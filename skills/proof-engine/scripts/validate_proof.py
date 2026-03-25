@@ -1,0 +1,297 @@
+"""
+validate_proof.py — Static analysis of proof scripts for Hardening Rule compliance.
+
+Runs BEFORE execution to catch LLM errors early. Checks that the generated
+proof code follows all 7 Hardening Rules without actually running it.
+
+Usage:
+    python scripts/validate_proof.py proof_file.py
+
+Exit code 0 = pass (warnings OK), 1 = fail (issues found).
+"""
+
+import re
+import sys
+import os
+
+
+class ProofValidator:
+    """Static analyzer for proof-engine proof scripts."""
+
+    def __init__(self, filepath: str):
+        self.filepath = filepath
+        self.filename = os.path.basename(filepath)
+        with open(filepath) as f:
+            self.source = f.read()
+        self.lines = self.source.splitlines()
+
+        self.passed = []
+        self.warnings = []
+        self.issues = []
+
+    # ------------------------------------------------------------------
+    # Rule checks
+    # ------------------------------------------------------------------
+
+    def check_rule1_no_handtyped_values(self):
+        """Rule 1: No hand-typed extracted values.
+
+        Scans for date() literals and 'value': N patterns near quote definitions
+        that suggest the LLM typed a value instead of parsing it from the quote.
+        """
+        problems = []
+
+        for i, line in enumerate(self.lines, 1):
+            stripped = line.strip()
+
+            # Skip PROOF_GENERATION_DATE (that's Rule 3, it's OK)
+            if "PROOF_GENERATION_DATE" in line:
+                continue
+            # Skip lines inside parse/extract functions / import statements
+            if any(kw in line for kw in ["parse_date", "parse_number", "parse_percentage", "verify_extraction", "normalize_unicode", "def ", "import "]):
+                continue
+            # Skip comment lines
+            if stripped.startswith("#"):
+                continue
+
+            # Check for bare date() literals that look like hand-typed dates
+            # Match date(YYYY, M, D) but not date.today()
+            date_match = re.search(r'\bdate\(\s*\d{4}\s*,\s*\d{1,2}\s*,\s*\d{1,2}\s*\)', line)
+            if date_match:
+                # Check if this is near a quote/fact definition (within 10 lines)
+                context_start = max(0, i - 11)
+                context_end = min(len(self.lines), i + 5)
+                context = "\n".join(self.lines[context_start:context_end])
+                if '"quote"' in context or "'quote'" in context or "empirical" in context.lower():
+                    problems.append(f"  Line {i}: {date_match.group(0)} — possible hand-typed date near fact definition")
+
+            # Check for "value": <number> in dict literals
+            value_match = re.search(r'["\']value["\']\s*:\s*[\d.]+', line)
+            if value_match:
+                problems.append(f"  Line {i}: {value_match.group(0)} — possible hand-typed value")
+
+        if problems:
+            self.warnings.append(("Rule 1: Possible hand-typed extracted values detected", problems))
+        else:
+            self.passed.append("Rule 1: No hand-typed extracted values detected")
+
+    def check_rule2_citation_verification(self):
+        """Rule 2: Citation verification code present."""
+        has_verify_import = bool(re.search(r'verify_citation|verify_all_citations', self.source))
+        has_smart_extract = bool(re.search(r'smart_extract|normalize_unicode|verify_extraction', self.source))
+        has_requests = bool(re.search(r'requests\.get', self.source))
+
+        if has_verify_import:
+            extra = " (with Unicode normalization)" if has_smart_extract else ""
+            self.passed.append(f"Rule 2: Citation verification code found (bundled script){extra}")
+        elif has_requests:
+            self.warnings.append(("Rule 2: Inline requests.get found — prefer bundled verify_citations.py", []))
+        else:
+            # For pure-math proofs with no empirical facts, this is OK
+            if "empirical_facts" in self.source or "Type B" in self.source or '"url"' in self.source:
+                self.issues.append(("Rule 2: Has empirical facts but no citation verification code", []))
+            else:
+                self.passed.append("Rule 2: No empirical facts — citation verification not needed")
+
+    def check_rule3_system_time(self):
+        """Rule 3: Anchored to system time via date.today()."""
+        has_today = "date.today()" in self.source
+        has_hardcoded = bool(re.search(r'\bdate\(\s*\d{4}\s*,', self.source))
+
+        # Check if the proof is time-dependent
+        time_keywords = ["today", "current", "age", "years old", "elapsed", "since", "duration"]
+        is_time_dependent = any(kw in self.source.lower() for kw in time_keywords)
+
+        if has_today:
+            self.passed.append("Rule 3: date.today() found — anchored to system time")
+        elif not is_time_dependent:
+            self.passed.append("Rule 3: Proof does not appear time-dependent — no date anchoring needed")
+        elif has_hardcoded:
+            self.issues.append(("Rule 3: Found hardcoded date() but no date.today() in time-dependent proof", []))
+        else:
+            self.passed.append("Rule 3: No date operations found")
+
+    def check_rule4_claim_interpretation(self):
+        """Rule 4: Explicit claim interpretation via CLAIM_FORMAL dict."""
+        has_formal = bool(re.search(r'CLAIM_FORMAL|claim_formal', self.source))
+        has_operator_note = bool(re.search(r'operator_note', self.source))
+
+        if has_formal and has_operator_note:
+            self.passed.append("Rule 4: CLAIM_FORMAL with operator_note found")
+        elif has_formal:
+            self.warnings.append(("Rule 4: CLAIM_FORMAL found but missing operator_note", []))
+        else:
+            self.issues.append(("Rule 4: No CLAIM_FORMAL dict — claim interpretation not explicit", []))
+
+    def check_rule5_adversarial(self):
+        """Rule 5: Structurally independent adversarial check."""
+        adversarial_patterns = [
+            r'adversarial', r'disproof', r'counter.?evidence',
+            r'counter.?example', r'contradict', r'disprove',
+        ]
+        found = any(re.search(p, self.source, re.IGNORECASE) for p in adversarial_patterns)
+
+        if found:
+            self.passed.append("Rule 5: Adversarial check section found")
+        else:
+            self.issues.append(("Rule 5: No adversarial check found — proof may have confirmation bias", []))
+
+    def check_rule6_independent_crosscheck(self):
+        """Rule 6: Cross-checks use truly independent sources."""
+        # Count distinct source references
+        source_patterns = re.findall(
+            r'["\'](?:source_[a-z]|fact_\d+|source_\d+)["\']',
+            self.source, re.IGNORECASE,
+        )
+        unique_sources = set(s.strip("\"'") for s in source_patterns)
+
+        if len(unique_sources) >= 2:
+            self.passed.append(f"Rule 6: {len(unique_sources)} distinct source references found ({', '.join(sorted(unique_sources))})")
+        elif len(unique_sources) == 1:
+            self.warnings.append((
+                f"Rule 6: Only one source reference found ({unique_sources.pop()}) — "
+                "cross-check may not be truly independent",
+                [],
+            ))
+        else:
+            # For pure-math proofs, multiple sources aren't needed
+            if "empirical_facts" in self.source or '"url"' in self.source:
+                self.warnings.append(("Rule 6: No distinct source references found for empirical proof", []))
+            else:
+                self.passed.append("Rule 6: Pure computation — independent sources not required")
+
+    def check_rule7_no_hardcoded_constants(self):
+        """Rule 7: No hard-coded well-known constants or formulas.
+
+        LLMs can misremember constants (365.25 vs 365.2425, using eval() for
+        comparisons, rolling their own age calculation). The bundled
+        computations.py provides verified implementations.
+        """
+        problems = []
+
+        for i, line in enumerate(self.lines, 1):
+            stripped = line.strip()
+            if stripped.startswith("#"):
+                continue
+            # Skip imports and the computations module itself
+            if "import" in line or "DAYS_PER" in line:
+                continue
+
+            # Check for hard-coded days-per-year constants
+            if re.search(r'365\.24', line) or re.search(r'365\.25\b', line):
+                # OK if it's in a comment or a string defining the constant
+                if not stripped.startswith("#") and "DAYS_PER" not in line:
+                    problems.append(
+                        f"  Line {i}: Hard-coded year-length constant — use DAYS_PER_GREGORIAN_YEAR from scripts/computations.py"
+                    )
+
+            # Check for eval() used with operators (unsafe and error-prone)
+            if re.search(r'\beval\s*\(', line):
+                problems.append(
+                    f"  Line {i}: eval() call — use compare() from scripts/computations.py instead"
+                )
+
+        # Check if age is computed inline instead of using compute_age()
+        has_inline_age = bool(re.search(
+            r'\.year\s*-\s*\w+\.year', self.source
+        ))
+        has_compute_age = bool(re.search(r'compute_age', self.source))
+        if has_inline_age and not has_compute_age:
+            problems.append(
+                "  Inline age calculation detected (year subtraction) — "
+                "consider using compute_age() from scripts/computations.py"
+            )
+
+        if problems:
+            self.warnings.append(("Rule 7: Possible hard-coded constants or formulas", problems))
+        else:
+            self.passed.append("Rule 7: No hard-coded constants or inline formulas detected")
+
+    def check_general_selfcontained(self):
+        """General: proof is self-contained and runnable."""
+        problems = []
+
+        if '__main__' not in self.source and 'if __name__' not in self.source:
+            problems.append("  No __main__ block — proof may not be directly runnable")
+
+        if 'verdict' not in self.source.lower():
+            problems.append("  No 'verdict' found — proof may not produce a clear conclusion")
+
+        if problems:
+            self.issues.append(("General: Proof may not be self-contained", problems))
+        else:
+            self.passed.append("General: Self-contained proof with __main__ and verdict")
+
+    # ------------------------------------------------------------------
+    # Run all checks
+    # ------------------------------------------------------------------
+
+    def validate(self) -> bool:
+        """Run all rule checks and print results.
+
+        Returns True if no issues (warnings are OK).
+        """
+        self.check_rule1_no_handtyped_values()
+        self.check_rule2_citation_verification()
+        self.check_rule3_system_time()
+        self.check_rule4_claim_interpretation()
+        self.check_rule5_adversarial()
+        self.check_rule6_independent_crosscheck()
+        self.check_rule7_no_hardcoded_constants()
+        self.check_general_selfcontained()
+
+        # Print report
+        print(f"Validating: {self.filename}")
+        print("=" * 60)
+
+        if self.passed:
+            print("\n✓ PASSED:")
+            for msg in self.passed:
+                print(f"  {msg}")
+
+        if self.warnings:
+            print("\n⚠ WARNINGS:")
+            for msg, details in self.warnings:
+                print(f"  {msg}")
+                for d in details:
+                    print(f"    {d}")
+
+        if self.issues:
+            print("\n✗ ISSUES (must fix):")
+            for msg, details in self.issues:
+                print(f"  {msg}")
+                for d in details:
+                    print(f"    {d}")
+
+        total = len(self.passed) + len(self.warnings) + len(self.issues)
+        print(f"\n{'=' * 60}")
+        print(f"Result: {len(self.passed)}/{total} checks passed, "
+              f"{len(self.issues)} issues, {len(self.warnings)} warnings")
+
+        if self.issues:
+            print("STATUS: FAIL — fix issues before presenting proof")
+            return False
+        elif self.warnings:
+            print("STATUS: PASS with warnings — review recommended")
+            return True
+        else:
+            print("STATUS: PASS")
+            return True
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python scripts/validate_proof.py proof_file.py")
+        sys.exit(1)
+
+    filepath = sys.argv[1]
+    if not os.path.isfile(filepath):
+        print(f"ERROR: File not found: {filepath}")
+        sys.exit(1)
+
+    validator = ProofValidator(filepath)
+    ok = validator.validate()
+    sys.exit(0 if ok else 1)

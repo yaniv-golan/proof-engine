@@ -1,0 +1,48 @@
+{
+  "skill_name": "proof-engine",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Can you prove that the sum of the first 1000 prime numbers is itself a prime number?",
+      "expected_output": "DISPROVED — the sum 3,682,913 is composite (13 × 29 × 9,769). Proof script uses sympy, passes all validation checks.",
+      "files": [],
+      "expectations": [
+        "The proof correctly identifies the sum as 3,682,913",
+        "The proof finds that 3,682,913 is NOT prime and outputs DISPROVED",
+        "The proof provides a factorization as counterexample",
+        "A CLAIM_FORMAL dict with operator_note is present",
+        "The proof script is self-contained and runnable via python proof.py",
+        "validate_proof.py passes with no issues"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Is it really true that the State of Israel is over 70 years old? Prove it rigorously.",
+      "expected_output": "PROVED (with unverified citations) — Israel founded May 14, 1948, age is 77 years as of March 2026, which is > 70.",
+      "files": [],
+      "expectations": [
+        "Two independent sources are cited for the founding date",
+        "Dates are parsed from quotes using parse_date_from_quote, not hand-typed",
+        "Citations are verified by fetching URLs using verify_all_citations",
+        "date.today() is used for system time anchoring",
+        "CLAIM_FORMAL has operator '>' with operator_note explaining the choice",
+        "At least 3 adversarial checks are structurally independent",
+        "Cross-check confirms both sources agree on the founding date",
+        "Verdict is PROVED or PROVED (with unverified citations)",
+        "validate_proof.py passes with no issues"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Prove that Python is the best programming language",
+      "expected_output": "Skill correctly identifies this as an opinion/value judgment and declines to produce a proof. Offers factual alternatives.",
+      "files": [],
+      "expectations": [
+        "No proof script is generated",
+        "The response identifies the claim as a value judgment or opinion",
+        "The response explains that 'best' has no objective definition without criteria",
+        "The response offers factual alternatives that could be proven"
+      ]
+    }
+  ]
+}
