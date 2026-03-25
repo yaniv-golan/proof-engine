@@ -220,6 +220,15 @@ adversarial_checks = [
 
 These are structurally independent: they don't re-derive the founding date or recompute the age. They search for entirely different facts that, if found, would invalidate the proof's assumptions. Perform these via actual web searches BEFORE writing the proof code.
 
+**Tactics for effective adversarial search:**
+- Search for **alternative definitions** of key terms (e.g., "founding" = proclamation vs recognition vs UN admission)
+- Search for **later or earlier milestone dates** that could shift the result past the threshold
+- Search for **contested terminology** where the same word means different things in different sources
+- Check if the **same institution uses inconsistent wording** across pages (e.g., NASA climate page vs NASA FAQ)
+- Look for **source hierarchy conflicts** (primary source disagrees with secondary summary)
+- Search for **edge cases where the operator choice matters** (claim is exactly at the threshold boundary)
+- Search for **methodological disputes** (different measurement approaches yield different numbers)
+
 **How validate_proof.py catches it**: Looks for "adversarial", "disproof", "counter-evidence" etc. in the code.
 
 ---

@@ -46,6 +46,17 @@ PROOF_ENGINE_ROOT = "${CLAUDE_SKILL_DIR}"  # ← replaced with actual path at pr
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 ```
 
+## Environment Requirements
+
+Full Type B (empirical) verification requires **outbound HTTP access** from Python to fetch citation URLs. Without it, `verify_all_citations()` will fail to fetch pages, and the verdict degrades to "PROVED (with unverified citations)."
+
+Three distinct fetch failure modes exist — do not treat them as equivalent:
+- **Quote not found on page** — the URL was fetched successfully but the quoted text isn't there. This is a proof issue (wrong quote or wrong URL).
+- **Fetch blocked by environment** — the runtime sandbox has no outbound network access (common in ChatGPT, some cloud containers). This is an environmental limitation, not an evidentiary problem. Note it in the audit doc as such.
+- **Transient network error** — timeout, DNS failure, rate limiting. May succeed on retry. Note as transient in the audit doc.
+
+Type A (pure math) proofs have no network requirements — they run entirely offline.
+
 ## Core Concepts
 
 **Type A facts (Pure)**: Established entirely by code. The computation IS the verification. Use for math, logic, and derivations. Tools: `sympy` for symbolic math, plain Python for arithmetic.
@@ -54,7 +65,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 **Every proof has three parts**: (1) Fact Registry — numbered facts tagged Type A or B, (2) Proof Logic — a self-contained Python script, (3) Verdict — one of the five levels below.
 
-## The 6 Hardening Rules
+## The 7 Hardening Rules
 
 | Rule | Closes failure mode | Enforced by |
 |------|-------------------|-------------|
@@ -75,6 +86,15 @@ Classify the claim: mathematical (Type A only), empirical (Type B only), or mixe
 
 If the claim is an opinion, value judgment, or has no verifiable answer (e.g., "Python is the best language"), do NOT attempt a proof. Explain why, and offer to prove a related factual claim instead.
 
+Before proceeding, assess whether a formal proof adds value. Consider these guiding questions:
+- Does the claim have a crisp true/false threshold?
+- Can the evidence be decomposed into a finite set of extractable facts?
+- Are there canonical, publicly accessible sources?
+- Is there a clear disproof condition (what would make it false)?
+- Is the ambiguity surface manageable (few contested definitions)?
+
+If fewer than 3 are true, consider whether a simpler factual summary would serve the user better than a full proof. If the user explicitly wants rigor, proceed anyway but note the limitations in the proof strategy.
+
 ### Step 2: Gather Facts (Both Directions)
 Search for sources that SUPPORT the claim. Then search for sources that CONTRADICT it (adversarial — Rule 5). For empirical facts, find at least two independent sources (Rule 6). For math claims, identify the right tool (sympy, plain Python).
 
@@ -94,7 +114,7 @@ Required structural elements in every proof script:
 - `if __name__ == "__main__"` block with structured output ending in `=== PROOF SUMMARY (JSON) ===`
 
 ### Step 4: Validate Before Executing
-Run `python ${CLAUDE_SKILL_DIR}/scripts/validate_proof.py proof_file.py` and fix any issues before proceeding.
+Run `python ${CLAUDE_SKILL_DIR}/scripts/validate_proof.py proof_file.py` and fix any issues before proceeding. Note: validate_proof.py checks structural compliance with the hardening rules (imports, FACT_REGISTRY, JSON summary, etc.), not epistemic quality. Reasoning quality is assessed in the Step 6 self-critique checklist.
 
 ### Step 5: Execute and Report
 
