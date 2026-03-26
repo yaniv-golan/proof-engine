@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.1] - 2026-03-26
+
+### Fixed
+
+- `verify_extraction()` trailing-zero float mismatch: 9.9 now matches "9.900" in quotes (generates zero-padded check forms)
+- `verify_extraction()` on `data_values` is circular — documented to skip it; cross-check (Rule 6) is the verification for table data
+- Added officialdata.org to reference_domains.json (tier 3)
+- Aligned `data_values` guidance between SKILL.md and hardening-rules.md
+- Documented multi-extraction naming convention (B1_cpi_1913, B1_cpi_2024) for multiple values from one source
+
 ## [0.5.0] - 2026-03-26
 
 ### Added
