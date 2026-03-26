@@ -1,5 +1,5 @@
 {
-    "_comment": "Established reference sources, encyclopedias, and major data aggregators. Tier 3 (established reference).",
+    "_comment": "Established reference sources, encyclopedias, major data aggregators, and known-good government data republishers. Tier 3 (established reference).",
     "known_domains": [
         "en.wikipedia.org",
         "wikipedia.org",
@@ -20,6 +20,16 @@
         "wolframalpha.com",
         "mathworld.wolfram.com",
         "khanacademy.org",
-        "coursera.org"
+        "coursera.org",
+        "rateinflation.com",
+        "inflationdata.com",
+        "measuringworth.com",
+        "usinflationcalculator.com",
+        "multpl.com",
+        "fred.stlouisfed.org",
+        "minneapolisfed.org",
+        "bea.gov",
+        "numbeo.com",
+        "countryeconomy.com"
     ]
 }

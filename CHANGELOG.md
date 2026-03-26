@@ -31,10 +31,12 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- `verify_extraction()` boundary matching: numeric values use digit-boundary (`(?![\d])`) so "1913." (trailing period) matches; string/date values use simple substring match — fixes both case-sensitivity and sentence-ending punctuation bugs
+- `verify_extraction()` date handling: `datetime.date` objects now generate multiple format check_forms ("December 23, 1913", "23 December 1913", "1913-12-23", etc.) and match correctly
+- Credibility: added CPI aggregator domains (rateinflation.com, inflationdata.com, measuringworth.com, etc.) to reference_domains.json — sites the skill recommends no longer flag as tier 2
 - Validator false positives on pure-math proofs: `_has_nonempty_empirical_facts()` distinguishes empty `empirical_facts = {}` from populated dicts
 - Validator Rule 6 no longer warns about missing sources for pure-computation proofs
 - Validator extraction check recognizes `parse_range_from_quote` and qualitative proofs using `verify_extraction()` without parse functions
-- `verify_extraction()` boundary matching now case-insensitive (fixes date string matching)
 - `explain_calc()` documented as unsuitable for list aggregations; descriptive `print()` recommended instead
 
 ### Changed
@@ -46,6 +48,9 @@ All notable changes to this project will be documented in this file.
 - Citation detail in JSON summary now includes `credibility` dict (domain, source_type, tier, flags, note)
 - Type B Evidence Table in proof_audit.md adds Credibility column
 - Example proofs updated to include credibility in citation details
+- `compute_percentage_change()` gains `mode="decline"` parameter for purchasing power decline: `(1 - old/new) * 100`
+- `source_credibility.py` note in SKILL.md: `verify_all_citations()` runs credibility automatically — do not call `assess_all()` separately
+- Table-sourced numeric data pattern (`data_values` dict) documented in SKILL.md alongside existing hardening-rules.md reference
 
 ## [0.3.0] - 2026-03-26
 

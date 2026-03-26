@@ -135,30 +135,40 @@ def cross_check(value_a, value_b, tolerance=0.01, mode="absolute", label=None):
     return result
 
 
-def compute_percentage_change(old_value, new_value, label=None):
+def compute_percentage_change(old_value, new_value, label=None, mode="increase"):
     """Compute percentage change from old to new value.
 
     Args:
-        old_value: The starting value (must be non-zero).
-        new_value: The ending value.
+        old_value: The starting value (must be non-zero for "increase" mode).
+        new_value: The ending value (must be non-zero for "decline" mode).
         label: Optional description for output.
+        mode: "increase" (default) computes (new - old) / old * 100.
+              "decline" computes (1 - old / new) * 100 — e.g., purchasing
+              power decline from CPI values.
 
     Returns:
-        float — percentage change. Positive = increase, negative = decrease.
+        float — percentage. Always positive for "decline" mode when new > old.
 
     Example:
         >>> compute_percentage_change(9.883, 313.689)
-        3073.35  # increase
+        3073.35  # CPI increase
 
-        >>> compute_percentage_change(313.689, 9.883)
-        -96.85   # decline
+        >>> compute_percentage_change(9.883, 313.689, mode="decline")
+        96.85    # purchasing power decline
     """
-    if old_value == 0:
-        raise ValueError("Cannot compute percentage change from zero")
-    change = (new_value - old_value) / old_value * 100
     tag = label or "pct_change"
-    print(f"  {tag}: ({new_value} - {old_value}) / {old_value} * 100 = {change:.4f}%")
-    return change
+    if mode == "decline":
+        if new_value == 0:
+            raise ValueError("Cannot compute decline with zero new_value")
+        result = (1 - old_value / new_value) * 100
+        print(f"  {tag}: (1 - {old_value} / {new_value}) * 100 = {result:.4f}%")
+        return result
+    else:
+        if old_value == 0:
+            raise ValueError("Cannot compute percentage change from zero")
+        change = (new_value - old_value) / old_value * 100
+        print(f"  {tag}: ({new_value} - {old_value}) / {old_value} * 100 = {change:.4f}%")
+        return change
 
 
 # ---------------------------------------------------------------------------

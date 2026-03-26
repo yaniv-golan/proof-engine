@@ -276,16 +276,23 @@ def verify_extraction(value: Any, quote: str, fact_id: str, description: str = "
     # Normalize quote for comparison
     norm_quote = normalize_unicode(quote.lower())
 
-    # Use word-boundary-aware matching to avoid false positives
-    # (e.g., "1.1" matching inside "11.1" or "21.1")
-    def _boundary_match(v, text):
-        # Lowercase v to match the lowercased norm_quote (fixes case-sensitivity
-        # bug for string values like "December 23, 1913")
-        # (?<![\d.]) = not preceded by digit or dot
-        # (?![\d.]) = not followed by digit or dot
-        return bool(re.search(r'(?<![\d.])' + re.escape(v.lower()) + r'(?![\d.])', text))
+    # Use context-aware boundary matching to avoid false positives.
+    # For numeric values: (?<![\d.]) and (?![\d]) prevents "1.1" matching "11.1".
+    #   The trailing boundary excludes digits but NOT dots/punctuation, so "1913."
+    #   (sentence-ending period) still matches.
+    # For string values (dates, keywords): simple substring match after lowercasing,
+    #   since the value is already specific enough (e.g., "december 23, 1913").
+    def _boundary_match(v, text, is_numeric=False):
+        v_lower = v.lower()
+        if is_numeric:
+            # Numeric boundary: not preceded by digit/dot, not followed by digit
+            return bool(re.search(r'(?<![\d.])' + re.escape(v_lower) + r'(?![\d])', text))
+        else:
+            # String/date: simple substring match (already specific enough)
+            return v_lower in text
 
-    found = any(v and _boundary_match(v, norm_quote) for v in check_forms if v)
+    is_num = isinstance(value, (int, float))
+    found = any(v and _boundary_match(v, norm_quote, is_numeric=is_num) for v in check_forms if v)
     desc = f" ({description})" if description else ""
 
     if found:

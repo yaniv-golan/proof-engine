@@ -37,7 +37,7 @@ Import these instead of re-implementing verification logic. They are tested and 
 | `${CLAUDE_SKILL_DIR}/scripts/smart_extract.py` | Unicode normalization + LLM-assisted extraction utilities | `normalize_unicode()`, `verify_extraction()`, `diagnose_mismatch()`, `ExtractionRecord` |
 | `${CLAUDE_SKILL_DIR}/scripts/verify_citations.py` | Fetch URLs, verify quotes (live, snapshot, Wayback, PDF) (Rule 2) | `verify_citation()`, `verify_all_citations()` |
 | `${CLAUDE_SKILL_DIR}/scripts/computations.py` | Verified constants, formulas, and self-documenting output (Rule 7) | `compute_age()`, `compare()`, `explain_calc()`, `cross_check()`, `compute_percentage_change()`, `DAYS_PER_GREGORIAN_YEAR` |
-| `${CLAUDE_SKILL_DIR}/scripts/source_credibility.py` | Assess domain credibility from URL (offline, bundled data) | `assess_credibility(url)`, `assess_all(empirical_facts)` |
+| `${CLAUDE_SKILL_DIR}/scripts/source_credibility.py` | Assess domain credibility from URL (offline, bundled data). **Note:** `verify_all_citations()` runs credibility assessment automatically — do NOT call `assess_all()` separately in proof scripts. Use `assess_credibility(url)` only for standalone CLI use. | `assess_credibility(url)`, `assess_all(empirical_facts)` |
 | `${CLAUDE_SKILL_DIR}/scripts/validate_proof.py` | Static analysis for rule compliance (pre-flight) | `ProofValidator(filepath).validate()` |
 
 To import these from a proof script, set `PROOF_ENGINE_ROOT` to the skill's install directory (the directory containing this SKILL.md and the `scripts/` subdirectory). In Claude Code, use the resolved value of `${CLAUDE_SKILL_DIR}`:
@@ -340,6 +340,30 @@ def extract_ghg_warming_low(quote):
 ```
 
 Use `diagnose_mismatch(page_text, quote)` to understand WHY a quote fails verification, then write the custom extractor to handle those specific differences.
+
+## Table-Sourced Numeric Data
+
+For claims backed by HTML tables (CPI values, GDP figures, population data), the numeric values aren't in prose text that can be quoted. Use the `data_values` pattern:
+
+```python
+empirical_facts = {
+    "source_a_cpi": {
+        # Prose quote verifies source authority
+        "quote": "The CPI for USA is calculated and issued by: U.S. Bureau of Labor Statistics",
+        "url": "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi/",
+        "source_name": "RateInflation.com (sourced from BLS)",
+        # Table values stored as strings — parsed via parse_number_from_quote()
+        "data_values": {"cpi_1913": "9.883", "cpi_2024": "313.689"},
+    },
+}
+```
+
+- The `quote` field verifies the source's authority via `verify_all_citations()`
+- Parse table values with `parse_number_from_quote(fact["data_values"]["cpi_1913"], r"([\d.]+)", "B1_cpi_1913")`
+- Use `cross_check()` to compare values across independent sources
+- The audit doc should distinguish "source authority verified via quote" from "numeric data extracted from table"
+
+See hardening-rules.md "Citing structured/tabular data" for the full pattern.
 
 ## Gotchas
 
