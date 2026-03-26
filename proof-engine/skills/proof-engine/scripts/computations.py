@@ -443,6 +443,12 @@ def explain_calc(expr_str: str, scope: dict, label: str = None) -> object:
         >>> age = 77
         >>> explain_calc("age > 70", locals(), label="Claim test")
           Claim test: age > 70 = 77 > 70 = True
+
+    Note:
+        Best suited for scalar expressions with named variables. For
+        aggregations over lists (e.g., sum(fib[1:101]) % 11), the AST walker
+        can't introspect the list contents meaningfully. In those cases, use
+        descriptive print() statements instead.
     """
     tree = ast.parse(expr_str, mode='eval')
     expr_node = tree.body

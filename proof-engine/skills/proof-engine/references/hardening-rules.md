@@ -199,24 +199,26 @@ adversarial_age = 2026 - 1948  # not independent at all
 adversarial_checks = [
     {
         "question": "Was there ever a gap or dissolution of Israel's statehood since 1948?",
-        "search_performed": "web search: 'Israel statehood continuity gap dissolution'",
+        "verification_performed": "web search: 'Israel statehood continuity gap dissolution'",
         "finding": "No credible source documents any interruption of sovereignty.",
         "breaks_proof": False,
     },
     {
         "question": "Is there a credible alternative founding date that would make Israel younger than 70?",
-        "search_performed": "web search: 'Israel founding date dispute alternative'",
+        "verification_performed": "web search: 'Israel founding date dispute alternative'",
         "finding": "Even UN admission (May 1949) yields 76+ years. No date brings age below 70.",
         "breaks_proof": False,
     },
     {
         "question": "Could 'over 70' linguistically require 71+?",
-        "search_performed": "linguistic analysis",
+        "verification_performed": "linguistic analysis",
         "finding": "Even under the strictest reading (71+), 77 > 71.",
         "breaks_proof": False,
     },
 ]
 ```
+
+The `verification_performed` field describes what was done to investigate the question. For empirical proofs this is typically a web search; for pure-math proofs it is a computation or structural analysis. (The legacy field name `search_performed` is also accepted.)
 
 These are structurally independent: they don't re-derive the founding date or recompute the age. They search for entirely different facts that, if found, would invalidate the proof's assumptions. Perform these via actual web searches BEFORE writing the proof code.
 
@@ -267,6 +269,15 @@ assert age_a == age_b, f"Ages disagree: source_a→{age_a}, source_b→{age_b}"
 Now if one source has a different date, the assertion catches it. The cross-check has truly independent inputs.
 
 **Interpreting "independent" for government statistics:** For data published by a single authority (BLS for CPI, Census for population), truly independent *measurements* don't exist — all sources trace back to the same authority. In this context, "independent" means independent *publication and presentation*: two different websites that republish BLS data can catch transcription errors, display bugs, or rounding differences between them. This provides weaker assurance than independent measurements but still has value. Note the distinction in the audit doc: "independently published (same upstream authority)" vs "independently measured."
+
+**Interpreting "independent" for pure-math proofs:** Multiple external sources don't apply. Instead, independence means **mathematically distinct approaches** — different algorithms, identities, or structural arguments that don't share intermediate computations with the primary method. Examples of genuinely independent cross-checks:
+
+- Primary: direct summation → Cross-check: closed-form identity (e.g., sum of Fibonacci numbers = F(n+2) − 1)
+- Primary: brute-force enumeration → Cross-check: algebraic proof or generating function
+- Primary: numerical computation → Cross-check: modular/structural analysis (e.g., Pisano periodicity)
+- Primary: symbolic algebra → Cross-check: numerical spot-check at specific values
+
+Re-computing the same formula with different variable names, a different loop structure, or a trivially equivalent expression is **NOT** an independent cross-check. The test: if a bug in the primary method's mathematical reasoning would also affect the cross-check, they are not independent.
 
 **How validate_proof.py catches it**: Counts distinct source references (`source_a`, `source_b`, etc.). Warns if only one source is found for an empirical proof.
 
@@ -450,7 +461,7 @@ claim_holds = compare(age, CLAIM_FORMAL["operator"], CLAIM_FORMAL["threshold"])
 adversarial_checks = [
     {
         "question": "...",
-        "search_performed": "...",
+        "verification_performed": "...",  # web search for empirical, computation for pure math
         "finding": "...",
         "breaks_proof": False,
     },
@@ -539,6 +550,110 @@ if __name__ == "__main__":
     print("\n=== PROOF SUMMARY (JSON) ===")
     print(json.dumps(summary, indent=2, default=str))
 ```
+
+### Pure-Math Proof Template
+
+For claims that are entirely mathematical (no empirical sources, no URLs, no citations), use this streamlined template. It omits all citation/extraction boilerplate and focuses on computation, cross-checks, and adversarial analysis.
+
+```python
+"""
+Proof: [claim text]
+Generated: [date]
+"""
+import json
+import sys
+
+PROOF_ENGINE_ROOT = "..."  # ← LLM fills with resolved ${CLAUDE_SKILL_DIR}
+sys.path.insert(0, PROOF_ENGINE_ROOT)
+
+from scripts.computations import compare, explain_calc
+
+# 1. CLAIM INTERPRETATION (Rule 4)
+CLAIM_NATURAL = "..."
+CLAIM_FORMAL = {
+    "subject": "...",
+    "property": "...",
+    "operator": "==",
+    "operator_note": "...",
+    "threshold": ...,
+}
+
+# 2. FACT REGISTRY — A-types only for pure math
+FACT_REGISTRY = {
+    "A1": {"label": "...", "method": None, "result": None},
+    "A2": {"label": "...", "method": None, "result": None},
+}
+
+# 3. COMPUTATION — primary method
+# ... your computation logic here ...
+# Use explain_calc() where it adds clarity (scalar expressions).
+# For aggregations over lists, use descriptive print() statements instead.
+primary_result = ...
+
+# 4. CROSS-CHECKS — mathematically independent methods (Rule 6)
+# Each cross-check must use a DIFFERENT algorithm, identity, or structural
+# argument. See Rule 6 for what counts as "independent" in pure math.
+crosscheck_result = ...  # different method, same expected answer
+assert primary_result == crosscheck_result, (
+    f"Cross-check failed: primary={primary_result}, crosscheck={crosscheck_result}"
+)
+
+# 5. ADVERSARIAL CHECKS (Rule 5)
+adversarial_checks = [
+    {
+        "question": "...",
+        "verification_performed": "...",  # computation or structural analysis
+        "finding": "...",
+        "breaks_proof": False,
+    },
+]
+
+# 6. VERDICT AND STRUCTURED OUTPUT
+if __name__ == "__main__":
+    claim_holds = compare(primary_result, CLAIM_FORMAL["operator"], CLAIM_FORMAL["threshold"])
+
+    verdict = "PROVED" if claim_holds else "DISPROVED"
+
+    FACT_REGISTRY["A1"]["method"] = "..."
+    FACT_REGISTRY["A1"]["result"] = str(primary_result)
+    FACT_REGISTRY["A2"]["method"] = "..."
+    FACT_REGISTRY["A2"]["result"] = str(crosscheck_result)
+
+    summary = {
+        "fact_registry": {
+            fid: {k: v for k, v in info.items()}
+            for fid, info in FACT_REGISTRY.items()
+        },
+        "claim_formal": CLAIM_FORMAL,
+        "claim_natural": CLAIM_NATURAL,
+        "cross_checks": [
+            {
+                "description": "...",
+                "values_compared": [str(primary_result), str(crosscheck_result)],
+                "agreement": primary_result == crosscheck_result,
+            },
+        ],
+        "adversarial_checks": adversarial_checks,
+        "verdict": verdict,
+        "key_results": {
+            "primary_result": primary_result,
+            "threshold": CLAIM_FORMAL["threshold"],
+            "operator": CLAIM_FORMAL["operator"],
+            "claim_holds": claim_holds,
+        },
+    }
+
+    print("\n=== PROOF SUMMARY (JSON) ===")
+    print(json.dumps(summary, indent=2, default=str))
+```
+
+Key differences from the empirical template:
+- No `empirical_facts`, `verify_all_citations`, `extract_values`, or `smart_extract` imports
+- No `citations` or `extractions` keys in the JSON summary (omitted, not empty)
+- Cross-checks use mathematically independent methods instead of independent sources
+- Adversarial checks use `verification_performed` with computations, not web searches
+- No `date.today()` unless the claim is time-dependent
+- `explain_calc()` is optional — use it for scalar expressions where the symbolic/substituted/result trace adds clarity. For aggregations over lists (e.g., `sum(fib[1:101])`), use descriptive `print()` statements instead, since the AST walker can't introspect built-in calls over slices.
 
 ### Adapting for empirical consensus proofs
 

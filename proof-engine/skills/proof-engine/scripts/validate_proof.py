@@ -75,6 +75,25 @@ class ProofValidator:
         else:
             self.passed.append("Rule 1: No hand-typed extracted values detected")
 
+    def _has_nonempty_empirical_facts(self) -> bool:
+        """Check if the source defines empirical_facts with actual entries.
+
+        Returns False for:
+          - no empirical_facts at all
+          - empirical_facts = {}
+          - empirical_facts = dict()
+        Returns True if empirical_facts is assigned a non-empty dict.
+        """
+        if "empirical_facts" not in self.source:
+            return False
+        # Match empty dict assignments: empirical_facts = {} or = { }
+        if re.search(r'empirical_facts\s*=\s*\{\s*\}', self.source):
+            return False
+        # Match empty dict() call
+        if re.search(r'empirical_facts\s*=\s*dict\(\s*\)', self.source):
+            return False
+        return True
+
     def check_rule2_citation_verification(self):
         """Rule 2: Citation verification code present."""
         has_verify_import = bool(re.search(r'verify_citation|verify_all_citations', self.source))
@@ -87,8 +106,10 @@ class ProofValidator:
         elif has_requests:
             self.warnings.append(("Rule 2: Inline requests.get found — prefer bundled verify_citations.py", []))
         else:
-            # For pure-math proofs with no empirical facts, this is OK
-            if "empirical_facts" in self.source or "Type B" in self.source or '"url"' in self.source:
+            # For pure-math proofs with no empirical facts, this is OK.
+            # An empty dict (empirical_facts = {}) counts as "no empirical facts".
+            has_empirical = self._has_nonempty_empirical_facts()
+            if has_empirical or "Type B" in self.source or '"url"' in self.source:
                 self.issues.append(("Rule 2: Has empirical facts but no citation verification code", []))
             else:
                 self.passed.append("Rule 2: No empirical facts — citation verification not needed")
@@ -155,7 +176,7 @@ class ProofValidator:
             ))
         else:
             # For pure-math proofs, multiple sources aren't needed
-            if "empirical_facts" in self.source or '"url"' in self.source:
+            if self._has_nonempty_empirical_facts() or '"url"' in self.source:
                 self.warnings.append(("Rule 6: No distinct source references found for empirical proof", []))
             else:
                 self.passed.append("Rule 6: Pure computation — independent sources not required")

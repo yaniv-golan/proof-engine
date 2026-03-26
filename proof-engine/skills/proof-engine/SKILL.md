@@ -122,7 +122,7 @@ Before proceeding, assess whether a formal proof adds value. Consider these guid
 If fewer than 3 are true, consider whether a simpler factual summary would serve the user better than a full proof. If the user explicitly wants rigor, proceed anyway but note the limitations in the proof strategy.
 
 ### Step 2: Gather Facts (Both Directions)
-Search for sources that SUPPORT the claim. Then search for sources that CONTRADICT it (adversarial — Rule 5). For empirical facts, find at least two independent sources (Rule 6). For math claims, identify the right tool (sympy, plain Python).
+Search for sources that SUPPORT the claim. Then search for sources that CONTRADICT it (adversarial — Rule 5). For empirical facts, find at least two independent sources (Rule 6). For math claims, identify the right tool (sympy, plain Python) and plan at least two mathematically independent approaches for cross-checking (Rule 6 — see "Interpreting independent for pure-math proofs" in hardening-rules.md).
 
 When fetching source pages during research, save the page text for each citation. Include it as the `snapshot` field in `empirical_facts` so the proof is reproducible offline. This is especially important in sandboxed environments where Python cannot fetch URLs directly.
 
@@ -131,12 +131,12 @@ Read [references/hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-ru
 
 Required structural elements in every proof script:
 - `CLAIM_FORMAL` dict with `operator_note` (Rule 4). For compound claims, a `sub_claims` list with per-sub-claim evaluation and a `conjunction` type (AND/OR/BECAUSE/IMPLIES)
-- `empirical_facts` dict with quotes but NO hand-typed values (Rule 1)
-- Imports from bundled scripts for verification (Rules 1, 2)
+- For empirical proofs: `empirical_facts` dict with quotes but NO hand-typed values (Rule 1); imports from bundled scripts for verification (Rules 1, 2)
+- For pure-math proofs: no `empirical_facts`, no citation/extraction imports. Use the **pure-math template** from hardening-rules.md
 - `date.today()` for time-dependent proofs (Rule 3)
-- `compute_age()`, `compare()`, `explain_calc()`, and constants from `${CLAUDE_SKILL_DIR}/scripts/computations.py` — never hand-code formulas or well-known constants, and use `explain_calc()` for self-documenting output (Rule 7)
-- Adversarial checks section (Rule 5)
-- Cross-checks from independent sources (Rule 6)
+- `compare()` from `${CLAUDE_SKILL_DIR}/scripts/computations.py` — never hand-code formulas or well-known constants (Rule 7). Use `explain_calc()` for self-documenting output on scalar expressions; for aggregations over lists, use descriptive `print()` statements instead
+- Adversarial checks section with `verification_performed` field (Rule 5) — web searches for empirical proofs, computations/structural analysis for pure math
+- Cross-checks from independent sources (empirical) or mathematically independent methods (pure math) (Rule 6)
 - `FACT_REGISTRY` dict mapping report IDs (B1, A1) to proof-script keys and labels
 - JSON summary block in `__main__` with all structured fields (see hardening-rules.md template)
 - `if __name__ == "__main__"` block with structured output ending in `=== PROOF SUMMARY (JSON) ===`
@@ -259,7 +259,7 @@ Proof script contract:
 - [ ] proof.py `__main__` emits `=== PROOF SUMMARY (JSON) ===` block
 - [ ] JSON summary contains required keys: fact_registry (with method/result for A-types), claim_formal, adversarial_checks, verdict, key_results
 - [ ] For empirical proofs: JSON summary also contains citations (with normalized status/method/coverage_pct), extractions (with value/value_in_quote/quote_snippet), cross_checks
-- [ ] For pure-math proofs: citations, extractions, and cross_checks may be empty objects or omitted
+- [ ] For pure-math proofs: omit citations and extractions keys entirely (do not include as empty dicts). cross_checks should contain computationally independent verification methods (see Rule 6 in hardening-rules.md for what "independent" means in a pure-math context). Use the pure-math template from hardening-rules.md.
 - [ ] FACT_REGISTRY keys in JSON match IDs used in both report documents
 
 Document consistency:
