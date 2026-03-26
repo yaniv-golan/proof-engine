@@ -307,6 +307,7 @@ Document consistency:
 **Technical limitations**:
 - Citations are snapshots in time — web pages change
 - URL fetching can fail due to network issues, paywalls, or bot protection
+- Citation verification confirms quote presence on the page, not semantic entailment — a real quote may not actually support the claim. The adversarial cross-check (Rule 5) mitigates this but does not eliminate it
 - Evidence behind images, videos, PDFs, or dynamic pages cannot be cited
 - sympy has limits on certain symbolic computations
 - This is rigorous verification, not peer review — it catches LLM errors but doesn't replace domain expertise

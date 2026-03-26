@@ -104,6 +104,123 @@
         "Three output files: proof.py, proof.md, proof_audit.md",
         "validate_proof.py passes with no issues"
       ]
+    },
+    {
+      "id": 5,
+      "prompt": "Is the speed of light faster than the speed of sound by more than a factor of 1 million?",
+      "expected_output": "DISPROVED — the ratio is approximately 874,000x, which is less than 1,000,000. Speed of light ~299,792,458 m/s, speed of sound ~343 m/s.",
+      "files": [],
+      "expectations": [
+        "Both speeds are cited from authoritative sources with exact quotes",
+        "Values are parsed from quotes, not hand-typed",
+        "The ratio is computed in Python, not stated by the LLM",
+        "CLAIM_FORMAL has operator '>' with threshold 1000000 and operator_note",
+        "Verdict is DISPROVED because ~874,000 < 1,000,000",
+        "Adversarial check searches for whether the ratio could exceed 1 million under different conditions",
+        "validate_proof.py passes with no issues",
+        "Three output files: proof.py, proof.md, proof_audit.md"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Prove that Brazil is both the largest country in South America by area AND has the largest population in South America.",
+      "expected_output": "PROVED — Brazil leads South America in both area (~8.5M km²) and population (~203M+). Compound AND claim with both sub-claims verified.",
+      "files": [],
+      "expectations": [
+        "CLAIM_FORMAL includes sub_claims list with conjunction AND",
+        "At least two sub-claims: area comparison and population comparison",
+        "Each sub-claim has its own sources and extracted values",
+        "At least one comparison country cited for each dimension",
+        "Values parsed from quotes using parse_number_from_quote",
+        "Both sub-claims must be PROVED for overall PROVED verdict",
+        "validate_proof.py passes with no issues",
+        "Three output files: proof.py, proof.md, proof_audit.md"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Is it true that coffee consumption reduces type 2 diabetes risk?",
+      "expected_output": "PARTIALLY VERIFIED or UNDETERMINED — studies show associations but with conflicting magnitudes, confounders, and no definitive causal proof.",
+      "files": [],
+      "expectations": [
+        "Multiple sources cited showing different study conclusions",
+        "The proof acknowledges conflicting or nuanced evidence",
+        "Verdict is PARTIALLY VERIFIED or UNDETERMINED, not PROVED",
+        "The proof explains why a definitive verdict cannot be reached",
+        "Adversarial check includes studies showing limitations or confounders",
+        "validate_proof.py passes with no issues",
+        "Three output files: proof.py, proof.md, proof_audit.md"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Prove that the Eiffel Tower is taller than the Statue of Liberty, which is taller than the Leaning Tower of Pisa.",
+      "expected_output": "PROVED — Eiffel Tower (~330m) > Statue of Liberty (~93m) > Leaning Tower of Pisa (~56m). Multi-hop transitive chain.",
+      "files": [],
+      "expectations": [
+        "Three separate structures cited with height data from independent sources",
+        "Heights parsed from quotes, not hand-typed",
+        "Two explicit comparisons: Eiffel > Statue of Liberty, Statue of Liberty > Leaning Tower",
+        "CLAIM_FORMAL captures the transitive chain structure",
+        "All three heights cross-checked against at least two sources each or adversarial check confirms no contradicting heights",
+        "validate_proof.py passes with no issues",
+        "Three output files: proof.py, proof.md, proof_audit.md"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Will AI surpass human intelligence by 2030?",
+      "expected_output": "Skill correctly identifies this as a future prediction and returns UNDETERMINED or declines to produce a proof.",
+      "files": [],
+      "expectations": [
+        "The response identifies the claim as a future prediction",
+        "The response explains that future events cannot be verified",
+        "Verdict is UNDETERMINED if a proof is generated, or no proof is generated",
+        "No PROVED or DISPROVED verdict is issued"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Prove that the 50th Fibonacci number is divisible by 5 but not by 7.",
+      "expected_output": "PROVED — Fib(50) = 12,586,269,025. 12,586,269,025 mod 5 = 0 and 12,586,269,025 mod 7 ≠ 0.",
+      "files": [],
+      "expectations": [
+        "The proof computes Fib(50) correctly as 12586269025",
+        "Both divisibility checks are computed in Python",
+        "CLAIM_FORMAL captures the compound AND structure (divisible by 5 AND not divisible by 7)",
+        "No empirical sources needed — pure Type A computation",
+        "Adversarial check verifies Fibonacci computation independently (e.g., closed-form or alternative algorithm)",
+        "validate_proof.py passes with no issues",
+        "Three output files: proof.py, proof.md, proof_audit.md"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Is it true that Japan's national debt exceeds 200% of its GDP?",
+      "expected_output": "PROVED or PROVED (with unverified citations) — Japan's debt-to-GDP ratio consistently reported above 200% by IMF, World Bank, or similar sources.",
+      "files": [],
+      "expectations": [
+        "At least two independent sources cited (IMF, World Bank, OECD, etc.)",
+        "Percentage values parsed from quotes using parse_percentage_from_quote or parse_number_from_quote",
+        "CLAIM_FORMAL has operator '>' with threshold 200 and operator_note",
+        "Cross-check confirms sources agree on the >200% figure",
+        "validate_proof.py passes with no issues",
+        "Three output files: proof.py, proof.md, proof_audit.md"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Fact-check: The Great Wall of China is visible from space with the naked eye.",
+      "expected_output": "DISPROVED — NASA and astronaut testimony confirm the Great Wall is not visible from low Earth orbit with the naked eye.",
+      "files": [],
+      "expectations": [
+        "At least one authoritative source (NASA, astronaut accounts) cited with exact quote",
+        "The proof identifies this as a common misconception",
+        "Verdict is DISPROVED",
+        "Adversarial check searches for any sources claiming visibility and addresses them",
+        "validate_proof.py passes with no issues",
+        "Three output files: proof.py, proof.md, proof_audit.md"
+      ]
     }
   ]
 }
