@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2026-03-26
+
+### Added
+
+- Qualitative consensus proofs: `verify_extraction()` now works with keywords/phrases, not just numbers
+- Compound claim support: `sub_claims` list with `conjunction` (AND/OR/BECAUSE/IMPLIES) in CLAIM_FORMAL
+- Paywalled sources guidance in SKILL.md with .gov workarounds and snapshot-first workflow
+- Pure-math proof template in hardening-rules.md (no citation/extraction boilerplate)
+- `cross_check()` function in computations.py for tolerance-based value comparison across sources
+- `compute_percentage_change()` function in computations.py
+- `verify_extraction()` now handles `datetime.date` values with multiple format checks
+- Guidance for citing structured/tabular data via `data_values` dict alongside quotes
+- "Interpreting independent" guidance for government statistics and pure-math proofs (Rule 6)
+- `verification_performed` field for adversarial checks (replaces `search_performed`, legacy accepted)
+- "How This Differs From..." section in README: positions project vs theorem provers, probabilistic scorers, and RAG pipelines
+- "Security Model" section in README: documents eval-free design, AST walking, and static analysis
+- Entailment gap documented in SKILL.md Technical limitations
+- Real proof examples in docs/examples/ (purchasing power decline, cortical plasticity)
+- CI validation workflow (.github/workflows/validate.yml)
+- 8 new eval cases (IDs 5–12): unit conversion disproof, compound AND claims, conflicting sources, multi-hop transitive chains, future prediction refusal, compound pure-math, percentage extraction, common misconception disproof
+
+### Fixed
+
+- Validator false positives on pure-math proofs: `_has_nonempty_empirical_facts()` distinguishes empty `empirical_facts = {}` from populated dicts
+- Validator Rule 6 no longer warns about missing sources for pure-computation proofs
+- Validator extraction check recognizes `parse_range_from_quote` and qualitative proofs using `verify_extraction()` without parse functions
+- `verify_extraction()` boundary matching now case-insensitive (fixes date string matching)
+- `explain_calc()` documented as unsuitable for list aggregations; descriptive `print()` recommended instead
+
+### Changed
+
+- SKILL.md workflow updated: Step 1 now covers compound claim decomposition, Step 2 covers pure-math cross-check planning
+- Proof template structural requirements split into empirical vs pure-math variants
+- `coverage_pct` documented as null for full_quote/unicode_normalized methods
+- Eval suite expanded from 5 to 13 cases for broader coverage
+
 ## [0.3.0] - 2026-03-26
 
 ### Added
