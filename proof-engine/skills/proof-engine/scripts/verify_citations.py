@@ -44,13 +44,19 @@ try:
 except ImportError:
     from smart_extract import normalize_unicode, diagnose_mismatch
 
+# Import source credibility assessment
+try:
+    from scripts.source_credibility import assess_credibility
+except ImportError:
+    from source_credibility import assess_credibility
+
 
 # ---------------------------------------------------------------------------
 # Result builder
 # ---------------------------------------------------------------------------
 
 def _result(status, method=None, coverage_pct=None, fetch_error=None,
-            fetch_mode="live", message=""):
+            fetch_mode="live", message="", credibility=None):
     """Build a structured citation verification result.
 
     Args:
@@ -61,8 +67,9 @@ def _result(status, method=None, coverage_pct=None, fetch_error=None,
         fetch_error: string if fetch_failed, None otherwise
         fetch_mode: "live" | "snapshot" | "wayback"
         message: human-readable description (for inline output)
+        credibility: source credibility assessment dict (from source_credibility.py)
     """
-    return {
+    result = {
         "status": status,
         "method": method,
         "coverage_pct": coverage_pct,
@@ -70,6 +77,9 @@ def _result(status, method=None, coverage_pct=None, fetch_error=None,
         "fetch_mode": fetch_mode,
         "message": message,
     }
+    if credibility is not None:
+        result["credibility"] = credibility
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -238,6 +248,9 @@ def verify_citation(
 
     Fallback chain: live fetch → snapshot → Wayback (if opted in).
 
+    Also performs source credibility assessment and includes it in the result
+    under the "credibility" key.
+
     Args:
         url: The URL to fetch.
         expected_quote: The quote text to look for.
@@ -248,7 +261,8 @@ def verify_citation(
         wayback_fallback: If True, try Wayback Machine when live+snapshot fail.
 
     Returns:
-        dict with keys: status, method, coverage_pct, fetch_error, fetch_mode, message
+        dict with keys: status, method, coverage_pct, fetch_error, fetch_mode,
+                        message, credibility
         - status: "verified" | "partial" | "not_found" | "fetch_failed"
         - method: "full_quote" | "unicode_normalized" | "fragment" |
                   "aggressive_normalization" | None
@@ -256,7 +270,16 @@ def verify_citation(
         - fetch_error: string if fetch_failed, None otherwise
         - fetch_mode: "live" | "snapshot" | "wayback"
         - message: human-readable description
+        - credibility: {domain, source_type, tier, flags, note}
     """
+    # Assess source credibility (offline, no network call)
+    credibility = assess_credibility(url)
+
+    def _with_credibility(result):
+        """Attach credibility assessment to any verification result."""
+        result["credibility"] = credibility
+        return result
+
     # --- 1. Try live fetch ---
     live_page = None
     fetch_error_msg = None
@@ -295,20 +318,20 @@ def verify_citation(
     if live_page is not None:
         result = _match_quote(live_page, expected_quote, fact_id, fetch_mode="live")
         if result is not None:
-            return result
+            return _with_credibility(result)
         # Live fetch succeeded but quote not found
         fragment = _extract_fragment(normalize_text(expected_quote), min_words=6)
-        return _result("not_found", fetch_mode="live",
-                        message=f"Quote NOT found for {fact_id}. Searched: '{fragment[:60]}...'")
+        return _with_credibility(_result("not_found", fetch_mode="live",
+                        message=f"Quote NOT found for {fact_id}. Searched: '{fragment[:60]}...'"))
 
     # --- 2. Try snapshot fallback (deterministic, user-provided) ---
     if snapshot:
         result = _match_quote(snapshot, expected_quote, fact_id, fetch_mode="snapshot")
         if result is not None:
-            return result
+            return _with_credibility(result)
         # Snapshot available but quote not in it
-        return _result("not_found", fetch_mode="snapshot",
-                        message=f"Quote NOT found in snapshot for {fact_id}")
+        return _with_credibility(_result("not_found", fetch_mode="snapshot",
+                        message=f"Quote NOT found in snapshot for {fact_id}"))
 
     # --- 3. Try Wayback Machine (opt-in, non-deterministic) ---
     if wayback_fallback:
@@ -316,13 +339,13 @@ def verify_citation(
         if wayback_text is not None:
             result = _match_quote(wayback_text, expected_quote, fact_id, fetch_mode="wayback")
             if result is not None:
-                return result
-            return _result("not_found", fetch_mode="wayback",
-                            message=f"Quote NOT found in Wayback archive for {fact_id}")
+                return _with_credibility(result)
+            return _with_credibility(_result("not_found", fetch_mode="wayback",
+                            message=f"Quote NOT found in Wayback archive for {fact_id}"))
 
     # --- 4. All methods exhausted ---
-    return _result("fetch_failed", fetch_error=fetch_error_msg,
-                    message=f"Fetch failed for {fact_id}: {fetch_error_msg}")
+    return _with_credibility(_result("fetch_failed", fetch_error=fetch_error_msg,
+                    message=f"Fetch failed for {fact_id}: {fetch_error_msg}"))
 
 
 # ---------------------------------------------------------------------------
@@ -400,14 +423,22 @@ def _print_status(fact_id: str, result: dict):
     msg = result["message"]
     mode = result.get("fetch_mode", "live")
     mode_tag = f" [{mode}]" if mode != "live" else ""
+    cred = result.get("credibility")
+    cred_tag = ""
+    if cred:
+        tier = cred.get("tier", "?")
+        stype = cred.get("source_type", "unknown")
+        cred_tag = f" (source: tier {tier}/{stype})"
+        if cred.get("flags"):
+            cred_tag += f" [{', '.join(cred['flags'])}]"
     if status == "verified":
-        print(f"  [✓] {fact_id}{mode_tag}: {msg}")
+        print(f"  [✓] {fact_id}{mode_tag}: {msg}{cred_tag}")
     elif status == "partial":
-        print(f"  [~] {fact_id}{mode_tag}: {msg}")
+        print(f"  [~] {fact_id}{mode_tag}: {msg}{cred_tag}")
     elif status == "not_found":
-        print(f"  [✗] {fact_id}{mode_tag}: {msg}")
+        print(f"  [✗] {fact_id}{mode_tag}: {msg}{cred_tag}")
     else:  # fetch_failed
-        print(f"  [?] {fact_id}{mode_tag}: {msg}")
+        print(f"  [?] {fact_id}{mode_tag}: {msg}{cred_tag}")
 
 
 # ---------------------------------------------------------------------------

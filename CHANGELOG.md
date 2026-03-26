@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Source credibility assessment: new `scripts/source_credibility.py` module classifies citation URLs into 5 tiers (government, academic, major news, reference, unknown/unreliable) using bundled domain data — fully offline, no API keys
+- Bundled credibility datasets in `scripts/data/`: government TLDs, academic publishers, major news orgs, established references, flagged unreliable/satire domains
+- `credibility` field automatically included in `verify_citation()` and `verify_all_citations()` results
+- Source Credibility Assessment section in proof_audit.md template
+- Low-credibility source warnings in proof.md conclusion
+- Self-critique checklist items for credibility assessment
 - Qualitative consensus proofs: `verify_extraction()` now works with keywords/phrases, not just numbers
 - Compound claim support: `sub_claims` list with `conjunction` (AND/OR/BECAUSE/IMPLIES) in CLAIM_FORMAL
 - Paywalled sources guidance in SKILL.md with .gov workarounds and snapshot-first workflow
@@ -37,6 +43,9 @@ All notable changes to this project will be documented in this file.
 - Proof template structural requirements split into empirical vs pure-math variants
 - `coverage_pct` documented as null for full_quote/unicode_normalized methods
 - Eval suite expanded from 5 to 13 cases for broader coverage
+- Citation detail in JSON summary now includes `credibility` dict (domain, source_type, tier, flags, note)
+- Type B Evidence Table in proof_audit.md adds Credibility column
+- Example proofs updated to include credibility in citation details
 
 ## [0.3.0] - 2026-03-26
 

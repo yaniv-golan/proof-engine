@@ -37,6 +37,7 @@ Import these instead of re-implementing verification logic. They are tested and 
 | `${CLAUDE_SKILL_DIR}/scripts/smart_extract.py` | Unicode normalization + LLM-assisted extraction utilities | `normalize_unicode()`, `verify_extraction()`, `diagnose_mismatch()`, `ExtractionRecord` |
 | `${CLAUDE_SKILL_DIR}/scripts/verify_citations.py` | Fetch URLs, verify quotes (live, snapshot, Wayback, PDF) (Rule 2) | `verify_citation()`, `verify_all_citations()` |
 | `${CLAUDE_SKILL_DIR}/scripts/computations.py` | Verified constants, formulas, and self-documenting output (Rule 7) | `compute_age()`, `compare()`, `explain_calc()`, `cross_check()`, `compute_percentage_change()`, `DAYS_PER_GREGORIAN_YEAR` |
+| `${CLAUDE_SKILL_DIR}/scripts/source_credibility.py` | Assess domain credibility from URL (offline, bundled data) | `assess_credibility(url)`, `assess_all(empirical_facts)` |
 | `${CLAUDE_SKILL_DIR}/scripts/validate_proof.py` | Static analysis for rule compliance (pre-flight) | `ProofValidator(filepath).validate()` |
 
 To import these from a proof script, set `PROOF_ENGINE_ROOT` to the skill's install directory (the directory containing this SKILL.md and the `scripts/` subdirectory). In Claude Code, use the resolved value of `${CLAUDE_SKILL_DIR}`:
@@ -187,7 +188,8 @@ Section "Conclusion": Restate verdict with the key numbers. Verdict-specific:
 - PROVED (with unverified citations): Same as PROVED, but explicitly list the unverified citations and their impact.
 - PARTIALLY VERIFIED: List which sub-claims were proved and which remain unverifiable, with reasons.
 - UNDETERMINED: State what specific evidence would be needed to resolve the claim.
-Source: JSON summary `verdict`, `key_results`; impact analysis is author analysis.
+- If any cited source has credibility tier ≤ 2 (unclassified or flagged), add a note: "Note: [N] citation(s) come from unclassified or low-credibility sources. See Source Credibility Assessment in the audit trail."
+Source: JSON summary `verdict`, `key_results`, `citations[].credibility`; impact analysis is author analysis.
 
 #### proof_audit.md structure
 
@@ -207,7 +209,7 @@ Section "Fact Registry": FACT_REGISTRY showing ID-to-key mapping. Source: proof.
 Section "Full Evidence Table": Two sub-sections:
 
 - "Type A (Computed) Facts" — table with columns: ID, Fact, Method, Result. All fields from JSON summary `fact_registry` entries where `method` and `result` are present. Source: proof.py JSON summary.
-- "Type B (Empirical) Facts" — table with columns: ID, Fact, Source, URL, Quote, Status, Method. One row per source. Source: proof.py JSON summary `citations` (which has normalized `status` and `method` fields — not free-form messages). For pure-math proofs, omit.
+- "Type B (Empirical) Facts" — table with columns: ID, Fact, Source, URL, Quote, Status, Method, Credibility. One row per source. Source: proof.py JSON summary `citations` (which has normalized `status` and `method` fields — not free-form messages). The Credibility column shows "Tier N (type)" from `citations[fact_id].credibility`. For pure-math proofs, omit.
 
 Section "Citation Verification Details": For each Type B citation, four fields — all from structured JSON fields, not parsed from prose:
 - Status: verified / partial / not_found / fetch_failed. Source: JSON summary `citations[fact_id].status`.
@@ -221,6 +223,8 @@ Section "Computation Traces": The explain_calc() output showing symbolic express
 Section "Independent Source Agreement (Rule 6)": Cross-check details — which values were independently sourced, whether they agree, source-to-source comparisons. Source: proof.py JSON summary `cross_checks`. For pure-math proofs, omit.
 
 Section "Adversarial Checks (Rule 5)": Full records with questions, searches performed, findings, and whether each breaks the proof. Source: proof.py JSON summary `adversarial_checks`.
+
+Section "Source Credibility Assessment": Table with columns: Fact ID, Domain, Type, Tier, Note. Source: JSON summary `citations[fact_id].credibility`. If any source has tier ≤ 1 (flagged unreliable or satire), add a note explaining why it was cited and whether the claim depends solely on it. Tier scale: 5=government/intergovernmental, 4=academic/peer-reviewed, 3=major news or established reference, 2=unclassified, 1=flagged unreliable. For pure-math proofs, omit.
 
 Section "Extraction Records": For each extracted value — fact ID, extracted value, whether value was found in quote. Source: JSON summary `extractions[fact_id]` (value, value_in_quote, quote_snippet). Plus: extraction method and normalization narrative. Source: author analysis (label as such). For pure-math proofs, omit.
 
@@ -258,7 +262,7 @@ Proof script contract:
 - [ ] proof.py includes FACT_REGISTRY with IDs for all facts
 - [ ] proof.py `__main__` emits `=== PROOF SUMMARY (JSON) ===` block
 - [ ] JSON summary contains required keys: fact_registry (with method/result for A-types), claim_formal, adversarial_checks, verdict, key_results
-- [ ] For empirical proofs: JSON summary also contains citations (with normalized status/method/coverage_pct), extractions (with value/value_in_quote/quote_snippet), cross_checks
+- [ ] For empirical proofs: JSON summary also contains citations (with normalized status/method/coverage_pct/credibility), extractions (with value/value_in_quote/quote_snippet), cross_checks
 - [ ] For pure-math proofs: omit citations and extractions keys entirely (do not include as empty dicts). cross_checks should contain computationally independent verification methods (see Rule 6 in hardening-rules.md for what "independent" means in a pure-math context). Use the pure-math template from hardening-rules.md.
 - [ ] FACT_REGISTRY keys in JSON match IDs used in both report documents
 
@@ -270,6 +274,8 @@ Document consistency:
 - [ ] proof_audit.md sections labeled with provenance (proof.py JSON summary / proof.py inline output / author analysis)
 - [ ] proof_audit.md includes Computation Traces reproduced from explain_calc inline output
 - [ ] proof_audit.md presents "Partially verified" citations distinctly from "Verified"
+- [ ] proof_audit.md includes Source Credibility Assessment table (for empirical proofs)
+- [ ] proof.md conclusion notes low-credibility sources if any cited source has tier ≤ 2
 - [ ] All three files are consistent with each other
 
 ## Verdicts

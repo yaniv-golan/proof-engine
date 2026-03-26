@@ -444,6 +444,7 @@ if __name__ == "__main__":
                 "method": cr.get("method", ""),
                 "coverage_pct": cr.get("coverage_pct", None),
                 "fetch_mode": cr.get("fetch_mode", ""),
+                "credibility": cr.get("credibility"),
             }
 
     # --- Build extraction records ---
