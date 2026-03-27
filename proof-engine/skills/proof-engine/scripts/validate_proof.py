@@ -94,6 +94,37 @@ class ProofValidator:
             return False
         return True
 
+    def _extract_empirical_facts_keys(self) -> list:
+        """Extract top-level key names from the empirical_facts dict.
+
+        Parses the source to find `empirical_facts = { "key": { ... }, ... }`
+        and returns the list of top-level string keys.
+        """
+        match = re.search(r'empirical_facts\s*=\s*\{', self.source)
+        if not match:
+            return []
+
+        keys = []
+        start = match.end()
+        depth = 1
+        i = start
+        while i < len(self.source) and depth > 0:
+            ch = self.source[i]
+            if ch == '{':
+                depth += 1
+            elif ch == '}':
+                depth -= 1
+            elif ch in ('"', "'") and depth == 1:
+                quote_char = ch
+                end_quote = self.source.index(quote_char, i + 1)
+                key = self.source[i + 1:end_quote]
+                rest = self.source[end_quote + 1:end_quote + 10].strip()
+                if rest.startswith(':'):
+                    keys.append(key)
+                i = end_quote
+            i += 1
+        return keys
+
     def check_rule2_citation_verification(self):
         """Rule 2: Citation verification code present."""
         has_verify_import = bool(re.search(r'verify_citation|verify_all_citations', self.source))
@@ -158,24 +189,24 @@ class ProofValidator:
             self.issues.append(("Rule 5: No adversarial check found — proof may have confirmation bias", []))
 
     def check_rule6_independent_crosscheck(self):
-        """Rule 6: Cross-checks use truly independent sources."""
-        # Count distinct source references
-        source_patterns = re.findall(
-            r'["\'](?:source_[a-z][a-z0-9_]*|fact_\d+|source_\d+)["\']',
-            self.source, re.IGNORECASE,
-        )
-        unique_sources = set(s.strip("\"'") for s in source_patterns)
+        """Rule 6: Cross-checks use truly independent sources.
 
-        if len(unique_sources) >= 2:
-            self.passed.append(f"Rule 6: {len(unique_sources)} distinct source references found ({', '.join(sorted(unique_sources))})")
-        elif len(unique_sources) == 1:
+        Counts distinct top-level keys in empirical_facts dict.
+        """
+        ef_keys = self._extract_empirical_facts_keys()
+
+        if len(ef_keys) >= 2:
+            self.passed.append(
+                f"Rule 6: {len(ef_keys)} distinct source references found "
+                f"({', '.join(sorted(ef_keys))})"
+            )
+        elif len(ef_keys) == 1:
             self.warnings.append((
-                f"Rule 6: Only one source reference found ({unique_sources.pop()}) — "
+                f"Rule 6: Only one source in empirical_facts ({ef_keys[0]}) — "
                 "cross-check may not be truly independent",
                 [],
             ))
         else:
-            # For pure-math proofs, multiple sources aren't needed
             if self._has_nonempty_empirical_facts() or '"url"' in self.source:
                 self.warnings.append(("Rule 6: No distinct source references found for empirical proof", []))
             else:
