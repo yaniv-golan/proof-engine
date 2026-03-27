@@ -68,8 +68,8 @@ Import these instead of re-implementing verification logic.
 ```python
 # computations.py
 cross_check(value_a, value_b, tolerance=0.01, mode="absolute", label=None) -> bool
-#   mode="absolute": |a - b| < tolerance
-#   mode="relative": |a - b| / max(|a|, |b|) < tolerance
+#   mode="absolute": |a - b| <= tolerance
+#   mode="relative": |a - b| / max(|a|, |b|) <= tolerance
 compute_percentage_change(old_value, new_value, label=None, mode="increase") -> float
 #   mode="increase": (new - old) / old * 100
 #   mode="decline": (1 - old / new) * 100

@@ -104,8 +104,8 @@ def cross_check(value_a, value_b, tolerance=0.01, mode="absolute", label=None):
         value_a: First value.
         value_b: Second value.
         tolerance: Maximum acceptable difference.
-        mode: "absolute" (|a - b| < tolerance) or
-              "relative" (|a - b| / max(|a|, |b|) < tolerance).
+        mode: "absolute" (|a - b| <= tolerance) or
+              "relative" (|a - b| / max(|a|, |b|) <= tolerance).
         label: Optional description for output.
 
     Returns:
@@ -124,12 +124,12 @@ def cross_check(value_a, value_b, tolerance=0.01, mode="absolute", label=None):
             pct = 0.0
         else:
             pct = diff / denom
-            result = pct < tolerance
+            result = pct <= tolerance
         print(f"  {tag}: {value_a} vs {value_b}, diff={diff}, "
               f"relative={pct:.6f}, tolerance={tolerance} "
               f"-> {'AGREE' if result else 'DISAGREE'}")
     else:  # absolute
-        result = diff < tolerance
+        result = diff <= tolerance
         print(f"  {tag}: {value_a} vs {value_b}, diff={diff}, "
               f"tolerance={tolerance} -> {'AGREE' if result else 'DISAGREE'}")
     return result
