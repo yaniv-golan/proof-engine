@@ -127,17 +127,19 @@ If the claim is an opinion or has no verifiable answer, do NOT attempt a proof. 
 Guiding questions:
 - Crisp true/false threshold? Extractable facts? Canonical sources? Clear disproof condition?
 - If fewer than 3 are true, consider a simpler factual summary instead.
-- For consensus claims, see "qualitative consensus proofs" in hardening-rules.md.
+- For consensus claims, see the Qualitative Consensus Proof Template in [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md).
 
 ### Step 2: Gather Facts (Both Directions)
 Search for sources that SUPPORT the claim, then sources that CONTRADICT it (adversarial — Rule 5). Find at least two independent sources (Rule 6). For math claims, plan two independent computation approaches.
 
 **Adversarial work happens once, here.** The `adversarial_checks` list in proof code records what you found — it's documentation of Step 2 research, not code that runs searches at proof execution time. Use past tense in `verification_performed` (e.g., "Searched for counter-evidence...") to make this clear.
 
+**Adversarial sources belong in `adversarial_checks`, not `empirical_facts`.** Sources that argue *against* your proof's conclusion should be documented in the `adversarial_checks` list's `verification_performed` field. Only sources that *support* the proof's conclusion belong in `empirical_facts`. This prevents adversarial citation failures from degrading the verdict via `any_unverified`.
+
 If a source is likely to return 403 on automated fetch (common for .gov, .edu, and some aggregators), pre-fetch the page text using any available tool and include it as the `snapshot` field in `empirical_facts`. The proof script will verify against the snapshot instead of live-fetching. See [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for details.
 
 ### Step 3: Write the Proof Code
-Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 7 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) and choose the template that matches your claim type (date/age, numeric/table, or pure-math). The proof script must be self-contained: `python proof.py` produces the full output.
+Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 7 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) and choose the template that matches your claim type (date/age, numeric/table, qualitative consensus, or pure-math). The proof script must be self-contained: `python proof.py` produces the full output.
 
 Required elements:
 - `CLAIM_FORMAL` dict with `operator_note` (Rule 4)
