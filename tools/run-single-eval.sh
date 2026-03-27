@@ -23,8 +23,10 @@ PLUGIN_DIR="$REPO_ROOT/proof-engine"
 
 mkdir -p "$OUTPUT_DIR"
 
-# Clean stale markers from previous runs
+# Clean stale markers and artifacts from previous runs
 rm -f "$OUTPUT_DIR/.success" "$OUTPUT_DIR/.failed"
+rm -f "$OUTPUT_DIR/proof.py" "$OUTPUT_DIR/proof.md" "$OUTPUT_DIR/proof_audit.md"
+rm -f "$OUTPUT_DIR/phase1.log" "$OUTPUT_DIR/feedback.md"
 
 # Save the original claim for later reference
 echo "$CLAIM" > "$OUTPUT_DIR/claim.txt"
@@ -111,10 +113,16 @@ if [ $PHASE2_EXIT -ne 0 ]; then
     exit 0
 fi
 
-# Validate feedback.md has expected structure (at least one probe heading)
-if [ ! -s "$OUTPUT_DIR/feedback.md" ] || ! grep -q "^## Probe 1" "$OUTPUT_DIR/feedback.md" 2>/dev/null; then
+# Validate feedback.md has all 7 probe headings
+MISSING_PROBES=""
+for n in 1 2 3 4 5 6 7; do
+    if ! grep -q "^## Probe $n" "$OUTPUT_DIR/feedback.md" 2>/dev/null; then
+        MISSING_PROBES="$MISSING_PROBES $n"
+    fi
+done
+if [ ! -s "$OUTPUT_DIR/feedback.md" ] || [ -n "$MISSING_PROBES" ]; then
     echo "[$(date '+%H:%M:%S')] Phase 2 produced malformed feedback: $(basename "$OUTPUT_DIR")"
-    echo "Phase 2 exited 0 but feedback.md is empty or missing probe structure. Phase 1 succeeded." > "$OUTPUT_DIR/.failed"
+    echo "Phase 2 exited 0 but feedback.md is missing probe headings:$MISSING_PROBES. Phase 1 succeeded." > "$OUTPUT_DIR/.failed"
     exit 0
 fi
 

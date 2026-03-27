@@ -64,8 +64,19 @@ if [ ! -f "$CLAIMS_FILE" ]; then
     exit 1
 fi
 
-if [ "$PARALLEL" -lt 1 ] 2>/dev/null; then
+case "$PARALLEL" in
+    ''|*[!0-9]*) echo "Error: --parallel must be a positive integer (got: $PARALLEL)" >&2; exit 1 ;;
+esac
+if [ "$PARALLEL" -lt 1 ]; then
     echo "Error: --parallel must be >= 1 (got: $PARALLEL)" >&2
+    exit 1
+fi
+
+case "$TIMEOUT" in
+    ''|*[!0-9]*) echo "Error: --timeout must be a positive integer (got: $TIMEOUT)" >&2; exit 1 ;;
+esac
+if [ "$TIMEOUT" -lt 1 ]; then
+    echo "Error: --timeout must be >= 1 (got: $TIMEOUT)" >&2
     exit 1
 fi
 
@@ -216,6 +227,7 @@ SUMMARY="$OUTPUT_DIR/summary.md"
 
     SUCCEEDED=0
     FAILED_COUNT=0
+    INCOMPLETE_COUNT=0
     NO_ISSUES=0
 
     for dir in "${CLAIM_DIRS[@]}"; do
@@ -235,7 +247,14 @@ SUMMARY="$OUTPUT_DIR/summary.md"
         fi
 
         if [ ! -f "$dir/.success" ]; then
-            continue  # incomplete or not yet run
+            INCOMPLETE_COUNT=$((INCOMPLETE_COUNT + 1))
+            echo "## $dir_name (INCOMPLETE)"
+            echo ""
+            echo "No .success or .failed marker — worker may have been interrupted."
+            echo ""
+            echo "---"
+            echo ""
+            continue
         fi
 
         SUCCEEDED=$((SUCCEEDED + 1))
@@ -291,6 +310,7 @@ MINOR_COUNT="${MINOR_COUNT:-0}"
     echo ""
     echo "- **Succeeded:** $SUCCEEDED / $TOTAL"
     echo "- **Failed:** $FAILED_COUNT"
+    echo "- **Incomplete:** $INCOMPLETE_COUNT"
     echo "- **Skipped (already done):** $SKIPPED"
     echo "- **Clean runs (no issues):** $NO_ISSUES"
     echo "- **Runs with blockers:** $BLOCKER_COUNT"
