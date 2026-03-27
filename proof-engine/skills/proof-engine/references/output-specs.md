@@ -62,7 +62,7 @@ Section "Citation Verification Details": For each Type B citation, four fields �
 - Impact (only if NOT verified): Which conclusions in proof.md depend on this citation, and whether they have independent support. Source: author analysis (label as such).
 For pure-math proofs, omit this section.
 
-Section "Computation Traces": The explain_calc() output showing symbolic expression, substituted values, and result for each computation step. Source: proof.py inline output (execution trace). This is the mechanical audit of all calculations — reproduce the explain_calc lines verbatim.
+Section "Computation Traces": The explain_calc() output showing symbolic expression, substituted values, and result for each computation step. Source: proof.py inline output (execution trace). This is the mechanical audit of all calculations — reproduce the explain_calc lines verbatim. For qualitative proofs without `explain_calc()` calls, reproduce the `compare()` and any other traced output from the execution. Note the absence of numeric computation traces if the proof is purely source-counting.
 
 Section "Independent Source Agreement (Rule 6)": Cross-check details — which values were independently sourced, whether they agree, source-to-source comparisons. Source: proof.py JSON summary `cross_checks`. For pure-math proofs, omit.
 
@@ -93,3 +93,11 @@ For pure-math proofs, mark Rules 1, 2, and 6 as "N/A — pure computation, no em
 - All extraction records in proof_audit.md must have value/value_in_quote from JSON summary `extractions`
 - Sections labeled "Source: proof.py JSON summary" or "Source: proof.py inline output" must be traceable to actual proof.py output
 - Sections labeled "Source: author analysis" must be clearly marked as such in proof_audit.md
+
+## Provenance labels
+
+Use these exact formats as a trailing line in each section:
+
+- `*Source: proof.py JSON summary*`
+- `*Source: proof.py inline output (execution trace)*`
+- `*Source: author analysis*`
