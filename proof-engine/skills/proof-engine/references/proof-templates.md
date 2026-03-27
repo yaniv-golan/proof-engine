@@ -418,13 +418,12 @@ Key differences from the empirical template:
 
 ## Qualitative Consensus Proof Template
 
-For claims where evidence is qualitative ("sources agree X is true") rather than numeric. Covers both affirmative proofs and disproofs. Uses source-counting as the metric: if N independent sources confirm a claim, it's proved; if 0 sources support it and N sources reject it, it's disproved.
+For claims where evidence is qualitative ("sources agree X is true") rather than numeric. Uses citation verification status as the counting mechanism: a source counts as "confirmed" if its citation was successfully verified (status = `verified` or `partial`).
 
 **When to use:** The claim's truth depends on expert/source agreement, not a numeric comparison. Examples: "The adult brain generates new neurons," "Humans only use 10% of their brain," "Coffee reduces diabetes risk."
 
 **Key differences from numeric templates:**
-- `verify_extraction("keyword", quote, fact_id)` replaces `parse_number_from_quote`
-- Source count replaces numeric threshold
+- Source count is based on citation verification status, not keyword extraction
 - `claim_holds` MUST use `compare()` — never hardcode `True` or `False`
 - Adversarial sources go in `adversarial_checks` only — NOT in `empirical_facts`
 
@@ -439,7 +438,6 @@ import sys
 PROOF_ENGINE_ROOT = "..."  # LLM fills this with the actual path at proof-writing time
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
-from scripts.smart_extract import verify_extraction
 from scripts.verify_citations import verify_all_citations, build_citation_detail
 from scripts.computations import compare
 
@@ -450,10 +448,8 @@ CLAIM_FORMAL = {
     "property": "...",
     "operator": ">=",
     "operator_note": "...",
-    "threshold": 3,            # min confirming sources needed
+    "threshold": 3,            # min verified sources needed (see threshold guidance below)
     "proof_direction": "affirm",  # "affirm" or "disprove"
-    # affirm: n_confirming = sources AGREEING → claim_holds=True → PROVED
-    # disprove: n_confirming = sources REJECTING → claim_holds=True → DISPROVED
 }
 
 # 2. FACT REGISTRY
@@ -461,15 +457,13 @@ FACT_REGISTRY = {
     "B1": {"key": "source_a", "label": "..."},
     "B2": {"key": "source_b", "label": "..."},
     "B3": {"key": "source_c", "label": "..."},
-    # A-type fact for the source count computation
-    "A1": {"label": "Source count for claim support", "method": None, "result": None},
+    "A1": {"label": "Verified source count", "method": None, "result": None},
 }
 
 # 3. EMPIRICAL FACTS — sources that confirm the proof's conclusion
 # For affirmative proofs: sources that AGREE with the claim
 # For disproofs: sources that REJECT the claim (confirm it's false)
 # IMPORTANT: adversarial sources go in adversarial_checks, NOT here.
-# This prevents adversarial citation failures from contaminating the verdict.
 empirical_facts = {
     "source_a": {
         "quote": "...", "url": "...", "source_name": "...",
@@ -485,57 +479,38 @@ empirical_facts = {
 # 4. CITATION VERIFICATION (Rule 2)
 citation_results = verify_all_citations(empirical_facts, wayback_fallback=True)
 
-# 5. KEYWORD EXTRACTION — verify key terms appear in each quote
-#
-# For AFFIRMATIVE proofs: keywords that confirm the claim
-#   e.g., "86 billion", "neurogenesis", "demonstrated"
-#
-# For DISPROOF proofs: keywords that confirm the source REJECTS the claim
-#   e.g., "myth", "no scientific evidence", "debunked", "misconception"
-#   This counts rejection sources (which is what we want for disproof).
-confirmations = []
-confirmations.append(verify_extraction("keyword_a", empirical_facts["source_a"]["quote"], "B1"))
-confirmations.append(verify_extraction("keyword_b", empirical_facts["source_b"]["quote"], "B2"))
-confirmations.append(verify_extraction("keyword_c", empirical_facts["source_c"]["quote"], "B3"))
+# 5. COUNT SOURCES WITH VERIFIED CITATIONS
+# A source counts toward the threshold if its quote was found on the page
+# (status = "verified" or "partial"). Sources with "not_found" or "fetch_failed"
+# are excluded — we can't confirm the quote exists.
+# Note: "partial" counts toward the threshold but still triggers the
+# "with unverified citations" verdict variant (it's not fully verified).
+COUNTABLE_STATUSES = ("verified", "partial")
+n_confirmed = sum(
+    1 for key in empirical_facts
+    if citation_results[key]["status"] in COUNTABLE_STATUSES
+)
+print(f"  Confirmed sources: {n_confirmed} / {len(empirical_facts)}")
 
-# 6. SOURCE COUNT
-# For affirmative: n_confirming = sources that agree with the claim
-# For disproof: n_confirming = sources that REJECT the claim
-n_confirming = sum(1 for c in confirmations if c)
+# 6. CLAIM EVALUATION — MUST use compare(), never hardcode claim_holds
+claim_holds = compare(n_confirmed, CLAIM_FORMAL["operator"], CLAIM_FORMAL["threshold"],
+                      label="verified source count vs threshold")
 
-# 7. CLAIM EVALUATION — MUST use compare(), never hardcode claim_holds
-#
-# AFFIRMATIVE mode: n_confirming = sources that agree with claim
-#   threshold=3, n_confirming >= 3 → claim_holds = True → PROVED
-#
-# DISPROOF mode: n_confirming = sources that REJECT claim
-#   threshold=3, n_confirming >= 3 → claim_holds = True
-#   BUT claim_holds=True means "the disproof holds" (we proved it false)
-#   The verdict block below maps this correctly:
-#     claim_holds=True → DISPROVED (the claim is false, proven by consensus rejection)
-#     claim_holds=False → UNDETERMINED (not enough rejection evidence)
-#
-# Set proof_direction in CLAIM_FORMAL to control verdict mapping.
-claim_holds = compare(n_confirming, CLAIM_FORMAL["operator"], CLAIM_FORMAL["threshold"])
-
-# 8. ADVERSARIAL CHECKS (Rule 5)
-# For affirmative proofs: search for sources that reject the claim
-# For disproofs: search for sources that support the claim
-# If breaks_proof=True, the verdict block maps to UNDETERMINED regardless of n_confirming.
+# 7. ADVERSARIAL CHECKS (Rule 5)
 adversarial_checks = [
     {
         "question": "...",
         "verification_performed": "Searched for ...",
         "finding": "...",
         "breaks_proof": False,
-        # Set True if counter-evidence undermines the proof.
-        # For disproofs: True if a credible supporting source was found.
-        # For affirmative: True if decisive counter-evidence was found.
     },
 ]
 
-# 9. VERDICT AND STRUCTURED OUTPUT
+# 8. VERDICT AND STRUCTURED OUTPUT
 if __name__ == "__main__":
+    # "partial" counts toward the threshold but is NOT fully verified —
+    # only "verified" is clean. This preserves the existing semantics where
+    # partial/fragment matches trigger "with unverified citations" verdicts.
     any_unverified = any(
         cr["status"] != "verified" for cr in citation_results.values()
     )
@@ -543,7 +518,6 @@ if __name__ == "__main__":
     any_breaks = any(ac.get("breaks_proof") for ac in adversarial_checks)
 
     if any_breaks:
-        # Adversarial check found evidence that undermines the proof
         verdict = "UNDETERMINED"
     elif claim_holds and not any_unverified:
         verdict = "DISPROVED" if is_disproof else "PROVED"
@@ -551,26 +525,25 @@ if __name__ == "__main__":
         verdict = ("DISPROVED (with unverified citations)" if is_disproof
                    else "PROVED (with unverified citations)")
     elif not claim_holds:
-        # Evidence threshold NOT met — insufficient evidence either way.
-        # For BOTH directions: can't conclude without enough confirming sources.
-        # Use DISPROVED only in numeric/date templates where compare() directly
-        # evaluates the claim (e.g., age < 70). For source-counting, not meeting
-        # the threshold means we don't have enough evidence, not that it's false.
         verdict = "UNDETERMINED"
 
-    FACT_REGISTRY["A1"]["method"] = f"sum(confirmations) = {n_confirming}"
-    FACT_REGISTRY["A1"]["result"] = str(n_confirming)
+    FACT_REGISTRY["A1"]["method"] = f"count(verified citations) = {n_confirmed}"
+    FACT_REGISTRY["A1"]["result"] = str(n_confirmed)
 
     citation_detail = build_citation_detail(FACT_REGISTRY, citation_results, empirical_facts)
 
-    extractions = {
-        f"B{i+1}": {
-            "value": "keyword confirmed" if c else "keyword not found",
-            "value_in_quote": c,
-            "quote_snippet": list(empirical_facts.values())[i]["quote"][:80],
+    # Extractions: for qualitative proofs, each B-type fact records citation status
+    extractions = {}
+    for fid, info in FACT_REGISTRY.items():
+        if not fid.startswith("B"):
+            continue
+        ef_key = info["key"]
+        cr = citation_results.get(ef_key, {})
+        extractions[fid] = {
+            "value": cr.get("status", "unknown"),
+            "value_in_quote": cr.get("status") in COUNTABLE_STATUSES,
+            "quote_snippet": empirical_facts[ef_key]["quote"][:80],
         }
-        for i, c in enumerate(confirmations)
-    }
 
     summary = {
         "fact_registry": {
@@ -581,18 +554,21 @@ if __name__ == "__main__":
         "claim_natural": CLAIM_NATURAL,
         "citations": citation_detail,
         "extractions": extractions,
+        # For qualitative proofs, cross_checks documents that multiple independent
+        # sources were consulted and how many were successfully verified.
         "cross_checks": [
             {
-                "description": "Independent source agreement on claim status",
-                "n_sources": len(confirmations),
-                "n_confirming": n_confirming,
-                "agreement": n_confirming == len(confirmations),
+                "description": "Multiple independent sources consulted",
+                "n_sources_consulted": len(empirical_facts),
+                "n_sources_verified": n_confirmed,
+                "sources": {k: citation_results[k]["status"] for k in empirical_facts},
+                "independence_note": "Sources are from different publications/institutions",
             }
         ],
         "adversarial_checks": adversarial_checks,
         "verdict": verdict,
         "key_results": {
-            "n_confirming": n_confirming,
+            "n_confirmed": n_confirmed,
             "threshold": CLAIM_FORMAL["threshold"],
             "operator": CLAIM_FORMAL["operator"],
             "claim_holds": claim_holds,
@@ -608,14 +584,13 @@ if __name__ == "__main__":
 To disprove a claim (e.g., "Humans only use 10% of their brain"):
 
 1. Set `CLAIM_FORMAL["proof_direction"]` to `"disprove"` and `threshold` to `3`.
-2. In `empirical_facts`, include authoritative sources that **reject** the claim (neuroscience textbooks, debunking articles).
-3. Keywords in `verify_extraction` should match **rejection** language: `"myth"`, `"no evidence"`, `"debunked"`, `"misconception"`.
-4. `n_confirming` counts sources that confirm the **rejection**. For a well-debunked myth, this will be 3+.
-5. `compare(3, ">=", 3)` returns `True`, so `claim_holds = True`.
-6. The verdict block checks `is_disproof` and maps `claim_holds = True` → `DISPROVED` (not PROVED).
-7. In `adversarial_checks`, search for any source that **supports** the claim. If none found, document this.
+2. In `empirical_facts`, include authoritative sources that **reject** the claim. Choose quotes that clearly express the rejection — the quote must be verifiable on the source page.
+3. `n_confirmed` counts sources whose quotes were verified on the live page.
+4. `compare(3, ">=", 3)` returns `True`, so `claim_holds = True`.
+5. The verdict block maps `claim_holds = True` → `DISPROVED` (via `proof_direction`).
+6. In `adversarial_checks`, search for sources that **support** the claim.
 
-**Why `proof_direction` exists:** `n_confirming` and `claim_holds` always mean "the evidence threshold was met." For affirmative proofs, meeting the threshold means the claim is true → PROVED. For disproofs, meeting the threshold means rejection is established → DISPROVED. The `proof_direction` flag tells the verdict block which mapping to use. This avoids the semantic trap of trying to make `claim_holds = False` mean "disproved" when the evidence is actually strong.
+No keyword selection is needed — the counting mechanism is citation verification, not keyword matching. The key requirement is that quotes are on-topic and verifiable.
 
 ### Adaptation notes
 
@@ -649,7 +624,6 @@ import sys
 PROOF_ENGINE_ROOT = "..."  # LLM fills with actual path
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
-from scripts.smart_extract import verify_extraction
 from scripts.verify_citations import verify_all_citations, build_citation_detail
 from scripts.computations import compare
 
@@ -686,20 +660,15 @@ empirical_facts = {
 # 4. CITATION VERIFICATION (Rule 2)
 citation_results = verify_all_citations(empirical_facts, wayback_fallback=True)
 
-# 5. PER-SUB-CLAIM KEYWORD EXTRACTION
-sc1_confirmations = [
-    verify_extraction("keyword", empirical_facts["sc1_source_a"]["quote"], "B1"),
-    verify_extraction("keyword", empirical_facts["sc1_source_b"]["quote"], "B2"),
-]
-sc2_confirmations = [
-    verify_extraction("keyword", empirical_facts["sc2_source_a"]["quote"], "B3"),
-    verify_extraction("keyword", empirical_facts["sc2_source_b"]["quote"], "B4"),
-]
+# 5. COUNT VERIFIED SOURCES PER SUB-CLAIM
+COUNTABLE_STATUSES = ("verified", "partial")
+sc1_keys = [k for k in empirical_facts if k.startswith("sc1_")]
+sc2_keys = [k for k in empirical_facts if k.startswith("sc2_")]
+
+n_sc1 = sum(1 for k in sc1_keys if citation_results[k]["status"] in COUNTABLE_STATUSES)
+n_sc2 = sum(1 for k in sc2_keys if citation_results[k]["status"] in COUNTABLE_STATUSES)
 
 # 6. PER-SUB-CLAIM EVALUATION — each uses compare()
-n_sc1 = sum(1 for c in sc1_confirmations if c)
-n_sc2 = sum(1 for c in sc2_confirmations if c)
-
 sc1_holds = compare(n_sc1, ">=", CLAIM_FORMAL["sub_claims"][0]["threshold"],
                     label="SC1: " + CLAIM_FORMAL["sub_claims"][0]["property"])
 sc2_holds = compare(n_sc2, ">=", CLAIM_FORMAL["sub_claims"][1]["threshold"],
@@ -744,28 +713,25 @@ if __name__ == "__main__":
         # Citation status is noted in proof.md conclusion.
         verdict = "UNDETERMINED"
 
-    FACT_REGISTRY["A1"]["method"] = f"sum(sc1_confirmations) = {n_sc1}"
+    FACT_REGISTRY["A1"]["method"] = f"count(verified sc1 citations) = {n_sc1}"
     FACT_REGISTRY["A1"]["result"] = str(n_sc1)
-    FACT_REGISTRY["A2"]["method"] = f"sum(sc2_confirmations) = {n_sc2}"
+    FACT_REGISTRY["A2"]["method"] = f"count(verified sc2 citations) = {n_sc2}"
     FACT_REGISTRY["A2"]["result"] = str(n_sc2)
 
     citation_detail = build_citation_detail(FACT_REGISTRY, citation_results, empirical_facts)
 
-    # Build extractions from FACT_REGISTRY B-type entries
-    all_sc_data = [
-        (sc1_confirmations, [fid for fid in FACT_REGISTRY if fid.startswith("B") and FACT_REGISTRY[fid]["key"].startswith("sc1_")]),
-        (sc2_confirmations, [fid for fid in FACT_REGISTRY if fid.startswith("B") and FACT_REGISTRY[fid]["key"].startswith("sc2_")]),
-    ]
+    # Extractions: each B-type fact records citation status
     extractions = {}
-    for conf_list, fid_list in all_sc_data:
-        for j, fid in enumerate(fid_list):
-            confirmed = conf_list[j] if j < len(conf_list) else False
-            ef_key = FACT_REGISTRY[fid]["key"]
-            extractions[fid] = {
-                "value": "keyword confirmed" if confirmed else "keyword not found",
-                "value_in_quote": confirmed,
-                "quote_snippet": empirical_facts[ef_key]["quote"][:80] if ef_key in empirical_facts else "",
-            }
+    for fid, info in FACT_REGISTRY.items():
+        if not fid.startswith("B"):
+            continue
+        ef_key = info["key"]
+        cr = citation_results.get(ef_key, {})
+        extractions[fid] = {
+            "value": cr.get("status", "unknown"),
+            "value_in_quote": cr.get("status") in COUNTABLE_STATUSES,
+            "quote_snippet": empirical_facts[ef_key]["quote"][:80],
+        }
 
     summary = {
         "fact_registry": {fid: dict(info) for fid, info in FACT_REGISTRY.items()},
@@ -774,14 +740,14 @@ if __name__ == "__main__":
         "citations": citation_detail,
         "extractions": extractions,
         "cross_checks": [
-            {"description": "SC1: independent source agreement",
-             "values_compared": [f"source {i+1}: {'confirms' if c else 'does not confirm'}"
-                                 for i, c in enumerate(sc1_confirmations)],
-             "agreement": all(sc1_confirmations) if sc1_confirmations else False},
-            {"description": "SC2: independent source agreement",
-             "values_compared": [f"source {i+1}: {'confirms' if c else 'does not confirm'}"
-                                 for i, c in enumerate(sc2_confirmations)],
-             "agreement": all(sc2_confirmations) if sc2_confirmations else False},
+            {"description": "SC1: independent sources consulted",
+             "n_sources_consulted": len(sc1_keys), "n_sources_verified": n_sc1,
+             "sources": {k: citation_results[k]["status"] for k in sc1_keys},
+             "independence_note": "Sources from different publications"},
+            {"description": "SC2: independent sources consulted",
+             "n_sources_consulted": len(sc2_keys), "n_sources_verified": n_sc2,
+             "sources": {k: citation_results[k]["status"] for k in sc2_keys},
+             "independence_note": "Sources from different publications"},
         ],
         "sub_claim_results": [
             {"id": "SC1", "n_confirming": n_sc1,
@@ -810,6 +776,6 @@ if __name__ == "__main__":
 - `sub_claim_results` in the JSON summary gives downstream tooling per-SC detail.
 - Only `AND` compounds are supported. For OR claims ("X or Y is true"), decompose into separate proofs — an OR compound where either sub-claim suffices is just two independent proofs.
 
-**Adapting for numeric compound claims:** Replace `verify_extraction()` with `parse_number_from_quote()` / `verify_data_values()` per the Numeric/Table template. The compound evaluation (steps 6-7) stays the same — only the per-sub-claim extraction (step 5) changes.
+**Adapting for numeric compound claims:** Replace the citation-counting step with `parse_number_from_quote()` / `verify_data_values()` per the Numeric/Table template. The compound evaluation (steps 6-7) stays the same — only the per-sub-claim counting (step 5) changes.
 
 **Sub-claims with no possible supporting sources:** Keep the sub-claim in `CLAIM_FORMAL["sub_claims"]` with its full structure — do not remove it from `n_total`. Set its `n_confirming` to 0 via an empty confirmations list (not a hardcoded literal). The compound verdict will naturally produce `PARTIALLY VERIFIED` (some hold, some don't) or `UNDETERMINED` (none hold). Removing a failing sub-claim from the denominator would change the claim's meaning and could turn a failing proof into a passing one. Document the sub-claim's failure and the evidence for it (e.g., adversarial findings) in the proof's adversarial_checks section.

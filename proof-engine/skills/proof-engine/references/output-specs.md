@@ -72,6 +72,8 @@ Section "Source Credibility Assessment": Table with columns: Fact ID, Domain, Ty
 
 Section "Extraction Records": For each extracted value — fact ID, extracted value, whether value was found in quote. Source: JSON summary `extractions[fact_id]` (value, value_in_quote, quote_snippet). Plus: extraction method and normalization narrative. Source: author analysis (label as such). For pure-math proofs, omit.
 
+For qualitative/consensus proofs (no numeric extraction), the `extractions` field records citation verification status per source instead of extracted values: `value` = verification status string, `value_in_quote` = whether the citation was countable (verified or partial), `quote_snippet` = first 80 chars of the quote.
+
 Section "Hardening Checklist":
 - Rule 1: Every empirical value parsed from quote text, not hand-typed
 - Rule 2: Every citation URL fetched and quote checked
