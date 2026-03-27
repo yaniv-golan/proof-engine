@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.0] - 2026-03-27
+
+### Added
+
+- `references/proof-templates.md` — dedicated file with 3 complete templates: date/age, numeric/table data, and pure-math. The numeric/table template is first-class (not commented-out PATH B) and uses `verify_data_values()`, `compute_percentage_change(mode="decline")`, and `cross_check()` throughout.
+- `cross_check()` mode heuristic in Gotchas: use `absolute` for computed results, `relative` for source-to-source comparisons
+- .gov 403 note in Step 2 pointing to environment-and-sources.md
+- JS-rendered site guidance expanded: static data ≠ static page metadata
+
+### Changed
+
+- Split `hardening-rules.md` from 714 lines to 339 lines (rules only) + `proof-templates.md` (templates and adaptation notes). Both are now under the 10k token read limit.
+- Reference Files Index updated with proof-templates.md entry
+- Step 3 now points to both hardening-rules.md (rules) and proof-templates.md (templates)
+
 ## [0.6.1] - 2026-03-27
 
 ### Added

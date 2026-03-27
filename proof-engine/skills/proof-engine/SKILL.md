@@ -34,8 +34,8 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **`explain_calc()` vs `compute_*()`**: Use named functions (`compute_percentage_change()`, `compute_age()`) when they match your computation — they self-document. Use `explain_calc()` for ad-hoc expressions. Don't wrap a `compute_*()` call in `explain_calc()`.
 - **Don't call `verify_extraction()` on data_values**: It's circular. Instead, call `verify_data_values(url, data_values, fact_id)` to confirm each value string appears on the source page, then cross-check across sources (Rule 6).
 - **Index base mismatches**: Economic data from different aggregators may use different base periods. If `cross_check()` flags a large disagreement, check whether sources use different scaling. Document the base period in source_name.
-- **Dynamic/JS-rendered sites**: Some aggregators (officialdata.org, in2013dollars.com) render via JavaScript. Live fetch gets raw HTML, causing low fragment coverage. Prefer static-content aggregators (rateinflation.com, inflationdata.com).
-- **`cross_check()` for data_values**: Use the full signature: `cross_check(val_a, val_b, tolerance=0.05, mode="absolute", label="CPI 1913")`. `mode="relative"` is useful when values span different magnitudes.
+- **Dynamic/JS-rendered sites**: Some aggregators (officialdata.org, in2013dollars.com) render via JavaScript. Live fetch gets raw HTML, causing low fragment coverage. Note: even static-data sites may have JS-rendered page metadata (titles, headers) — the data table being static doesn't mean quote verification will pass on page chrome. Prefer static-content aggregators (rateinflation.com, inflationdata.com).
+- **`cross_check()` mode heuristic**: Use `mode="absolute"` when comparing computed results that should match closely. Use `mode="relative"` when comparing values from different sources that may round differently (e.g., CPI 9.883 vs 9.9 — small absolute diff but ~0.2% relative).
 
 ## Reference Files
 
@@ -43,11 +43,12 @@ Read these on demand, not all upfront.
 
 | File | Read when |
 |------|-----------|
-| [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) | **Step 3** — before writing proof code. Start from the proof template near the end. |
-| [output-specs.md](${CLAUDE_SKILL_DIR}/references/output-specs.md) | **Step 5** — when writing proof.md and proof_audit.md |
+| [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) | **Step 3** — the 7 rules with bad/good examples |
+| [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) | **Step 3** — choose a template: date/age, numeric/table, or pure-math |
+| [output-specs.md](${CLAUDE_SKILL_DIR}/references/output-specs.md) | **Step 5** — proof.md and proof_audit.md structure |
 | [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md) | **Step 6** — before presenting results |
 | [advanced-patterns.md](${CLAUDE_SKILL_DIR}/references/advanced-patterns.md) | When encountering complex quotes or table-sourced data |
-| [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) | When facing fetch failures, paywalls, or sandboxed environments |
+| [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) | When facing fetch failures, paywalls, or .gov 403s |
 
 ## Bundled Scripts
 
@@ -133,8 +134,10 @@ Search for sources that SUPPORT the claim, then sources that CONTRADICT it (adve
 
 **Adversarial work happens once, here.** The `adversarial_checks` list in proof code records what you found — it's documentation of Step 2 research, not code that runs searches at proof execution time. Use past tense in `verification_performed` (e.g., "Searched for counter-evidence...") to make this clear.
 
+If .gov or major data sites return 403, see [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for workarounds (aggregator sites, snapshots).
+
 ### Step 3: Write the Proof Code
-Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md). Start from the proof template near the end. The proof script must be self-contained: `python proof.py` produces the full output.
+Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 7 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) and choose the template that matches your claim type (date/age, numeric/table, or pure-math). The proof script must be self-contained: `python proof.py` produces the full output.
 
 Required elements:
 - `CLAIM_FORMAL` dict with `operator_note` (Rule 4)
