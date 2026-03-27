@@ -173,8 +173,10 @@ Before presenting results, run through the checklist in [self-critique-checklist
 | **PROVED (with unverified citations)** | Logic valid but some citation URLs couldn't be fetched |
 | **DISPROVED** | Verified counterexample or contradiction found |
 | **DISPROVED (with unverified citations)** | Counterexample found but some citations couldn't be fetched |
-| **PARTIALLY VERIFIED** | Some sub-claims proved, others unverifiable |
+| **PARTIALLY VERIFIED** | Some sub-claims proved, others unverifiable or disproved |
 | **UNDETERMINED** | Insufficient evidence either way |
+
+**Threshold guidance for source-counting proofs:** The default `threshold: 3` means 3 independently verified sources must confirm the claim. Use `threshold: 2` only when the domain has few authoritative sources (e.g., a single landmark study replicated once). Always document the threshold choice in `operator_note`. Never set `threshold: 1` — a single source is not consensus.
 
 ## Limitations
 
