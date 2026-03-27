@@ -78,3 +78,96 @@ def test_rule6_no_empirical_pure_math():
     """Pure math proof should pass without sources."""
     v = _validate(NO_EMPIRICAL)
     assert len(v.issues) == 0
+
+
+def _validate_claim_holds(source_code: str) -> ProofValidator:
+    """Write source to temp file, run claim_holds check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_claim_holds_computed()
+    os.unlink(f.name)
+    return v
+
+
+CLAIM_HOLDS_VIA_COMPARE = '''
+claim_holds = compare(age, ">", 70)
+'''
+
+CLAIM_HOLDS_HARDCODED_TRUE = '''
+claim_holds = True
+'''
+
+CLAIM_HOLDS_HARDCODED_FALSE = '''
+claim_holds = False
+'''
+
+CLAIM_HOLDS_VIA_VARIABLE = '''
+has_support = False
+claim_holds = has_support
+'''
+
+CLAIM_HOLDS_VIA_BOOL_EXPR = '''
+claim_holds = n_confirming >= 3
+'''
+
+CLAIM_HOLDS_COMPOUND = '''
+sc1_claim_holds = compare(val_sc1, ">=", 80)
+sc2_claim_holds = compare(val_sc2, ">=", 3)
+overall_claim_holds = sc1_claim_holds and sc2_claim_holds
+'''
+
+CLAIM_HOLDS_COMPOUND_HARDCODED = '''
+sc1_claim_holds = True
+overall_claim_holds = sc1_claim_holds and sc2_claim_holds
+'''
+
+SUBCLAIM_HOLDS_VIA_COMPARE = '''
+subclaim_a_holds = compare(n_methods, "==", 0)
+subclaim_b_holds = not (adult_plasticity and reopening)
+overall_claim_holds = subclaim_a_holds and subclaim_b_holds
+'''
+
+SUBCLAIM_HOLDS_HARDCODED = '''
+subclaim_a_holds = False
+subclaim_b_holds = False
+overall_claim_holds = subclaim_a_holds and subclaim_b_holds
+'''
+
+
+def test_claim_holds_via_compare_passes():
+    v = _validate_claim_holds(CLAIM_HOLDS_VIA_COMPARE)
+    assert len(v.issues) == 0
+
+def test_claim_holds_hardcoded_true_fails():
+    v = _validate_claim_holds(CLAIM_HOLDS_HARDCODED_TRUE)
+    assert len(v.issues) > 0
+
+def test_claim_holds_hardcoded_false_fails():
+    v = _validate_claim_holds(CLAIM_HOLDS_HARDCODED_FALSE)
+    assert len(v.issues) > 0
+
+def test_claim_holds_via_variable_warns():
+    v = _validate_claim_holds(CLAIM_HOLDS_VIA_VARIABLE)
+    assert len(v.warnings) > 0
+
+def test_claim_holds_via_bool_expr_warns():
+    v = _validate_claim_holds(CLAIM_HOLDS_VIA_BOOL_EXPR)
+    assert len(v.warnings) > 0
+
+def test_claim_holds_compound_passes():
+    v = _validate_claim_holds(CLAIM_HOLDS_COMPOUND)
+    assert len(v.issues) == 0
+
+def test_claim_holds_compound_hardcoded_fails():
+    v = _validate_claim_holds(CLAIM_HOLDS_COMPOUND_HARDCODED)
+    assert len(v.issues) > 0
+
+def test_subclaim_holds_via_compare_passes():
+    v = _validate_claim_holds(SUBCLAIM_HOLDS_VIA_COMPARE)
+    assert any("subclaim_a_holds" in msg for msg in v.passed)
+
+def test_subclaim_holds_hardcoded_fails():
+    v = _validate_claim_holds(SUBCLAIM_HOLDS_HARDCODED)
+    assert len(v.issues) > 0

@@ -324,6 +324,50 @@ class ProofValidator:
         else:
             self.passed.append("General: Self-contained proof with __main__ and verdict")
 
+    def check_claim_holds_computed(self):
+        """Check that verdict-controlling variables are computed, not hardcoded.
+
+        Scans for any variable named *claim_holds* (including variants like
+        overall_claim_holds, sc1_claim_holds) and checks that they are assigned
+        from compare() or a compound expression, not from bare True/False literals.
+        """
+        # Match claim_holds and variants: overall_claim_holds, sc1_claim_holds,
+        # subclaim_a_holds, subclaim_b_holds, etc.
+        pattern = re.compile(r'\s*(\w*(?:claim_holds|_holds)\w*)\s*=\s*(.+)')
+        found_any = False
+
+        for i, line in enumerate(self.lines, 1):
+            if line.strip().startswith("#"):
+                continue
+            m = pattern.match(line)
+            if m:
+                found_any = True
+                var_name = m.group(1)
+                rhs = m.group(2).strip()
+                if rhs in ("True", "False"):
+                    self.issues.append((
+                        f"Verdict: {var_name} is hardcoded to {rhs} (line {i}) — "
+                        "must use compare() so the verdict is computed from evidence",
+                        [],
+                    ))
+                elif "compare(" in rhs:
+                    self.passed.append(f"Verdict: {var_name} assigned from compare()")
+                else:
+                    # Could be a variable alias (overall_claim_holds = sc1 and sc2)
+                    # or a boolean expression — warn, don't fail
+                    self.warnings.append((
+                        f"Verdict: {var_name} assigned from '{rhs}' (line {i}) — "
+                        "prefer using compare() for auditable verdict computation",
+                        [],
+                    ))
+
+        if not found_any:
+            # Check inside __main__ block as fallback
+            for i, line in enumerate(self.lines, 1):
+                if "claim_holds" in line and "compare(" in line:
+                    self.passed.append("Verdict: claim_holds assigned from compare() (inside __main__)")
+                    return
+
     # ------------------------------------------------------------------
     # Run all checks
     # ------------------------------------------------------------------
@@ -344,6 +388,7 @@ class ProofValidator:
         self.check_json_summary()
         self.check_extraction_verification()
         self.check_general_selfcontained()
+        self.check_claim_holds_computed()
 
         # Print report
         print(f"Validating: {self.filename}")
