@@ -62,7 +62,7 @@ Section "Citation Verification Details": For each Type B citation, four fields �
 - Impact (only if NOT verified): Which conclusions in proof.md depend on this citation, and whether they have independent support. Source: author analysis (label as such).
 For pure-math proofs, omit this section.
 
-Section "Computation Traces": The explain_calc() output showing symbolic expression, substituted values, and result for each computation step. Source: proof.py inline output (execution trace). This is the mechanical audit of all calculations — reproduce the explain_calc lines verbatim. For qualitative proofs without `explain_calc()` calls, reproduce the `compare()` and any other traced output from the execution. Note the absence of numeric computation traces if the proof is purely source-counting.
+Section "Computation Traces": The explain_calc() and compare() output from proof.py execution. Source: proof.py inline output (execution trace). Reproduce these lines verbatim — do not add annotations or labels that are not in the actual output. Use `compare(value, op, threshold, label="SC1: description")` to make traces self-documenting; the label appears in the printed output. For qualitative proofs without `explain_calc()` calls, the compare() output is the trace.
 
 Section "Independent Source Agreement (Rule 6)": Cross-check details — which values were independently sourced, whether they agree, source-to-source comparisons. Source: proof.py JSON summary `cross_checks`. For pure-math proofs, omit.
 

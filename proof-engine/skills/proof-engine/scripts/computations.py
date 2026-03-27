@@ -61,7 +61,7 @@ Using this avoids eval() and ensures the operator string in CLAIM_FORMAL
 is executed correctly."""
 
 
-def compare(value, op_str: str, threshold) -> bool:
+def compare(value, op_str: str, threshold, label=None) -> bool:
     """Compare a value against a threshold using a string operator.
 
     This replaces patterns like `eval(f"result {op} {threshold}")` which
@@ -71,6 +71,8 @@ def compare(value, op_str: str, threshold) -> bool:
         value: The computed value (left side of comparison).
         op_str: One of ">", ">=", "<", "<=", "==", "!=".
         threshold: The threshold to compare against (right side).
+        label: Optional description for output (e.g., "SC1: source count").
+               If omitted, prints "compare:" as the tag.
 
     Returns:
         bool — result of the comparison.
@@ -89,7 +91,8 @@ def compare(value, op_str: str, threshold) -> bool:
             f"Unknown operator '{op_str}'. Must be one of: {', '.join(OPERATORS.keys())}"
         )
     result = OPERATORS[op_str](value, threshold)
-    print(f"  compare: {value} {op_str} {threshold} = {result}")
+    tag = label or "compare"
+    print(f"  {tag}: {value} {op_str} {threshold} = {result}")
     return result
 
 

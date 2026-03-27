@@ -1,5 +1,5 @@
 """Tests for computations.py — cross_check tolerance fixes."""
-from scripts.computations import cross_check
+from scripts.computations import cross_check, compare
 
 
 def test_cross_check_exact_match_zero_tolerance_absolute():
@@ -29,3 +29,21 @@ def test_cross_check_relative_outside():
 def test_cross_check_both_zero():
     assert cross_check(0, 0, tolerance=0, mode="absolute") is True
     assert cross_check(0, 0, tolerance=0, mode="relative") is True
+
+
+def test_compare_label_in_output(capsys):
+    """compare() with label should print the label instead of 'compare'."""
+    compare(3, ">=", 2, label="SC1: source count")
+    captured = capsys.readouterr()
+    assert "SC1: source count" in captured.out
+    assert "3 >= 2 = True" in captured.out
+
+def test_compare_no_label_prints_compare(capsys):
+    compare(3, ">=", 2)
+    captured = capsys.readouterr()
+    assert "compare:" in captured.out
+
+def test_compare_label_none_prints_compare(capsys):
+    compare(3, ">=", 2, label=None)
+    captured = capsys.readouterr()
+    assert "compare:" in captured.out

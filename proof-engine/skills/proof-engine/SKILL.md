@@ -75,6 +75,8 @@ compute_percentage_change(old_value, new_value, label=None, mode="increase") -> 
 #   mode="decline": (1 - old / new) * 100
 explain_calc(expr_str, scope, label=None) -> object
 #   Prints symbolic -> substituted -> result. RETURNS the computed value.
+compare(value, op_str, threshold, label=None) -> bool
+#   Prints "{label}: {value} {op_str} {threshold} = {result}". Label defaults to "compare".
 
 # verify_citations.py
 build_citation_detail(fact_registry, citation_results, empirical_facts) -> dict
