@@ -368,6 +368,75 @@ class ProofValidator:
                     self.passed.append("Verdict: claim_holds assigned from compare() (inside __main__)")
                     return
 
+    def check_unused_imports(self):
+        """Check for imported-but-unused functions from scripts.*"""
+        import_lines = re.findall(
+            r'from\s+scripts\.\w+\s+import\s+(.+)',
+            self.source,
+        )
+        imported_names = []
+        for line in import_lines:
+            names = [n.strip() for n in line.split(",")]
+            imported_names.extend(names)
+
+        unused = []
+        for name in imported_names:
+            occurrences = len(re.findall(r'\b' + re.escape(name) + r'\b', self.source))
+            if occurrences <= 1:
+                unused.append(name)
+
+        if unused:
+            self.warnings.append((
+                f"Unused imports from scripts.*: {', '.join(unused)} — "
+                "imported but never called (dead code that may falsely satisfy rule checks)",
+                [],
+            ))
+        else:
+            self.passed.append("Contract: All imported script functions are used")
+
+    def check_verdict_branches(self):
+        """Check that verdict assignment has proper conditional branches.
+
+        Instead of checking indentation (which fails inside __main__), we check:
+        1. Single verdict assignment with no `if` on line → hardcoded
+        2. Multiple verdict assignments → conditional (branched)
+        3. Ternary → conditional
+        4. Warn if no else/fallback branch
+        """
+        verdict_lines = []
+        for i, line in enumerate(self.lines, 1):
+            if line.strip().startswith("#"):
+                continue
+            if re.search(r'\bverdict\s*=\s*["\']', line):
+                verdict_lines.append((i, line))
+
+        if not verdict_lines:
+            return
+
+        if len(verdict_lines) == 1:
+            lineno, line = verdict_lines[0]
+            if " if " in line:
+                self.passed.append("Verdict: ternary verdict assignment (conditional)")
+            else:
+                self.issues.append((
+                    f"Verdict: only one verdict assignment found (line {lineno}) — "
+                    "verdict appears hardcoded. Use if/elif/else branches or a ternary.",
+                    [],
+                ))
+            return
+
+        has_else_verdict = bool(re.search(
+            r'^\s+else\s*:\s*\n\s+verdict\s*=', self.source, re.MULTILINE
+        ))
+        if not has_else_verdict:
+            self.warnings.append((
+                "Verdict: no fallback (else) branch in verdict assignment — "
+                "verdict variable may be unassigned on some code paths",
+                [],
+            ))
+        else:
+            self.passed.append("Verdict: verdict assignment has conditional branches with fallback")
+
     # ------------------------------------------------------------------
     # Run all checks
     # ------------------------------------------------------------------
@@ -389,6 +458,8 @@ class ProofValidator:
         self.check_extraction_verification()
         self.check_general_selfcontained()
         self.check_claim_holds_computed()
+        self.check_unused_imports()
+        self.check_verdict_branches()
 
         # Print report
         print(f"Validating: {self.filename}")

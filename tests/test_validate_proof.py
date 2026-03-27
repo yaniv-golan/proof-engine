@@ -171,3 +171,92 @@ def test_subclaim_holds_via_compare_passes():
 def test_subclaim_holds_hardcoded_fails():
     v = _validate_claim_holds(SUBCLAIM_HOLDS_HARDCODED)
     assert len(v.issues) > 0
+
+
+def _validate_full(source_code: str) -> ProofValidator:
+    """Write source to temp file, run unused imports + verdict branch checks."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_unused_imports()
+        v.check_verdict_branches()
+    os.unlink(f.name)
+    return v
+
+
+UNUSED_COMPARE = '''
+from scripts.computations import compare, explain_calc
+result = explain_calc("2 + 3", {"x": 5})
+'''
+
+ALL_USED = '''
+from scripts.computations import compare, explain_calc
+result = explain_calc("2 + 3", {"x": 5})
+claim_holds = compare(result, "==", 5)
+'''
+
+VERDICT_COMPLETE = '''
+if claim_holds and not any_unverified:
+    verdict = "PROVED"
+elif claim_holds and any_unverified:
+    verdict = "PROVED (with unverified citations)"
+elif not claim_holds and not any_unverified:
+    verdict = "DISPROVED"
+elif not claim_holds and any_unverified:
+    verdict = "DISPROVED (with unverified citations)"
+else:
+    verdict = "UNDETERMINED"
+'''
+
+VERDICT_MISSING_DISPROVED = '''
+if claim_holds and not any_unverified:
+    verdict = "PROVED"
+elif claim_holds and any_unverified:
+    verdict = "PROVED (with unverified citations)"
+elif not claim_holds:
+    verdict = "DISPROVED"
+'''
+
+VERDICT_HARDCODED = '''
+if __name__ == "__main__":
+    verdict = "PROVED"
+'''
+
+VERDICT_HARDCODED_TOPLEVEL = '''
+verdict = "PROVED"
+'''
+
+VERDICT_TERNARY = '''
+if __name__ == "__main__":
+    verdict = "PROVED" if claim_holds else "DISPROVED"
+'''
+
+
+def test_unused_import_warns():
+    v = _validate_full(UNUSED_COMPARE)
+    assert any("compare" in str(w) for w in v.warnings)
+
+def test_all_imports_used_passes():
+    v = _validate_full(ALL_USED)
+    assert not any("unused" in str(w).lower() for w in v.warnings)
+
+def test_verdict_complete_passes():
+    v = _validate_full(VERDICT_COMPLETE)
+    assert len(v.issues) == 0
+
+def test_verdict_missing_branch_warns():
+    v = _validate_full(VERDICT_MISSING_DISPROVED)
+    assert len(v.warnings) > 0 or len(v.issues) > 0
+
+def test_verdict_hardcoded_inside_main_fails():
+    v = _validate_full(VERDICT_HARDCODED)
+    assert len(v.issues) > 0
+
+def test_verdict_hardcoded_toplevel_fails():
+    v = _validate_full(VERDICT_HARDCODED_TOPLEVEL)
+    assert len(v.issues) > 0
+
+def test_verdict_ternary_passes():
+    v = _validate_full(VERDICT_TERNARY)
+    assert len(v.issues) == 0
