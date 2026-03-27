@@ -134,7 +134,7 @@ Search for sources that SUPPORT the claim, then sources that CONTRADICT it (adve
 
 **Adversarial work happens once, here.** The `adversarial_checks` list in proof code records what you found — it's documentation of Step 2 research, not code that runs searches at proof execution time. Use past tense in `verification_performed` (e.g., "Searched for counter-evidence...") to make this clear.
 
-If .gov or major data sites return 403, see [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for workarounds (aggregator sites, snapshots).
+If a source is likely to return 403 on automated fetch (common for .gov, .edu, and some aggregators), pre-fetch the page text using any available tool and include it as the `snapshot` field in `empirical_facts`. The proof script will verify against the snapshot instead of live-fetching. See [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for details.
 
 ### Step 3: Write the Proof Code
 Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 7 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) and choose the template that matches your claim type (date/age, numeric/table, or pure-math). The proof script must be self-contained: `python proof.py` produces the full output.
