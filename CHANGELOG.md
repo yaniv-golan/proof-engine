@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 2026-03-27
+
+### Added
+
+- **Qualitative Consensus Proof Template** — full template for source-counting proofs (affirm + disprove variants). Uses `proof_direction` field to control verdict mapping. Replaces the 3-sentence adaptation note.
+- **Compound CLAIM_FORMAL template** — complete worked example for AND claims with per-sub-claim confirmation lists, labeled `compare()` calls, and full verdict block with PARTIALLY VERIFIED handling.
+- **6th verdict: DISPROVED (with unverified citations)** — completes the 2x2 verdict matrix (claim_holds × citation_status). Updated all templates, output-specs, README.
+- `compare(label=)` parameter — traces now print `SC1: 3 >= 3 = True` instead of `compare: 3 >= 3 = True`. Eliminates manual annotation of computation traces.
+- Validator: `check_claim_holds_computed()` — flags hardcoded `claim_holds = True/False` and variants (`subclaim_a_holds`, `overall_claim_holds`).
+- Validator: `check_unused_imports()` — warns when scripts.* functions are imported but never called.
+- Validator: `check_verdict_branches()` — flags single hardcoded verdict assignments, warns on missing else fallback.
+- Test suite: 40 pytest tests covering `cross_check`, `parse_number_from_quote`, and all validator checks.
+- Eval harness (`tools/run-evals.sh`, `tools/run-single-eval.sh`) — batch-tests claims against the skill with structured feedback collection.
+- Claim generation prompt (`evals/generate-claims-prompt.md`) — meta-prompt for generating diverse test claims by domain.
+
+### Fixed
+
+- `cross_check(a, a, tolerance=0)` now returns AGREE (was DISAGREE due to `<` instead of `<=`).
+- `parse_number_from_quote` handles leading-zero-omitted decimals (`.24`, `-.33`) common in statistics papers.
+- Validator Rule 6 counts actual `empirical_facts` dict keys instead of regex-matching `source_name` fields.
+
+### Changed
+
+- Adversarial sources guidance: sources that argue against the proof's conclusion go in `adversarial_checks`, not `empirical_facts`. Prevents citation failures from contaminating the verdict.
+- Cross-reference fix: qualitative consensus pointer now correctly points to proof-templates.md (was hardening-rules.md).
+- Step 3 now lists qualitative consensus as a template option alongside date/age, numeric/table, and pure-math.
+- output-specs.md: computation traces section updated for qualitative proofs and labeled compare() output. Provenance label format specified.
+- self-critique-checklist.md: fixed stale reference to hardening-rules.md.
+
+### Gotchas added
+
+- **WebFetch paraphrases quotes** — AI fetch tools silently reformat text; always verify verbatim before committing to empirical_facts.
+- **Handle `verify_data_values()` failures** — don't use unverified data_values as primary computation input; cross-checking two unverified sources is circular.
+
 ## [0.7.0] - 2026-03-27
 
 ### Added
