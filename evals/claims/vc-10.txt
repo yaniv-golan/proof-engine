@@ -1,0 +1,10 @@
+US venture capital funding reached $332 billion in 2021 before declining by over 35% in 2022.
+More than 75% of venture capital returns come from fewer than 10% of portfolio companies in a typical fund.
+A venture capital fund investing $50 million in 25 startups at equal sizes requires at least one 50x return and two 10x returns to achieve a 3x gross multiple.
+Sequoia Capital's total capital raised exceeds $100 billion across all funds and its average fund multiple exceeds 4x net to LPs.
+The failure rate for venture-backed startups is 70% within 10 years, lower than the commonly cited 90% for all startups.
+Venture capital funds vintage 2012-2016 have a median net IRR of 16.8% according to Cambridge Associates but 18.2% according to Preqin.
+The average exit multiple for SaaS venture-backed companies is 8.5x invested capital, higher than for consumer internet companies.
+If a company raises $5 million in Series A at a $25 million post-money valuation and exits at $500 million seven years later, the annualized return to the Series A investor exceeds 40% before dilution.
+Y Combinator has backed over 100 unicorns since its inception in 2005.
+The superior predictor of venture success is founder pedigree from elite universities rather than market size or product traction.

@@ -1,0 +1,10 @@
+The Schwarzschild radius of the Sun calculated via rs = 2GM/c² with 2022 CODATA values for G, solar mass, and c lies strictly between 2.95 km and 2.96 km.
+Local Cepheid-variable measurements of the Hubble constant exceed 72 km s⁻¹ Mpc⁻¹ while the 2018 Planck CMB inference yields a value below 68 km s⁻¹ Mpc⁻¹.
+The theoretical vacuum energy density from quantum field theory exceeds the observed cosmological-constant value inferred from Type Ia supernovae by more than 10¹²⁰ orders of magnitude.
+An object moving at exactly 0.95c relative to a stationary observer experiences a Lorentz factor γ greater than 3.2.
+Heavier objects fall faster than lighter objects even in a perfect vacuum.
+The mean neutron lifetime measured in beam experiments is more than 1 second shorter than the lifetime obtained from ultracold-neutron bottle experiments.
+Quantum entanglement enables the transmission of usable information faster than the speed of light when the distant parties pre-agree on a measurement basis.
+The twin paradox in special relativity can be resolved only by invoking general relativity and the acceleration of the traveling twin.
+Dark energy constitutes more than 68 % of the universe’s total energy density according to the Planck 2018 legacy release.
+M-theory is the only consistent quantum-gravity framework that simultaneously incorporates all four fundamental forces and eliminates ultraviolet divergences.
