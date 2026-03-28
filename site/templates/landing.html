@@ -6,8 +6,8 @@
 
 {% block content %}
 <div class="hero">
-    <h1>Proof Engine</h1>
-    <p>Open-source verifiable proofs. Every fact cited, every calculation re-runnable. No LLM trust required.</p>
+    <h1>Verifiable Proofs</h1>
+    <p class="hero-subtitle">// every fact cited · every calculation re-runnable</p>
     <div class="stats">
         <div class="stat">
             <div class="stat-value">{{ stats.total }}</div>
@@ -27,17 +27,17 @@
         </div>
     </div>
     <div class="cta-row">
-        <a href="{{ base_url }}catalog/" class="cta">Browse Proofs</a>
-        <a href="https://github.com/yaniv-golan/proof-engine#installation" class="cta cta-secondary" rel="nofollow">Install the Skill</a>
-        <a href="{{ base_url }}submit/#ai-agents" class="cta cta-secondary">AI Agents</a>
+        <a href="{{ base_url }}catalog/" class="cta">browse proofs</a>
+        <a href="https://github.com/yaniv-golan/proof-engine#installation" class="cta cta-secondary" rel="nofollow">install skill</a>
+        <a href="{{ base_url }}submit/#ai-agents" class="cta cta-secondary">ai agents</a>
     </div>
 </div>
 
 {% if featured_proofs %}
-<h2 class="section-heading">Featured Proofs</h2>
+<h2 class="section-heading">featured proofs</h2>
 <div id="featured-container">
 {% for proof in featured_proofs %}
-<a href="{{ base_url }}proofs/{{ proof.slug }}/" class="featured-proof" style="text-decoration: none; color: inherit; display: none;">
+<a href="{{ base_url }}proofs/{{ proof.slug }}/" class="card-link featured-proof featured-hidden">
 <div class="proof-card">
     <h3>{{ proof.proof_data.claim_natural }}</h3>
     <div class="meta">
@@ -47,6 +47,9 @@
         {% endfor %}
         <span class="date">{{ proof.date }}</span>
     </div>
+    {% if proof.source_names %}
+    <div class="source-line">Sources: {{ proof.source_names | join(', ') }}{% if proof.source_names_extra > 0 %} +{{ proof.source_names_extra }} more{% endif %}</div>
+    {% endif %}
 </div>
 </a>
 {% endfor %}
@@ -59,7 +62,7 @@
         var tmp = cards[i]; cards[i] = cards[j]; cards[j] = tmp;
     }
     for (var k = 0; k < Math.min(3, cards.length); k++) {
-        cards[k].style.display = '';
+        cards[k].classList.remove('featured-hidden');
     }
 })();
 </script>
