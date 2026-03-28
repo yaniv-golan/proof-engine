@@ -23,7 +23,11 @@
 <div class="verdict-banner {{ proof.verdict.category }}">
     <span class="badge badge-{{ proof.verdict.category }}">{{ proof.verdict.raw }}</span>
     <span class="verdict-info">
-        {% if proof.citation_count is not none %}
+        {% if proof.search_count is not none and proof.citation_count is not none %}
+            {{ proof.search_count }} database search{{ "es" if proof.search_count != 1 }}, {{ proof.citation_count }} citation{{ "s" if proof.citation_count != 1 }}
+        {% elif proof.search_count is not none %}
+            {{ proof.search_count }} database search{{ "es" if proof.search_count != 1 }}
+        {% elif proof.citation_count is not none %}
             {{ proof.citation_count }} citation{{ "s" if proof.citation_count != 1 }}
         {% else %}
             Pure computation — no citations

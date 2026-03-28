@@ -75,6 +75,13 @@ def load_proof(proof_dir: Path) -> dict:
         print(f"WARNING: {slug}: proof_audit.md missing optional sections: {missing_audit}",
               file=sys.stderr)
 
+    # Absence proofs: check for Type S (Search) Facts section
+    if proof_data.get("search_registry") is not None:
+        if "Type S (Search) Facts" not in sections_audit:
+            print(f"WARNING: {slug}: proof_audit.md missing 'Type S (Search) Facts' section "
+                  "(expected for absence proofs with search_registry)",
+                  file=sys.stderr)
+
     missing_md_opt = validate_required_sections(sections_md, OPTIONAL_MD_SECTIONS)
     if missing_md_opt:
         print(f"WARNING: {slug}: proof.md missing optional sections: {missing_md_opt}",
@@ -97,6 +104,10 @@ def load_proof(proof_dir: Path) -> dict:
     citations = proof_data.get("citations")
     citation_count = len(citations) if citations is not None else None
 
+    # Search count (absence proofs)
+    search_registry = proof_data.get("search_registry")
+    search_count = len(search_registry) if search_registry is not None else None
+
     return {
         "slug": slug,
         "proof_data": proof_data,
@@ -106,6 +117,7 @@ def load_proof(proof_dir: Path) -> dict:
         "tags": tags,
         "featured": featured,
         "citation_count": citation_count,
+        "search_count": search_count,
         "date": generator["generated_at"],
         "proof_engine_version": generator["version"],
     }

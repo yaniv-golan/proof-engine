@@ -18,6 +18,12 @@ REQUIRED_GENERATOR_KEYS = ["name", "version", "repo", "generated_at"]
 REQUIRED_CLAIM_FORMAL_KEYS = []  # claim_formal structure varies by proof type
 INVARIANT_FIELDS = ["verdict", "claim_formal", "claim_natural", "fact_registry", "key_results"]
 
+# Keys within search_registry entries that are authored (should not drift)
+SEARCH_REGISTRY_AUTHORED_KEYS = [
+    "database", "url", "search_url", "query_terms",
+    "date_range", "result_count", "source_name",
+]
+
 
 def validate_json_structure(proof_data):
     errors = []
@@ -38,6 +44,19 @@ def validate_json_structure(proof_data):
     if "verdict" in proof_data:
         if proof_data["verdict"] not in VERDICT_TAXONOMY:
             errors.append(f"Unknown verdict: {proof_data['verdict']}")
+
+    # Conditional: absence proofs require search_registry
+    claim_formal = proof_data.get("claim_formal", {})
+    if claim_formal.get("proof_direction") == "absence":
+        if "search_registry" not in proof_data:
+            errors.append("Absence proof (proof_direction=absence) missing required search_registry")
+
+    # For absence proofs, validate authored search metadata hasn't drifted
+    if "search_registry" in proof_data:
+        for key, entry in proof_data["search_registry"].items():
+            for field in SEARCH_REGISTRY_AUTHORED_KEYS:
+                if field not in entry:
+                    errors.append(f"search_registry[{key}] missing authored field: {field}")
 
     return errors
 
