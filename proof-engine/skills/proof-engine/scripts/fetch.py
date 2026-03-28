@@ -69,7 +69,8 @@ def try_wayback(url: str, timeout: int = 15) -> str | None:
 # ---------------------------------------------------------------------------
 
 def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
-               wayback_fallback: bool = False) -> tuple[str | None, str, str | None]:
+               wayback_fallback: bool = False,
+               skip_live_fetch: bool = False) -> tuple[str | None, str, str | None]:
     """Fetch page text using the standard fallback chain.
 
     Args:
@@ -77,6 +78,8 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
         timeout: Fetch timeout in seconds.
         snapshot: Pre-fetched page text for offline verification.
         wayback_fallback: If True, try Wayback Machine as last resort.
+        skip_live_fetch: If True, skip live HTTP fetch (e.g., when requests
+            is unavailable in the calling module).
 
     Returns:
         (page_text, fetch_mode, error_message)
@@ -86,7 +89,7 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
     """
     # --- 1. Try live fetch ---
     fetch_error_msg = None
-    if requests is not None:
+    if requests is not None and not skip_live_fetch:
         try:
             resp = requests.get(
                 url,

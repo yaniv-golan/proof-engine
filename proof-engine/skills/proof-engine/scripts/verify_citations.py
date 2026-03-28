@@ -257,6 +257,7 @@ def verify_citation(
     page_text, fetch_mode, fetch_error_msg = _fetch_page(
         url, timeout=timeout, snapshot=snapshot,
         wayback_fallback=wayback_fallback,
+        skip_live_fetch=(requests is None),
     )
 
     if page_text is not None:
