@@ -146,6 +146,7 @@ if __name__ == "__main__":
         },
         "generator": {
             "name": "proof-engine",
+            "version": "__PROOF_ENGINE_VERSION__",
             "repo": "https://github.com/yaniv-golan/proof-engine",
             "generated_at": date.today().isoformat(),
         },
@@ -337,6 +338,7 @@ if __name__ == "__main__":
         },
         "generator": {
             "name": "proof-engine",
+            "version": "__PROOF_ENGINE_VERSION__",
             "repo": "https://github.com/yaniv-golan/proof-engine",
             "generated_at": date.today().isoformat(),
         },
@@ -434,6 +436,7 @@ if __name__ == "__main__":
         },
         "generator": {
             "name": "proof-engine",
+            "version": "__PROOF_ENGINE_VERSION__",
             "repo": "https://github.com/yaniv-golan/proof-engine",
             "generated_at": date.today().isoformat(),
         },
@@ -609,6 +612,7 @@ if __name__ == "__main__":
         },
         "generator": {
             "name": "proof-engine",
+            "version": "__PROOF_ENGINE_VERSION__",
             "repo": "https://github.com/yaniv-golan/proof-engine",
             "generated_at": date.today().isoformat(),
         },
@@ -804,6 +808,7 @@ if __name__ == "__main__":
         },
         "generator": {
             "name": "proof-engine",
+            "version": "__PROOF_ENGINE_VERSION__",
             "repo": "https://github.com/yaniv-golan/proof-engine",
             "generated_at": date.today().isoformat(),
         },
