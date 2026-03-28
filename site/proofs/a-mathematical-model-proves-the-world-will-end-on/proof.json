@@ -1,0 +1,151 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "source_future_earth",
+      "label": "Wikipedia Future of Earth: Sun engulfs Earth in ~7.59 billion years"
+    },
+    "B2": {
+      "key": "source_ladbible",
+      "label": "LADbible: von Foerster model's exponential growth assumption falsified"
+    },
+    "B3": {
+      "key": "source_livescience",
+      "label": "Live Science: Earth habitable for another 1.75 billion years"
+    },
+    "A1": {
+      "label": "Verified disproof source count vs threshold",
+      "method": "count(verified disproof citations) = 3",
+      "result": "3"
+    }
+  },
+  "claim_formal": {
+    "subject": "The von Foerster et al. (1960) mathematical model (the only known candidate)",
+    "property": "constitutes a scientifically credible proof that Earth / human civilization will effectively end on a specific day in 2026",
+    "operator": ">=",
+    "operator_note": "The claim asserts a mathematical model 'proves' world-end on a specific day in 2026. We interpret 'proves' as: the model provides a scientifically valid, evidence-supported prediction of Earth's end (physical or civilizational) on a specific 2026 date. The only known candidate is von Foerster, Mora & Amiot (1960, Science), which predicted population growth would reach a mathematical singularity (infinity) on Friday, November 13, 2026. proof_direction=disprove: We collect sources that REJECT the claim. The claim is DISPROVED if >=2 independent sources confirm (a) Earth's actual lifespan is billions of years, not decades, and/or (b) the von Foerster model's core assumptions have been observably falsified. Threshold=2 (not default 3): counter-evidence is overwhelming and only a few authoritative sources exist above astrophysics and demography.",
+    "threshold": 2,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "A mathematical model proves the world will end on a specific day in 2026.",
+  "citations": {
+    "B1": {
+      "source_key": "source_future_earth",
+      "source_name": "Wikipedia: Future of Earth (synthesizing peer-reviewed astrophysics)",
+      "url": "https://en.wikipedia.org/wiki/Future_of_Earth",
+      "quote": "These effects will counterbalance the impact of mass loss by the Sun, and the Sun will likely engulf Earth in about 7.59 billion years from now.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B2": {
+      "source_key": "source_ladbible",
+      "source_name": "LADbible: Chilling mathematical equation predicted world end date (Jan 2026)",
+      "url": "https://www.ladbible.com/news/science/when-will-world-end-date-408044-20260109",
+      "quote": "With the exponential growth of the population halted, largely because women are choosing to have fewer children in some of the world's largest countries, a 2026 apocalypse is less likely.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "ladbible.com",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B3": {
+      "source_key": "source_livescience",
+      "source_name": "Live Science: How Much Longer Can Earth Support Life?",
+      "url": "https://www.livescience.com/39775-how-long-can-earth-support-life.html",
+      "quote": "in another 1.75 billion years the planet will travel out of the solar system's habitable zone and into a hot zone that will scorch away its oceans",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "livescience.com",
+        "source_type": "major_news",
+        "tier": 3,
+        "flags": [],
+        "note": "Major news organization"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "These effects will counterbalance the impact of mass loss by the Sun, and the Su"
+    },
+    "B2": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "With the exponential growth of the population halted, largely because women are "
+    },
+    "B3": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "in another 1.75 billion years the planet will travel out of the solar system's h"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Three independent sources from different domains consulted: astrophysics (B1, B3) and science journalism on demography (B2). B1 and B3 independently confirm Earth's lifespan in billions of years. B2 confirms the von Foerster model's assumptions were falsified.",
+      "n_sources_consulted": 3,
+      "n_sources_verified": 3,
+      "sources": {
+        "source_future_earth": "verified",
+        "source_ladbible": "verified",
+        "source_livescience": "verified"
+      },
+      "independence_note": "B1 (Wikipedia/astrophysics) and B3 (Live Science/habitability research) are independent measurements of Earth's projected lifespan from different research groups. B2 (LADbible) documents the demographic evidence separately. All three reach the same conclusion through different mechanisms."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Was the von Foerster 1960 paper peer-reviewed and published in a credible journal? Could the model still be considered scientifically valid?",
+      "verification_performed": "Searched 'von Foerster 1960 Science paper doomsday equation'. Confirmed: von Foerster, Mora & Amiot published 'Doomsday: Friday, 13 November, A.D. 2026' in Science (Vol. 132, pp. 1291-1295, 4 Nov 1960) \u2014 a top-tier peer-reviewed journal. However, the paper was explicitly presented as a conditional extrapolation under extreme assumptions (unlimited food, no nuclear war, ever-accelerating growth), not a literal prediction. The authors framed it as a warning about what would happen IF growth continued unchecked. The title itself contained 'Doomsday' in quotation marks in some reprints.",
+      "finding": "The paper is legitimate peer-reviewed science, but its doomsday conclusion was always conditional. By 2026 the core assumption \u2014 super-exponential population acceleration \u2014 is observably false. The UN projects population peaking at 10.3 billion in the 2080s and declining, not reaching infinity. A model whose assumptions are falsified does not 'prove' its conclusion.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Are there other mathematical models (besides von Foerster) predicting world end in 2026?",
+      "verification_performed": "Searched 'mathematical model predicts world end 2026 scientific peer reviewed'. Other 2026 'end of world' claims found: (1) Messiah Foundation International \u2014 fringe religious group predicting asteroid impact, no mathematical model; (2) Various numerology-based claims with no scientific basis. No peer-reviewed mathematical model other than von Foerster predicts world end in 2026.",
+      "finding": "Von Foerster (1960) is the only peer-reviewed mathematical model cited in connection with a specific 2026 doomsday date. No additional credible models support the claim. The claim therefore rises or falls with von Foerster \u2014 and that model's assumptions have been falsified.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could 'world will end' refer only to civilizational collapse from overpopulation rather than physical Earth destruction? Would this charitable reading rescue the claim?",
+      "verification_performed": "Considered whether 'world ends' = civilizational collapse from overpopulation could save the claim. The von Foerster model predicted population reaching a mathematical singularity \u2014 a feature of the equation, not a validated physical mechanism. Even under the civilizational-collapse reading: (a) population growth has slowed, not accelerated; (b) the model's mechanism (overcrowding to death) is not operational; (c) the UN projects a stable peak of 10.3 billion, not runaway growth.",
+      "finding": "Even the charitable reading fails. A model whose driving assumption (ever-accelerating growth) is falsified does not 'prove' any version of world-end in 2026. The equation's singularity is a mathematical artifact of an invalid input assumption.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n_confirmed_disproof_sources": 3,
+    "threshold": 2,
+    "operator": ">=",
+    "claim_holds": true,
+    "days_until_predicted_end_date": 230,
+    "predicted_end_date": "2026-11-13",
+    "date_note": "System date matches proof generation date",
+    "earth_lifespan_years_remaining": "~7.59 billion (until solar engulfment)",
+    "model_assumption_status": "FALSIFIED (population growth slowed dramatically)"
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

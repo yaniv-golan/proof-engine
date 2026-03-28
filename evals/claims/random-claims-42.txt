@@ -1,0 +1,52 @@
+# 2026 Hot Topics — 42 high-traffic claims
+# Viral Hoaxes & Math Memes (1-10)
+A man on TikTok has solved the Riemann Hypothesis after one week of work.
+Earth will lose gravity for exactly 7 seconds on August 12, 2026, causing 40 million deaths.
+A mathematical model proves the world will end on a specific day in 2026.
+2026 has no square root (viral New Year's math meme).
+2026 is both a "happy number" and mathematically "perfect," proving the year is cosmically special.
+Computers had a hidden "math glitch" preventing division by zero until it was patched in 2026.
+The viral expression "8 ÷ 2(2+2)" equals 1 (PEMDAS war still raging).
+The viral expression "8 ÷ 2(2+2)" equals 16.
+2026 being divisible by 2, 3, 7, 11, 13, 17 proves it has "hidden perfect number properties."
+"Thank God 2026 has no square root" is mathematically meaningful.
+
+# AI & LLM Controversies (11-20)
+Modern large language models (like GPT-4o) truly understand the meaning of the text they generate.
+AI hallucinations occur on fewer than 5% of factual questions.
+Training and running today's frontier AI models consumes more electricity than entire small countries.
+AI will replace over 50% of white-collar jobs by 2035.
+Current AI systems have already achieved Artificial General Intelligence (AGI).
+Deepfake videos are now indistinguishable from real footage to the average human eye.
+Using AI tools makes humans worse at critical thinking and original problem-solving.
+AI-generated code has fewer security vulnerabilities than typical human-written code.
+AI progress in capabilities has largely plateaued since late 2024.
+AI chatbots are sentient or conscious.
+
+# Nutrition & Health Wars (21-30)
+Seed oils (canola, sunflower, soybean, corn oil) are toxic and a primary cause of modern chronic inflammation and disease.
+All ultra-processed foods are inherently unhealthy and should be avoided completely.
+Carbohydrates, not dietary fat, are the main driver of obesity and type-2 diabetes.
+You must eat animal protein to meet daily protein needs effectively.
+Natural sugars in fruit are healthy while added sugars are poison (in equivalent amounts).
+Detox diets and juice cleanses actually remove toxins from the body.
+Eating eggs significantly raises LDL cholesterol and heart-disease risk.
+"Calories in, calories out" is the only thing that matters for sustainable weight loss.
+Intermittent fasting is scientifically proven superior to other diets for fat loss and longevity.
+Olive oil and avocado oil are dramatically healthier than every single seed oil.
+
+# Climate, Energy & Environment (31-37)
+Current global warming is primarily driven by natural climate cycles rather than human CO2 emissions.
+Higher atmospheric CO2 is beneficial "plant food" with no net negative effects.
+Electric vehicles have a larger lifetime carbon footprint than gasoline cars when manufacturing and battery disposal are included.
+Nuclear power is too dangerous to be a major part of any clean-energy future.
+Renewable energy (solar + wind) can replace fossil fuels without major grid upgrades or backups.
+Extreme weather events (hurricanes, wildfires, floods) have become dramatically more frequent and intense solely because of climate change.
+The climate has always changed — today's warming is not unusual or alarming.
+
+# Economics, Finance & Tech Myths (38-42)
+Bitcoin is a proven hedge against inflation and fiat currency collapse.
+Raising the federal minimum wage to $15+/hour has no significant negative effect on employment.
+Infinite economic growth is possible on a finite planet.
+"Math washing" a spreadsheet (presenting empirical observations as universal theorems) is valid scientific practice.
+The St. Petersburg paradox has a finite expected value that a rational person should be willing to pay.

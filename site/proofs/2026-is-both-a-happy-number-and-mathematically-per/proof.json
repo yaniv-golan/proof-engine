@@ -1,0 +1,135 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "SC1: Is 2026 a happy number? (iterative digit-square-sum algorithm)",
+      "method": "is_happy_iterative(2026): Floyd cycle detection on digit-square-sum sequence",
+      "result": "True \u2014 sequence [2026, 44, 32, 13, 10, 1] terminates at 1"
+    },
+    "A2": {
+      "label": "SC1 cross-check: Happy-number verification via cycle membership (OEIS A007770 structure)",
+      "method": "is_happy_cycle_check(2026): halt on UNHAPPY_CYCLE membership",
+      "result": "True \u2014 agrees with A1"
+    },
+    "A3": {
+      "label": "SC2: Is 2026 a perfect number? (compute sum of proper divisors)",
+      "method": "sum_of_proper_divisors_direct(2026): O(sqrt(n)) enumeration",
+      "result": "1016 (need 2026 for perfect; deficit = 1010)"
+    },
+    "A4": {
+      "label": "SC2 cross-check: Perfect-number verification via multiplicative sigma formula",
+      "method": "sigma_multiplicative(2026): product formula \u03c3(n)=\u220f(p^(a+1)-1)/(p-1) minus n",
+      "result": "1016 \u2014 agrees with A3"
+    },
+    "A5": {
+      "label": "SC2 factorisation: prime factorisation of 2026",
+      "method": "prime_factorisation(2026): trial division",
+      "result": "{2: 1, 1013: 1}"
+    }
+  },
+  "claim_formal": {
+    "subject": "2026",
+    "sub_claims": {
+      "SC1": {
+        "property": "happy number",
+        "operator": "==",
+        "operator_note": "A positive integer n is 'happy' if repeatedly replacing n with the sum of squares of its decimal digits eventually reaches 1. All other integers are 'unhappy' (they cycle through a fixed loop containing 4). This is the standard mathematical definition (OEIS A007770). Informal uses such as 'happy' as an adjective are not mathematical claims and are not evaluated.",
+        "threshold": true
+      },
+      "SC2": {
+        "property": "perfect number",
+        "operator": "==",
+        "operator_note": "A positive integer n is 'perfect' if the sum of its proper divisors (all positive divisors excluding n itself) equals n exactly. This is the standard mathematical definition (Euclid, Elements Book IX, Proposition 36; OEIS A000396). The known perfect numbers are: 6, 28, 496, 8128, 33550336, ... Perfect numbers are extraordinarily rare \u2014 only 51 are known as of 2024. The claim 'mathematically perfect' is interpreted as this strict definition, not a colloquial usage, because the claim invokes mathematical precision.",
+        "threshold": true
+      },
+      "SC3": {
+        "property": "cosmically special",
+        "operator": "==",
+        "operator_note": "'Cosmically special' is a rhetorical/metaphorical expression, not a mathematical or empirical claim. It is not formally evaluable. This sub-claim is excluded from the verdict and noted as opinion.",
+        "threshold": "NOT_EVALUABLE"
+      }
+    },
+    "compound_operator": "AND (SC1 AND SC2; SC3 excluded as non-evaluable)",
+    "operator_note": "The compound claim holds only if BOTH SC1 and SC2 are true. SC3 ('cosmically special') is not a mathematical claim and is excluded."
+  },
+  "claim_natural": "2026 is both a \"happy number\" and mathematically \"perfect,\" proving the year is cosmically special.",
+  "cross_checks": [
+    {
+      "description": "SC1: Two independent happy-number algorithms agree",
+      "values_compared": [
+        "True",
+        "True"
+      ],
+      "agreement": true,
+      "tolerance": "exact (boolean)",
+      "method_independence": "Primary uses Floyd cycle detection (stops when 'current' is seen before); cross-check stops on membership in the precomputed UNHAPPY_CYCLE set. Different stopping criteria \u2014 a bug in one would not affect the other."
+    },
+    {
+      "description": "SC2: Two independent proper-divisor-sum algorithms agree",
+      "values_compared": [
+        "1016",
+        "1016"
+      ],
+      "agreement": true,
+      "tolerance": "exact (integer)",
+      "method_independence": "Primary enumerates candidate divisors by iteration (arithmetic); cross-check uses the multiplicative sigma formula from number theory (algebraic identity). Different mathematical principles."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is there an alternative definition of 'happy number' that would yield a different result for 2026?",
+      "verification_performed": "Reviewed OEIS A007770 (Happy Numbers) definition. Also checked whether 'base-10' vs 'base-2' happy number definitions differ: the standard definition (Grundman & Teeple 2001) operates in base 10. The claim does not specify a base, so base 10 is used (the overwhelmingly standard interpretation). In base-2, a different set of happy numbers exists, but the unqualified term 'happy number' refers to base 10 in mathematical literature.",
+      "finding": "No credible alternative definition changes the result. 2026 is happy in base 10 by any standard algorithm.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there an alternative definition of 'perfect number' under which 2026 qualifies?",
+      "verification_performed": "Checked related concepts: quasi-perfect numbers (\u03c3(n) = 2n+1), almost perfect numbers (\u03c3(n) = 2n-1), semiperfect numbers (n = sum of some proper divisors), abundant numbers (\u03c3(n) > 2n), deficient numbers (\u03c3(n) < 2n). 2026: \u03c3(2026) = 1+2+1013+2026 = 3042; 2*2026 = 4052. So 2026 is deficient (\u03c3(n) = 3042 < 4052 = 2n). It is not quasi-perfect, semiperfect, or abundant either.",
+      "finding": "Under the standard definition, 2026 is deficient, not perfect. No non-standard variant of 'perfect number' makes 2026 qualify.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could 2026 be a perfect number if a different factorisation is used (e.g., a computation error)?",
+      "verification_performed": "Verified factorisation independently: 2026 / 2 = 1013. Checked primality of 1013 by trial division up to floor(sqrt(1013)) = 31: 1013 is not divisible by 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, or 31. Therefore 2026 = 2^1 * 1013^1 is the unique prime factorisation. The two independent methods (direct enumeration and multiplicative \u03c3) both agree: sum of proper divisors = 1016.",
+      "finding": "Factorisation is confirmed. Sum of proper divisors is unambiguously 1016, not 2026.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is 'cosmically special' a falsifiable mathematical claim?",
+      "verification_performed": "Reviewed mathematical literature for 'cosmically special number' as a defined term. Found no such definition in number theory, combinatorics, or mathematical physics. The phrase is rhetorical/poetic, not mathematical.",
+      "finding": "SC3 is not a mathematical claim and cannot be proved or disproved. Excluded from verdict.",
+      "breaks_proof": false
+    }
+  ],
+  "sub_claim_verdicts": {
+    "SC1": "PROVED",
+    "SC2": "DISPROVED",
+    "SC3": "NOT_EVALUABLE (opinion/metaphor)"
+  },
+  "verdict": "PARTIALLY VERIFIED",
+  "key_results": {
+    "sc1_is_happy": true,
+    "sc1_sequence": [
+      2026,
+      44,
+      32,
+      13,
+      10,
+      1
+    ],
+    "sc2_sum_proper_divisors": 1016,
+    "sc2_n": 2026,
+    "sc2_deficit": 1010,
+    "sc2_is_perfect": false,
+    "sc2_prime_factors": {
+      "2": 1,
+      "1013": 1
+    },
+    "compound_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

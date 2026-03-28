@@ -1,0 +1,89 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Floor-sqrt bound check: no integer squares to 2026",
+      "method": "math.isqrt() floor-sqrt bound check",
+      "result": "45\u00b2 = 2025 \u2260 2026, 46\u00b2 = 2116 \u2260 2026 \u2192 no integer square root"
+    },
+    "A2": {
+      "label": "Quadratic-residue mod-16 check: 2026 mod 16 is not a perfect-square residue",
+      "method": "Quadratic residues mod 16",
+      "result": "2026 mod 16 = 10; QR_16 = {0,1,4,9}; 10 \u2209 QR_16 \u2192 not a perfect square"
+    },
+    "A3": {
+      "label": "Context: 2025 = 45\u00b2 confirming the adjacent perfect square",
+      "method": "math.isqrt() perfect-square confirmation",
+      "result": "45\u00b2 = 2025 \u2192 2025 IS a perfect square (adjacent year)"
+    }
+  },
+  "claim_formal": {
+    "subject": "2026",
+    "property": "existence of an integer n such that n\u00b2 = 2026",
+    "operator": "==",
+    "threshold": false,
+    "operator_note": "The claim is interpreted as: there is no integer n \u2265 0 satisfying n\u00b2 = 2026 (equivalently, 2026 is not a perfect square). In \u211d or \u2102, 2026 trivially has square roots (\u221a2026 \u2248 45.011\u2026), so the real/complex interpretation makes the claim false. The viral meme's mathematical punch-line \u2014 that 2025 = 45\u00b2 is a perfect square and 2026 is not \u2014 only makes sense under the integer interpretation, which is therefore the formal claim. Proof succeeds when both independent methods agree: no integer n satisfies n\u00b2 = 2026."
+  },
+  "claim_natural": "2026 has no square root",
+  "cross_checks": [
+    {
+      "description": "Primary (floor-sqrt) vs cross-check (mod-16): both return is_perfect_square=False for 2026",
+      "values_compared": [
+        "False",
+        "False"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does 2026 have a real or complex square root? Could that vindicate the claim?",
+      "verification_performed": "Computed math.sqrt(2026) \u2248 45.011109\u2026 and noted that every positive real has exactly two real square roots (\u00b1). In \u2102 every number has square roots. The meme's mathematical joke depends on 2025 being special as a perfect square year; the intended meaning is unambiguously the integer/perfect-square sense.",
+      "finding": "\u221a2026 \u2248 45.011\u2026 exists in \u211d but is irrational. The real/complex interpretations make the claim FALSE; only the integer interpretation makes it TRUE and mathematically interesting. The formal claim is correctly scoped to integers.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Are there any integers near 2026 that are perfect squares, confirming 2026 is genuinely between two?",
+      "verification_performed": "Computed 45\u00b2 = 2025 and 46\u00b2 = 2116. Checked that 2025 < 2026 < 2116 with no integer between 45 and 46, confirming no gap is missed.",
+      "finding": "44\u00b2 = 1936, 45\u00b2 = 2025, 46\u00b2 = 2116, 47\u00b2 = 2209. 2026 falls strictly between consecutive perfect squares 2025 and 2116. This is fully consistent with the primary proof \u2014 no counterexample.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could a modular-arithmetic error give a false 'not a perfect square' result?",
+      "verification_performed": "Verified the set PERFECT_SQUARE_RESIDUES_MOD16 by enumerating all k in 0..15 and computing k\u00b2 mod 16. Result: {0,1,4,9}. Confirmed 2026 mod 16 = 10 by direct subtraction: 2026 - 126\u00d716 = 2026 - 2016 = 10. Checked that 10 \u2209 {0,1,4,9} by inspection.",
+      "finding": "The residue set {0,1,4,9} and 2026 mod 16 = 10 are both straightforward to verify by hand. No error \u2014 the modular argument is sound.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is math.isqrt() reliable for four-digit numbers?",
+      "verification_performed": "math.isqrt() is specified in PEP 578 / Python 3.8+ and computes the exact integer square root (no floating-point rounding). For n = 2026, cross-checked: floor(\u221a2026) = floor(45.011\u2026) = 45. Since 45\u00b2 = 2025 and 46\u00b2 = 2116, and math.isqrt(2026) = 45, the result is correct.",
+      "finding": "math.isqrt() is exact for all non-negative integers (arbitrary precision). No floating-point risk. Result for 2026 verified by manual bounding.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
+    "n": 2026,
+    "floor_sqrt": 45,
+    "lower_perfect_square": 2025,
+    "upper_perfect_square": 2116,
+    "n_mod_16": 10,
+    "perfect_square_residues_mod16": [
+      0,
+      1,
+      4,
+      9
+    ],
+    "is_perfect_square_primary": false,
+    "is_perfect_square_crosscheck": false,
+    "claim_holds": true,
+    "adjacent_perfect_square_2025": "45\u00b2 = 2025",
+    "next_perfect_square_2116": "46\u00b2 = 2116",
+    "real_sqrt_approx": 45.01111
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

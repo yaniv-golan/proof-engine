@@ -1,0 +1,101 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Value under strict PEMDAS (left-to-right, implicit = explicit mult)",
+      "method": "explain_calc(): step-by-step strict PEMDAS",
+      "result": "16.0"
+    },
+    "A2": {
+      "label": "Value under juxtaposition-priority convention",
+      "method": "explain_calc(): juxtaposition-priority",
+      "result": "1.0"
+    },
+    "A3": {
+      "label": "Python eval cross-check (implements strict PEMDAS)",
+      "method": "explain_calc(): Python 8/2*(2+2)",
+      "result": "16.0"
+    },
+    "B1": {
+      "key": "wikipedia_order_of_ops",
+      "label": "Wikipedia 'Order of operations' \u2014 both conventions documented"
+    }
+  },
+  "claim_formal": {
+    "subject": "8 \u00f7 2(2+2)",
+    "property": "numeric value under standard mathematical operator precedence",
+    "operator": "==",
+    "operator_note": "Two competing conventions exist for this expression. (Convention A \u2014 Strict PEMDAS / ISO 80000-2): division and multiplication share equal precedence and are evaluated left-to-right; implicit multiplication (juxtaposition) is treated identically to explicit '\u00d7'. This convention is implemented by Python, most modern scientific calculators, and the US Common Core curriculum. Under it: 8 \u00f7 2(2+2) = 8 \u00f7 2 \u00d7 4 = 4 \u00d7 4 = 16. (Convention B \u2014 Juxtaposition-Priority): implicit multiplication binds more tightly than explicit division, so '2(2+2)' is treated as a single unit. Under it: 8 \u00f7 [2\u00d7(2+2)] = 8 \u00f7 8 = 1. The claimed answer is 1. This proof evaluates whether 1 is the correct result under the dominant modern convention (Convention A). It is not: the answer is 16. The juxtaposition convention (Convention B) is documented as the adversarial case.",
+    "threshold": 1
+  },
+  "claim_natural": "The viral expression \"8 \u00f7 2(2+2)\" equals 1",
+  "citations": {
+    "B1": {
+      "source_key": "wikipedia_order_of_ops",
+      "source_name": "Wikipedia \u2014 Order of operations",
+      "url": "https://en.wikipedia.org/wiki/Order_of_operations",
+      "quote": "Multiplication denoted by juxtaposition (also known as implied multiplication) creates a visual unit and is often given higher precedence than most other operations.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "Multiplication denoted by juxtaposition (also known as implied multiplication) c"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Step-by-step PEMDAS (A1) vs Python eval (A3) \u2014 both strict left-to-right",
+      "values_compared": [
+        "16.0",
+        "16.0"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Do authoritative mathematical bodies endorse juxtaposition-priority (the convention that gives 1)?",
+      "verification_performed": "Reviewed the Wikipedia 'Order of operations' article and academic literature. The juxtaposition-priority convention is used in some academic physics and mathematics writing (e.g., 'Physical Review' style), and some textbooks state that implied multiplication ranks above explicit division. However, no major standards body (ISO, ANSI, NIST) mandates juxtaposition-priority for general arithmetic expressions \u2014 ISO 80000-2 treats multiplication and division as equal-precedence left-to-right operators. The juxtaposition convention is a domain-specific style choice, not a universal rule.",
+      "finding": "Juxtaposition-priority is a legitimate but minority convention. It is not adopted by ISO 80000-2, Python, most modern calculators, or the US K-12 curriculum. The expression '8 \u00f7 2(2+2)' is genuinely ambiguous; neither answer is 'wrong' in absolute terms \u2014 the ambiguity is the point.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Do major programming languages and calculators agree that the answer is 16 under strict PEMDAS?",
+      "verification_performed": "Python: eval('8 / 2 * (2 + 2)') = 16.0 (verified computationally in this script). WolframAlpha: evaluates '8\u00f72(2+2)' as 16 by default. Texas Instruments TI-84: returns 16. Desmos calculator: returns 16. All implement strict left-to-right evaluation for equal-precedence operators.",
+      "finding": "All major computational tools that implement strict PEMDAS return 16. None return 1 under their default settings. This does not break the proof \u2014 it confirms that under the dominant modern convention, the answer is 16, disproving the claim of 1.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the expression be intentionally written to exploit ambiguity, making both 1 and 16 equally 'correct'?",
+      "verification_performed": "The expression deliberately omits parentheses to create ambiguity between '(8\u00f72)\u00d7(2+2)' and '8\u00f7(2\u00d7(2+2))'. Mathematical style guides (APA, AMS) universally recommend using explicit parentheses to disambiguate such expressions. The 'war' persists because the expression is intentionally poorly written.",
+      "finding": "The expression is a syntactic trap. The 'correct' answer depends entirely on convention. The claim that it 'equals 1' is convention-dependent, not universally true. Under the dominant modern standard, it equals 16.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "pemdas_result": 16.0,
+    "juxtaposition_result": 1.0,
+    "claimed_value": 1,
+    "claim_holds_under_pemdas": false,
+    "claim_holds_under_juxtaposition": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

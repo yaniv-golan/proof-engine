@@ -1,0 +1,151 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "hallulens",
+      "label": "HalluLens ACL 2025: GPT-4o hallucination rate on PreciseWikiQA factual Q&A"
+    },
+    "B2": {
+      "key": "legal_fictions",
+      "label": "Large Legal Fictions (arxiv 2401.01301): LLM hallucination rate on legal factual questions"
+    },
+    "B3": {
+      "key": "pmc_survey",
+      "label": "PMC survey (2025): LLaMA 2 and DeepSeek hallucination rates on factual Q&A"
+    },
+    "A1": {
+      "label": "Count of independent sources confirming hallucination rates \u22655%",
+      "method": "count(citations with status in ('verified', 'partial'))",
+      "result": "3 confirmed sources (need \u22653)"
+    }
+  },
+  "claim_formal": {
+    "subject": "AI language models (mainstream LLMs)",
+    "property": "hallucination rate on factual question-answering benchmarks",
+    "operator": "<",
+    "operator_note": "The claim uses 'AI' without qualification \u2014 interpreted as mainstream large language models (GPT-4/4o, Claude, Llama, etc.). 'Factual questions' maps to published factual Q&A benchmarks (PreciseWikiQA, legal case queries, domain Q&A studies). The threshold 5% means <5 hallucinated answers per 100 factual questions. As a universal claim, a single well-documented counterexample showing any mainstream AI \u22655% on a standard factual Q&A benchmark disproves it. This proof uses three independent counterexamples. Note: summarization-task hallucination rates (Vectara leaderboard) are excluded as they measure a different phenomenon (introducing facts not in the source document), which is distinct from recalling factual knowledge under questioning.",
+    "threshold": 5.0,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "AI hallucinations occur on fewer than 5% of factual questions",
+  "citations": {
+    "B1": {
+      "source_key": "hallulens",
+      "source_name": "HalluLens: LLM Hallucination Benchmark (ACL 2025, arxiv 2504.17550)",
+      "url": "https://arxiv.org/html/2504.17550v1",
+      "quote": "GPT-4o, with a 45.15% hallucination rate when not refusing, maintains a much lower false refusal rate and achieves the highest correct answer scores (52.59%), indicating a trade-off between precision and recall.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "arxiv.org",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Known academic/scholarly publisher"
+      }
+    },
+    "B2": {
+      "source_key": "legal_fictions",
+      "source_name": "Large Legal Fictions: Profiling Legal Hallucinations in Large Language Models (arxiv 2401.01301)",
+      "url": "https://arxiv.org/html/2401.01301v1",
+      "quote": "legal hallucinations are alarmingly prevalent, occurring between 69% of the time with ChatGPT 3.5 and 88% with Llama 2",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "arxiv.org",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Known academic/scholarly publisher"
+      }
+    },
+    "B3": {
+      "source_key": "pmc_survey",
+      "source_name": "PMC: Survey and analysis of hallucinations in large language models (2025, PMC12518350)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12518350/",
+      "quote": "LLaMA 2 and DeepSeek exhibited significantly higher factual hallucination rates around 20%\u201325%",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "GPT-4o, with a 45.15% hallucination rate when not refusing, maintains a much low"
+    },
+    "B2": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "legal hallucinations are alarmingly prevalent, occurring between 69% of the time"
+    },
+    "B3": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "LLaMA 2 and DeepSeek exhibited significantly higher factual hallucination rates "
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Three independent research groups, separate benchmarks, separate domains",
+      "n_sources_consulted": 3,
+      "n_sources_verified": 3,
+      "sources": {
+        "hallulens": "verified",
+        "legal_fictions": "verified",
+        "pmc_survey": "verified"
+      },
+      "independence_note": "B1: AI/NLP researchers (HalluLens, ACL 2025). B2: Legal AI researchers (Stanford/Princeton/NYU, arxiv 2401.01301). B3: PMC survey authors (2025). Different institutions, different benchmark designs, different domains."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does GPT-4 specifically achieve hallucination rates below 5% on any factual benchmark, potentially making the claim true for the best models?",
+      "verification_performed": "Searched for GPT-4 hallucination rate studies. Found PMC12518350 which reports 'GPT-4 achieved near-perfect factual accuracy, maintaining a hallucination rate below 5%' in one study. However: (1) this is under chain-of-thought prompting conditions; (2) it applies to GPT-4 specifically, not 'AI' in general; (3) HalluLens (ACL 2025) shows GPT-4o at 45.15% on PreciseWikiQA \u2014 a different benchmark. The claim uses 'AI' universally, and GPT-4 below 5% on one specific prompted benchmark does not rescue a universal claim when dozens of other models and benchmarks show far higher rates.",
+      "finding": "GPT-4 may approach <5% under optimal conditions on some benchmarks. This does not save the universal claim: LLaMA 2, DeepSeek, ChatGPT 3.5, GPT-4o on other benchmarks, and all models on legal/medical domain questions all show rates far above 5%. The claim as stated is false for 'AI' broadly.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the Vectara summarization leaderboard show models below 5%, suggesting the claim could be true for some AI systems?",
+      "verification_performed": "Reviewed Vectara hallucination leaderboard (github.com/vectara/hallucination-leaderboard). Top-performing models show 1.8%\u20133.3% hallucination on document summarization tasks. However, the Vectara leaderboard measures a different task: whether a model introduces facts not present in a source document when summarizing. This is NOT factual Q&A hallucination. Factual Q&A requires models to recall knowledge from training data \u2014 a fundamentally harder task where rates are consistently much higher.",
+      "finding": "Summarization-fidelity rates (Vectara) are not comparable to factual Q&A hallucination rates. On actual factual question benchmarks (SimpleQA, PreciseWikiQA, legal/medical domain tests), rates are far above 5% across all tested models.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could 'hallucination' be defined narrowly enough (e.g., only fabricated citations, not factual errors) to make the <5% claim true?",
+      "verification_performed": "Reviewed definitions across the three cited papers. HalluLens defines hallucination as 'incorrect answers when the model does not refuse to answer' on fact-based queries. The legal study counts hallucinated case citations and holdings. The PMC survey uses standard factual accuracy benchmarks. All three use well-established, conservative definitions. There is no credible narrow definition that reduces these measured rates below 5%.",
+      "finding": "Narrow definitions do not rescue the claim. All studies use standard, conservative hallucination definitions, and rates remain far above 5% under any reasonable definition.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n_confirmed_disproof_sources": 3,
+    "disproof_threshold": 3,
+    "claim_holds": true,
+    "hallucination_rates_found": {
+      "GPT-4o on PreciseWikiQA (HalluLens ACL 2025)": "45.15%",
+      "ChatGPT 3.5 on legal case questions (Legal Fictions 2024)": "69%",
+      "Llama 2 on legal case questions (Legal Fictions 2024)": "88%",
+      "LLaMA 2 / DeepSeek on factual Q&A (PMC survey 2025)": "~20-25%"
+    }
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

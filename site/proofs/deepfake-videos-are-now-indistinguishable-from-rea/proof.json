@@ -1,0 +1,146 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "meta_analysis_2024",
+      "label": "Systematic review & meta-analysis of 56 papers (86,155 participants): video detection CI crosses 50% \u2014 not significantly above chance"
+    },
+    "B2": {
+      "key": "fooled_twice_2021",
+      "label": "Fooled Twice RCT (N=210): people cannot reliably detect deepfakes; only 5/16 videos detectable above chance"
+    },
+    "B3": {
+      "key": "fooled_twice_sciencedirect",
+      "label": "Fooled Twice (ScienceDirect full-text): 'seeing-is-believing' heuristic; training and incentives do not improve detection"
+    },
+    "A1": {
+      "label": "Verified source count meeting near-chance confirmation threshold",
+      "method": "count(verified citations) = 1",
+      "result": "1 confirmed source(s) of 3 required; adversarial check breaks proof (video detection above chance in multiple studies)"
+    }
+  },
+  "claim_formal": {
+    "subject": "Deepfake video detection by average, untrained humans",
+    "property": "number of independent peer-reviewed sources confirming performance at or near chance level (i.e., not reliably above 50% accuracy) for video deepfake detection",
+    "operator": ">=",
+    "operator_note": "'Indistinguishable' is interpreted as: average humans cannot reliably distinguish deepfake videos from real footage \u2014 meaning their detection accuracy is near chance (~50%) and not statistically significantly above chance in controlled studies. This is the most defensible formal rendering of the claim. Note: the claim applies to VIDEO deepfakes specifically (not static images). Threshold = 3 independent peer-reviewed sources confirming near-chance detection. Counter-evidence: studies showing above-chance video detection (63\u201367%) are documented in adversarial checks and may break the proof.",
+    "threshold": 3,
+    "proof_direction": "affirm"
+  },
+  "claim_natural": "Deepfake videos are now indistinguishable from real footage to the average human eye.",
+  "citations": {
+    "B1": {
+      "source_key": "meta_analysis_2024",
+      "source_name": "Somoray et al. (2024) \u2014 'Human performance in detecting deepfakes: A systematic review and meta-analysis of 56 papers', Computers in Human Behavior Reports, Elsevier (peer-reviewed)",
+      "url": "https://www.sciencedirect.com/science/article/pii/S2451958824001714",
+      "quote": "Overall deepfake detection rates (sensitivity) were not significantly above chance because 95% confidence intervals crossed 50%. Total deepfake detection accuracy was 55.54% (95% CI [48.87, 62.10], k = 67).",
+      "status": "fetch_failed",
+      "method": null,
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "sciencedirect.com",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Known academic/scholarly publisher"
+      }
+    },
+    "B2": {
+      "source_key": "fooled_twice_2021",
+      "source_name": "K\u00f6bis et al. (2021) \u2014 'Fooled twice: People cannot detect deepfakes but think they can', iScience / PMC (peer-reviewed, N=210)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8602050/",
+      "quote": "people cannot reliably detect deepfakes and neither raising awareness nor introducing financial incentives improves their detection accuracy",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B3": {
+      "source_key": "fooled_twice_sciencedirect",
+      "source_name": "K\u00f6bis et al. (2021) \u2014 'Fooled twice: People cannot detect deepfakes but think they can', iScience, Elsevier (peer-reviewed, ScienceDirect mirror)",
+      "url": "https://www.sciencedirect.com/science/article/pii/S2589004221013353",
+      "quote": "people can no longer reliably detect deepfakes. Some of the previously established strategies against misinformation do not hold for the detection of deepfakes",
+      "status": "fetch_failed",
+      "method": null,
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "sciencedirect.com",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Known academic/scholarly publisher"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "fetch_failed",
+      "value_in_quote": false,
+      "quote_snippet": "Overall deepfake detection rates (sensitivity) were not significantly above chan"
+    },
+    "B2": {
+      "value": "partial",
+      "value_in_quote": true,
+      "quote_snippet": "people cannot reliably detect deepfakes and neither raising awareness nor introd"
+    },
+    "B3": {
+      "value": "fetch_failed",
+      "value_in_quote": false,
+      "quote_snippet": "people can no longer reliably detect deepfakes. Some of the previously establish"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "B1 (meta-analysis 2024) and B2/B3 (Fooled Twice 2021) \u2014 independently conducted studies by different research groups. Both report near-chance or unreliable detection, consistent direction.",
+      "values_compared": [
+        "Meta-analysis: 55.54% overall, video CI crosses 50%",
+        "Fooled Twice: 57.6% overall, only 5/16 videos detectable above chance"
+      ],
+      "agreement": true,
+      "note": "Consistent direction (near-chance) but different methodologies. Note: B2 and B3 are the PMC and ScienceDirect versions of the same paper \u2014 they share upstream data. B1 (meta-analysis) is independent of B2/B3."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Do studies show humans detect VIDEO deepfakes reliably above chance (~50%)?",
+      "verification_performed": "Searched PMC and PNAS for studies measuring human video deepfake detection accuracy. Found: (1) Groh et al. 2022 (PNAS, N=15,016): 66% accuracy for video deepfakes \u2014 well above chance; (2) K\u00f6bis et al. 2025 'Is this real?' (PMC12779810): 63% accuracy, AUC=0.67 for videos, described as 'fairly good' discrimination; (3) University of Florida study (Feb 2026): humans correctly identified real and fake videos about two-thirds of the time, outperforming AI algorithms. These three independent studies all show video detection significantly above 50%.",
+      "finding": "Multiple studies \u2014 including a large PNAS study (N=15,016) and a 2025 PMC study \u2014 show human video deepfake detection at 63\u201367%, which IS above chance. This directly contradicts the claim that videos are 'indistinguishable.' The meta-analysis (B1) shows video CI [47.80, 66.57] crossing 50%, but individual studies with dedicated video stimuli consistently show above-chance performance. This is genuine counter-evidence that breaks the strong form of the claim.",
+      "breaks_proof": true
+    },
+    {
+      "question": "Is the claim specifically about state-of-the-art (2024\u20132026) deepfakes, which may be harder to detect than older deepfakes used in older studies?",
+      "verification_performed": "Searched for studies specifically testing newest-generation deepfakes (e.g., Sora, HeyGen, Face Swap v2 tools) vs older FaceForensics++ dataset. Found: The iProov (2024) commercial study claims only 0.1% can detect AI-generated deepfakes, but this is from a company selling detection tools and uses opaque methodology. The academic meta-analysis (B1, 2024) uses studies up to ~2023. No peer-reviewed academic study specifically testing 2025\u20132026 generation deepfakes was found.",
+      "finding": "The 'now' qualifier in the claim implies the most recent (2025\u20132026) deepfakes. Academic evidence covers mostly 2018\u20132023 deepfake generations. It is plausible that newer AI-generated videos are harder to detect, but no peer-reviewed study quantifies this for current-generation tools. This is an evidence gap, not direct counter-evidence.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the meta-analysis aggregate bias explain why CI crosses 50% even though individual studies show above-chance detection?",
+      "verification_performed": "Examined the meta-analysis methodology: it pools 56 heterogeneous studies with different deepfake types (face-swap, voice, text), different quality levels, and different experimental designs. The wide CI [48.87, 62.10] reflects high between-study variability (heterogeneity). The pooled CI crossing 50% does not mean ALL studies found at-chance performance \u2014 it means the average is uncertain.",
+      "finding": "The CI crossing 50% reflects high study heterogeneity, not a consensus that humans are at chance. Individual well-controlled video studies consistently show above-chance detection (63\u201367%). The meta-analysis is inconclusive, not supportive. This further weakens the claim.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "UNDETERMINED",
+  "key_results": {
+    "n_confirmed": 1,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": false,
+    "any_breaks": true,
+    "summary": "The meta-analysis (56 papers, 86K participants) shows video detection CI crossing 50% \u2014 consistent with near-chance performance. However, three independent studies (PNAS 2022, PMC 2025, UF 2026) show above-chance video detection at 63\u201367%. The claim is not definitively proved or disproved."
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

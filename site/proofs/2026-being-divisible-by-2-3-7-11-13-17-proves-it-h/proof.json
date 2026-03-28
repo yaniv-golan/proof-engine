@@ -1,0 +1,130 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "2026 divisible by 2: 2026 % 2 == 0",
+      "method": "2026 % 2",
+      "result": "remainder=0, divisible=True"
+    },
+    "A2": {
+      "label": "2026 divisible by 3: 2026 % 3 == 0",
+      "method": "2026 % 3",
+      "result": "remainder=1, divisible=False"
+    },
+    "A3": {
+      "label": "2026 divisible by 7: 2026 % 7 == 0",
+      "method": "2026 % 7",
+      "result": "remainder=3, divisible=False"
+    },
+    "A4": {
+      "label": "2026 divisible by 11: 2026 % 11 == 0",
+      "method": "2026 % 11",
+      "result": "remainder=2, divisible=False"
+    },
+    "A5": {
+      "label": "2026 divisible by 13: 2026 % 13 == 0",
+      "method": "2026 % 13",
+      "result": "remainder=11, divisible=False"
+    },
+    "A6": {
+      "label": "2026 divisible by 17: 2026 % 17 == 0",
+      "method": "2026 % 17",
+      "result": "remainder=3, divisible=False"
+    },
+    "A7": {
+      "label": "Prime factorization of 2026 (trial division)",
+      "method": "Trial division prime factorization",
+      "result": "2 \u00d7 1013"
+    },
+    "A8": {
+      "label": "SC2 check: sum of proper divisors of 2026 vs 2026 (perfect number test)",
+      "method": "Sum of proper divisors via trial division",
+      "result": "sigma_proper(2026)=1016, required=2026, difference=-1010, classification=deficient"
+    },
+    "A9": {
+      "label": "Cross-check: divisibility via gcd(2026, d) == d for each claimed d",
+      "method": "gcd(2026, d) == d for each d in {2,3,7,11,13,17}",
+      "result": "GCD method: 1/6 divisibilities hold, agrees with modulo method (1/6)"
+    }
+  },
+  "claim_formal": {
+    "subject": "2026",
+    "property": "SC1: number of claimed divisors {2,3,7,11,13,17} that actually divide 2026 == 6; SC2: 2026 has 'hidden perfect number properties' (interpreted as: 2026 is a perfect number, i.e. sum of proper divisors equals 2026)",
+    "operator": "==",
+    "operator_note": [
+      "The compound claim requires BOTH sub-claims to hold. SC1: 2026 must be divisible by each of 2, 3, 7, 11, 13, and 17. We check this via modular arithmetic (n % d == 0) and independently via GCD (gcd(n,d) == d). SC2: 'Hidden perfect number properties' is not a standard mathematical term. We adopt the most charitable interpretation: either (a) 2026 is itself a perfect number (sigma(n) - n == n, i.e. sum of proper divisors equals n), or (b) 2026 participates in the Euclid-Euler formula for even perfect numbers (2^(p-1) * (2^p - 1) for Mersenne prime p). A perfect number satisfies sigma(n)/n = 2 exactly. If SC1 is false \u2014 i.e. 2026 is NOT divisible by all six claimed primes \u2014 the premise of the compound claim is false, and the claim is DISPROVED regardless of SC2. The threshold 6 means all 6 divisibilities must hold for SC1 to pass."
+    ],
+    "threshold": 6
+  },
+  "claim_natural": "2026 being divisible by 2, 3, 7, 11, 13, 17 proves it has \"hidden perfect number properties.\"",
+  "cross_checks": [
+    {
+      "description": "Divisibility confirmed by two independent algebraic methods: modular arithmetic (n % d == 0) and GCD characterization (gcd(n,d) == d). Both methods agree on the count of divisibilities holding.",
+      "values_compared": [
+        "1",
+        "1"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Could '2026' in the claim refer to a transformed or encoded value that IS divisible by all six primes?",
+      "verification_performed": "Computed LCM(2,3,7,11,13,17) = 102102. Checked all multiples of 102102 near 2026: the nearest multiples are 0 and 102102. 2026 is not a multiple of 102102. No standard calendar year encoding (e.g., 2026 mod k, 2026 in a different base) produces 102102 or any multiple thereof. Checked 2026 in bases 2-16: none yield 102102.",
+      "finding": "2026 in any standard encoding is not divisible by all six claimed primes. The premise is straightforwardly false for the integer 2026.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is 'hidden perfect number properties' a recognized mathematical term that 2026 could satisfy?",
+      "verification_performed": "Surveyed standard number theory classifications: perfect numbers (sigma(n)=2n), quasi-perfect (sigma(n)=2n+1, none known), almost perfect (sigma(n)=2n-1, only powers of 2), multiply perfect / k-perfect (sigma(n)=kn), semiperfect/pseudoperfect (n equals some subset-sum of proper divisors), weird numbers (abundant but not semiperfect). 'Hidden perfect number properties' appears in none of these standard classifications. Searched for the phrase in number theory literature \u2014 no results found.",
+      "finding": "'Hidden perfect number properties' has no standard mathematical definition. Under the most charitable interpretation (2026 is a perfect number): sum of proper divisors of 2026 = 1016 \u2260 2026. 2026 is a deficient number. sigma(2026)/2026 \u2248 1.501, far from the ratio of 2 required for a perfect number.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does divisibility by 2, 3, 7, 11, 13, 17 imply any known perfect-number-adjacent property for numbers that ARE divisible by all six?",
+      "verification_performed": "The smallest number divisible by 2,3,7,11,13,17 is their LCM = 102102. sigma(102102): 102102 = 2 \u00d7 3 \u00d7 7 \u00d7 11 \u00d7 13 \u00d7 17. For a squarefree number n = p1\u00d7p2\u00d7...\u00d7pk, sigma(n) = (1+p1)(1+p2)...(1+pk). sigma(102102) = 3 \u00d7 4 \u00d7 8 \u00d7 12 \u00d7 14 \u00d7 18 = 290304. sigma(102102)/102102 \u2248 2.843 \u2260 2. So 102102 is abundant, not perfect.",
+      "finding": "Even the smallest number genuinely divisible by all six claimed primes (102102) is NOT a perfect number. Divisibility by {2,3,7,11,13,17} does not imply perfect number properties for any number, let alone for 2026 which fails the divisibility premise.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n": 2026,
+    "claimed_divisors": [
+      2,
+      3,
+      7,
+      11,
+      13,
+      17
+    ],
+    "divisors_that_hold": [
+      2
+    ],
+    "divisors_that_fail": [
+      3,
+      7,
+      11,
+      13,
+      17
+    ],
+    "sc1_count_holding": 1,
+    "sc1_required": 6,
+    "sc1_holds": false,
+    "prime_factorization": "2 \u00d7 1013",
+    "proper_divisors": [
+      1,
+      2,
+      1013
+    ],
+    "sum_of_proper_divisors": 1016,
+    "sc2_holds": false,
+    "sigma_over_n_ratio": 1.501481,
+    "sc1_and_sc2_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

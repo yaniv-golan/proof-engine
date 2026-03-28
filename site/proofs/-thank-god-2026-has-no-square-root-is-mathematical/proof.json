@@ -1,0 +1,102 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "isqrt(2026)\u00b2 \u2260 2026 (primary: no integer square root)",
+      "method": "math.isqrt(2026) = 45; verified 45\u00b2 = 2025 \u2260 2026 and 46\u00b2 = 2116 \u2260 2026",
+      "result": "True"
+    },
+    "A2": {
+      "label": "Prime factorisation of 2026 has no repeated factors (cross-check)",
+      "method": "Prime factorisation: 2026 = 2\u00b9 \u00d7 1013\u00b9; both exponents are odd \u2192 not a perfect square (cross-check)",
+      "result": "True"
+    },
+    "A3": {
+      "label": "45\u00b2 = 2025 (predecessor year is a perfect square \u2014 context)",
+      "method": "math.isqrt(2025) = 45; verified 45\u00b2 = 2025 (context: predecessor year is a perfect square)",
+      "result": "True"
+    },
+    "A4": {
+      "label": "\u221a2026 is irrational (consequence of A1/A2)",
+      "method": "Valuation argument: v\u2082(2026) = 1 (odd); if \u221a2026 = p/q then 2\u00b7v\u2082(p) = 1 + 2\u00b7v\u2082(q) \u2014 even = odd, contradiction",
+      "result": "True"
+    }
+  },
+  "claim_formal": {
+    "subject": "2026",
+    "property": "count of positive integers n such that n\u00b2 = 2026 (equivalently: is 2026 a perfect square?)",
+    "operator": "==",
+    "threshold": 0,
+    "operator_note": "The phrase 'has no square root' is a colloquial way of saying '2026 is not a perfect square' \u2014 i.e., no positive integer n satisfies n\u00b2 = 2026. The claim is 'mathematically meaningful' if and only if it makes a precise, true mathematical assertion. We formalise this as: the count of such n equals 0. The claim would be FALSE (and thus not supported) if any n \u2208 \u2124\u207a existed with n\u00b2=2026. Context: 2025 = 45\u00b2 is a perfect square, so the 'relief' that 2026 escapes this property is mathematically grounded. Note: every positive real has a real-valued square root (\u221a2026 \u2248 45.011...); the meaningful assertion concerns integer square roots only."
+  },
+  "claim_natural": "\"Thank God 2026 has no square root\" is mathematically meaningful",
+  "cross_checks": [
+    {
+      "description": "A1 (isqrt floor/ceil method) vs A2 (prime factorisation method): both independently establish 2026 is not a perfect square",
+      "values_compared": [
+        "True",
+        "True"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does 2026 have an integer square root that was overlooked?",
+      "verification_performed": "Computed math.isqrt(2026) = 45; verified 45\u00b2 = 2025 and 46\u00b2 = 2116. Also verified via exhaustive search: no n in [1, 2026] satisfies n\u00b2 = 2026.",
+      "finding": "Exhaustive check confirms no integer n satisfies n\u00b2 = 2026. The nearest perfect squares are 45\u00b2 = 2025 (one below) and 46\u00b2 = 2116 (next above).",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could 'no square root' mean something other than 'not a perfect square'?",
+      "verification_performed": "Considered three interpretations: (1) no real square root \u2014 FALSE, \u221a2026 \u2248 45.011 exists in \u211d; (2) no rational square root \u2014 TRUE, proved via valuation argument (A4); (3) no integer square root \u2014 TRUE, proved via isqrt and factorisation (A1, A2). The colloquial use in the context of year-numbering most naturally refers to interpretation (3), consistent with 2025 = 45\u00b2 being called 'a perfect square year'.",
+      "finding": "Under the natural 'year context' interpretation (integer square root), the claim is TRUE. Under the rational interpretation it is also TRUE. Only under interpretation (1) \u2014 real square root \u2014 is it false, but that reading is inconsistent with the celebratory framing ('Thank God'). The claim is therefore unambiguously mathematically meaningful.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is 2026 perhaps a perfect power of some other kind that could confuse the claim?",
+      "verification_performed": "Checked whether 2026 is a perfect cube, 4th power, or any perfect power. 2026 = 2 \u00d7 1013 (both primes); for a perfect k-th power all exponents must be divisible by k. Since 2026 has exponents {2:1, 1013:1}, it is a perfect power only for k=1 (trivially). Not a perfect square, cube, or any higher power.",
+      "finding": "2026 is not a perfect power for any exponent k \u2265 2. The claim is specific to squares.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is 1013 actually prime? (needed for the factorisation cross-check)",
+      "verification_performed": "Trial division up to \u221a1013 \u2248 31.8: tested all primes \u2264 31 (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31). None divide 1013. Therefore 1013 is prime.",
+      "finding": "1013 is prime. Factorisation 2026 = 2 \u00d7 1013 is correct.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
+    "n": 2026,
+    "isqrt_n": 45,
+    "isqrt_n_squared": 2025,
+    "next_perfect_square": 2116,
+    "factorisation": {
+      "2": 1,
+      "1013": 1
+    },
+    "odd_exponent_primes": [
+      [
+        2,
+        1
+      ],
+      [
+        1013,
+        1
+      ]
+    ],
+    "predecessor_year_is_perfect_square": true,
+    "predecessor_year_sqrt": 45,
+    "sqrt_2026_is_irrational": true,
+    "integer_sqrt_count": 0,
+    "threshold": 0,
+    "operator": "==",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

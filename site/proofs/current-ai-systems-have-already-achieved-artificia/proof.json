@@ -1,0 +1,179 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "marcus_2026",
+      "label": "Gary Marcus (Feb 2026): AGI rumors greatly exaggerated"
+    },
+    "B2": {
+      "key": "lecun_transcript",
+      "label": "Yann LeCun (Lex Fridman #416): autoregressive LLMs not path to superhuman intelligence"
+    },
+    "B3": {
+      "key": "wiki_agi",
+      "label": "Wikipedia: AGI is a 'theoretical' type of AI, no consensus it exists yet"
+    },
+    "B4": {
+      "key": "eighty_thousand_hours",
+      "label": "80,000 Hours (March 2025): all expert forecasts treat AGI as future event"
+    },
+    "A1": {
+      "label": "Count of verified sources rejecting the AGI-achieved claim",
+      "method": "count(verified disproof citations) = 4",
+      "result": "4"
+    }
+  },
+  "claim_formal": {
+    "subject": "Current AI systems (as of March 2026)",
+    "property": "number of reputable expert/scientific sources explicitly stating that AGI has NOT been achieved by current AI systems",
+    "operator": ">=",
+    "operator_note": "To DISPROVE the claim, we count how many reputable, independent sources explicitly assert that current AI systems have NOT achieved AGI under its mainstream definition ('theoretical AI that matches or surpasses human capabilities across virtually all cognitive tasks'). We require \u22653 such sources (standard qualitative consensus threshold). A claim of 'AGI achieved' using a narrowed, non-standard, or ad-hoc definition (e.g., Jensen Huang's '$1B company' standard) does NOT constitute evidence of achievement under the original concept \u2014 it is a goalpost move. If \u22653 verified sources reject the claim, verdict is DISPROVED.",
+    "threshold": 3,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "Current AI systems have already achieved Artificial General Intelligence (AGI).",
+  "citations": {
+    "B1": {
+      "source_key": "marcus_2026",
+      "source_name": "Gary Marcus \u2014 Marcus on AI (Substack), February 17, 2026",
+      "url": "https://garymarcus.substack.com/p/rumors-of-agis-arrival-have-been",
+      "quote": "Rumors that humanity has already achieved artificial general intelligence (AGI) have been greatly exaggerated.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "substack.com",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B2": {
+      "source_key": "lecun_transcript",
+      "source_name": "Yann LeCun, Lex Fridman Podcast #416 transcript \u2014 Meta Chief AI Scientist",
+      "url": "https://lexfridman.com/yann-lecun-3-transcript/",
+      "quote": "autoregressive LLMs are not the way we're going to make progress towards superhuman intelligence",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "lexfridman.com",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B3": {
+      "source_key": "wiki_agi",
+      "source_name": "Wikipedia \u2014 Artificial general intelligence",
+      "url": "https://en.wikipedia.org/wiki/Artificial_general_intelligence",
+      "quote": "Artificial general intelligence (AGI) is a theoretical type of artificial intelligence that matches or surpasses human capabilities across virtually all cognitive tasks.",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B4": {
+      "source_key": "eighty_thousand_hours",
+      "source_name": "80,000 Hours \u2014 Shrinking AGI timelines: a review of expert forecasts (March 2025)",
+      "url": "https://80000hours.org/2025/03/when-do-experts-expect-agi-to-arrive/",
+      "quote": "Expert opinion can neither rule out nor rule in AGI soon.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "80000hours.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "Rumors that humanity has already achieved artificial general intelligence (AGI) "
+    },
+    "B2": {
+      "value": "partial",
+      "value_in_quote": true,
+      "quote_snippet": "autoregressive LLMs are not the way we're going to make progress towards superhu"
+    },
+    "B3": {
+      "value": "partial",
+      "value_in_quote": true,
+      "quote_snippet": "Artificial general intelligence (AGI) is a theoretical type of artificial intell"
+    },
+    "B4": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "Expert opinion can neither rule out nor rule in AGI soon."
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Multiple independent expert sources consulted",
+      "n_sources_consulted": 4,
+      "n_sources_verified": 4,
+      "sources": {
+        "marcus_2026": "verified",
+        "lecun_transcript": "partial",
+        "wiki_agi": "partial",
+        "eighty_thousand_hours": "verified"
+      },
+      "independence_note": "Sources span: independent AI researcher (Marcus), Meta's Chief AI Scientist (LeCun), encyclopedic reference (Wikipedia), and independent research organisation (80,000 Hours). All are institutionally independent."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "NVIDIA CEO Jensen Huang stated on March 23, 2026 'I think we've achieved AGI' \u2014 does this constitute expert confirmation that AGI is achieved?",
+      "verification_performed": "Fetched https://youmind.com/blog/nvidia-ceo-jensen-huang-agi-achieved-analysis. Huang's claim was explicitly qualified: his definition of AGI was 'an AI that can start a $1 billion company,' and he immediately added 'The odds of 100,000 of those agents building NVIDIA is zero percent.' This is a non-standard, ad-hoc definition far below the mainstream benchmark (matching human capabilities across virtually all cognitive tasks). Mashable analysis noted the qualifier 'isn't a small caveat \u2014 it's the whole ballgame.' Huang is a hardware vendor CEO, not an AI research scientist.",
+      "finding": "Huang's claim uses a narrowed goalpost definition and is accompanied by his own admission that current systems cannot replicate complex human organizational feats. It does not constitute genuine expert consensus that AGI has been achieved.",
+      "breaks_proof": false
+    },
+    {
+      "question": "OpenAI CEO Sam Altman said (February 2026) 'We basically have built AGI, or very close to it' \u2014 does this confirm AGI achievement?",
+      "verification_performed": "Web search: 'Sam Altman AGI achieved February 2026 quote'. Altman's own statement contains 'or very close to it,' indicating the achievement is not confirmed. He separately described the remark as 'spiritual' rather than technical, and acknowledged that AGI still requires 'many medium-sized breakthroughs.' OpenAI's own charter defines AGI as a FUTURE goal: 'highly autonomous systems that outperform humans at most economically valuable work.' The company does not officially claim to have built AGI under its own charter definition.",
+      "finding": "Altman's statement is self-contradictory (contains 'or very close to it'), acknowledged as metaphorical, and contradicted by OpenAI's own charter which treats AGI as an aspirational future target.",
+      "breaks_proof": false
+    },
+    {
+      "question": "A 2023 Microsoft Research paper concluded GPT-4 'could reasonably be viewed as an early (yet still incomplete) version of an AGI system' \u2014 does this confirm AGI?",
+      "verification_performed": "Web search: 'Microsoft Research GPT-4 early incomplete AGI 2023 paper'. The paper's own language includes 'yet still incomplete,' meaning its authors explicitly did NOT claim AGI has been achieved \u2014 only that GPT-4 is an early, incomplete precursor. The paper was also widely criticized in the AI research community for conflating surface-level performance with general intelligence. Wikipedia notes the paper's conclusion as one contested view among many.",
+      "finding": "The Microsoft paper itself uses the qualifier 'still incomplete,' which is a rejection, not a confirmation, of full AGI achievement. This source actually supports the disproof.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Are there known capability gaps that definitively rule out current AI systems as AGI under the mainstream definition?",
+      "verification_performed": "Fetched https://lexfridman.com/yann-lecun-3-transcript/ and web search 'current AI systems limitations AGI 2025 2026 planning reasoning memory'. LeCun (Meta Chief AI Scientist) identifies concrete gaps: LLMs lack persistent memory, genuine causal reasoning, robust planning, and physical world understanding. Current models fail on novel physical reasoning tasks, long-horizon planning, and consistent generalisation outside training distribution \u2014 all core requirements of AGI as 'virtually all cognitive tasks.'",
+      "finding": "Specific, documented capability gaps in planning, causal reasoning, and persistent memory mean current systems do not match human capabilities across virtually all cognitive tasks. The failure is not a matter of definition \u2014 concrete benchmarks exist where current systems reliably fail.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED (with unverified citations)",
+  "key_results": {
+    "n_confirmed": 4,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

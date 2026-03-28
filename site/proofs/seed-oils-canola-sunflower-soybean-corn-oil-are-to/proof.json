@@ -1,0 +1,276 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "sc1_source_a",
+      "label": "SC1: Harvard T.H. Chan School of Public Health \u2014 scientists debunk seed oil 'toxic' claims"
+    },
+    "B2": {
+      "key": "sc1_source_b",
+      "label": "SC1: Stanford Medicine (Gardner) \u2014 omega-6s are not pro-inflammatory"
+    },
+    "B3": {
+      "key": "sc1_source_c",
+      "label": "SC1: PMC 11600290 (2024) \u2014 clinical trials: n-6 PUFA does not increase inflammation/oxidative stress"
+    },
+    "B4": {
+      "key": "sc2_source_a",
+      "label": "SC2: PMC 6179509 (Innes & Calder 2018) \u2014 RCT/obs. review: virtually no data support LA\u2013inflammation hypothesis"
+    },
+    "B5": {
+      "key": "sc2_source_b",
+      "label": "SC2: ScienceDaily 2025 \u2014 1,900-person study: linoleic acid linked to LOWER inflammation biomarkers"
+    },
+    "B6": {
+      "key": "sc2_source_c",
+      "label": "SC2: PMC 11600290 (2024) \u2014 higher PUFA intake associated with lower risk of CVD and type 2 diabetes"
+    },
+    "A1": {
+      "label": "SC1: count of verified sources rejecting 'toxic' claim",
+      "method": "count(verified sc1 citations) = 3",
+      "result": "3"
+    },
+    "A2": {
+      "label": "SC2: count of verified sources rejecting 'primary cause of inflammation/disease' claim",
+      "method": "count(verified sc2 citations) = 3",
+      "result": "3"
+    }
+  },
+  "claim_formal": {
+    "subject": "seed oils (canola, sunflower, soybean, corn oil)",
+    "sub_claims": [
+      {
+        "id": "SC1",
+        "property": "seed oils are toxic at normal dietary consumption levels",
+        "operator": ">=",
+        "threshold": 3,
+        "proof_direction": "disprove",
+        "operator_note": "SC1 is DISPROVED if \u22653 independent authoritative sources explicitly state that seed oils are not toxic at normal dietary doses, or that scientific evidence does not support the 'toxic' characterization. 'Toxic' is interpreted as causing direct cellular or systemic harm at ordinary dietary consumption levels \u2014 not extreme doses or specific industrial conditions (e.g., high-temperature frying). Threshold of 3 is conservative: requires multiple independent institutions."
+      },
+      {
+        "id": "SC2",
+        "property": "seed oils are a primary cause of modern chronic inflammation and disease",
+        "operator": ">=",
+        "threshold": 3,
+        "proof_direction": "disprove",
+        "operator_note": "SC2 is DISPROVED if \u22653 independent authoritative sources show that dietary linoleic acid / n-6 PUFA from seed oils does NOT increase inflammatory markers, or that epidemiological/clinical evidence does not support seed oils as the primary driver of chronic disease. 'Primary cause' means the dominant or leading causal factor \u2014 stronger than other well-established risk factors (excess calories, refined carbohydrates, smoking, physical inactivity, saturated fat). Threshold of 3 is conservative: requires multiple independent institutions."
+      }
+    ],
+    "compound_operator": "AND",
+    "operator_note": "Both sub-claims must be disproved (each meeting its threshold) for the compound claim to receive verdict DISPROVED. If only one sub-claim is disproved, the verdict is PARTIALLY VERIFIED. The burden on the disproof is \u22653 independent authoritative sources rejecting each component claim."
+  },
+  "claim_natural": "Seed oils (canola, sunflower, soybean, corn oil) are toxic and a primary cause of modern chronic inflammation and disease.",
+  "citations": {
+    "B1": {
+      "source_key": "sc1_source_a",
+      "source_name": "Harvard T.H. Chan School of Public Health (2024)",
+      "url": "https://hsph.harvard.edu/news/scientists-debunk-seed-oil-health-risks/",
+      "quote": "While the internet may be full of posts stating that seed oils such as canola and soy are 'toxic,' scientific evidence does not support these claims.",
+      "status": "partial",
+      "method": "fragment",
+      "coverage_pct": 50.0,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "harvard.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    },
+    "B2": {
+      "source_key": "sc1_source_b",
+      "source_name": "Stanford Medicine \u2014 Christopher Gardner, PhD, director of nutrition studies at Stanford Prevention Research Center (2025)",
+      "url": "https://med.stanford.edu/news/insights/2025/03/5-things-to-know-about-the-effects-of-seed-oils-on-health.html",
+      "quote": "But somehow, this has been flipped into saying the omega-6s are pro-inflammatory. That isn't the case.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "stanford.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    },
+    "B3": {
+      "source_key": "sc1_source_c",
+      "source_name": "PMC 11600290 \u2014 Perspective on the health effects of unsaturated fatty acids and commonly consumed plant oils high in unsaturated fat (2024)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11600290/",
+      "quote": "Clinical trials show that increased n-6 PUFA (linoleic acid) intake does not increase markers of inflammation or oxidative stress.",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B4": {
+      "source_key": "sc2_source_a",
+      "source_name": "PMC 6179509 \u2014 Linoleic Acid, Vegetable Oils & Inflammation (Innes & Calder, Prostaglandins Leukotrienes Essential Fatty Acids, 2018)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6179509/",
+      "quote": "Based on the current evidence from RCT and observational studies there appears to be virtually no data available to support the hypothesis that LA in the diet increases markers of inflammation among healthy, non-infant humans.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B5": {
+      "source_key": "sc2_source_b",
+      "source_name": "ScienceDaily \u2014 Myth-busting study: seed oils reduce inflammation, based on ~1,900-person dataset (June 2025)",
+      "url": "https://www.sciencedaily.com/releases/2025/06/250621103446.htm",
+      "quote": "higher linoleic acid in blood plasma was associated with lower levels of biomarkers of cardiometabolic risk, including those related to inflammation.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "sciencedaily.com",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B6": {
+      "source_key": "sc2_source_c",
+      "source_name": "PMC 11600290 \u2014 Perspective on the health effects of unsaturated fatty acids and commonly consumed plant oils high in unsaturated fat (2024)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11600290/",
+      "quote": "Epidemiological evidence indicates that higher PUFA intake is associated with lower risk of incident CVD and type 2 diabetes mellitus (T2DM).",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "partial",
+      "value_in_quote": true,
+      "quote_snippet": "While the internet may be full of posts stating that seed oils such as canola an"
+    },
+    "B2": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "But somehow, this has been flipped into saying the omega-6s are pro-inflammatory"
+    },
+    "B3": {
+      "value": "partial",
+      "value_in_quote": true,
+      "quote_snippet": "Clinical trials show that increased n-6 PUFA (linoleic acid) intake does not inc"
+    },
+    "B4": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "Based on the current evidence from RCT and observational studies there appears t"
+    },
+    "B5": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "higher linoleic acid in blood plasma was associated with lower levels of biomark"
+    },
+    "B6": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "Epidemiological evidence indicates that higher PUFA intake is associated with lo"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "SC1: independent sources rejecting 'seed oils are toxic'",
+      "n_sources_consulted": 3,
+      "n_sources_verified": 3,
+      "sources": {
+        "sc1_source_a": "partial",
+        "sc1_source_b": "verified",
+        "sc1_source_c": "partial"
+      },
+      "independence_note": "Sources are from different institutions: Harvard T.H. Chan School of Public Health, Stanford Prevention Research Center, and a peer-reviewed journal review (PMC 11600290)."
+    },
+    {
+      "description": "SC2: independent sources rejecting 'seed oils are primary cause of inflammation/disease'",
+      "n_sources_consulted": 3,
+      "n_sources_verified": 3,
+      "sources": {
+        "sc2_source_a": "verified",
+        "sc2_source_b": "verified",
+        "sc2_source_c": "verified"
+      },
+      "independence_note": "Sources are from different publications: a 2018 systematic review of RCTs and observational studies (PMC 6179509), a 2025 population-based study (ScienceDaily), and a 2024 perspective paper (PMC 11600290). Note: PMC 11600290 appears in both SC1 and SC2 with different quotes addressing different aspects \u2014 it is one independent source that covers both sub-claims."
+    }
+  ],
+  "sub_claim_results": [
+    {
+      "id": "SC1",
+      "property": "seed oils are toxic at normal dietary consumption levels",
+      "proof_direction": "disprove",
+      "n_confirming": 3,
+      "threshold": 3,
+      "holds": true
+    },
+    {
+      "id": "SC2",
+      "property": "seed oils are a primary cause of modern chronic inflammation and disease",
+      "proof_direction": "disprove",
+      "n_confirming": 3,
+      "threshold": 3,
+      "holds": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does the oxidized linoleic acid (OXLAM) hypothesis provide scientific support for seed oils causing cardiovascular disease?",
+      "verification_performed": "Searched PMC for 'oxidized linoleic acid hypothesis Ramsden'; found PMC6196963 (DiNicolantonio & O'Keefe, 2018) which proposes that oxidized LA metabolites promote atherosclerosis. Ramsden et al. also re-analyzed the Sydney Diet Heart Study (2013) finding increased mortality when saturated fat was replaced with LA. Reviewed the strength of this hypothesis against the broader literature.",
+      "finding": "The OXLAM hypothesis is a minority scientific position, not the consensus. The Sydney Diet Heart re-analysis used partially recovered data from a single 1960s trial with methodological limitations. The hypothesis has not been confirmed in large modern RCTs. Importantly, even proponents of this hypothesis (Ramsden et al.) do not use the word 'toxic' and do not claim seed oils are the 'primary cause' of chronic disease \u2014 they propose a specific mechanistic pathway for one disease outcome (CHD), which is far narrower than the original claim. This adversarial evidence does not break the disproof: the OXLAM hypothesis is contested and does not rise to scientific consensus.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Do high-temperature cooking with seed oils produce harmful compounds (aldehydes) that could justify calling them 'toxic'?",
+      "verification_performed": "Searched for 'seed oil high heat aldehydes toxic cooking PUFAs'; found evidence that polyunsaturated fats can produce 4-HNE and other aldehydes at very high temperatures (smoke point or above, deep frying). This is a documented concern in food chemistry.",
+      "finding": "High-heat degradation of PUFAs is a real but narrow concern. It does not support the original claim's framing that seed oils are broadly 'toxic' or a 'primary cause' of chronic disease. The claim does not specify high-heat cooking; it characterizes the oils themselves as toxic. Evidence-based guidance addresses this by recommending appropriate cooking temperatures, not avoiding seed oils entirely. This adversarial evidence is too narrow to rescue SC1 or SC2 as stated.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there an RCT showing that replacing seed oils in the diet improves inflammation or chronic disease outcomes, which would support the original claim?",
+      "verification_performed": "Searched for 'seed oil elimination diet RCT inflammation improvement'; reviewed recent dietary intervention literature. Found no large RCT demonstrating that eliminating seed oils specifically reduces inflammatory markers or chronic disease incidence in otherwise healthy populations. The PREDIMED trial (Mediterranean diet) and similar studies use olive oil but do not isolate seed oil elimination as the causal variable.",
+      "finding": "No large, well-designed RCT demonstrates that eliminating seed oils specifically reduces inflammation or chronic disease. Absence of such evidence, combined with multiple RCTs showing no harmful effects from seed oil consumption, further undermines SC2. Does not break the disproof.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED (with unverified citations)",
+  "key_results": {
+    "n_sc1_confirmed": 3,
+    "n_sc2_confirmed": 3,
+    "n_holding": 2,
+    "n_total": 2,
+    "claim_holds": true,
+    "sc1_holds": true,
+    "sc2_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}
