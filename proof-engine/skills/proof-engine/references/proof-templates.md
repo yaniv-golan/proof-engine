@@ -146,7 +146,7 @@ if __name__ == "__main__":
         },
         "generator": {
             "name": "proof-engine",
-            "version": "__PROOF_ENGINE_VERSION__",
+            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
             "repo": "https://github.com/yaniv-golan/proof-engine",
             "generated_at": date.today().isoformat(),
         },
@@ -338,7 +338,7 @@ if __name__ == "__main__":
         },
         "generator": {
             "name": "proof-engine",
-            "version": "__PROOF_ENGINE_VERSION__",
+            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
             "repo": "https://github.com/yaniv-golan/proof-engine",
             "generated_at": date.today().isoformat(),
         },
@@ -436,7 +436,7 @@ if __name__ == "__main__":
         },
         "generator": {
             "name": "proof-engine",
-            "version": "__PROOF_ENGINE_VERSION__",
+            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
             "repo": "https://github.com/yaniv-golan/proof-engine",
             "generated_at": date.today().isoformat(),
         },
@@ -612,7 +612,7 @@ if __name__ == "__main__":
         },
         "generator": {
             "name": "proof-engine",
-            "version": "__PROOF_ENGINE_VERSION__",
+            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
             "repo": "https://github.com/yaniv-golan/proof-engine",
             "generated_at": date.today().isoformat(),
         },
@@ -808,7 +808,7 @@ if __name__ == "__main__":
         },
         "generator": {
             "name": "proof-engine",
-            "version": "__PROOF_ENGINE_VERSION__",
+            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
             "repo": "https://github.com/yaniv-golan/proof-engine",
             "generated_at": date.today().isoformat(),
         },
