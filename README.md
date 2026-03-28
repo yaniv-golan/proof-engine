@@ -20,7 +20,7 @@ LLMs have two weaknesses that make them unreliable for factual claims: they hall
 - **Offloading facts to citations** — every empirical claim must have a source, URL, and exact quote
 - **Offloading reasoning to code** — every computation is executable Python, not prose
 - **Enforcing 7 hardening rules** — closing specific failure modes where proof code looks correct but is silently wrong
-- **Offline-reproducible proofs** — embedded page snapshots let proofs run without network access
+- **Optionally offline-reproducible** — embedded page snapshots let proofs run without network access
 - **Multi-mode verification** — live fetch, embedded snapshots, Wayback Machine archive, and PDF support
 
 The skill produces three outputs: a re-runnable `proof.py` script, a reader-facing `proof.md` summary with verdict, and a `proof_audit.md` with full verification details. Verdicts: PROVED, DISPROVED, PARTIALLY VERIFIED, UNDETERMINED, PROVED with unverified citations, or DISPROVED with unverified citations.
@@ -98,7 +98,7 @@ The skill will:
 
 1. **Analyze the claim** — classify as mathematical, empirical, or mixed; identify ambiguities
 2. **Gather evidence** — search for supporting AND contradicting sources (adversarial)
-3. **Write proof code** — a self-contained Python script with hardening rules enforced
+3. **Write proof code** — a Python script importing bundled verification modules, with hardening rules enforced
 4. **Validate and execute** — run static analysis, then execute the proof
 5. **Report** — deliver three files: `proof.py` (re-runnable script), `proof.md` (reader summary with verdict), and `proof_audit.md` (full verification details)
 
@@ -117,7 +117,7 @@ Each example includes a runnable `proof.py`, reader-facing `proof.md`, and detai
 
 The key limit is not hard vs easy, but **formalizable vs fuzzy**. The engine handles very nontrivial claims as long as they decompose into a finite set of extractable facts and a clear rule for what counts as proof or disproof.
 
-Note: disproof is often easier than proof — a single counterexample or source contradiction is enough to disprove, while proof may require exhaustive coverage.
+Note: disproof is often easier than proof — for crisp factual claims, a single counterexample suffices. For consensus-style claims, the system requires multiple independent sources (default threshold: 3).
 
 ### Good fit
 
@@ -151,7 +151,7 @@ Note: disproof is often easier than proof — a single counterexample or source 
 
 **Probabilistic/Bayesian scorers** — The engine produces auditable pass/fail verdicts with full evidence trails, not confidence percentages. This is deliberate: a "73% confidence" score hides *why* it's 73%. The six-tier verdict system (PROVED, DISPROVED, PARTIALLY VERIFIED, UNDETERMINED, PROVED with unverified citations, DISPROVED with unverified citations) plus the complete audit trail lets reviewers see exactly which facts held and which didn't.
 
-**RAG pipelines** — RAG retrieves context to help an LLM generate an answer. This engine forces the LLM to *prove* its answer with re-runnable code and exact quotes. The output is a standalone Python script anyone can re-execute, not a chat response.
+**RAG pipelines** — RAG retrieves context to help an LLM generate an answer. This engine forces the LLM to *prove* its answer with re-runnable code and exact quotes. The output is a Python script (importing bundled verification modules) anyone can re-execute, not a chat response.
 
 ## Security Model
 
@@ -168,6 +168,10 @@ Proof scripts run in your existing agent environment (Claude Code, ChatGPT, etc.
 | 5. Independent adversarial check | Confirmation bias |
 | 6. Independent cross-checks | Shared-variable bugs |
 | 7. Never hard-code constants | LLM misremembers formulas |
+
+## Design
+
+For a deeper look at the design principles, trust boundaries, hardening rules, and limitations, see [`docs/DESIGN.md`](docs/DESIGN.md).
 
 ## License
 
