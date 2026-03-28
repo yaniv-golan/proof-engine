@@ -220,3 +220,89 @@ def test_data_values_unaffected_by_normalization():
     norm = vc_module.normalize_text(page)
     assert "9.883" in norm
     assert "307.789" in norm
+
+
+# ---------------------------------------------------------------------------
+# verify_search_registry tests
+# ---------------------------------------------------------------------------
+
+from scripts.verify_citations import verify_search_registry
+
+
+def test_verify_search_registry_accessible(monkeypatch):
+    """search_url returning 200 should produce 'accessible' status."""
+    import requests
+
+    class MockResponse:
+        status_code = 200
+        def raise_for_status(self):
+            pass
+
+    monkeypatch.setattr(requests, "get", lambda *a, **kw: MockResponse())
+
+    registry = {
+        "search_a": {
+            "database": "PubMed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/",
+            "search_url": "https://pubmed.ncbi.nlm.nih.gov/?term=test",
+            "query_terms": ["test"],
+            "date_range": "all years",
+            "result_count": 0,
+            "source_name": "PubMed",
+        }
+    }
+    results = verify_search_registry(registry)
+    assert results["search_a"]["status"] == "accessible"
+    assert "credibility" in results["search_a"]
+
+
+def test_verify_search_registry_known_403(monkeypatch):
+    """search_url returning 403 should produce 'known' status."""
+    import requests
+
+    class MockResponse:
+        status_code = 403
+        def raise_for_status(self):
+            err = requests.exceptions.HTTPError("403")
+            err.response = self  # attach response so status_code is accessible
+            raise err
+
+    monkeypatch.setattr(requests, "get", lambda *a, **kw: MockResponse())
+
+    registry = {
+        "search_a": {
+            "database": "Test",
+            "url": "https://example.gov/",
+            "search_url": "https://example.gov/?q=test",
+            "query_terms": ["test"],
+            "date_range": "all years",
+            "result_count": 0,
+            "source_name": "Test",
+        }
+    }
+    results = verify_search_registry(registry)
+    assert results["search_a"]["status"] == "known"
+
+
+def test_verify_search_registry_unreachable(monkeypatch):
+    """Connection error should produce 'unreachable' status."""
+    import requests
+
+    def fail(*a, **kw):
+        raise requests.exceptions.ConnectionError("fail")
+
+    monkeypatch.setattr(requests, "get", fail)
+
+    registry = {
+        "search_a": {
+            "database": "Test",
+            "url": "https://nonexistent.example.com/",
+            "search_url": "https://nonexistent.example.com/?q=test",
+            "query_terms": ["test"],
+            "date_range": "all years",
+            "result_count": 0,
+            "source_name": "Test",
+        }
+    }
+    results = verify_search_registry(registry)
+    assert results["search_a"]["status"] == "unreachable"
