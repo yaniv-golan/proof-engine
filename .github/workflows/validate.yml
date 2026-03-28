@@ -17,7 +17,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests sympy python-dateutil pytest
+        run: pip install requests sympy python-dateutil pytest Jinja2 Markdown PyYAML bleach
 
       - name: Run unit tests
         run: python -m pytest tests/ -v
@@ -75,3 +75,46 @@ jobs:
             exit 1
           fi
           echo "All example proofs passed."
+
+  validate-site:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install Jinja2 Markdown PyYAML bleach requests sympy python-dateutil
+
+      - name: Find and validate new/changed proofs
+        run: |
+          MERGE_BASE=$(git merge-base HEAD origin/${{ github.base_ref }})
+          PROOFS=$(git diff --name-only --diff-filter=ACMR "$MERGE_BASE"...HEAD -- 'site/proofs/' | xargs -I{} dirname {} | sort -u)
+          if [ -z "$PROOFS" ]; then
+            echo "No new proofs found"
+            exit 0
+          fi
+          echo "$PROOFS" | while IFS= read -r dir; do
+            [ -z "$dir" ] && continue
+            echo "=== Validating $dir ==="
+            python proof-engine/skills/proof-engine/scripts/validate_proof.py "$dir/proof.py"
+            env -u GITHUB_TOKEN -u ACTIONS_RUNTIME_TOKEN \
+              timeout 600 python tools/validate-site-proof.py "$dir"
+          done
+
+      - name: Build site (dry run)
+        run: |
+          python tools/build-site.py \
+            --site-dir site \
+            --output-dir _site \
+            --base-url /proof-engine/ \
+            --site-url https://yaniv-golan.github.io \
+            --design-md docs/DESIGN.md \
+            --hardening-rules-md proof-engine/skills/proof-engine/references/hardening-rules.md

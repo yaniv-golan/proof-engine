@@ -1,0 +1,61 @@
+name: Deploy Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'tools/build-site.py'
+      - 'tools/lib/**'
+      - 'docs/DESIGN.md'
+      - 'proof-engine/skills/proof-engine/references/hardening-rules.md'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install Jinja2 Markdown PyYAML bleach
+
+      - name: Validate all proofs (defense-in-depth)
+        run: |
+          for dir in site/proofs/*/; do
+            [ -f "$dir/proof.json" ] || continue
+            echo "=== Validating $dir ==="
+            python tools/validate-site-proof.py "$dir"
+          done
+
+      - name: Build site
+        run: |
+          python tools/build-site.py \
+            --site-dir site \
+            --output-dir _site \
+            --base-url /proof-engine/ \
+            --site-url https://yaniv-golan.github.io \
+            --design-md docs/DESIGN.md \
+            --hardening-rules-md proof-engine/skills/proof-engine/references/hardening-rules.md
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
