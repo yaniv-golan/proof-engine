@@ -1,0 +1,156 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "source_neurons_a",
+      "label": "Herculano-Houzel 2009 (Frontiers Hum Neurosci, PMC2776484): 86B neurons in adult brain"
+    },
+    "B2": {
+      "key": "source_neurons_b",
+      "label": "UCLA Brain Research Institute: ~86B neurons, ~100 trillion synapses whole-brain"
+    },
+    "B3": {
+      "key": "source_synapses",
+      "label": "BioNumbers BNID 112055 (Harvard/Drachman 2005): 7,000 synapses per neocortical neuron"
+    },
+    "A1": {
+      "label": "SC3 arithmetic: 86e9 \u00d7 7,000 = 6.02e14",
+      "method": "explain_calc(neurons * synapses_per_neuron)",
+      "result": "6.020e+14"
+    },
+    "A2": {
+      "label": "SC3 comparison: 6.02e14 > 6e14",
+      "method": "compare(total_synapses, '>', 6e14)",
+      "result": "True"
+    }
+  },
+  "claim_formal": {
+    "subject": "Adult human brain",
+    "sub_claims": {
+      "SC1": "Neuron count \u2248 86 billion (within \u00b115% tolerance)",
+      "SC2": "Average synapses per neuron \u2248 7,000, applied brain-wide across all neurons",
+      "SC3": "Total synaptic count = SC1 \u00d7 SC2 > 6 \u00d7 10^14"
+    },
+    "operator": ">",
+    "operator_note": "'Exceeding 6 \u00d7 10^14' means strictly greater than 6.0e14. The arithmetic (86e9 \u00d7 7000 = 6.02e14 > 6e14) is correct given the premises. However, the 7,000 synapses/neuron figure (SC2) originates from research on NEOCORTICAL neurons specifically (~20 billion neurons), not all 86 billion brain neurons. Applying it as a brain-wide average \u2014 including the ~69 billion cerebellar granule cells (which have only 4\u20135 synapses each) \u2014 inflates the estimated total by roughly 3\u20135\u00d7. This makes SC2, as stated for all neurons, unsupported by primary literature. The compound claim is therefore only PARTIALLY VERIFIED.",
+    "threshold": 600000000000000.0
+  },
+  "claim_natural": "The adult human brain has approximately 86 billion neurons and an average of 7,000 synapses per neuron, resulting in a total synaptic count exceeding 6 \u00d7 10^14.",
+  "citations": {
+    "B1": {
+      "source_key": "source_neurons_a",
+      "source_name": "Frontiers in Human Neuroscience, Herculano-Houzel 2009 (PubMed Central)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/",
+      "quote": "the adult male human brain, at an average of 1.5 kg, has 86 billion neurons and 85 billion non-neuronal cells",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B2": {
+      "source_key": "source_neurons_b",
+      "source_name": "UCLA Brain Research Institute, Brain Facts",
+      "url": "https://bri.ucla.edu/brain-fact/billions-of-neurons-trillions-of-synapses/",
+      "quote": "The human brain contains approximately 86 billion neurons, each forming thousands of connections, resulting in an estimated 100 trillion synapses.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "ucla.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    },
+    "B3": {
+      "source_key": "source_synapses",
+      "source_name": "BioNumbers BNID 112055, Harvard Medical School (citing Drachman 2005, Neurology)",
+      "url": "https://bionumbers.hms.harvard.edu/bionumber.aspx?s=n&v=3&id=112055",
+      "quote": "Within the liter and a half of human brain, stereologic studies estimate that there are approximately 20 billion neocortical neurons, with an average of 7,000 synaptic connections each",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "harvard.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "8.600e+10",
+      "value_in_quote": true,
+      "quote_snippet": "the adult male human brain, at an average of 1.5 kg, has 86 billion neurons and "
+    },
+    "B2": {
+      "value": "8.600e+10",
+      "value_in_quote": true,
+      "quote_snippet": "The human brain contains approximately 86 billion neurons, each forming thousand"
+    },
+    "B3": {
+      "value": "7000.0",
+      "value_in_quote": true,
+      "quote_snippet": "Within the liter and a half of human brain, stereologic studies estimate that th"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "SC1 neuron count: B1 (Herculano-Houzel 86e9) vs B2 (UCLA BRI 86e9)",
+      "values_compared": [
+        "86000000000.0",
+        "86000000000.0"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is the 86 billion neuron figure disputed?",
+      "verification_performed": "Searched for critiques of Herculano-Houzel's isotropic fractionator method. Found Goriely (Brain, 2024, PMC11884752) arguing confidence intervals span ~73\u201399 billion, not precisely 86 billion. A 2025 rebuttal (Brain, PMID 39913195) defends the ~86 billion estimate and recommends the phrasing 'around 86 billion neurons'.",
+      "finding": "86 billion is the best current estimate. The uncertainty (\u00b18B per Azevedo 2009) does not undermine SC1. The claim says 'approximately 86 billion', which is accurate.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the 7,000 synapses/neuron figure apply to ALL brain neurons?",
+      "verification_performed": "Read BioNumbers BNID 112055 (Harvard): explicitly says '~20 billion neocortical neurons, with an average of 7,000 synaptic connections each' \u2014 not all 86 billion. Primary source: Drachman 2005 (Neurology 64:2004), citing Pakkenberg et al. 2003 for neocortical data. The cerebellum alone contains ~69 billion granule cells with only 4\u20135 synapses each (confirmed in multiple neuroanatomy texts). If only neocortical neurons average 7,000: 20e9 \u00d7 7000 = 1.4e14, well below 6e14.",
+      "finding": "BREAKS SC2 as stated for ALL neurons. The 7,000 figure applies to neocortical neurons only. Brain-wide average is far lower due to the ~69 billion cerebellar granule cells. The compound claim's SC2 premise is a conflation of neocortical average with whole-brain average.",
+      "breaks_proof": true
+    },
+    {
+      "question": "Do any primary sources report total brain synapses at or above 6\u00d710^14?",
+      "verification_performed": "Searched PubMed, PMC, and educational sources for whole-brain synapse estimates. UCLA BRI (B2): ~100 trillion = 1\u00d710^14. Pakkenberg et al. 2003 (PMID 12543266): ~0.15\u00d710^15 = 1.5\u00d710^14 (neocortex only). Tang et al. 2001 (PMID 11418939): ~1.64\u00d710^14 (neocortex). PMC11423976: 'around 10^14 (100 trillion) synapses in the average adult human brain'. No primary peer-reviewed source found reporting 6\u00d710^14 for the whole brain.",
+      "finding": "No primary source corroborates 6\u00d710^14 as the total synapse count. Primary literature consistently gives ~1\u20133\u00d710^14. The 6\u00d710^14 figure arises from applying the neocortical average (7,000) to all 86 billion neurons \u2014 a methodological error in the original claim.",
+      "breaks_proof": true
+    }
+  ],
+  "verdict": "PARTIALLY VERIFIED",
+  "key_results": {
+    "sc1_neurons": "8.600e+10",
+    "sc2_synapses_per_neuron": 7000.0,
+    "sc2_applies_to_all_neurons": false,
+    "sc3_arithmetic_total": "6.020e+14",
+    "sc3_arithmetic_holds": true,
+    "sc3_empirically_supported": false,
+    "primary_literature_whole_brain_synapses": "~1e14 to ~3e14",
+    "threshold": 600000000000000.0,
+    "claim_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "harvard_gazette",
+      "label": "Harvard Gazette: H\u00f6lzel 2011 minimum positive protocol \u2014 8 weeks, 27 min/day (exceeds claim's 30 days / 10 min/day by 1.87\u00d7 and 2.7\u00d7)"
+    },
+    "B2": {
+      "key": "psych_today_kral",
+      "label": "Psychology Today citing Kral et al. 2022 (Science Advances): largest RCT (n=218) finds NO neuroplastic structural changes from 8-week MBSR"
+    },
+    "B3": {
+      "key": "pubmed_holzel",
+      "label": "PubMed: H\u00f6lzel et al. 2011 abstract \u2014 corroborates 8-week MBSR design, confirms study measured structural (gray matter) changes under that protocol"
+    },
+    "A1": {
+      "label": "Source count: independent rejection sources confirming disproof",
+      "method": "sum(1 for c in confirmations if c)",
+      "result": "3"
+    }
+  },
+  "claim_formal": {
+    "subject": "daily 10-minute mindfulness meditation practiced over 30 days",
+    "property": "produces \u22651% increase in hippocampal volume as measurable on MRI",
+    "operator": ">=",
+    "operator_note": "Disproof direction. We seek N \u2265 2 independent sources whose findings collectively reject the specific claim. Two independent lines of rejection evidence are used: (a) the only landmark peer-reviewed study showing any hippocampal structural change from meditation (H\u00f6lzel et al. 2011) required 8 weeks / 27 min per day \u2014 1.87\u00d7 longer duration and 2.7\u00d7 higher daily dose than the claim specifies; (b) even that more intensive protocol failed to produce structural changes in the largest rigorous RCT to date (Kral et al. 2022, n=218). Threshold set to 2 (rather than default 3) because both primary rejection sources are primary scientific evidence of the highest quality (university press office reporting peer-reviewed findings, plus science journalism citing a Science Advances RCT). In disproof mode: claim_holds=True means 'the disproof holds' \u2014 i.e., the original claim is FALSE.",
+    "threshold": 2,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "Daily mindfulness meditation for 10 minutes increases hippocampal volume by at least 1% within one month.",
+  "citations": {
+    "B1": {
+      "source_key": "harvard_gazette",
+      "source_name": "Harvard Gazette \u2014 'Eight weeks to a better brain' (reporting H\u00f6lzel et al. 2011, Psychiatry Research: Neuroimaging 191(1):36\u201343)",
+      "url": "https://news.harvard.edu/gazette/story/2011/01/eight-weeks-to-a-better-brain/",
+      "quote": "Sixteen participants underwent brain imaging before and after the eight-week program. They practiced mindfulness exercises averaging 27 minutes daily. A control group of non-meditators showed no comparable changes.",
+      "status": "not_found",
+      "method": null,
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "harvard.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    },
+    "B2": {
+      "source_key": "psych_today_kral",
+      "source_name": "Psychology Today \u2014 'Mindfulness Doesn't Change Our Brains in Ways Once Thought' (reporting Kral et al. 2022, Science Advances)",
+      "url": "https://www.psychologytoday.com/us/blog/the-athletes-way/202205/mindfulness-doesn-t-change-our-brains-in-ways-once-thought",
+      "quote": "In the largest and most rigorously controlled study to date, we failed to replicate prior findings and found no evidence that MBSR produced neuroplastic changes compared to either control group, at either the whole-brain level or in regions of interest drawn from prior MBSR studies",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "psychologytoday.com",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B3": {
+      "source_key": "pubmed_holzel",
+      "source_name": "PubMed \u2014 H\u00f6lzel et al. 2011, 'Mindfulness practice leads to increases in regional brain gray matter density,' Psychiatry Research: Neuroimaging 191(1):36\u201343",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21071182/",
+      "quote": "participation in MBSR is associated with changes in gray matter concentration in brain regions involved in learning and memory processes, emotion regulation, self-referential processing, and perspective taking.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    }
+  },
+  "extractions": {
+    "B1_keyword": {
+      "value": "eight-week",
+      "value_in_quote": true,
+      "quote_snippet": "Sixteen participants underwent brain imaging before and after the eight-week pro"
+    },
+    "B2_keyword": {
+      "value": "no evidence",
+      "value_in_quote": true,
+      "quote_snippet": "In the largest and most rigorously controlled study to date, we failed to replic"
+    },
+    "B3_keyword": {
+      "value": "MBSR",
+      "value_in_quote": true,
+      "quote_snippet": "participation in MBSR is associated with changes in gray matter concentration in"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "B1 (Harvard Gazette / H\u00f6lzel 2011) and B2 (Psychology Today / Kral 2022) are structurally independent: different institutions, different studies, different years (2011 vs 2022), different finding types (minimum threshold vs replication failure). Both reject the claim's specific protocol.",
+      "values_compared": [
+        "B1: minimum positive protocol = 8 weeks / 27 min/day (H\u00f6lzel 2011)",
+        "B2: no structural changes even from 8-week MBSR (Kral 2022, n=218)"
+      ],
+      "agreement": true,
+      "note": "Both sources converge: the claim's protocol (10 min/day, 30 days) is insufficient even relative to a protocol that itself failed rigorous replication."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is there any peer-reviewed study showing 10-minute daily meditation for ~30 days produces measurable hippocampal volume change on MRI?",
+      "verification_performed": "Searched PubMed and web for '10 minute meditation hippocampal volume', '30 day meditation brain structure MRI', and '1 month mindfulness hippocampus'. No study measuring hippocampal volume after a 30-day, 10-min/day protocol was found.",
+      "finding": "No peer-reviewed study exists testing the claim's exact protocol. The claim's specific parameters (10 min/day, 30 days, \u22651% hippocampal volume) have no empirical support in the published literature.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the H\u00f6lzel 2011 result imply the claimed effect at a lower dose? Was the hippocampal change \u22651% in volume?",
+      "verification_performed": "Reviewed H\u00f6lzel 2011 abstract (PubMed 21071182) and Harvard Gazette coverage. The study reported changes in 'gray matter concentration' (voxel-based morphometry), not volumetric percent changes. The protocol used was 8 weeks / 27 min/day. Additionally, Kral et al. 2022 (n=218, Science Advances) failed to replicate H\u00f6lzel's findings in the most rigorous controlled trial to date.",
+      "finding": "H\u00f6lzel 2011 used a 2.7\u00d7 higher daily dose and 1.87\u00d7 longer duration than claimed. The exact \u22651% volumetric threshold was never established in the original study. Kral 2022 found no structural changes even with the more intensive protocol. The claim's specific parameters are not supported.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Do cross-sectional studies of long-term meditators show larger hippocampi, suggesting meditation can eventually change hippocampal structure?",
+      "verification_performed": "Searched for 'long-term meditators hippocampal volume cross-sectional'. Found Luders et al. 2009 and similar studies showing larger right hippocampi in practitioners with 5\u201346 years of experience (mean ~24 years).",
+      "finding": "Cross-sectional evidence exists for long-term practitioners (years to decades). This does not support a 30-day / 10-min/day claim. Causality is also unestablished: pre-existing brain differences may attract certain people to sustained meditation practice rather than meditation causing changes.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the retracted 2023 Scientific Reports meta-analysis provide supporting evidence?",
+      "verification_performed": "Searched for Siew & Yu 2023 meta-analysis status. Found it was retracted in 2024\u20132025 for excluding four null-finding papers representing ~40% of participants, making its positive conclusions unreliable.",
+      "finding": "The 2023 Scientific Reports meta-analysis was retracted and cannot be cited as evidence. Its retraction further undermines the premise that short-term meditation reliably produces hippocampal structural changes.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED (with unverified citations)",
+  "key_results": {
+    "n_confirming": 3,
+    "threshold": 2,
+    "operator": ">=",
+    "claim_holds": true,
+    "proof_direction": "disprove",
+    "interpretation": "claim_holds=True in disproof mode means the DISPROOF HOLDS \u2014 i.e., the original claim is FALSE. The claim's specific protocol (10 min/day, 30 days) has no empirical support, and even the closest tested protocol (8 weeks, 27 min/day) failed replication."
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

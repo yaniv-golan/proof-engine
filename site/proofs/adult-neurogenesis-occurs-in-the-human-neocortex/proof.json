@@ -1,0 +1,145 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "bhardwaj_2006",
+      "label": "Bhardwaj et al. 2006 (PNAS) \u2014 C14 bomb-pulse dating + BrdU study shows no adult neocortical neurogenesis in humans (direct human tissue study)"
+    },
+    "B2": {
+      "key": "kornack_rakic_2001",
+      "label": "Kornack & Rakic 2001 (Science) \u2014 triple-label BrdU immunofluorescence finds no neurogenesis in adult primate neocortex; fails to replicate Gould 1999 claim"
+    },
+    "B3": {
+      "key": "rakic_2002",
+      "label": "Rakic 2002 (Nature Reviews Neuroscience) \u2014 authoritative review questions the scientific basis of claims of adult primate neocortical neurogenesis"
+    },
+    "A1": {
+      "label": "Count of independent peer-reviewed sources rejecting adult neocortical neurogenesis",
+      "method": "sum(verify_extraction confirmations)",
+      "result": "3"
+    }
+  },
+  "claim_formal": {
+    "subject": "human neocortex",
+    "property": "presence of adult neurogenesis \u2014 generation of new neurons in the mature human brain's neocortical regions at a detectable level",
+    "operator": ">=",
+    "operator_note": "The claim asserts that new neurons ARE generated in the adult human neocortex. Proof direction is 'disprove': we count independent peer-reviewed sources that explicitly REJECT this claim. A threshold of 3 independent rejection sources is required for DISPROVED. 'Neocortex' is interpreted as the layered cerebral cortex (prefrontal, temporal, parietal, occipital regions), explicitly excluding the hippocampal dentate gyrus and olfactory bulb, which are anatomically and functionally distinct structures where adult neurogenesis is a separate ongoing debate. The claim is assessed against the most rigorous available evidence \u2014 C14 radiocarbon bomb-pulse dating, which directly measures neuronal birth dates without relying on cell-division markers that can label non-dividing cells.",
+    "threshold": 3,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "Adult neurogenesis occurs in the human neocortex.",
+  "citations": {
+    "B1": {
+      "source_key": "bhardwaj_2006",
+      "source_name": "Bhardwaj et al. 2006 \u2014 Neocortical neurogenesis in humans is restricted to development. Proc Natl Acad Sci USA 103(33):12564-12568 (PubMed abstract)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16901981/",
+      "quote": "neurons in the human cerebral neocortex are not generated in adulthood at detectable levels but are generated perinatally.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B2": {
+      "source_key": "kornack_rakic_2001",
+      "source_name": "Kornack & Rakic 2001 \u2014 Cell Proliferation Without Neurogenesis in Adult Primate Neocortex. Science 294:2127-2130 (PubMed abstract)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11739948/",
+      "quote": "our results do not substantiate the claim of neurogenesis in normal adult primate neocortex.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B3": {
+      "source_key": "rakic_2002",
+      "source_name": "Rakic 2002 \u2014 Neurogenesis in adult primate neocortex: an evaluation of the evidence. Nature Reviews Neuroscience 3:65-71 (PubMed abstract)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11823806/",
+      "quote": "Here, I review the available evidence, and question the scientific basis of this claim.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "not generated in adulthood",
+      "value_in_quote": true,
+      "quote_snippet": "neurons in the human cerebral neocortex are not generated in adulthood at detect"
+    },
+    "B2": {
+      "value": "do not substantiate",
+      "value_in_quote": true,
+      "quote_snippet": "our results do not substantiate the claim of neurogenesis in normal adult primat"
+    },
+    "B3": {
+      "value": "question the scientific basis",
+      "value_in_quote": true,
+      "quote_snippet": "Here, I review the available evidence, and question the scientific basis of this"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Bhardwaj 2006 (human tissue, C14 dating) and Kornack & Rakic 2001 (macaque, BrdU immunofluorescence) use independent methodologies on independent subjects and independently reach the same conclusion: no neurogenesis in adult primate/human neocortex.",
+      "values_compared": [
+        "not generated in adulthood (human, C14+BrdU, Bhardwaj 2006)",
+        "do not substantiate neurogenesis claim (macaque, BrdU, Kornack 2001)"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does Gould et al. 1999 (Science) provide credible unrebutted evidence of adult neocortical neurogenesis in primates?",
+      "verification_performed": "Read Gould et al. 1999 (PMID 10521353) and subsequent replies. The paper used BrdU labeling in adult macaques and claimed new neurons in prefrontal, temporal, and parietal cortex. Searched PubMed for replications and critiques.",
+      "finding": "Gould et al. 1999 was immediately contested. Kornack & Rakic 2001 (B2) used the identical BrdU method in macaques and found zero new neurons in neocortex. Nowakowski & Hayes 2000 (Science 288:771) published a formal critique. Bhardwaj et al. 2006 (B1) used C14 bomb-pulse dating \u2014 a method immune to BrdU artifacts (BrdU can label DNA-repair in non-dividing cells and dying cells) \u2014 and found no adult neocortical neurogenesis in human tissue. The Gould 1999 findings are now regarded as methodological artifacts by the field.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could any post-2006 study have demonstrated neocortical neurogenesis in humans using improved methods, rebutting Bhardwaj 2006?",
+      "verification_performed": "Searched PubMed and Google Scholar for 'adult human neocortical neurogenesis' 2010-2025, 'human cortex new neurons adult', 'neocortex neurogenesis human 2020'. Read review articles PMC10665662 (2023) and PMC6852840 (2019).",
+      "finding": "No post-2006 study using C14 dating has found neocortical neurogenesis in humans. The 2018-2024 debate concerns the hippocampal dentate gyrus only (Sorrells 2018 vs Boldrini 2018). Reviews through 2023 continue to state that cortical neurons are not generated locally in adulthood. Bhardwaj 2006 remains unrebutted for the neocortex specifically.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the neocortex claim contaminated by the hippocampal adult neurogenesis controversy \u2014 i.e., does uncertainty about the hippocampus extend to the neocortex?",
+      "verification_performed": "Read review articles distinguishing hippocampal from neocortical neurogenesis. Checked whether Sorrells et al. 2018 or Boldrini et al. 2018 addressed the neocortex.",
+      "finding": "The 2018-2024 debate is confined to the hippocampus. All parties in that debate treat the neocortex as a settled negative. Bhardwaj 2006 covers both structures with the same C14 method and reaches the same negative conclusion for the neocortex independent of the hippocampal results. The hippocampal controversy does not rescue the neocortical claim.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n_confirming": 3,
+    "n_required": 3,
+    "operator": ">=",
+    "claim_holds": true,
+    "proof_direction": "disprove",
+    "any_unverified_citations": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

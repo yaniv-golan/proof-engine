@@ -1,0 +1,171 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "source_a",
+      "label": "Szuhany et al. 2014 meta-analysis \u2014 exercise and BDNF effect sizes (J Psychiatric Research)"
+    },
+    "B2": {
+      "key": "source_b",
+      "label": "Cardoso et al. 2024 systematic review \u2014 aerobic exercise and neuroplasticity (Int J Exercise Science)"
+    },
+    "B3": {
+      "key": "source_c",
+      "label": "Marzbani et al. 2016 comprehensive review \u2014 neurofeedback efficacy limitations (Basic Clin Neurosci)"
+    },
+    "B4": {
+      "key": "source_d",
+      "label": "Orndorff-Plunkett et al. 2017 \u2014 neurofeedback versus sham controls (Brain Sciences)"
+    },
+    "A1": {
+      "label": "Count of independent sources rejecting neurofeedback-as-superior claim",
+      "method": "sum(confirmations) = 4",
+      "result": "4"
+    }
+  },
+  "claim_formal": {
+    "subject": "Neurofeedback training",
+    "property": "scientific evidence quality for neuroplasticity enhancement in adults, compared to aerobic exercise and sleep optimization",
+    "operator": ">=",
+    "operator_note": "The claim asserts neurofeedback is THE SUPERIOR method \u2014 meaning it outperforms BOTH exercise AND sleep optimization for neuroplasticity. Disproof requires showing at least one of those alternatives has stronger or more reliably demonstrated neuroplasticity effects than neurofeedback. 'Superior' is interpreted as having larger effect sizes, better replication, and clearer mechanistic evidence across independent meta-analyses and systematic reviews. Neuroplasticity is operationalized as changes in: BDNF (Brain-Derived Neurotrophic Factor) levels, hippocampal volume, gray matter density, or functional neural modulation \u2014 the primary measurable markers in the literature.",
+    "threshold": 3,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "The superior method for enhancing neuroplasticity in adults is neurofeedback training compared to exercise or sleep optimization.",
+  "citations": {
+    "B1": {
+      "source_key": "source_a",
+      "source_name": "Szuhany et al. 2014, Journal of Psychiatric Research (PMC4314337)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4314337/",
+      "quote": "Results demonstrated a moderate effect size for increases in BDNF following a single session of exercise",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B2": {
+      "source_key": "source_b",
+      "source_name": "Cardoso et al. 2024, International Journal of Exercise Science (PMC11385284)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11385284/",
+      "quote": "moderate to high intensity aerobic exercise (AE), increases the level of peripheral BDNF",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B3": {
+      "source_key": "source_c",
+      "source_name": "Marzbani et al. 2016, Basic and Clinical Neuroscience (PMC4892319)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4892319/",
+      "quote": "current research does not support conclusive results about its efficacy",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B4": {
+      "source_key": "source_d",
+      "source_name": "Orndorff-Plunkett et al. 2017, Brain Sciences (PMC5575615)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5575615/",
+      "quote": "recent accumulating evidence seems to refute the clinical superiority of feedback training over sham treatment",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "Results demonstrated a moderate effect size for increases in BDNF following a si"
+    },
+    "B2": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "moderate to high intensity aerobic exercise (AE), increases the level of periphe"
+    },
+    "B3": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "current research does not support conclusive results about its efficacy"
+    },
+    "B4": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "recent accumulating evidence seems to refute the clinical superiority of feedbac"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Independent source agreement: exercise superiority confirmed by B1+B2; neurofeedback insufficiency confirmed by B3+B4",
+      "n_sources": 4,
+      "n_confirming": 4,
+      "agreement": true,
+      "note": "B1 (Szuhany 2014) and B2 (Cardoso 2024) are independent research groups using independent datasets. B3 (Marzbani 2016) and B4 (Orndorff-Plunkett 2017) are independent reviews of neurofeedback literature."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is there any meta-analysis or systematic review showing neurofeedback produces neuroplasticity effects (BDNF increase, hippocampal volume, gray matter change) larger than aerobic exercise in healthy adults?",
+      "verification_performed": "Searched PubMed, Google Scholar, and PMC for: 'neurofeedback neuroplasticity BDNF meta-analysis', 'neurofeedback hippocampal volume', 'neurofeedback superior exercise neuroplasticity'. Also reviewed Galang et al. 2025 (PMC12426165) \u2014 the largest recent neurofeedback meta-analysis (SMD=0.32 for neural modulation, functional only, not structural neuroplasticity).",
+      "finding": "No meta-analysis or systematic review was found claiming neurofeedback produces neuroplasticity effects exceeding those of aerobic exercise. The best pro-neurofeedback finding (Galang et al. 2025, SMD=0.32) measures functional neural modulation during sessions only \u2014 not structural neuroplasticity (BDNF, hippocampal volume, gray matter). Exercise meta-analyses report Hedges' g = 0.46\u20130.58 for BDNF and documented hippocampal volume changes in RCTs. Neurofeedback's structural neuroplasticity evidence is absent.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could 'neuroplasticity' in the claim refer only to EEG-measured functional plasticity (alpha/theta brainwave modulation), where neurofeedback might excel?",
+      "verification_performed": "Reviewed neuroscience literature definitions of neuroplasticity. Searched for 'neuroplasticity definition EEG neurofeedback' and 'neuroplasticity BDNF hippocampus gold standard'. Reviewed Galang et al. 2025 functional vs. structural distinction.",
+      "finding": "Standard neuroscience definitions of neuroplasticity encompass structural and functional changes: synaptic density, gray matter volume, hippocampal neurogenesis, BDNF-mediated changes. A narrow redefinition limited to EEG brainwave modulation would exclude the primary measures used in the neuroplasticity enhancement literature and is not the standard scientific meaning. Even under this generous interpretation, neurofeedback's functional modulation effects (SMD=0.32) are contested and not established above sham; does not break proof.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there any RCT showing neurofeedback produces superior neuroplasticity outcomes compared to an active exercise control?",
+      "verification_performed": "Searched PubMed for 'neurofeedback exercise RCT neuroplasticity comparison', 'neurofeedback versus aerobic exercise brain'. Checked Thibault et al. 2017 (Brain, Oxford) commentary on sham-controlled trials.",
+      "finding": "No RCT comparing neurofeedback head-to-head against exercise for neuroplasticity was found. Thibault et al. 2017 notes that as of 2017, very few randomized double-blind sham-controlled neurofeedback trials exist, and those that do show genuine and sham neurofeedback produce comparable improvements, suggesting placebo plays a central role. The absence of head-to-head evidence means the claim of neurofeedback's superiority cannot be supported; does not break disproof.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n_confirming": 4,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": true,
+    "proof_direction": "disprove",
+    "exercise_bdnf_effect_size": "Hedges' g = 0.46\u20130.58 (Szuhany 2014 meta-analysis)",
+    "neurofeedback_functional_smd": "SMD = 0.32 (Galang 2025, functional only, not structural)"
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

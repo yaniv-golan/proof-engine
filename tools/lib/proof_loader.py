@@ -20,7 +20,7 @@ REQUIRED_JSON_KEYS = ["fact_registry", "claim_formal", "claim_natural",
 
 REQUIRED_GENERATOR_KEYS = ["name", "version", "repo", "generated_at"]
 
-REQUIRED_CLAIM_FORMAL_KEYS = ["operator", "operator_note"]
+REQUIRED_CLAIM_FORMAL_KEYS = []  # claim_formal structure varies by proof type
 
 OPTIONAL_AUDIT_SECTIONS = [
     "Citation Verification Details", "Computation Traces",

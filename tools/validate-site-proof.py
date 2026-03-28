@@ -15,7 +15,7 @@ from tools.lib.verdict import VERDICT_TAXONOMY
 REQUIRED_JSON_KEYS = ["fact_registry", "claim_formal", "claim_natural",
                       "verdict", "key_results", "generator"]
 REQUIRED_GENERATOR_KEYS = ["name", "version", "repo", "generated_at"]
-REQUIRED_CLAIM_FORMAL_KEYS = ["operator", "operator_note"]
+REQUIRED_CLAIM_FORMAL_KEYS = []  # claim_formal structure varies by proof type
 INVARIANT_FIELDS = ["verdict", "claim_formal", "claim_natural", "fact_registry", "key_results"]
 
 

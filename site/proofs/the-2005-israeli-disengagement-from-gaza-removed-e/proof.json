@@ -1,0 +1,329 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "wiki_disengagement",
+      "label": "Wikipedia: All 21 Gaza settlements dismantled in 2005 disengagement"
+    },
+    "B2": {
+      "key": "britannica_disengagement",
+      "label": "Britannica: Complete removal of settlers and soldiers from Gaza"
+    },
+    "B3": {
+      "key": "adl_disengagement",
+      "label": "ADL: All Israeli military installations removed from Gaza"
+    },
+    "B4": {
+      "key": "wiki_2006_election",
+      "label": "Wikipedia: Hamas won 74/132 seats in January 25, 2006 elections"
+    },
+    "B5": {
+      "key": "globalsec_2006_election",
+      "label": "GlobalSecurity.org: Hamas won decisive majority in Jan 25, 2006 elections"
+    },
+    "B6": {
+      "key": "wiki_battle_gaza",
+      "label": "Wikipedia: Hamas completed takeover of Gaza on June 15, 2007"
+    },
+    "B7": {
+      "key": "ecf_takeover",
+      "label": "ECF: Complete Hamas victory in June 2007 Gaza confrontation"
+    },
+    "A1": {
+      "label": "SC1 source count: independent sources confirming all settlements removed",
+      "method": "sum(sc1_sources) = 2 / threshold 2",
+      "result": "2"
+    },
+    "A2": {
+      "label": "SC2 source count: independent sources confirming all military outposts removed",
+      "method": "sum(sc2_sources) = 1 / threshold 1",
+      "result": "1"
+    },
+    "A3": {
+      "label": "SC3 source count: independent sources confirming Hamas January 2006 election win",
+      "method": "sum(sc3_sources) = 2 / threshold 2",
+      "result": "2"
+    },
+    "A4": {
+      "label": "SC4 source count: independent sources confirming complete 2007 Hamas takeover",
+      "method": "sum(sc4_sources) = 2 / threshold 2",
+      "result": "2"
+    },
+    "A5": {
+      "label": "Compound verdict: number of sub-claims holding out of 4",
+      "method": "n_holding / n_total = 4 / 4",
+      "result": "4/4"
+    }
+  },
+  "claim_formal": {
+    "subject": "2005 Israeli disengagement from Gaza and its aftermath",
+    "sub_claims": [
+      {
+        "id": "SC1",
+        "property": "All Israeli civilian settlements in Gaza were removed in 2005",
+        "operator": ">=",
+        "threshold": 2,
+        "operator_note": "Requires 2 independent sources confirming all 21 Gaza settlements were dismantled. A single settlement remaining would disprove this sub-claim."
+      },
+      {
+        "id": "SC2",
+        "property": "All Israeli military outposts/installations in Gaza were removed in 2005",
+        "operator": ">=",
+        "threshold": 1,
+        "operator_note": "Requires at least 1 authoritative source confirming all military installations were removed from Gaza soil. Retention of airspace/naval control is noted as a caveat but does not contradict removal of ground military outposts and installations."
+      },
+      {
+        "id": "SC3",
+        "property": "Hamas won the January 2006 Palestinian parliamentary elections",
+        "operator": ">=",
+        "threshold": 2,
+        "operator_note": "Requires 2 independent sources confirming Hamas won a parliamentary majority in elections held specifically in January 2006. 'Winning' means Hamas obtained enough seats to form a government (>=67 of 132 seats)."
+      },
+      {
+        "id": "SC4",
+        "property": "Hamas achieved complete takeover of Gaza territory in 2007",
+        "operator": ">=",
+        "threshold": 2,
+        "operator_note": "Requires 2 independent sources confirming Hamas seized full de facto control of Gaza in 2007. 'Complete' means all Palestinian Authority institutions in Gaza were seized; Abbas's rival West Bank PA government does not negate Gaza control."
+      }
+    ],
+    "compound_operator": "AND",
+    "operator_note": "All four sub-claims must hold for the compound claim to be PROVED. The phrase 'resulted in' is interpreted as temporal sequence plus widely recognized causal context: disengagement completed Sep 2005, Hamas won elections Jan 2006, Hamas seized Gaza Jun 2007. Strict causal proof (disengagement uniquely caused Hamas win) is beyond empirical fact-checking scope and is noted as a caveat in adversarial checks."
+  },
+  "claim_natural": "The 2005 Israeli disengagement from Gaza removed every settlement and military outpost AND resulted in Hamas winning the January 2006 parliamentary elections followed by its complete takeover of the territory in 2007.",
+  "citations": {
+    "B1": {
+      "source_key": "wiki_disengagement",
+      "source_name": "Wikipedia: Israeli disengagement from the Gaza Strip",
+      "url": "https://en.wikipedia.org/wiki/Israeli_disengagement_from_the_Gaza_Strip",
+      "quote": "Israel disengaged from the Gaza Strip by dismantling all 21 Israeli settlements there.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B2": {
+      "source_key": "britannica_disengagement",
+      "source_name": "Britannica: Israel's disengagement from Gaza (2005)",
+      "url": "https://www.britannica.com/event/Israels-disengagement-from-Gaza",
+      "quote": "complete removal of Israeli settlers and soldiers from the Gaza Strip",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "britannica.com",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B3": {
+      "source_key": "adl_disengagement",
+      "source_name": "ADL: Israeli Disengagement Background",
+      "url": "https://www.adl.org/resources/backgrounder/disengagement",
+      "quote": "removing all Israeli military installations, 25 Israeli settlements (4 in the West Bank) with over 8,000 residents",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "adl.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B4": {
+      "source_key": "wiki_2006_election",
+      "source_name": "Wikipedia: 2006 Palestinian legislative election",
+      "url": "https://en.wikipedia.org/wiki/2006_Palestinian_legislative_election",
+      "quote": "Legislative elections were held in the Palestinian territories on 25 January 2006 in order to elect the second Palestinian Legislative Council. The result was a victory for Hamas, contesting under the list name of Change and Reform, which received 44.45% of the vote and won 74 of the 132 seats.",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B5": {
+      "source_key": "globalsec_2006_election",
+      "source_name": "GlobalSecurity.org: Palestinian Parliamentary Elections 2006",
+      "url": "https://www.globalsecurity.org/military/world/palestine/pa-elections2006.htm",
+      "quote": "In the 25 January 2006 Palestinian parliamentary elections, Hamas won a decisive majority in the Palestinian Legislative Council or Parliament. Of the 132-seat Parliament, Hamas won 74 seats, thereby ending the Fatah party's control of the Palestinian Authority.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "globalsecurity.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B6": {
+      "source_key": "wiki_battle_gaza",
+      "source_name": "Wikipedia: Battle of Gaza (2007)",
+      "url": "https://en.wikipedia.org/wiki/Battle_of_Gaza_(2007)",
+      "quote": "On 15 June, Hamas completed taking control of the Gaza Strip, seizing all PNA government institutions and replacing all PNA officials in Gaza with Hamas members.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B7": {
+      "source_key": "ecf_takeover",
+      "source_name": "Economic Cooperation Foundation: Hamas Takeover of the Gaza Strip (2007)",
+      "url": "https://ecf.org.il/issues/issue/244",
+      "quote": "A short confrontation between Fatah and Hamas over control of the Gaza Strip, concluding with a complete victory for the latter",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "org.il",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "Israel disengaged from the Gaza Strip by dismantling all 21 Israeli settlements "
+    },
+    "B2": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "complete removal of Israeli settlers and soldiers from the Gaza Strip"
+    },
+    "B3": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "removing all Israeli military installations, 25 Israeli settlements (4 in the We"
+    },
+    "B4": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "Legislative elections were held in the Palestinian territories on 25 January 200"
+    },
+    "B5": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "In the 25 January 2006 Palestinian parliamentary elections, Hamas won a decisive"
+    },
+    "B6": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "On 15 June, Hamas completed taking control of the Gaza Strip, seizing all PNA go"
+    },
+    "B7": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "A short confrontation between Fatah and Hamas over control of the Gaza Strip, co"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "SC1 (all settlements removed): Wikipedia and Britannica independently confirm",
+      "n_sources": 2,
+      "n_confirming": 2,
+      "agreement": true
+    },
+    {
+      "description": "SC3 (Hamas Jan 2006 win): Wikipedia and GlobalSecurity independently confirm",
+      "n_sources": 2,
+      "n_confirming": 2,
+      "agreement": true
+    },
+    {
+      "description": "SC4 (Hamas 2007 complete takeover): Wikipedia and ECF independently confirm",
+      "n_sources": 2,
+      "n_confirming": 2,
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Did any Israeli settlement or military installation remain in Gaza after the 2005 disengagement?",
+      "verification_performed": "Searched 'Israeli settlement remained Gaza after disengagement 2005' and 'Gaza military base retained Israel 2005 exception'. Reviewed Wikipedia, Britannica, UN reports, and news archives.",
+      "finding": "No civilian settlement or ground military installation remained. All 21 settlements were dismantled; IDF ground forces withdrew by September 12, 2005. Israel retained aerial and naval control (airspace, coastline), which the UN and human rights bodies argue constitutes continued occupation, but no ground outposts were retained on Gaza soil.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Did Hamas win a true parliamentary majority in January 2006, or only a plurality?",
+      "verification_performed": "Verified seat count against 132-seat threshold: Hamas won 74 seats. Majority requires 67+ seats. 74 > 67, confirmed by Wikipedia and GlobalSecurity independently.",
+      "finding": "Hamas won 74 of 132 seats (56.1%), a clear majority exceeding the 67-seat threshold. This is a majority, not merely a plurality, enabling Hamas to form a government.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Was the Hamas 2007 Gaza takeover truly 'complete', or did Fatah retain any territorial control?",
+      "verification_performed": "Searched 'Hamas 2007 Gaza takeover incomplete Fatah retained area' and reviewed Wikipedia Battle of Gaza (2007) and ECF. Checked whether any Fatah stronghold persisted.",
+      "finding": "Hamas seized all PA government institutions in Gaza by June 15, 2007. President Abbas dissolved the unity government and created a rival West Bank PA, but no part of Gaza territory remained under Fatah/PA control. ECF explicitly calls it 'complete victory'. Wikipedia: 'Hamas completed taking control of the Gaza Strip'.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does 'resulted in' require proving strict causation between disengagement and Hamas's election win?",
+      "verification_performed": "Reviewed academic literature and policy analyses on causes of Hamas's 2006 win. Searched 'Hamas 2006 election win causes disengagement Fatah corruption'.",
+      "finding": "Strict causal proof is contested: analysts cite Fatah corruption, poor governance, and Hamas's social service network as co-causes. The temporal sequence (disengagement Sep 2005 \u2192 Hamas election Jan 2006 \u2192 Hamas takeover Jun 2007) is uncontested across all sources. The proof interprets 'resulted in' as verified temporal sequence with widely recognized causal context; no source disputes the sequence.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED (with unverified citations)",
+  "key_results": {
+    "sc1_settlements_removed": {
+      "n_confirming": 2,
+      "threshold": 2,
+      "holds": true
+    },
+    "sc2_military_removed": {
+      "n_confirming": 1,
+      "threshold": 1,
+      "holds": true
+    },
+    "sc3_hamas_election_jan2006": {
+      "n_confirming": 2,
+      "threshold": 2,
+      "holds": true
+    },
+    "sc4_hamas_takeover_2007": {
+      "n_confirming": 2,
+      "threshold": 2,
+      "holds": true
+    },
+    "n_holding": 4,
+    "n_total": 4,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

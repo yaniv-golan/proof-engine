@@ -1,0 +1,141 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "source_mit",
+      "label": "MIT McGovern Institute for Brain Research: labels the 10% claim a myth"
+    },
+    "B2": {
+      "key": "source_britannica",
+      "label": "Encyclopaedia Britannica: states entire brain is in use at all times"
+    },
+    "B3": {
+      "key": "source_sciam",
+      "label": "Scientific American: characterizes the 10-percent claim as a myth"
+    },
+    "A1": {
+      "label": "Source count: independent authoritative sources rejecting the 10% claim",
+      "method": "sum(confirmations) = 3",
+      "result": "3"
+    }
+  },
+  "claim_formal": {
+    "subject": "human brain usage",
+    "property": "Whether scientific consensus holds that only 10% of the brain is active at any given moment",
+    "operator": ">=",
+    "operator_note": "This proof proceeds by disproof: the claim is adjudicated FALSE if 3 or more independent authoritative sources explicitly characterize it as a myth, misconception, or scientifically unsupported belief. The threshold of 3 sources reflects the standard for established scientific consensus in the qualitative consensus template. If the threshold is not met, the verdict is UNDETERMINED (not PROVED), because failing to find enough rejection sources does not validate the claim.",
+    "threshold": 3,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "Humans use only 10% of their brain at any one time.",
+  "citations": {
+    "B1": {
+      "source_key": "source_mit",
+      "source_name": "MIT McGovern Institute for Brain Research",
+      "url": "https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/",
+      "quote": "But the idea that we use 10 percent of our brain is 100 percent a myth.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "mit.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    },
+    "B2": {
+      "source_key": "source_britannica",
+      "source_name": "Encyclopaedia Britannica",
+      "url": "https://www.britannica.com/story/do-we-really-use-only-10-percent-of-our-brain",
+      "quote": "But the truth is that we use all of our brain all of the time.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "britannica.com",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B3": {
+      "source_key": "source_sciam",
+      "source_name": "Scientific American",
+      "url": "https://www.scientificamerican.com/article/do-we-really-use-only-10/",
+      "quote": "the 10-percent myth is one of those hopeful shibboleths that refuses to die",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "scientificamerican.com",
+        "source_type": "major_news",
+        "tier": 3,
+        "flags": [],
+        "note": "Major news organization"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "But the idea that we use 10 percent of our brain is 100 percent a myth."
+    },
+    "B2": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "But the truth is that we use all of our brain all of the time."
+    },
+    "B3": {
+      "value": "keyword confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "the 10-percent myth is one of those hopeful shibboleths that refuses to die"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Independent source agreement on claim rejection",
+      "n_sources": 3,
+      "n_confirming": 3,
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does any peer-reviewed neuroscience study support that only 10% of the brain is active at any given moment?",
+      "verification_performed": "Searched: 'scientific evidence supporting 10 percent brain usage theory peer reviewed'. All results were debunking articles or consensus statements. No peer-reviewed study was found that supports the 10% claim.",
+      "finding": "No peer-reviewed neuroscience study supports the 10% claim. fMRI and PET imaging studies consistently show substantially more than 10% of brain regions active at any given time. The claim has no empirical basis.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could 'sparse coding' \u2014 the fact that not all neurons fire simultaneously \u2014 give the 10% claim any scientific grounding?",
+      "verification_performed": "Searched: 'neuroscience sparse coding 10 percent neurons firing simultaneously'. Reviewed neuroscience discussions on neural efficiency and sparse representation.",
+      "finding": "Sparse coding means individual neurons fire selectively, not that only 10% of brain REGIONS are active. fMRI BOLD signal shows that even simple tasks engage many distributed brain regions simultaneously. Sparse neuron firing is fundamentally different from 10% brain usage and does not rescue the claim.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the qualifier 'at any one time' narrow the claim to something defensible \u2014 e.g., only a fraction of the brain fires in any single millisecond?",
+      "verification_performed": "Reviewed neuroscience literature on neural synchrony, BOLD signal interpretation, and metabolic baseline activity. Considered whether any temporal interpretation makes the claim valid.",
+      "finding": "Even under the most favorable temporal interpretation the claim fails. The brain's metabolic baseline \u2014 consuming 20% of the body's energy despite being 2% of body mass \u2014 requires continuous activity across many regions at all times, including during sleep. There is no timescale at which only 10% of brain regions are active while the rest are truly idle.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n_confirming": 3,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

@@ -1,0 +1,233 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "source_a",
+      "label": "Squire LR (2009) The Legacy of Patient H.M. for Neuroscience, Neuron 61(1):6-9 (PMC2649674) \u2014 SC1"
+    },
+    "B2": {
+      "key": "source_b",
+      "label": "Wikipedia: Henry Molaison \u2014 anterograde amnesia and procedural memory \u2014 SC1, SC2"
+    },
+    "B3": {
+      "key": "source_c",
+      "label": "Simply Psychology: Patient H.M. Case Study \u2014 early life memories \u2014 SC3"
+    },
+    "B4": {
+      "key": "source_d",
+      "label": "BrainFacts.org: Patient Zero \u2014 What We Learned from H.M. \u2014 SC2"
+    },
+    "B5": {
+      "key": "source_e",
+      "label": "Wikipedia: Anterograde amnesia \u2014 H.M. childhood memories \u2014 SC3"
+    },
+    "A1": {
+      "label": "SC1 confirming source count (anterograde amnesia for new episodic memories)",
+      "method": "sum(confirmations_sc1) = 2",
+      "result": "2"
+    },
+    "A2": {
+      "label": "SC2 confirming source count (skill/procedural learning preserved)",
+      "method": "sum(confirmations_sc2) = 2",
+      "result": "2"
+    },
+    "A3": {
+      "label": "SC3 confirming source count (early-life retrograde memories intact)",
+      "method": "sum(confirmations_sc3) = 2",
+      "result": "2"
+    },
+    "A4": {
+      "label": "All three sub-claims meet threshold (compound claim holds)",
+      "method": "sc1_holds AND sc2_holds AND sc3_holds",
+      "result": "True"
+    }
+  },
+  "claim_formal": {
+    "subject": "Bilateral hippocampal damage (canonical case: patient H.M., Henry Molaison)",
+    "property": "Three jointly required sub-claims: (SC1) causes anterograde amnesia for new episodic memories; (SC2) does not impair procedural/skill learning; (SC3) does not impair retrograde memories from early life",
+    "operator": ">=",
+    "operator_note": "The compound claim is interpreted as TRUE if all three sub-claims are each confirmed by at least 2 independent sources (threshold=2 per sub-claim). This threshold was chosen because neuroscience consensus claims require corroboration from more than one source, but the core findings from H.M. are well-replicated across many studies. SC1 is proved by sources documenting inability to encode new episodic/declarative memories. SC2 is proved by sources documenting preserved motor skill learning (e.g., mirror tracing). SC3 is proved by sources documenting intact autobiographical memories predating surgery. The overall compound claim fails if ANY sub-claim fails to meet its threshold, or if adversarial checks reveal credible disconfirming evidence against any sub-claim.",
+    "threshold": 2,
+    "proof_direction": "affirm"
+  },
+  "claim_natural": "Hippocampal damage leads to anterograde amnesia for new episodic memories and does not impair skill learning or retrograde memories from early life.",
+  "citations": {
+    "B1": {
+      "source_key": "source_a",
+      "source_name": "Squire LR (2009) The Legacy of Patient H.M. for Neuroscience, Neuron (PMC)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2649674/",
+      "quote": "He forgot daily events nearly as fast as they occurred, apparently in the absence of any general intellectual loss.",
+      "status": "not_found",
+      "method": null,
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B2": {
+      "source_key": "source_b",
+      "source_name": "Wikipedia: Henry Molaison",
+      "url": "https://en.wikipedia.org/wiki/Henry_Molaison",
+      "quote": "Molaison developed severe anterograde amnesia: although his working memory and procedural memory were intact",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B3": {
+      "source_key": "source_c",
+      "source_name": "Simply Psychology: Patient H.M. Case Study",
+      "url": "https://www.simplypsychology.org/henry-molaison-patient-hm.html",
+      "quote": "he could still recall childhood memories, but he had difficulty remembering events that happened during the years immediately preceding the surgery",
+      "status": "not_found",
+      "method": null,
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "simplypsychology.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B4": {
+      "source_key": "source_d",
+      "source_name": "BrainFacts.org: Patient Zero \u2014 What We Learned from H.M.",
+      "url": "https://www.brainfacts.org/thinking-sensing-and-behaving/learning-and-memory/2013/patient-zero-what-we-learned-from-hm",
+      "quote": "he had retained the ability to form non-declarative memories, which took the form of improvement in motor skills.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "brainfacts.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B5": {
+      "source_key": "source_e",
+      "source_name": "Wikipedia: Anterograde amnesia",
+      "url": "https://en.wikipedia.org/wiki/Anterograde_amnesia",
+      "quote": "He could remember anything from his childhood.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "forgot daily events",
+      "value_in_quote": true,
+      "quote_snippet": "He forgot daily events nearly as fast as they occurred, apparently in the absenc"
+    },
+    "B2_sc1": {
+      "value": "anterograde amnesia",
+      "value_in_quote": true,
+      "quote_snippet": "Molaison developed severe anterograde amnesia: although his working memory and p"
+    },
+    "B2_sc2": {
+      "value": "procedural memory",
+      "value_in_quote": true,
+      "quote_snippet": "Molaison developed severe anterograde amnesia: although his working memory and p"
+    },
+    "B3": {
+      "value": "childhood memories",
+      "value_in_quote": true,
+      "quote_snippet": "he could still recall childhood memories, but he had difficulty remembering even"
+    },
+    "B4": {
+      "value": "motor skills",
+      "value_in_quote": true,
+      "quote_snippet": "he had retained the ability to form non-declarative memories, which took the for"
+    },
+    "B5": {
+      "value": "childhood",
+      "value_in_quote": true,
+      "quote_snippet": "He could remember anything from his childhood."
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "SC1 independent sources (PMC Squire 2009 + Wikipedia HM)",
+      "n_sources": 2,
+      "n_confirming": 2,
+      "agreement": true
+    },
+    {
+      "description": "SC2 independent sources (Wikipedia HM + BrainFacts)",
+      "n_sources": 2,
+      "n_confirming": 2,
+      "agreement": true
+    },
+    {
+      "description": "SC3 independent sources (Simply Psychology + Wikipedia AA)",
+      "n_sources": 2,
+      "n_confirming": 2,
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does Multiple Trace Theory (Nadel & Moscovitch 1997) show the hippocampus IS required for early-life memories, contradicting SC3?",
+      "verification_performed": "Searched for 'multiple trace theory hippocampus remote memories early life'. Reviewed MTT arguments against standard consolidation theory.",
+      "finding": "MTT argues the hippocampus is always engaged in rich episodic memory retrieval, even for remote memories. However, (1) H.M.'s preserved childhood memories are an empirical finding independent of theoretical interpretation; (2) even MTT proponents acknowledge that semantic (gist-level) memories become hippocampus-independent; (3) the temporal gradient of retrograde amnesia (older = better preserved) is well-documented regardless of which theory is correct. MTT represents theoretical disagreement, not empirical refutation of SC3.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does hippocampal damage impair certain types of skill or procedural learning, contradicting SC2?",
+      "verification_performed": "Searched for 'hippocampus procedural learning impaired skill', 'hippocampus sequence learning SRTT', 'hippocampus motor skill'.",
+      "finding": "Some studies show hippocampus involvement in probabilistic sequence learning (serial reaction time tasks with probabilistic elements) and spatial navigation learning. However, classic motor skill learning (mirror tracing, rotor pursuit, weight bias) is consistently preserved after hippocampal damage across multiple patients and studies. The claim's reference to 'skill learning' aligns with this classical finding, which is the domain Milner established in H.M. The sequence learning nuance does not break the proof.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could H.M.'s anterograde amnesia (SC1) be caused by amygdala or entorhinal cortex removal rather than hippocampal damage specifically?",
+      "verification_performed": "Searched for 'selective hippocampal damage anterograde amnesia amygdala entorhinal HM patient RB'. Reviewed subsequent amnesic patient cases.",
+      "finding": "Subsequent research on patients with selective hippocampal damage confirmed the hippocampus-specific role: Patient R.B. (Zola-Morgan et al. 1986) had isolated CA1 damage and showed clear anterograde amnesia; patients with hippocampal atrophy show similar profiles. Amygdala damage contributes to emotional memory and fear conditioning but not the classic episodic anterograde amnesia. The hippocampus is the critical structure for SC1.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there evidence that remote spatial memories from early life are impaired after hippocampal damage, undermining SC3?",
+      "verification_performed": "Found paper: 'Impaired Remote Spatial Memory After Hippocampal Lesions Despite Extensive Training Beginning Early in Life' (PMC2754396). Reviewed its scope.",
+      "finding": "This paper (and others) shows that hippocampal lesions impair remote SPATIAL memories even acquired early in life, which may contradict a broad reading of SC3. However, the claim specifically concerns 'retrograde memories from early life' in the context of H.M.'s autobiographical/episodic memories \u2014 the domain in which the classical finding holds. Spatial navigation memory may be a distinct case. Both the Wikipedia and Simply Psychology sources confirm H.M.'s childhood autobiographical memories were preserved. The spatial memory nuance refines but does not refute SC3 as stated for autobiographical early-life memories.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED (with unverified citations)",
+  "key_results": {
+    "sc1_anterograde_amnesia_sources": 2,
+    "sc2_skill_learning_preserved_sources": 2,
+    "sc3_early_life_memories_intact_sources": 2,
+    "threshold_per_sub_claim": 2,
+    "all_sub_claims_hold": true,
+    "any_citation_unverified": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

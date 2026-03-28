@@ -1,0 +1,289 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "egypt_wiki",
+      "label": "Wikipedia: Egypt\u2013Israel peace treaty signed 26 March 1979"
+    },
+    "B2": {
+      "key": "egypt_state_dept",
+      "label": "US State Dept (history.state.gov): Egypt-Israel Peace Treaty signed March 26"
+    },
+    "B3": {
+      "key": "jordan_wiki",
+      "label": "Wikipedia: Israel\u2013Jordan peace treaty signed 26 October 1994"
+    },
+    "B4": {
+      "key": "jordan_accords_xref",
+      "label": "Wikipedia (Abraham Accords): UAE/Bahrain first Arab recognition since Jordan in 1994"
+    },
+    "B5": {
+      "key": "accords_britannica",
+      "label": "Britannica: Abraham Accords \u2014 UAE, Bahrain, Morocco bilateral agreements 2020"
+    },
+    "B6": {
+      "key": "accords_wiki_sudan",
+      "label": "Wikipedia (Abraham Accords): Sudan signed Declaration January 6, 2021"
+    },
+    "A1": {
+      "label": "SC1 \u2014 Egypt treaty confirming-source count",
+      "method": "sum([egypt_confirm_b1, egypt_confirm_b2]) = 2",
+      "result": "2"
+    },
+    "A2": {
+      "label": "SC2 \u2014 Jordan treaty confirming-source count",
+      "method": "sum([jordan_confirm_b3, jordan_confirm_b4]) = 2",
+      "result": "2"
+    },
+    "A3": {
+      "label": "SC3 \u2014 Abraham Accords state count by 2023",
+      "method": "sum([uae, bahrain, morocco, sudan confirmations]) = 4",
+      "result": "4"
+    }
+  },
+  "claim_formal": {
+    "subject": "Assertion that no Arab state has ever recognized Israel",
+    "sub_claims": [
+      {
+        "id": "SC1",
+        "property": "Egypt signed a peace treaty with Israel in 1979",
+        "operator": ">=",
+        "threshold": 1,
+        "operator_note": "SC1 holds if at least 1 authoritative source confirms Egypt signed a peace treaty with Israel in 1979. We require \u2265 1 confirming source; two independent sources (Wikipedia + US State Dept) are used for cross-check (Rule 6). One confirming source is sufficient because this is a matter of established historical record."
+      },
+      {
+        "id": "SC2",
+        "property": "Jordan signed a peace treaty with Israel in 1994",
+        "operator": ">=",
+        "threshold": 1,
+        "operator_note": "SC2 holds if at least 1 authoritative source confirms Jordan signed a peace treaty (the Wadi Araba Treaty) with Israel in 1994. Jordan was the second Arab country to formally recognize Israel after Egypt. Two independent sources are used: the treaty's own Wikipedia article and the Abraham Accords Wikipedia article (which cross-references Jordan 1994)."
+      },
+      {
+        "id": "SC3",
+        "property": "At least 4 Arab states joined the Abraham Accords by 2023",
+        "operator": ">=",
+        "threshold": 4,
+        "operator_note": "SC3 holds if at least 4 Arab states signed the Abraham Accords Declaration or a bilateral normalization agreement with Israel by 31 December 2023. 'Joined' includes both bilateral agreements and signing the general Declaration, consistent with Wikipedia and Britannica definitions. The four states are: United Arab Emirates and Bahrain (bilateral, September 15 2020), Morocco (bilateral, December 2020), and Sudan (Declaration, January 6 2021). All four joined by January 2021, well before the 2023 cutoff."
+      }
+    ],
+    "compound_operator": "AND",
+    "operator_note": "The meta-claim \u2014 that 'no Arab state has ever recognized Israel' is false \u2014 is proved by demonstrating ANY one of SC1, SC2, SC3 holds. The original claim asserts all three simultaneously, so we verify all three (AND). Even SC1 alone (Egypt 1979) constitutes a decisive counterexample to the 'no Arab state' assertion."
+  },
+  "claim_natural": "The assertion that no Arab state has ever recognized Israel is false because Egypt signed a peace treaty in 1979, Jordan in 1994, and four additional states joined the Abraham Accords by 2023.",
+  "citations": {
+    "B1": {
+      "source_key": "egypt_wiki",
+      "source_name": "Wikipedia: Egypt\u2013Israel peace treaty",
+      "url": "https://en.wikipedia.org/wiki/Egypt%E2%80%93Israel_peace_treaty",
+      "quote": "The Egypt\u2013Israel peace treaty was signed in Washington, D.C., United States, on 26 March 1979, following the 1978 Camp David Accords.",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B2": {
+      "source_key": "egypt_state_dept",
+      "source_name": "U.S. Department of State, Office of the Historian: Camp David Accords",
+      "url": "https://history.state.gov/milestones/1977-1980/camp-david",
+      "quote": "the Egyptian-Israeli Peace Treaty was formally signed on March 26.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "state.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B3": {
+      "source_key": "jordan_wiki",
+      "source_name": "Wikipedia: Israel\u2013Jordan peace treaty",
+      "url": "https://en.wikipedia.org/wiki/Israel%E2%80%93Jordan_peace_treaty",
+      "quote": "The signing ceremony took place at the southern border crossing of Arabah on 26 October 1994. Jordan was the second Arab country, after Egypt, to sign a peace accord with Israel.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B4": {
+      "source_key": "jordan_accords_xref",
+      "source_name": "Wikipedia: Abraham Accords (Jordan 1994 cross-reference)",
+      "url": "https://en.wikipedia.org/wiki/Abraham_Accords",
+      "quote": "The UAE and Bahrain became the first Arab countries to formally recognize Israel since Jordan in 1994.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B5": {
+      "source_key": "accords_britannica",
+      "source_name": "Encyclopaedia Britannica: Abraham Accords",
+      "url": "https://www.britannica.com/topic/Abraham-Accords",
+      "quote": "The accords, all of which were signed in the latter half of 2020, consist of a general declaration alongside individual bilateral agreements between Israel and each of the following countries: United Arab Emirates, Bahrain, Morocco.",
+      "status": "partial",
+      "method": "fragment",
+      "coverage_pct": 48.6,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "britannica.com",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B6": {
+      "source_key": "accords_wiki_sudan",
+      "source_name": "Wikipedia: Abraham Accords (Sudan signing)",
+      "url": "https://en.wikipedia.org/wiki/Abraham_Accords",
+      "quote": "On January 6, 2021, the government of Sudan signed the \"Abraham Accords Declaration\" in Khartoum.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "1979",
+      "value_in_quote": true,
+      "quote_snippet": "The Egypt\u2013Israel peace treaty was signed in Washington, D.C., United States, on "
+    },
+    "B2": {
+      "value": "March 26",
+      "value_in_quote": true,
+      "quote_snippet": "the Egyptian-Israeli Peace Treaty was formally signed on March 26."
+    },
+    "B3": {
+      "value": "1994",
+      "value_in_quote": true,
+      "quote_snippet": "The signing ceremony took place at the southern border crossing of Arabah on 26 "
+    },
+    "B4": {
+      "value": "Jordan in 1994",
+      "value_in_quote": true,
+      "quote_snippet": "The UAE and Bahrain became the first Arab countries to formally recognize Israel"
+    },
+    "B5_uae": {
+      "value": "United Arab Emirates",
+      "value_in_quote": true,
+      "quote_snippet": "The accords, all of which were signed in the latter half of 2020, consist of a g"
+    },
+    "B5_bah": {
+      "value": "Bahrain",
+      "value_in_quote": true,
+      "quote_snippet": "The accords, all of which were signed in the latter half of 2020, consist of a g"
+    },
+    "B5_mor": {
+      "value": "Morocco",
+      "value_in_quote": true,
+      "quote_snippet": "The accords, all of which were signed in the latter half of 2020, consist of a g"
+    },
+    "B6_sud": {
+      "value": "Abraham Accords Declaration",
+      "value_in_quote": true,
+      "quote_snippet": "On January 6, 2021, the government of Sudan signed the \"Abraham Accords Declarat"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "SC1 Egypt 1979: Wikipedia (B1) vs US State Dept (B2) \u2014 independent sources confirm same event",
+      "values_compared": [
+        "B1: 'signed ... on 26 March 1979'",
+        "B2: 'Peace Treaty was formally signed on March 26'"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "SC2 Jordan 1994: Wikipedia treaty page (B3) vs Wikipedia Abraham Accords (B4) \u2014 different pages confirm Jordan 1994",
+      "values_compared": [
+        "B3: 'signed ... on 26 October 1994'",
+        "B4: 'formally recognize Israel since Jordan in 1994'"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "SC3 Abraham Accords states: Britannica (B5, three bilateral states) + Wikipedia (B6, Sudan Declaration) \u2014 independent sources",
+      "values_compared": [
+        "B5 (Britannica): UAE=True, Bahrain=True, Morocco=True",
+        "B6 (Wikipedia Sudan): Sudan Declaration=True"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Was the Egypt-Israel peace treaty revoked or suspended after Sadat's assassination in 1981?",
+      "verification_performed": "Searched for 'Egypt Israel peace treaty revoked annulled suspended after Sadat assassination'. Reviewed Wikipedia Egypt\u2013Israel peace treaty article and news sources.",
+      "finding": "The peace treaty remained continuously in force after Sadat's assassination. President Mubarak maintained the treaty throughout his 30-year reign. Egypt recalled its ambassador temporarily (1982-1988 over Lebanon, 2000-2005 over the Second Intifada), but the treaty was never annulled. SC1 is not undermined.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does 'normalization' in the Abraham Accords constitute formal diplomatic recognition of Israel, or is it merely economic/security cooperation?",
+      "verification_performed": "Searched for 'Abraham Accords normalization not recognition argument critics 2020'. Reviewed Foreign Affairs, Middle East Institute, and Wikipedia Abraham Accords articles.",
+      "finding": "Critics argue the Accords bypassed Palestinian concerns and the 2002 Arab Peace Initiative, but do not dispute that the agreements establish full diplomatic relations. Wikipedia's Abraham Accords article explicitly states UAE and Bahrain 'formally recognize Israel' \u2014 the same language used for Egypt (1979) and Jordan (1994). SC3 stands.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Should Sudan be excluded from the Abraham Accords count given its bilateral agreement remains unratified?",
+      "verification_performed": "Reviewed Britannica Abraham Accords (which notes Sudan signed only the general declaration) and Wikipedia Abraham Accords (which confirms Sudan signed the Declaration on January 6, 2021). Checked whether excluding Sudan breaks SC3.",
+      "finding": "Sudan signed the Abraham Accords Declaration on January 6, 2021, which constitutes joining the Accords even without a bilateral agreement. However, even excluding Sudan, three Abraham Accords states (UAE, Bahrain, Morocco) plus Egypt and Jordan give five Arab states that formally recognized Israel, still decisively disproving the 'no Arab state' assertion. SC3 as stated (\u22654) requires Sudan to hold \u2014 but the meta-claim is still proved by SC1+SC2 alone if SC3 fails.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED (with unverified citations)",
+  "key_results": {
+    "sc1_egypt_1979": {
+      "n_confirming": 2,
+      "holds": true
+    },
+    "sc2_jordan_1994": {
+      "n_confirming": 2,
+      "holds": true
+    },
+    "sc3_accords_states": {
+      "n_confirming": 4,
+      "holds": true
+    },
+    "n_sub_claims_holding": 3,
+    "n_sub_claims_total": 3,
+    "claim_holds": true
+  },
+  "date_note": "Proof generated for 2026-03-27; running on 2026-03-28.",
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "peace_now_wb",
+      "label": "Peace Now Settlement Watch (citing Israeli CBS): West Bank settler population 2023 and 2010"
+    },
+    "B2": {
+      "key": "wikipedia_ej",
+      "label": "Wikipedia: East Jerusalem Jewish settler population 2023 and 2010"
+    },
+    "B3": {
+      "key": "jvl_wb",
+      "label": "Jewish Virtual Library (citing Israeli CBS): West Bank settler population 2023 and 2010 (cross-check)"
+    },
+    "A1": {
+      "label": "SC1: Combined West Bank + East Jerusalem settler population, end-2023",
+      "method": "explain_calc('wb_2023 + ej_2023')",
+      "result": "749732"
+    },
+    "A2": {
+      "label": "SC2: Percentage growth from combined 2010 total to combined 2023 total",
+      "method": "compute_percentage_change(total_2010, total_2023, mode='increase')",
+      "result": "47.08%"
+    },
+    "A3": {
+      "label": "Cross-check: West Bank 2023 \u2014 Peace Now vs Jewish Virtual Library",
+      "method": "cross_check(wb_2023, wb_2023_jvl, tolerance=0.005, mode='relative')",
+      "result": "503,732 vs 502,991 \u2014 within 0.5%"
+    },
+    "A4": {
+      "label": "Cross-check: West Bank 2010 \u2014 Peace Now vs Jewish Virtual Library",
+      "method": "cross_check(wb_2010, wb_2010_jvl, tolerance=0.025, mode='relative')",
+      "result": "311,100 vs 303,900 \u2014 within 2.5%"
+    }
+  },
+  "claim_formal": {
+    "subject": "Israeli settler population in the West Bank and East Jerusalem combined",
+    "sub_claims": [
+      {
+        "id": "SC1",
+        "property": "combined settler count (West Bank + East Jerusalem) at end of 2023",
+        "operator": ">",
+        "threshold": 700000,
+        "operator_note": "'surpassed 700,000' is interpreted as strictly greater than 700,000. The Israeli CBS (ICBS) publishes Judea and Samaria (West Bank) settler counts and Jerusalem District population data separately; it does not produce a single combined 'settler' figure. The 700,000 figure cited by international bodies (UN, EU) combines these two CBS data streams. The attribution 'per the Israeli CBS' refers to the underlying data source."
+      },
+      {
+        "id": "SC2",
+        "property": "percentage growth from 2010 combined total to 2023 combined total",
+        "operator": ">",
+        "threshold": 20.0,
+        "operator_note": "'more than 20 percent growth since 2010' is interpreted as (2023_total - 2010_total) / 2010_total * 100 > 20.0. The 2010 baseline uses the same geographic scope: West Bank + East Jerusalem."
+      }
+    ],
+    "compound_operator": "AND",
+    "operator_note": "Both sub-claims must hold for the compound claim to be PROVED."
+  },
+  "claim_natural": "The Israeli settler population in the West Bank and East Jerusalem surpassed 700,000 by December 2023 per the Israeli Central Bureau of Statistics, representing more than 20 percent growth since 2010.",
+  "citations": {
+    "B1": {
+      "source_key": "peace_now_wb",
+      "source_name": "Peace Now Settlement Watch (sourced from Israeli CBS, end of 2023)",
+      "url": "https://peacenow.org.il/en/settlements-watch/settlements-data/population",
+      "quote": "Source: Israeli and Palestinian CBS, end of 2023",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "org.il",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B2": {
+      "source_key": "wikipedia_ej",
+      "source_name": "Wikipedia: Population statistics for Israeli settlements in the West Bank",
+      "url": "https://en.wikipedia.org/wiki/Population_statistics_for_Israeli_settlements_in_the_West_Bank",
+      "quote": "In total, over 529,000 Israeli settlers live in the West Bank excluding East Jerusalem, with an additional 246,000 Jewish settlers residing in East Jerusalem.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B3": {
+      "source_key": "jvl_wb",
+      "source_name": "Jewish Virtual Library: Jewish Settlements Population (sourced from Israeli CBS)",
+      "url": "https://www.jewishvirtuallibrary.org/jewish-settlements-population-1970-present",
+      "quote": "As of January 1, 2024 - Includes 129 settlements but excludes 23 communities in the Old City and eastern neighborhoods of Jerusalem",
+      "status": "partial",
+      "method": "fragment",
+      "coverage_pct": 50.0,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "jewishvirtuallibrary.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1_wb_2023": {
+      "value": "503732",
+      "value_in_quote": true,
+      "quote_snippet": "data_values['wb_2023'] = '503,732'"
+    },
+    "B1_wb_2010": {
+      "value": "311100",
+      "value_in_quote": true,
+      "quote_snippet": "data_values['wb_2010'] = '311,100'"
+    },
+    "B2_ej_2023": {
+      "value": "246000",
+      "value_in_quote": true,
+      "quote_snippet": "data_values['ej_2023'] = '246,000'"
+    },
+    "B2_ej_2010": {
+      "value": "198629",
+      "value_in_quote": true,
+      "quote_snippet": "data_values['ej_2010'] = '198,629'"
+    },
+    "B3_wb_2023": {
+      "value": "502991",
+      "value_in_quote": true,
+      "quote_snippet": "data_values['wb_2023_jvl'] = '502,991'"
+    },
+    "B3_wb_2010": {
+      "value": "303900",
+      "value_in_quote": true,
+      "quote_snippet": "data_values['wb_2010_jvl'] = '303,900'"
+    }
+  },
+  "data_value_verification": {
+    "B1": {
+      "wb_2023": {
+        "found": false,
+        "value": "503,732",
+        "fetch_mode": "live"
+      },
+      "wb_2010": {
+        "found": false,
+        "value": "311,100",
+        "fetch_mode": "live"
+      }
+    },
+    "B2": {
+      "ej_2023": {
+        "found": true,
+        "value": "246,000",
+        "fetch_mode": "live"
+      },
+      "ej_2010": {
+        "found": true,
+        "value": "198,629",
+        "fetch_mode": "live"
+      }
+    },
+    "B3": {
+      "wb_2023_jvl": {
+        "found": true,
+        "value": "502,991",
+        "fetch_mode": "live"
+      },
+      "wb_2010_jvl": {
+        "found": true,
+        "value": "303,900",
+        "fetch_mode": "live"
+      }
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "West Bank 2023: Peace Now vs JVL (independently cited CBS data)",
+      "values_compared": [
+        "503732",
+        "502991"
+      ],
+      "agreement": true,
+      "tolerance": "0.5% relative"
+    },
+    {
+      "description": "West Bank 2010: Peace Now vs JVL (independently cited CBS data)",
+      "values_compared": [
+        "311100",
+        "303900"
+      ],
+      "agreement": true,
+      "tolerance": "2.5% relative"
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does the Israeli CBS publish a single combined West Bank + East Jerusalem 'settler' figure that confirms 700,000+? Or is the 700,000 derived by combining two separate CBS datasets?",
+      "verification_performed": "Searched the Israeli CBS website (cbs.gov.il) and secondary literature. The CBS publishes population data for 'Judea and Samaria Area' localities and for Jerusalem District separately in its Statistical Yearbook. No single CBS publication uses a '700,000 settler' figure. International bodies (UN OCHA, EU EEAS, Peace Now) derive the combined figure by summing these two CBS data streams. The POMEPS academic review 'So, how many settlements are there?' confirms CBS methodology uses locality-level data in Judea and Samaria, not a single aggregated settler count.",
+      "finding": "The 700,000 figure is derived FROM CBS data by combining two separate CBS data streams (West Bank + East Jerusalem), consistent with standard practice by UN, EU, and academic sources. The claim's attribution 'per the Israeli CBS' accurately describes the data's origin, though no single CBS publication uses this combined total.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Do any authoritative sources dispute the combined 700,000 figure for end-2023?",
+      "verification_performed": "Searched for sources reporting a sub-700,000 combined total for West Bank + East Jerusalem at end-2023. Peace Now (503,732 WB) + Wikipedia (246,000 EJ) = 749,732. Using the most conservative West Bank figure (JVL: 502,991) with the lower East Jerusalem bound (~230,000 cited by UN OCHA) gives 732,991 \u2014 still above 700,000. The JNS article (January 2024) projects 700,000+ as a 2035 milestone for West Bank alone, but this refers to West Bank only, not the combined total. No credible source found placing the combined total below 700,000 by end-2023.",
+      "finding": "No credible source disputes the 700,000+ combined total. The threshold is safely exceeded under all reasonable estimates; even the most conservative combined figure is ~732,000.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Under the most conservative plausible 2010 baseline and 2023 estimate, is growth still above 20%?",
+      "verification_performed": "Computed growth using most conservative figures: 2010 low = JVL WB 303,900 + Wikipedia EJ 198,629 = 502,529; 2023 low = JVL WB 502,991 + Wikipedia EJ 246,000 = 748,991. Growth = (748,991 - 502,529) / 502,529 * 100 = 49.0%. Even under the narrower West Bank-only scope: (503,732 - 311,100) / 311,100 * 100 = 61.9% growth.",
+      "finding": "Under the most conservative combined estimates, growth is ~49%, far above 20%. The claim's 20% figure is a substantial understatement of actual growth. No plausible combination of 2010 and 2023 figures produces growth below 20%.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is 'East Jerusalem' defined consistently across sources? Could definitional differences place the combined total below 700,000?",
+      "verification_performed": "Searched for sources using different East Jerusalem boundaries. Wikipedia's 246,000 refers to Jewish settlers in East Jerusalem neighborhoods built after 1967. JVL references '~340,000 Jews' in 'Old City and eastern neighborhoods,' suggesting a broader geographic inclusion. UN OCHA uses ~230,000. Even the narrowest definition (Wikipedia's 246,000) yields a combined 2023 total of 749,732 > 700,000. The narrower UN OCHA estimate (~230,000) yields ~733,732 > 700,000.",
+      "finding": "Definitional variation in 'East Jerusalem' affects the exact combined figure but not the conclusion. Under all reasonable definitions \u2014 narrow (230,000) or broad (340,000) \u2014 the combined 2023 total exceeds 700,000 by at least ~32,000.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED (with unverified citations)",
+  "key_results": {
+    "wb_2023": 503732,
+    "ej_2023": 246000,
+    "total_2023": 749732,
+    "wb_2010": 311100,
+    "ej_2010": 198629,
+    "total_2010": 509729,
+    "sc1_threshold": 700000,
+    "sc1_holds": true,
+    "growth_pct": 47.0844311388993,
+    "sc2_threshold": 20.0,
+    "sc2_holds": true,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

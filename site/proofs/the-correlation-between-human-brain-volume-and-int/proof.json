@@ -1,0 +1,185 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "pietschnig_2015",
+      "label": "Pietschnig et al. (2015): 88 studies, 8000+ subjects; weighted r = .24"
+    },
+    "B2": {
+      "key": "pmc_2022",
+      "label": "Nave et al. (2022): largest meta-analysis (N=26k+); r = 0.24, range 0.10\u20130.37"
+    },
+    "B3": {
+      "key": "wiki_conditional",
+      "label": "Wikipedia Neuroscience & Intelligence: r \u2248 0.4 for healthy adults, high-quality tests"
+    },
+    "A1": {
+      "label": "SC1-A: |r_Pietschnig - 0.40|",
+      "method": "abs(0.24 - 0.40)",
+      "result": "0.1600"
+    },
+    "A2": {
+      "label": "SC1-B: |r_PMC2022 - 0.40|",
+      "method": "abs(0.24 - 0.40)",
+      "result": "0.1600"
+    },
+    "A3": {
+      "label": "SC2:   |r_conditional - 0.40|",
+      "method": "abs(0.40 - 0.40)",
+      "result": "0.0000"
+    },
+    "A4": {
+      "label": "Cross-check: Pietschnig 2015 vs PMC 2022 overall r agreement",
+      "method": "cross_check(0.24, 0.24, tol=0.01, mode='absolute')",
+      "result": "Agreement"
+    }
+  },
+  "claim_formal": {
+    "subject": "Pearson r correlation between human brain volume (total in vivo, MRI) and intelligence (IQ/g)",
+    "property": "meta-analytic correlation coefficient",
+    "operator": "within",
+    "operator_note": "r = 0.4 is interpreted as r within \u00b10.05 of 0.40 (i.e., 0.35 \u2264 r \u2264 0.45). This is a standard rounding tolerance for meta-analytic correlations. Two sub-claims are evaluated: SC1 tests whether the unconditional overall meta-analytic estimate equals r \u2248 0.40 (this would be false if major meta-analyses converge on r \u2248 0.24). SC2 tests whether the conditional estimate\u2014restricted to healthy adults using high-quality intelligence tests\u2014equals r \u2248 0.40. 'Brain volume' means total in vivo brain volume via MRI. 'Intelligence' means psychometric IQ or g-factor test scores.",
+    "threshold": 0.4,
+    "tolerance": 0.05
+  },
+  "claim_natural": "The correlation between human brain volume and intelligence is r = 0.4",
+  "citations": {
+    "B1": {
+      "source_key": "pietschnig_2015",
+      "source_name": "Pietschnig et al. (2015), Neuroscience & Biobehavioral Reviews \u2014 PubMed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26449760/",
+      "quote": "Our results showed significant positive associations of brain volume and IQ (r=.24, R(2)=.06) that generalize over age (children vs. adults), IQ domain (full-scale, performance, and verbal IQ), and sex.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B2": {
+      "source_key": "pmc_2022",
+      "source_name": "Nave et al. (2022), Royal Society Open Science \u2014 PMC",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9096623/",
+      "quote": "Brain size and IQ associations yielded r = 0.24, with the strongest effects observed for more g-loaded tests and in healthy samples that generalize across participant sex and age bands.",
+      "status": "partial",
+      "method": "fragment",
+      "coverage_pct": 50.0,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B3": {
+      "source_key": "wiki_conditional",
+      "source_name": "Wikipedia \u2014 Neuroscience and intelligence",
+      "url": "https://en.wikipedia.org/wiki/Neuroscience_and_intelligence",
+      "quote": "In healthy adults, the correlation of total brain volume and IQ is approximately 0.4 when high-quality tests are used.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "0.24",
+      "value_in_quote": true,
+      "quote_snippet": "Our results showed significant positive associations of brain volume and IQ (r=."
+    },
+    "B2": {
+      "value": "0.24",
+      "value_in_quote": true,
+      "quote_snippet": "Brain size and IQ associations yielded r = 0.24, with the strongest effects obse"
+    },
+    "B3": {
+      "value": "0.4",
+      "value_in_quote": true,
+      "quote_snippet": "In healthy adults, the correlation of total brain volume and IQ is approximately"
+    }
+  },
+  "data_value_verification": {
+    "B1": {
+      "r_overall": {
+        "found": true,
+        "value": ".24",
+        "fetch_mode": "live"
+      }
+    },
+    "B2": {
+      "r_overall": {
+        "found": true,
+        "value": "0.24",
+        "fetch_mode": "live"
+      }
+    },
+    "B3": {
+      "r_conditional": {
+        "found": true,
+        "value": "0.4",
+        "fetch_mode": "live"
+      }
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "SC1: Pietschnig 2015 vs PMC 2022 unconditional r (two independent meta-analyses)",
+      "values_compared": [
+        "0.24",
+        "0.24"
+      ],
+      "agreement": true,
+      "tolerance": "0.01 absolute"
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does any major unconditional meta-analysis report r = 0.40 for brain volume vs. IQ?",
+      "verification_performed": "Searched for 'brain volume IQ meta-analysis r = 0.4 overall' and reviewed McDaniel (2005), Pietschnig et al. (2015), and Nave et al. (2022). McDaniel (2005) found r = 0.33 overall (37 samples, n = 1,530). Pietschnig et al. (2015) found r = .24 (88 studies, 8,000+ subjects). Nave et al. (2022) found r = 0.24 (86 studies, N = 26,000+, range 0.10\u20130.37). Gignac & Bates (2017) concluded r \u2248 0.40 only as a conditional estimate (excellent-quality tests), not unconditionally.",
+      "finding": "No major meta-analysis reports r = 0.40 as the unconditional overall estimate. The three principal meta-analyses converge on r = 0.24\u20130.33.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could publication bias be deflating the estimates below 0.40?",
+      "verification_performed": "Examined publication bias analysis in Pietschnig et al. (2015) and Nave et al. (2022). PMC 2022 abstract states: 'Summary effects appeared to be somewhat inflated due to selective reporting, and cross-temporally decreasing effect sizes indicated a confounding decline effect.' Pietschnig 2015 similarly found 'strong and positive correlation coefficients have been reported frequently in the literature whilst small and non-significant associations appear to have been often omitted from reports.'",
+      "finding": "Publication bias INFLATES reported r values, not deflates them. After bias correction, estimates remain around r = 0.24. The true unconditional r is likely at or below 0.24, not at 0.40.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the Wikipedia source for SC2 citing a credible peer-reviewed finding?",
+      "verification_performed": "Wikipedia's claim (r \u2248 0.4 for healthy adults, high-quality tests) cites Gignac & Bates (2017), published in Intelligence (Elsevier). That paper found corrected correlations of .23 (fair quality), .32 (good quality), .39 (excellent quality) and concluded the association is 'arguably best characterised as r \u2248 .40.' This is a published peer-reviewed finding, though it applies only to healthy adult samples using the best IQ tests.",
+      "finding": "SC2 is supported by peer-reviewed research. The conditional r \u2248 0.40 is a credible finding, not a fringe estimate. However, it requires specifying the condition (excellent-quality tests, healthy adults).",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PARTIALLY VERIFIED",
+  "key_results": {
+    "r_overall_pietschnig_2015": 0.24,
+    "r_overall_pmc_2022": 0.24,
+    "r_conditional_wiki": 0.4,
+    "threshold": 0.4,
+    "tolerance": 0.05,
+    "sc1_holds": false,
+    "sc2_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "wiki_oslo_ii_areas",
+      "label": "Wikipedia: Oslo II Accord \u2014 Area C 'full Israeli civil and security control'"
+    },
+    "B2": {
+      "key": "area_c_wiki",
+      "label": "Wikipedia: Area C \u2014 Oslo II definition 'gradually transferred to Palestinian jurisdiction'"
+    },
+    "B3": {
+      "key": "wiki_area_a",
+      "label": "Wikipedia: Oslo II Accord \u2014 Area A 'full civil and security control by the Palestinian Authority'"
+    },
+    "B4": {
+      "key": "wiki_area_b",
+      "label": "Wikipedia: Oslo II Accord \u2014 Area B 'Palestinian civil control and joint Israeli-Palestinian security control'"
+    },
+    "A1": {
+      "label": "SC1 confirmed: n_sources_sc1 >= 2",
+      "method": "sum(sc1_confirmations) = 2",
+      "result": "2 / 2 sources confirm SC1 (Area C under Israeli control)"
+    },
+    "A2": {
+      "label": "SC2a confirmed: n_sources_sc2a >= 2",
+      "method": "sum(sc2a_confirmations) = 2",
+      "result": "2 / 2 sources confirm SC2a (Areas A, B under Palestinian civil control)"
+    },
+    "A3": {
+      "label": "SC2b fails: ICJ 2024 finds occupation unlawful regardless of Oslo",
+      "method": "adversarial_check: ICJ 2024 Advisory Opinion",
+      "result": "SC2b fails: ICJ found occupation unlawful; Oslo cannot detract from international law obligations"
+    }
+  },
+  "claim_formal": {
+    "subject": "Oslo Accords / Area C designation",
+    "sub_claims": [
+      {
+        "id": "SC1",
+        "property": "Oslo II (1995) designates Area C under full Israeli civil and security administration pending final-status negotiations",
+        "operator": ">=",
+        "threshold": 2,
+        "operator_note": "SC1 requires at least 2 independent sources confirming the Area C designation. This is a factual claim about the text of the Interim Agreement and is non-controversial \u2014 confirmed by the treaty text itself and authoritative summaries."
+      },
+      {
+        "id": "SC2a",
+        "property": "Oslo shows the West Bank is NOT entirely under Israeli civil control (Areas A and B have Palestinian civil administration)",
+        "operator": ">=",
+        "threshold": 2,
+        "operator_note": "SC2a requires at least 2 sources confirming Areas A and B are under Palestinian civil administration, undercutting the 'entire West Bank' characterization. This is also non-controversial and established by the treaty text."
+      },
+      {
+        "id": "SC2b",
+        "property": "The Oslo designation contradicts the 'illegal' characterization under international law",
+        "operator": ">=",
+        "threshold": 2,
+        "operator_note": "SC2b would require sources showing Oslo's bilateral arrangements preclude an 'illegal occupation' finding under international law. This sub-claim FAILS: the ICJ 2024 Advisory Opinion explicitly found the occupation unlawful and stated that Oslo accords cannot detract from Israel's obligations under international law. The Fourth Geneva Convention (Art. 47) bars bilateral agreements from derogating IHL protections."
+      }
+    ],
+    "compound_operator": "AND",
+    "operator_note": "All three sub-claims must hold for the overall claim to be PROVED. SC1 and SC2a are verifiable and hold; SC2b fails. Result: PARTIALLY VERIFIED \u2014 the factual basis is correct (Area C designation exists and does differentiate from Areas A/B), but the 'illegal' dimension is not contradicted by Oslo, which is a bilateral administrative arrangement, not an international law adjudication."
+  },
+  "claim_natural": "The claim that Israel maintains an illegal occupation of the entire West Bank is contradicted by the Oslo Accords designating Area C as remaining under full Israeli civil and security administration pending final-status negotiations.",
+  "citations": {
+    "B1": {
+      "source_key": "wiki_oslo_ii_areas",
+      "source_name": "Wikipedia: West Bank areas in the Oslo II Accord",
+      "url": "https://en.wikipedia.org/wiki/West_Bank_areas_in_the_Oslo_II_Accord",
+      "quote": "Area C (full Israeli civil and security control): initially, circa 72\u201374% (first phase, 1995)",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B2": {
+      "source_key": "area_c_wiki",
+      "source_name": "Wikipedia: Area C (West Bank) \u2014 quoting Oslo II Accord definition",
+      "url": "https://en.wikipedia.org/wiki/Area_C_(West_Bank)",
+      "quote": "areas of the West Bank outside Areas A and B, which, except for the issues that will be negotiated in the permanent status negotiations, will be gradually transferred to Palestinian jurisdiction in accordance with this Agreement",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B3": {
+      "source_key": "wiki_area_a",
+      "source_name": "Wikipedia: West Bank areas in the Oslo II Accord \u2014 Area A designation",
+      "url": "https://en.wikipedia.org/wiki/West_Bank_areas_in_the_Oslo_II_Accord",
+      "quote": "full civil and security control by the Palestinian Authority",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B4": {
+      "source_key": "wiki_area_b",
+      "source_name": "Wikipedia: West Bank areas in the Oslo II Accord \u2014 Area B designation",
+      "url": "https://en.wikipedia.org/wiki/West_Bank_areas_in_the_Oslo_II_Accord",
+      "quote": "Palestinian civil control and joint Israeli-Palestinian security control",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "Israeli civil and security control confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "Area C (full Israeli civil and security control): initially, circa 72\u201374% (first"
+    },
+    "B2": {
+      "value": "permanent status negotiations confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "areas of the West Bank outside Areas A and B, which, except for the issues that "
+    },
+    "B3": {
+      "value": "Palestinian Authority civil control (Area A) confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "full civil and security control by the Palestinian Authority"
+    },
+    "B4": {
+      "value": "Palestinian civil control (Area B) confirmed",
+      "value_in_quote": true,
+      "quote_snippet": "Palestinian civil control and joint Israeli-Palestinian security control"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "SC1: Area C under Israeli control \u2014 two independent Wikipedia sections (same article, different claims)",
+      "n_sources": 2,
+      "n_confirming": 2,
+      "agreement": true
+    },
+    {
+      "description": "SC2a: Areas A and B under Palestinian civil control \u2014 Area A and Area B descriptions independently confirm",
+      "n_sources": 2,
+      "n_confirming": 2,
+      "agreement": true
+    },
+    {
+      "description": "SC2b: Oslo contradicts 'illegal' characterization \u2014 ICJ 2024 Advisory Opinion contradicts this sub-claim",
+      "n_sources": 1,
+      "n_confirming": 0,
+      "agreement": false,
+      "note": "SC2b fails: ICJ 2024 explicitly found occupation unlawful and stated Oslo cannot detract from international law obligations"
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does the Oslo II Accord's designation of Area C contradict international legal characterizations of the occupation as illegal?",
+      "verification_performed": "Fetched ICJ Advisory Opinion summary (icj-cij.org/node/204176, July 19 2024). Searched for legal scholarship on Oslo Accords and occupation law. Reviewed opiniojuris.org article on Oslo Accords and ICC jurisdiction (2020). Reviewed Indiana University Law Review article on Oslo Accords and occupation. Reviewed Max Planck Institute analysis (mpil.de) on West Bank/Gaza legal status.",
+      "finding": "The ICJ 2024 Advisory Opinion explicitly found: (1) 'Israel's continued presence in the Occupied Palestinian Territory is unlawful'; (2) 'the Oslo Accords do not permit Israel to annex parts of the Occupied Palestinian Territory in order to meet its security needs. Nor do they authorize Israel to maintain a permanent presence'; (3) such agreements 'cannot be understood to detract from Israel's obligations under the pertinent rules of international law applicable in the Occupied Palestinian Territory.' Fourth Geneva Convention Article 47 bars bilateral agreements from derogating international humanitarian law protections. The Oslo Accords govern administrative arrangements but do not adjudicate legality under international law. Therefore SC2b (Oslo contradicts 'illegal' characterization) fails.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does Israel's consent argument (Palestinians agreed via Oslo, so no occupation) have legal merit?",
+      "verification_performed": "Searched: 'Israel Oslo Accords estoppel no occupation argument international law'. Reviewed JCFA article 'Palestinian Compliance with the Oslo Accords: A Legal Overview'. Reviewed Opinio Juris analysis of ICC jurisdiction and Oslo.",
+      "finding": "Israel argues that Palestinian consent via Oslo removes the 'occupation' characterization. This argument is rejected by the ICJ and mainstream international law scholarship: Article 47 of the Fourth Geneva Convention specifically states that protected persons cannot renounce rights regardless of any agreement. The ICJ 2004 Wall Advisory Opinion also found the West Bank remained occupied territory subject to international law. Israel's consent argument is a minority legal position not accepted by international tribunals.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does 'entire West Bank' terminology accurately describe the occupation given Oslo's zone divisions?",
+      "verification_performed": "Searched for UN, Palestinian Authority, and scholarly usage of 'entire West Bank occupation'. Reviewed Al Jazeera, Anera, and UN sources on Areas A, B, C. Checked whether critics of the occupation claim 'entire West Bank' or qualify by zone.",
+      "finding": "International critics typically say 'occupied West Bank' (not 'entire') or acknowledge the Oslo zone divisions. The ICJ 2024 opinion refers to 'the Occupied Palestinian Territory' without implying uniform Israeli civil administration. Area A (18%) has full Palestinian civil and security control; Area B (22%) has Palestinian civil control. The 'entire West Bank under Israeli civil control' framing overstates the situation even under Oslo \u2014 SC2a therefore partially holds, but critics seldom use this exact framing.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the Area C designation be read as mutual agreement that legitimizes Israeli control, thereby undermining the 'illegal' label?",
+      "verification_performed": "Reviewed legal analysis of Oslo Accords as lex specialis vs. lex generalis. Fetched opiniojuris.org/2020/06/10 (Oslo Accords and ICC jurisdiction). Searched for academic articles on Oslo II and Fourth Geneva Convention applicability.",
+      "finding": "International law scholars and the ICJ consistently hold that Oslo is not lex specialis overriding the Fourth Geneva Convention. Bilateral consent cannot waive occupation law protections. The PLO's agreement to interim arrangements does not transform the legal character of the occupation. This confirms SC2b fails \u2014 the Oslo designation does not constitute a contradiction of the 'illegal' characterization under international law.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PARTIALLY VERIFIED",
+  "key_results": {
+    "n_sc1_confirming": 2,
+    "n_sc2a_confirming": 2,
+    "n_sc2b_confirming": 0,
+    "sc1_holds": true,
+    "sc2a_holds": true,
+    "sc2b_holds": false,
+    "n_subclaims_holding": 2,
+    "n_subclaims_total": 3,
+    "claim_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}
