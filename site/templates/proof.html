@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}{{ proof.proof_data.claim_natural | truncate(80) }} — Proof Engine{% endblock %}
+
+{% block head_extra %}
+<link rel="canonical" href="{{ canonical_url }}">
+<script type="application/ld+json">
+{{ json_ld | safe }}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{{ base_url }}catalog/">Proofs</a>
+    {% for tag in proof.tags %}
+    / <a href="{{ base_url }}tags/{{ tag }}/">{{ tag }}</a>
+    {% endfor %}
+</div>
+
+<div class="verdict-banner {{ proof.verdict.category }}">
+    <span class="badge badge-{{ proof.verdict.category }}">{{ proof.verdict.raw }}</span>
+    <span class="verdict-info">
+        {% if proof.citation_count is not none %}
+            {{ proof.citation_count }} citation{{ "s" if proof.citation_count != 1 }}
+        {% else %}
+            Pure computation — no citations
+        {% endif %}
+    </span>
+</div>
+
+<div class="trust-bar">
+    Verified by <a href="{{ base_url }}">Proof Engine</a> — an open-source tool that proves claims using cited sources and executable code. No LLM trust required: every fact is traced to its source, every calculation is re-runnable.
+    <br>
+    <a href="{{ base_url }}methodology/">Methodology</a> ·
+    <a href="https://github.com/yaniv-golan/proof-engine" rel="nofollow">GitHub</a> ·
+    <a href="{{ base_url }}methodology/#how-to-re-run-a-proof">Re-run this proof</a> ·
+    <a href="{{ base_url }}submit/">Submit your own</a>
+</div>
+
+<h1 style="font-size: 22px; margin-bottom: 8px; line-height: 1.3;">
+    "{{ proof.proof_data.claim_natural }}"
+</h1>
+<div style="margin-bottom: 24px;">
+    {% for tag in proof.tags %}
+    <a href="{{ base_url }}tags/{{ tag }}/" class="tag">{{ tag }}</a>
+    {% endfor %}
+    <span style="color: var(--text-secondary); font-size: 12px; margin-left: 4px;">
+        · Generated {{ proof.date }}
+        {% if proof.proof_engine_version %}· v{{ proof.proof_engine_version }}{% endif %}
+    </span>
+</div>
+
+{# Section keys are always title-cased by extract_sections() #}
+{% for section_name in ["Key Findings", "Claim Interpretation", "Evidence Summary", "Proof Logic", "Conclusion"] %}
+{% if section_name in rendered_sections_md %}
+<h2 class="section-heading">{{ section_name }}</h2>
+<div class="proof-content">{{ rendered_sections_md[section_name] | safe }}</div>
+{% endif %}
+{% endfor %}
+
+{% if "Counter-Evidence Search" in rendered_sections_md %}
+<h2 class="section-heading">Counter-Evidence Search</h2>
+<div class="proof-content">{{ rendered_sections_md["Counter-Evidence Search"] | safe }}</div>
+{% endif %}
+
+<h2 class="section-heading">Audit Trail</h2>
+
+{% set audit_sections = [
+    "Citation Verification Details",
+    "Computation Traces",
+    "Independent Source Agreement",
+    "Adversarial Checks",
+    "Hardening Checklist",
+    "Source Credibility Assessment",
+    "Extraction Records",
+] %}
+
+{% for section_name in audit_sections %}
+{% set content = rendered_sections_audit.get(section_name) %}
+{% if content %}
+<div class="audit-section">
+    <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
+        <span>{{ section_name }}</span>
+        <span class="toggle">▸</span>
+    </div>
+    <div class="audit-body proof-content">{{ content | safe }}</div>
+</div>
+{% endif %}
+{% endfor %}
+
+<div class="downloads">
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.py" class="download-link" download>Download proof.py</a>
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_audit.md" class="download-link" download>Download audit trail</a>
+    <a href="https://github.com/yaniv-golan/proof-engine/tree/main/site/proofs/{{ proof.slug }}" class="download-link" rel="nofollow">View on GitHub</a>
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.json" class="download-link">proof.json</a>
+</div>
+{% endblock %}

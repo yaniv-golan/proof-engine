@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tag }} — Proof Engine{% endblock %}
+
+{% block content %}
+<h1 style="font-size: 22px; margin-bottom: 16px;">Tag: {{ tag }}</h1>
+<p style="color: var(--text-secondary); margin-bottom: 20px;">{{ total }} proof{{ "s" if total != 1 }}</p>
+
+{% for proof in proofs %}
+<a href="{{ base_url }}proofs/{{ proof.slug }}/" style="text-decoration: none; color: inherit;">
+<div class="proof-card">
+    <h3>{{ proof.proof_data.claim_natural }}</h3>
+    <div class="meta">
+        <span class="badge badge-{{ proof.verdict.category }}">{{ proof.verdict.raw }}</span>
+        {% for t in proof.tags %}
+        <span class="tag">{{ t }}</span>
+        {% endfor %}
+        <span class="date">{{ proof.date }}</span>
+    </div>
+</div>
+</a>
+{% endfor %}
+
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if current_page > 1 %}
+    <a href="{{ base_url }}tags/{{ tag }}/{% if current_page > 2 %}page/{{ current_page - 1 }}/{% endif %}">Prev</a>
+    {% endif %}
+    {% for p in range(1, total_pages + 1) %}
+    {% if p == current_page %}
+    <span class="current">{{ p }}</span>
+    {% else %}
+    <a href="{{ base_url }}tags/{{ tag }}/{% if p > 1 %}page/{{ p }}/{% endif %}">{{ p }}</a>
+    {% endif %}
+    {% endfor %}
+    {% if current_page < total_pages %}
+    <a href="{{ base_url }}tags/{{ tag }}/page/{{ current_page + 1 }}/">Next</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

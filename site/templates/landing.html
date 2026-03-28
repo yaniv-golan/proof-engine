@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Proof Engine — Verifiable Proofs{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Proof Engine</h1>
+    <p>Open-source verifiable proofs. Every fact cited, every calculation re-runnable. No LLM trust required.</p>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value">{{ stats.total }}</div>
+            <div class="stat-label">Proofs</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">{{ stats.tags_count }}</div>
+            <div class="stat-label">Domains</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">{{ stats.verification_rate }}%</div>
+            <div class="stat-label">Fully Resolved</div>
+        </div>
+    </div>
+    <a href="{{ base_url }}catalog/" class="cta">Browse Proofs</a>
+    <a href="https://github.com/yaniv-golan/proof-engine#installation" class="cta" style="background: var(--bg-secondary); border: 1px solid var(--border); margin-left: 12px;" rel="nofollow">Install the Skill</a>
+</div>
+
+{% if featured_proofs %}
+<h2 class="section-heading">Featured Proofs</h2>
+{% for proof in featured_proofs %}
+<a href="{{ base_url }}proofs/{{ proof.slug }}/" style="text-decoration: none; color: inherit;">
+<div class="proof-card">
+    <h3>{{ proof.proof_data.claim_natural }}</h3>
+    <div class="meta">
+        <span class="badge badge-{{ proof.verdict.category }}">{{ proof.verdict.raw }}</span>
+        {% for tag in proof.tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+        <span class="date">{{ proof.date }}</span>
+    </div>
+</div>
+</a>
+{% endfor %}
+{% endif %}
+{% endblock %}

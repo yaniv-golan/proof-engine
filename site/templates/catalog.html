@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Catalog — Proof Engine{% endblock %}
+
+{% block content %}
+<h1 style="font-size: 22px; margin-bottom: 16px;">Proof Catalog</h1>
+
+<div class="filters">
+    <input type="text" class="filter-input" id="search" placeholder="Search claims...">
+    <select class="filter-select" id="verdict-filter">
+        <option value="">All verdicts</option>
+        <option value="proved">Proved</option>
+        <option value="disproved">Disproved</option>
+        <option value="partial">Partially Verified</option>
+        <option value="undetermined">Undetermined</option>
+    </select>
+    <select class="filter-select" id="tag-filter">
+        <option value="">All tags</option>
+    </select>
+</div>
+
+<div id="proof-list">
+    <p style="color: var(--text-secondary);">Loading proofs...</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.CATALOG_JSON_URL = "{{ base_url }}index.json";
+    window.BASE_URL = "{{ base_url }}";
+</script>
+<script src="{{ base_url }}static/catalog.js"></script>
+{% endblock %}
