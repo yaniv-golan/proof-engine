@@ -131,10 +131,14 @@ def cross_check(value_a, value_b, tolerance=0.01, mode="absolute", label=None):
         print(f"  {tag}: {value_a} vs {value_b}, diff={diff}, "
               f"relative={pct:.6f}, tolerance={tolerance} "
               f"-> {'AGREE' if result else 'DISAGREE'}")
-    else:  # absolute
+    elif mode == "absolute":
         result = diff <= tolerance
         print(f"  {tag}: {value_a} vs {value_b}, diff={diff}, "
               f"tolerance={tolerance} -> {'AGREE' if result else 'DISAGREE'}")
+    else:
+        raise ValueError(
+            f"Unknown mode '{mode}'. Must be 'absolute' or 'relative'."
+        )
     return result
 
 

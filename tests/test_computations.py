@@ -1,4 +1,5 @@
 """Tests for computations.py — cross_check tolerance fixes."""
+import pytest
 from scripts.computations import cross_check, compare
 
 
@@ -47,3 +48,15 @@ def test_compare_label_none_prints_compare(capsys):
     compare(3, ">=", 2, label=None)
     captured = capsys.readouterr()
     assert "compare:" in captured.out
+
+
+def test_cross_check_unknown_mode_raises():
+    """Unknown mode should raise ValueError, not silently use absolute."""
+    with pytest.raises(ValueError, match="Unknown mode"):
+        cross_check(1.0, 2.0, tolerance=0.5, mode="realtive")
+
+
+def test_cross_check_valid_modes_still_work():
+    """Explicit 'absolute' and 'relative' modes should still work."""
+    assert cross_check(1.0, 1.0, tolerance=0, mode="absolute") is True
+    assert cross_check(1.0, 1.0, tolerance=0, mode="relative") is True
