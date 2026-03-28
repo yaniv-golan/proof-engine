@@ -22,8 +22,11 @@
             <div class="stat-label">Fully Resolved</div>
         </div>
     </div>
-    <a href="{{ base_url }}catalog/" class="cta">Browse Proofs</a>
-    <a href="https://github.com/yaniv-golan/proof-engine#installation" class="cta" style="background: var(--bg-secondary); border: 1px solid var(--border); margin-left: 12px;" rel="nofollow">Install the Skill</a>
+    <div class="cta-row">
+        <a href="{{ base_url }}catalog/" class="cta">Browse Proofs</a>
+        <a href="https://github.com/yaniv-golan/proof-engine#installation" class="cta cta-secondary" rel="nofollow">Install the Skill</a>
+        <a href="{{ base_url }}llms.txt" class="cta cta-secondary">AI Agents</a>
+    </div>
 </div>
 
 {% if featured_proofs %}
