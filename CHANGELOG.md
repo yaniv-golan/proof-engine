@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- **Generator signature** on all proof artifacts: JSON summary includes `generator` block (`name`, `version`, `repo`, `generated_at`); proof.md and proof_audit.md end with a footer line. Version is read at runtime from `VERSION` file in the skill directory.
+- `build_citation_detail()` now handles multi-source empirical facts — emits `{fact_id}_source_{N}` entries for facts with a `sources` list, preserving "one row per source" contract.
 - Validator: `check_table_data_integrity()` — enforces correct table-data verification patterns:
   - `data_values` present requires `verify_data_values()` call (hard failure)
   - `verify_extraction()` on `data_values`-derived values detected as circular (hard failure)
@@ -14,10 +16,23 @@ All notable changes to this project will be documented in this file.
 - 9 new validator tests for table data integrity checks, including regression fixtures for the purchasing-power anti-pattern.
 - Negative example in proof-templates.md showing the rejected pseudo-quote pattern.
 - Gotcha in SKILL.md: "Never create pseudo-quote fields for table data."
+- Unit tests added to CI workflow (`.github/workflows/validate.yml`).
 
 ### Fixed
 
+- `parse_range_from_quote()` no longer misparses ISO dates (`2020-01-01`) as numeric ranges. Uses `re.finditer` to skip date-shaped matches and keep scanning.
+- `verify_citations.py` no longer calls `sys.exit(1)` at import time when `requests` is missing. HTTP calls are guarded individually; snapshot-only verification works without `requests`.
+- `validate_proof.py` `_extract_empirical_facts_keys()` no longer crashes on unterminated strings in malformed source code.
+- `cross_check()` now raises `ValueError` on unknown `mode` instead of silently falling to absolute comparison.
+- Release workflow: fixed `mv` collision that nested the temp dir inside existing `proof-engine/`; `${CLAUDE_SKILL_DIR}` placeholder now stripped from all markdown files (was only SKILL.md).
+- Broken links in `docs/examples/purchasing-power-decline/` proof.md and proof_audit.md.
+- `docs/cross-platform.md` release snippet synced with corrected workflow.
 - Purchasing-power example (`docs/examples/purchasing-power-decline/proof.py`) converted from pseudo-quote fields to `data_values` + `verify_data_values()`.
+
+### Changed
+
+- `output-specs.md` updated to document multi-source citation sub-entries and generator signature.
+- `bump-version.sh` now copies `VERSION` to skill directory for runtime access by generated proofs.
 
 ## [0.8.0] - 2026-03-27
 
