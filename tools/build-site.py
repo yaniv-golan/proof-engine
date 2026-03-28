@@ -238,6 +238,42 @@ def main():
     # Static assets
     shutil.copytree(site_dir / "static", output_dir / "static")
 
+    # Collect all page URLs for sitemap
+    sitemap_urls = [
+        f"{site_url}{base_url}",
+        f"{site_url}{base_url}catalog/",
+        f"{site_url}{base_url}methodology/",
+        f"{site_url}{base_url}submit/",
+    ]
+    for proof in proofs:
+        sitemap_urls.append(f"{site_url}{base_url}proofs/{proof['slug']}/")
+    for tag, tproofs in tag_proofs.items():
+        total_pages = math.ceil(len(tproofs) / PROOFS_PER_TAG_PAGE)
+        for page_num in range(1, total_pages + 1):
+            if page_num == 1:
+                sitemap_urls.append(f"{site_url}{base_url}tags/{tag}/")
+            else:
+                sitemap_urls.append(f"{site_url}{base_url}tags/{tag}/page/{page_num}/")
+
+    # sitemap.xml
+    sitemap_entries = "\n".join(f"  <url><loc>{url}</loc></url>" for url in sitemap_urls)
+    sitemap_xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{sitemap_entries}\n"
+        "</urlset>\n"
+    )
+    write_file(output_dir / "sitemap.xml", sitemap_xml)
+
+    # robots.txt
+    robots_txt = (
+        "User-agent: *\n"
+        "Allow: /\n"
+        "\n"
+        f"Sitemap: {site_url}{base_url}sitemap.xml\n"
+    )
+    write_file(output_dir / "robots.txt", robots_txt)
+
     print(f"Built {len(proofs)} proofs to {output_dir}")
 
 
