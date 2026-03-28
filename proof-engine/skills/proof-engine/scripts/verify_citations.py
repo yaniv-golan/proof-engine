@@ -49,6 +49,12 @@ try:
 except ImportError:
     from source_credibility import assess_credibility
 
+# Import transport layer
+try:
+    from scripts.fetch import fetch_page as _fetch_page
+except ImportError:
+    from fetch import fetch_page as _fetch_page
+
 
 # ---------------------------------------------------------------------------
 # Result builder
@@ -137,56 +143,6 @@ def _extract_fragment(quote: str, min_words: int = 6) -> str:
     words = quote.split()
     length = max(min_words, len(words) // 2)
     return ' '.join(words[:length])
-
-
-# ---------------------------------------------------------------------------
-# PDF text extraction
-# ---------------------------------------------------------------------------
-
-def _extract_pdf_text(content: bytes) -> str:
-    """Extract text from PDF bytes. Tries pdfplumber first, then PyPDF2.
-
-    Returns None if no PDF library is available or if extraction fails
-    for any reason (malformed PDF, empty content, etc.).
-    """
-    try:
-        import pdfplumber
-        import io
-        with pdfplumber.open(io.BytesIO(content)) as pdf:
-            return "\n".join(page.extract_text() or "" for page in pdf.pages)
-    except ImportError:
-        pass
-    except Exception:
-        pass  # Malformed PDF or extraction error — fall through to PyPDF2
-    try:
-        import PyPDF2
-        import io
-        reader = PyPDF2.PdfReader(io.BytesIO(content))
-        return "\n".join(page.extract_text() or "" for page in reader.pages)
-    except ImportError:
-        pass
-    except Exception:
-        pass  # Malformed PDF or extraction error
-    return None  # No PDF library available or extraction failed
-
-
-# ---------------------------------------------------------------------------
-# Wayback Machine fallback
-# ---------------------------------------------------------------------------
-
-def _try_wayback(url: str, timeout: int = 15) -> str:
-    """Try fetching a URL from the Wayback Machine. Returns page text or None."""
-    if requests is None:
-        return None
-    wayback_url = f"https://web.archive.org/web/{url}"
-    try:
-        resp = requests.get(wayback_url, timeout=timeout,
-                            headers={"User-Agent": "proof-engine/1.0"},
-                            allow_redirects=True)
-        resp.raise_for_status()
-        return resp.text
-    except requests.exceptions.RequestException:
-        return None
 
 
 # ---------------------------------------------------------------------------
@@ -297,73 +253,22 @@ def verify_citation(
         result["credibility"] = credibility
         return result
 
-    # --- 1. Try live fetch ---
-    live_page = None
-    fetch_error_msg = None
-    if requests is not None:
-        try:
-            resp = requests.get(
-                url,
-                timeout=timeout,
-                headers={"User-Agent": "proof-engine/1.0"},
-                allow_redirects=True,
-            )
-            resp.raise_for_status()
+    # Fetch page text using fallback chain
+    page_text, fetch_mode, fetch_error_msg = _fetch_page(
+        url, timeout=timeout, snapshot=snapshot,
+        wayback_fallback=wayback_fallback,
+    )
 
-            # Detect PDF
-            content_type = resp.headers.get("Content-Type", "")
-            is_pdf = "application/pdf" in content_type or url.lower().endswith(".pdf")
-
-            if is_pdf:
-                pdf_text = _extract_pdf_text(resp.content)
-                if pdf_text is None:
-                    fetch_error_msg = f"PDF detected but no extraction library available (pip install pdfplumber)"
-                else:
-                    live_page = pdf_text
-            else:
-                live_page = resp.text
-
-        except requests.exceptions.Timeout:
-            fetch_error_msg = f"Timeout after {timeout}s on {url}"
-        except requests.exceptions.ConnectionError as e:
-            fetch_error_msg = f"Connection error on {url}: {e}"
-        except requests.exceptions.HTTPError:
-            fetch_error_msg = f"HTTP {resp.status_code} on {url}"
-        except requests.exceptions.RequestException as e:
-            fetch_error_msg = f"{e}"
-    else:
-        fetch_error_msg = "requests package not installed — skipping live fetch"
-
-    # Try matching against live page
-    if live_page is not None:
-        result = _match_quote(live_page, expected_quote, fact_id, fetch_mode="live")
+    if page_text is not None:
+        result = _match_quote(page_text, expected_quote, fact_id, fetch_mode=fetch_mode)
         if result is not None:
             return _with_credibility(result)
-        # Live fetch succeeded but quote not found
+        # Page fetched but quote not found
         fragment = _extract_fragment(normalize_text(expected_quote), min_words=6)
-        return _with_credibility(_result("not_found", fetch_mode="live",
+        return _with_credibility(_result("not_found", fetch_mode=fetch_mode,
                         message=f"Quote NOT found for {fact_id}. Searched: '{fragment[:60]}...'"))
 
-    # --- 2. Try snapshot fallback (deterministic, user-provided) ---
-    if snapshot:
-        result = _match_quote(snapshot, expected_quote, fact_id, fetch_mode="snapshot")
-        if result is not None:
-            return _with_credibility(result)
-        # Snapshot available but quote not in it
-        return _with_credibility(_result("not_found", fetch_mode="snapshot",
-                        message=f"Quote NOT found in snapshot for {fact_id}"))
-
-    # --- 3. Try Wayback Machine (opt-in, non-deterministic) ---
-    if wayback_fallback:
-        wayback_text = _try_wayback(url, timeout)
-        if wayback_text is not None:
-            result = _match_quote(wayback_text, expected_quote, fact_id, fetch_mode="wayback")
-            if result is not None:
-                return _with_credibility(result)
-            return _with_credibility(_result("not_found", fetch_mode="wayback",
-                            message=f"Quote NOT found in Wayback archive for {fact_id}"))
-
-    # --- 4. All methods exhausted ---
+    # All fetch methods exhausted
     return _with_credibility(_result("fetch_failed", fetch_error=fetch_error_msg,
                     message=f"Fetch failed for {fact_id}: {fetch_error_msg}"))
 
@@ -459,35 +364,10 @@ def verify_data_values(url: str, data_values: dict, fact_id: str,
     Returns:
         dict of {key: {"found": bool, "value": str, "fetch_mode": str}}
     """
-    # Get page text using the same fallback chain as verify_citation
-    page_text = None
-    fetch_mode = "live"
-    fetch_error = None
-
-    if requests is not None:
-        try:
-            resp = requests.get(url, timeout=timeout,
-                                headers={"User-Agent": "proof-engine/1.0"},
-                                allow_redirects=True)
-            resp.raise_for_status()
-            content_type = resp.headers.get("Content-Type", "")
-            if "application/pdf" in content_type or url.lower().endswith(".pdf"):
-                page_text = _extract_pdf_text(resp.content)
-            else:
-                page_text = resp.text
-        except requests.exceptions.RequestException as e:
-            fetch_error = str(e)
-    else:
-        fetch_error = "requests package not installed"
-
-    if page_text is None and snapshot:
-        page_text = snapshot
-        fetch_mode = "snapshot"
-
-    if page_text is None and wayback_fallback:
-        page_text = _try_wayback(url, timeout)
-        if page_text:
-            fetch_mode = "wayback"
+    page_text, fetch_mode, fetch_error = _fetch_page(
+        url, timeout=timeout, snapshot=snapshot,
+        wayback_fallback=wayback_fallback,
+    )
 
     if page_text is None:
         results = {}

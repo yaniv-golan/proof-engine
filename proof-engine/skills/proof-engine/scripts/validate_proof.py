@@ -14,6 +14,11 @@ import re
 import sys
 import os
 
+try:
+    from scripts.ast_helpers import extract_script_imports, find_call_sites, extract_dict_keys
+except ImportError:
+    from ast_helpers import extract_script_imports, find_call_sites, extract_dict_keys
+
 
 class ProofValidator:
     """Static analyzer for proof-engine proof scripts."""
@@ -143,13 +148,36 @@ class ProofValidator:
     def _extract_empirical_facts_keys(self) -> list:
         """Extract top-level key names from the empirical_facts dict.
 
-        Parses the source to find `empirical_facts = { "key": { ... }, ... }`
-        and returns the list of top-level string keys.
+        Uses AST when source parses cleanly. Falls back to brace-depth
+        regex parser when AST returns empty but the source has an
+        empirical_facts assignment. This catches:
+          - SyntaxError in source (AST can't parse at all)
+          - Unsupported assignment shapes (dict(), comprehensions)
+          - Any other case where AST returns [] but keys exist
+
+        The fallback is always safe — worst case it returns the same []
+        that AST did. It cannot produce false positives because the
+        brace-depth parser only matches `empirical_facts = {`.
+        """
+        keys = extract_dict_keys(self.source, "empirical_facts")
+        if keys:
+            return keys
+        # AST returned empty. If source doesn't even mention empirical_facts,
+        # there are no keys to find.
+        if not re.search(r'empirical_facts\s*=\s*\{', self.source):
+            return []
+        # Source has `empirical_facts = {` but AST returned empty —
+        # fall back to brace-depth parser.
+        return self._extract_empirical_facts_keys_regex()
+
+    def _extract_empirical_facts_keys_regex(self) -> list:
+        """Regex/brace-depth fallback for _extract_empirical_facts_keys.
+
+        Handles malformed source that ast.parse() rejects.
         """
         match = re.search(r'empirical_facts\s*=\s*\{', self.source)
         if not match:
             return []
-
         keys = []
         start = match.end()
         depth = 1
@@ -165,7 +193,7 @@ class ProofValidator:
                 try:
                     end_quote = self.source.index(quote_char, i + 1)
                 except ValueError:
-                    break  # Unterminated string — stop parsing
+                    break
                 key = self.source[i + 1:end_quote]
                 rest = self.source[end_quote + 1:end_quote + 10].strip()
                 if rest.startswith(':'):
@@ -175,15 +203,35 @@ class ProofValidator:
         return keys
 
     def check_rule2_citation_verification(self):
-        """Rule 2: Citation verification code present (actual call, not just import)."""
-        code_body = self._build_code_body()
-        has_verify_call = bool(re.search(
-            r'(?:verify_citation|verify_all_citations)\s*\(', code_body
-        ))
+        """Rule 2: Citation verification code present (actual call, not just import).
+
+        Uses AST to require an actual call site — importing verify_all_citations
+        without calling it does not satisfy Rule 2.
+
+        If AST parsing fails (find_call_sites returns None), falls back to
+        regex on _build_code_body-style stripped source to avoid false positives
+        on malformed drafts.
+        """
+        call_sites = find_call_sites(self.source)
+        if call_sites is not None:
+            has_verify_call = (
+                "verify_citation" in call_sites or
+                "verify_all_citations" in call_sites
+            )
+            has_verify_search = "verify_search_registry" in call_sites
+        else:
+            # AST failed — fall back to regex on comment-stripped source.
+            # This matches the pre-AST behavior exactly.
+            code_body = self._build_code_body()
+            has_verify_call = bool(re.search(
+                r'(?:verify_citation|verify_all_citations)\s*\(', code_body
+            ))
+            has_verify_search = bool(re.search(
+                r'verify_search_registry\s*\(', code_body
+            ))
         has_smart_extract = bool(re.search(r'smart_extract|normalize_unicode|verify_extraction', self.source))
         has_requests = bool(re.search(r'requests\.get', self.source))
         has_search_registry = self._has_search_registry()
-        has_verify_search = bool(re.search(r'verify_search_registry\s*\(', code_body))
 
         if has_search_registry:
             if not has_verify_search:
@@ -193,7 +241,6 @@ class ProofValidator:
                 ))
             else:
                 self.passed.append("Rule 2: verify_search_registry found for search_registry")
-            # Also check for verify_all_citations if empirical_facts present
             has_empirical = self._has_nonempty_empirical_facts()
             if has_empirical and not has_verify_call:
                 self.issues.append((
@@ -629,45 +676,48 @@ class ProofValidator:
     def check_unused_imports(self):
         """Check for imported-but-unused functions from scripts.*
 
-        For critical functions (verify_all_citations, verify_data_values),
-        checks for actual call sites — name followed by '(' — excluding
-        comments and the import line itself. Promotes unused critical
-        functions to ISSUE since their mere import falsely satisfies rule checks.
+        Uses AST to find actual call sites. For critical functions
+        (verify_all_citations, etc.), requires a real call — promotes to ISSUE.
+        For non-critical functions, falls back to word-occurrence count
+        to tolerate comment/docstring mentions (preserving existing behavior).
+
+        If AST parsing fails (SyntaxError), skips the check entirely —
+        we cannot distinguish "imported but unused" from "can't parse".
         """
         CRITICAL_FUNCTIONS = {
             "verify_all_citations", "verify_citation",
             "verify_data_values", "verify_search_registry",
         }
 
-        import_lines = re.findall(
-            r'from\s+scripts\.\w+\s+import\s+(.+)',
-            self.source,
-        )
-        imported_names = []
-        for line in import_lines:
-            names = [n.strip() for n in line.split(",")]
-            imported_names.extend(names)
+        imported = extract_script_imports(self.source)
+        call_sites = find_call_sites(self.source)
 
-        code_body = self._build_code_body()
+        if call_sites is None:
+            # Source has syntax errors — can't reliably detect call sites.
+            # Record as a warning (not silent skip) so the validator output
+            # shows this check was not performed.
+            self.warnings.append((
+                "Contract: Could not check unused imports — source has syntax errors",
+                [],
+            ))
+            return
 
         unused = []
-        for name in imported_names:
+        for name in imported:
+            if name in call_sites:
+                continue  # Actually called — not unused
             if name in CRITICAL_FUNCTIONS:
-                has_call = bool(re.search(
-                    r'\b' + re.escape(name) + r'\s*\(', code_body
-                ))
-                if not has_call:
-                    unused.append(name)
+                # Critical: no call site = unused, period
+                unused.append(name)
             else:
-                has_call = bool(re.search(
-                    r'\b' + re.escape(name) + r'\s*\(', code_body
+                # Non-critical: fall back to word-occurrence count.
+                # A name mentioned >1 time (import + comment/docstring)
+                # is tolerated — matches existing behavior.
+                occurrences = len(re.findall(
+                    r'\b' + re.escape(name) + r'\b', self.source
                 ))
-                if not has_call:
-                    occurrences = len(re.findall(
-                        r'\b' + re.escape(name) + r'\b', self.source
-                    ))
-                    if occurrences <= 1:
-                        unused.append(name)
+                if occurrences <= 1:
+                    unused.append(name)
 
         if unused:
             critical_unused = [n for n in unused if n in CRITICAL_FUNCTIONS]

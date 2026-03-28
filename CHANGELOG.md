@@ -25,6 +25,15 @@ All notable changes to this project will be documented in this file.
 - SKILL.md: edge-case guidance for fictitious source attributions, partial-period data, and missing constants
 - proof-templates.md: open-problem and proof-by-contradiction adaptation notes
 - SKILL.md: actionable WebFetch paraphrasing gotcha
+- TypedDict definitions for all proof artifact shapes (`scripts/proof_types.py`) with contract tests
+- AST-based source analysis helpers (`scripts/ast_helpers.py`) for reliable import/call-site detection
+- HTTP transport layer extracted to `scripts/fetch.py` (live -> snapshot -> Wayback fallback chain)
+
+### Changed
+
+- `verify_citations.py` fetching logic extracted to `fetch.py` (public API unchanged)
+- `validate_proof.py` migrated from regex to AST for import analysis, call-site detection, and dict key extraction
+- `scripts/__init__.py` documents the dual-audience purpose of the scripts directory
 
 ### Fixed
 
