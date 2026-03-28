@@ -10,6 +10,7 @@ Read this at **Step 6** before presenting results.
 - [ ] proof.py includes FACT_REGISTRY with IDs for all facts
 - [ ] proof.py `__main__` emits `=== PROOF SUMMARY (JSON) ===` block
 - [ ] JSON summary contains required keys: fact_registry (with method/result for A-types), claim_formal, adversarial_checks, verdict, key_results
+- [ ] JSON summary contains `generator` block with `name`, `repo`, `generated_at`
 - [ ] For empirical proofs: JSON summary also contains citations (with normalized status/method/coverage_pct/credibility), extractions, cross_checks
 - [ ] For pure-math proofs: omit citations and extractions keys entirely. Use the pure-math template from proof-templates.md.
 - [ ] FACT_REGISTRY keys in JSON match IDs used in both report documents
@@ -27,3 +28,4 @@ Read this at **Step 6** before presenting results.
 - [ ] proof_audit.md includes Computation Traces reproduced from inline output
 - [ ] proof_audit.md presents "Partially verified" citations distinctly from "Verified"
 - [ ] proof_audit.md includes Source Credibility Assessment table (for empirical proofs)
+- [ ] proof.md and proof_audit.md end with generator footer line

@@ -144,6 +144,11 @@ if __name__ == "__main__":
             "operator": CLAIM_FORMAL["operator"],
             "claim_holds": claim_holds,
         },
+        "generator": {
+            "name": "proof-engine",
+            "repo": "https://github.com/yaniv-golan/proof-engine",
+            "generated_at": date.today().isoformat(),
+        },
     }
 
     print("\n=== PROOF SUMMARY (JSON) ===")
@@ -330,6 +335,11 @@ if __name__ == "__main__":
             "operator": CLAIM_FORMAL["operator"],
             "claim_holds": claim_holds,
         },
+        "generator": {
+            "name": "proof-engine",
+            "repo": "https://github.com/yaniv-golan/proof-engine",
+            "generated_at": date.today().isoformat(),
+        },
     }
 
     print("\n=== PROOF SUMMARY (JSON) ===")
@@ -350,6 +360,7 @@ import sys
 
 PROOF_ENGINE_ROOT = "..."
 sys.path.insert(0, PROOF_ENGINE_ROOT)
+from datetime import date
 
 from scripts.computations import compare, explain_calc
 
@@ -421,6 +432,11 @@ if __name__ == "__main__":
             "operator": CLAIM_FORMAL["operator"],
             "claim_holds": claim_holds,
         },
+        "generator": {
+            "name": "proof-engine",
+            "repo": "https://github.com/yaniv-golan/proof-engine",
+            "generated_at": date.today().isoformat(),
+        },
     }
 
     print("\n=== PROOF SUMMARY (JSON) ===")
@@ -454,6 +470,7 @@ import sys
 
 PROOF_ENGINE_ROOT = "..."  # LLM fills this with the actual path at proof-writing time
 sys.path.insert(0, PROOF_ENGINE_ROOT)
+from datetime import date
 
 from scripts.verify_citations import verify_all_citations, build_citation_detail
 from scripts.computations import compare
@@ -590,6 +607,11 @@ if __name__ == "__main__":
             "operator": CLAIM_FORMAL["operator"],
             "claim_holds": claim_holds,
         },
+        "generator": {
+            "name": "proof-engine",
+            "repo": "https://github.com/yaniv-golan/proof-engine",
+            "generated_at": date.today().isoformat(),
+        },
     }
 
     print("\n=== PROOF SUMMARY (JSON) ===")
@@ -640,6 +662,7 @@ import sys
 
 PROOF_ENGINE_ROOT = "..."  # LLM fills with actual path
 sys.path.insert(0, PROOF_ENGINE_ROOT)
+from datetime import date
 
 from scripts.verify_citations import verify_all_citations, build_citation_detail
 from scripts.computations import compare
@@ -778,6 +801,11 @@ if __name__ == "__main__":
             "n_holding": n_holding,
             "n_total": n_total,
             "claim_holds": claim_holds,
+        },
+        "generator": {
+            "name": "proof-engine",
+            "repo": "https://github.com/yaniv-golan/proof-engine",
+            "generated_at": date.today().isoformat(),
         },
     }
 
