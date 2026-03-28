@@ -6,6 +6,12 @@
 
 {% block content %}
 <div class="static-content">
-    <div class="proof-content">{{ submit_html | safe }}</div>
+    <div class="proof-content">
+        {{ submit_html | safe }}
+        <h2>AI Agents</h2>
+        <p>Working with an AI agent? Give it this URL to get started:</p>
+        <pre><a href="{{ llms_txt_url }}">{{ llms_txt_url }}</a> <button class="copy-btn" onclick="navigator.clipboard.writeText('{{ llms_txt_url }}').then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)})">Copy</button></pre>
+        <p>Your agent can browse the proof catalog, understand the submission process, and generate proofs using the proof-engine skill.</p>
+    </div>
 </div>
 {% endblock %}
