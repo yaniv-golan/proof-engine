@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- README: Claude Desktop installation says "Browse Skills" instead of outdated "Browse Plugins"
+- README: updated Claude Desktop installation instructions with correct marketplace flow
 
 ## [0.10.0] - Unreleased
 
