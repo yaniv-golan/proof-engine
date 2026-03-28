@@ -22,18 +22,19 @@ Most of the interesting design work is in the gaps between the obvious ideas. A 
 
 The rest of this document explains the design choices behind these decisions.
 
-## Two types of facts, two verification strategies
+## Three types of facts, three verification strategies
 
-The system recognizes exactly two kinds of facts:
+The system recognizes exactly three kinds of facts:
 
 - **Type A (computed)**: The computation is the verification. `sympy.isprime(n)` doesn't need a citation. The code is re-runnable and deterministic.
 - **Type B (empirical)**: Every empirical fact needs a source, a URL, and an exact quote. The proof script fetches the URL at runtime and confirms the quote appears on the page. For table-sourced data (where the interesting values are numbers in a table, not prose), `verify_data_values()` confirms each numeric value string appears on the source page — a different check than quote matching, but the same principle: the proof doesn't trust the LLM's transcription.
+- **Type S (search)**: For absence-of-evidence proofs, each database search is documented with a clickable `search_url`. The tool confirms the URL is accessible but cannot verify the result count — that's author-reported and reproducible by a human reviewer. This weaker trust boundary is reflected in the `SUPPORTED` verdict (never `PROVED`).
 
 These are fact types, not claim types. A claim can be purely mathematical, purely empirical, or mixed — combining computation with cited evidence. "Has the US dollar lost more than 90% of its purchasing power since 1913?" is mixed: the CPI values are Type B (cited from BLS data), but the percentage-decline calculation is Type A (computed). The constraint is at the fact level: if an individual fact can't be computed or cited, it doesn't go in the proof.
 
 ## Structured verdicts, not confidence scores
 
-The output is one of six verdicts: PROVED, DISPROVED, PARTIALLY VERIFIED, UNDETERMINED, and two "with unverified citations" variants. Not a probability. A "73% confidence" hides *why* 73% — the verdict system forces transparency by making each fact's status visible. The "with unverified citations" variants distinguish "the evidence contradicts the claim" from "the evidence couldn't be reached."
+The output is one of eight verdicts: PROVED, DISPROVED, SUPPORTED, PARTIALLY VERIFIED, UNDETERMINED, and three "with unverified citations" variants. Not a probability. A "73% confidence" hides *why* 73% — the verdict system forces transparency by making each fact's status visible. The "with unverified citations" variants distinguish "the evidence contradicts the claim" from "the evidence couldn't be reached."
 
 ## The 7 hardening rules
 

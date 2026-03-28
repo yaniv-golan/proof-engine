@@ -23,7 +23,7 @@ LLMs have two weaknesses that make them unreliable for factual claims: they hall
 - **Optionally offline-reproducible** — embedded page snapshots let proofs run without network access
 - **Multi-mode verification** — live fetch, embedded snapshots, Wayback Machine archive, and PDF support
 
-The skill produces three outputs: a re-runnable `proof.py` script, a reader-facing `proof.md` summary with verdict, and a `proof_audit.md` with full verification details. Verdicts: PROVED, DISPROVED, PARTIALLY VERIFIED, UNDETERMINED, PROVED with unverified citations, or DISPROVED with unverified citations.
+The skill produces three outputs: a re-runnable `proof.py` script, a reader-facing `proof.md` summary with verdict, and a `proof_audit.md` with full verification details. Verdicts: PROVED, SUPPORTED, DISPROVED, PARTIALLY VERIFIED, UNDETERMINED, or qualified variants with unverified citations.
 
 ## Installation
 
