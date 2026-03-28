@@ -374,3 +374,41 @@ def test_index_json_has_source_names(site_fixture):
     assert "source_names_extra" in proof_entry
     assert "has_citations" in proof_entry
     assert proof_entry["has_citations"] is True
+
+
+def test_proof_page_evidence_table_with_citations(site_fixture):
+    """Proof pages with citations render a structured evidence table with links."""
+    proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
+    data = json.loads(proof_json_path.read_text())
+    data["citations"] = {
+        "B1": {
+            "source_name": "Test Source",
+            "url": "https://example.com/source",
+            "status": "verified",
+            "source_key": "test_src",
+            "quote": "Test quote",
+            "method": "full_quote",
+            "credibility": {
+                "domain": "example.com",
+                "source_type": "academic",
+                "tier": 4,
+                "note": "Test note",
+            },
+        },
+    }
+    data["extractions"] = {
+        "B1": {
+            "value": "verified",
+            "value_in_quote": True,
+            "quote_snippet": "Test quote snippet",
+        },
+    }
+    proof_json_path.write_text(json.dumps(data))
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    # Evidence table has linked source
+    assert "evidence-table" in html
+    assert 'href="https://example.com/source"' in html
+    assert "Test Source" in html

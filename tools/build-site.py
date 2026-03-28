@@ -166,6 +166,7 @@ def main():
             json_ld=json_ld,
             canonical_url=canonical_url,
             og_type="article",
+            citations=proof["proof_data"].get("citations", {}),
         ))
 
         src_dir = proofs_dir / proof["slug"]

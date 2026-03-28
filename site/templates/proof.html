@@ -14,7 +14,7 @@
 
 {% block content %}
 <div class="breadcrumb">
-    <a href="{{ base_url }}catalog/">Proofs</a>
+    <a href="{{ base_url }}catalog/">proofs</a>
     {% for tag in proof.tags %}
     / <a href="{{ base_url }}tags/{{ tag }}/">{{ tag }}</a>
     {% endfor %}
@@ -24,40 +24,38 @@
     <span class="badge badge-{{ proof.verdict.category }}">{{ proof.verdict.raw }}</span>
     <span class="verdict-info">
         {% if proof.search_count is not none and proof.citation_count is not none %}
-            {{ proof.search_count }} database search{{ "es" if proof.search_count != 1 }}, {{ proof.citation_count }} citation{{ "s" if proof.citation_count != 1 }}
+            {{ proof.search_count }} database search{{ "es" if proof.search_count != 1 }} · {{ proof.citation_count }} citation{{ "s" if proof.citation_count != 1 }}
         {% elif proof.search_count is not none %}
             {{ proof.search_count }} database search{{ "es" if proof.search_count != 1 }}
         {% elif proof.citation_count is not none %}
             {{ proof.citation_count }} citation{{ "s" if proof.citation_count != 1 }}
         {% else %}
-            Pure computation — no citations
+            pure computation — no citations
         {% endif %}
     </span>
 </div>
 
 <div class="trust-bar">
-    Verified by <a href="{{ base_url }}">Proof Engine</a> — an open-source tool that proves claims using cited sources and executable code. No LLM trust required: every fact is traced to its source, every calculation is re-runnable.
+    <span class="trust-icon">⬡</span>
+    Verified by <a href="{{ base_url }}">Proof Engine</a> — an open-source tool that proves claims using cited sources and executable code. No LLM trust required.
     <br>
-    <a href="{{ base_url }}methodology/">Methodology</a> ·
-    <a href="https://github.com/yaniv-golan/proof-engine" rel="nofollow">GitHub</a> ·
-    <a href="{{ base_url }}methodology/#how-to-re-run-a-proof">Re-run this proof</a> ·
-    <a href="{{ base_url }}submit/">Submit your own</a>
+    <a href="{{ base_url }}methodology/">methodology</a> ·
+    <a href="https://github.com/yaniv-golan/proof-engine" rel="nofollow">github</a> ·
+    <a href="{{ base_url }}methodology/#how-to-re-run-a-proof">re-run this proof</a> ·
+    <a href="{{ base_url }}submit/">submit your own</a>
 </div>
 
-<h1 style="font-size: 22px; margin-bottom: 8px; line-height: 1.3;">
-    "{{ proof.proof_data.claim_natural }}"
-</h1>
-<div style="margin-bottom: 24px;">
+<h1 class="proof-title">"{{ proof.proof_data.claim_natural }}"</h1>
+<div class="proof-meta">
     {% for tag in proof.tags %}
     <a href="{{ base_url }}tags/{{ tag }}/" class="tag">{{ tag }}</a>
     {% endfor %}
-    <span style="color: var(--text-secondary); font-size: 12px; margin-left: 4px;">
-        · Generated {{ proof.date }}
+    <span class="date-info">
+        · generated {{ proof.date }}
         {% if proof.proof_engine_version %}· v{{ proof.proof_engine_version }}{% endif %}
     </span>
 </div>
 
-{# Section keys are always title-cased by extract_sections() #}
 {% for section_name in ["Key Findings", "Claim Interpretation"] %}
 {% if section_name in rendered_sections_md %}
 <h2 class="section-heading">{{ section_name }}</h2>
@@ -66,12 +64,27 @@
 {% endfor %}
 
 {% if "Evidence Summary" in rendered_sections_md %}
-<h2 class="section-heading">Evidence Summary</h2>
-<p style="color: var(--text-secondary); font-size: 12px; margin-bottom: 12px;">
-    <strong>Yes/No</strong> = cited fact verified against source.
-    <strong>Computed</strong> = calculated by the proof script from verified inputs.
-</p>
-<div class="proof-content">{{ rendered_sections_md["Evidence Summary"] | safe }}</div>
+<h2 class="section-heading">evidence summary</h2>
+<div class="proof-content">
+    {{ rendered_sections_md["Evidence Summary"] | safe }}
+    {% if citations %}
+    <h3>Linked Sources</h3>
+    <table class="evidence-table">
+        <thead>
+            <tr><th>ID</th><th>Source</th><th>Verified</th></tr>
+        </thead>
+        <tbody>
+        {% for fact_id, fact in proof.proof_data.fact_registry.items() %}
+            <tr>
+                <td>{% if fact_id in citations %}<a href="{{ citations[fact_id].url }}">{{ fact_id }}</a>{% else %}{{ fact_id }}{% endif %}</td>
+                <td>{% if fact_id in citations %}<a href="{{ citations[fact_id].url }}">{{ citations[fact_id].source_name }}</a>{% else %}{{ fact.label }}{% endif %}</td>
+                <td>{% if fact_id in citations %}{% set st = citations[fact_id].status %}<span class="{% if st == 'verified' %}evidence-verified{% elif st == 'partial' %}evidence-computed{% elif st in ('failed', 'not_found') %}evidence-failed{% else %}evidence-unknown{% endif %}">{% if st == "verified" %}Yes{% elif st == "partial" %}Partial{% elif st == "not_found" %}Not Found{% elif st == "failed" %}No{% else %}{{ st | capitalize }}{% endif %}</span>{% elif fact.method is defined %}<span class="evidence-computed">Computed</span>{% endif %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
 {% endif %}
 
 {% for section_name in ["Proof Logic", "Conclusion"] %}
@@ -82,11 +95,11 @@
 {% endfor %}
 
 {% if "Counter-Evidence Search" in rendered_sections_md %}
-<h2 class="section-heading">Counter-Evidence Search</h2>
+<h2 class="section-heading">counter-evidence search</h2>
 <div class="proof-content">{{ rendered_sections_md["Counter-Evidence Search"] | safe }}</div>
 {% endif %}
 
-<h2 class="section-heading">Audit Trail</h2>
+<h2 class="section-heading">audit trail</h2>
 
 {% set audit_sections = [
     "Citation Verification Details",
@@ -112,9 +125,9 @@
 {% endfor %}
 
 <div class="downloads">
-    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.py" class="download-link" download>Download proof.py</a>
-    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_audit.md" class="download-link" download>Download audit trail</a>
-    <a href="https://github.com/yaniv-golan/proof-engine/tree/main/site/proofs/{{ proof.slug }}" class="download-link" rel="nofollow">View on GitHub</a>
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.py" class="download-link" download>↓ proof.py</a>
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_audit.md" class="download-link" download>↓ audit trail</a>
+    <a href="https://github.com/yaniv-golan/proof-engine/tree/main/site/proofs/{{ proof.slug }}" class="download-link" rel="nofollow">view on github</a>
     <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.json" class="download-link">proof.json</a>
 </div>
 {% endblock %}
