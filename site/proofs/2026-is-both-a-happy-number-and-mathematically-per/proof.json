@@ -100,11 +100,6 @@
       "breaks_proof": false
     }
   ],
-  "sub_claim_verdicts": {
-    "SC1": "PROVED",
-    "SC2": "DISPROVED",
-    "SC3": "NOT_EVALUABLE (opinion/metaphor)"
-  },
   "verdict": "PARTIALLY VERIFIED",
   "key_results": {
     "sc1_is_happy": true,

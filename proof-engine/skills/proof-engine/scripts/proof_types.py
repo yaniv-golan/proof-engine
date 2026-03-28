@@ -191,9 +191,6 @@ class ProofData(TypedDict, total=False):
     date_note: str
     # Featured flag (used in some published proofs)
     featured: bool
-    # Compound claim sub-verdicts and results (used in compound claims with SC1, SC2, etc.)
-    sub_claim_verdicts: dict[str, str]
-    sub_claim_results: dict[str, object]
     # Verdict annotations (used in some published proofs)
     verdict_note: str
     verdict_reason: str

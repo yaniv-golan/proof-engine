@@ -219,24 +219,6 @@
       "independence_note": "Sources are from different publications: a 2018 systematic review of RCTs and observational studies (PMC 6179509), a 2025 population-based study (ScienceDaily), and a 2024 perspective paper (PMC 11600290). Note: PMC 11600290 appears in both SC1 and SC2 with different quotes addressing different aspects \u2014 it is one independent source that covers both sub-claims."
     }
   ],
-  "sub_claim_results": [
-    {
-      "id": "SC1",
-      "property": "seed oils are toxic at normal dietary consumption levels",
-      "proof_direction": "disprove",
-      "n_confirming": 3,
-      "threshold": 3,
-      "holds": true
-    },
-    {
-      "id": "SC2",
-      "property": "seed oils are a primary cause of modern chronic inflammation and disease",
-      "proof_direction": "disprove",
-      "n_confirming": 3,
-      "threshold": 3,
-      "holds": true
-    }
-  ],
   "adversarial_checks": [
     {
       "question": "Does the oxidized linoleic acid (OXLAM) hypothesis provide scientific support for seed oils causing cardiovascular disease?",

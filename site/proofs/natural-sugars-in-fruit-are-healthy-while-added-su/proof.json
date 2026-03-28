@@ -209,10 +209,6 @@
     }
   ],
   "verdict": "PARTIALLY VERIFIED",
-  "sub_claim_verdicts": {
-    "SC1_fruit_sugars_healthy": "PROVED",
-    "SC2_added_sugars_poison_equivalent": "DISPROVED"
-  },
   "key_results": {
     "n_sc1_confirmed": 4,
     "n_sc2_disproof_confirmed": 4,
