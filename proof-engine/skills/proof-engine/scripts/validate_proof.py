@@ -309,6 +309,128 @@ class ProofValidator:
         else:
             self.passed.append("Contract: No value parsing detected (pure-math proof or no extractions)")
 
+    def check_table_data_integrity(self):
+        """Check that table/numeric data uses data_values + verify_data_values(),
+        not pseudo-quote fields with circular verify_extraction().
+
+        Four sub-rules:
+          1. data_values present → verify_data_values() must be called
+          2. verify_extraction() must not be called on data_values-derived values
+          3. *_quote fields containing bare numeric/date literals are rejected
+          4. Multiple short numeric "quotes" without data_values → warning
+        """
+        has_data_values = bool(re.search(r'["\']data_values["\']', self.source))
+        has_verify_dv = bool(re.search(r'verify_data_values\s*\(', self.source))
+        has_verify_ext = bool(re.search(r'verify_extraction\s*\(', self.source))
+
+        # --- Rule 1: data_values requires verify_data_values() ---
+        if has_data_values and not has_verify_dv:
+            self.issues.append((
+                "Rule 2/Contract: data_values present but verify_data_values() "
+                "not called — table values are unverified.",
+                [],
+            ))
+        elif has_data_values and has_verify_dv:
+            self.passed.append(
+                "Table integrity: data_values verified via verify_data_values()"
+            )
+
+        # --- Rule 2: verify_extraction() on data_values-derived values ---
+        if has_data_values and has_verify_ext:
+            # Linkage check: verify_extraction called with data_values path
+            linkage = re.search(
+                r'verify_extraction\s*\([^)]*\[["\']data_values["\']\]',
+                self.source,
+            )
+            if linkage:
+                self.issues.append((
+                    "Rule 1/Contract: verify_extraction() used on "
+                    "data_values-derived value — circular verification. "
+                    "Use verify_data_values() + cross-check instead.",
+                    [],
+                ))
+
+        # --- Rule 3: pseudo-quote fields with bare numeric/date literals ---
+        # Find keys ending in _quote with short atomic values
+        pseudo_quote_re = re.compile(
+            r'["\'](\w+_quote)["\']\s*:\s*["\']([^"\']+)["\']'
+        )
+        pseudo_quotes = []
+        for m in pseudo_quote_re.finditer(self.source):
+            key, value = m.group(1), m.group(2)
+            # Classify as atomic if: bare number, percentage, date-like, or
+            # very short fragment (< 20 chars with no spaces beyond one)
+            is_bare_number = bool(re.fullmatch(r'[\d,.\-+]+', value.strip()))
+            is_percentage = bool(re.fullmatch(r'[\d.]+\s*%', value.strip()))
+            is_date_like = bool(re.fullmatch(
+                r'(?:January|February|March|April|May|June|July|August|'
+                r'September|October|November|December)\s+\d{1,2},?\s+\d{4}',
+                value.strip(),
+            ))
+            is_very_short = len(value.strip()) < 20 and value.strip().count(' ') <= 1
+
+            if is_bare_number or is_percentage or is_date_like:
+                pseudo_quotes.append((key, value))
+            elif is_very_short and not any(c.isalpha() for c in value):
+                pseudo_quotes.append((key, value))
+
+        if pseudo_quotes:
+            # Check if these pseudo-quotes are parsed as evidence
+            parsed_as_evidence = []
+            for key, value in pseudo_quotes:
+                # Look for parse_*_from_quote(...[key]...) usage
+                if re.search(
+                    r'parse_(?:number|date|percentage|range)_from_quote\s*\([^)]*'
+                    + re.escape(key),
+                    self.source,
+                ):
+                    parsed_as_evidence.append(key)
+                # Also check verify_extraction on the pseudo-quote
+                elif re.search(
+                    r'verify_extraction\s*\([^)]*' + re.escape(key),
+                    self.source,
+                ):
+                    parsed_as_evidence.append(key)
+
+            if parsed_as_evidence:
+                details = [
+                    f"  '{k}' = '{v}'" for k, v in pseudo_quotes
+                    if k in parsed_as_evidence
+                ]
+                self.issues.append((
+                    "Rule 1: pseudo-quote fields contain authored literals and "
+                    "are parsed as evidence. For table data, use data_values + "
+                    "verify_data_values(); for prose evidence, store the real quote.",
+                    details,
+                ))
+            elif pseudo_quotes:
+                details = [f"  '{k}' = '{v}'" for k, v in pseudo_quotes]
+                self.warnings.append((
+                    "Table integrity: possible pseudo-quote fields with atomic "
+                    "values detected (not currently parsed as evidence).",
+                    details,
+                ))
+
+        # --- Rule 4: table-like extraction without data_values (warning) ---
+        if not has_data_values and not pseudo_quotes:
+            # Count short numeric _quote fields in empirical_facts
+            quote_fields = re.findall(
+                r'["\'](\w+_quote)["\']\s*:\s*["\']([^"\']+)["\']',
+                self.source,
+            )
+            numeric_quotes = [
+                (k, v) for k, v in quote_fields
+                if re.fullmatch(r'[\d,.\-+%]+', v.strip())
+            ]
+            if len(numeric_quotes) >= 3:
+                details = [f"  '{k}' = '{v}'" for k, v in numeric_quotes]
+                self.warnings.append((
+                    "Rule 1/Rule 2: multiple numeric _quote fields found "
+                    "without data_values — consider using data_values + "
+                    "verify_data_values() for table-sourced data.",
+                    details,
+                ))
+
     def check_general_selfcontained(self):
         """General: proof is self-contained and runnable."""
         problems = []
@@ -456,6 +578,7 @@ class ProofValidator:
         self.check_fact_registry()
         self.check_json_summary()
         self.check_extraction_verification()
+        self.check_table_data_integrity()
         self.check_general_selfcontained()
         self.check_claim_holds_computed()
         self.check_unused_imports()

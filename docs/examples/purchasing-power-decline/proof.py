@@ -19,7 +19,7 @@ from datetime import date
 # --- STRUCTURAL IMPORTS ---
 from scripts.extract_values import parse_number_from_quote, parse_date_from_quote
 from scripts.smart_extract import normalize_unicode, verify_extraction
-from scripts.verify_citations import verify_all_citations
+from scripts.verify_citations import verify_all_citations, verify_data_values
 from scripts.computations import compare, explain_calc
 
 # =============================================================================
@@ -101,10 +101,7 @@ empirical_facts = {
         ),
         "url": "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi/",
         "source_name": "RateInflation.com (sourced from U.S. Bureau of Labor Statistics)",
-        # CPI values from table: 1913 annual avg = 9.883, 2024 annual avg = 313.689
-        # These are in the HTML table but may not be in prose text
-        "cpi_1913_quote": "9.883",
-        "cpi_2024_quote": "313.689",
+        "data_values": {"cpi_1913": "9.883", "cpi_2024": "313.689"},
     },
     "source_b_cpi": {
         "quote": (
@@ -112,9 +109,7 @@ empirical_facts = {
         ),
         "url": "https://inflationdata.com/Inflation/Consumer_Price_Index/HistoricalCPI.aspx",
         "source_name": "InflationData.com (sourced from U.S. Bureau of Labor Statistics)",
-        # CPI values from table: 1913 annual avg = 9.9, 2024 annual avg = 313.689
-        "cpi_1913_quote": "9.9",
-        "cpi_2024_quote": "313.689",
+        "data_values": {"cpi_1913": "9.9", "cpi_2024": "313.689"},
     },
     "source_a_fed_date": {
         "quote": (
@@ -142,50 +137,52 @@ print("=" * 60)
 citation_results = verify_all_citations(empirical_facts, wayback_fallback=True)
 
 # =============================================================================
-# 5. VALUE EXTRACTION — parsed from quotes (Rule 1)
+# 5. DATA VALUE VERIFICATION — confirms CPI numbers appear on source pages
+# =============================================================================
+print("\n" + "=" * 60)
+print("DATA VALUE VERIFICATION")
+print("=" * 60)
+
+dv_results_a = verify_data_values(
+    empirical_facts["source_a_cpi"]["url"],
+    empirical_facts["source_a_cpi"]["data_values"],
+    "B1",
+)
+dv_results_b = verify_data_values(
+    empirical_facts["source_b_cpi"]["url"],
+    empirical_facts["source_b_cpi"]["data_values"],
+    "B2",
+)
+
+# =============================================================================
+# 6. VALUE EXTRACTION — parsed from data_values (no verify_extraction needed)
 # =============================================================================
 print("\n" + "=" * 60)
 print("VALUE EXTRACTION")
 print("=" * 60)
 
-# --- Source A: CPI values ---
-# The CPI values are in HTML table cells on rateinflation.com.
-# We extract from the cpi_*_quote fields which contain the exact table values.
+# --- Source A: CPI values from data_values ---
 cpi_1913_a = parse_number_from_quote(
-    empirical_facts["source_a_cpi"]["cpi_1913_quote"],
+    empirical_facts["source_a_cpi"]["data_values"]["cpi_1913"],
     r"([\d.]+)",
     "B1_cpi_1913",
 )
-cpi_1913_a_in_quote = verify_extraction(
-    cpi_1913_a, empirical_facts["source_a_cpi"]["cpi_1913_quote"], "B1_cpi_1913"
-)
-
 cpi_2024_a = parse_number_from_quote(
-    empirical_facts["source_a_cpi"]["cpi_2024_quote"],
+    empirical_facts["source_a_cpi"]["data_values"]["cpi_2024"],
     r"([\d.]+)",
     "B1_cpi_2024",
 )
-cpi_2024_a_in_quote = verify_extraction(
-    cpi_2024_a, empirical_facts["source_a_cpi"]["cpi_2024_quote"], "B1_cpi_2024"
-)
 
-# --- Source B: CPI values ---
+# --- Source B: CPI values from data_values ---
 cpi_1913_b = parse_number_from_quote(
-    empirical_facts["source_b_cpi"]["cpi_1913_quote"],
+    empirical_facts["source_b_cpi"]["data_values"]["cpi_1913"],
     r"([\d.]+)",
     "B2_cpi_1913",
 )
-cpi_1913_b_in_quote = verify_extraction(
-    cpi_1913_b, empirical_facts["source_b_cpi"]["cpi_1913_quote"], "B2_cpi_1913"
-)
-
 cpi_2024_b = parse_number_from_quote(
-    empirical_facts["source_b_cpi"]["cpi_2024_quote"],
+    empirical_facts["source_b_cpi"]["data_values"]["cpi_2024"],
     r"([\d.]+)",
     "B2_cpi_2024",
-)
-cpi_2024_b_in_quote = verify_extraction(
-    cpi_2024_b, empirical_facts["source_b_cpi"]["cpi_2024_quote"], "B2_cpi_2024"
 )
 
 # --- Federal Reserve founding date ---
@@ -448,15 +445,19 @@ if __name__ == "__main__":
             }
 
     # --- Build extraction records ---
+    dv_a_ok = all(v.get("found", False) for v in dv_results_a.get("results", {}).values()) if isinstance(dv_results_a, dict) else False
+    dv_b_ok = all(v.get("found", False) for v in dv_results_b.get("results", {}).values()) if isinstance(dv_results_b, dict) else False
     extractions = {
         "B1": {
             "value": f"CPI_1913={cpi_1913_a}, CPI_2024={cpi_2024_a}",
-            "value_in_quote": cpi_1913_a_in_quote and cpi_2024_a_in_quote,
+            "verified_via": "verify_data_values",
+            "data_values_verified": dv_a_ok,
             "quote_snippet": empirical_facts["source_a_cpi"]["quote"][:80],
         },
         "B2": {
             "value": f"CPI_1913={cpi_1913_b}, CPI_2024={cpi_2024_b}",
-            "value_in_quote": cpi_1913_b_in_quote and cpi_2024_b_in_quote,
+            "verified_via": "verify_data_values",
+            "data_values_verified": dv_b_ok,
             "quote_snippet": empirical_facts["source_b_cpi"]["quote"][:80],
         },
         "B3": {

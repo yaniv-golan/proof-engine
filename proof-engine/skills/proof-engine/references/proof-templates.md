@@ -155,6 +155,23 @@ if __name__ == "__main__":
 For proofs where the primary evidence is numeric data from HTML tables (CPI, GDP, population).
 Uses `data_values` for table numbers and `verify_data_values()` to confirm they appear on the page.
 
+**Do NOT do this** — pseudo-quote fields with bare numeric literals are circular verification:
+```python
+# BAD — validator will reject this
+empirical_facts = {
+    "source_a": {
+        "quote": "CPI data is published by the BLS.",
+        "url": "...",
+        "cpi_1913_quote": "9.883",      # authored literal, not a real quote
+        "cpi_2024_quote": "313.689",     # authored literal, not a real quote
+    },
+}
+val = parse_number_from_quote(empirical_facts["source_a"]["cpi_1913_quote"], ...)
+verify_extraction(val, empirical_facts["source_a"]["cpi_1913_quote"], ...)  # circular!
+```
+
+Instead, use `data_values` + `verify_data_values()` as shown below:
+
 ```python
 """
 Proof: [claim text]

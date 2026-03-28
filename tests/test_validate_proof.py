@@ -260,3 +260,230 @@ def test_verdict_hardcoded_toplevel_fails():
 def test_verdict_ternary_passes():
     v = _validate_full(VERDICT_TERNARY)
     assert len(v.issues) == 0
+
+
+# ---------------------------------------------------------------------------
+# Table data integrity checks (check_table_data_integrity)
+# ---------------------------------------------------------------------------
+
+def _validate_table_integrity(source_code: str) -> ProofValidator:
+    """Write source to temp file, run table data integrity check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_table_data_integrity()
+    os.unlink(f.name)
+    return v
+
+
+# --- Test 1: data_values requires verify_data_values ---
+DATA_VALUES_NO_VERIFY = '''
+empirical_facts = {
+    "source_a": {
+        "quote": "The CPI is calculated by the BLS.",
+        "url": "https://example.com",
+        "data_values": {"cpi_1913": "9.883", "cpi_2024": "313.689"},
+    },
+}
+val = parse_number_from_quote(empirical_facts["source_a"]["data_values"]["cpi_1913"], r"([\\d.]+)", "B1")
+'''
+
+DATA_VALUES_WITH_VERIFY = '''
+empirical_facts = {
+    "source_a": {
+        "quote": "The CPI is calculated by the BLS.",
+        "url": "https://example.com",
+        "data_values": {"cpi_1913": "9.883", "cpi_2024": "313.689"},
+    },
+}
+dv_results = verify_data_values(empirical_facts["source_a"]["url"], empirical_facts["source_a"]["data_values"], "B1")
+val = parse_number_from_quote(empirical_facts["source_a"]["data_values"]["cpi_1913"], r"([\\d.]+)", "B1")
+'''
+
+
+def test_data_values_requires_verify_data_values():
+    v = _validate_table_integrity(DATA_VALUES_NO_VERIFY)
+    assert len(v.issues) > 0
+    assert any("verify_data_values" in str(iss) for iss in v.issues)
+
+
+def test_data_values_with_verify_passes():
+    v = _validate_table_integrity(DATA_VALUES_WITH_VERIFY)
+    assert not any("verify_data_values() not called" in str(iss) for iss in v.issues)
+
+
+# --- Test 2: verify_extraction on data_values fails ---
+VERIFY_EXTRACTION_ON_DATA_VALUES = '''
+empirical_facts = {
+    "source_a": {
+        "quote": "The CPI is calculated by the BLS.",
+        "url": "https://example.com",
+        "data_values": {"cpi_1913": "9.883"},
+    },
+}
+dv_results = verify_data_values(empirical_facts["source_a"]["url"], empirical_facts["source_a"]["data_values"], "B1")
+val = parse_number_from_quote(empirical_facts["source_a"]["data_values"]["cpi_1913"], r"([\\d.]+)", "B1")
+in_quote = verify_extraction(val, empirical_facts["source_a"]["data_values"]["cpi_1913"], "B1")
+'''
+
+
+def test_verify_extraction_on_data_values_fails():
+    v = _validate_table_integrity(VERIFY_EXTRACTION_ON_DATA_VALUES)
+    assert len(v.issues) > 0
+    assert any("circular" in str(iss).lower() for iss in v.issues)
+
+
+# --- Test 3: numeric pseudo-quote fields fail ---
+NUMERIC_PSEUDO_QUOTES = '''
+empirical_facts = {
+    "source_a": {
+        "quote": "The CPI is calculated by the BLS.",
+        "url": "https://example.com",
+        "cpi_1913_quote": "9.883",
+        "cpi_2024_quote": "313.689",
+    },
+}
+cpi_1913 = parse_number_from_quote(empirical_facts["source_a"]["cpi_1913_quote"], r"([\\d.]+)", "B1")
+cpi_2024 = parse_number_from_quote(empirical_facts["source_a"]["cpi_2024_quote"], r"([\\d.]+)", "B1")
+'''
+
+
+def test_numeric_pseudo_quote_fields_fail():
+    v = _validate_table_integrity(NUMERIC_PSEUDO_QUOTES)
+    assert len(v.issues) > 0
+    assert any("pseudo-quote" in str(iss) for iss in v.issues)
+
+
+# --- Test 4: real prose quotes still pass ---
+REAL_PROSE_QUOTES = '''
+empirical_facts = {
+    "source_a": {
+        "quote": "Signed into law by President Woodrow Wilson on December 23, 1913, the Federal Reserve Act established the central banking system.",
+        "url": "https://example.com",
+    },
+}
+fed_date = parse_date_from_quote(empirical_facts["source_a"]["quote"], "B1")
+in_quote = verify_extraction(fed_date.year, empirical_facts["source_a"]["quote"], "B1")
+'''
+
+
+def test_real_prose_quotes_still_pass():
+    v = _validate_table_integrity(REAL_PROSE_QUOTES)
+    assert len(v.issues) == 0
+
+
+# --- Test 5: clean table template passes ---
+CLEAN_TABLE_TEMPLATE = '''
+empirical_facts = {
+    "source_a": {
+        "quote": "The CPI is calculated by the BLS.",
+        "url": "https://example.com",
+        "data_values": {"cpi_1913": "9.883", "cpi_2024": "313.689"},
+    },
+    "source_b": {
+        "quote": "Consumer Price Index historical data.",
+        "url": "https://example2.com",
+        "data_values": {"cpi_1913": "9.9", "cpi_2024": "313.689"},
+    },
+}
+dv_a = verify_data_values(empirical_facts["source_a"]["url"], empirical_facts["source_a"]["data_values"], "B1")
+dv_b = verify_data_values(empirical_facts["source_b"]["url"], empirical_facts["source_b"]["data_values"], "B2")
+val_a = parse_number_from_quote(empirical_facts["source_a"]["data_values"]["cpi_1913"], r"([\\d.]+)", "B1")
+val_b = parse_number_from_quote(empirical_facts["source_b"]["data_values"]["cpi_1913"], r"([\\d.]+)", "B2")
+'''
+
+
+def test_clean_table_template_passes():
+    v = _validate_table_integrity(CLEAN_TABLE_TEMPLATE)
+    assert len(v.issues) == 0
+
+
+# --- Test 6: mixed proof passes (prose + table) ---
+MIXED_PROOF = '''
+empirical_facts = {
+    "source_date": {
+        "quote": "Signed into law by President Woodrow Wilson on December 23, 1913.",
+        "url": "https://example.com/fed",
+    },
+    "source_cpi": {
+        "quote": "CPI data is published monthly by the BLS.",
+        "url": "https://example.com/cpi",
+        "data_values": {"cpi_1913": "9.883", "cpi_2024": "313.689"},
+    },
+}
+fed_date = parse_date_from_quote(empirical_facts["source_date"]["quote"], "B1")
+in_quote = verify_extraction(fed_date.year, empirical_facts["source_date"]["quote"], "B1")
+dv = verify_data_values(empirical_facts["source_cpi"]["url"], empirical_facts["source_cpi"]["data_values"], "B2")
+val = parse_number_from_quote(empirical_facts["source_cpi"]["data_values"]["cpi_1913"], r"([\\d.]+)", "B2")
+'''
+
+
+def test_mixed_proof_passes():
+    v = _validate_table_integrity(MIXED_PROOF)
+    assert len(v.issues) == 0
+
+
+# --- Test 7: regression fixture — purchasing-power anti-pattern shape ---
+PURCHASING_POWER_ANTIPATTERN = '''
+empirical_facts = {
+    "source_a_cpi": {
+        "quote": "The CPI for USA is calculated and issued by: U.S. Bureau of Labor Statistics.",
+        "url": "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi/",
+        "source_name": "RateInflation.com (sourced from BLS)",
+        "cpi_1913_quote": "9.883",
+        "cpi_2024_quote": "313.689",
+    },
+    "source_b_cpi": {
+        "quote": "A CPI of 195 indicates 95% inflation since 1982",
+        "url": "https://inflationdata.com/Inflation/Consumer_Price_Index/HistoricalCPI.aspx",
+        "source_name": "InflationData.com (sourced from BLS)",
+        "cpi_1913_quote": "9.9",
+        "cpi_2024_quote": "313.689",
+    },
+}
+cpi_1913_a = parse_number_from_quote(empirical_facts["source_a_cpi"]["cpi_1913_quote"], r"([\\d.]+)", "B1")
+in_quote = verify_extraction(cpi_1913_a, empirical_facts["source_a_cpi"]["cpi_1913_quote"], "B1")
+cpi_2024_a = parse_number_from_quote(empirical_facts["source_a_cpi"]["cpi_2024_quote"], r"([\\d.]+)", "B1")
+'''
+
+
+def test_purchasing_power_antipattern_fails():
+    """Regression: the old purchasing-power proof shape must fail validation."""
+    v = _validate_table_integrity(PURCHASING_POWER_ANTIPATTERN)
+    assert len(v.issues) > 0
+    assert any("pseudo-quote" in str(iss) for iss in v.issues)
+
+
+# --- Test 8: repaired purchasing-power shape passes ---
+PURCHASING_POWER_REPAIRED = '''
+empirical_facts = {
+    "source_a_cpi": {
+        "quote": "The CPI for USA is calculated and issued by: U.S. Bureau of Labor Statistics.",
+        "url": "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi/",
+        "source_name": "RateInflation.com (sourced from BLS)",
+        "data_values": {"cpi_1913": "9.883", "cpi_2024": "313.689"},
+    },
+    "source_b_cpi": {
+        "quote": "A CPI of 195 indicates 95% inflation since 1982",
+        "url": "https://inflationdata.com/Inflation/Consumer_Price_Index/HistoricalCPI.aspx",
+        "source_name": "InflationData.com (sourced from BLS)",
+        "data_values": {"cpi_1913": "9.9", "cpi_2024": "313.689"},
+    },
+    "source_a_fed_date": {
+        "quote": "Signed into law by President Woodrow Wilson on December 23, 1913",
+        "url": "https://en.wikipedia.org/wiki/Federal_Reserve_Act",
+    },
+}
+dv_a = verify_data_values(empirical_facts["source_a_cpi"]["url"], empirical_facts["source_a_cpi"]["data_values"], "B1")
+dv_b = verify_data_values(empirical_facts["source_b_cpi"]["url"], empirical_facts["source_b_cpi"]["data_values"], "B2")
+cpi_1913_a = parse_number_from_quote(empirical_facts["source_a_cpi"]["data_values"]["cpi_1913"], r"([\\d.]+)", "B1")
+fed_date = parse_date_from_quote(empirical_facts["source_a_fed_date"]["quote"], "B3")
+in_quote = verify_extraction(fed_date.year, empirical_facts["source_a_fed_date"]["quote"], "B3")
+'''
+
+
+def test_purchasing_power_repaired_passes():
+    """Regression: the repaired purchasing-power proof shape must pass validation."""
+    v = _validate_table_integrity(PURCHASING_POWER_REPAIRED)
+    assert len(v.issues) == 0
