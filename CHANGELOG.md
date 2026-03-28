@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - README: updated Claude Desktop installation instructions with correct marketplace flow
+- README: added Claude.ai (web) installation instructions
 - Validator: detect missing `proof_direction` key in disproof proofs (silent 180° verdict flip)
 - Validator: warn when compound sub-claim has fewer than 2 sources (prefix-based heuristic)
 - Validator: require call site for `verify_all_citations` / `verify_data_values` / `verify_search_registry` (import alone no longer satisfies Rule 2 or unused-import check)

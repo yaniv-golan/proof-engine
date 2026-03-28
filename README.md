@@ -27,12 +27,19 @@ The skill produces three outputs: a re-runnable `proof.py` script, a reader-faci
 
 ## Installation
 
+### Claude.ai (Web)
+
+1. Download [`proof-engine.zip`](https://github.com/yaniv-golan/proof-engine/releases/latest/download/proof-engine.zip)
+2. Click **Customize** in the sidebar
+3. Go to **Skills** and click **+**
+4. Choose **Upload a skill** and upload the zip file
+
 ### Claude Desktop
 
 1. Click **Customize** in the sidebar
 2. Click **Browse Plugins**
 3. Go to the **Personal** tab and click **+**
-4. Choose **Add marketplace** 
+4. Choose **Add marketplace**
 5. Type `yaniv-golan/proof-engine` and click **Sync**
 
 ### Claude Code (CLI)
