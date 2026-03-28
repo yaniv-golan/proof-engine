@@ -17,7 +17,10 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests sympy python-dateutil
+        run: pip install requests sympy python-dateutil pytest
+
+      - name: Run unit tests
+        run: python -m pytest tests/ -v
 
       - name: Syntax check bundled scripts
         run: |
