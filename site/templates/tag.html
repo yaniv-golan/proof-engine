@@ -5,11 +5,11 @@
 {% block meta_description %}{{ total }} verified proofs tagged '{{ tag }}'{% if current_page > 1 %} (Page {{ current_page }}){% endif %} — Proof Engine{% endblock %}
 
 {% block content %}
-<h1 style="font-size: 22px; margin-bottom: 16px;">Tag: {{ tag }}</h1>
-<p style="color: var(--text-secondary); margin-bottom: 20px;">{{ total }} proof{{ "s" if total != 1 }}</p>
+<h1 class="tag-heading">tag: {{ tag }}</h1>
+<p class="tag-count">{{ total }} proof{{ "s" if total != 1 }}</p>
 
 {% for proof in proofs %}
-<a href="{{ base_url }}proofs/{{ proof.slug }}/" style="text-decoration: none; color: inherit;">
+<a href="{{ base_url }}proofs/{{ proof.slug }}/" class="card-link">
 <div class="proof-card">
     <h3>{{ proof.proof_data.claim_natural }}</h3>
     <div class="meta">
@@ -19,6 +19,9 @@
         {% endfor %}
         <span class="date">{{ proof.date }}</span>
     </div>
+    {% if proof.source_names %}
+    <div class="source-line">Sources: {{ proof.source_names | join(', ') }}{% if proof.source_names_extra > 0 %} +{{ proof.source_names_extra }} more{% endif %}</div>
+    {% endif %}
 </div>
 </a>
 {% endfor %}
