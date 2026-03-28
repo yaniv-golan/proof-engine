@@ -116,7 +116,10 @@ class ProofValidator:
                 depth -= 1
             elif ch in ('"', "'") and depth == 1:
                 quote_char = ch
-                end_quote = self.source.index(quote_char, i + 1)
+                try:
+                    end_quote = self.source.index(quote_char, i + 1)
+                except ValueError:
+                    break  # Unterminated string — stop parsing
                 key = self.source[i + 1:end_quote]
                 rest = self.source[end_quote + 1:end_quote + 10].strip()
                 if rest.startswith(':'):

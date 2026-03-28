@@ -48,6 +48,9 @@ empirical_facts = {
 }
 '''
 
+# Unterminated quote at depth=1 (key position) — triggers .index() crash
+MALFORMED_UNTERMINATED_KEY = 'empirical_facts = {\n    "src_a'
+
 NO_EMPIRICAL = '''
 from scripts.computations import compare
 result = compare(5, ">", 3)
@@ -72,6 +75,13 @@ def test_rule6_template_keys_counted():
     v = _validate(TEMPLATE_KEYS_SOURCE)
     assert len(v.issues) == 0
     assert any("2 distinct" in msg for msg in v.passed)
+
+
+def test_rule6_unterminated_key_no_crash():
+    """Unterminated string at key position should not crash the validator."""
+    v = _validate(MALFORMED_UNTERMINATED_KEY)
+    # Should not raise — validator handles gracefully
+    assert True  # reaching here means no crash
 
 
 def test_rule6_no_empirical_pure_math():
