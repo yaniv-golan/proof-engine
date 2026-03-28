@@ -169,5 +169,6 @@
     "version": "0.10.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-03-28"
-  }
+  },
+  "featured": true
 }
