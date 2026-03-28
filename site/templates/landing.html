@@ -31,8 +31,9 @@
 
 {% if featured_proofs %}
 <h2 class="section-heading">Featured Proofs</h2>
+<div id="featured-container">
 {% for proof in featured_proofs %}
-<a href="{{ base_url }}proofs/{{ proof.slug }}/" style="text-decoration: none; color: inherit;">
+<a href="{{ base_url }}proofs/{{ proof.slug }}/" class="featured-proof" style="text-decoration: none; color: inherit; display: none;">
 <div class="proof-card">
     <h3>{{ proof.proof_data.claim_natural }}</h3>
     <div class="meta">
@@ -45,5 +46,18 @@
 </div>
 </a>
 {% endfor %}
+</div>
+<script>
+(function() {
+    var cards = Array.from(document.querySelectorAll('.featured-proof'));
+    for (var i = cards.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = cards[i]; cards[i] = cards[j]; cards[j] = tmp;
+    }
+    for (var k = 0; k < Math.min(3, cards.length); k++) {
+        cards[k].style.display = '';
+    }
+})();
+</script>
 {% endif %}
 {% endblock %}

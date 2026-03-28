@@ -137,12 +137,10 @@ def main():
     common = {"base_url": base_url}
     stats = compute_stats(proofs)
 
-    # Landing page — pick 3 random featured proofs
-    import random
-    featured_pool = [p for p in proofs if p.get("featured")]
-    if not featured_pool:
-        featured_pool = proofs[:3]
-    featured = random.sample(featured_pool, min(3, len(featured_pool)))
+    # Landing page — pass all featured proofs; JS picks 3 randomly per page load
+    featured = [p for p in proofs if p.get("featured")]
+    if not featured:
+        featured = proofs[:3]
     tpl = env.get_template("landing.html")
     write_file(output_dir / "index.html", tpl.render(**common, stats=stats, featured_proofs=featured, canonical_url=f"{site_url}{base_url}"))
 
