@@ -1,0 +1,10 @@
+The 100000th prime number is exactly 1299709.
+641 divides 2^{32} + 1 exactly.
+There are no positive integer solutions to the equation x^4 + y^4 = z^4.
+A real number is rational if and only if its decimal expansion is eventually periodic.
+The integer 1 is a prime number.
+The infinite sum from n=1 to infinity of 1/n^2 equals exactly π²/6.
+For any triangle with sides a, b, c where a² + b² = c² then the angle opposite c is exactly 90 degrees AND the converse also holds.
+Fewer than 20 percent of the positive integers from 1 to 1000 are prime.
+The positive root of x² - x - 1 = 0 is exactly (1 + √5)/2.
+The Goldbach conjecture holds for every even integer greater than 2.
