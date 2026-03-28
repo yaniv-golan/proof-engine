@@ -94,6 +94,39 @@ class ProofValidator:
             return False
         return True
 
+    def _has_search_registry(self) -> bool:
+        """Check if the source defines search_registry with entries."""
+        if "search_registry" not in self.source:
+            return False
+        if re.search(r'search_registry\s*=\s*\{\s*\}', self.source):
+            return False
+        return True
+
+    def _extract_search_registry_domains(self) -> set:
+        """Extract unique URL domains from search_registry entries."""
+        domains = set()
+        sr_match = re.search(r'search_registry\s*=\s*\{', self.source)
+        if not sr_match:
+            return domains
+        start = sr_match.end()
+        depth = 1
+        i = start
+        while i < len(self.source) and depth > 0:
+            if self.source[i] == '{':
+                depth += 1
+            elif self.source[i] == '}':
+                depth -= 1
+            i += 1
+        sr_text = self.source[start:i]
+        from urllib.parse import urlparse
+        # Match both single and double quoted Python strings
+        for url_match in re.finditer(r'''["']url["']\s*:\s*["']([^"']+)["']''', sr_text):
+            url = url_match.group(1)
+            domain = urlparse(url).netloc
+            if domain:
+                domains.add(domain)
+        return domains
+
     def _extract_empirical_facts_keys(self) -> list:
         """Extract top-level key names from the empirical_facts dict.
 
@@ -133,8 +166,25 @@ class ProofValidator:
         has_verify_import = bool(re.search(r'verify_citation|verify_all_citations', self.source))
         has_smart_extract = bool(re.search(r'smart_extract|normalize_unicode|verify_extraction', self.source))
         has_requests = bool(re.search(r'requests\.get', self.source))
+        has_search_registry = self._has_search_registry()
+        has_verify_search = bool(re.search(r'verify_search_registry', self.source))
 
-        if has_verify_import:
+        if has_search_registry:
+            if not has_verify_search:
+                self.issues.append((
+                    "Rule 2: Has search_registry but no verify_search_registry import",
+                    [],
+                ))
+            else:
+                self.passed.append("Rule 2: verify_search_registry found for search_registry")
+            # Also check for verify_all_citations if empirical_facts present
+            has_empirical = self._has_nonempty_empirical_facts()
+            if has_empirical and not has_verify_import:
+                self.issues.append((
+                    "Rule 2: Has corroborating empirical_facts but no verify_all_citations import",
+                    [],
+                ))
+        elif has_verify_import:
             extra = " (with Unicode normalization)" if has_smart_extract else ""
             self.passed.append(f"Rule 2: Citation verification code found (bundled script){extra}")
         elif has_requests:
@@ -194,11 +244,30 @@ class ProofValidator:
     def check_rule6_independent_crosscheck(self):
         """Rule 6: Cross-checks use truly independent sources.
 
-        Counts distinct top-level keys in empirical_facts dict.
+        Counts distinct top-level keys in empirical_facts dict,
+        and unique URL domains in search_registry.
         """
         ef_keys = self._extract_empirical_facts_keys()
+        sr_domains = self._extract_search_registry_domains()
 
-        if len(ef_keys) >= 2:
+        if sr_domains:
+            if len(sr_domains) >= 2:
+                self.passed.append(
+                    f"Rule 6: {len(sr_domains)} unique database domains in search_registry "
+                    f"({', '.join(sorted(sr_domains))})"
+                )
+            else:
+                self.warnings.append((
+                    f"Rule 6: Only 1 unique database domain in search_registry ({next(iter(sr_domains))}) — "
+                    "cross-check requires multiple independent databases",
+                    [],
+                ))
+            if ef_keys and len(ef_keys) >= 2:
+                self.passed.append(
+                    f"Rule 6: {len(ef_keys)} distinct corroborating sources "
+                    f"({', '.join(sorted(ef_keys))})"
+                )
+        elif len(ef_keys) >= 2:
             self.passed.append(
                 f"Rule 6: {len(ef_keys)} distinct source references found "
                 f"({', '.join(sorted(ef_keys))})"

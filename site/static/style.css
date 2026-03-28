@@ -17,6 +17,9 @@
     --amber-bg: #2d2208;
     --gray: #484f58;
     --gray-text: #8b949e;
+    --blue: #1f6feb;
+    --blue-text: #58a6ff;
+    --blue-bg: #0d1d3a;
     --tag-bg: #1f2937;
     --tag-border: rgba(253, 203, 110, 0.27);
     --tag-text: #fdcb6e;
@@ -55,6 +58,8 @@ a:hover { text-decoration: underline; }
 .badge-disproved-qualified { background: var(--red); color: white; }
 .badge-partial { background: var(--amber); color: var(--bg); }
 .badge-undetermined { background: var(--gray); color: var(--text); }
+.badge-supported { background: var(--blue); color: white; }
+.badge-supported-qualified { background: var(--blue); color: white; }
 
 .verdict-banner { padding: 14px 20px; border-radius: 8px; display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .verdict-banner.proved { background: var(--green-bg); border: 1px solid var(--green); }
@@ -65,6 +70,8 @@ a:hover { text-decoration: underline; }
 .verdict-banner.partial .verdict-info, .verdict-banner.proved-qualified .verdict-info, .verdict-banner.disproved-qualified .verdict-info { color: var(--amber-text); }
 .verdict-banner.undetermined { background: var(--bg-secondary); border: 1px solid var(--gray); }
 .verdict-banner.undetermined .verdict-info { color: var(--gray-text); }
+.verdict-banner.supported, .verdict-banner.supported-qualified { background: var(--blue-bg); border: 1px solid var(--blue); }
+.verdict-banner.supported .verdict-info, .verdict-banner.supported-qualified .verdict-info { color: var(--blue-text); }
 .verdict-info { font-size: 14px; }
 
 .tag { display: inline-block; background: var(--tag-bg); color: var(--tag-text); font-size: 11px; padding: 3px 10px; border-radius: 12px; border: 1px solid var(--tag-border); }

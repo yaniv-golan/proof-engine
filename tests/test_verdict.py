@@ -52,6 +52,22 @@ def test_undetermined():
     assert result["rating"] == 3
 
 
+def test_supported():
+    result = normalize_verdict("SUPPORTED")
+    assert result["category"] == "supported"
+    assert result["badge_color"] == "blue"
+    assert result["filter_value"] == "supported"
+    assert result["rating"] == 4
+
+
+def test_supported_with_unverified_citations():
+    result = normalize_verdict("SUPPORTED (with unverified citations)")
+    assert result["category"] == "supported-qualified"
+    assert result["badge_color"] == "blue"
+    assert result["filter_value"] == "supported"
+    assert result["rating"] == 3
+
+
 def test_unknown_verdict_raises():
     import pytest
     with pytest.raises(ValueError, match="Unknown verdict"):
@@ -59,4 +75,4 @@ def test_unknown_verdict_raises():
 
 
 def test_taxonomy_has_all_verdicts():
-    assert len(VERDICT_TAXONOMY) == 6
+    assert len(VERDICT_TAXONOMY) == 8

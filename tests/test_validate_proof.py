@@ -497,3 +497,80 @@ def test_purchasing_power_repaired_passes():
     """Regression: the repaired purchasing-power proof shape must pass validation."""
     v = _validate_table_integrity(PURCHASING_POWER_REPAIRED)
     assert len(v.issues) == 0
+
+
+# ---------------------------------------------------------------------------
+# search_registry validator tests (Tasks 11 & 12)
+# ---------------------------------------------------------------------------
+
+def test_rule2_search_registry_requires_verify(tmp_path):
+    """Rule 2: search_registry present but no verify_search_registry → issue."""
+    code = '''
+search_registry = {"search_a": {"url": "https://example.com"}}
+CLAIM_FORMAL = {"operator_note": "test", "proof_direction": "absence"}
+adversarial_checks = [{"question": "test"}]
+FACT_REGISTRY = {"S1": {"key": "search_a", "label": "test"}}
+if __name__ == "__main__":
+    verdict = "SUPPORTED"
+    import json
+    print("=== PROOF SUMMARY (JSON) ===")
+    print(json.dumps({"verdict": verdict}))
+'''
+    p = tmp_path / "proof.py"
+    p.write_text(code)
+    from scripts.validate_proof import ProofValidator
+    v = ProofValidator(str(p))
+    v.validate()
+    issues = [i[0] for i in v.issues]
+    assert any("search_registry" in i and "verify_search_registry" in i for i in issues)
+
+
+def test_rule2_search_registry_with_verify_passes(tmp_path):
+    """Rule 2: search_registry + verify_search_registry import → pass."""
+    code = '''
+from scripts.verify_citations import verify_search_registry
+search_registry = {"search_a": {"url": "https://example.com"}}
+CLAIM_FORMAL = {"operator_note": "test", "proof_direction": "absence"}
+adversarial_checks = [{"question": "test"}]
+FACT_REGISTRY = {"S1": {"key": "search_a", "label": "test"}}
+if __name__ == "__main__":
+    verdict = "SUPPORTED"
+    import json
+    print("=== PROOF SUMMARY (JSON) ===")
+    print(json.dumps({"verdict": verdict}))
+'''
+    p = tmp_path / "proof.py"
+    p.write_text(code)
+    from scripts.validate_proof import ProofValidator
+    v = ProofValidator(str(p))
+    v.validate()
+    issues = [i[0] for i in v.issues]
+    assert not any("verify_search_registry" in i for i in issues)
+
+
+def test_rule6_search_registry_counts_unique_domains(tmp_path):
+    """Rule 6: search_registry keys deduped by URL domain."""
+    code = '''
+from scripts.verify_citations import verify_search_registry
+search_registry = {
+    "search_a": {"url": "https://pubmed.ncbi.nlm.nih.gov/", "database": "PubMed"},
+    "search_b": {"url": "https://www.cochranelibrary.com/", "database": "Cochrane"},
+    "search_c": {"url": "https://pubmed.ncbi.nlm.nih.gov/advanced", "database": "PubMed2"},
+}
+CLAIM_FORMAL = {"operator_note": "test", "proof_direction": "absence"}
+adversarial_checks = [{"question": "test"}]
+FACT_REGISTRY = {"S1": {"key": "search_a"}, "S2": {"key": "search_b"}, "S3": {"key": "search_c"}}
+if __name__ == "__main__":
+    verdict = "SUPPORTED"
+    import json
+    print("=== PROOF SUMMARY (JSON) ===")
+    print(json.dumps({"verdict": verdict}))
+'''
+    p = tmp_path / "proof.py"
+    p.write_text(code)
+    from scripts.validate_proof import ProofValidator
+    v = ProofValidator(str(p))
+    v.validate()
+    passed = v.passed
+    # Should count 2 unique domains, not 3 keys
+    assert any("2" in p and "unique" in p.lower() for p in passed)

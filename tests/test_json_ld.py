@@ -68,3 +68,17 @@ def test_date_from_generator():
         canonical_url="https://example.com/proofs/test/",
     ))
     assert result["datePublished"] == "2025-01-15"
+
+
+def test_rating_value_supported():
+    data = {**SAMPLE_PROOF_DATA, "verdict": "SUPPORTED"}
+    result = json.loads(generate_claim_review(data, "https://example.com/proof"))
+    assert result["reviewRating"]["ratingValue"] == 4
+    assert result["reviewRating"]["alternateName"] == "SUPPORTED"
+
+
+def test_rating_value_supported_qualified():
+    data = {**SAMPLE_PROOF_DATA, "verdict": "SUPPORTED (with unverified citations)"}
+    result = json.loads(generate_claim_review(data, "https://example.com/proof"))
+    assert result["reviewRating"]["ratingValue"] == 3
+    assert result["reviewRating"]["alternateName"] == "SUPPORTED (with unverified citations)"

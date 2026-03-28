@@ -35,6 +35,18 @@ VERDICT_TAXONOMY = {
         "filter_value": "undetermined",
         "rating": 3,
     },
+    "SUPPORTED": {
+        "category": "supported",
+        "badge_color": "blue",
+        "filter_value": "supported",
+        "rating": 4,
+    },
+    "SUPPORTED (with unverified citations)": {
+        "category": "supported-qualified",
+        "badge_color": "blue",
+        "filter_value": "supported",
+        "rating": 3,
+    },
 }
 
 

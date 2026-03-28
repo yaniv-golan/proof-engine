@@ -9,7 +9,7 @@ description: >
   questions with no verifiable answer.
 metadata:
   author: Yaniv Golan
-  version: "0.10.0"
+  version: "0.11.0"
   license: MIT
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
@@ -39,6 +39,10 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **Index base mismatches**: Economic data from different aggregators may use different base periods. If `cross_check()` flags a large disagreement, check whether sources use different scaling. Document the base period in source_name.
 - **Dynamic/JS-rendered sites**: Many aggregators (officialdata.org, in2013dollars.com, inflationdata.com) render page chrome via JavaScript. Live fetch gets raw HTML — data tables may be static but page titles, headings, and navigation are often JS-rendered. Quote verification on page titles commonly fails even when data is correct. Use `verify_data_values()` as the primary verification for table data; treat quote verification as a bonus, not a requirement.
 - **`cross_check()` mode and tolerance**: Use `mode="absolute"` for computed results that should match closely. Use `mode="relative"` for source-to-source comparisons. Tolerance heuristics for government statistics: expect 1-5% variation across aggregators due to rounding, month selection (annual avg vs December), and base-period differences. If sources disagree by more than 5%, investigate: find a third source, check if they use different base periods or date ranges, and document the discrepancy in adversarial checks. Don't silently ignore large disagreements — they may indicate one source is wrong.
+- **Quote selection for qualitative claims**: Pick quotes that directly state the claim's core assertion, not tangential mentions. A source that says "the brain is remarkable" does not support "adult neurogenesis occurs." The quote must be specific enough that citation verification confirms the source actually addresses the claim.
+- **Academic HTML degrades citation matches**: PMC and journal pages embed inline reference markers (`[1]`, superscripts) that inject noise after HTML stripping. If a real verbatim quote gets `partial` status, check whether the source is academic HTML before suspecting the quote itself. Use `snapshot` to capture clean text if needed.
+- **Don't conflate source count with evidence strength**: 5 news articles citing the same study count as 1 independent source, not 5. For qualitative consensus proofs, check whether sources trace to independent primary research. Document the independence rationale in the cross-checks section.
+- **Absence claims need search documentation**: For "no evidence exists" claims, use the Absence-of-Evidence template. Document what was searched (databases, query terms, date ranges), not just what was found. The `search_registry` structure makes this machine-checkable.
 
 ## Reference Files
 
@@ -172,6 +176,8 @@ Before presenting results, run through the checklist in [self-critique-checklist
 |---------|---------|
 | **PROVED** | All facts verified, logic valid, conclusion follows |
 | **PROVED (with unverified citations)** | Logic valid but some citation URLs couldn't be fetched |
+| **SUPPORTED** | Absence-of-evidence threshold met, no counter-evidence found |
+| **SUPPORTED (with unverified citations)** | Absence threshold met but corroborating citations couldn't be fetched |
 | **DISPROVED** | Verified counterexample or contradiction found |
 | **DISPROVED (with unverified citations)** | Counterexample found but some citations couldn't be fetched |
 | **PARTIALLY VERIFIED** | Some sub-claims proved, others unverifiable or disproved |

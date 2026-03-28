@@ -12,6 +12,8 @@
         "disproved-qualified": "badge-disproved-qualified",
         "partial": "badge-partial",
         "undetermined": "badge-undetermined",
+        "supported": "badge-supported",
+        "supported-qualified": "badge-supported-qualified",
     };
 
     function renderCard(p) {

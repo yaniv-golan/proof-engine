@@ -1,9 +1,18 @@
+import importlib.util
 import json
 import subprocess
 import sys
 import pytest
 from pathlib import Path
 import shutil
+
+_bs_spec = importlib.util.spec_from_file_location(
+    "build_site",
+    Path(__file__).parent.parent / "tools" / "build-site.py",
+)
+_bs_mod = importlib.util.module_from_spec(_bs_spec)
+_bs_spec.loader.exec_module(_bs_mod)
+compute_stats = _bs_mod.compute_stats
 
 
 @pytest.fixture
@@ -280,3 +289,13 @@ def test_submit_page_has_ai_agents_section(site_fixture):
     assert "AI Agents" in html
     assert "https://example.com/proof-engine/llms.txt" in html
     assert "copy-btn" in html
+
+
+def test_supported_not_fully_resolved():
+    """SUPPORTED proofs should not count as fully resolved."""
+    proofs = [
+        {"verdict": {"raw": "PROVED"}, "tags": []},
+        {"verdict": {"raw": "SUPPORTED"}, "tags": []},
+    ]
+    stats = compute_stats(proofs)
+    assert stats["verification_rate"] == 50

@@ -15,6 +15,33 @@ For proof templates, see [proof-templates.md](${CLAUDE_SKILL_DIR}/references/pro
 
 ---
 
+## Rule Applicability by Proof Type
+
+The validator checks all 7 rules for every proof. Some rules auto-pass when
+the proof doesn't contain the patterns they target. This table shows typical
+validator behavior — the "Auto-pass when" column describes the heuristic.
+
+| Rule | Date/Age | Numeric/Table | Qualitative | Absence | Pure Math | Auto-pass when |
+|------|----------|---------------|-------------|---------|-----------|----------------|
+| 1    | Checked  | Checked       | Auto-pass   | Auto-pass | Auto-pass | No value-extraction patterns found |
+| 2    | Checked  | Checked       | Checked     | Checked*  | Auto-pass | No `empirical_facts`, `search_registry`, or URLs |
+| 3    | Checked  | Checked       | Auto-pass   | Auto-pass | Auto-pass | No time-dependent keywords (`today`, `age`, etc.) |
+| 4    | Checked  | Checked       | Checked     | Checked   | Checked   | Never auto-passes |
+| 5    | Checked  | Checked       | Checked     | Checked   | Checked   | Never auto-passes |
+| 6    | Checked  | Checked       | Checked     | Checked*  | Auto-pass | No `empirical_facts` or `search_registry` keys |
+| 7    | Checked  | Checked       | Auto-pass   | Auto-pass | Checked   | No `365.2*`/`eval()`/inline-age patterns |
+
+*For absence proofs, Rule 2 checks `verify_search_registry` import (plus
+ `verify_all_citations` if corroborating `empirical_facts` are present);
+ Rule 6 counts unique databases in `search_registry` by URL domain.
+
+**Note on Pure Math Rule 6:** The validator auto-passes when no empirical sources
+are present. It does not inspect whether cross-checks use mathematically
+independent methods — that's a proof-writing discipline enforced by the template
+and self-critique checklist, not by static analysis.
+
+---
+
 ## Rule 1: Never Hand-Type Extracted Values
 
 **Failure mode**: An LLM reads a quote like "On May 14, 1948, David Ben-Gurion proclaimed..." and then, in a separate line of code, types `date(1948, 5, 15)`. The quote says the 14th; the code says the 15th. Nothing connects them — the quote sits in a string, the date sits in a constructor, and the proof runs without complaint. This happens because LLMs frequently make small transcription errors with numbers, dates, and quantities.

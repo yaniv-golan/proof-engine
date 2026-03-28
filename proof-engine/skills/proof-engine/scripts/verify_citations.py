@@ -91,7 +91,11 @@ def normalize_text(text: str) -> str:
     Steps performed IN ORDER (this sequence matters):
       1. Unicode normalization — NFKC + character substitution registry
          (en-dashes → hyphens, curly quotes → straight, ˚ → °, etc.)
+      1.5. Strip inline reference elements — <sup>[N]</sup>, <sup><a>N</a></sup>,
+           <a class="xref">[N,M]</a> (common in academic HTML like PMC)
       2. Strip HTML tags  — handles inline markup like <span>...</span>
+      2.5. Strip orphaned reference markers [N] — ONLY if academic refs
+           were detected in step 1.5 (avoids false positives in non-academic text)
       3. Remove spaces before punctuation — fixes "Ben-Gurion ," artifacts
       4. Collapse whitespace — multiple spaces become one
       5. Lowercase — case-insensitive matching
@@ -102,8 +106,20 @@ def normalize_text(text: str) -> str:
     """
     # 1. Unicode normalization (handles en-dashes, curly quotes, degree symbols, etc.)
     text = normalize_unicode(text)
+    # 1.5. Strip inline reference elements (common in academic HTML)
+    _had_academic_refs = False
+    text, n1 = re.subn(
+        r'<sup[^>]*>\s*(?:<a[^>]*>)?\s*\[?\d+(?:[,\-\u2013]\d+)*\]?\s*(?:</a>)?\s*</sup>',
+        '', text, flags=re.IGNORECASE)
+    text, n2 = re.subn(
+        r'<a[^>]*class="[^"]*xref[^"]*"[^>]*>\s*\[?\d+(?:[,\-\u2013]\d+)*\]?\s*</a>',
+        '', text, flags=re.IGNORECASE)
+    _had_academic_refs = (n1 + n2) > 0
     # 2. Strip HTML tags
     text = re.sub(r'<[^>]+>', ' ', text)
+    # 2.5. Strip orphaned reference markers — ONLY in academic HTML
+    if _had_academic_refs:
+        text = re.sub(r'\[\d+(?:[,\-\u2013]\d+)*\]', '', text)
     # 3. Remove spaces before punctuation
     text = re.sub(r'\s+([,.:;!?\)\]])', r'\1', text)
     # 4. Collapse whitespace
@@ -494,6 +510,71 @@ def verify_data_values(url: str, data_values: dict, fact_id: str,
             print(f"  [✓] {fact_id}.{key}: '{val_str}' found on page [{fetch_mode}]")
         else:
             print(f"  [✗] {fact_id}.{key}: '{val_str}' NOT found on page [{fetch_mode}]")
+
+    return results
+
+
+def verify_search_registry(search_registry: dict, timeout: int = 15) -> dict:
+    """Verify that search_url endpoints in a search registry are accessible.
+
+    For absence-of-evidence proofs. Checks each search_url with HTTP GET.
+    Does NOT verify result counts — those are author-reported.
+
+    Returns dict of {key: {"status": str, "credibility": dict, "fetch_mode": str}}
+    where status is "accessible" (200), "known" (403/451), or "unreachable".
+    """
+    # assess_credibility is already imported at module level with try/except fallback
+    results = {}
+    for key, entry in search_registry.items():
+        search_url = entry.get("search_url", entry["url"])
+        credibility = assess_credibility(entry["url"])
+
+        if requests is None:
+            results[key] = {
+                "status": "unreachable",
+                "credibility": credibility,
+                "fetch_mode": "none",
+                "message": "requests library not available",
+            }
+            continue
+
+        try:
+            resp = requests.get(
+                search_url,
+                timeout=timeout,
+                headers={"User-Agent": "proof-engine/citation-verifier"},
+                allow_redirects=True,
+            )
+            resp.raise_for_status()
+            results[key] = {
+                "status": "accessible",
+                "credibility": credibility,
+                "fetch_mode": "live",
+            }
+        except requests.exceptions.HTTPError as e:
+            status_code = getattr(getattr(e, "response", None), "status_code", None)
+            if status_code in (403, 451):
+                results[key] = {
+                    "status": "known",
+                    "credibility": credibility,
+                    "fetch_mode": "live",
+                    "message": f"HTTP {status_code}",
+                }
+            else:
+                results[key] = {
+                    "status": "unreachable",
+                    "credibility": credibility,
+                    "fetch_mode": "live",
+                    "message": str(e),
+                }
+        except (requests.exceptions.ConnectionError,
+                requests.exceptions.Timeout) as e:
+            results[key] = {
+                "status": "unreachable",
+                "credibility": credibility,
+                "fetch_mode": "live",
+                "message": str(e),
+            }
 
     return results
 

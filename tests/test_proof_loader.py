@@ -111,3 +111,21 @@ def test_load_proof_citation_count_empirical(proof_dir):
 def test_load_proof_citation_count_pure_math(proof_dir):
     proof = load_proof(proof_dir / "test-claim")
     assert proof["citation_count"] is None
+
+
+def test_load_proof_search_count(proof_dir):
+    """Absence proof with search_registry should have search_count."""
+    data = json.loads((proof_dir / "test-claim" / "proof.json").read_text())
+    data["search_registry"] = {
+        "search_a": {"database": "PubMed", "verification": {"status": "accessible"}},
+        "search_b": {"database": "Cochrane", "verification": {"status": "accessible"}},
+    }
+    (proof_dir / "test-claim" / "proof.json").write_text(json.dumps(data))
+    proof = load_proof(proof_dir / "test-claim")
+    assert proof["search_count"] == 2
+
+
+def test_load_proof_no_search_registry(proof_dir):
+    """Proof without search_registry should have search_count None."""
+    proof = load_proof(proof_dir / "test-claim")
+    assert proof["search_count"] is None

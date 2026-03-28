@@ -23,14 +23,14 @@ LLMs have two weaknesses that make them unreliable for factual claims: they hall
 - **Optionally offline-reproducible** — embedded page snapshots let proofs run without network access
 - **Multi-mode verification** — live fetch, embedded snapshots, Wayback Machine archive, and PDF support
 
-The skill produces three outputs: a re-runnable `proof.py` script, a reader-facing `proof.md` summary with verdict, and a `proof_audit.md` with full verification details. Verdicts: PROVED, DISPROVED, PARTIALLY VERIFIED, UNDETERMINED, PROVED with unverified citations, or DISPROVED with unverified citations.
+The skill produces three outputs: a re-runnable `proof.py` script, a reader-facing `proof.md` summary with verdict, and a `proof_audit.md` with full verification details. Verdicts: PROVED, SUPPORTED, DISPROVED, PARTIALLY VERIFIED, UNDETERMINED, or qualified variants with unverified citations.
 
 ## Installation
 
 ### Claude Desktop
 
 1. Click **Customize** in the sidebar
-2. Click **Browse Plugins**
+2. Click **Browse Skills**
 3. Go to the **Personal** tab and click **+**
 4. Choose **Add marketplace** 
 5. Type `yaniv-golan/proof-engine` and click **Sync**
