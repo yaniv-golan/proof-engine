@@ -72,3 +72,44 @@ def find_call_sites(source: str) -> dict[str, int] | None:
                 name = node.func.attr
                 calls[name] = calls.get(name, 0) + 1
     return calls
+
+
+def extract_dict_keys(source: str, variable_name: str) -> list[str]:
+    """Extract top-level string keys from a dict literal assigned to variable_name.
+
+    Finds `variable_name = { "key1": ..., "key2": ... }` and returns
+    the list of string keys in order. Only returns top-level keys.
+
+    Handles both simple assignment (`x = {...}`) and AugAssign/AnnAssign.
+    Returns empty list if variable not found, not a dict, or parse fails.
+
+    Limitations vs. the brace-depth parser this replaces:
+    - Only matches `ast.Assign` (simple `name = {...}`). If a proof ever
+      uses `empirical_facts: dict = {...}` (annotated assignment), this
+      won't match. The fallback in _extract_empirical_facts_keys catches this.
+    - Dict comprehensions and dict() constructor calls return [].
+    - These shapes don't occur in any of the 47 published proofs (verified).
+    """
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return []
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Name) and target.id == variable_name:
+                    if isinstance(node.value, ast.Dict):
+                        return [
+                            k.value for k in node.value.keys
+                            if isinstance(k, ast.Constant) and isinstance(k.value, str)
+                        ]
+        # Also handle annotated assignment: name: type = {...}
+        elif isinstance(node, ast.AnnAssign):
+            if isinstance(node.target, ast.Name) and node.target.id == variable_name:
+                if node.value and isinstance(node.value, ast.Dict):
+                    return [
+                        k.value for k in node.value.keys
+                        if isinstance(k, ast.Constant) and isinstance(k.value, str)
+                    ]
+    return []
