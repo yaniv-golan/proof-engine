@@ -23,7 +23,7 @@ jobs:
           mkdir -p dist
           cp -r proof-engine/skills/proof-engine dist/proof-engine
           find dist/proof-engine -name '*.md' -exec sed -i 's|\${CLAUDE_SKILL_DIR}/||g' {} +
-          sed -i "s/__PROOF_ENGINE_VERSION__/${{ steps.version.outputs.version }}/g" dist/proof-engine/references/proof-templates.md
+          sed -i 's/"version": "[^"]*"/"version": "${{ steps.version.outputs.version }}"/g' dist/proof-engine/references/proof-templates.md
           cd dist && zip -r ../proof-engine.zip proof-engine/
 
       - name: Extract release notes from CHANGELOG.md
