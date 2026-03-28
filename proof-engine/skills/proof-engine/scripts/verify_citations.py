@@ -514,6 +514,71 @@ def verify_data_values(url: str, data_values: dict, fact_id: str,
     return results
 
 
+def verify_search_registry(search_registry: dict, timeout: int = 15) -> dict:
+    """Verify that search_url endpoints in a search registry are accessible.
+
+    For absence-of-evidence proofs. Checks each search_url with HTTP GET.
+    Does NOT verify result counts — those are author-reported.
+
+    Returns dict of {key: {"status": str, "credibility": dict, "fetch_mode": str}}
+    where status is "accessible" (200), "known" (403/451), or "unreachable".
+    """
+    # assess_credibility is already imported at module level with try/except fallback
+    results = {}
+    for key, entry in search_registry.items():
+        search_url = entry.get("search_url", entry["url"])
+        credibility = assess_credibility(entry["url"])
+
+        if requests is None:
+            results[key] = {
+                "status": "unreachable",
+                "credibility": credibility,
+                "fetch_mode": "none",
+                "message": "requests library not available",
+            }
+            continue
+
+        try:
+            resp = requests.get(
+                search_url,
+                timeout=timeout,
+                headers={"User-Agent": "proof-engine/citation-verifier"},
+                allow_redirects=True,
+            )
+            resp.raise_for_status()
+            results[key] = {
+                "status": "accessible",
+                "credibility": credibility,
+                "fetch_mode": "live",
+            }
+        except requests.exceptions.HTTPError as e:
+            status_code = getattr(getattr(e, "response", None), "status_code", None)
+            if status_code in (403, 451):
+                results[key] = {
+                    "status": "known",
+                    "credibility": credibility,
+                    "fetch_mode": "live",
+                    "message": f"HTTP {status_code}",
+                }
+            else:
+                results[key] = {
+                    "status": "unreachable",
+                    "credibility": credibility,
+                    "fetch_mode": "live",
+                    "message": str(e),
+                }
+        except (requests.exceptions.ConnectionError,
+                requests.exceptions.Timeout) as e:
+            results[key] = {
+                "status": "unreachable",
+                "credibility": credibility,
+                "fetch_mode": "live",
+                "message": str(e),
+            }
+
+    return results
+
+
 def build_citation_detail(fact_registry: dict, citation_results: dict,
                           empirical_facts: dict) -> dict:
     """Build the citation_detail dict for the JSON summary.
