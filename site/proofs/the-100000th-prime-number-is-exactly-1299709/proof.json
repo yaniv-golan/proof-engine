@@ -1,0 +1,94 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "100000th prime via Sieve of Eratosthenes",
+      "method": "Sieve of Eratosthenes up to upper bound, extract 100000th prime",
+      "result": "1299709"
+    },
+    "A2": {
+      "label": "Prime-counting function \u03c0(1299709) equals 100000",
+      "method": "Independent sieve counting all primes \u2264 1299709",
+      "result": "100000"
+    },
+    "A3": {
+      "label": "1299709 is prime (trial division)",
+      "method": "Trial division testing all factors up to \u221a1299709",
+      "result": "True"
+    },
+    "A4": {
+      "label": "\u03c0(1299708) equals 99999 (confirms no prime between)",
+      "method": "Independent sieve counting all primes \u2264 1299708",
+      "result": "99999"
+    }
+  },
+  "claim_formal": {
+    "subject": "the 100000th prime number",
+    "property": "value of the 100000th prime in the sequence of primes (2, 3, 5, 7, 11, ...)",
+    "operator": "==",
+    "operator_note": "'exactly' means strict equality. The 100000th prime must be precisely 1299709. Primes are indexed starting at p(1)=2, p(2)=3, etc. \u2014 the standard convention.",
+    "threshold": 1299709
+  },
+  "claim_natural": "The 100000th prime number is exactly 1299709.",
+  "cross_checks": [
+    {
+      "description": "Sieve nth-prime vs \u03c0(1299709) counting",
+      "values_compared": [
+        "1299709",
+        "\u03c0(1299709)=100000"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Trial division confirms 1299709 is prime",
+      "values_compared": [
+        "is_prime(1299709)",
+        "True"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "\u03c0(1299708)=99999 confirms 1299709 is the boundary",
+      "values_compared": [
+        "\u03c0(1299708)=99999",
+        "99999"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Could the indexing convention differ (0-based vs 1-based)?",
+      "verification_performed": "Checked standard mathematical convention: p(1)=2, p(2)=3, p(3)=5, ... The claim uses 'the 100000th prime' which in standard notation is p(100000). Verified sieve starts counting at p(1)=2.",
+      "finding": "Sieve uses 1-based indexing (first prime counted is 2). Matches claim convention.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is 1 sometimes counted as a prime, shifting the index?",
+      "verification_performed": "Historically, 1 was sometimes considered prime, but modern convention (post-1800s) excludes 1. The sieve starts from 2. If 1 were included, p(100000) would be p(99999) in modern convention. Verified that the claim uses modern convention.",
+      "finding": "Modern convention excludes 1 as prime. Both sieve and claim use this convention.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could there be an off-by-one error in the sieve or counting?",
+      "verification_performed": "Verified sieve against known small primes: p(1)=2, p(10)=29, p(100)=541, p(1000)=7919. Additionally, the independent \u03c0(x) counting function provides a structural cross-check: \u03c0(1299709)=100000 and \u03c0(1299708)=99999 together confirm 1299709 is the exact 100000th prime.",
+      "finding": "Small-case verification and \u03c0(x) boundary check rule out off-by-one errors.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
+    "primary_result": 1299709,
+    "threshold": 1299709,
+    "operator": "==",
+    "claim_holds": true,
+    "pi_1299709": 100000,
+    "pi_1299708": 99999,
+    "is_prime_1299709": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Newtonian derivation: acceleration = g, independent of mass",
+      "method": "Symbolic algebra (sympy): a = F/m = mg/m = g for any mass m",
+      "result": "a1 == a2 == g (acceleration independent of mass)"
+    },
+    "B1": {
+      "key": "source_a",
+      "label": "NASA Glenn: all objects free fall with same acceleration"
+    },
+    "B2": {
+      "key": "source_b",
+      "label": "NASA Science: Apollo 15 hammer-feather drop"
+    },
+    "B3": {
+      "key": "source_c",
+      "label": "Wikipedia: Weak Equivalence Principle"
+    }
+  },
+  "claim_formal": {
+    "subject": "Objects of different mass in a perfect vacuum (no air resistance)",
+    "property": "Whether heavier objects have greater gravitational acceleration than lighter objects",
+    "operator": ">=",
+    "operator_note": "The claim asserts that heavier objects fall faster, meaning their acceleration due to gravity would be greater than that of lighter objects. We interpret 'fall faster' as 'have greater free-fall acceleration.' In Newtonian mechanics, F = mg and a = F/m = g, so acceleration is independent of mass. The claim requires a_heavy > a_light, but physics shows a_heavy == a_light == g. This is a disproof: we seek >= 3 authoritative sources confirming that all objects fall at the same rate in a vacuum regardless of mass.",
+    "threshold": 3,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "Heavier objects fall faster than lighter objects even in a perfect vacuum.",
+  "citations": {
+    "B1": {
+      "source_key": "source_a",
+      "source_name": "NASA Glenn Research Center",
+      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/free-fall-without-air-resistance/",
+      "quote": "So all objects, regardless of size or shape or weight, free fall with the same acceleration.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nasa.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B2": {
+      "source_key": "source_b",
+      "source_name": "NASA Science",
+      "url": "https://science.nasa.gov/resource/the-apollo-15-hammer-feather-drop/",
+      "quote": "Because they were essentially in a vacuum, there was no air resistance and the feather fell at the same rate as the hammer",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nasa.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B3": {
+      "source_key": "source_c",
+      "source_name": "Wikipedia: Equivalence Principle",
+      "url": "https://en.wikipedia.org/wiki/Equivalence_principle",
+      "quote": "in a gravitational field the acceleration of a test particle is independent of its properties, including its rest mass",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "So all objects, regardless of size or shape or weight, free fall with the same a"
+    },
+    "B2": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "Because they were essentially in a vacuum, there was no air resistance and the f"
+    },
+    "B3": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "in a gravitational field the acceleration of a test particle is independent of i"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Mathematical derivation (Type A) independently confirms empirical sources (Type B)",
+      "math_result": "a = g for all masses (sympy symbolic simplification)",
+      "n_sources_consulted": 3,
+      "n_sources_verified": 3,
+      "sources": {
+        "source_a": "verified",
+        "source_b": "verified",
+        "source_c": "verified"
+      },
+      "independence_note": "Type A derivation uses only Newton's laws (no external sources). Type B sources are from independent institutions: NASA Glenn Research Center, NASA Science (Apollo 15 mission data), and Wikipedia (summarizing Einstein's equivalence principle). The mathematical proof and empirical evidence are fully independent lines of reasoning."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is there any credible scientific evidence that heavier objects fall faster in a vacuum?",
+      "verification_performed": "Searched 'heavier objects fall faster vacuum gravitational attraction evidence'. All results (Physics Forums, NASA, University of Illinois, UCSB ScienceLine, Britannica) unanimously confirm objects fall at the same rate in a vacuum.",
+      "finding": "No credible scientific source supports the claim. The only nuance found is the two-body problem: a heavier object attracts the Earth slightly more (reducing the distance faster), but this effect is negligible (~10^-25 for everyday objects) and does not contradict the equivalence principle. All standard physics references state that in a uniform gravitational field, acceleration is independent of mass.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Did Aristotle's theory (heavier objects fall faster) have any experimental support?",
+      "verification_performed": "Searched 'Aristotle heavier objects fall faster disproved Galileo'. Aristotle's claim was based on everyday observation with air resistance, not vacuum conditions. Galileo's experiments (c. 1590) and the Apollo 15 demonstration (1971) definitively disproved it in vacuum conditions.",
+      "finding": "Aristotle's theory was based on observations in air (where drag affects lighter objects more) and was never validated for vacuum conditions. It has been thoroughly disproved by experiment.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n_confirmed": 3,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": true,
+    "math_derivation": "a = g (mass cancels in F=ma=mg)"
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

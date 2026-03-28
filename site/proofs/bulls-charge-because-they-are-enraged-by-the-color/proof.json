@@ -1,0 +1,146 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "source_a",
+      "label": "Peer-reviewed study: cattle have dichromatic vision (two cone types, no red receptor)"
+    },
+    "B2": {
+      "key": "source_b",
+      "label": "University science Q&A: red does not make bulls angry, they lack red retina receptor"
+    },
+    "B3": {
+      "key": "source_c",
+      "label": "Science publication: bulls respond to movement of cape, not its color"
+    },
+    "A1": {
+      "label": "Verified source count meeting disproof threshold",
+      "method": "count(verified citations) = 3",
+      "result": "3"
+    }
+  },
+  "claim_formal": {
+    "subject": "Bulls (Bos taurus, particularly fighting bulls)",
+    "property": "Whether charging behavior is caused by rage triggered by the color red",
+    "operator": ">=",
+    "operator_note": "This is a causal claim with two components: (1) bulls perceive and are enraged by red, and (2) this rage causes their charging behavior. Scientific evidence shows cattle are dichromatic and cannot distinguish red from green, and that movement \u2014 not color \u2014 triggers charging. We disprove by finding >= 3 independent authoritative sources that reject the claim. The threshold of 3 reflects strong scientific consensus.",
+    "threshold": 3,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "Bulls charge because they are enraged by the color red.",
+  "citations": {
+    "B1": {
+      "source_key": "source_a",
+      "source_name": "Jacobs et al. 1998, Visual Neuroscience (PubMed)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9685209/",
+      "quote": "Electroretinogram (ERG) flicker photometry was used to measure the spectral properties of cones in three common ungulates-cattle (Bos taurus), goats (Capra hircus), and sheep (Ovis aries). Two cone mechanisms were identified in each species.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B2": {
+      "source_key": "source_b",
+      "source_name": "West Texas A&M University \u2014 Science Questions with Surprising Answers",
+      "url": "https://www.wtamu.edu/~cbaird/sq/2012/12/12/what-is-it-about-red-that-makes-bulls-so-angry/",
+      "quote": "The color red does not make bulls angry. Cattle lack the red retina receptor and can only see yellow, green, blue, and violet colors.",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wtamu.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    },
+    "B3": {
+      "source_key": "source_c",
+      "source_name": "ScienceABC \u2014 Do Bulls Really Hate the Color Red?",
+      "url": "https://www.scienceabc.com/nature/animals/do-bulls-really-hate-red-colour-blind.html",
+      "quote": "It's not the color, but rather the movement of the cape and the bullfighter that makes bulls so angry.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "scienceabc.com",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "Electroretinogram (ERG) flicker photometry was used to measure the spectral prop"
+    },
+    "B2": {
+      "value": "partial",
+      "value_in_quote": true,
+      "quote_snippet": "The color red does not make bulls angry. Cattle lack the red retina receptor and"
+    },
+    "B3": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "It's not the color, but rather the movement of the cape and the bullfighter that"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Multiple independent sources consulted from different domains",
+      "n_sources_consulted": 3,
+      "n_sources_verified": 3,
+      "sources": {
+        "source_a": "verified",
+        "source_b": "partial",
+        "source_c": "verified"
+      },
+      "independence_note": "Source A is a peer-reviewed neuroscience paper (Jacobs et al. 1998, Visual Neuroscience). Source B is a university physics department Q&A (West Texas A&M). Source C is a science education publication (ScienceABC). These represent independent publications from different institutions and domains (primary research, academic outreach, science journalism)."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is there any scientific study showing bulls can perceive red or are trichromatic?",
+      "verification_performed": "Searched for 'cattle trichromatic vision' and 'bulls see red color scientific evidence'. All results confirm cattle are dichromatic with two cone types (S-cone ~444-455nm, M/L-cone ~552-555nm). No peer-reviewed study was found claiming cattle have a red cone receptor or trichromatic vision.",
+      "finding": "No credible source supports cattle having red color perception. Jacobs et al. (1998) is the definitive photopigment study.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there any experimental evidence that red specifically triggers aggression in bulls more than other colors?",
+      "verification_performed": "Searched for 'bulls actually do see red color evidence support myth true'. Found MythBusters (Discovery Channel, 2007) ran controlled experiments: (1) stationary red, blue, and white flags received equal attacks; (2) a moving blue flag was charged while a stationary red flag was ignored; (3) a motionless person in red was ignored while moving bullfighters were charged. No source was found showing red triggers more aggression than other colors.",
+      "finding": "All experimental evidence confirms movement, not color, triggers charging. No counter-evidence found.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the traditional use of red capes indicate that matadors observed a real color preference?",
+      "verification_performed": "Searched for 'why matadors use red cape history bullfighting muleta'. Multiple sources explain the red muleta is used in the final stage (tercio de muerte) to mask blood splatters from the audience. The earlier stages use a larger magenta-and-yellow capote. The color choice is for human spectators, not the bull.",
+      "finding": "Red cape tradition is for masking blood from audience, not based on bull color preference.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED (with unverified citations)",
+  "key_results": {
+    "n_confirmed": 3,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

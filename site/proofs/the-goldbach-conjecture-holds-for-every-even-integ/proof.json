@@ -1,0 +1,72 @@
+{
+  "claim_natural": "The Goldbach conjecture holds for every even integer greater than 2.",
+  "claim_formal": {
+    "subject": "Goldbach conjecture",
+    "property": "counterexamples in range [4, 10^6]",
+    "operator": "==",
+    "threshold": 0,
+    "claim_type": "open_problem",
+    "operator_note": "The Goldbach conjecture asserts that every even integer > 2 is the sum of two primes. This is an unresolved conjecture \u2014 no proof or disproof exists as of 2026. Computational verification up to a finite bound provides evidence but cannot prove the claim for all even integers. The literature records verification up to 4 x 10^18 (Oliveira e Silva, 2013). Our script verifies up to 10^6 with two independent methods. Verdict is always UNDETERMINED regardless of computational outcome."
+  },
+  "fact_registry": {
+    "A1": {
+      "label": "Primary check: counterexamples in [4, 10^6] via trial division",
+      "type": "A",
+      "key": "primary_check",
+      "method": "goldbach_trial_division() \u2014 isprime() per candidate",
+      "result": "0 counterexamples in [4, 1000000]"
+    },
+    "A2": {
+      "label": "Cross-check: counterexamples in [4, 10^6] via prime-pair sieve",
+      "type": "A",
+      "key": "cross_check",
+      "method": "goldbach_prime_sieve() \u2014 primerange sieve + set lookup",
+      "result": "0 counterexamples in [4, 1000000]"
+    }
+  },
+  "citations": {},
+  "extractions": {},
+  "cross_checks": [
+    {
+      "description": "Trial division vs prime sieve methods",
+      "value_a": 0,
+      "value_b": 0,
+      "agree": true,
+      "independence": "Mathematically independent: Method 1 uses per-number isprime() calls; Method 2 pre-generates a prime set via sieve and uses set membership. Different algorithms, different data structures."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Has any counterexample to Goldbach's conjecture ever been found?",
+      "verification_performed": "Searched: 'Goldbach conjecture counterexample found disproved'. Reviewed Wikipedia, Physics Forums, Medium articles, and LessWrong. No counterexample has ever been reported.",
+      "finding": "No counterexample exists in the literature or computational records.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Has the Goldbach conjecture been formally proved or disproved?",
+      "verification_performed": "Searched: 'Goldbach conjecture proof solved 2024 2025 2026'. Found several claimed proofs in non-peer-reviewed venues (SSRN, SCIRP, preprints.org, ScienceOpen) but none accepted by the mainstream mathematical community. The conjecture remains open as of March 2026.",
+      "finding": "No universally accepted proof or disproof exists. The conjecture is listed as an open problem by all major references.",
+      "breaks_proof": false
+    },
+    {
+      "question": "What is the current computational verification bound?",
+      "verification_performed": "Searched: 'Goldbach conjecture verified computational bound 2026'. Oliveira e Silva verified up to 4 x 10^18 (2013). The Gridbach project (2025) extended this further. A March 2025 preprint reports empirical verification beyond 4 quintillion.",
+      "finding": "Verified computationally up to at least 4 x 10^18. Our 10^6 bound is far below the literature record but uses two independent methods.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "UNDETERMINED",
+  "verdict_reason": "No counterexamples found up to 1000000 by two independent methods. However, this is a universal conjecture over infinitely many even integers. Computational verification of a finite range cannot constitute a proof. The Goldbach conjecture remains an open problem.",
+  "key_results": {
+    "verified_up_to": 1000000,
+    "counterexamples_found": 0,
+    "methods_agree": true,
+    "literature_bound": "4 x 10^18 (Oliveira e Silva, 2013)"
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

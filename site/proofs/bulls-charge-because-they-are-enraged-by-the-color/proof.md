@@ -1,0 +1,57 @@
+# Proof: Bulls charge because they are enraged by the color red.
+
+- Generated: 2026-03-28
+- Verdict: **DISPROVED (with unverified citations)**
+- Audit trail: [proof_audit.md](proof_audit.md) | [proof.py](proof.py)
+
+## Key Findings
+
+- Cattle (including bulls) are **dichromatic** — they have only two types of cone cells (S-cone ~444-455 nm, M/L-cone ~552-555 nm) and **lack a red photoreceptor** entirely (B1).
+- A university science resource states directly: "The color red does not make bulls angry. Cattle lack the red retina receptor" (B2).
+- Bulls respond to the **movement** of the cape and bullfighter, not its color (B3). Controlled experiments (MythBusters, 2007) confirmed bulls charge moving objects regardless of color.
+- The red muleta cape is used in bullfighting's final stage to **mask blood** from the audience, not to provoke the bull.
+
+## Claim Interpretation
+
+**Natural language claim:** "Bulls charge because they are enraged by the color red."
+
+**Formal interpretation:** This is a compound causal claim asserting that (1) bulls perceive and are specifically enraged by the color red, and (2) this red-triggered rage causes their charging behavior. The claim is disproved if >= 3 independent authoritative sources reject it. The threshold of 3 reflects that this is a well-studied topic with strong scientific consensus against the claim.
+
+## Evidence Summary
+
+| ID | Fact | Verified |
+|----|------|----------|
+| B1 | Peer-reviewed study: cattle have dichromatic vision (two cone types, no red receptor) | Yes |
+| B2 | University science Q&A: red does not make bulls angry, they lack red retina receptor | Partial (aggressive normalization match) |
+| B3 | Science publication: bulls respond to movement of cape, not its color | Yes |
+| A1 | Verified source count meeting disproof threshold | Computed: 3 sources confirmed against threshold of 3 |
+
+## Proof Logic
+
+The claim that bulls charge because they are enraged by red fails on two independent scientific grounds:
+
+**1. Bulls cannot distinguish red.** Jacobs et al. (1998) used electroretinogram flicker photometry to characterize cattle cone photopigments, finding only two cone mechanisms — an S-cone at ~444-455 nm and an M/L-cone at ~552-555 nm (B1). This dichromatic vision means cattle are physiologically incapable of perceiving red as a distinct color, similar to human protanopia (red-cone color blindness). Without a red receptor, "enraged by the color red" has no biological basis.
+
+**2. Movement, not color, triggers charging.** West Texas A&M University confirms that "the color red does not make bulls angry" and that "cattle lack the red retina receptor" (B2). ScienceABC explains that "it's not the color, but rather the movement of the cape and the bullfighter that makes bulls so angry" (B3). The MythBusters experiments (2007) provided controlled demonstration: stationary flags of any color received equal attention, while moving objects were preferentially charged regardless of color.
+
+Three independent sources from different domains (peer-reviewed neuroscience, university science outreach, science journalism) all reject the claim.
+
+## Counter-Evidence Search
+
+1. **Can bulls perceive red?** Searched for any scientific study showing cattle are trichromatic or have red cone receptors. All results confirm dichromatic vision. No counter-evidence found.
+
+2. **Does red trigger more aggression?** Searched for experimental evidence that red specifically triggers bull aggression. MythBusters controlled experiments showed no color preference — bulls charged moving objects of any color equally. No counter-evidence found.
+
+3. **Does the matador tradition indicate a real color preference?** The red muleta is used in the final stage (tercio de muerte) to mask blood splatters from the audience. Earlier stages use a magenta-and-yellow capote. The color choice serves human spectators, not the bull.
+
+## Conclusion
+
+**DISPROVED (with unverified citations).** The claim that bulls charge because they are enraged by the color red is false. Cattle lack red photoreceptors entirely (B1) and cannot distinguish red from other colors. Their charging behavior is triggered by movement, not color (B2, B3). Three independent sources from different domains unanimously reject the claim.
+
+One citation (B2, West Texas A&M University) was verified via aggressive normalization rather than full quote match. However, B1 (peer-reviewed, fully verified) independently establishes that cattle lack red vision, and B3 (fully verified) independently establishes that movement triggers charging. The disproof does not depend solely on the partially verified source.
+
+Note: 1 citation (B3) comes from an unclassified source (scienceabc.com, Tier 2). However, its claim about movement triggering charges is independently confirmed by the Tier 5 and Tier 4 sources, as well as by the MythBusters experimental results documented in the adversarial checks.
+
+---
+
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v0.10.0 on 2026-03-28.

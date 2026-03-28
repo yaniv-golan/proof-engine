@@ -1,0 +1,135 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "doe_source",
+      "label": "U.S. DOE: beam lifetime 887.7 +/- 2.2 s, bottle lifetime 878.5 +/- 0.8 s"
+    },
+    "B2": {
+      "key": "quanta_source",
+      "label": "Quanta Magazine: beam ~14 min 48 s, bottle ~14 min 39 s, gap ~9 s"
+    },
+    "A1": {
+      "label": "Computed difference (beam - bottle) from DOE values",
+      "method": "explain_calc('beam_lifetime - bottle_lifetime')",
+      "result": "9.200000000000045 s"
+    },
+    "A2": {
+      "label": "Computed difference (beam - bottle) from Quanta values",
+      "method": "Quanta Magazine reported gap",
+      "result": "9.0 s (beam > bottle)"
+    },
+    "A3": {
+      "label": "Claim evaluation: is (beam - bottle) < -1.0?",
+      "method": "compare(difference, '<', -1.0)",
+      "result": "False"
+    }
+  },
+  "claim_formal": {
+    "subject": "neutron lifetime discrepancy between beam and bottle experiments",
+    "property": "difference defined as (beam lifetime) minus (bottle lifetime)",
+    "operator": "<",
+    "operator_note": "The claim asserts beam < bottle by more than 1 second. Formally: (beam_lifetime - bottle_lifetime) < -1.0. If the difference is positive (beam > bottle) or within [-1, 0], the claim is FALSE. We use the world-average values reported in the physics literature for each method.",
+    "threshold": -1.0,
+    "unit": "seconds"
+  },
+  "claim_natural": "The mean neutron lifetime measured in beam experiments is more than 1 second shorter than the lifetime obtained from ultracold-neutron bottle experiments.",
+  "citations": {
+    "B1": {
+      "source_key": "doe_source",
+      "source_name": "U.S. Department of Energy, Office of Science",
+      "url": "https://www.energy.gov/science/articles/mystery-neutron-lifetime",
+      "quote": "One method measures it as 887.7 seconds, plus or minus 2.2 seconds.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "energy.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B2": {
+      "source_key": "quanta_source",
+      "source_name": "Quanta Magazine",
+      "url": "https://www.quantamagazine.org/neutron-lifetime-puzzle-deepens-but-no-dark-matter-seen-20180213/",
+      "quote": "The gap between the world-average bottle and beam measurements has only grown slightly \u2014 to nine seconds",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "quantamagazine.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1_beam": {
+      "value": "887.7",
+      "value_in_quote": true,
+      "quote_snippet": "One method measures it as 887.7 seconds, plus or minus 2.2 seconds."
+    },
+    "B1_bottle": {
+      "value": "878.5",
+      "value_in_quote": true,
+      "quote_snippet": "Another method measures it as 878.5 seconds, plus or minus 0.8 second."
+    },
+    "B2_gap": {
+      "value": "9.0",
+      "value_in_quote": true,
+      "quote_snippet": "The gap between the world-average bottle and beam measurements has only grown sl"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "DOE computed difference vs Quanta reported gap",
+      "values_compared": [
+        "9.200000000000045",
+        "9.0"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Could the claim be using a non-standard definition where 'beam' refers to a different measurement technique?",
+      "verification_performed": "Searched web for 'neutron lifetime beam experiment definition method'. All sources consistently define beam experiments as measuring decay products (protons) from cold neutron beams, yielding ~887-888 s. Bottle experiments trap ultracold neutrons and count survivors, yielding ~878-879 s. No alternative definition found.",
+      "finding": "The two methods are universally defined consistently across all sources. Beam always gives the longer lifetime.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there any recent measurement where a beam experiment produced a shorter lifetime than the bottle average?",
+      "verification_performed": "Searched web for 'neutron lifetime beam experiment new result 2024 2025'. Checked PDG 2024 data. The most recent beam measurement is YUE 2013 at 887.7 +/- 1.2 s. No beam experiment has ever produced a result below the bottle average of ~878 s. The BL2 experiment at NIST is ongoing but has not published a result contradicting this.",
+      "finding": "No beam experiment result is shorter than the bottle average. The discrepancy has persisted since the 2000s with beam consistently higher.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could 'shorter' in the claim refer to something other than the numerical value (e.g., measurement duration)?",
+      "verification_performed": "Linguistic analysis of the claim. 'The mean neutron lifetime measured in beam experiments is more than 1 second shorter' unambiguously refers to the numerical value of the measured lifetime.",
+      "finding": "The claim clearly refers to the measured lifetime value, not the experiment duration. No alternative reading is plausible.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "beam_lifetime_s": 887.7,
+    "bottle_lifetime_s": 878.5,
+    "difference_beam_minus_bottle_s": 9.200000000000045,
+    "claim_threshold_s": -1.0,
+    "operator": "<",
+    "claim_holds": false,
+    "actual_direction": "beam is LONGER than bottle (opposite of claim)"
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

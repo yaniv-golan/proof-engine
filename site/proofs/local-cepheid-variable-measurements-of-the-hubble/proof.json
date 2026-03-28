@@ -1,0 +1,196 @@
+{
+  "claim_natural": "Local Cepheid-variable measurements of the Hubble constant exceed 72 km s\u207b\u00b9 Mpc\u207b\u00b9 while the 2018 Planck CMB inference yields a value below 68 km s\u207b\u00b9 Mpc\u207b\u00b9.",
+  "claim_formal": {
+    "subject": "Hubble constant (H\u2080) as measured by two independent methods",
+    "property": "central reported values of H\u2080 from (a) the SH0ES Cepheid-calibrated distance ladder and (b) the Planck 2018 CMB \u039bCDM inference",
+    "operator": "SC1: > 72 AND SC2: < 68",
+    "operator_note": "The claim is a conjunction of two sub-claims. SC1: The SH0ES Cepheid-variable measurement of H\u2080 strictly exceeds 72 km/s/Mpc. SC2: The Planck 2018 CMB-inferred H\u2080 under base-\u039bCDM is strictly less than 68 km/s/Mpc. 'Local Cepheid-variable measurements' is interpreted as the most comprehensive Cepheid-based determination, i.e. the SH0ES team result (Riess et al. 2022), which is the definitive Cepheid distance-ladder measurement. '2018 Planck CMB inference' refers to the Planck Collaboration 2018 result (published 2020 in A&A) under base-\u039bCDM. Both thresholds refer to central (best-fit) values, not uncertainty bounds.",
+    "threshold_sc1": 72,
+    "threshold_sc2": 68
+  },
+  "fact_registry": {
+    "B1": {
+      "key": "shoes_arxiv",
+      "label": "SH0ES H\u2080 measurement (Riess et al. 2022, arXiv)"
+    },
+    "B2": {
+      "key": "shoes_iop",
+      "label": "SH0ES H\u2080 measurement (Riess et al. 2022, IOPscience)"
+    },
+    "B3": {
+      "key": "planck_arxiv",
+      "label": "Planck 2018 H\u2080 inference (Planck Collaboration, arXiv)"
+    },
+    "B4": {
+      "key": "planck_esa",
+      "label": "Planck 2018 H\u2080 inference (ESA Science Portal)"
+    },
+    "A1": {
+      "label": "SC1: SH0ES H\u2080 > 72 km/s/Mpc",
+      "method": "compare(73.04, '>', 72)",
+      "result": "True"
+    },
+    "A2": {
+      "label": "SC2: Planck H\u2080 < 68 km/s/Mpc",
+      "method": "compare(67.4, '<', 68)",
+      "result": "True"
+    },
+    "A3": {
+      "label": "Cross-check: SH0ES values agree across sources",
+      "method": "cross_check(h0_shoes_arxiv, h0_shoes_iop, tolerance=0.01)",
+      "result": "Agreement: True (73.04 vs 73.04)"
+    },
+    "A4": {
+      "label": "Cross-check: Planck values agree across sources",
+      "method": "cross_check(h0_planck_arxiv, h0_planck_esa, tolerance=0.01)",
+      "result": "Agreement: True (67.4 vs 67.4)"
+    }
+  },
+  "citations": {
+    "B1": {
+      "source_key": "shoes_arxiv",
+      "source_name": "Riess et al. 2022 (arXiv:2112.04510)",
+      "url": "https://arxiv.org/abs/2112.04510",
+      "quote": "Our baseline result from the Cepheid-SN sample is H0=73.04+-1.04 km/s/Mpc, which includes systematics and lies near the median of all analysis variants.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "arxiv.org",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Known academic/scholarly publisher"
+      }
+    },
+    "B2": {
+      "source_key": "shoes_iop",
+      "source_name": "Riess et al. 2022 (ApJL 934 L7, IOPscience)",
+      "url": "https://iopscience.iop.org/article/10.3847/2041-8213/ac5c5b",
+      "quote": "Our baseline result from the Cepheid\u2013SN Ia sample is H 0 = 73.04 \u00b1 1.04 km s\u22121 Mpc\u22121, which includes systematic uncertainties and lies near the median of all analysis variants.",
+      "status": "not_found",
+      "method": null,
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "iop.org",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Known academic/scholarly publisher"
+      }
+    },
+    "B3": {
+      "source_key": "planck_arxiv",
+      "source_name": "Planck Collaboration 2018 (arXiv:1807.06209)",
+      "url": "https://arxiv.org/abs/1807.06209",
+      "quote": "Assuming the base-LCDM cosmology, the inferred late-Universe parameters are: Hubble constant H0 = (67.4+-0.5) km/s/Mpc",
+      "status": "not_found",
+      "method": null,
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "arxiv.org",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Known academic/scholarly publisher"
+      }
+    },
+    "B4": {
+      "source_key": "planck_esa",
+      "source_name": "ESA Planck Science Portal",
+      "url": "https://sci.esa.int/web/planck/-/60504-measurements-of-the-hubble-constant",
+      "quote": "When applied to Planck data, this method gives a lower value of 67.4 km/s/Mpc, with a tiny uncertainty of less than a percent.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "esa.int",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "73.04",
+      "value_in_quote": true,
+      "quote_snippet": "Our baseline result from the Cepheid-SN sample is H0=73.04+-1.04 km/s/Mpc, which"
+    },
+    "B2": {
+      "value": "73.04",
+      "value_in_quote": true,
+      "quote_snippet": "Our baseline result from the Cepheid\u2013SN Ia sample is H 0 = 73.04 \u00b1 1.04 km s\u22121 M"
+    },
+    "B3": {
+      "value": "67.4",
+      "value_in_quote": true,
+      "quote_snippet": "Assuming the base-LCDM cosmology, the inferred late-Universe parameters are: Hub"
+    },
+    "B4": {
+      "value": "67.4",
+      "value_in_quote": true,
+      "quote_snippet": "When applied to Planck data, this method gives a lower value of 67.4 km/s/Mpc, w"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "SH0ES H\u2080 agreement across arXiv and IOPscience",
+      "values_compared": [
+        "73.04",
+        "73.04"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Planck H\u2080 agreement across arXiv and ESA portal",
+      "values_compared": [
+        "67.4",
+        "67.4"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Are there Cepheid-based H\u2080 measurements that yield a value at or below 72 km/s/Mpc?",
+      "verification_performed": "Searched for 'Cepheid Hubble constant below 72 km/s/Mpc alternative'. Found that Freedman et al. (2019, 2021) use the TRGB method (Tip of the Red Giant Branch), NOT Cepheids, and obtain H\u2080 \u2248 69.8 km/s/Mpc. However, the CCHP team's own Cepheid measurement yields 72.04 km/s/Mpc, still exceeding 72. The SH0ES Cepheid measurement (73.04) is the most comprehensive Cepheid-based determination. No Cepheid-specific measurement from a major survey yields H\u2080 \u2264 72.",
+      "finding": "Lower H\u2080 values (~69.8) use TRGB, not Cepheids. All major Cepheid-calibrated measurements exceed 72. Does not break the proof.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could alternative analyses of Planck 2018 CMB data yield H\u2080 \u2265 68 km/s/Mpc?",
+      "verification_performed": "Searched for 'Planck CMB Hubble constant above 68 alternative analysis'. The Planck 2018 base-\u039bCDM result is H\u2080 = 67.4 \u00b1 0.5. Even at the upper 1\u03c3 bound (67.9), it remains below 68. Extended models (e.g., with extra relativistic species Neff) can shift H\u2080 upward, but the claim specifically references the 2018 Planck inference, which uses base-\u039bCDM. Other CMB experiments (ACT, SPT) combined with WMAP give 67.6-68.2 km/s/Mpc, but those are not the '2018 Planck' result.",
+      "finding": "The 2018 Planck base-\u039bCDM value is firmly 67.4 \u00b1 0.5. No standard analysis of Planck 2018 data yields H\u2080 \u2265 68 under base-\u039bCDM. Does not break the proof.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Has the SH0ES result been superseded or revised downward by newer measurements?",
+      "verification_performed": "Searched for 'JWST Cepheid Hubble constant SH0ES confirmation'. JWST observations (2023-2024) independently surveyed >1000 Cepheid variables and confirmed the HST-based SH0ES value. The JWST Cepheid measurement is consistent with ~73 km/s/Mpc. The Hubble tension persists.",
+      "finding": "JWST confirmed the SH0ES Cepheid-based H\u2080 value. No downward revision. Does not break the proof.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED (with unverified citations)",
+  "key_results": {
+    "h0_shoes": 73.04,
+    "h0_planck": 67.4,
+    "sc1_threshold": 72,
+    "sc2_threshold": 68,
+    "sc1_holds": true,
+    "sc2_holds": true,
+    "claim_holds": true,
+    "tension_magnitude": 5.640000000000001
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

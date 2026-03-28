@@ -1,0 +1,90 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "SC1 (Forward): a^2 + b^2 = c^2 implies angle C = 90 degrees via Law of Cosines",
+      "method": "Algebraic: substitute a^2+b^2=c^2 into Law of Cosines, derive cos(C)=0, conclude C=90",
+      "result": "True"
+    },
+    "A2": {
+      "label": "SC2 (Converse): angle C = 90 degrees implies a^2 + b^2 = c^2 via Law of Cosines",
+      "method": "Algebraic: substitute cos(90)=0 into Law of Cosines, derive c^2=a^2+b^2",
+      "result": "True"
+    },
+    "A3": {
+      "label": "Cross-check: numerical verification with random triangles",
+      "method": "Numerical: 10000 random triangles tested in both directions",
+      "result": "SC1 failures: 0, SC2 failures: 0"
+    },
+    "A4": {
+      "label": "Cross-check: symbolic verification using sympy",
+      "method": "Symbolic: sympy simplification of Law of Cosines substitution",
+      "result": "SC1 symbolic: True, SC2 symbolic: True"
+    }
+  },
+  "claim_formal": {
+    "subject": "Any triangle with sides a, b, c",
+    "property": "biconditional: (a^2 + b^2 = c^2) <=> (angle opposite c = 90 degrees)",
+    "operator": "==",
+    "operator_note": "This is a biconditional (if and only if) claim with two sub-claims: SC1 (Forward): a^2 + b^2 = c^2 implies angle C = 90 degrees. SC2 (Converse): angle C = 90 degrees implies a^2 + b^2 = c^2. Both directions are proved via the Law of Cosines: c^2 = a^2 + b^2 - 2ab*cos(C). The Law of Cosines is taken as an established theorem of Euclidean geometry. The proof is algebraic: substitution and simplification.",
+    "threshold": true
+  },
+  "claim_natural": "For any triangle with sides a, b, c where a^2 + b^2 = c^2, the angle opposite c is exactly 90 degrees, AND the converse also holds.",
+  "cross_checks": [
+    {
+      "description": "Numerical: random triangle verification (10,000 trials each direction)",
+      "values_compared": [
+        "SC1 failures: 0",
+        "SC2 failures: 0"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Symbolic: sympy verification of both directions",
+      "values_compared": [
+        "SC1 symbolic: True",
+        "SC2 symbolic: True"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does this proof depend on Euclidean geometry specifically?",
+      "verification_performed": "Analyzed whether the Law of Cosines holds in non-Euclidean geometries. In spherical and hyperbolic geometry, the Law of Cosines takes a different form. The Pythagorean theorem as stated (a^2 + b^2 = c^2) is specific to Euclidean geometry.",
+      "finding": "The claim is implicitly restricted to Euclidean geometry, which is the standard interpretation. The proof is valid in this context. In non-Euclidean geometries, the relationship between sides and angles differs, but the claim does not assert otherwise.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Are there degenerate triangles where the proof fails?",
+      "verification_performed": "Checked edge cases: (1) degenerate triangle where a + b = c (zero area), (2) triangle inequality violations, (3) zero-length sides. A degenerate 'triangle' with a + b = c has angle C = 180 deg and a^2 + b^2 < c^2 (by Cauchy-Schwarz), so it does not satisfy the hypothesis.",
+      "finding": "Degenerate cases do not satisfy a^2 + b^2 = c^2 with positive side lengths, so they are excluded from the hypothesis. The proof requires a, b, c > 0 and the triangle inequality, which are implicit in 'for any triangle.'",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is cos(C) = 0 sufficient to conclude C = 90 degrees?",
+      "verification_performed": "cos(C) = 0 has solutions C = 90 + 180*k degrees for integer k. In a triangle, interior angles satisfy 0 < C < 180 degrees. The only solution in this range is C = 90 degrees.",
+      "finding": "Within the valid range for triangle interior angles (0, 180), cos(C) = 0 uniquely determines C = 90 degrees. The step is valid.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the converse require any additional conditions beyond C = 90?",
+      "verification_performed": "Checked whether the converse direction assumes anything beyond C = 90 degrees. The substitution cos(90) = 0 into the Law of Cosines is direct and requires no additional conditions beyond the triangle being valid (positive sides, satisfying triangle inequality).",
+      "finding": "No additional conditions needed. The converse follows directly from cos(90) = 0 in the Law of Cosines.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
+    "sc1_forward_holds": true,
+    "sc2_converse_holds": true,
+    "numerical_cross_check_passed": true,
+    "symbolic_cross_check_passed": true,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

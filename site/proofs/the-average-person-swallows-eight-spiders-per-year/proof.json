@@ -1,0 +1,173 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "scientific_american",
+      "label": "Scientific American: spider-swallowing myth debunked"
+    },
+    "B2": {
+      "key": "burke_museum",
+      "label": "Burke Museum (arachnology dept): no formal record of spider ingestion"
+    },
+    "B3": {
+      "key": "britannica",
+      "label": "Britannica: we swallow no spiders at all"
+    },
+    "B4": {
+      "key": "sleep_foundation",
+      "label": "Sleep Foundation: no proof spiders crawl into mouths"
+    },
+    "A1": {
+      "label": "Verified source count meets disproof threshold",
+      "method": "count(verified citations) = 4",
+      "result": "4"
+    }
+  },
+  "claim_formal": {
+    "subject": "the average person",
+    "property": "number of spiders swallowed per year while sleeping",
+    "operator": ">=",
+    "operator_note": "The claim asserts a specific rate of 8 spiders/year. To disprove it, we seek authoritative sources confirming the claim is a myth with no scientific basis. Using the qualitative consensus disproof template: if >= 3 independent authoritative sources confirm the claim is false, verdict is DISPROVED. Threshold of 3 chosen because this is a widely-addressed myth with many authoritative sources available.",
+    "threshold": 3,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "The average person swallows eight spiders per year while sleeping.",
+  "citations": {
+    "B1": {
+      "source_key": "scientific_american",
+      "source_name": "Scientific American",
+      "url": "https://www.scientificamerican.com/article/fact-or-fiction-people-swallow-8-spiders-a-year-while-they-sleep1/",
+      "quote": "The myth flies in the face of both spider and human biology, which makes it highly unlikely that a spider would ever end up in your mouth.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "scientificamerican.com",
+        "source_type": "major_news",
+        "tier": 3,
+        "flags": [],
+        "note": "Major news organization"
+      }
+    },
+    "B2": {
+      "source_key": "burke_museum",
+      "source_name": "Burke Museum \u2014 Arachnology & Entomology",
+      "url": "https://www.burkemuseum.org/collections-and-research/biology/arachnology-and-entomology/spider-myths/myth-you-swallow-spiders",
+      "quote": "For a sleeping person to swallow even one live spider would involve so many highly unlikely circumstances that for practical purposes we can rule out the possibility.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "burkemuseum.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B3": {
+      "source_key": "britannica",
+      "source_name": "Encyclopaedia Britannica",
+      "url": "https://www.britannica.com/story/do-we-really-swallow-spiders-in-our-sleep",
+      "quote": "The reality, however, is quite different: we swallow no spiders at all.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "britannica.com",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B4": {
+      "source_key": "sleep_foundation",
+      "source_name": "Sleep Foundation",
+      "url": "https://www.sleepfoundation.org/sleep-faqs/how-many-spiders-do-you-eat-in-your-sleep",
+      "quote": "There is no proof that spiders crawl into people's mouths while they are sleeping.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "sleepfoundation.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "The myth flies in the face of both spider and human biology, which makes it high"
+    },
+    "B2": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "For a sleeping person to swallow even one live spider would involve so many high"
+    },
+    "B3": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "The reality, however, is quite different: we swallow no spiders at all."
+    },
+    "B4": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "There is no proof that spiders crawl into people's mouths while they are sleepin"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Multiple independent sources consulted",
+      "n_sources_consulted": 4,
+      "n_sources_verified": 4,
+      "sources": {
+        "scientific_american": "verified",
+        "burke_museum": "verified",
+        "britannica": "verified",
+        "sleep_foundation": "verified"
+      },
+      "independence_note": "Sources are from different institutions: Scientific American (science journalism), Burke Museum (academic museum / arachnology), Encyclopaedia Britannica (reference encyclopedia), and Sleep Foundation (health/sleep nonprofit). Each independently debunks the claim."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is there any scientific study that confirms people swallow spiders in their sleep?",
+      "verification_performed": "Searched for: 'swallow spiders sleep scientific study evidence confirmed'. Reviewed results from Scientific American, Burke Museum, Britannica, Sleep Foundation, HowStuffWorks, Discover Magazine, and ScienceDirect. Also found a ScienceDirect paper titled 'Believing that Humans Swallow Spiders in Their Sleep: False Beliefs as Side Effects of the Processes that Support Accurate Knowledge' \u2014 which studies the myth's persistence, not its truth.",
+      "finding": "No scientific study, medical record, or sleep research study has ever documented a case of a person swallowing a spider while sleeping. Every source found unanimously debunks the claim.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the claim have a legitimate scientific origin that was later misrepresented?",
+      "verification_performed": "Searched for the origin of the claim. Multiple sources (Snopes, Britannica, Scientific American) trace it to a 1993 PC Professional magazine column by Lisa Holst, who deliberately included it as an example of ridiculous 'facts' that people would uncritically believe. However, Snopes later noted that the Lisa Holst origin story itself may be apocryphal \u2014 the magazine article has never been independently located.",
+      "finding": "Regardless of whether the Lisa Holst origin is real, no legitimate scientific study has ever supported the claim. The origin is either a deliberate fabrication to illustrate gullibility, or an untraceable piece of folklore. Neither constitutes scientific evidence.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is it biologically plausible that spiders would enter a sleeping person's mouth?",
+      "verification_performed": "Reviewed entomological explanations from Scientific American and Burke Museum. Rod Crawford (Burke Museum arachnologist) and other experts explain that spiders are sensitive to vibrations from breathing, heartbeat, and snoring; sleeping humans are warm, moist, and create air currents \u2014 all things spiders avoid. Spiders have no biological incentive to enter a mouth.",
+      "finding": "Spider biology and behavior make it extremely unlikely a spider would approach a sleeping human's mouth. Vibrations, warmth, moisture, and air currents all deter spiders. Experts consider it practically impossible.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n_confirmed": 4,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

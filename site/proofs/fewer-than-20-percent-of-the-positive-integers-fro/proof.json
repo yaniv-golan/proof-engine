@@ -1,0 +1,66 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Prime count via Sieve of Eratosthenes",
+      "method": "Sieve of Eratosthenes",
+      "result": "168"
+    },
+    "A2": {
+      "label": "Prime count via trial division (independent cross-check)",
+      "method": "Trial division",
+      "result": "168"
+    },
+    "A3": {
+      "label": "Percentage of primes in [1, 1000]",
+      "method": "prime_count / 1000 * 100",
+      "result": "16.8%"
+    }
+  },
+  "claim_formal": {
+    "subject": "positive integers from 1 to 1000",
+    "property": "percentage that are prime",
+    "operator": "<",
+    "operator_note": "'Fewer than 20 percent' means the count of primes in [1, 1000] divided by 1000, multiplied by 100, must be strictly less than 20. Equivalently, the prime count must be strictly less than 200.",
+    "threshold": 20
+  },
+  "claim_natural": "Fewer than 20 percent of the positive integers from 1 to 1000 are prime.",
+  "cross_checks": [
+    {
+      "description": "Sieve of Eratosthenes vs trial division prime count",
+      "values_compared": [
+        "168",
+        "168"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Could the sieve or trial division have a bug that undercounts primes?",
+      "verification_performed": "Cross-checked two independent algorithms (Sieve of Eratosthenes and trial division). Both produce identical prime lists. Additionally, the result of 168 primes up to 1000 is a well-known value in number theory, denoted \u03c0(1000) = 168.",
+      "finding": "Both methods agree on 168 primes. This matches the known value \u03c0(1000) = 168.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there an interpretation where '20 percent' could mean something other than 200 out of 1000?",
+      "verification_performed": "Considered whether 'fewer than 20 percent' could be non-strict (\u2264 vs <). The phrase 'fewer than' is unambiguously strict inequality. Even under \u2264, 168 \u2264 200 holds, so the claim would still be true.",
+      "finding": "No alternative interpretation changes the result. 168 < 200 under any reading.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
+    "prime_count": 168,
+    "total_integers": 1000,
+    "percentage": 16.8,
+    "threshold": 20,
+    "operator": "<",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

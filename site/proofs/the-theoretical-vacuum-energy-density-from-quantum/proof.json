@@ -1,0 +1,159 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "wiki_cc_problem",
+      "label": "Observed vacuum energy density from Planck satellite (Wikipedia, Cosmological constant problem)"
+    },
+    "B2": {
+      "key": "wiki_dark_energy",
+      "label": "Observed dark energy density (Wikipedia, Dark energy)"
+    },
+    "B3": {
+      "key": "cosmoverse",
+      "label": "Observed vacuum energy in GeV^4 units (CosmoVerse)"
+    },
+    "A1": {
+      "label": "QFT vacuum energy density with Planck cutoff (computed from fundamental constants)",
+      "method": "M_P^4 / (16*pi^2) with Planck cutoff, converted to J/m^3",
+      "result": "2.9338e+111 J/m^3"
+    },
+    "A2": {
+      "label": "Ratio of theoretical to observed vacuum energy density",
+      "method": "rho_QFT / rho_obs",
+      "result": "5.4771e+120 (ratio)"
+    },
+    "A3": {
+      "label": "Number of orders of magnitude in the discrepancy",
+      "method": "log10(ratio)",
+      "result": "120.74 orders of magnitude"
+    },
+    "A4": {
+      "label": "Cross-check: ratio computed in GeV^4 units",
+      "method": "log10(rho_QFT_GeV4 / rho_obs_GeV4) [cross-check]",
+      "result": "121.15 orders of magnitude"
+    }
+  },
+  "claim_formal": {
+    "subject": "discrepancy between QFT vacuum energy density and observed cosmological constant",
+    "property": "number of orders of magnitude by which theoretical exceeds observed",
+    "operator": ">",
+    "threshold": 1e+120,
+    "operator_note": "The claim states the theoretical value exceeds the observed value by 'more than 10^120 orders of magnitude.' In standard mathematical usage, 'N orders of magnitude' means a ratio of 10^N. So 'more than 10^120 orders of magnitude' means the ratio exceeds 10^(10^120). The well-known cosmological constant problem involves a discrepancy of ~120 orders of magnitude (a ratio of ~10^120), NOT 10^120 orders of magnitude. The claim as written likely conflates '10^120' (the ratio) with '10^120 orders of magnitude' (which would be a ratio of 10^(10^120)). We evaluate the claim as literally stated: does the number of orders of magnitude in the ratio exceed 10^120?"
+  },
+  "claim_natural": "The theoretical vacuum energy density from quantum field theory exceeds the observed cosmological-constant value inferred from Type Ia supernovae by more than 10^120 orders of magnitude.",
+  "citations": {
+    "B1": {
+      "source_key": "wiki_cc_problem",
+      "source_name": "Wikipedia \u2014 Cosmological constant problem",
+      "url": "https://en.wikipedia.org/wiki/Cosmological_constant_problem",
+      "quote": "Using Planck mass as the cut-off for a cut-off regularization scheme provides a difference of 120 orders of magnitude between the vacuum energy and the cosmological constant.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B2": {
+      "source_key": "wiki_dark_energy",
+      "source_name": "Wikipedia \u2014 Dark energy",
+      "url": "https://en.wikipedia.org/wiki/Dark_energy",
+      "quote": "Dark energy's density is very low: 7\u00d710\u221230 g/cm3 (6\u00d710\u221210 J/m3 in mass-energy), much less than the density of ordinary matter or dark matter within galaxies.",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B3": {
+      "source_key": "cosmoverse",
+      "source_name": "CosmoVerse COST Action \u2014 Quantum vacuum: the cosmological constant problem",
+      "url": "https://cosmoversetensions.eu/learn-cosmology/quantum-vacuum-the-cosmological-constant-problem/",
+      "quote": "at least 55 orders of magnitude smaller than the value predicted within the Standard Model",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "cosmoversetensions.eu",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "5.3566e-10 J/m^3 (observed rho_vac)",
+      "value_in_quote": true,
+      "quote_snippet": "Using Planck mass as the cut-off for a cut-off regularization scheme provides a "
+    },
+    "B2": {
+      "value": "6e-10 J/m^3 (dark energy density)",
+      "value_in_quote": true,
+      "quote_snippet": "Dark energy's density is very low: 7\u00d710\u221230 g/cm3 (6\u00d710\u221210 J/m3 in mass-energy), "
+    },
+    "B3": {
+      "value": "~10^-47 GeV^4 (observed rho_vac)",
+      "value_in_quote": false,
+      "quote_snippet": "at least 55 orders of magnitude smaller than the value predicted within the Stan"
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Orders of magnitude computed in SI units vs GeV^4 units",
+      "values_compared": [
+        "120.74",
+        "121.15"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Could '10^120 orders of magnitude' be a standard way to express this discrepancy in physics literature?",
+      "verification_performed": "Searched physics literature and textbooks for the phrase '10^120 orders of magnitude.' The standard phrasing is '120 orders of magnitude' or 'a factor of 10^120.' No reputable source uses '10^120 orders of magnitude' because that would mean a ratio of 10^(10^120), which is nonsensical in this context.",
+      "finding": "The claim conflates two different expressions: '120 orders of magnitude' (correct) and '10^120 orders of magnitude' (incorrect). This is a common error in popular science discussions.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there any regularization scheme where the discrepancy actually exceeds 120 orders of magnitude, let alone 10^120?",
+      "verification_performed": "Searched for alternative QFT calculations. Wikipedia states: 'Original estimates of the degree of mismatch were as high as 120 to 122 orders of magnitude.' Modern calculations with Lorentz invariance reduce the discrepancy to ~55-60 orders. No known calculation produces a discrepancy anywhere near 10^120 orders of magnitude.",
+      "finding": "The maximum discrepancy in the literature is ~122 orders of magnitude (Planck cutoff). Even this is vastly less than 10^120 orders. Modern methods reduce the discrepancy further to ~55-60 orders.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the observed value be much smaller than cited, making the discrepancy larger?",
+      "verification_performed": "Checked multiple sources for the observed vacuum energy density: Wikipedia (Planck satellite data) gives 5.36e-10 J/m^3, CosmoVerse gives ~10^-47 GeV^4. These are consistent across sources. Even if the observed value were zero (as it was believed before 1998), the theoretical prediction is finite, so the ratio would be undefined (infinite), not 10^(10^120).",
+      "finding": "The observed value is well-established. No plausible revision would bring the discrepancy near 10^120 orders of magnitude.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED (with unverified citations)",
+  "key_results": {
+    "rho_QFT_J_m3": 2.933847823302617e+111,
+    "rho_obs_J_m3": 5.3566e-10,
+    "ratio": 5.477070946687483e+120,
+    "orders_of_magnitude": 120.7385483665551,
+    "threshold_orders": 1e+120,
+    "claim_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

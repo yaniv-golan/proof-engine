@@ -1,0 +1,72 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Direct substitution: (1+\u221a5)/2 satisfies x\u00b2 - x - 1 = 0",
+      "method": "Direct substitution with exact integer arithmetic over Q(\u221a5)",
+      "result": "\u03c6\u00b2 - \u03c6 - 1 = 0 (exact)"
+    },
+    "A2": {
+      "label": "Quadratic formula yields (1+\u221a5)/2 as the positive root",
+      "method": "Quadratic formula: x = (-b \u00b1 \u221a(b\u00b2-4ac)) / 2a with a=1, b=-1, c=-1",
+      "result": "Positive root = (1+\u221a5)/2 = 1.618033988749895"
+    },
+    "A3": {
+      "label": "(1+\u221a5)/2 is positive",
+      "method": "Direct evaluation: (1+\u221a5)/2 > 0",
+      "result": "\u03c6 = 1.618033988749895 > 0"
+    }
+  },
+  "claim_formal": {
+    "subject": "the equation x\u00b2 - x - 1 = 0",
+    "property": "positive root equals (1 + \u221a5)/2",
+    "operator": "==",
+    "operator_note": "Exact algebraic equality. We verify that substituting \u03c6 = (1 + \u221a5)/2 into x\u00b2 - x - 1 yields exactly 0 (symbolically), and independently derive the positive root via the quadratic formula to confirm it equals (1 + \u221a5)/2. Numerical verification uses tolerance for floating-point, but the symbolic argument is exact.",
+    "threshold": true
+  },
+  "claim_natural": "The positive root of x\u00b2 - x - 1 = 0 is exactly (1 + \u221a5)/2",
+  "cross_checks": [
+    {
+      "description": "Direct substitution (A1) vs quadratic formula derivation (A2)",
+      "values_compared": [
+        "substitution yields 0",
+        "quadratic formula yields 1.618033988749895"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Could there be another positive root we're missing?",
+      "verification_performed": "A degree-2 polynomial has at most 2 roots (Fundamental Theorem of Algebra). The quadratic formula gives both roots: (1+\u221a5)/2 \u2248 1.618 and (1-\u221a5)/2 \u2248 -0.618. Only one root is positive. Verified computationally: root_negative < 0.",
+      "finding": "The other root is (1-\u221a5)/2 \u2248 -0.618034, which is negative. Only one positive root exists.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could floating-point error make the substitution appear to be zero when it isn't?",
+      "verification_performed": "The proof uses exact integer arithmetic for the symbolic verification: representing \u03c6 as (1 + 1\u00b7\u221a5)/2 and computing \u03c6\u00b2 - \u03c6 - 1 using rational coefficients of {1, \u221a5}. The irrational parts cancel exactly (coefficient = 0) and the rational remainder is exactly 0. No floating-point arithmetic is involved in the symbolic path.",
+      "finding": "Symbolic verification uses only integer/rational arithmetic. Result is exactly 0, not approximately 0.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the equation x\u00b2 - x - 1 = 0 the correct equation (not x\u00b2 + x - 1 or x\u00b2 - x + 1)?",
+      "verification_performed": "Checked: x\u00b2 - x - 1 evaluated at \u03c6 = (1+\u221a5)/2 gives 0. If the equation were x\u00b2 + x - 1, the roots would be (-1 \u00b1 \u221a5)/2, and the positive root would be (-1+\u221a5)/2 \u2248 0.618, not (1+\u221a5)/2. If the equation were x\u00b2 - x + 1, discriminant = 1-4 = -3 < 0, no real roots.",
+      "finding": "The equation x\u00b2 - x - 1 = 0 is the unique quadratic with (1+\u221a5)/2 as a root and integer coefficients (up to scaling).",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
+    "phi": 1.618033988749895,
+    "substitution_exact_zero": true,
+    "quadratic_positive_root": 1.618033988749895,
+    "positive": true,
+    "operator": "==",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

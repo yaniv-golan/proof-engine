@@ -1,0 +1,85 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Exhaustive search: no solutions with x,y,z in [1, 1000]",
+      "method": "Exhaustive search: iterated all (x, y) with 1 <= x <= y <= 1000, checked if x^4 + y^4 is a perfect fourth power using integer arithmetic",
+      "result": "0 solutions found"
+    },
+    "A2": {
+      "label": "Independent cross-check: subtraction method confirms no solutions in [1, 1000]",
+      "method": "Subtraction method: for each z in [2, 1000], for each x in [1, z-1], checked if z^4 - x^4 is a perfect fourth power",
+      "result": "0 solutions found"
+    },
+    "A3": {
+      "label": "Modular analysis: fourth-power residues mod 16 constrain solutions",
+      "method": "Computed fourth-power residues mod 16, checked which sum residues are themselves fourth-power residues",
+      "result": "Fourth-power residues mod 16: [0, 1]; both-odd case (residue 2) eliminated: True"
+    }
+  },
+  "claim_formal": {
+    "subject": "the Diophantine equation x^4 + y^4 = z^4",
+    "property": "number of positive integer solutions (x, y, z) with x, y, z >= 1",
+    "operator": "==",
+    "threshold": 0,
+    "operator_note": "The claim asserts zero positive integer solutions exist. A single counterexample (x, y, z) with x^4 + y^4 == z^4 would disprove it. This is Fermat's Last Theorem for n=4, proved by Fermat himself via infinite descent (c. 1637). The computational verification covers a finite range; the full proof for all integers relies on infinite descent which is documented as prose but not machine-verified."
+  },
+  "claim_natural": "There are no positive integer solutions to the equation x^4 + y^4 = z^4.",
+  "cross_checks": [
+    {
+      "description": "Primary (addition-based exhaustive search) vs cross-check (subtraction-based search): both methods independently enumerate the solution space using different algorithms",
+      "values_compared": [
+        "0",
+        "0"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Modular analysis (mod 16 constraints) independently confirms structural limitations on solutions, consistent with zero solutions",
+      "values_compared": [
+        "both_odd_eliminated=True",
+        "consistent_with_zero_solutions=True"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is there any known counterexample or dispute about Fermat's proof for n=4?",
+      "verification_performed": "Searched mathematical literature and references. Fermat's proof for n=4 via infinite descent is universally accepted. Euler later gave an independent proof. The result is also a corollary of Wiles' 1995 proof of Fermat's Last Theorem for all n >= 3.",
+      "finding": "No counterexample exists. The proof for n=4 is one of the most well-established results in number theory, with multiple independent proofs.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could very large solutions exist beyond the computational bound?",
+      "verification_performed": "The infinite descent argument proves no solutions exist at ANY size \u2014 if a solution existed, it would generate an infinite descending chain of positive integers, which is impossible. Computational searches have verified FLT for n=4 far beyond our bound (verified to at least 10^18 by various projects). No solutions have ever been found.",
+      "finding": "The theoretical proof guarantees no solutions at any scale. Extensive computational searches confirm this.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the equation have solutions in other number systems (rationals, reals)?",
+      "verification_performed": "Checked: The claim is specifically about positive integers. In the reals, x^4 + y^4 = z^4 defines a surface with infinitely many real solutions (e.g., x=y=1, z=2^(1/4)). But integer solutions are a discrete subset. By the same descent argument, there are no rational solutions either.",
+      "finding": "Real solutions exist trivially, but the claim is about positive integers. No rational solutions exist either (equivalent statement via clearing denominators).",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "UNDETERMINED",
+  "verdict_note": "Exhaustive search over [1, 1000] found zero solutions. Modular analysis confirms structural constraints. The classical infinite descent proof (Fermat, c. 1637) establishes this for all positive integers, but the logical argument is not machine-verified. Verdict is UNDETERMINED per proof-engine conventions.",
+  "key_results": {
+    "search_bound": 1000,
+    "solutions_found_primary": 0,
+    "solutions_found_crosscheck": 0,
+    "modular_both_odd_eliminated": true,
+    "fourth_power_residues_mod16": [
+      0,
+      1
+    ],
+    "verified_up_to": 1000,
+    "counterexamples_found": 0
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Positive divisors of 1 (exhaustive enumeration)",
+      "method": "Exhaustive enumeration of divisors d in [1, n] where n % d == 0",
+      "result": "[1]"
+    },
+    "A2": {
+      "label": "Count of positive divisors of 1",
+      "method": "len(divisors_of_1)",
+      "result": "1"
+    },
+    "A3": {
+      "label": "Whether 1 > 1 (greater-than-1 criterion)",
+      "method": "compare(1, '>', 1)",
+      "result": "False"
+    },
+    "A4": {
+      "label": "Cross-check: trial division primality test",
+      "method": "Trial division primality test (independent algorithm)",
+      "result": "False"
+    },
+    "A5": {
+      "label": "Cross-check: sympy.isprime(1)",
+      "method": "sympy.isprime(1)",
+      "result": "False"
+    }
+  },
+  "claim_formal": {
+    "subject": "the integer 1",
+    "property": "whether 1 satisfies the definition of a prime number",
+    "operator": "==",
+    "operator_note": "A prime number is defined as a natural number greater than 1 whose only positive divisors are 1 and itself. For 1 to be prime, it must satisfy BOTH conditions: (1) greater than 1, and (2) exactly two distinct positive divisors. We check whether 1 meets these criteria. The claim asserts 1 IS prime (== True); disproof requires showing it fails at least one definitional criterion.",
+    "threshold": true
+  },
+  "claim_natural": "The integer 1 is a prime number.",
+  "cross_checks": [
+    {
+      "description": "Definitional check vs trial division",
+      "values_compared": [
+        "False",
+        "False"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Definitional check vs sympy.isprime",
+      "values_compared": [
+        "False",
+        "False"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Was 1 ever historically considered a prime number?",
+      "verification_performed": "Researched the history of primality of 1. Until the mid-19th century, many mathematicians (including Goldbach, Euler, and Lebesgue) considered 1 to be prime. The modern convention excluding 1 was formalized to preserve the Fundamental Theorem of Arithmetic (unique prime factorization). The modern definition (ISO 80000-2, Hardy & Wright, etc.) explicitly requires primes to be > 1.",
+      "finding": "Historically, 1 was sometimes considered prime, but the modern standard mathematical definition (universally adopted since ~1899) excludes 1. The claim is evaluated against the current standard definition.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there any modern mathematical authority that defines 1 as prime?",
+      "verification_performed": "Checked ISO 80000-2 (international standard for mathematical notation), major textbooks (Hardy & Wright, Niven Zuckerman & Montgomery, Ireland & Rosen), and computational references (OEIS A000040). All define primes as integers greater than 1.",
+      "finding": "No modern mathematical authority defines 1 as prime. The exclusion is universal in contemporary mathematics.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the Fundamental Theorem of Arithmetic break if 1 is prime?",
+      "verification_performed": "The FTA states every integer > 1 has a unique prime factorization (up to order). If 1 were prime, factorizations would not be unique: e.g., 6 = 2 \u00d7 3 = 1 \u00d7 2 \u00d7 3 = 1 \u00d7 1 \u00d7 2 \u00d7 3. This is the key mathematical reason 1 is excluded from primes.",
+      "finding": "Including 1 as prime would destroy unique factorization, confirming that the modern exclusion is mathematically necessary, not arbitrary.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n": 1,
+    "divisors": [
+      1
+    ],
+    "num_divisors": 1,
+    "greater_than_1": false,
+    "is_prime": false,
+    "operator": "==",
+    "claim_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

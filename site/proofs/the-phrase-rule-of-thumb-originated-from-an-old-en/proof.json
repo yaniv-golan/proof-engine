@@ -1,0 +1,173 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "wikipedia",
+      "label": "Wikipedia: no such law ever existed"
+    },
+    "B2": {
+      "key": "phrases_org",
+      "label": "Phrases.org.uk: no printed records associate phrase with domestic violence until 1970s"
+    },
+    "B3": {
+      "key": "uoregon",
+      "label": "U. Oregon legal scholar: no truth in the legend"
+    },
+    "B4": {
+      "key": "allthatsinteresting",
+      "label": "All That's Interesting: no evidence Buller said anything of the sort"
+    },
+    "A1": {
+      "label": "Verified source count rejecting the claim",
+      "method": "count(verified citations) = 4",
+      "result": "4"
+    }
+  },
+  "claim_formal": {
+    "subject": "The phrase \"rule of thumb\"",
+    "property": "etymological origin linked to a specific English law permitting wife-beating",
+    "operator": ">=",
+    "operator_note": "This is a compound claim: (1) an old English law existed permitting a man to beat his wife with a stick no thicker than his thumb, AND (2) this law is the origin of the phrase \"rule of thumb.\" Both sub-claims must be true for the claim to hold. We attempt to disprove by finding >= 3 independent authoritative sources that reject these sub-claims. Sources must be from different institutions/publications.",
+    "threshold": 3,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "The phrase \"rule of thumb\" originated from an old English law that allowed a man to beat his wife with a stick no thicker than his thumb.",
+  "citations": {
+    "B1": {
+      "source_key": "wikipedia",
+      "source_name": "Wikipedia \u2014 Rule of thumb",
+      "url": "https://en.wikipedia.org/wiki/Rule_of_thumb",
+      "quote": "A modern folk etymology holds that the phrase is derived from the maximum width of a stick allowed for wife-beating under English common law, but no such law ever existed.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B2": {
+      "source_key": "phrases_org",
+      "source_name": "Phrases.org.uk \u2014 Rule of Thumb meaning and origin",
+      "url": "https://phrases.org.uk/meanings/rule-of-thumb.html",
+      "quote": "Despite the phrase being in common use since the 17th century and appearing many thousands of times in print, there are no printed records that associate it with domestic violence until the 1970s",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "org.uk",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B3": {
+      "source_key": "uoregon",
+      "source_name": "University of Oregon \u2014 Rule of Thumb essay (Prof. J.J. Freund)",
+      "url": "https://dynamic.uoregon.edu/jjf/essays/ruleofthumb.html",
+      "quote": "there is probably no truth whatever in the legend that he was permitted to beat her with a stick no thicker than his thumb",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "uoregon.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    },
+    "B4": {
+      "source_key": "allthatsinteresting",
+      "source_name": "All That's Interesting \u2014 Rule of Thumb Origin",
+      "url": "https://allthatsinteresting.com/rule-of-thumb-origin",
+      "quote": "There is no evidence that Buller actually said anything of the sort, but he was mocked in the press.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "allthatsinteresting.com",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "A modern folk etymology holds that the phrase is derived from the maximum width "
+    },
+    "B2": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "Despite the phrase being in common use since the 17th century and appearing many"
+    },
+    "B3": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "there is probably no truth whatever in the legend that he was permitted to beat "
+    },
+    "B4": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "There is no evidence that Buller actually said anything of the sort, but he was "
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Multiple independent sources consulted to reject the claim",
+      "n_sources_consulted": 4,
+      "n_sources_verified": 4,
+      "sources": {
+        "wikipedia": "verified",
+        "phrases_org": "verified",
+        "uoregon": "verified",
+        "allthatsinteresting": "verified"
+      },
+      "independence_note": "Sources are from different institutions: Wikimedia Foundation (Wikipedia), Gary Martin's Phrases.org.uk, University of Oregon academic essay. While they cite overlapping primary research, they are independently published and maintained."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Was there ever an actual English law specifying a thumb-width stick for wife-beating?",
+      "verification_performed": "Searched for 'rule of thumb wife beating law evidence historical support Buller ruling'. Reviewed Wikipedia, Phrases.org.uk, University of Oregon essay, and allthatsinteresting.com. Also reviewed the Sir Francis Buller / Judge Thumb incident of 1782.",
+      "finding": "No such law was ever codified in English common law. Sir Francis Buller was rumored in 1782 to have stated a husband could beat his wife with a stick no wider than his thumb, but there is no record he actually made this ruling. He was satirized as 'Judge Thumb.' Some 19th-century American courts referenced a supposed common-law doctrine, but legal scholars (including Henry Ansgar Kelly) confirm no such law existed.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the phrase have originated from the wife-beating association even without a formal law?",
+      "verification_performed": "Searched for earliest documented uses of 'rule of thumb' and when the wife-beating association first appeared. Checked multiple etymology sources.",
+      "finding": "The phrase first appeared in print in 1658/1685 (James Durham's sermons), referring to rough practical measurement. The first recorded link between the phrase and wife-beating appeared only in 1976, in a report by women's-rights advocate Del Martin. The phrase predates the false association by roughly 300 years, ruling out this etymology.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Are the three disproof sources truly independent?",
+      "verification_performed": "Checked source independence: Wikipedia cites multiple scholarly references; Phrases.org.uk is an independent etymology reference site; University of Oregon essay is an academic source citing legal historian Henry Ansgar Kelly's research.",
+      "finding": "Sources are from different institutions (Wikimedia Foundation, Gary Martin's Phrases.org.uk, University of Oregon). While they cite overlapping primary research (e.g., Kelly's work), they are independently published and maintained.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n_confirmed": 4,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

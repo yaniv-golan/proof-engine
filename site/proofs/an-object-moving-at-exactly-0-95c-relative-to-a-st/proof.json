@@ -1,0 +1,88 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Primary computation of \u03b3 via direct formula",
+      "method": "Direct float computation: \u03b3 = 1/\u221a(1 - 0.95\u00b2)",
+      "result": "3.2025630761"
+    },
+    "A2": {
+      "label": "Cross-check via high-precision decimal arithmetic",
+      "method": "50-digit Decimal arithmetic",
+      "result": "3.2025630761"
+    },
+    "A3": {
+      "label": "Cross-check via algebraic simplification \u03b3\u00b2 = 1/(1-\u03b2\u00b2)",
+      "method": "Exact rational: \u03b3\u00b2 = 400/39, verify \u03b3\u00b2 > (3.2)\u00b2 = 256/25",
+      "result": "\u03b3\u00b2 = 400/39 \u2248 10.2564102564, \u03b3 \u2248 3.2025630761"
+    }
+  },
+  "claim_formal": {
+    "subject": "Lorentz factor \u03b3 for an object at v = 0.95c",
+    "property": "\u03b3 = 1 / sqrt(1 - \u03b2\u00b2) where \u03b2 = v/c = 0.95",
+    "operator": ">",
+    "operator_note": "'greater than 3.2' is interpreted as strictly greater than (>). The Lorentz factor \u03b3 is a standard definition from special relativity: \u03b3 = 1 / sqrt(1 - v\u00b2/c\u00b2). With v/c = 0.95 (exact), this is a pure mathematical computation with no empirical ambiguity. If \u03b3 were exactly 3.2, the claim would be FALSE.",
+    "threshold": 3.2
+  },
+  "claim_natural": "An object moving at exactly 0.95c relative to a stationary observer experiences a Lorentz factor \u03b3 greater than 3.2.",
+  "cross_checks": [
+    {
+      "description": "Float vs 50-digit Decimal arithmetic",
+      "values_compared": [
+        "3.2025630761",
+        "3.2025630761"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Float vs exact rational (Fraction) arithmetic",
+      "values_compared": [
+        "3.2025630761",
+        "3.2025630761"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Exact rational squared comparison: \u03b3\u00b2 = 400/39 > 256/25 = (3.2)\u00b2",
+      "values_compared": [
+        "400/39",
+        "256/25"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is there any alternative definition of the Lorentz factor that would yield a different value?",
+      "verification_performed": "Reviewed standard physics references. The Lorentz factor \u03b3 = 1/\u221a(1-v\u00b2/c\u00b2) is the universal definition in special relativity. There is no competing definition. The reciprocal 1/\u03b3 is sometimes used but is clearly distinct.",
+      "finding": "No alternative definition exists that would change the computed value.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could floating-point representation of 0.95 introduce enough error to change the comparison?",
+      "verification_performed": "Computed \u03b3 via three independent methods: IEEE 754 float, 50-digit Decimal, and exact rational (Fraction) arithmetic. All agree to >10 decimal places. The exact rational computation confirms \u03b3\u00b2 = 400/39 > 256/25 = 3.2\u00b2 with no floating-point involved.",
+      "finding": "Floating-point representation cannot affect the verdict; exact rational arithmetic confirms \u03b3 > 3.2.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the margin above 3.2 so small that rounding could flip the result?",
+      "verification_performed": "\u03b3 \u2248 3.2026 and threshold is 3.2. The margin is ~0.0026, which is well above any floating-point uncertainty. Additionally, the exact rational proof shows \u03b3\u00b2 = 400/39 \u2248 10.2564 vs 3.2\u00b2 = 10.24, a margin of ~0.0164 in the squared domain.",
+      "finding": "The margin is small but unambiguous \u2014 confirmed by exact arithmetic.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
+    "gamma": 3.202563076101742,
+    "threshold": 3.2,
+    "operator": ">",
+    "claim_holds": true,
+    "beta": 0.95,
+    "gamma_exact_rational_squared": "400/39"
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

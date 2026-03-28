@@ -1,0 +1,98 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Algebraic proof: if x = 0.999... then x = 1",
+      "method": "Algebraic: x = 0.999..., 10x - x = 9, x = 1 (verified via Fraction(9,9))",
+      "result": "1.0"
+    },
+    "A2": {
+      "label": "Geometric series proof: sum of 9/10^k for k=1..inf equals 1",
+      "method": "Geometric series: a/(1-r) = (9/10)/(9/10) = 1 (verified via Fraction arithmetic)",
+      "result": "1.0"
+    },
+    "A3": {
+      "label": "Fraction proof: 1/3 = 0.333..., so 3 * (1/3) = 0.999... = 1",
+      "method": "Fraction identity: 3 * (1/3) = 3/3 = 1 (verified via Fraction arithmetic)",
+      "result": "1.0"
+    },
+    "A4": {
+      "label": "Numerical convergence: partial sums approach 1 with zero gap",
+      "method": "Numerical convergence: partial sums 1 - 10^(-n) -> 1 as n -> inf",
+      "result": "True (converges to 1)"
+    }
+  },
+  "claim_formal": {
+    "subject": "0.999... (the repeating decimal 0.9 recurring)",
+    "property": "value compared to 1",
+    "operator": "<",
+    "operator_note": "The claim asserts strict inequality: 0.999... < 1. In standard real analysis, 0.999... denotes the limit of the sequence 0.9, 0.99, 0.999, ... which equals exactly 1. This proof will show 0.999... = 1, thereby disproving the strict inequality. We work in the standard real number system (not hyperreals or surreals).",
+    "threshold": 1
+  },
+  "claim_natural": "0.999... (with 9s repeating forever) is strictly less than 1.",
+  "cross_checks": [
+    {
+      "description": "Algebraic (A1) vs geometric series (A2)",
+      "values_compared": [
+        "1.0",
+        "1.0"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Algebraic (A1) vs fraction identity (A3)",
+      "values_compared": [
+        "1.0",
+        "1.0"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Geometric series (A2) vs numerical convergence (A4)",
+      "values_compared": [
+        "1.0",
+        "1.0 (limit)"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is there a number system where 0.999... != 1?",
+      "verification_performed": "Investigated alternative number systems: hyperreals, surreals, and p-adic numbers. In hyperreals, one can define a number 0.999...;...999 with a specific hypernatural number of 9s that differs from 1 by an infinitesimal. However, '0.999...' with genuinely infinitely many 9s (i.e., one 9 for every natural number) equals 1 even in the hyperreals. The standard notation '0.999...' always denotes the real number 1.",
+      "finding": "In no standard or extended number system does the notation '0.999... (repeating forever)' denote a value less than 1. The claim specifically says 'with 9s repeating forever,' which maps to the standard real-number interpretation.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could there be a flaw in the algebraic proof (multiplying infinite decimals)?",
+      "verification_performed": "Examined whether multiplying an infinite repeating decimal by 10 is rigorous. The operation is justified because 0.999... is defined as the limit of the sequence S_n = sum_{k=1}^{n} 9*10^{-k}. Multiplying by 10: 10*S_n = 9 + S_n - 9*10^{-n}. Taking limits: 10*L = 9 + L - 0, so 9L = 9, L = 1. The algebra is rigorous when interpreted as operations on limits.",
+      "finding": "The algebraic manipulation is fully rigorous when grounded in the epsilon-delta definition of limits. No flaw found.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the geometric series formula apply here (is |r| < 1)?",
+      "verification_performed": "The geometric series sum a/(1-r) requires |r| < 1. Here r = 1/10, so |r| = 0.1 < 1. The formula applies unconditionally.",
+      "finding": "The convergence condition is satisfied. Formula is valid.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there peer-reviewed mathematical literature disputing 0.999... = 1?",
+      "verification_performed": "Searched for mathematical papers disputing 0.999... = 1 in standard real analysis. Found extensive pedagogical literature discussing why students resist this equality (Tall & Schwarzenberger 1978, Dubinsky et al. 2005), but no peer-reviewed paper disputes the result within standard mathematics.",
+      "finding": "No credible mathematical source disputes that 0.999... = 1 in the real numbers. The equality is a theorem, not a conjecture.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "value_of_repeating_decimal": 1.0,
+    "threshold": 1,
+    "operator": "<",
+    "claim_holds": false,
+    "reason": "0.999... = 1 exactly; the strict inequality 0.999... < 1 is false"
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

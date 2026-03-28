@@ -1,0 +1,90 @@
+# Audit: The integer 1 is a prime number.
+
+- **Generated:** 2026-03-28
+- **Reader summary:** [proof.md](proof.md)
+- **Proof script:** [proof.py](proof.py)
+
+## Claim Specification
+
+| Field | Value |
+|-------|-------|
+| Subject | the integer 1 |
+| Property | whether 1 satisfies the definition of a prime number |
+| Operator | == |
+| Threshold | True |
+| Operator note | A prime number is defined as a natural number greater than 1 whose only positive divisors are 1 and itself. For 1 to be prime, it must satisfy BOTH conditions: (1) greater than 1, and (2) exactly two distinct positive divisors. We check whether 1 meets these criteria. The claim asserts 1 IS prime (== True); disproof requires showing it fails at least one definitional criterion. |
+
+*Source: proof.py JSON summary*
+
+## Fact Registry
+
+| ID | Key | Label |
+|----|-----|-------|
+| A1 | — | Positive divisors of 1 (exhaustive enumeration) |
+| A2 | — | Count of positive divisors of 1 |
+| A3 | — | Whether 1 > 1 (greater-than-1 criterion) |
+| A4 | — | Cross-check: trial division primality test |
+| A5 | — | Cross-check: sympy.isprime(1) |
+
+*Source: proof.py JSON summary*
+
+## Full Evidence Table
+
+### Type A (Computed) Facts
+
+| ID | Fact | Method | Result |
+|----|------|--------|--------|
+| A1 | Positive divisors of 1 (exhaustive enumeration) | Exhaustive enumeration of divisors d in [1, n] where n % d == 0 | [1] |
+| A2 | Count of positive divisors of 1 | len(divisors_of_1) | 1 |
+| A3 | Whether 1 > 1 (greater-than-1 criterion) | compare(1, '>', 1) | False |
+| A4 | Cross-check: trial division primality test | Trial division primality test (independent algorithm) | False |
+| A5 | Cross-check: sympy.isprime(1) | sympy.isprime(1) | False |
+
+*Source: proof.py JSON summary*
+
+## Computation Traces
+
+```
+A1: Positive divisors of 1: [1]
+  A2: number of positive divisors of 1: len(divisors_of_1) = len([1]) = 1
+  A3: is 1 > 1?: 1 > 1 = False
+    1 > 1 is False
+  A2: divisor count == 2?: 1 == 2 = False
+
+Primary method: 1 is prime = False
+  Fails criterion 1 (n > 1): 1 > 1 is False
+  Fails criterion 2 (exactly 2 divisors): has 1 divisor(s), need 2
+
+A4 cross-check (trial division): is_prime(1) = False
+A5 cross-check (sympy.isprime): isprime(1) = False
+  Claim evaluation: is 1 prime?: False == True = False
+```
+
+*Source: proof.py inline output (execution trace)*
+
+## Adversarial Checks (Rule 5)
+
+| # | Question | Verification Performed | Finding | Breaks Proof? |
+|---|----------|----------------------|---------|---------------|
+| 1 | Was 1 ever historically considered a prime number? | Researched the history of primality of 1. Until the mid-19th century, many mathematicians (including Goldbach, Euler, and Lebesgue) considered 1 to be prime. The modern convention excluding 1 was formalized to preserve the Fundamental Theorem of Arithmetic (unique prime factorization). The modern definition (ISO 80000-2, Hardy & Wright, etc.) explicitly requires primes to be > 1. | Historically, 1 was sometimes considered prime, but the modern standard mathematical definition (universally adopted since ~1899) excludes 1. The claim is evaluated against the current standard definition. | No |
+| 2 | Is there any modern mathematical authority that defines 1 as prime? | Checked ISO 80000-2 (international standard for mathematical notation), major textbooks (Hardy & Wright, Niven Zuckerman & Montgomery, Ireland & Rosen), and computational references (OEIS A000040). All define primes as integers greater than 1. | No modern mathematical authority defines 1 as prime. The exclusion is universal in contemporary mathematics. | No |
+| 3 | Does the Fundamental Theorem of Arithmetic break if 1 is prime? | The FTA states every integer > 1 has a unique prime factorization (up to order). If 1 were prime, factorizations would not be unique: e.g., 6 = 2 x 3 = 1 x 2 x 3 = 1 x 1 x 2 x 3. This is the key mathematical reason 1 is excluded from primes. | Including 1 as prime would destroy unique factorization, confirming that the modern exclusion is mathematically necessary, not arbitrary. | No |
+
+*Source: proof.py JSON summary*
+
+## Hardening Checklist
+
+- **Rule 1:** N/A — pure computation, no empirical facts
+- **Rule 2:** N/A — pure computation, no empirical facts
+- **Rule 3:** `date.today()` used for `generated_at` timestamp
+- **Rule 4:** CLAIM_FORMAL with explicit operator_note documenting interpretation of "prime number" and criteria for disproof
+- **Rule 5:** Three adversarial checks investigated: historical definitions, modern authorities, and FTA implications. None break the proof.
+- **Rule 6:** N/A — pure computation, no empirical facts. Cross-checks use three mathematically independent methods: (1) definitional enumeration, (2) trial division algorithm, (3) sympy.isprime
+- **Rule 7:** `compare()` and `explain_calc()` imported from computations.py; no hard-coded constants
+- **validate_proof.py result:** PASS (14/14 checks passed, 0 issues, 0 warnings)
+
+*Source: author analysis*
+
+---
+
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v0.10.0 on 2026-03-28.

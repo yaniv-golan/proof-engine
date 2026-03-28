@@ -1,0 +1,232 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "nist_G",
+      "label": "Newtonian gravitational constant G (2022 CODATA)"
+    },
+    "B2": {
+      "key": "nist_c",
+      "label": "Speed of light c (2022 CODATA, exact)"
+    },
+    "B3": {
+      "key": "iau_GM_sun",
+      "label": "Nominal solar mass parameter GM\u2609^N (IAU 2015 Resolution B3)"
+    },
+    "B4": {
+      "key": "wiki_solar_mass",
+      "label": "Solar mass cross-check (Wikipedia)"
+    },
+    "A1": {
+      "label": "rs via separate G and M (primary)",
+      "method": "rs = 2 * G * (GM\u2609/G) / c\u00b2 (G and M separate)",
+      "result": "2.953250 km"
+    },
+    "A2": {
+      "label": "rs via GM\u2609 directly (cross-check)",
+      "method": "rs = 2 * GM\u2609 / c\u00b2 (direct, G cancels)",
+      "result": "2.953250 km"
+    }
+  },
+  "claim_formal": {
+    "subject": "Schwarzschild radius of the Sun",
+    "property": "rs = 2GM/c\u00b2 in kilometres",
+    "operator": "compound: > AND <",
+    "operator_note": "'strictly between 2.95 km and 2.96 km' means rs > 2.95 AND rs < 2.96 (both strict inequalities). If rs were exactly 2.95 or exactly 2.96, the claim would be FALSE. CODATA does not publish a solar mass value directly. The standard approach is to use the IAU 2015 Resolution B3 nominal solar mass parameter GM\u2609^N = 1.3271244 \u00d7 10\u00b2\u2070 m\u00b3 s\u207b\u00b2 and derive M\u2609 = GM\u2609^N / G. Since rs = 2GM/c\u00b2 = 2(GM\u2609^N)/c\u00b2, the value of G cancels, but we compute both ways for cross-checking.",
+    "threshold_lower": 2.95,
+    "threshold_upper": 2.96
+  },
+  "claim_natural": "The Schwarzschild radius of the Sun calculated via rs = 2GM/c\u00b2 with 2022 CODATA values for G, solar mass, and c lies strictly between 2.95 km and 2.96 km.",
+  "citations": {
+    "B1": {
+      "source_key": "nist_G",
+      "source_name": "NIST 2022 CODATA Recommended Values",
+      "url": "https://physics.nist.gov/cgi-bin/cuu/Value?bg",
+      "quote": "Newtonian constant of gravitation",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nist.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B2": {
+      "source_key": "nist_c",
+      "source_name": "NIST 2022 CODATA Recommended Values",
+      "url": "https://physics.nist.gov/cgi-bin/cuu/Value?c",
+      "quote": "speed of light in vacuum",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nist.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B3": {
+      "source_key": "iau_GM_sun",
+      "source_name": "IAU 2015 Resolution B3 (Mamajek et al. 2015, arXiv:1510.07674)",
+      "url": "https://ar5iv.labs.arxiv.org/html/1510.07674",
+      "quote": "nominal solar mass parameter",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "arxiv.org",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Known academic/scholarly publisher"
+      }
+    },
+    "B4": {
+      "source_key": "wiki_solar_mass",
+      "source_name": "Wikipedia \u2014 Solar mass (TCG-compatible GM\u2609 estimate)",
+      "url": "https://en.wikipedia.org/wiki/Solar_mass",
+      "quote": "1.32712442099",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    }
+  },
+  "extractions": {
+    "B1_G": {
+      "value": "6.6743e-11",
+      "value_in_quote": true,
+      "quote_snippet": "6.674 30 x 10^-11"
+    },
+    "B2_c": {
+      "value": "299792458.0",
+      "value_in_quote": true,
+      "quote_snippet": "299 792 458"
+    },
+    "B3_GM_sun": {
+      "value": "1.3271244e+20",
+      "value_in_quote": true,
+      "quote_snippet": "1.3271244 x 10^20"
+    },
+    "B4_GM_sun_tcg": {
+      "value": "1.32712442099e+20",
+      "value_in_quote": true,
+      "quote_snippet": "1.32712442099 x 10^20"
+    }
+  },
+  "data_value_verification": {
+    "B1": {
+      "G_mantissa": {
+        "found": false,
+        "value": "6.674 30",
+        "fetch_mode": "live"
+      },
+      "G_exponent": {
+        "found": true,
+        "value": "-11",
+        "fetch_mode": "live"
+      }
+    },
+    "B2": {
+      "c_value": {
+        "found": false,
+        "value": "299 792 458",
+        "fetch_mode": "live"
+      }
+    },
+    "B3": {
+      "GM_sun": {
+        "found": true,
+        "value": "1.3271244",
+        "fetch_mode": "live"
+      }
+    },
+    "B4": {
+      "GM_sun_tcg": {
+        "found": false,
+        "value": "1.32712442099",
+        "fetch_mode": "live"
+      }
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "GM\u2609 IAU nominal vs Wikipedia TCG",
+      "values_compared": [
+        "1.3271244e+20",
+        "1.32712442099e+20"
+      ],
+      "agreement": true,
+      "tolerance": "1e-5 relative"
+    },
+    {
+      "description": "rs primary (G\u00d7M) vs direct (GM\u2609/c\u00b2)",
+      "values_compared": [
+        "2.9532500761",
+        "2.9532500761"
+      ],
+      "agreement": true,
+      "tolerance": "1e-10 km absolute"
+    },
+    {
+      "description": "rs IAU nominal GM\u2609 vs Wikipedia GM\u2609",
+      "values_compared": [
+        "2.953250",
+        "2.953250"
+      ],
+      "agreement": true,
+      "tolerance": "1e-5 km absolute"
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Could uncertainty in G shift rs outside [2.95, 2.96] km?",
+      "verification_performed": "Computed rs using G \u00b1 uncertainty (6.67430 \u00b1 0.00015 \u00d7 10\u207b\u00b9\u00b9). Since rs = 2(GM\u2609)/c\u00b2 and G cancels when using the GM\u2609 product, G's uncertainty does not affect the result. Even computing via G\u00d7M separately, the relative uncertainty in G (2.2 \u00d7 10\u207b\u2075) shifts rs by only ~0.00006 km, well within the 0.01 km band.",
+      "finding": "G uncertainty cannot move rs outside [2.95, 2.96].",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the choice of time coordinate (TCB vs TDB) for GM\u2609 matter?",
+      "verification_performed": "Searched for TCB vs TDB solar mass parameter values. TCG: 1.32712442099 \u00d7 10\u00b2\u2070, TDB: 1.32712440041 \u00d7 10\u00b2\u2070. IAU nominal: 1.3271244 \u00d7 10\u00b2\u2070. Difference is in the 8th digit, yielding ~10\u207b\u2078 relative change in rs \u2014 negligible.",
+      "finding": "Time coordinate choice shifts rs by < 10\u207b\u2075 km. No impact.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Do any authoritative sources cite a Schwarzschild radius outside [2.95, 2.96] km?",
+      "verification_performed": "Searched web: 'Schwarzschild radius Sun km value'. Wikipedia cites 'approximately 3.0 km' and '2.95 \u00d7 10\u00b3 m'. NASA SpaceMath cites ~3 km. No source gives a value outside the range [2.9, 3.0] km, and all precise computations give ~2.953 km.",
+      "finding": "No authoritative source contradicts the [2.95, 2.96] range.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED (with unverified citations)",
+  "key_results": {
+    "rs_primary_km": 2.95325007610025,
+    "rs_crosscheck_km": 2.95325007610025,
+    "rs_wiki_km": 2.953250122809299,
+    "threshold_lower": 2.95,
+    "threshold_upper": 2.96,
+    "lower_holds": true,
+    "upper_holds": true,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

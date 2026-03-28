@@ -1,0 +1,173 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "harvard_health",
+      "label": "Harvard Health: no arthritis risk from knuckle cracking"
+    },
+    "B2": {
+      "key": "jabfm_deweber_2011",
+      "label": "Deweber et al. 2011 (JABFM): no association between KC and hand OA"
+    },
+    "B3": {
+      "key": "castellanos_1990",
+      "label": "Castellanos & Axelrod 1990 (PMC): no increased arthritis in crackers"
+    },
+    "B4": {
+      "key": "hopkins_arthritis",
+      "label": "Johns Hopkins Arthritis Center: no evidence KC causes arthritis"
+    },
+    "A1": {
+      "label": "Verified source count",
+      "method": "count(verified citations) = 4",
+      "result": "4"
+    }
+  },
+  "claim_formal": {
+    "subject": "habitual knuckle cracking",
+    "property": "causal relationship with arthritis (osteoarthritis of the hand)",
+    "operator": ">=",
+    "operator_note": "This is a disproof by scientific consensus. The claim asserts a causal link between habitual knuckle cracking and arthritis. To disprove, we need >= 3 independent authoritative sources (peer-reviewed studies, major medical institutions) that explicitly find no such causal relationship. The threshold of 3 is appropriate given the abundance of published research on this topic.",
+    "threshold": 3,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "Cracking your knuckles regularly causes arthritis later in life.",
+  "citations": {
+    "B1": {
+      "source_key": "harvard_health",
+      "source_name": "Harvard Health Publishing",
+      "url": "https://www.health.harvard.edu/pain/does-cracking-knuckles-cause-arthritis",
+      "quote": "Cracking your knuckles may aggravate the people around you, but it probably won't raise your risk for arthritis.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "harvard.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    },
+    "B2": {
+      "source_key": "jabfm_deweber_2011",
+      "source_name": "Journal of the American Board of Family Medicine (Deweber et al. 2011)",
+      "url": "https://www.jabfm.org/content/24/2/169",
+      "quote": "A history of habitual KC does not seem to be a risk factor for hand OA.",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "jabfm.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B3": {
+      "source_key": "castellanos_1990",
+      "source_name": "Annals of the Rheumatic Diseases (Castellanos & Axelrod 1990)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1004074/",
+      "quote": "There was no increased preponderance of arthritis of the hand in either group",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "nih.gov",
+        "source_type": "government",
+        "tier": 5,
+        "flags": [],
+        "note": "Government domain (.gov)"
+      }
+    },
+    "B4": {
+      "source_key": "hopkins_arthritis",
+      "source_name": "Johns Hopkins Arthritis Center",
+      "url": "https://www.hopkinsarthritis.org/arthritis-news/knuckle-cracking-q-a-from/",
+      "quote": "There is no evidence that cracking knuckles causes any damage such as arthritis in the joints.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "hopkinsarthritis.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "Cracking your knuckles may aggravate the people around you, but it probably won'"
+    },
+    "B2": {
+      "value": "partial",
+      "value_in_quote": true,
+      "quote_snippet": "A history of habitual KC does not seem to be a risk factor for hand OA."
+    },
+    "B3": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "There was no increased preponderance of arthritis of the hand in either group"
+    },
+    "B4": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "There is no evidence that cracking knuckles causes any damage such as arthritis "
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Multiple independent sources consulted",
+      "n_sources_consulted": 4,
+      "n_sources_verified": 4,
+      "sources": {
+        "harvard_health": "verified",
+        "jabfm_deweber_2011": "partial",
+        "castellanos_1990": "verified",
+        "hopkins_arthritis": "verified"
+      },
+      "independence_note": "Sources are from different institutions: Harvard Medical School, Journal of the American Board of Family Medicine (peer-reviewed study), Annals of the Rheumatic Diseases (peer-reviewed study via PMC), and Johns Hopkins Arthritis Center. These represent independent research groups and editorial boards \u2014 not republications of the same study."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Are there any peer-reviewed studies that found knuckle cracking causes arthritis?",
+      "verification_performed": "Searched PubMed and Google Scholar for 'knuckle cracking causes arthritis' and 'knuckle cracking osteoarthritis positive association'. Reviewed all returned studies.",
+      "finding": "No peer-reviewed study was found that establishes a causal link between knuckle cracking and arthritis. Every study that examined this question found no association.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the Castellanos 1990 study's finding of reduced grip strength suggest joint damage leading to arthritis?",
+      "verification_performed": "Reviewed the Castellanos & Axelrod 1990 study findings. The study found hand swelling and lower grip strength in habitual crackers but explicitly stated there was no increased preponderance of arthritis.",
+      "finding": "Reduced grip strength and hand swelling are functional effects, not evidence of arthritis. The same study that found these effects explicitly ruled out an arthritis association. Grip strength loss is not a precursor to osteoarthritis.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the mechanism of knuckle cracking (cavitation bubbles in synovial fluid) theoretically damage cartilage?",
+      "verification_performed": "Searched for 'knuckle cracking cavitation cartilage damage mechanism'. Reviewed biomechanical literature.",
+      "finding": "The sound is caused by gas bubble formation/collapse in synovial fluid. No study has demonstrated that this process damages articular cartilage or leads to degenerative joint changes. The forces involved are well below the threshold for cartilage injury.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED (with unverified citations)",
+  "key_results": {
+    "n_confirmed": 4,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

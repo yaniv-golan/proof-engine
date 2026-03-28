@@ -1,0 +1,173 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "source_a",
+      "label": "Wikipedia: No-communication theorem \u2014 theorem statement"
+    },
+    "B2": {
+      "key": "source_b",
+      "label": "Caltech Science Exchange \u2014 entanglement does not enable FTL communication"
+    },
+    "B3": {
+      "key": "source_c",
+      "label": "Wikipedia: Faster-than-light communication \u2014 scientific consensus"
+    },
+    "B4": {
+      "key": "source_d",
+      "label": "QSNP (EU Quantum Flagship) \u2014 debunking FTL entanglement myth"
+    },
+    "A1": {
+      "label": "Verified source count meeting disproof threshold",
+      "method": "count(verified citations) = 4",
+      "result": "4"
+    }
+  },
+  "claim_formal": {
+    "subject": "quantum entanglement with pre-agreed measurement basis",
+    "property": "number of independent authoritative sources confirming this is impossible",
+    "operator": ">=",
+    "operator_note": "This is a DISPROOF. The claim asserts entanglement enables FTL information transfer with a pre-agreed measurement basis. The no-communication theorem in quantum mechanics proves this is impossible: local measurement statistics are independent of the distant party's measurement choice, so no information can be encoded or decoded superluminally regardless of any pre-agreed protocol. We disprove the claim by finding >= 3 independent authoritative sources that confirm entanglement cannot transmit usable information FTL. The threshold of 3 reflects broad scientific consensus from independent institutions.",
+    "threshold": 3,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "Quantum entanglement enables the transmission of usable information faster than the speed of light when the distant parties pre-agree on a measurement basis.",
+  "citations": {
+    "B1": {
+      "source_key": "source_a",
+      "source_name": "Wikipedia \u2014 No-communication theorem",
+      "url": "https://en.wikipedia.org/wiki/No-communication_theorem",
+      "quote": "It asserts that during the measurement of an entangled quantum state, it is impossible for one observer to transmit information to another observer, regardless of their spatial separation.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B2": {
+      "source_key": "source_b",
+      "source_name": "Caltech Science Exchange \u2014 Quantum Entanglement",
+      "url": "https://scienceexchange.caltech.edu/topics/quantum-science-explained/entanglement",
+      "quote": "Experiments have shown that this is not true, nor can quantum physics be used to send faster-than-light communications.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "caltech.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    },
+    "B3": {
+      "source_key": "source_c",
+      "source_name": "Wikipedia \u2014 Faster-than-light communication",
+      "url": "https://en.wikipedia.org/wiki/Faster-than-light_communication",
+      "quote": "The current scientific consensus is that faster-than-light communication is not possible, and to date it has not been achieved in any experiment.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "wikipedia.org",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B4": {
+      "source_key": "source_d",
+      "source_name": "QSNP (EU Quantum Flagship) \u2014 Debunking quantum myths",
+      "url": "https://qsnp.eu/debunking-quantum-myths-entanglement-allows-faster-than-light-communication/",
+      "quote": "The catch is that we are not actually sending any information.",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "qsnp.eu",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "It asserts that during the measurement of an entangled quantum state, it is impo"
+    },
+    "B2": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "Experiments have shown that this is not true, nor can quantum physics be used to"
+    },
+    "B3": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "The current scientific consensus is that faster-than-light communication is not "
+    },
+    "B4": {
+      "value": "verified",
+      "value_in_quote": true,
+      "quote_snippet": "The catch is that we are not actually sending any information."
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Multiple independent sources consulted",
+      "n_sources_consulted": 4,
+      "n_sources_verified": 4,
+      "sources": {
+        "source_a": "verified",
+        "source_b": "verified",
+        "source_c": "verified",
+        "source_d": "verified"
+      },
+      "independence_note": "Sources are from 4 different institutions/publications: Wikipedia (community encyclopedia citing physics literature), Caltech (university research institution), Wikipedia FTL article (separate article with distinct references), QSNP/EU Quantum Flagship (European research consortium). All trace to independent primary physics research and the mathematically proven no-communication theorem."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is there any credible peer-reviewed physics paper demonstrating FTL information transfer via entanglement with pre-agreed measurement bases?",
+      "verification_performed": "Searched for: 'pre-agreed measurement basis entanglement superluminal signaling loophole scheme'. Reviewed results from arXiv, Physics Forums, Stanford Encyclopedia of Philosophy, and Wikipedia.",
+      "finding": "No credible peer-reviewed source demonstrates FTL information transfer via entanglement. Proposed schemes (e.g., Gao Shan 2003) have been refuted. The no-communication theorem is mathematically proven under standard quantum mechanics. All search results confirm the impossibility.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does pre-agreeing on a measurement basis create any loophole in the no-communication theorem?",
+      "verification_performed": "Searched for: 'quantum entanglement FTL information transfer pre-agreed measurement basis impossibility'. Reviewed Physics Forums discussions and the arXiv paper 2001.08867.",
+      "finding": "Pre-agreeing on a measurement basis does not create a loophole. The no-communication theorem proves that Bob's local measurement statistics are completely independent of Alice's measurement choice, regardless of any prior agreement. Each party sees random 50/50 outcomes locally; correlations only emerge when results are compared via a classical (light-speed-limited) channel.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Has any experiment ever demonstrated superluminal information transfer using quantum entanglement?",
+      "verification_performed": "Searched for: 'quantum entanglement enables faster than light communication claim debunked physics'. Reviewed phys.org, Caltech, and QSNP articles.",
+      "finding": "No experiment has ever demonstrated FTL information transfer. Wikipedia's Faster-than-light communication article states: 'The current scientific consensus is that faster-than-light communication is not possible, and to date it has not been achieved in any experiment.'",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "n_confirmed": 4,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

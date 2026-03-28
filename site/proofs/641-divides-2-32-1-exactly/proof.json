@@ -1,0 +1,83 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Direct modular arithmetic: (2^32 + 1) mod 641",
+      "method": "Python exact integer arithmetic: (2**32 + 1) % 641",
+      "result": "0"
+    },
+    "A2": {
+      "label": "Integer division cross-check: 2^32 + 1 == 641 * quotient",
+      "method": "Integer division: divmod(2^32 + 1, 641) then verify 641 * quotient == 2^32 + 1",
+      "result": "quotient=6700417, remainder=0, 641*6700417=4294967297"
+    },
+    "A3": {
+      "label": "Algebraic decomposition via Euler's method",
+      "method": "Euler's algebraic decomposition: 641 = 5^4 + 2^4 = 5*2^7 + 1, therefore 5^4 \u2261 -2^4 and 5*2^7 \u2261 -1 (mod 641), combining gives 2^32 \u2261 -1 (mod 641)",
+      "result": "2^32 mod 641 = 640, so (2^32 + 1) mod 641 = 0"
+    }
+  },
+  "claim_formal": {
+    "subject": "2^32 + 1 (the fifth Fermat number, F_5)",
+    "property": "(2^32 + 1) mod 641",
+    "operator": "==",
+    "operator_note": "'Divides exactly' means 641 is a factor of 2^32 + 1, i.e., (2^32 + 1) mod 641 == 0. This is equivalent to showing 2^32 + 1 = 641 * k for some positive integer k.",
+    "threshold": 0
+  },
+  "claim_natural": "641 divides 2^{32} + 1 exactly.",
+  "cross_checks": [
+    {
+      "description": "Integer division: 641 * quotient reconstructs 2^32 + 1",
+      "values_compared": [
+        "4294967297",
+        "4294967297"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Euler's algebraic decomposition confirms 2^32 \u2261 -1 (mod 641)",
+      "values_compared": [
+        "640",
+        "640"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Could the computation overflow or lose precision?",
+      "verification_performed": "Python integers have arbitrary precision \u2014 no overflow is possible. 2^32 + 1 = 4294967297, well within exact integer range. The modular arithmetic uses Python's built-in integer mod, which is exact.",
+      "finding": "No precision issue. Python integers are arbitrary-precision.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is 641 the smallest prime factor of 2^32 + 1?",
+      "verification_performed": "Checked by trial division: no prime less than 641 divides 4294967297. The cofactor 4294967297 / 641 = 6700417, which is itself prime. Thus 4294967297 = 641 \u00d7 6700417 is the complete factorization.",
+      "finding": "641 is indeed the smallest prime factor. Confirmed by trial division below.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does 'divides exactly' require that 641 is a prime factor, or just a factor?",
+      "verification_performed": "The claim says '641 divides 2^{32} + 1 exactly', which in standard number theory means 641 | (2^32 + 1), i.e., the remainder is zero. The claim does not require 641 to be prime (though it is). Our proof shows the remainder is 0, which is sufficient for the claim as stated.",
+      "finding": "The interpretation is correct. 'Divides exactly' means zero remainder.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
+    "fermat_5": 4294967297,
+    "remainder": 0,
+    "quotient": 6700417,
+    "cofactor": 6700417,
+    "cofactor_is_prime": true,
+    "complete_factorization": "4294967297 = 641 \u00d7 6700417",
+    "threshold": 0,
+    "operator": "==",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

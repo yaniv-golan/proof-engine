@@ -1,0 +1,123 @@
+{
+  "claim_natural": "Dark energy constitutes more than 68% of the universe's total energy density according to the Planck 2018 legacy release.",
+  "claim_formal": {
+    "subject": "Dark energy fraction of the universe's total energy density",
+    "property": "Omega_Lambda (dark energy density parameter) as reported by Planck 2018",
+    "operator": ">",
+    "operator_note": "'More than 68%' is interpreted as Omega_Lambda > 0.68 (strictly greater). The claim references the Planck 2018 legacy release (Planck Collaboration VI, A&A 641, A6, 2020; arXiv:1807.06209). In the base-LCDM model with spatial flatness (Omega_total = 1), Omega_Lambda = 1 - Omega_m. The claim is about the best-fit central value, not the confidence interval.",
+    "threshold": 0.68
+  },
+  "fact_registry": {
+    "B1": {
+      "key": "planck_paper",
+      "label": "Planck 2018 paper: matter density Omega_m = 0.315 +/- 0.007"
+    },
+    "B2": {
+      "key": "unlv_reference",
+      "label": "UNLV cosmic parameters reference: Omega_Lambda = 0.6853(74) from Planck 2018"
+    },
+    "A1": {
+      "label": "Derived Omega_Lambda from Omega_m via flat-LCDM relation",
+      "method": "explain_calc('1 - omega_m')",
+      "result": "0.685"
+    },
+    "A2": {
+      "label": "Cross-check: derived Omega_Lambda vs directly reported Omega_Lambda",
+      "method": "cross_check(derived, direct, tolerance=0.01, mode='relative')",
+      "result": "True"
+    }
+  },
+  "citations": {
+    "B1": {
+      "source_key": "planck_paper",
+      "source_name": "Planck Collaboration VI (2020), A&A 641, A6 \u2014 arXiv:1807.06209 (ar5iv HTML)",
+      "url": "https://ar5iv.labs.arxiv.org/html/1807.06209",
+      "quote": "matter density parameter \u03a9m=0.315\u00b10.007",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "arxiv.org",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Known academic/scholarly publisher"
+      }
+    },
+    "B2": {
+      "source_key": "unlv_reference",
+      "source_name": "UNLV Cosmic Parameters Reference (sourced from Planck 2018)",
+      "url": "https://www.physics.unlv.edu/~jeffery/astro/cosmol/cosmic_parameters.html",
+      "quote": "Omega_Lambda           0.6853(74)               Assuming Omega = 1 (Planck 2018 p. 14)",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "unlv.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    }
+  },
+  "extractions": {
+    "B1": {
+      "value": "0.315",
+      "value_in_quote": true,
+      "quote_snippet": "matter density parameter \u03a9m=0.315\u00b10.007"
+    },
+    "B2": {
+      "value": "0.6853",
+      "value_in_quote": true,
+      "quote_snippet": "Omega_Lambda           0.6853(74)               Assuming Omega = 1 (Planck 2018 "
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Omega_Lambda derived from Omega_m (source A) vs directly reported (source B)",
+      "values_compared": [
+        "0.685",
+        "0.6853"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Has the Planck 2018 value for Omega_Lambda been revised or retracted?",
+      "verification_performed": "Searched for 'Planck 2018 dark energy revised retracted correction erratum'. The Planck 2018 paper (arXiv:1807.06209) was published in A&A 641, A6 (2020) as the final legacy release. No errata revising the cosmological parameters have been issued.",
+      "finding": "No revision or retraction found. The 2018 release is the final Planck data release.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could alternative cosmological models give Omega_Lambda < 0.68 from the same Planck data?",
+      "verification_performed": "Searched for 'Planck 2018 dark energy fraction alternative model lower than 68 percent'. Extended models (w0waCDM, curved models) can shift Omega_DE slightly, but the claim specifically references the base-LCDM results. In the base-LCDM model, Omega_Lambda is tightly constrained at 0.685 +/- 0.007.",
+      "finding": "In the base-LCDM model (which the Planck 2018 release uses as its primary framework), Omega_Lambda = 0.6853 +/- 0.0074. Even at the lower 1-sigma bound (0.6779), the value remains below 0.68 only marginally. The central value is clearly > 0.68.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the 68% threshold ambiguous \u2014 could it refer to a different quantity?",
+      "verification_performed": "Considered whether 'energy density' might refer to Omega_DE in a non-flat model, or to a different definition. In standard cosmology, 'dark energy fraction of total energy density' is Omega_Lambda = rho_Lambda / rho_critical, which equals 1 - Omega_m in a flat universe.",
+      "finding": "The standard interpretation is unambiguous: Omega_Lambda is the dark energy fraction of the critical density, and equals the fraction of total energy density in a flat universe.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED (with unverified citations)",
+  "key_results": {
+    "omega_lambda_direct": 0.6853,
+    "omega_lambda_derived": 0.685,
+    "omega_m": 0.315,
+    "threshold": 0.68,
+    "operator": ">",
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

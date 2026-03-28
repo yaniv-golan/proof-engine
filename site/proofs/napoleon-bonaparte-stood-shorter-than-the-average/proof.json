@@ -1,0 +1,225 @@
+{
+  "fact_registry": {
+    "B1": {
+      "key": "britannica_height",
+      "label": "Britannica: Napoleon's height at death (~1.68m) and average French male height in 1820 (~1.65m)"
+    },
+    "B2": {
+      "key": "history_com",
+      "label": "History.com: Napoleon's height ~1.67m, above average for early 1800s French men"
+    },
+    "B3": {
+      "key": "napoleon_series",
+      "label": "Napoleon Series: Average French male height 1800-1820 was 164.1 cm"
+    },
+    "B4": {
+      "key": "britannica_story",
+      "label": "Britannica: Napoleon average or taller, most Frenchmen 5'2\"-5'6\""
+    },
+    "A1": {
+      "label": "Comparison: Napoleon's height vs average French male height",
+      "method": "compare(napoleon_conservative, '<', avg_french_generous)",
+      "result": "Napoleon (1.67m) vs avg French (1.65m): claim_holds=False"
+    },
+    "A2": {
+      "label": "Cross-check: Napoleon's height vs average using second source pair",
+      "method": "cross_check() on independent sources",
+      "result": "Napoleon heights agree (1.68m vs 1.67m), avg heights agree (1.65m vs 1.641m)"
+    }
+  },
+  "claim_formal": {
+    "subject": "Napoleon Bonaparte's height",
+    "property": "comparison of Napoleon's height to average French male height of his era (late 18th/early 19th century)",
+    "operator": "<",
+    "operator_note": "'stood shorter than' is interpreted as strictly less than: Napoleon's height < average French male height. Napoleon lived 1769-1821; 'his era' is interpreted as the late 18th to early 19th century. Heights are compared in centimeters. If Napoleon's height is equal to or greater than the average, the claim is DISPROVED.",
+    "threshold": "average French male height (~164-165 cm)",
+    "measurement_note": "Napoleon's height was recorded in pre-metric French units (pieds and pouces). The French pouce (inch) was 2.71 cm vs the English inch at 2.54 cm. His recorded '5 pieds 2 pouces' translates to approximately 168-170 cm in modern units, not the 157 cm that a naive English conversion would yield."
+  },
+  "claim_natural": "Napoleon Bonaparte stood shorter than the average Frenchman of his era.",
+  "citations": {
+    "B1": {
+      "source_key": "britannica_height",
+      "source_name": "Encyclopaedia Britannica",
+      "url": "https://www.britannica.com/question/Was-Napoleon-short",
+      "quote": "At the time of his death in 1821, Napoleon measured about 5 feet 7 inches (roughly 1.68 meters) tall.",
+      "status": "partial",
+      "method": "fragment",
+      "coverage_pct": 47.4,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "britannica.com",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    },
+    "B2": {
+      "source_key": "history_com",
+      "source_name": "History.com (A&E Networks)",
+      "url": "https://www.history.com/articles/napoleon-complex-short",
+      "quote": "Three French sources\u2014his valet Constant, General Gourgaud, and his personal physician Francesco Antommarchi\u2014said that Napoleon's height was just over 5 pieds 2 pouces (5'2\"). Applying the French measurements of the time, that equals around 1.67 meters, or just under 5'6\", which is a little above average for a French man in the early 1800s.",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "history.com",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B3": {
+      "source_key": "napoleon_series",
+      "source_name": "The Napoleon Series (anthropometric data compilation)",
+      "url": "https://www.napoleon-series.org/research/abstract/population/vital/c_heights1.html",
+      "quote": "France 1800 - 1820 164.1",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "napoleon-series.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B4": {
+      "source_key": "britannica_story",
+      "source_name": "Encyclopaedia Britannica",
+      "url": "https://www.britannica.com/story/was-napoleon-short",
+      "quote": "most Frenchmen stood between 5'2\" and 5'6\" (1.58 and 1.68 meters) tall",
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "britannica.com",
+        "source_type": "reference",
+        "tier": 3,
+        "flags": [],
+        "note": "Established reference source"
+      }
+    }
+  },
+  "extractions": {
+    "B1_napoleon_height": {
+      "value": "1.68",
+      "value_in_quote": true,
+      "quote_snippet": "data_values['napoleon_height_m']"
+    },
+    "B1_avg_french": {
+      "value": "1.65",
+      "value_in_quote": true,
+      "quote_snippet": "data_values['avg_french_height_m']"
+    },
+    "B2_napoleon_height": {
+      "value": "1.67",
+      "value_in_quote": true,
+      "quote_snippet": "data_values['napoleon_height_m']"
+    },
+    "B3_avg_french_cm": {
+      "value": "164.1",
+      "value_in_quote": true,
+      "quote_snippet": "data_values['avg_french_height_cm']"
+    }
+  },
+  "data_value_verification": {
+    "B1": {
+      "napoleon_height_m": {
+        "found": true,
+        "value": "1.68",
+        "fetch_mode": "live"
+      },
+      "avg_french_height_m": {
+        "found": true,
+        "value": "1.65",
+        "fetch_mode": "live"
+      }
+    },
+    "B2": {
+      "napoleon_height_m": {
+        "found": true,
+        "value": "1.67",
+        "fetch_mode": "live"
+      }
+    },
+    "B3": {
+      "avg_french_height_cm": {
+        "found": true,
+        "value": "164.1",
+        "fetch_mode": "live"
+      }
+    },
+    "B4": {
+      "french_range_low_m": {
+        "found": true,
+        "value": "1.58",
+        "fetch_mode": "live"
+      },
+      "french_range_high_m": {
+        "found": true,
+        "value": "1.68",
+        "fetch_mode": "live"
+      }
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Napoleon height: Britannica vs History.com",
+      "values_compared": [
+        "1.68",
+        "1.67"
+      ],
+      "agreement": true,
+      "tolerance": "0.02m absolute"
+    },
+    {
+      "description": "Average French male height: Britannica vs Napoleon Series",
+      "values_compared": [
+        "1.65",
+        "1.641"
+      ],
+      "agreement": true,
+      "tolerance": "0.02m absolute"
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Are there any credible historical sources that place Napoleon's height below the French average?",
+      "verification_performed": "Searched for 'Napoleon shorter than average evidence sources claiming Napoleon was genuinely short'. Reviewed results from History.com, Britannica, National Geographic, Washington Post, and Wikipedia. All sources consistently state Napoleon was average height or above for his era.",
+      "finding": "No credible source claims Napoleon was below average height. The 'short Napoleon' myth is universally attributed to: (1) confusion between French and English measurement units, and (2) British propaganda cartoons by James Gillray.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the French measurement conversion be wrong, making Napoleon actually shorter?",
+      "verification_performed": "Checked multiple sources on the French pouce (inch) conversion. The French pouce was 2.71 cm vs the English inch at 2.54 cm. Napoleon's '5 pieds 2 pouces' converts to ~168 cm, not 157 cm. This conversion is well-established in metrology.",
+      "finding": "The conversion is consistent across all scholarly sources. Napoleon at 5 pieds 2 pouces = approximately 168 cm. There is no credible dispute about this conversion factor.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the average French male height have been higher than 164-165 cm, making Napoleon relatively shorter?",
+      "verification_performed": "Consulted Napoleon Series anthropometric data and Britannica. The Napoleon Series gives 164.1 cm for 1800-1820 French males. Britannica gives ~1.65m. Academic anthropometric studies by Komlos confirm these ranges. No source suggests the average exceeded 166 cm.",
+      "finding": "Average French male height in Napoleon's era was consistently reported as 164-165 cm across independent sources. Even at the generous upper bound of 165 cm, Napoleon (167-170 cm) was still taller.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED (with unverified citations)",
+  "key_results": {
+    "napoleon_height_conservative_m": 1.67,
+    "avg_french_height_generous_m": 1.65,
+    "difference_cm": 2.0000000000000018,
+    "claim_holds": false,
+    "napoleon_was_taller_by_cm": 2.0000000000000018
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Direction 1: Long division of p/q produces eventually periodic digits (pigeonhole on remainders)",
+      "method": "Long division of p/q tracking remainders; pigeonhole principle guarantees remainder repetition within q steps, creating a periodic cycle. Tested on 35 rationals including terminating, purely repeating, and mixed cases.",
+      "result": "All 35 cases passed: expansion is eventually periodic and round-trips to original fraction"
+    },
+    "A2": {
+      "label": "Direction 2: Every eventually periodic decimal converts to a fraction p/q",
+      "method": "Algebraic conversion: for decimal 0.d\u2081...d\u2096(r\u2081...r\u209a), multiply by 10^(k+p) and 10^k, subtract to eliminate the repeating part, yielding a ratio of integers. Tested on 14 periodic decimals.",
+      "result": "All 14 cases converted to correct fractions and round-tripped"
+    },
+    "A3": {
+      "label": "Cross-check: Python Fraction confirms rational \u2194 periodic equivalence",
+      "method": "Exhaustive test of all p/q with 1 \u2264 q \u2264 200, 0 \u2264 p < q: long_division \u2192 periodic_decimal_to_fraction must return original Fraction(p,q). Uses Python's Fraction for exact arithmetic as independent ground truth.",
+      "result": "20100 rationals tested, 0 failures"
+    }
+  },
+  "claim_formal": {
+    "subject": "real numbers and their decimal expansions",
+    "property": "biconditional equivalence between rationality and eventual periodicity",
+    "operator": "==",
+    "operator_note": "This is a biconditional (iff) claim with two directions: (1) rational \u21d2 eventually periodic, and (2) eventually periodic \u21d2 rational. Both must hold for the claim to be PROVED. 'Eventually periodic' means there exist non-negative integers k (pre-period length) and p \u2265 1 (period length) such that for all n \u2265 k, digit d(n) = d(n+p). A terminating decimal is eventually periodic with repeating 0s (or equivalently 9s). We verify computationally by testing both directions on a comprehensive set of cases.",
+    "threshold": true
+  },
+  "claim_natural": "A real number is rational if and only if its decimal expansion is eventually periodic.",
+  "cross_checks": [
+    {
+      "description": "Exhaustive round-trip test for all rationals p/q with q \u2264 200",
+      "values_compared": [
+        "20100 tested",
+        "0 failures"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Direction 1 hand-picked cases vs Direction 2 reconstruction",
+      "values_compared": [
+        "True",
+        "True"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does 0.(9) = 1 break the uniqueness of decimal expansions?",
+      "verification_performed": "Tested 0.(9) conversion: periodic_decimal_to_fraction(True, 0, [], [9]) returns Fraction(1, 1) = 1. This is correct \u2014 0.999... = 1 is a well-known identity. Decimal representations are not unique, but the theorem holds: both 1.0(0) and 0.(9) are eventually periodic representations of the rational number 1.",
+      "finding": "0.(9) = 1 is handled correctly. Non-uniqueness of decimal representation does not affect the theorem.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Are there irrational numbers with 'almost periodic' expansions that could be mistaken for periodic?",
+      "verification_performed": "Considered numbers like \u221a2 = 1.41421356... \u2014 the digits never repeat. The Champernowne constant 0.123456789101112... contains every finite digit string but is not periodic. Liouville's number has a pattern but is not eventually periodic. The proof's correctness does not depend on detecting periodicity in arbitrary digit strings \u2014 it depends on the algebraic structure: long division of p/q necessarily cycles (pigeonhole on q remainders), and any periodic decimal can be algebraically converted to p/q.",
+      "finding": "Almost-periodic irrationals do not affect the proof. The proof works from the algebraic structure, not from digit pattern detection.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the proof handle edge cases: 0, negative numbers, integers?",
+      "verification_performed": "Tested: 0/1 = 0.0(0) \u2014 terminates, periodic with period [0]. -1/3 = -0.(3) \u2014 sign handled separately, fractional part periodic. 5/1 = 5.0(0) \u2014 integer, terminates. 100/4 = 25.0(0) \u2014 integer result from non-trivial fraction. All pass both directions.",
+      "finding": "Edge cases (zero, negatives, integers) are handled correctly.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the pigeonhole argument fail for very large denominators?",
+      "verification_performed": "The pigeonhole principle guarantees repetition within q steps for denominator q. Tested with q=97 (period 96, maximal for a prime), q=127 (period 42), q=239. The exhaustive cross-check tests all q up to 200. The mathematical argument is watertight: q possible remainders means at most q steps before a repeat.",
+      "finding": "Pigeonhole bound holds for all tested denominators. The argument is valid for all positive q.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
+    "direction_1_passed": true,
+    "direction_2_passed": true,
+    "crosscheck_passed": true,
+    "total_rationals_exhaustively_tested": 20100,
+    "exhaustive_failures": 0,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "0.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-28"
+  }
+}
