@@ -1,5 +1,6 @@
-"""Tests for verify_citations.py — build_citation_detail."""
+"""Tests for verify_citations.py — build_citation_detail and deferred import."""
 from scripts.verify_citations import build_citation_detail
+from scripts import verify_citations as vc_module
 
 
 def test_build_citation_detail_single_source():
@@ -78,3 +79,38 @@ def test_build_citation_detail_multi_source_short_sources_list():
     assert detail["B1_source_0"]["url"] == "http://a.com"
     assert "B1_source_1" in detail
     assert detail["B1_source_1"]["url"] == ""
+
+
+# ---------------------------------------------------------------------------
+# Deferred requests import — snapshot-only verification without requests
+# ---------------------------------------------------------------------------
+
+
+def test_no_requests_skips_live_fetch(monkeypatch):
+    """When requests is None, verify_citation should skip live fetch and use snapshot."""
+    monkeypatch.setattr(vc_module, "requests", None)
+    result = vc_module.verify_citation(
+        url="http://example.com",
+        expected_quote="hello world",
+        fact_id="test",
+        snapshot="<html>hello world</html>",
+    )
+    assert result["status"] == "verified"
+    assert result["fetch_mode"] == "snapshot"
+
+
+def test_no_requests_returns_fetch_failed_without_snapshot(monkeypatch):
+    """When requests is None and no snapshot, verify_citation returns fetch_failed."""
+    monkeypatch.setattr(vc_module, "requests", None)
+    result = vc_module.verify_citation(
+        url="http://example.com",
+        expected_quote="hello world",
+        fact_id="test",
+    )
+    assert result["status"] == "fetch_failed"
+
+
+def test_no_requests_normalize_still_works(monkeypatch):
+    """Non-HTTP functions work fine without requests."""
+    monkeypatch.setattr(vc_module, "requests", None)
+    assert vc_module.normalize_text("Hello World") == "hello world"

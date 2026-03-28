@@ -35,8 +35,7 @@ import json
 try:
     import requests
 except ImportError:
-    print("ERROR: 'requests' package required. Install with: pip install requests")
-    sys.exit(1)
+    requests = None
 
 # Import Unicode normalization from smart_extract
 try:
@@ -161,6 +160,8 @@ def _extract_pdf_text(content: bytes) -> str:
 
 def _try_wayback(url: str, timeout: int = 15) -> str:
     """Try fetching a URL from the Wayback Machine. Returns page text or None."""
+    if requests is None:
+        return None
     wayback_url = f"https://web.archive.org/web/{url}"
     try:
         resp = requests.get(wayback_url, timeout=timeout,
@@ -283,36 +284,39 @@ def verify_citation(
     # --- 1. Try live fetch ---
     live_page = None
     fetch_error_msg = None
-    try:
-        resp = requests.get(
-            url,
-            timeout=timeout,
-            headers={"User-Agent": "proof-engine/1.0"},
-            allow_redirects=True,
-        )
-        resp.raise_for_status()
+    if requests is not None:
+        try:
+            resp = requests.get(
+                url,
+                timeout=timeout,
+                headers={"User-Agent": "proof-engine/1.0"},
+                allow_redirects=True,
+            )
+            resp.raise_for_status()
 
-        # Detect PDF
-        content_type = resp.headers.get("Content-Type", "")
-        is_pdf = "application/pdf" in content_type or url.lower().endswith(".pdf")
+            # Detect PDF
+            content_type = resp.headers.get("Content-Type", "")
+            is_pdf = "application/pdf" in content_type or url.lower().endswith(".pdf")
 
-        if is_pdf:
-            pdf_text = _extract_pdf_text(resp.content)
-            if pdf_text is None:
-                fetch_error_msg = f"PDF detected but no extraction library available (pip install pdfplumber)"
+            if is_pdf:
+                pdf_text = _extract_pdf_text(resp.content)
+                if pdf_text is None:
+                    fetch_error_msg = f"PDF detected but no extraction library available (pip install pdfplumber)"
+                else:
+                    live_page = pdf_text
             else:
-                live_page = pdf_text
-        else:
-            live_page = resp.text
+                live_page = resp.text
 
-    except requests.exceptions.Timeout:
-        fetch_error_msg = f"Timeout after {timeout}s on {url}"
-    except requests.exceptions.ConnectionError as e:
-        fetch_error_msg = f"Connection error on {url}: {e}"
-    except requests.exceptions.HTTPError:
-        fetch_error_msg = f"HTTP {resp.status_code} on {url}"
-    except requests.exceptions.RequestException as e:
-        fetch_error_msg = f"{e}"
+        except requests.exceptions.Timeout:
+            fetch_error_msg = f"Timeout after {timeout}s on {url}"
+        except requests.exceptions.ConnectionError as e:
+            fetch_error_msg = f"Connection error on {url}: {e}"
+        except requests.exceptions.HTTPError:
+            fetch_error_msg = f"HTTP {resp.status_code} on {url}"
+        except requests.exceptions.RequestException as e:
+            fetch_error_msg = f"{e}"
+    else:
+        fetch_error_msg = "requests package not installed — skipping live fetch"
 
     # Try matching against live page
     if live_page is not None:
@@ -444,18 +448,21 @@ def verify_data_values(url: str, data_values: dict, fact_id: str,
     fetch_mode = "live"
     fetch_error = None
 
-    try:
-        resp = requests.get(url, timeout=timeout,
-                            headers={"User-Agent": "proof-engine/1.0"},
-                            allow_redirects=True)
-        resp.raise_for_status()
-        content_type = resp.headers.get("Content-Type", "")
-        if "application/pdf" in content_type or url.lower().endswith(".pdf"):
-            page_text = _extract_pdf_text(resp.content)
-        else:
-            page_text = resp.text
-    except requests.exceptions.RequestException as e:
-        fetch_error = str(e)
+    if requests is not None:
+        try:
+            resp = requests.get(url, timeout=timeout,
+                                headers={"User-Agent": "proof-engine/1.0"},
+                                allow_redirects=True)
+            resp.raise_for_status()
+            content_type = resp.headers.get("Content-Type", "")
+            if "application/pdf" in content_type or url.lower().endswith(".pdf"):
+                page_text = _extract_pdf_text(resp.content)
+            else:
+                page_text = resp.text
+        except requests.exceptions.RequestException as e:
+            fetch_error = str(e)
+    else:
+        fetch_error = "requests package not installed"
 
     if page_text is None and snapshot:
         page_text = snapshot
