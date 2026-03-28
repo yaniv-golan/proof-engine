@@ -76,7 +76,17 @@
         "worldscientific.com",
         "degruyter.com",
         "karger.com",
-        "biomedcentral.com"
+        "biomedcentral.com",
+        "iopscience.iop.org",
+        "aanda.org",
+        "journals.aps.org",
+        "physrev.org",
+        "aip.org",
+        "scitation.org",
+        "projecteuclid.org",
+        "msp.org",
+        "ams.org",
+        "zbmath.org"
     ],
     "doi_prefixes": [
         "https://doi.org/",
