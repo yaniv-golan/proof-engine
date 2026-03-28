@@ -526,13 +526,14 @@ if __name__ == "__main__":
 
 
 def test_rule2_search_registry_with_verify_passes(tmp_path):
-    """Rule 2: search_registry + verify_search_registry import → pass."""
+    """Rule 2: search_registry + verify_search_registry call → pass."""
     code = '''
 from scripts.verify_citations import verify_search_registry
 search_registry = {"search_a": {"url": "https://example.com"}}
 CLAIM_FORMAL = {"operator_note": "test", "proof_direction": "absence"}
 adversarial_checks = [{"question": "test"}]
 FACT_REGISTRY = {"S1": {"key": "search_a", "label": "test"}}
+search_results = verify_search_registry(search_registry)
 if __name__ == "__main__":
     verdict = "SUPPORTED"
     import json
@@ -828,3 +829,177 @@ def test_no_subclaims_skips():
     v = _validate_rule6_subclaim(NO_SUBCLAIMS_SKIPS)
     assert len(v.warnings) == 0
     assert len(v.issues) == 0
+
+
+# ---------------------------------------------------------------------------
+# Unused imports: critical functions should be ISSUE not WARNING
+# ---------------------------------------------------------------------------
+
+IMPORTED_VERIFY_ALL_NEVER_CALLED = '''
+from scripts.verify_citations import verify_all_citations, build_citation_detail
+from scripts.computations import compare
+
+empirical_facts = {
+    "source_a": {"quote": "...", "url": "...", "source_name": "A"},
+}
+citation_detail = build_citation_detail({}, {}, empirical_facts)
+claim_holds = compare(3, ">=", 3)
+'''
+
+IMPORTED_VERIFY_ALL_IN_COMMENT_ONLY = '''
+from scripts.verify_citations import verify_all_citations, build_citation_detail
+from scripts.computations import compare
+
+empirical_facts = {
+    "source_a": {"quote": "...", "url": "...", "source_name": "A"},
+}
+# verify_all_citations is not needed for this proof type
+citation_detail = build_citation_detail({}, {}, empirical_facts)
+claim_holds = compare(3, ">=", 3)
+'''
+
+IMPORTED_VERIFY_ALL_ACTUALLY_CALLED = '''
+from scripts.verify_citations import verify_all_citations, build_citation_detail
+from scripts.computations import compare
+
+empirical_facts = {
+    "source_a": {"quote": "...", "url": "...", "source_name": "A"},
+}
+citation_results = verify_all_citations(empirical_facts)
+citation_detail = build_citation_detail({}, citation_results, empirical_facts)
+claim_holds = compare(3, ">=", 3)
+'''
+
+
+def test_unused_verify_all_citations_is_issue():
+    """verify_all_citations imported but never called should be ISSUE, not WARNING."""
+    v = _validate_full(IMPORTED_VERIFY_ALL_NEVER_CALLED)
+    assert any("verify_all_citations" in str(iss) for iss in v.issues)
+
+
+def test_verify_all_in_comment_only_is_issue():
+    """verify_all_citations mentioned only in a comment should still be ISSUE."""
+    v = _validate_full(IMPORTED_VERIFY_ALL_IN_COMMENT_ONLY)
+    assert any("verify_all_citations" in str(iss) for iss in v.issues)
+
+
+def test_verify_all_actually_called_passes():
+    """verify_all_citations actually called should pass."""
+    v = _validate_full(IMPORTED_VERIFY_ALL_ACTUALLY_CALLED)
+    assert not any("verify_all_citations" in str(iss) for iss in v.issues)
+    assert not any("verify_all_citations" in str(w) for w in v.warnings)
+
+
+# ---------------------------------------------------------------------------
+# Rule 2 interaction: bare import should NOT satisfy Rule 2
+# ---------------------------------------------------------------------------
+
+def _validate_rule2(source_code: str) -> ProofValidator:
+    """Write source to temp file, run Rule 2 check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_rule2_citation_verification()
+    os.unlink(f.name)
+    return v
+
+
+RULE2_BARE_IMPORT_WITH_EMPIRICAL = '''
+from scripts.verify_citations import verify_all_citations
+empirical_facts = {
+    "source_a": {"quote": "data", "url": "https://example.com", "source_name": "A"},
+}
+# Never actually calls verify_all_citations
+'''
+
+
+RULE2_ACTUAL_CALL_WITH_EMPIRICAL = '''
+from scripts.verify_citations import verify_all_citations
+empirical_facts = {
+    "source_a": {"quote": "data", "url": "https://example.com", "source_name": "A"},
+}
+citation_results = verify_all_citations(empirical_facts)
+'''
+
+
+def test_rule2_bare_import_does_not_satisfy():
+    """Importing verify_all_citations without calling it should fail Rule 2."""
+    v = _validate_rule2(RULE2_BARE_IMPORT_WITH_EMPIRICAL)
+    assert len(v.issues) > 0
+    assert any("Rule 2" in str(iss) for iss in v.issues)
+
+
+def test_rule2_actual_call_satisfies():
+    """Calling verify_all_citations should pass Rule 2."""
+    v = _validate_rule2(RULE2_ACTUAL_CALL_WITH_EMPIRICAL)
+    assert len(v.issues) == 0
+    assert any("Rule 2" in str(p) for p in v.passed)
+
+
+# ---------------------------------------------------------------------------
+# End-to-end: unused import + Rule 2 interaction via full validate()
+# ---------------------------------------------------------------------------
+
+def _validate_end_to_end(source_code: str) -> ProofValidator:
+    """Write source to temp file, run full validate(), return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.validate()
+    os.unlink(f.name)
+    return v
+
+
+E2E_UNUSED_VERIFY_FULL_PROOF = '''
+"""Proof: test claim"""
+import json
+import sys
+import os
+from datetime import date
+from scripts.verify_citations import verify_all_citations, build_citation_detail
+from scripts.computations import compare
+from scripts.extract_values import verify_extraction
+
+PROOF_ENGINE_ROOT = "."
+CLAIM_NATURAL = "Test claim"
+CLAIM_FORMAL = {
+    "subject": "test",
+    "property": "value",
+    "operator": ">",
+    "operator_note": "test",
+    "threshold": 50,
+}
+empirical_facts = {
+    "source_a": {"quote": "The value is 60", "url": "https://example.com", "source_name": "A"},
+    "source_b": {"quote": "The value is 61", "url": "https://example2.com", "source_name": "B"},
+}
+FACT_REGISTRY = {
+    "A1": {"label": "result", "method": None, "result": None},
+    "B1": {"label": "source a", "key": "source_a"},
+    "B2": {"label": "source b", "key": "source_b"},
+}
+# NOTE: verify_all_citations is imported but NEVER called
+citation_detail = build_citation_detail(FACT_REGISTRY, {}, empirical_facts)
+val = verify_extraction("60", empirical_facts["source_a"]["quote"], "B1")
+adversarial_checks = [{"question": "counter?", "verification_performed": "searched", "finding": "none", "breaks_proof": False}]
+if __name__ == "__main__":
+    claim_holds = compare(60, ">", 50)
+    if claim_holds:
+        verdict = "PROVED"
+    else:
+        verdict = "DISPROVED"
+    print("=== PROOF SUMMARY (JSON) ===")
+    print(json.dumps({"verdict": verdict}))
+'''
+
+
+def test_e2e_unused_verify_all_fails_both_rule2_and_imports():
+    """Full validate(): importing verify_all_citations without calling it should
+    fail both Rule 2 (no citation verification call) and unused imports."""
+    v = _validate_end_to_end(E2E_UNUSED_VERIFY_FULL_PROOF)
+    # Should have issues for both Rule 2 and unused critical import
+    issue_strs = [str(iss) for iss in v.issues]
+    assert any("Rule 2" in s for s in issue_strs), f"Expected Rule 2 issue, got: {issue_strs}"
+    assert any("verify_all_citations" in s for s in issue_strs), f"Expected unused import issue, got: {issue_strs}"

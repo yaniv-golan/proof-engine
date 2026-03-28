@@ -33,6 +33,19 @@ class ProofValidator:
     # Rule checks
     # ------------------------------------------------------------------
 
+    def _build_code_body(self):
+        """Build source with imports and comments stripped, for call-site detection."""
+        code_lines = []
+        for line in self.lines:
+            stripped = line.strip()
+            if stripped.startswith("#") or stripped.startswith("from scripts.") or stripped.startswith("import "):
+                continue
+            comment_pos = stripped.find("#")
+            if comment_pos >= 0:
+                stripped = stripped[:comment_pos]
+            code_lines.append(stripped)
+        return "\n".join(code_lines)
+
     def check_rule1_no_handtyped_values(self):
         """Rule 1: No hand-typed extracted values.
 
@@ -162,36 +175,37 @@ class ProofValidator:
         return keys
 
     def check_rule2_citation_verification(self):
-        """Rule 2: Citation verification code present."""
-        has_verify_import = bool(re.search(r'verify_citation|verify_all_citations', self.source))
+        """Rule 2: Citation verification code present (actual call, not just import)."""
+        code_body = self._build_code_body()
+        has_verify_call = bool(re.search(
+            r'(?:verify_citation|verify_all_citations)\s*\(', code_body
+        ))
         has_smart_extract = bool(re.search(r'smart_extract|normalize_unicode|verify_extraction', self.source))
         has_requests = bool(re.search(r'requests\.get', self.source))
         has_search_registry = self._has_search_registry()
-        has_verify_search = bool(re.search(r'verify_search_registry', self.source))
+        has_verify_search = bool(re.search(r'verify_search_registry\s*\(', code_body))
 
         if has_search_registry:
             if not has_verify_search:
                 self.issues.append((
-                    "Rule 2: Has search_registry but no verify_search_registry import",
+                    "Rule 2: Has search_registry but no verify_search_registry call",
                     [],
                 ))
             else:
                 self.passed.append("Rule 2: verify_search_registry found for search_registry")
             # Also check for verify_all_citations if empirical_facts present
             has_empirical = self._has_nonempty_empirical_facts()
-            if has_empirical and not has_verify_import:
+            if has_empirical and not has_verify_call:
                 self.issues.append((
-                    "Rule 2: Has corroborating empirical_facts but no verify_all_citations import",
+                    "Rule 2: Has corroborating empirical_facts but no verify_all_citations call",
                     [],
                 ))
-        elif has_verify_import:
+        elif has_verify_call:
             extra = " (with Unicode normalization)" if has_smart_extract else ""
             self.passed.append(f"Rule 2: Citation verification code found (bundled script){extra}")
         elif has_requests:
             self.warnings.append(("Rule 2: Inline requests.get found — prefer bundled verify_citations.py", []))
         else:
-            # For pure-math proofs with no empirical facts, this is OK.
-            # An empty dict (empirical_facts = {}) counts as "no empirical facts".
             has_empirical = self._has_nonempty_empirical_facts()
             if has_empirical or "Type B" in self.source or '"url"' in self.source:
                 self.issues.append(("Rule 2: Has empirical facts but no citation verification code", []))
@@ -613,7 +627,18 @@ class ProofValidator:
                     return
 
     def check_unused_imports(self):
-        """Check for imported-but-unused functions from scripts.*"""
+        """Check for imported-but-unused functions from scripts.*
+
+        For critical functions (verify_all_citations, verify_data_values),
+        checks for actual call sites — name followed by '(' — excluding
+        comments and the import line itself. Promotes unused critical
+        functions to ISSUE since their mere import falsely satisfies rule checks.
+        """
+        CRITICAL_FUNCTIONS = {
+            "verify_all_citations", "verify_citation",
+            "verify_data_values", "verify_search_registry",
+        }
+
         import_lines = re.findall(
             r'from\s+scripts\.\w+\s+import\s+(.+)',
             self.source,
@@ -623,18 +648,44 @@ class ProofValidator:
             names = [n.strip() for n in line.split(",")]
             imported_names.extend(names)
 
+        code_body = self._build_code_body()
+
         unused = []
         for name in imported_names:
-            occurrences = len(re.findall(r'\b' + re.escape(name) + r'\b', self.source))
-            if occurrences <= 1:
-                unused.append(name)
+            if name in CRITICAL_FUNCTIONS:
+                has_call = bool(re.search(
+                    r'\b' + re.escape(name) + r'\s*\(', code_body
+                ))
+                if not has_call:
+                    unused.append(name)
+            else:
+                has_call = bool(re.search(
+                    r'\b' + re.escape(name) + r'\s*\(', code_body
+                ))
+                if not has_call:
+                    occurrences = len(re.findall(
+                        r'\b' + re.escape(name) + r'\b', self.source
+                    ))
+                    if occurrences <= 1:
+                        unused.append(name)
 
         if unused:
-            self.warnings.append((
-                f"Unused imports from scripts.*: {', '.join(unused)} — "
-                "imported but never called (dead code that may falsely satisfy rule checks)",
-                [],
-            ))
+            critical_unused = [n for n in unused if n in CRITICAL_FUNCTIONS]
+            other_unused = [n for n in unused if n not in CRITICAL_FUNCTIONS]
+
+            if critical_unused:
+                self.issues.append((
+                    f"Unused critical imports: {', '.join(critical_unused)} — "
+                    "imported but never called; their presence falsely satisfies "
+                    "rule checks (Rule 2 / table integrity)",
+                    [],
+                ))
+            if other_unused:
+                self.warnings.append((
+                    f"Unused imports from scripts.*: {', '.join(other_unused)} — "
+                    "imported but never called (dead code that may falsely satisfy rule checks)",
+                    [],
+                ))
         else:
             self.passed.append("Contract: All imported script functions are used")
 
