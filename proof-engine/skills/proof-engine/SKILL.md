@@ -9,7 +9,7 @@ description: >
   questions with no verifiable answer.
 metadata:
   author: Yaniv Golan
-  version: "1.0.0"
+  version: "1.1.0"
   license: MIT
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),

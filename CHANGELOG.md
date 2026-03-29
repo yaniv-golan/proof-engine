@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-03-29
+
+### Added
+
+- **Per-proof OG verdict card images** — auto-generated 1200x630 social sharing cards at build time using Pillow, with verdict badge, claim text, source count, and optional 240x240 thumbnail
+  - Submitter-provided `thumbnail.png` takes priority over default thumbnail
+  - Custom thumbnails also displayed on proof detail pages (floated right of claim title)
+  - JetBrains Mono Bold font bundled for consistent CI rendering (OFL license)
+- **Share buttons on proof pages** — X/Twitter post (with pre-filled verdict text), copy verdict, and copy link buttons after the verdict banner
+  - Share text varies: "verified with sources" vs "verified by computation" based on proof type
+  - All claim text safely escaped via data-attributes (no inline JS interpolation)
+- **How-it-works pipeline diagram** — 5-step CSS/HTML flow on landing page: claim → fetch sources → verify quotes → run proof.py → verdict. Responsive (stacks vertically on mobile)
+- **GitHub stars badge** on landing page (shields.io, live count)
+- **Trust line** on landing page: "X sources checked across Y proofs" using unique verified source names
+- **"Star on GitHub" nudge** on proof detail pages near downloads
+- **Twitter Card meta tags** (`twitter:card`, `twitter:title`, `twitter:description`) on all pages
+- **Schema.org WebSite JSON-LD** on landing page
+- **Claude Desktop one-click install** button and redirect page
+- **Proof thumbnails** for 7 proofs generated via Nano Banana Pro
+- Seeded 38 new proofs from eval rounds (hot topics, nutrition claims, more)
+
+### Changed
+
+- **CTA hierarchy** — landing page hero now has single primary "browse proofs" button; "install skill" and "ai agents" demoted to text links below
+- **Evidence table** on proof detail pages leads with source name (linked), fact ID as secondary column
+- **Download labels** humanized: "run the proof (Python)", "full audit trail", "raw data (JSON)"
+- Source line contrast improved from `--text-muted` to `--text-secondary` for WCAG AA compliance
+
+### Fixed
+
+- Source line contrast ratio below WCAG AA minimum (2.5:1 → 7:1)
+- OG verdict badge vertical padding too tight for long verdict text like "DISPROVED (with unverified citations)"
+- `verify_citation` now respects monkeypatched `requests=None` via `skip_live_fetch` parameter
+- Proof output directory created before thumbnail copy
+- Unknown `proof.json` keys (`sub_claim_verdicts`, `sub_claim_results`) added to ProofData TypedDict
+- Redundant `sub_claim_verdicts`/`sub_claim_results` removed from proof artifacts
+- Install redirect page fallback and auto-redirect improvements
+
 ## [1.0.0] - 2026-03-28
 
 ### Added
