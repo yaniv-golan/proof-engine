@@ -4,6 +4,8 @@
   <img src="assets/banner.png" alt="Proof Engine" width="100%">
 </p>
 
+[![Install in Claude Desktop](https://img.shields.io/badge/Install_in_Claude_Desktop-D97757?style=for-the-badge&logo=claude&logoColor=white)](claude://claude.ai/customize/plugins/new?marketplace=https://github.com/yaniv-golan/proof-engine&plugin=proof-engine)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Agent Skills Compatible](https://img.shields.io/badge/Agent_Skills-compatible-4A90D9)](https://agentskills.io)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-plugin-F97316)](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/plugins)
@@ -36,6 +38,10 @@ The skill produces three outputs: a re-runnable `proof.py` script, a reader-faci
 
 ### Claude Desktop
 
+[![Install in Claude Desktop](https://img.shields.io/badge/Install_in_Claude_Desktop-D97757?style=for-the-badge&logo=claude&logoColor=white)](claude://claude.ai/customize/plugins/new?marketplace=https://github.com/yaniv-golan/proof-engine&plugin=proof-engine)
+
+*— or install manually —*
+
 1. Click **Customize** in the sidebar
 2. Click **Browse Plugins**
 3. Go to the **Personal** tab and click **+**
@@ -44,7 +50,16 @@ The skill produces three outputs: a re-runnable `proof.py` script, a reader-faci
 
 ### Claude Code (CLI)
 
+From your terminal:
+
 ```bash
+claude plugin marketplace add https://github.com/yaniv-golan/proof-engine
+claude plugin install proof-engine@proof-engine-marketplace
+```
+
+Or from within a Claude Code session:
+
+```
 /plugin marketplace add yaniv-golan/proof-engine
 /plugin install proof-engine@proof-engine-marketplace
 ```
@@ -62,6 +77,8 @@ The skill produces three outputs: a re-runnable `proof.py` script, a reader-faci
 4. Upload the zip
 
 ### ChatGPT
+
+> **Note:** ChatGPT Skills are currently in beta, available on Business, Enterprise, Edu, Teachers, and Healthcare plans only. See [OpenAI's documentation](https://help.openai.com/en/articles/20001066-skills-in-chatgpt) for the latest on plan availability.
 
 1. Download [`proof-engine.zip`](https://github.com/yaniv-golan/proof-engine/releases/latest/download/proof-engine.zip)
 2. Upload at [chatgpt.com/skills](https://chatgpt.com/skills)
