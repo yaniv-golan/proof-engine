@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <title>Install Proof Engine in Claude Desktop</title>
-<meta http-equiv="refresh" content="0;url=claude://claude.ai/customize/plugins/new?marketplace=https://github.com/yaniv-golan/proof-engine&plugin=proof-engine">
 <style>
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #f9f5f1; color: #3d3929; }
 .card { text-align: center; padding: 3rem; max-width: 480px; }
@@ -11,14 +10,40 @@ h1 { font-size: 1.4rem; margin-bottom: 1rem; }
 p { color: #6b5e4f; line-height: 1.6; }
 a { color: #d97757; text-decoration: none; font-weight: 600; }
 a:hover { text-decoration: underline; }
+.fallback { display: none; }
 </style>
 </head>
 <body>
 <div class="card">
 <h1>Installing Proof Engine</h1>
-<p>Opening Claude Desktop to install the plugin...</p>
-<p>If nothing happened, <a href="claude://claude.ai/customize/plugins/new?marketplace=https://github.com/yaniv-golan/proof-engine&plugin=proof-engine">click here</a> or install manually from Claude Desktop's Customize menu.</p>
+<p id="status">Opening Claude Desktop...</p>
+<div id="fallback" class="fallback">
+<p>Claude Desktop didn't open. You can:</p>
+<p><a href="claude://claude.ai/customize/plugins/new?marketplace=https://github.com/yaniv-golan/proof-engine&plugin=proof-engine">Try again</a></p>
+<p>Or install manually: open Claude Desktop, click <strong>Customize</strong>, then <strong>Browse Plugins</strong>, add marketplace <code>yaniv-golan/proof-engine</code>.</p>
 </div>
-<script>window.location = "claude://claude.ai/customize/plugins/new?marketplace=https://github.com/yaniv-golan/proof-engine&plugin=proof-engine";</script>
+</div>
+<script>
+var deepLink = "claude://claude.ai/customize/plugins/new?marketplace=https://github.com/yaniv-golan/proof-engine&plugin=proof-engine";
+var repo = "https://github.com/yaniv-golan/proof-engine";
+
+// Try opening the deep link
+window.location = deepLink;
+
+// If the page is still visible after 3s, the deep link likely didn't work
+setTimeout(function() {
+  if (!document.hidden) {
+    document.getElementById("status").textContent = "";
+    document.getElementById("fallback").style.display = "block";
+  }
+}, 3000);
+
+// If the user comes back to this tab (Claude opened then they switched back), redirect to repo
+document.addEventListener("visibilitychange", function() {
+  if (!document.hidden) {
+    setTimeout(function() { window.location = repo; }, 500);
+  }
+});
+</script>
 </body>
 </html>
