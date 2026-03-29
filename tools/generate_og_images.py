@@ -132,7 +132,7 @@ def generate_proof_og_image(
     verdict_text = f"{symbol} {verdict_raw}"
     badge_bbox = draw.textbbox((0, 0), verdict_text, font=font_verdict)
     badge_w = badge_bbox[2] - badge_bbox[0] + 40
-    badge_h = badge_bbox[3] - badge_bbox[1] + 20
+    badge_h = badge_bbox[3] - badge_bbox[1] + 32
     badge_x = 80
     badge_y = 80
     draw.rounded_rectangle(
