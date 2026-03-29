@@ -22,6 +22,7 @@ a:hover { text-decoration: underline; }
 <p><a href="claude://claude.ai/customize/plugins/new?marketplace=https://github.com/yaniv-golan/proof-engine&plugin=proof-engine">Try again</a></p>
 <p>Or install manually: open Claude Desktop, click <strong>Customize</strong>, then <strong>Browse Plugins</strong>, add marketplace <code>yaniv-golan/proof-engine</code>.</p>
 </div>
+<p><a href="https://github.com/yaniv-golan/proof-engine">Back to Proof Engine on GitHub</a></p>
 </div>
 <script>
 var deepLink = "claude://claude.ai/customize/plugins/new?marketplace=https://github.com/yaniv-golan/proof-engine&plugin=proof-engine";
@@ -30,13 +31,13 @@ var repo = "https://github.com/yaniv-golan/proof-engine";
 // Try opening the deep link
 window.location = deepLink;
 
-// If the page is still visible after 3s, the deep link likely didn't work
+// If the page is still visible after 5s, the deep link likely didn't work
 setTimeout(function() {
   if (!document.hidden) {
     document.getElementById("status").textContent = "";
     document.getElementById("fallback").style.display = "block";
   }
-}, 3000);
+}, 5000);
 
 // If the user comes back to this tab (Claude opened then they switched back), redirect to repo
 document.addEventListener("visibilitychange", function() {
