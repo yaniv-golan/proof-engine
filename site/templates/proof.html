@@ -6,6 +6,9 @@
 
 {% block og_title %}{{ proof.proof_data.claim_natural }}{% endblock %}
 
+{% block og_image %}<meta property="og:image" content="{{ site_url }}{{ base_url }}proofs/{{ proof.slug }}/og-image.png">
+    <meta name="twitter:image" content="{{ site_url }}{{ base_url }}proofs/{{ proof.slug }}/og-image.png">{% endblock %}
+
 {% block head_extra %}
 <script type="application/ld+json">
 {{ json_ld | safe }}

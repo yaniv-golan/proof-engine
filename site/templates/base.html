@@ -15,6 +15,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ self.og_title() }}">
     <meta name="twitter:description" content="{{ self.og_description() }}">
+    {% block og_image %}<meta property="og:image" content="{{ site_url }}{{ base_url }}static/og-default.png">
+    <meta name="twitter:image" content="{{ site_url }}{{ base_url }}static/og-default.png">{% endblock %}
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSGK7C8RGD"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KSGK7C8RGD');</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">

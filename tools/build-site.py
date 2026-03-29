@@ -192,7 +192,7 @@ def main():
         autoescape=select_autoescape(["html"]),
     )
 
-    common = {"base_url": base_url}
+    common = {"base_url": base_url, "site_url": site_url}
     stats = compute_stats(proofs)
 
     # Landing page — pass all featured proofs; JS picks 3 randomly per page load
@@ -305,6 +305,32 @@ def main():
 
     # Static assets
     shutil.copytree(site_dir / "static", output_dir / "static")
+
+    # OG images — import here (not top-level) so compute_stats tests
+    # don't require Pillow at collection time
+    from tools.generate_og_images import generate_proof_og_image, generate_default_og_image
+
+    font_path = site_dir / "static" / "fonts" / "JetBrainsMono-Bold.ttf"
+    default_thumb = site_dir / "static" / "thumbnail-default.png"
+
+    # Default OG image
+    generate_default_og_image(output_dir / "static" / "og-default.png", font_path)
+
+    # Per-proof OG images
+    for proof in proofs:
+        proof_og_path = output_dir / "proofs" / proof["slug"] / "og-image.png"
+        custom_thumb = proofs_dir / proof["slug"] / "thumbnail.png"
+        generate_proof_og_image(
+            claim=proof["proof_data"]["claim_natural"],
+            verdict_raw=proof["verdict"]["raw"],
+            verdict_category=proof["verdict"]["category"],
+            citation_count=proof.get("citation_count"),
+            search_count=proof.get("search_count"),
+            output_path=proof_og_path,
+            font_path=font_path,
+            thumbnail_path=custom_thumb if custom_thumb.exists() else None,
+            default_thumbnail_path=default_thumb,
+        )
 
     # Collect all page URLs for sitemap
     sitemap_urls = [

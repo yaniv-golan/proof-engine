@@ -530,3 +530,21 @@ def test_proof_page_evidence_table_source_first(site_fixture):
     id_pos = table_html.find("<th>ID</th>")
     assert source_pos != -1 and id_pos != -1, "Evidence table missing Source or ID header"
     assert source_pos < id_pos, "Source column should come before ID column"
+
+
+def test_og_image_meta_in_head(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "index.html").read_text()
+    assert 'og:image' in html
+    assert 'og-default.png' in html
+
+
+def test_proof_page_og_image(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert 'og:image' in html
+    assert 'og-image.png' in html
+    # Check OG image file was generated
+    assert (site_fixture / "_site" / "proofs" / "test-claim" / "og-image.png").exists()

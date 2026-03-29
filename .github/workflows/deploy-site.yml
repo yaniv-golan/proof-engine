@@ -6,6 +6,7 @@ on:
     paths:
       - 'site/**'
       - 'tools/build-site.py'
+      - 'tools/generate_og_images.py'
       - 'tools/validate-site-proof.py'
       - 'tools/lib/**'
       - 'docs/DESIGN.md'
@@ -35,7 +36,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install Jinja2 Markdown PyYAML bleach
+        run: pip install Jinja2 Markdown PyYAML bleach Pillow
 
       - name: Validate all proofs (structural only — provenance checked in PR)
         run: |

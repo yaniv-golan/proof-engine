@@ -17,7 +17,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests sympy python-dateutil pytest Jinja2 Markdown PyYAML bleach
+        run: pip install requests sympy python-dateutil pytest Jinja2 Markdown PyYAML bleach Pillow
 
       - name: Run unit tests
         run: python -m pytest tests/ -v
@@ -91,7 +91,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install Jinja2 Markdown PyYAML bleach requests sympy python-dateutil
+        run: pip install Jinja2 Markdown PyYAML bleach requests sympy python-dateutil Pillow
 
       - name: Find and validate new/changed proofs
         run: |
