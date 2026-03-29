@@ -40,11 +40,11 @@
     </div>
     <p class="hero-trust">{{ stats.total_sources_checked }} sources checked across {{ stats.total }} proofs — open source, auditable, re-runnable</p>
     <div class="cta-row">
-        <a href="{{ base_url }}catalog/" class="cta">browse proofs</a>
+        <a href="{{ base_url }}catalog/" class="cta" onclick="gtag('event','cta_click',{cta_label:'browse_proofs'})">browse proofs</a>
     </div>
     <div class="cta-links">
-        <a href="https://github.com/yaniv-golan/proof-engine#installation" rel="nofollow">install skill</a>
-        <a href="{{ base_url }}submit/#ai-agents">ai agents</a>
+        <a href="https://github.com/yaniv-golan/proof-engine#installation" rel="nofollow" onclick="gtag('event','cta_click',{cta_label:'install_skill'})">install skill</a>
+        <a href="{{ base_url }}submit/#ai-agents" onclick="gtag('event','cta_click',{cta_label:'ai_agents'})">ai agents</a>
     </div>
     <div class="github-stars">
         <a href="https://github.com/yaniv-golan/proof-engine" rel="nofollow"><img alt="GitHub stars" src="https://img.shields.io/github/stars/yaniv-golan/proof-engine?style=flat&logo=github&label=stars&color=238636" loading="lazy"></a>

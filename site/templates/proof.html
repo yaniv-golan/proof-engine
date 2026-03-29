@@ -69,11 +69,16 @@
         });
     }
 
+    document.getElementById('share-twitter').addEventListener('click', function() {
+        gtag('event', 'share', {method: 'twitter', content_id: url});
+    });
     document.getElementById('share-copy-verdict').addEventListener('click', function() {
         copyAndFlash(this, verdictText, 'copy verdict');
+        gtag('event', 'share', {method: 'copy_verdict', content_id: url});
     });
     document.getElementById('share-copy-link').addEventListener('click', function() {
         copyAndFlash(this, url, 'copy link');
+        gtag('event', 'share', {method: 'copy_link', content_id: url});
     });
 })();
 </script>
@@ -222,10 +227,19 @@
 {% endif %}
 
 <div class="downloads">
-    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.py" class="download-link" download>↓ run the proof (Python)</a>
-    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_audit.md" class="download-link" download>↓ full audit trail</a>
-    <a href="https://github.com/yaniv-golan/proof-engine/tree/main/site/proofs/{{ proof.slug }}" class="download-link" rel="nofollow">view on github</a>
-    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.json" class="download-link">raw data (JSON)</a>
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.py" class="download-link" download onclick="gtag('event','download',{file_type:'proof_py',proof_slug:'{{ proof.slug }}'})">↓ run the proof (Python)</a>
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_audit.md" class="download-link" download onclick="gtag('event','download',{file_type:'audit_trail',proof_slug:'{{ proof.slug }}'})">↓ full audit trail</a>
+    <a href="https://github.com/yaniv-golan/proof-engine/tree/main/site/proofs/{{ proof.slug }}" class="download-link" rel="nofollow" onclick="gtag('event','download',{file_type:'github',proof_slug:'{{ proof.slug }}'})">view on github</a>
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.json" class="download-link" onclick="gtag('event','download',{file_type:'proof_json',proof_slug:'{{ proof.slug }}'})">raw data (JSON)</a>
 </div>
 <p class="hero-trust" style="margin-top: 20px;">found this useful? <a href="https://github.com/yaniv-golan/proof-engine" rel="nofollow">★ star on github</a></p>
+<script>
+document.querySelectorAll('.audit-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+        var section = this.querySelector('span').textContent;
+        var isOpening = !this.nextElementSibling.classList.contains('open');
+        if (isOpening) { gtag('event', 'audit_expand', {section_name: section}); }
+    });
+});
+</script>
 {% endblock %}
