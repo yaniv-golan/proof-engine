@@ -141,9 +141,20 @@ Guiding questions:
 - For consensus claims, see the Qualitative Consensus Proof Template in [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md).
 
 ### Step 2: Gather Facts (Both Directions)
-Search for sources that SUPPORT the claim, then sources that CONTRADICT it (adversarial — Rule 5). Find at least two independent sources (Rule 6). For math claims, plan two independent computation approaches.
 
-**Adversarial work happens once, here.** The `adversarial_checks` list in proof code records what you found — it's documentation of Step 2 research, not code that runs searches at proof execution time. Use past tense in `verification_performed` (e.g., "Searched for counter-evidence...") to make this clear.
+**Use your environment's web search tool — do not rely on memory for source selection.** LLM training data has a cutoff; sources recalled from memory may be outdated. Perform at least three searches:
+
+1. **Search for the claim itself** — find authoritative sources that address it directly
+2. **Search for recent data** — find the latest benchmarks, studies, or statistics on the topic
+3. **Search for counter-evidence** — find sources that contradict, debunk, or criticize the claim. Search for "[claim] debunked", "[claim] wrong", or "[claim] criticism"
+
+**Recency check:** If your best sources are older than 12 months, search specifically for newer data. Fast-moving fields (AI benchmarks, politics, economics, medicine) require sources from the current year when available. Prefer recent primary sources over older ones when they cover the same data.
+
+**If web search is unavailable** in your environment, note this limitation in the proof audit under adversarial checks and flag that sources may not reflect the latest data.
+
+Find at least two independent sources (Rule 6). For math claims, plan two independent computation approaches.
+
+**Adversarial work happens once, here.** Use web search for counter-evidence — do not rely on memory. The `adversarial_checks` list in proof code records what you found — it's documentation of Step 2 research, not code that runs searches at proof execution time. Use past tense in `verification_performed` (e.g., "Searched for counter-evidence...") to make this clear.
 
 **Adversarial sources belong in `adversarial_checks`, not `empirical_facts`.** Sources that argue *against* your proof's conclusion should be documented in the `adversarial_checks` list's `verification_performed` field. Only sources that *support* the proof's conclusion belong in `empirical_facts`. This prevents adversarial citation failures from degrading the verdict via `any_unverified`.
 
