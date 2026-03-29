@@ -1,192 +1,164 @@
 # Audit: Using AI tools makes humans worse at critical thinking and original problem-solving.
 
-- Generated: 2026-03-28
-- Reader summary: [proof.md](proof.md)
-- Proof script: [proof.py](proof.py)
-
----
+- **Generated:** 2026-03-29
+- **Reader summary:** [proof.md](proof.md)
+- **Proof script:** [proof.py](proof.py)
 
 ## Claim Specification
 
-*Source: proof.py JSON summary `claim_formal`*
-
 | Field | Value |
 |-------|-------|
-| Subject | Humans who use AI tools frequently or habitually |
-| Property | Measurable reduction in critical thinking ability and/or reflective/independent problem-solving capacity, documented by peer-reviewed empirical research |
+| Subject | AI tool usage by humans |
+| Property | associated with diminished critical thinking and problem-solving abilities |
 | Operator | >= |
-| Threshold | 2 (independently verified sources) |
+| Threshold | 3 independent verified sources |
 | Proof direction | affirm |
-| Operator note | "Makes worse" is interpreted as: peer-reviewed empirical research documents a measurable decline in critical thinking engagement or performance associated with habitual AI tool use. Threshold = 2: at least 2 independently verified sources must confirm this effect. The causal language "makes worse" is supported by: (a) large-sample correlational evidence (Gerlich 2025, r = -0.68, p < 0.001, mediated by cognitive offloading), (b) self-reported reductions in cognitive effort in knowledge workers (Microsoft/Lee 2025), and (c) longitudinal causal evidence for the cognitive-offloading mechanism from GPS research (Dahmani & Bohbot 2020), which explicitly ruled out reverse causation. "Original problem-solving" is operationalized as "reflective/independent problem-solving" — the claim's exact phrasing ("original") has weaker direct support than "critical thinking"; this limitation is noted in the verdict. |
+| Operator note | The claim as stated is a universal causal assertion. We interpret it as: at least 3 independent, peer-reviewed or authoritative sources report that AI tool usage is associated with reduced critical thinking or problem-solving abilities. This is a consensus-of-evidence interpretation — the claim is PROVED if the weight of independent evidence supports the association, even though individual studies show correlation rather than proven causation. Important nuance: the evidence shows this effect is moderated by usage patterns, task stakes, and user confidence — heavy/uncritical use drives the decline, not all AI usage universally. |
 
----
+*Source: proof.py JSON summary*
 
 ## Fact Registry
 
-*Source: proof.py JSON summary `fact_registry`*
-
 | ID | Key | Label |
 |----|-----|-------|
-| B1 | gerlich_2025 | Gerlich (2025, Societies/MDPI via Phys.org): 666-participant mixed-method study finds significant negative correlation (r = -0.68, p < 0.001) between AI tool use and critical thinking scores, mediated by cognitive offloading |
-| B2 | microsoft_2025 | Lee et al. (2025, Microsoft Research / CHI 2025): survey of 319 knowledge workers; higher confidence in GenAI predicts less critical thinking; risk of long-term over-reliance and skill decline noted |
-| B3 | gps_2020 | Dahmani & Bohbot (2020, Scientific Reports / Nature): 3-year longitudinal study of 50 drivers — habitual GPS use causes spatial memory decline; reverse causation explicitly ruled out; establishes cognitive-offloading → skill-decline causal mechanism |
-| A1 | — | Count of independently verified sources confirming AI-tool-induced cognitive decline |
+| B1 | gerlich_2025 | Gerlich (2025): Negative correlation (r=-0.68) between AI usage and critical thinking scores in 666 participants |
+| B2 | lee_chi_2025 | Lee et al. (2025, CHI): Higher confidence in GenAI associated with less critical thinking in 319 knowledge workers |
+| B3 | harvard_gazette_2025 | Harvard Gazette (2025): Harvard faculty experts warn AI use undercuts critical thinking |
+| B4 | pmc_cognitive_paradox | Jose et al. (2025, PMC): ChatGPT users scored 17% lower on concept understanding despite solving 48% more problems |
+| A1 | — | Verified source count meets threshold |
 
----
+*Source: proof.py JSON summary*
 
 ## Full Evidence Table
 
 ### Type A (Computed) Facts
 
-*Source: proof.py JSON summary `fact_registry`*
-
 | ID | Fact | Method | Result |
 |----|------|--------|--------|
-| A1 | Count of independently verified sources confirming AI-tool-induced cognitive decline | count(citation_results[key]['status'] in COUNTABLE_STATUSES) for key in empirical_facts | 3 confirmed sources (threshold: 2) |
+| A1 | Verified source count meets threshold | count(verified citations) = 4 | 4 |
+
+*Source: proof.py JSON summary*
 
 ### Type B (Empirical) Facts
 
-*Source: proof.py JSON summary `citations`*
-
 | ID | Fact | Source | URL | Quote | Status | Method | Credibility |
 |----|------|--------|-----|-------|--------|--------|-------------|
-| B1 | Gerlich 2025 — AI tool use and critical thinking | Phys.org news report on Gerlich, M. (2025), 'AI Tools in Society: Impacts on Cognitive Offloading and the Future of Critical Thinking', Societies (MDPI), DOI: 10.3390/soc15010006 | https://phys.org/news/2025-01-ai-linked-eroding-critical-skills.html | "Statistical analyses demonstrated a significant negative correlation between AI tool usage and critical thinking scores (r = -0.68, p < 0.001)." | Partial (47.6% word coverage, fragment match) | fragment | Tier 2 (unknown) |
-| B2 | Lee et al. 2025 — Microsoft Research survey | Lee et al. (2025), Microsoft Research, 'The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects from a Survey of Knowledge Workers', CHI 2025 | https://www.microsoft.com/en-us/research/publication/the-impact-of-generative-ai-on-critical-thinking-self-reported-reductions-in-cognitive-effort-and-confidence-effects-from-a-survey-of-knowledge-workers/ | "Specifically, higher confidence in GenAI is associated with less critical thinking, while higher self-confidence is associated with more critical thinking." | Verified | full_quote | Tier 2 (unknown) |
-| B3 | Dahmani & Bohbot 2020 — GPS and spatial memory | Dahmani & Bohbot (2020), 'Habitual use of GPS negatively impacts spatial memory during self-guided navigation', Scientific Reports (Nature Publishing Group) | https://pmc.ncbi.nlm.nih.gov/articles/PMC7156656/ | "those who used GPS more did not do so because they felt they had a poor sense of direction, suggesting that extensive GPS use led to a decline in spatial memory rather than the other way around" | Verified | full_quote | Tier 5 (government) |
+| B1 | Gerlich (2025) study findings | PsyPost report on Gerlich (2025), Societies 15(1):6 | [Link](https://www.psypost.org/ai-tools-may-weaken-critical-thinking-skills-by-encouraging-cognitive-offloading-study-suggests/) | "Participants who reported heavy reliance on AI tools performed worse on critical thinking assessments compared to those who used these tools less frequently." | verified | full_quote | Tier 2 (unknown) |
+| B2 | Lee et al. (2025) study findings | Microsoft Research — Lee et al. (2025), CHI 2025 | [Link](https://www.microsoft.com/en-us/research/publication/the-impact-of-generative-ai-on-critical-thinking-self-reported-reductions-in-cognitive-effort-and-confidence-effects-from-a-survey-of-knowledge-workers/) | "Higher confidence in GenAI is associated with less critical thinking, while higher self-confidence is associated with more critical thinking." | verified | full_quote | Tier 2 (unknown) |
+| B3 | Harvard faculty expert opinion | Harvard Gazette (2025) | [Link](https://news.harvard.edu/gazette/story/2025/11/is-ai-dulling-our-minds/) | "I am very worried about the effects of general-use LLMs on critical reasoning skills" | verified | full_quote | Tier 4 (academic) |
+| B4 | Cognitive paradox review findings | Jose et al. (2025), Frontiers — PMC | [Link](https://pmc.ncbi.nlm.nih.gov/articles/PMC12036037/) | "Excessive reliance may reduce cognitive engagement and long-term retention" | verified | full_quote | Tier 5 (government) |
 
----
+*Source: proof.py JSON summary*
 
 ## Citation Verification Details
 
-*Source: proof.py JSON summary `citations[fact_id].status`, `.method`, `.coverage_pct`, `.fetch_mode`*
-
-**B1 — gerlich_2025**
-- Status: **partial** (degraded result — not fully verified)
-- Method: fragment (47.6% word coverage)
-- Fetch mode: wayback (live fetch failed; Wayback Machine fallback used)
-- Note: The primary URL (phys.org) was fetched via Wayback Machine. Only 10/21 quote words matched. The specific statistics (r = -0.68, p < 0.001) likely appear on the original page but could not be fully confirmed via fragment matching.
-- Impact: The core finding — significant negative correlation between AI use and critical thinking — is independently corroborated by B2 (fully verified, different institution). The verdict does not depend solely on B1.
-
-**B2 — microsoft_2025**
-- Status: **verified**
+**B1 — Gerlich (2025) via PsyPost:**
+- Status: verified
 - Method: full_quote
 - Fetch mode: live
-- Note: Quote found verbatim on the Microsoft Research publication page.
 
-**B3 — gps_2020**
-- Status: **verified**
+**B2 — Lee et al. (2025) via Microsoft Research:**
+- Status: verified
 - Method: full_quote
 - Fetch mode: live
-- Note: Quote found verbatim on PubMed Central (NIH.gov).
 
----
+**B3 — Harvard Gazette (2025):**
+- Status: verified
+- Method: full_quote
+- Fetch mode: live
+
+**B4 — Jose et al. (2025) via PMC:**
+- Status: verified
+- Method: full_quote
+- Fetch mode: live
+
+*Source: proof.py JSON summary*
 
 ## Computation Traces
 
-*Source: proof.py inline output (reproduced verbatim)*
-
 ```
---- Citation Verification ---
-  [~] gerlich_2025 [wayback]: Only 10/21 quote words matched for gerlich_2025 — partial verification only (source: tier 2/unknown)
-  [✓] microsoft_2025: Full quote verified for microsoft_2025 (source: tier 2/unknown)
-  [✓] gps_2020: Full quote verified for gps_2020 (source: tier 5/government)
-  gerlich_2025: partial (method: fragment)
-  microsoft_2025: verified (method: full_quote)
-  gps_2020: verified (method: full_quote)
-
-  Confirmed sources: 3 / 3
-  SC1+SC2: verified source count vs threshold of 2: 3 >= 2 = True
+  Confirmed sources: 4 / 4
+  verified source count vs threshold: 4 >= 3 = True
 ```
 
----
+*Source: proof.py inline output (execution trace)*
 
 ## Independent Source Agreement (Rule 6)
 
-*Source: proof.py JSON summary `cross_checks`*
+| Metric | Value |
+|--------|-------|
+| Sources consulted | 4 |
+| Sources verified | 4 |
+| gerlich_2025 | verified |
+| lee_chi_2025 | verified |
+| harvard_gazette_2025 | verified |
+| pmc_cognitive_paradox | verified |
 
-**Cross-check 1: Independent methodology**
-- B1 (Gerlich 2025): survey/correlational, 666 participants, SBS Swiss Business School/MDPI
-- B3 (Dahmani 2020): longitudinal/causal, 50 participants over 3 years, Scientific Reports/Nature
-- Different designs, different tools (AI vs. GPS), different domains (critical thinking vs. spatial memory)
-- Both converge on the cognitive-offloading mechanism
-- Agreement: **True** — different methodologies, different institutions, same mechanism
+**Independence note:** Sources are from different institutions and research teams: (1) SBS Swiss Business School via PsyPost, (2) Microsoft Research via CHI 2025, (3) Harvard University via Harvard Gazette, (4) Multiple Indian universities via PMC/Frontiers. No two sources share authors or datasets.
 
-**Cross-check 2: Independent institution**
-- B1 (Gerlich 2025): 666-participant mixed-method study (academic institution, MDPI journal)
-- B2 (Lee et al. 2025): 319-participant knowledge-worker survey (industry research lab, CHI 2025 proceedings)
-- Different organizations, different methods, different populations
-- Both find AI confidence inversely related to critical thinking engagement
-- Agreement: **True** — independent replication by different institutions
-
----
+*Source: proof.py JSON summary*
 
 ## Adversarial Checks (Rule 5)
 
-*Source: proof.py JSON summary `adversarial_checks`*
+### Check 1: Do any studies show AI tools IMPROVE critical thinking or problem-solving?
 
-**1. Do rigorous controlled studies show AI tools can ENHANCE critical thinking?**
-- Search performed: "AI tools enhance critical thinking research 2024 2025"; reviewed CHI 2025 Tools for Thought workshop; reviewed ScienceDirect (2024) EFL student study; reviewed Frontiers (2025) TAM/critical thinking study; re-read Microsoft Lee (2025) redirection finding.
-- Finding: Yes — context-specific studies exist showing AI can enhance or redirect thinking when used actively (scaffolding, verification). Evidence is heterogeneous: passive AI use is associated with decline; active deliberate use may not be. Limits the universality of the claim's "makes humans worse" framing.
-- Breaks proof: **No**
+- **Verification performed:** Searched for "AI tools improve critical thinking enhance problem solving evidence study 2025 2026". Found that AI-powered classrooms can improve learning outcomes by 23-35% in STEM disciplines and language learning. Stanford research showed a 15% increase in scores for students using AI platforms. However, these gains are in knowledge acquisition, not in independent critical thinking or problem-solving ability. The PMC cognitive paradox paper itself notes that ChatGPT users solved 48% more problems but scored 17% lower on concept understanding — showing AI helps with task completion but may impair deeper cognitive engagement.
+- **Finding:** AI tools can improve task performance and learning outcomes, but these benefits are distinct from critical thinking and independent problem-solving. The evidence consistently shows that while AI boosts productivity, it may simultaneously reduce the depth of cognitive engagement required for critical thinking.
+- **Breaks proof:** No
 
-**2. Is the Gerlich (2025) study methodologically reliable? Could reverse causation explain its findings?**
-- Search performed: Checked MDPI Societies page, SBS Swiss Business School research page, ResearchGate (correction published 2025). Searched "Gerlich 2025 AI critical thinking criticism methodology."
-- Finding: Reverse causation is a real concern (correlational design). A post-hoc correction was published (methodological flag, not retraction). However, mediation analysis provides plausible causal pathway; GPS longitudinal study (B3) rules out reverse causation for the same mechanism in a different domain. Risk: moderate.
-- Breaks proof: **No**
+### Check 2: Are the effects task-dependent rather than universal?
 
-**3. Does the Microsoft (2025) study show AI "redirects" rather than "reduces" critical thinking?**
-- Search performed: Re-read Microsoft Research publication page; searched for full paper conclusion on long-term skill impact.
-- Finding: Microsoft study describes shift toward verification and integration tasks (redirection). However, also finds higher AI confidence predicts less critical thinking and warns of long-term skill decline. Partially undercuts strong version of claim; supports weaker but still significant version.
-- Breaks proof: **No**
+- **Verification performed:** Searched for Microsoft CHI 2025 findings on task-dependent effects. The Lee et al. study found that for high-stakes tasks requiring accuracy, workers expend MORE effort in critical thinking with AI. For routine, low-stakes tasks under time pressure, they report LESS critical thinking effort. This shows the effect is moderated by task stakes and user confidence, not universal.
+- **Finding:** The cognitive decline effect is moderated by task stakes, user confidence, and usage patterns. This does not break the proof because: (1) the claim is supported by the overall pattern across multiple studies, (2) the operator_note explicitly acknowledges this nuance, and (3) even task-dependent effects confirm that AI usage CAN and DOES reduce critical thinking under common conditions (routine tasks, high AI confidence). The proof documents this important qualification.
+- **Breaks proof:** No
 
-**4. Is the GPS spatial memory analogy (B3) valid for AI tools and critical thinking?**
-- Search performed: "cognitive offloading GPS analogy AI tools criticism"; reviewed cognitive offloading theory (Risko & Gilbert 2016).
-- Finding: Analogy is imperfect (different cognitive domains: spatial vs. analytical reasoning). However, both are instances of cognitive offloading. B3 supports the mechanism, not the exact magnitude or domain.
-- Breaks proof: **No**
+### Check 3: Has the key Gerlich (2025) study been retracted or significantly corrected?
 
----
+- **Verification performed:** Searched for "Gerlich 2025 AI Tools in Society correction retraction". Found a correction notice (Societies 2025, 15(9), 252) published September 2025. The correction addressed a duplicated table (Table 4 was a duplicate of Table 3). The author states the scientific conclusions are unaffected, and the correction was approved by the Academic Editor.
+- **Finding:** The correction was minor (table duplication) and does not affect the study's findings or conclusions about the negative correlation between AI usage and critical thinking.
+- **Breaks proof:** No
+
+*Source: proof.py JSON summary*
 
 ## Source Credibility Assessment
 
-*Source: proof.py JSON summary `citations[fact_id].credibility`*
-
 | Fact ID | Domain | Type | Tier | Note |
 |---------|--------|------|------|------|
-| B1 | phys.org | unknown | 2 | Unclassified domain — verify source authority manually. Phys.org is a reputable science news aggregator; the reported study (Gerlich 2025) is published in Societies (MDPI peer-reviewed journal). |
-| B2 | microsoft.com | unknown | 2 | Unclassified domain — verify source authority manually. This is the Microsoft Research institutional page for a peer-reviewed CHI 2025 publication. |
-| B3 | nih.gov | government | 5 | Government domain (.gov) — PubMed Central (NIH). The underlying paper is published in Scientific Reports (Nature Publishing Group). |
+| B1 | psypost.org | unknown | 2 | Unclassified domain — PsyPost is a science news site reporting on peer-reviewed research (Gerlich 2025, published in MDPI Societies) |
+| B2 | microsoft.com | unknown | 2 | Unclassified domain — Microsoft Research publication page for peer-reviewed CHI 2025 paper |
+| B3 | harvard.edu | academic | 4 | Academic domain (.edu) — Harvard University official gazette |
+| B4 | nih.gov | government | 5 | Government domain (.gov) — NIH PubMed Central hosting peer-reviewed article |
 
-**Note:** B1 and B2 are tier 2 (unclassified by the engine's domain list), but both represent identifiable peer-reviewed research: Societies/MDPI (B1) and CHI 2025 proceedings (B2). The engine's tier reflects domain classification, not actual source authority. Readers should verify independently.
+Note: 2 citations (B1, B2) come from tier-2 (unclassified) domains. Both are reporting platforms for peer-reviewed research: B1 reports on a study published in MDPI Societies (peer-reviewed journal), and B2 is Microsoft Research's own page for a paper published at ACM CHI 2025 (top-tier HCI venue). The claim does not depend solely on these sources — B3 (tier 4) and B4 (tier 5) independently support it.
 
----
+*Source: proof.py JSON summary + author analysis*
 
 ## Extraction Records
 
-*Source: proof.py JSON summary `extractions`; method from author analysis*
+For this qualitative consensus proof, extractions record citation verification status rather than numeric values:
 
-For qualitative/consensus proofs, extractions record citation verification status per source rather than numeric values.
+| Fact ID | Value (status) | Countable | Quote snippet |
+|---------|---------------|-----------|---------------|
+| B1 | verified | Yes | "Participants who reported heavy reliance on AI tools performed worse on critical..." |
+| B2 | verified | Yes | "Higher confidence in GenAI is associated with less critical thinking, while high..." |
+| B3 | verified | Yes | "I am very worried about the effects of general-use LLMs on critical reasoning sk..." |
+| B4 | verified | Yes | "Excessive reliance may reduce cognitive engagement and long-term retention" |
 
-| Fact ID | Value (citation status) | Countable (verified or partial) | Quote snippet |
-|---------|------------------------|----------------------------------|---------------|
-| B1 | partial | True | "Statistical analyses demonstrated a significant negative correlation between AI " |
-| B2 | verified | True | "Specifically, higher confidence in GenAI is associated with less critical thinki" |
-| B3 | verified | True | "those who used GPS more did not do so because they felt they had a poor sense of" |
-
-*Author analysis: For this qualitative consensus proof, no numeric value extraction was performed. Citation verification status (verified/partial/not_found/fetch_failed) is the sole counting mechanism. Rule 1 (no hand-typed extracted values) is satisfied by the absence of value-extraction patterns in the proof script.*
-
----
+*Source: proof.py JSON summary*
 
 ## Hardening Checklist
 
-- **Rule 1** (No hand-typed extracted values): N/A — qualitative consensus proof; no numeric extraction performed. `validate_proof.py` auto-passed.
-- **Rule 2** (Verify citations by fetching): `verify_all_citations(empirical_facts, wayback_fallback=True)` called. B2 and B3 verified live; B1 partial via Wayback Machine. `validate_proof.py` confirmed.
-- **Rule 3** (Anchor to system time): `date.today()` present in `generator.generated_at`. No date-dependent computation in this proof. `validate_proof.py` confirmed.
-- **Rule 4** (Explicit claim interpretation): `CLAIM_FORMAL` dict with `operator_note` present. `validate_proof.py` confirmed.
-- **Rule 5** (Adversarial checks): 4 adversarial questions with `verification_performed` (past tense), `finding`, and `breaks_proof` fields. All searches performed before writing proof code. `validate_proof.py` confirmed.
-- **Rule 6** (Independent cross-checks): 3 distinct source references (gerlich_2025, microsoft_2025, gps_2020). Two cross-checks documented: independent methodology and independent institution. `validate_proof.py` confirmed.
-- **Rule 7** (No hard-coded constants): No arithmetic constants, `eval()`, or inline age calculations. `compare()` used for claim evaluation. `validate_proof.py` confirmed.
-- **validate_proof.py result:** 14/14 checks PASSED, 0 issues, 0 warnings — STATUS: PASS
+- **Rule 1:** N/A — qualitative consensus proof, no numeric value extraction
+- **Rule 2:** All 4 citation URLs fetched and quotes verified via `verify_all_citations()` with full_quote matches
+- **Rule 3:** `date.today()` used for generation timestamp
+- **Rule 4:** CLAIM_FORMAL with operator_note explicitly documents the consensus-of-evidence interpretation and threshold rationale
+- **Rule 5:** 3 adversarial checks performed: searched for pro-AI evidence, task-dependent effects, and study corrections
+- **Rule 6:** 4 independent sources from different institutions (Swiss, Microsoft, Harvard, Indian universities) with no shared authors or datasets
+- **Rule 7:** N/A — qualitative consensus proof, no formulas or constants
+- **validate_proof.py result:** PASS with warnings (14/15 checks passed, 1 warning about missing else branch in verdict assignment — non-blocking)
+
+*Source: author analysis*
 
 ---
 
-*Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v0.10.0 on 2026-03-28.*
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.2.0 on 2026-03-29.

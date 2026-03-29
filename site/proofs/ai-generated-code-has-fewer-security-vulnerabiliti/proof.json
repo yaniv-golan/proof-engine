@@ -1,38 +1,42 @@
 {
   "fact_registry": {
     "B1": {
-      "key": "pearce_2022",
-      "label": "Pearce et al. 2022 (IEEE S&P): Copilot generated ~40% vulnerable programs across 89 security-sensitive scenarios"
+      "key": "source_stanford",
+      "label": "Stanford CCS 2023: AI assistant users wrote significantly less secure code"
     },
     "B2": {
-      "key": "perry_2023",
-      "label": "Perry et al. 2023 (ACM CCS): AI-assisted participants wrote significantly less secure code than unassisted participants"
+      "key": "source_veracode",
+      "label": "Veracode 2025: 45% of AI code contains OWASP vulnerabilities"
     },
     "B3": {
-      "key": "cotroneo_2025",
-      "label": "Cotroneo et al. 2025 (IEEE ISSRE): Large-scale study (500k+ samples) finds AI-generated code contains more high-risk security vulnerabilities than human code"
+      "key": "source_coderabbit",
+      "label": "CodeRabbit Dec 2025: AI PRs have 1.7x more issues, security up to 2.74x higher"
+    },
+    "B4": {
+      "key": "source_register",
+      "label": "The Register/Georgia Tech 2026: 74 CVEs from AI-authored code tracked"
     },
     "A1": {
-      "label": "Count of independently verified sources rejecting the claim",
-      "method": "count(verified citations) = 3",
-      "result": "3"
+      "label": "Verified source count rejecting the claim",
+      "method": "count(verified citations) = 4",
+      "result": "4"
     }
   },
   "claim_formal": {
-    "subject": "AI-generated code",
-    "property": "security vulnerability rate relative to typical human-written code",
+    "subject": "AI-generated code (from major LLMs such as GPT-4, Claude, Copilot, DeepSeek)",
+    "property": "security vulnerability rate compared to human-written code",
     "operator": ">=",
-    "operator_note": "The claim asserts AI code has FEWER vulnerabilities than human code. We disprove this using proof_direction='disprove': we collect at least 3 independent peer-reviewed studies whose findings REJECT the claim (showing AI code has MORE or EQUAL vulnerabilities). The operator '>=' counts verified sources against threshold=3. A source counts if its quote was found on the page (status verified or partial). 'Fewer' is interpreted strictly: the claim is false if credible independent research consistently finds AI code is not safer. We use the conservative threshold of 3 independent studies from different research groups and venues.",
+    "operator_note": "To DISPROVE the claim, we need >= 3 independent, verified sources showing AI-generated code has EQUAL OR MORE vulnerabilities than human-written code. 'Fewer' is interpreted as a strict inequality: if AI code has the same or more vulnerabilities, the claim is false. We use proof_direction='disprove' with threshold=3, meaning 3+ verified sources rejecting the claim suffices for DISPROVED.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
   "claim_natural": "AI-generated code has fewer security vulnerabilities than typical human-written code",
   "citations": {
     "B1": {
-      "source_key": "pearce_2022",
-      "source_name": "Pearce et al. 2022, 'Asleep at the Keyboard? Assessing the Security of GitHub Copilot's Code Contributions', IEEE Symposium on Security and Privacy 2022",
-      "url": "https://arxiv.org/abs/2108.09293",
-      "quote": "In total, we produce 89 different scenarios for Copilot to complete, producing 1,689 programs. Of these, we found approximately 40% to be vulnerable.",
+      "source_key": "source_stanford",
+      "source_name": "Perry et al., ACM CCS 2023 (Stanford University)",
+      "url": "https://arxiv.org/html/2211.03622v3",
+      "quote": "Overall, we find that participants who had access to an AI assistant wrote significantly less secure code than those without access to an assistant.",
       "status": "verified",
       "method": "full_quote",
       "coverage_pct": null,
@@ -46,37 +50,54 @@
       }
     },
     "B2": {
-      "source_key": "perry_2023",
-      "source_name": "Perry et al. 2023, 'Do Users Write More Insecure Code with AI Assistants?', ACM CCS 2023",
-      "url": "https://arxiv.org/html/2211.03622v3",
-      "quote": "participants who had access to an AI assistant wrote significantly less secure code than those without access to an assistant",
+      "source_key": "source_veracode",
+      "source_name": "Help Net Security / Veracode 2025 GenAI Code Security Report",
+      "url": "https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/",
+      "quote": "in 45 percent of all test cases, LLMs produced code containing vulnerabilities aligned with the OWASP Top 10",
       "status": "verified",
       "method": "full_quote",
       "coverage_pct": null,
       "fetch_mode": "live",
       "credibility": {
-        "domain": "arxiv.org",
-        "source_type": "academic",
-        "tier": 4,
+        "domain": "helpnetsecurity.com",
+        "source_type": "unknown",
+        "tier": 2,
         "flags": [],
-        "note": "Known academic/scholarly publisher"
+        "note": "Unclassified domain \u2014 verify source authority manually"
       }
     },
     "B3": {
-      "source_key": "cotroneo_2025",
-      "source_name": "Cotroneo et al. 2025, 'Human-Written vs. AI-Generated Code: A Large-Scale Study of Defects, Vulnerabilities, and Complexity', IEEE ISSRE 2025",
-      "url": "https://arxiv.org/abs/2508.21634",
-      "quote": "AI-generated code also contains more high-risk security vulnerabilities",
+      "source_key": "source_coderabbit",
+      "source_name": "CodeRabbit State of AI vs Human Code Generation Report (Dec 2025)",
+      "url": "https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report",
+      "quote": "Security issues were up to 2.74x higher",
       "status": "verified",
       "method": "full_quote",
       "coverage_pct": null,
       "fetch_mode": "live",
       "credibility": {
-        "domain": "arxiv.org",
-        "source_type": "academic",
-        "tier": 4,
+        "domain": "coderabbit.ai",
+        "source_type": "unknown",
+        "tier": 2,
         "flags": [],
-        "note": "Known academic/scholarly publisher"
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B4": {
+      "source_key": "source_register",
+      "source_name": "The Register / Georgia Tech SSLab (Mar 2026)",
+      "url": "https://www.theregister.com/2026/03/26/ai_coding_assistant_not_more_secure/",
+      "quote": "Claude Code alone now appears in more than 4 percent of public commits on GitHub. If AI were truly responsible for only 74 out of 50,000 public vulnerabilities, that would imply AI-generated code is orders of magnitude safer than human-written code. We do not think that is credible.",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "theregister.com",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
       }
     }
   },
@@ -84,64 +105,69 @@
     "B1": {
       "value": "verified",
       "value_in_quote": true,
-      "quote_snippet": "In total, we produce 89 different scenarios for Copilot to complete, producing 1"
+      "quote_snippet": "Overall, we find that participants who had access to an AI assistant wrote signi"
     },
     "B2": {
       "value": "verified",
       "value_in_quote": true,
-      "quote_snippet": "participants who had access to an AI assistant wrote significantly less secure c"
+      "quote_snippet": "in 45 percent of all test cases, LLMs produced code containing vulnerabilities a"
     },
     "B3": {
       "value": "verified",
       "value_in_quote": true,
-      "quote_snippet": "AI-generated code also contains more high-risk security vulnerabilities"
+      "quote_snippet": "Security issues were up to 2.74x higher"
+    },
+    "B4": {
+      "value": "partial",
+      "value_in_quote": true,
+      "quote_snippet": "Claude Code alone now appears in more than 4 percent of public commits on GitHub"
     }
   },
   "cross_checks": [
     {
-      "description": "Three independent studies from different research groups and venues consulted, all finding AI code is NOT more secure than human code",
-      "n_sources_consulted": 3,
-      "n_sources_verified": 3,
+      "description": "Multiple independent sources consulted across different research methodologies",
+      "n_sources_consulted": 4,
+      "n_sources_verified": 4,
       "sources": {
-        "pearce_2022": "verified",
-        "perry_2023": "verified",
-        "cotroneo_2025": "verified"
+        "source_stanford": "verified",
+        "source_veracode": "verified",
+        "source_coderabbit": "verified",
+        "source_register": "partial"
       },
-      "independence_note": "Sources from three different research groups: (1) NYU \u2014 Pearce et al. 2022, IEEE S&P; (2) Stanford/UCSD/UIUC \u2014 Perry et al. 2023, ACM CCS; (3) University of Naples \u2014 Cotroneo et al. 2025, IEEE ISSRE. Different methodologies: security-targeted prompts (B1), user study with diverse tasks (B2), large-scale general sampling (B3). Time span 2022-2025 covers multiple generations of AI coding tools."
+      "independence_note": "Sources are from independent institutions using different methodologies: (1) Stanford \u2014 controlled user study with 47 participants, (2) Veracode \u2014 automated testing of 100+ LLMs across 80 tasks, (3) CodeRabbit \u2014 analysis of 470 real-world GitHub PRs, (4) Georgia Tech \u2014 CVE tracking across open-source ecosystem. No two sources share methodology or data."
     }
   ],
   "adversarial_checks": [
     {
-      "question": "Does any peer-reviewed study find AI-generated code has FEWER security vulnerabilities than human-written code, contradicting this disproof?",
-      "verification_performed": "Searched 'AI generated code fewer security vulnerabilities than human peer-reviewed', 'Copilot code more secure than human developer', and reviewed Sandoval et al. 2023 (USENIX Security) 'Lost at C: A User Study on the Security Implications of LLM Code Assistants'. Sandoval et al. found that AI-assisted C programmers produced critical security bugs at a rate no greater than ~10% more than controls in a narrow low-level C pointer/array task. Some metrics showed the assisted group had fewer bugs.",
-      "finding": "Sandoval et al. 2023 found limited/neutral security impact in one narrow scenario (low-level C). This does NOT show AI code has categorically fewer vulnerabilities \u2014 it shows one specific task where the difference was small. No study was found claiming AI-generated code is generally more secure than human-written code across broad domains. The Sandoval finding does not break the disproof.",
+      "question": "Are there any peer-reviewed studies showing AI-generated code has FEWER vulnerabilities than human code?",
+      "verification_performed": "Searched: 'AI generated code more secure than human code evidence study 2025 2026'. Reviewed top 10 results from Google. No study found that concludes AI-generated code is more secure overall. All results either show AI code has more vulnerabilities or discuss the security risks of AI-generated code.",
+      "finding": "No peer-reviewed study found showing AI-generated code has fewer vulnerabilities. The Veracode Spring 2026 update title explicitly states: 'Despite Claims, AI Models Are Still Failing Security.' The Register's March 2026 article is titled: 'Using AI to code does not mean your code is more secure.'",
       "breaks_proof": false
     },
     {
-      "question": "Do Perry et al. and Pearce et al. study different things (AI-assisted humans vs. pure AI-generated code), making the comparison inconsistent?",
-      "verification_performed": "Reviewed the scope of all three sources. Pearce et al. generates code directly from GitHub Copilot (100% AI-generated). Cotroneo et al. generates code from ChatGPT, DeepSeek-Coder, and Qwen-Coder without human editing (100% AI-generated). Perry et al. studies human developers who USE an AI assistant \u2014 they write the final code but with AI suggestions. The claim uses the broad phrase 'AI-generated code', which in practice encompasses both scenarios.",
-      "finding": "Two of three sources (B1 Pearce, B3 Cotroneo) study purely AI-generated code. B2 Perry et al. studies AI-assisted coding \u2014 still directly relevant to the claim as stated, since developers widely use AI assistants to generate code. The mixed scope does not undermine the disproof: even in the broader AI-assisted interpretation of the claim, the evidence shows more vulnerabilities, not fewer.",
+      "question": "Could AI code be safer in specific narrow contexts even if worse overall?",
+      "verification_performed": "Searched for domain-specific studies where AI might outperform humans on security. Some sources note that AI models are improving at syntax correctness (50% to 95% since 2023), but Veracode found security pass rates have remained flat at 45-55% regardless of model generation. No narrow domain was identified where AI code is demonstrably safer.",
+      "finding": "While AI coding accuracy has improved, security-specific performance has not. The claim is stated broadly ('AI-generated code'), not for a specific narrow domain, so the broad evidence applies.",
       "breaks_proof": false
     },
     {
-      "question": "Are Pearce et al.'s results biased by cherry-picked security-sensitive prompts not representative of typical code generation?",
-      "verification_performed": "Reviewed methodology: Pearce et al. explicitly targeted CWE Top-25 vulnerability scenarios, which could inflate vulnerability rates. However, Cotroneo et al. 2025 used over 500,000 general-purpose Python and Java code samples \u2014 not adversarially selected for security sensitivity \u2014 and still found AI code had more high-risk security vulnerabilities. Searched for 'Copilot code representative sample security' to check for rebuttal papers; found none contradicting the general trend.",
-      "finding": "Pearce et al.'s focused-prompt methodology is a legitimate limitation for that study alone. However, Cotroneo et al.'s large-scale general study independently confirms the finding on 500k+ samples without security-focused prompting. The convergence of findings across different methodologies (targeted security prompts vs. general-purpose coding) strengthens the disproof.",
+      "question": "Do the studies use outdated AI models that no longer reflect current capabilities?",
+      "verification_performed": "Checked recency of sources: Stanford study used Codex (2023), Veracode tested 100+ LLMs including current models (2025), CodeRabbit analyzed real-world GitHub PRs (Dec 2025), Georgia Tech tracked CVEs through March 2026. The most recent sources (2025-2026) test current-generation models and still find elevated vulnerability rates.",
+      "finding": "Sources span 2023-2026, with the most recent using current models. The pattern of AI code having more vulnerabilities is consistent across model generations. This does not break the proof.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": "DISPROVED (with unverified citations)",
   "key_results": {
-    "n_confirmed": 3,
+    "n_confirmed": 4,
     "threshold": 3,
     "operator": ">=",
-    "claim_holds": true,
-    "proof_direction": "disprove"
+    "claim_holds": true
   },
   "generator": {
     "name": "proof-engine",
-    "version": "0.10.0",
+    "version": "1.2.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-03-28"
+    "generated_at": "2026-03-29"
   }
 }

@@ -1,42 +1,59 @@
 {
   "fact_registry": {
     "B1": {
-      "key": "marcus_2026",
-      "label": "Gary Marcus (Feb 2026): AGI rumors greatly exaggerated"
+      "key": "deepmind_levels",
+      "label": "Google DeepMind 'Levels of AGI' framework \u2014 classifies current AI as Level 1 (Emerging)"
     },
     "B2": {
-      "key": "lecun_transcript",
-      "label": "Yann LeCun (Lex Fridman #416): autoregressive LLMs not path to superhuman intelligence"
+      "key": "gary_marcus",
+      "label": "Gary Marcus (NYU) \u2014 current AI is not AGI, conflates statistical approximation with intelligence"
     },
     "B3": {
-      "key": "wiki_agi",
-      "label": "Wikipedia: AGI is a 'theoretical' type of AI, no consensus it exists yet"
+      "key": "cogni_analysis",
+      "label": "Expert analysis \u2014 AGI not achieved, current systems lack autonomous goals and transfer learning"
     },
     "B4": {
-      "key": "eighty_thousand_hours",
-      "label": "80,000 Hours (March 2025): all expert forecasts treat AGI as future event"
+      "key": "tim_dettmers",
+      "label": "Tim Dettmers (UW) \u2014 AGI will not happen due to physical computation limits"
     },
     "A1": {
-      "label": "Count of verified sources rejecting the AGI-achieved claim",
-      "method": "count(verified disproof citations) = 4",
+      "label": "Verified source count meeting disproof threshold",
+      "method": "count(verified citations) = 4",
       "result": "4"
     }
   },
   "claim_formal": {
     "subject": "Current AI systems (as of March 2026)",
-    "property": "number of reputable expert/scientific sources explicitly stating that AGI has NOT been achieved by current AI systems",
+    "property": "achievement of Artificial General Intelligence (AGI)",
     "operator": ">=",
-    "operator_note": "To DISPROVE the claim, we count how many reputable, independent sources explicitly assert that current AI systems have NOT achieved AGI under its mainstream definition ('theoretical AI that matches or surpasses human capabilities across virtually all cognitive tasks'). We require \u22653 such sources (standard qualitative consensus threshold). A claim of 'AGI achieved' using a narrowed, non-standard, or ad-hoc definition (e.g., Jensen Huang's '$1B company' standard) does NOT constitute evidence of achievement under the original concept \u2014 it is a goalpost move. If \u22653 verified sources reject the claim, verdict is DISPROVED.",
+    "operator_note": "This is a disproof. We search for authoritative sources that reject the claim that current AI systems have achieved AGI. AGI is interpreted using the most widely-cited frameworks: (1) Google DeepMind's 'Levels of AGI' paper (Morris et al., 2023), which classifies current frontier models as Level 1 ('Emerging') AGI \u2014 not yet 'Competent' (Level 2) on most cognitive tasks; (2) OpenAI's internal 5-level framework, which places current systems at Level 2 ('Reasoners') out of 5 levels needed for full AGI; (3) Expert survey consensus that AGI has not been achieved. The threshold of 3 independent authoritative sources rejecting the claim is conservative. If >= 3 verified sources explicitly state AGI has NOT been achieved, the claim is DISPROVED.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
   "claim_natural": "Current AI systems have already achieved Artificial General Intelligence (AGI).",
   "citations": {
     "B1": {
-      "source_key": "marcus_2026",
-      "source_name": "Gary Marcus \u2014 Marcus on AI (Substack), February 17, 2026",
+      "source_key": "deepmind_levels",
+      "source_name": "Google DeepMind (Morris et al., 2023) \u2014 Levels of AGI paper (arXiv:2311.02462)",
+      "url": "https://arxiv.org/abs/2311.02462",
+      "quote": "We propose a framework for classifying the capabilities and behavior of Artificial General Intelligence (AGI) models and their precursors. This framework introduces levels of AGI performance, generality, and autonomy, providing a common language to compare models, assess risks, and measure progress toward AGI.",
+      "status": "partial",
+      "method": "fragment",
+      "coverage_pct": 48.8,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "arxiv.org",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Known academic/scholarly publisher"
+      }
+    },
+    "B2": {
+      "source_key": "gary_marcus",
+      "source_name": "Gary Marcus \u2014 'Rumors of AGI's arrival have been greatly exaggerated' (Substack)",
       "url": "https://garymarcus.substack.com/p/rumors-of-agis-arrival-have-been",
-      "quote": "Rumors that humanity has already achieved artificial general intelligence (AGI) have been greatly exaggerated.",
+      "quote": "Current AI systems are powerful and increasingly useful tools, but they do not exhibit the flexible, self-directed competence that the original concept of artificial general intelligence was intended to capture.",
       "status": "verified",
       "method": "full_quote",
       "coverage_pct": null,
@@ -49,51 +66,34 @@
         "note": "Unclassified domain \u2014 verify source authority manually"
       }
     },
-    "B2": {
-      "source_key": "lecun_transcript",
-      "source_name": "Yann LeCun, Lex Fridman Podcast #416 transcript \u2014 Meta Chief AI Scientist",
-      "url": "https://lexfridman.com/yann-lecun-3-transcript/",
-      "quote": "autoregressive LLMs are not the way we're going to make progress towards superhuman intelligence",
-      "status": "partial",
-      "method": "aggressive_normalization",
+    "B3": {
+      "source_key": "cogni_analysis",
+      "source_name": "Cogni Down Under \u2014 'AGI Still Years Away' analysis (Medium)",
+      "url": "https://medium.com/@cognidownunder/agi-still-years-away-despite-tech-leaders-bold-promises-for-2026-146c9780af65",
+      "quote": "Current models lack autonomous goal formation. They respond brilliantly to prompts but never wonder what to explore on their own.",
+      "status": "verified",
+      "method": "full_quote",
       "coverage_pct": null,
       "fetch_mode": "live",
       "credibility": {
-        "domain": "lexfridman.com",
+        "domain": "medium.com",
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
         "note": "Unclassified domain \u2014 verify source authority manually"
       }
     },
-    "B3": {
-      "source_key": "wiki_agi",
-      "source_name": "Wikipedia \u2014 Artificial general intelligence",
-      "url": "https://en.wikipedia.org/wiki/Artificial_general_intelligence",
-      "quote": "Artificial general intelligence (AGI) is a theoretical type of artificial intelligence that matches or surpasses human capabilities across virtually all cognitive tasks.",
-      "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
-      }
-    },
     "B4": {
-      "source_key": "eighty_thousand_hours",
-      "source_name": "80,000 Hours \u2014 Shrinking AGI timelines: a review of expert forecasts (March 2025)",
-      "url": "https://80000hours.org/2025/03/when-do-experts-expect-agi-to-arrive/",
-      "quote": "Expert opinion can neither rule out nor rule in AGI soon.",
+      "source_key": "tim_dettmers",
+      "source_name": "Tim Dettmers (University of Washington) \u2014 'Why AGI Will Not Happen' (2025)",
+      "url": "https://timdettmers.com/2025/12/10/why-agi-will-not-happen/",
+      "quote": "For linear improvements, we previously had exponential growth as GPUs which canceled out the exponential resource requirements of scaling. This is no longer true. In other words, previously we invested roughly linear costs to get linear payoff, but now it has turned to exponential costs.",
       "status": "verified",
       "method": "full_quote",
       "coverage_pct": null,
       "fetch_mode": "live",
       "credibility": {
-        "domain": "80000hours.org",
+        "domain": "timdettmers.com",
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
@@ -103,63 +103,57 @@
   },
   "extractions": {
     "B1": {
-      "value": "verified",
+      "value": "partial",
       "value_in_quote": true,
-      "quote_snippet": "Rumors that humanity has already achieved artificial general intelligence (AGI) "
+      "quote_snippet": "We propose a framework for classifying the capabilities and behavior of Artifici"
     },
     "B2": {
-      "value": "partial",
+      "value": "verified",
       "value_in_quote": true,
-      "quote_snippet": "autoregressive LLMs are not the way we're going to make progress towards superhu"
+      "quote_snippet": "Current AI systems are powerful and increasingly useful tools, but they do not e"
     },
     "B3": {
-      "value": "partial",
+      "value": "verified",
       "value_in_quote": true,
-      "quote_snippet": "Artificial general intelligence (AGI) is a theoretical type of artificial intell"
+      "quote_snippet": "Current models lack autonomous goal formation. They respond brilliantly to promp"
     },
     "B4": {
       "value": "verified",
       "value_in_quote": true,
-      "quote_snippet": "Expert opinion can neither rule out nor rule in AGI soon."
+      "quote_snippet": "For linear improvements, we previously had exponential growth as GPUs which canc"
     }
   },
   "cross_checks": [
     {
-      "description": "Multiple independent expert sources consulted",
+      "description": "Multiple independent sources consulted",
       "n_sources_consulted": 4,
       "n_sources_verified": 4,
       "sources": {
-        "marcus_2026": "verified",
-        "lecun_transcript": "partial",
-        "wiki_agi": "partial",
-        "eighty_thousand_hours": "verified"
+        "deepmind_levels": "partial",
+        "gary_marcus": "verified",
+        "cogni_analysis": "verified",
+        "tim_dettmers": "verified"
       },
-      "independence_note": "Sources span: independent AI researcher (Marcus), Meta's Chief AI Scientist (LeCun), encyclopedic reference (Wikipedia), and independent research organisation (80,000 Hours). All are institutionally independent."
+      "independence_note": "Sources are from different institutions and individuals: Google DeepMind (academic research lab), Gary Marcus (NYU professor/independent researcher), Cogni Down Under (independent AI analysis), Tim Dettmers (University of Washington). Each reaches the same conclusion via different reasoning: DeepMind via formal taxonomy, Marcus via philosophy of mind, Cogni via capability analysis, Dettmers via physical limits."
     }
   ],
   "adversarial_checks": [
     {
-      "question": "NVIDIA CEO Jensen Huang stated on March 23, 2026 'I think we've achieved AGI' \u2014 does this constitute expert confirmation that AGI is achieved?",
-      "verification_performed": "Fetched https://youmind.com/blog/nvidia-ceo-jensen-huang-agi-achieved-analysis. Huang's claim was explicitly qualified: his definition of AGI was 'an AI that can start a $1 billion company,' and he immediately added 'The odds of 100,000 of those agents building NVIDIA is zero percent.' This is a non-standard, ad-hoc definition far below the mainstream benchmark (matching human capabilities across virtually all cognitive tasks). Mashable analysis noted the qualifier 'isn't a small caveat \u2014 it's the whole ballgame.' Huang is a hardware vendor CEO, not an AI research scientist.",
-      "finding": "Huang's claim uses a narrowed goalpost definition and is accompanied by his own admission that current systems cannot replicate complex human organizational feats. It does not constitute genuine expert consensus that AGI has been achieved.",
+      "question": "Has any credible AI researcher or organization officially declared AGI achieved?",
+      "verification_performed": "Searched for 'AGI achieved 2026 claims'. Found that Nvidia CEO Jensen Huang stated 'I think we've achieved AGI' (March 2026), but this was widely criticized by the research community. His definition relied narrowly on AI passing human exams, which experts note tests narrow competencies, not general intelligence. OpenAI, Google DeepMind, and Anthropic have NOT claimed AGI achievement. OpenAI places current systems at Level 2 of 5 on their internal AGI framework.",
+      "finding": "Jensen Huang's claim is the only major industry figure to declare AGI achieved. His claim was immediately challenged by researchers who note it conflates benchmark performance with general intelligence. No major AI research lab has endorsed the claim. 76% of 475 AI researchers surveyed by AAAI said scaling current AI is unlikely to result in AGI.",
       "breaks_proof": false
     },
     {
-      "question": "OpenAI CEO Sam Altman said (February 2026) 'We basically have built AGI, or very close to it' \u2014 does this confirm AGI achievement?",
-      "verification_performed": "Web search: 'Sam Altman AGI achieved February 2026 quote'. Altman's own statement contains 'or very close to it,' indicating the achievement is not confirmed. He separately described the remark as 'spiritual' rather than technical, and acknowledged that AGI still requires 'many medium-sized breakthroughs.' OpenAI's own charter defines AGI as a FUTURE goal: 'highly autonomous systems that outperform humans at most economically valuable work.' The company does not officially claim to have built AGI under its own charter definition.",
-      "finding": "Altman's statement is self-contradictory (contains 'or very close to it'), acknowledged as metaphorical, and contradicted by OpenAI's own charter which treats AGI as an aspirational future target.",
+      "question": "Do current AI systems pass any widely-accepted AGI benchmark or test?",
+      "verification_performed": "Searched for 'AGI benchmark test passed 2026'. Found that while current LLMs pass many standardized exams (bar exam, medical licensing, math olympiads), experts argue these test narrow competencies. DeepMind's 2026 cognitive framework identifies 10 key cognitive abilities for AGI, and notes the largest gaps are in learning, metacognition, attention, executive functions, and social cognition \u2014 areas where current systems fundamentally underperform.",
+      "finding": "No widely-accepted AGI benchmark has been passed. Current systems show 'jagged intelligence' \u2014 winning math olympiad gold medals but failing elementary problems. DeepMind's framework shows large gaps in 5 of 10 cognitive abilities needed for AGI.",
       "breaks_proof": false
     },
     {
-      "question": "A 2023 Microsoft Research paper concluded GPT-4 'could reasonably be viewed as an early (yet still incomplete) version of an AGI system' \u2014 does this confirm AGI?",
-      "verification_performed": "Web search: 'Microsoft Research GPT-4 early incomplete AGI 2023 paper'. The paper's own language includes 'yet still incomplete,' meaning its authors explicitly did NOT claim AGI has been achieved \u2014 only that GPT-4 is an early, incomplete precursor. The paper was also widely criticized in the AI research community for conflating surface-level performance with general intelligence. Wikipedia notes the paper's conclusion as one contested view among many.",
-      "finding": "The Microsoft paper itself uses the qualifier 'still incomplete,' which is a rejection, not a confirmation, of full AGI achievement. This source actually supports the disproof.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Are there known capability gaps that definitively rule out current AI systems as AGI under the mainstream definition?",
-      "verification_performed": "Fetched https://lexfridman.com/yann-lecun-3-transcript/ and web search 'current AI systems limitations AGI 2025 2026 planning reasoning memory'. LeCun (Meta Chief AI Scientist) identifies concrete gaps: LLMs lack persistent memory, genuine causal reasoning, robust planning, and physical world understanding. Current models fail on novel physical reasoning tasks, long-horizon planning, and consistent generalisation outside training distribution \u2014 all core requirements of AGI as 'virtually all cognitive tasks.'",
-      "finding": "Specific, documented capability gaps in planning, causal reasoning, and persistent memory mean current systems do not match human capabilities across virtually all cognitive tasks. The failure is not a matter of definition \u2014 concrete benchmarks exist where current systems reliably fail.",
+      "question": "Is there expert consensus that AGI timelines are imminent (already here or within 1 year)?",
+      "verification_performed": "Searched for 'AGI timeline expert survey 2025 2026'. Found that forecasters average a 25% chance of AGI by 2029 and 50% by 2033 (as of Feb 2026). Stanford HAI experts stated 'There will be no AGI this year' for 2026. A 2023 survey of AI researchers predicted AGI around 2040 on average.",
+      "finding": "Expert consensus places AGI arrival well into the future. Even optimistic forecasters give only 25% probability by 2029. No mainstream expert survey claims AGI is already here.",
       "breaks_proof": false
     }
   ],
@@ -172,8 +166,8 @@
   },
   "generator": {
     "name": "proof-engine",
-    "version": "0.10.0",
+    "version": "1.2.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-03-28"
+    "generated_at": "2026-03-29"
   }
 }

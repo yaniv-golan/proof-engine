@@ -1,30 +1,26 @@
-# Proof: Renewable energy (solar + wind) can replace fossil fuels without major grid upgrades or backups.
+# Proof: Renewable energy (solar + wind) can replace fossil fuels without major grid upgrades or backups
 
-- **Generated:** 2026-03-28
-- **Verdict:** DISPROVED (with unverified citations)
+- **Generated:** 2026-03-29
+- **Verdict:** DISPROVED
 - **Audit trail:** [proof_audit.md](proof_audit.md) | [proof.py](proof.py)
 
 ## Key Findings
 
-- The International Energy Agency (IEA) states the world must add or refurbish over **80 million kilometres of grid by 2040** — equal to rebuilding the entire existing global grid — to meet clean energy targets (B1, verified).
-- The National Renewable Energy Laboratory (NREL) confirms that reaching net-zero by 2035 requires adding **significant new transmission capacity** to deliver wind energy from generation regions to load centers (B2, verified).
-- The IEA states that **rapid scaling of energy storage is critical** to address the hour-to-hour variability of solar and wind generation (B3, verified).
-- NREL confirms that variable renewable resources **inherently fluctuate** and that addressing seasonal mismatches "may require technologies that have yet to be deployed at large scale" (B4, partial — 54.5% fragment match; independently confirmed by B3).
-- All 4 sources confirmed (threshold: 3). Both sub-claims — SC2 (grid upgrades required) and SC3 (backup/storage required) — are each independently confirmed by 2 top-tier sources.
-- **Note:** 2 citations are from iea.org, which the automated credibility system classifies as tier 2 (unclassified .org domain). The IEA is the UN-affiliated global energy authority and is authoritative; this is a classification limitation of the automated system.
+- **Both sub-claims disproved.** The IEA, IRENA, and EIA all explicitly state that grid upgrades and energy storage are essential for integrating high shares of solar and wind power.
+- **Grid investment must nearly double** — from ~$300B/year to over $600B/year by 2030 — just to keep pace with renewable deployment (B1).
+- **Energy storage is not optional.** 24 GW of battery storage is planned for 2026 in the U.S. alone (B6), and the IEA states flexibility needs will double by 2030 (B4).
+- **No country operates on solar+wind alone** without grid interconnections, hydroelectric backup, or battery storage.
 
 ## Claim Interpretation
 
-**Natural language claim:** "Renewable energy (solar + wind) can replace fossil fuels without major grid upgrades or backups."
+The claim asserts that solar and wind energy can fully replace fossil fuel electricity generation **without** requiring either (a) major grid infrastructure upgrades or (b) backup/storage systems such as batteries, pumped hydro, or gas peakers.
 
-**Formal interpretation:** This is a compound claim asserting two things simultaneously: (1) no major grid upgrades are needed, and (2) no major backups or storage are needed. To **disprove** the claim, it suffices to show that EITHER condition is false — i.e., that grid upgrades ARE required, or that backups/storage ARE required. This proof evaluates both:
+This is decomposed into two sub-claims joined by AND:
 
-- **SC2:** Are major grid upgrades required to integrate solar + wind at scale?
-- **SC3:** Is major backup or storage capacity required to maintain grid reliability?
+- **SC1:** Grid upgrades are not required for full renewable replacement
+- **SC2:** Backup/storage systems are not required for full renewable replacement
 
-The claim fails if either SC2 or SC3 is confirmed as true by the evidence. Both are confirmed here.
-
-**Operator note:** The word "major" is interpreted by reference to the documented scale: IEA calls for doubling annual grid investment to $600 billion/year and rebuilding the entire global grid; NREL documents the U.S. needing 1,400–10,100 miles of new high-capacity lines per year. Under any reasonable standard, these constitute "major" upgrades and investments.
+Both must be true for the compound claim to hold. To disprove the claim, we find >= 3 independent authoritative sources contradicting each sub-claim (i.e., sources stating that grid upgrades and storage ARE required). This threshold of 3 sources ensures institutional consensus, not a single outlier opinion.
 
 *Source: proof.py JSON summary*
 
@@ -32,63 +28,68 @@ The claim fails if either SC2 or SC3 is confirmed as true by the evidence. Both 
 
 | ID | Fact | Verified |
 |----|------|----------|
-| B1 | IEA (2023): World must add/replace 80 million km of grid by 2040 — SC2 disproof | Yes |
-| B2 | NREL (2022): Net-zero by 2035 requires up to tripling US transmission capacity — SC2 disproof | Yes |
-| B3 | IEA: Storage must expand 35-fold; critical to address solar/wind variability — SC3 disproof | Yes |
-| B4 | NREL (2021): Renewable variability requires technologies not yet deployed at scale — SC3 disproof | Partial (54.5% fragment match) |
-| A1 | Count of verified sources confirming grid upgrades and/or backup are required | Computed: 4 of 4 sources confirmed (threshold: 3) |
+| B1 | SC1: IEA — grid investment must nearly double | Yes |
+| B2 | SC1: IRENA — grid expansion and modernisation required | Yes |
+| B3 | SC1: IEA Renewables 2025 — curtailment from grid limits | Yes |
+| B4 | SC2: IEA — energy storage needed for flexibility | Yes |
+| B5 | SC2: IRENA — storage key to renewable supply-demand gaps | Yes |
+| B6 | SC2: EIA — 24 GW battery storage planned for 2026 | Yes |
+| A1 | SC1 verified source count | Computed: 3 independent sources confirm grid upgrades are required |
+| A2 | SC2 verified source count | Computed: 3 independent sources confirm storage/backups are required |
 
 *Source: proof.py JSON summary*
 
 ## Proof Logic
 
-This is a compound disproof. The original claim requires BOTH (no major grid upgrades needed) AND (no major backup/storage needed) to be true. Both conditions are false.
+### SC1: Grid upgrades ARE required
 
-**SC2 — Major grid upgrades ARE required:**
+The IEA's *Electricity Grids and Secure Energy Transitions* report states that grid investment must nearly double to over $600 billion/year by 2030 (B1). This is not aspirational — the report models a "Grid Delay Case" showing that insufficient grid investment would add 58 gigatonnes of CO2 emissions by 2050.
 
-The IEA's 2023 flagship report on electricity grids (B1) states that reaching national climate goals "means adding or refurbishing a total of over 80 million kilometres of grids by 2040, the equivalent of the entire existing global grid." This figure is not a marginal improvement — it means doubling the total extent of global grid infrastructure within 15 years. The report also calls for annual grid investment to nearly double to over $600 billion/year. NREL independently confirms (B2) that achieving net-zero in the U.S. by 2035 requires "significant transmission" added "in many locations, mostly to deliver energy from wind-rich regions to major load centers." These two sources, from entirely independent institutions on different continents, both confirm that major transmission infrastructure expansion is a prerequisite — not optional — for high-penetration renewable grids.
+IRENA, an independent intergovernmental agency, separately concludes that "the expansion and modernisation of grids" is required to triple renewable capacity by 2030 (B2).
 
-**SC3 — Major backup/storage IS required:**
+The IEA's *Renewables 2025* report provides the operational evidence: curtailment already occurs because "the power system cannot absorb all generated power because of transmission capacity limitations" (B3). At least 3,000 GW of renewable projects sit in grid connection queues globally — five times the solar and wind capacity added in 2022.
 
-The IEA states (B3) that "the rapid scaling up of energy storage systems will be critical to address the hour-to-hour variability of wind and solar PV electricity generation on the grid," and projects that grid-scale battery capacity must expand 35-fold between 2022 and 2030 (to nearly 970 GW) in the IEA's Net Zero Scenario. NREL independently confirms (B4, partial) that variable resources "inherently fluctuate across various timescales" and that seasonal mismatches "may require technologies that have yet to be deployed at large scale." B3 and B4 independently establish that storage and backup are not optional supplements but critical structural requirements of any high-renewable grid.
+Three independent sources (IEA Grids, IRENA, IEA Renewables) all confirm that major grid upgrades are essential. SC1 of the original claim is contradicted.
 
-Both sub-claims are independently confirmed by two top-tier institutions (IEA and NREL), providing cross-institutional agreement on each finding.
+### SC2: Storage/backups ARE required
+
+The IEA states that as variable renewable shares increase, "power systems need to become more flexible to accommodate the changes in output," with flexibility needs doubling by 2030 (B4). This flexibility includes energy storage and demand response.
+
+IRENA independently confirms that "the deployment of grid infrastructure and energy storage is a key element to avoid delaying global energy transition" (B5).
+
+The U.S. EIA provides concrete evidence of storage being deployed alongside renewables: developers plan to add 24 GW of utility-scale battery storage in 2026 alone, representing 28% of all planned capacity additions (B6). Battery storage is being co-located with solar projects precisely because solar alone cannot meet demand outside daylight hours.
+
+Three independent sources (IEA, IRENA, EIA) all confirm that energy storage is essential. SC2 of the original claim is contradicted.
 
 *Source: author analysis*
 
 ## Counter-Evidence Search
 
-**Search 1:** Do any credible scientific or government sources argue solar/wind can replace fossil fuels WITHOUT grid upgrades or storage?
+Three adversarial searches were conducted:
 
-Searched IEA, NREL, DOE, and academic literature for "renewable energy no grid upgrades needed," "solar wind no storage required," "100% renewable without backup grid," and "RethinkX renewable overcapacity no grid upgrades." No credible peer-reviewed, government, or major research institution source was found supporting this claim. RethinkX (a non-peer-reviewed think tank) argues overbuilding can minimize storage needs but still requires massive new generation infrastructure and grid connections — it does not argue against grid upgrades entirely. **Does not break the proof.**
+1. **Are there credible studies showing 100% solar+wind grids working without storage or grid upgrades?** No. All credible sources (IEA, IRENA, NREL, academic literature) consistently require storage and grid upgrades even in the most optimistic scenarios.
 
-**Search 2:** Could overbuilding renewable capacity eliminate the need for grid upgrades and storage?
+2. **Could emerging technology eliminate the need for storage and grid upgrades?** Overcapacity strategies can reduce but not eliminate storage needs, and themselves require grid upgrades to handle excess generation. No mainstream energy body endorses eliminating storage entirely.
 
-Searched "overcapacity renewable energy eliminate storage grid upgrades" and reviewed IEA and NREL analyses of high-penetration renewable scenarios. Overbuilding generation can reduce storage duration requirements but cannot eliminate transmission expansion (needed to move surplus power from generation regions to load centers) nor seasonal storage (needed for multi-week solar/wind droughts). The IEA Net Zero Scenario requires 970 GW of grid-scale batteries by 2030 even with aggressive capacity builds. **Does not break the proof.**
+3. **Does any country currently run on 100% solar+wind without storage or grid modifications?** No. Countries with high renewable shares (Denmark ~80%, Portugal ~60%) rely heavily on grid interconnections to neighboring countries and/or hydroelectric backup — both of which are forms of grid infrastructure and backup that the claim excludes.
 
-**Search 3:** Is there a real-world grid running on 100% solar+wind without grid upgrades or backup systems?
-
-Searched "country 100% solar wind no backup no grid upgrade" and reviewed IEA and IRENA country case studies for Denmark, Germany, Iceland, Portugal, and Costa Rica. No country or major grid operates on 100% solar+wind without backup. High-renewable countries rely on: international grid interconnections (Denmark/Germany), pumped hydro (Portugal/Costa Rica), dispatchable geothermal (Iceland), or natural gas backup — each of which constitutes either a backup system or a grid upgrade. **Does not break the proof.**
-
-**Search 4:** Could "major" in the claim allow for only minor grid investments?
-
-Analyzed the scale of grid investments cited in IEA/NREL reports against standard definitions of "major infrastructure." IEA documents $600B/year (doubling current levels) and 80 million km of global grid expansion; NREL documents 1,400–10,100 miles/year of new high-capacity lines for the U.S. alone. This scale unambiguously constitutes "major" upgrades by any reasonable standard. **Does not break the proof.**
-
-*Source: proof.py JSON summary (adversarial_checks)*
+*Source: proof.py JSON summary*
 
 ## Conclusion
 
-**Verdict: DISPROVED (with unverified citations)**
+**DISPROVED.** The claim that renewable energy (solar + wind) can replace fossil fuels without major grid upgrades or backups is contradicted by all major energy authorities:
 
-The claim that solar and wind can replace fossil fuels *without major grid upgrades or backups* is disproved by the independent consensus of the IEA and NREL — the two most authoritative energy grid research bodies globally.
+- **SC1 disproved:** 3/3 sources confirm grid upgrades are required (IEA: $600B+/year investment needed; IRENA: grid expansion and modernisation required; IEA Renewables: curtailment already occurs from grid limitations).
+- **SC2 disproved:** 3/3 sources confirm storage/backups are required (IEA: flexibility needs doubling by 2030; IRENA: storage is key to avoiding transition delays; EIA: 24 GW of battery storage being deployed in 2026).
 
-**SC2 (no grid upgrades)** is disproved: both IEA (B1, verified) and NREL (B2, verified) confirm that massive grid transmission expansion is required. The scale — rebuilding the entire global grid by 2040, $600B/year investment — unambiguously constitutes "major" upgrades.
+All 6 citations were fully verified against their source pages. The disproof rests on institutional consensus from three independent organizations (IEA, IRENA, U.S. EIA) — the world's leading energy analysis bodies.
 
-**SC3 (no backups/storage)** is disproved: both IEA (B3, verified) and NREL (B4, partial) confirm that large-scale energy storage is critical to address the inherent variability of solar and wind generation. B3 alone (fully verified) is sufficient to disprove SC3.
+Note: This disproof does not undermine the case for renewable energy itself. Solar and wind are rapidly growing, increasingly cost-competitive, and central to decarbonization. The disproof addresses only the narrow claim that they can do so *without* grid upgrades or storage — they cannot.
 
-**Impact of unverified citation:** B4 (NREL) received a partial match (54.5%), triggering the "with unverified citations" variant. However, B3 (IEA, fully verified) independently confirms the same SC3 conclusion. Removing B4 entirely from the count still leaves 3 fully verified sources (B1, B2, B3) — meeting the threshold — and both SC2 and SC3 remain disproved.
+Note: 5 citation(s) come from unclassified or low-credibility-tier sources (iea.org and pv-tech.org scored as tier 2/unknown by the automated classifier). These are in fact highly authoritative institutions — the IEA is an intergovernmental organization and PV Tech is a leading industry publication reporting IRENA statements. See Source Credibility Assessment in the audit trail.
 
-Note: The IEA (iea.org) is classified as tier 2 by the automated credibility system, which does not recognize `.org` intergovernmental agencies. The IEA is the UN-affiliated global energy authority, founded by treaty, and is the most authoritative source on global energy systems. Reviewers should treat its citations as tier 5 equivalent.
+*Source: proof.py JSON summary; impact analysis is author analysis*
 
 ---
-Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.0.0 on 2026-03-28.
+
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.2.0 on 2026-03-29.
