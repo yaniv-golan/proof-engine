@@ -126,7 +126,7 @@ a:hover { text-decoration: underline; }
 .pipeline-arrow { display: flex; align-items: center; color: var(--accent); font-size: 18px; font-family: var(--font-mono); padding: 0 4px; margin-top: -8px; }
 
 /* Section headings */
-.section-heading { font-size: 11px; font-family: var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); }
+.section-heading { font-size: 11px; font-family: var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin: 40px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); }
 
 /* Proof cards */
 .proof-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; transition: border-color 0.15s; }
