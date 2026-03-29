@@ -475,3 +475,13 @@ def test_landing_page_has_schema_org(site_fixture):
     html = (site_fixture / "_site" / "index.html").read_text()
     assert '"@type": "WebSite"' in html
     assert '"name": "Proof Engine"' in html
+
+
+def test_landing_page_has_pipeline_diagram(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "index.html").read_text()
+    assert "pipeline" in html
+    assert "fetch sources" in html
+    assert "verify quotes" in html
+    assert "verdict" in html

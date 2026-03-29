@@ -117,6 +117,14 @@ a:hover { text-decoration: underline; }
 .github-stars { display: flex; justify-content: center; margin-top: 16px; }
 .github-stars img { height: 20px; }
 
+/* How-it-works pipeline */
+.pipeline { display: flex; align-items: stretch; gap: 0; margin-bottom: 32px; max-width: 720px; margin-left: auto; margin-right: auto; }
+.pipeline-step { flex: 1; text-align: center; position: relative; }
+.pipeline-icon { font-size: 20px; margin-bottom: 6px; }
+.pipeline-label { font-size: 11px; font-family: var(--font-mono); color: var(--text); font-weight: 700; margin-bottom: 4px; }
+.pipeline-desc { font-size: 10px; font-family: var(--font-mono); color: var(--text-muted); line-height: 1.4; }
+.pipeline-arrow { display: flex; align-items: center; color: var(--accent); font-size: 18px; font-family: var(--font-mono); padding: 0 4px; margin-top: -8px; }
+
 /* Section headings */
 .section-heading { font-size: 11px; font-family: var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); }
 
@@ -246,6 +254,10 @@ a:hover { text-decoration: underline; }
     .cta { width: 100%; max-width: 280px; text-align: center; }
     .cta-links { flex-direction: column; gap: 12px; align-items: center; }
     .cta-links a { padding: 8px 0; }
+    .pipeline { flex-direction: column; gap: 4px; align-items: center; }
+    .pipeline-step { width: 100%; max-width: 240px; display: flex; align-items: center; gap: 12px; text-align: left; }
+    .pipeline-icon { margin-bottom: 0; min-width: 24px; }
+    .pipeline-arrow { transform: rotate(90deg); padding: 0; font-size: 14px; }
     .filters { flex-direction: column; }
     .filter-input { min-width: unset; }
     .proof-card { padding: 12px 14px; }
