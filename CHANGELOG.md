@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-03-29
+
+### Added
+
+- **Web search required for source discovery** — SKILL.md Step 2 now explicitly requires using the environment's web search tool instead of relying on LLM memory. Includes structured search protocol (claim, recent data, counter-evidence), recency check for fast-moving fields, and audit trail when search is unavailable. Works across all supported environments (Claude Code, ChatGPT, Cursor, Windsurf, Gemini CLI).
+- **GA4 custom events** — track CTA clicks (landing page), share button usage (proof pages), download clicks, and audit trail expansion
+
+### Changed
+
+- **Proof page layout** — claim title now appears first (above verdict banner), not fourth. Previous order showed the answer before the question.
+- Proof page section spacing increased for readability (section heading margin-top: 32px → 40px, added paragraph/list bottom margins)
+- Added `width`/`height` attributes to images for Lighthouse performance
+- Improved muted text contrast ratio for accessibility
+
+### Fixed
+
+- Proof page content sections cramped against divider borders
+- 5 proof thumbnails resized from 2048x2048 to correct 240x240
+
 ## [1.1.0] - 2026-03-29
 
 ### Added
