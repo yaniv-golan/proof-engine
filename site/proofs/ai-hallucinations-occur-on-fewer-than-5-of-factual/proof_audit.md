@@ -1,34 +1,32 @@
 # Audit: AI hallucinations occur on fewer than 5% of factual questions
 
-- **Generated:** 2026-03-28
+- **Generated:** 2026-03-29
 - **Reader summary:** [proof.md](proof.md)
 - **Proof script:** [proof.py](proof.py)
-
----
 
 ## Claim Specification
 
 | Field | Value |
 |-------|-------|
-| Subject | AI language models (mainstream LLMs) |
-| Property | Hallucination rate on factual question-answering benchmarks |
-| Operator | `<` |
-| Threshold | 5.0% |
+| Subject | AI language models (as a general class) |
+| Property | hallucination rate on factual question benchmarks |
+| Operator | >= |
+| Threshold | 3 (verified disproof sources needed) |
 | Proof direction | disprove |
-| Operator note | Universal claim — "AI" without qualification. Any mainstream LLM with ≥5% hallucination rate on a standard factual Q&A benchmark disproves it. Summarization-task rates (Vectara) excluded as they measure a different phenomenon. |
+| Operator note | To DISPROVE the claim that hallucinations occur on fewer than 5% of factual questions, we need >= 3 independent, verified sources showing hallucination rates >= 5% on factual question benchmarks. The claim is universal ('AI hallucinations') without specifying a particular model, so any major AI model demonstrating >= 5% hallucination on factual questions constitutes a counterexample. We focus on open-ended factual QA benchmarks like SimpleQA, PersonQA, and AA-Omniscience. |
 
----
+*Source: proof.py JSON summary*
 
 ## Fact Registry
 
 | ID | Key | Label |
 |----|-----|-------|
-| B1 | hallulens | HalluLens ACL 2025: GPT-4o hallucination rate on PreciseWikiQA factual Q&A |
-| B2 | legal_fictions | Large Legal Fictions (arxiv 2401.01301): LLM hallucination rate on legal factual questions |
-| B3 | pmc_survey | PMC survey (2025): LLaMA 2 and DeepSeek hallucination rates on factual Q&A |
-| A1 | *(computed)* | Count of independent sources confirming hallucination rates ≥5% |
+| B1 | source_ieee | IEEE ComSoc: OpenAI o3 hallucinated 33% on PersonQA |
+| B2 | source_allaboutai | AllAboutAI: ChatGPT hallucinates in ~19.5% of responses |
+| B3 | source_aa | Artificial Analysis: best model 22% hallucination on AA-Omniscience |
+| A1 | — | Verified source count meets disproof threshold |
 
----
+*Source: proof.py JSON summary*
 
 ## Full Evidence Table
 
@@ -36,104 +34,116 @@
 
 | ID | Fact | Method | Result |
 |----|------|--------|--------|
-| A1 | Count of independent sources confirming hallucination rates ≥5% | count(citations with status in ('verified', 'partial')) | 3 confirmed sources (need ≥3) |
+| A1 | Verified source count meets disproof threshold | count(verified citations) = 3 | 3 |
+
+*Source: proof.py JSON summary*
 
 ### Type B (Empirical) Facts
 
 | ID | Fact | Source | URL | Quote | Status | Method | Credibility |
 |----|------|--------|-----|-------|--------|--------|-------------|
-| B1 | GPT-4o hallucination rate on PreciseWikiQA | HalluLens: LLM Hallucination Benchmark (ACL 2025, arxiv 2504.17550) | https://arxiv.org/html/2504.17550v1 | "GPT-4o, with a 45.15% hallucination rate when not refusing, maintains a much lower false refusal rate and achieves the highest correct answer scores (52.59%), indicating a trade-off between precision and recall." | verified | full_quote | Tier 4 (academic) |
-| B2 | LLM hallucination rate on legal factual questions | Large Legal Fictions: Profiling Legal Hallucinations in Large Language Models (arxiv 2401.01301) | https://arxiv.org/html/2401.01301v1 | "legal hallucinations are alarmingly prevalent, occurring between 69% of the time with ChatGPT 3.5 and 88% with Llama 2" | verified | full_quote | Tier 4 (academic) |
-| B3 | LLaMA 2 and DeepSeek hallucination rates | PMC: Survey and analysis of hallucinations in large language models (2025, PMC12518350) | https://pmc.ncbi.nlm.nih.gov/articles/PMC12518350/ | "LLaMA 2 and DeepSeek exhibited significantly higher factual hallucination rates around 20%–25%" | verified | full_quote | Tier 5 (government) |
+| B1 | OpenAI o3 hallucinated 33% on PersonQA | IEEE Communications Society Technology Blog | [link](https://techblog.comsoc.org/2025/05/10/nyt-ai-is-getting-smarter-but-hallucinations-are-getting-worse/) | "The company found that o3 — its most powerful system — hallucinated 33% of the time when running its PersonQA benchmark test" | verified | full_quote | Tier 2 (unknown) |
+| B2 | ChatGPT hallucinates in ~19.5% of responses | AllAboutAI LLM Hallucination Test | [link](https://www.allaboutai.com/resources/llm-hallucination/) | "ChatGPT generates hallucinated content in approximately 19.5% of its responses" | verified | full_quote | Tier 2 (unknown) |
+| B3 | Best model 22% hallucination on AA-Omniscience | Artificial Analysis AA-Omniscience Benchmark | [link](https://artificialanalysis.ai/evaluations/omniscience) | "Grok 4.20 Beta 0309 (Reasoning)" + data_values: best_model_hallucination_rate=22%, benchmark_questions=6,000 | verified | full_quote | Tier 2 (unknown) |
 
----
+*Source: proof.py JSON summary*
 
 ## Citation Verification Details
 
-### B1 — HalluLens (arxiv 2504.17550)
-
+### B1 — IEEE ComSoc (source_ieee)
 - **Status:** verified
 - **Method:** full_quote
 - **Fetch mode:** live
-- **Coverage:** N/A (full quote match)
 
-### B2 — Large Legal Fictions (arxiv 2401.01301)
-
+### B2 — AllAboutAI (source_allaboutai)
 - **Status:** verified
 - **Method:** full_quote
 - **Fetch mode:** live
-- **Coverage:** N/A (full quote match)
 
-### B3 — PMC Survey (PMC12518350)
-
+### B3 — Artificial Analysis (source_aa)
 - **Status:** verified
 - **Method:** full_quote
 - **Fetch mode:** live
-- **Coverage:** N/A (full quote match)
+- **Data values verification:** best_model_hallucination_rate ("22%") found on page [live]; benchmark_questions ("6,000") found on page [live]
 
----
+*Source: proof.py JSON summary*
 
 ## Computation Traces
 
 ```
-confirmed disproof sources vs threshold of 3: 3 >= 5.0 = False
-confirmed disproof sources (need ≥3 to establish disproof): 3 >= 3 = True
+verified disproof sources vs threshold: 3 >= 3 = True
 ```
 
-*Note: The first compare() call (3 >= 5.0) uses the claim's numeric threshold (5%) applied to source count — it is superseded by the second call which correctly uses the disproof source threshold of 3. The second call drives the verdict.*
-
----
+*Source: proof.py inline output (execution trace)*
 
 ## Independent Source Agreement (Rule 6)
 
-| Description | Sources consulted | Sources verified | Agreement |
-|-------------|-------------------|-----------------|-----------|
-| Three independent research groups, separate benchmarks, separate domains | 3 | 3 | All verified |
+| Aspect | Details |
+|--------|---------|
+| Sources consulted | 3 |
+| Sources verified | 3 |
+| source_ieee | verified |
+| source_allaboutai | verified |
+| source_aa | verified |
+| Independence note | Sources are from different publications (IEEE ComSoc, AllAboutAI, Artificial Analysis) reporting on different benchmarks and models (PersonQA, ChatGPT testing, AA-Omniscience). Each measures hallucination rates independently. |
 
-**Independence note:**
-- B1: AI/NLP researchers (HalluLens, ACL 2025) — general factual Q&A benchmark
-- B2: Legal AI researchers (Stanford/Princeton/NYU, arxiv 2401.01301) — legal domain Q&A
-- B3: PMC survey authors (2025) — open-source model evaluation
-
-Different institutions, different benchmark designs, different domains. Each independently confirms hallucination rates far above 5%.
-
----
+*Source: proof.py JSON summary*
 
 ## Adversarial Checks (Rule 5)
 
-### Check 1: Does GPT-4 achieve <5% hallucination on some benchmarks?
-
-- **Question:** Does GPT-4 specifically achieve hallucination rates below 5% on any factual benchmark, potentially making the claim true for the best models?
-- **Search performed:** Searched for GPT-4 hallucination rate studies. Found PMC12518350 which reports "GPT-4 achieved near-perfect factual accuracy, maintaining a hallucination rate below 5%" in one study. However: (1) this is under chain-of-thought prompting conditions; (2) it applies to GPT-4 specifically, not "AI" in general; (3) HalluLens (ACL 2025) shows GPT-4o at 45.15% on PreciseWikiQA — a different benchmark.
-- **Finding:** GPT-4 may approach <5% under optimal conditions on some benchmarks. This does not save the universal claim: LLaMA 2, DeepSeek, ChatGPT 3.5, GPT-4o on other benchmarks, and all models on legal/medical domain questions all show rates far above 5%. The claim as stated is false for "AI" broadly.
+### Check 1: Can any model achieve < 5% on factual QA?
+- **Verification performed:** Searched for 'AI model lowest hallucination rate factual questions 2025 2026'. Found that on Vectara's ORIGINAL summarization benchmark, some models achieve < 1% (Gemini-2.0-Flash at 0.7%). However, this measures grounded summarization (factual consistency with provided text), NOT open-ended factual question answering. On the Vectara NEW dataset (harder, more realistic), most frontier models exceed 10%. On AA-Omniscience (6,000 factual questions), the best model has 22% hallucination.
+- **Finding:** Low hallucination rates (< 5%) exist only on narrow grounded summarization tasks, not on open-ended factual question benchmarks.
 - **Breaks proof:** No
 
-### Check 2: Vectara summarization leaderboard shows some models below 5%
-
-- **Question:** Does the Vectara summarization leaderboard show models below 5%, suggesting the claim could be true for some AI systems?
-- **Search performed:** Reviewed Vectara hallucination leaderboard (github.com/vectara/hallucination-leaderboard). Top-performing models show 1.8%–3.3% hallucination on document summarization tasks. However, the Vectara leaderboard measures whether a model introduces facts not present in a source document when summarizing — NOT factual Q&A hallucination.
-- **Finding:** Summarization-fidelity rates (Vectara) are not comparable to factual Q&A hallucination rates. On actual factual question benchmarks (SimpleQA, PreciseWikiQA, legal/medical domain tests), rates are far above 5% across all tested models.
+### Check 2: Could the claim hold under specific conditions?
+- **Verification performed:** Searched for 'best AI model factual accuracy 2026 lowest error rate'. Some models with RAG can reduce hallucination rates significantly, but the claim says 'AI hallucinations' generically.
+- **Finding:** Even with the most charitable interpretation, open-ended factual QA hallucination rates exceed 5%. RAG-augmented systems may achieve lower rates, but the claim does not specify RAG.
 - **Breaks proof:** No
 
-### Check 3: Narrow definition of "hallucination"
-
-- **Question:** Could "hallucination" be defined narrowly enough (e.g., only fabricated citations, not factual errors) to make the <5% claim true?
-- **Search performed:** Reviewed definitions across the three cited papers. HalluLens defines hallucination as "incorrect answers when the model does not refuse to answer" on fact-based queries. The legal study counts hallucinated case citations and holdings. The PMC survey uses standard factual accuracy benchmarks. All three use well-established, conservative definitions.
-- **Finding:** Narrow definitions do not rescue the claim. All studies use standard, conservative hallucination definitions, and rates remain far above 5% under any reasonable definition.
+### Check 3: Are benchmarks measuring hallucination correctly?
+- **Verification performed:** Searched for 'AI hallucination benchmark methodology criticism'. Found that hallucination measurement varies by benchmark. PersonQA and SimpleQA specifically test factual accuracy on verifiable questions.
+- **Finding:** Benchmark methodology criticism exists but does not undermine our sources. All cited benchmarks measure factual accuracy on verifiable questions.
 - **Breaks proof:** No
 
----
+*Source: proof.py JSON summary*
 
 ## Source Credibility Assessment
 
-| ID | Domain | Tier | Type | Notes |
-|----|--------|------|------|-------|
-| B1 | arxiv.org | 4 | Academic | Known academic/scholarly publisher |
-| B2 | arxiv.org | 4 | Academic | Known academic/scholarly publisher |
-| B3 | nih.gov | 5 | Government | Government domain (.gov) |
+| Fact ID | Domain | Type | Tier | Note |
+|---------|--------|------|------|------|
+| B1 | comsoc.org | unknown | 2 | IEEE Communications Society — professional engineering society. Unclassified by automated tool but a well-known professional organization. |
+| B2 | allaboutai.com | unknown | 2 | Established AI benchmarking and review platform. Unclassified by automated tool. |
+| B3 | artificialanalysis.ai | unknown | 2 | Independent AI benchmarking platform. Unclassified by automated tool. |
 
-All sources are Tier 4 or higher. No low-credibility sources were used.
+Note: All 3 citations come from unclassified (tier 2) sources. IEEE ComSoc (comsoc.org) is the Communications Society of IEEE, a major professional engineering body. AllAboutAI and Artificial Analysis are established AI benchmarking platforms with publicly reproducible methodologies. The disproof does not depend solely on any single source — all three independently confirm hallucination rates well above 5%.
+
+*Source: proof.py JSON summary + author analysis*
+
+## Extraction Records
+
+For this qualitative consensus disproof, extractions record citation verification status rather than numeric values:
+
+| Fact ID | Value | Countable | Quote Snippet |
+|---------|-------|-----------|---------------|
+| B1 | verified | Yes | "The company found that o3 — its most powerful system — hallucinated 33% of the t..." |
+| B2 | verified | Yes | "ChatGPT generates hallucinated content in approximately 19.5% of its responses" |
+| B3 | verified | Yes | "Grok 4.20 Beta 0309 (Reasoning)" |
+
+*Source: proof.py JSON summary*
+
+## Hardening Checklist
+
+- **Rule 1:** N/A — qualitative consensus proof, no numeric extraction from quotes
+- **Rule 2:** All 3 citation URLs fetched live, quotes verified via `verify_all_citations()`. Data values for B3 verified via `verify_data_values()`.
+- **Rule 3:** `date.today()` used for generated_at timestamp
+- **Rule 4:** CLAIM_FORMAL includes operator_note explaining disproof threshold and interpretation of "factual questions"
+- **Rule 5:** Three adversarial checks searched for counter-evidence: sub-5% models, specific conditions, benchmark methodology
+- **Rule 6:** Three independent sources from different organizations reporting on different benchmarks
+- **Rule 7:** `compare()` from computations.py used for threshold evaluation
+- **validate_proof.py:** PASS with warnings (1 warning: no else branch in verdict assignment — cosmetic only)
+
+*Source: author analysis*
 
 ---
-
-*Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v0.10.0 on 2026-03-28.*
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.1.0 on 2026-03-29.
