@@ -4,7 +4,7 @@
   <img src="assets/banner.png" alt="Proof Engine" width="100%">
 </p>
 
-[![Install in Claude Desktop](https://img.shields.io/badge/Install_in_Claude_Desktop-D97757?style=for-the-badge&logo=claude&logoColor=white)](https://yaniv-golan.github.io/proof-engine/install-claude-desktop.html)
+[![Install in Claude Desktop](https://img.shields.io/badge/Install_in_Claude_Desktop-D97757?style=for-the-badge&logo=claude&logoColor=white)](https://yaniv-golan.github.io/proof-engine/static/install-claude-desktop.html)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Agent Skills Compatible](https://img.shields.io/badge/Agent_Skills-compatible-4A90D9)](https://agentskills.io)
@@ -38,7 +38,7 @@ The skill produces three outputs: a re-runnable `proof.py` script, a reader-faci
 
 ### Claude Desktop
 
-[![Install in Claude Desktop](https://img.shields.io/badge/Install_in_Claude_Desktop-D97757?style=for-the-badge&logo=claude&logoColor=white)](https://yaniv-golan.github.io/proof-engine/install-claude-desktop.html)
+[![Install in Claude Desktop](https://img.shields.io/badge/Install_in_Claude_Desktop-D97757?style=for-the-badge&logo=claude&logoColor=white)](https://yaniv-golan.github.io/proof-engine/static/install-claude-desktop.html)
 
 *— or install manually —*
 
