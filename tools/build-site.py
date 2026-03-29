@@ -218,6 +218,7 @@ def main():
         src_dir = proofs_dir / proof["slug"]
         has_custom_thumbnail = (src_dir / "thumbnail.png").exists()
         if has_custom_thumbnail:
+            proof_out.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src_dir / "thumbnail.png", proof_out / "thumbnail.png")
 
         write_file(proof_out / "index.html", tpl.render(
