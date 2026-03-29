@@ -14,3 +14,4 @@ docs/internal/
 .superpowers/brainstorm/
 _site/
 .worktrees/
+tools/thumbnail-prompts.csv
