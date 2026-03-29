@@ -88,6 +88,9 @@
     <a href="{{ base_url }}submit/">submit your own</a>
 </div>
 
+{% if has_custom_thumbnail %}
+<img src="{{ base_url }}proofs/{{ proof.slug }}/thumbnail.png" alt="" class="proof-thumbnail">
+{% endif %}
 <h1 class="proof-title">"{{ proof.proof_data.claim_natural }}"</h1>
 <div class="proof-meta">
     {% for tag in proof.tags %}

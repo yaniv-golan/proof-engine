@@ -215,6 +215,11 @@ def main():
         json_ld = generate_claim_review(proof["proof_data"], canonical_url)
 
         proof_out = output_dir / "proofs" / proof["slug"]
+        src_dir = proofs_dir / proof["slug"]
+        has_custom_thumbnail = (src_dir / "thumbnail.png").exists()
+        if has_custom_thumbnail:
+            shutil.copy2(src_dir / "thumbnail.png", proof_out / "thumbnail.png")
+
         write_file(proof_out / "index.html", tpl.render(
             **common, proof=proof,
             rendered_sections_md=rendered_md,
@@ -224,9 +229,8 @@ def main():
             og_type="article",
             citations=proof["proof_data"].get("citations", {}),
             audit_tables=build_audit_tables(proof["proof_data"]),
+            has_custom_thumbnail=has_custom_thumbnail,
         ))
-
-        src_dir = proofs_dir / proof["slug"]
         shutil.copy2(src_dir / "proof.py", proof_out / "proof.py")
         shutil.copy2(src_dir / "proof_audit.md", proof_out / "proof_audit.md")
 
