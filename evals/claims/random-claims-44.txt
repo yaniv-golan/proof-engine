@@ -44,7 +44,11 @@ Renewable energy (solar + wind) can replace fossil fuels without major grid upgr
 Extreme weather events (hurricanes, wildfires, floods) have become dramatically more frequent and intense solely because of climate change.
 The climate has always changed — today's warming is not unusual or alarming.
 
-# Economics, Finance & Tech Myths (38-42)
+# History & Archaeology (38-39)
+The Pyramid of Giza was built by slaves.
+The Great Wall of China is visible from space with the naked eye.
+
+# Economics, Finance & Tech Myths (40-44)
 Bitcoin is a proven hedge against inflation and fiat currency collapse.
 Raising the federal minimum wage to $15+/hour has no significant negative effect on employment.
 Infinite economic growth is possible on a finite planet.

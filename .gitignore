@@ -15,3 +15,6 @@ docs/internal/
 _site/
 .worktrees/
 tools/thumbnail-prompts.csv
+CLAUDE.md
+.claude/
+_build/
