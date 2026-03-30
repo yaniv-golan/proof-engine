@@ -107,6 +107,11 @@ def load_proof(proof_dir: Path) -> dict:
     meta_path = proof_dir / "meta.yaml"
     if meta_path.exists():
         meta = yaml.safe_load(meta_path.read_text()) or {}
+        if "featured" in meta:
+            raise ValueError(
+                f"{slug}: meta.yaml contains deprecated 'featured' key — "
+                f"featured status is now managed via site/proofs/featured.json"
+            )
         if "tags" in meta:
             tags = [canonicalize_tag(t) for t in meta["tags"]]
         else:

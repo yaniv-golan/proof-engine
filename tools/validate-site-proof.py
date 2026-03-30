@@ -44,6 +44,16 @@ def validate_json_structure(proof_data):
             f"add it to ProofData in proof_types.py to silence this warning"
         )
 
+    # Reject deprecated keys that have been migrated to site-level config
+    REJECTED_KEYS = ["featured"]
+    for key in REJECTED_KEYS:
+        if key in proof_data:
+            errors.append(
+                f"proof.json contains rejected key '{key}' — "
+                f"featured status is now managed via site/proofs/featured.json, "
+                f"not per-proof. Remove this key."
+            )
+
     for key in REQUIRED_JSON_KEYS:
         if key not in proof_data:
             errors.append(f"proof.json missing required key: {key}")
