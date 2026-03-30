@@ -129,3 +129,33 @@ def test_load_proof_no_search_registry(proof_dir):
     """Proof without search_registry should have search_count None."""
     proof = load_proof(proof_dir / "test-claim")
     assert proof["search_count"] is None
+
+
+def test_load_all_proofs_applies_featured(proof_dir):
+    """load_all_proofs should set featured=True for slugs in featured.json."""
+    featured_path = proof_dir / "featured.json"
+    featured_path.write_text(json.dumps(["test-claim"]))
+    proofs = load_all_proofs(proof_dir)
+    assert proofs[0]["featured"] is True
+
+
+def test_load_all_proofs_no_featured_file(proof_dir):
+    """Without featured.json, all proofs should have featured=False."""
+    proofs = load_all_proofs(proof_dir)
+    assert proofs[0]["featured"] is False
+
+
+def test_load_all_proofs_featured_not_in_list(proof_dir):
+    """Proofs not in featured.json should have featured=False."""
+    featured_path = proof_dir / "featured.json"
+    featured_path.write_text(json.dumps([]))
+    proofs = load_all_proofs(proof_dir)
+    assert proofs[0]["featured"] is False
+
+
+def test_load_all_proofs_dangling_featured_raises(proof_dir):
+    """Dangling ref in featured.json should raise."""
+    featured_path = proof_dir / "featured.json"
+    featured_path.write_text(json.dumps(["nonexistent-slug"]))
+    with pytest.raises(ValueError, match="nonexistent-slug"):
+        load_all_proofs(proof_dir)

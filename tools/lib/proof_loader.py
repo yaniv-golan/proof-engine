@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 import yaml
 
+from tools.lib.featured import load_featured_slugs
 from tools.lib.section_extractor import extract_sections, validate_required_sections
 from tools.lib.tagger import auto_tag, canonicalize_tag
 from tools.lib.verdict import normalize_verdict
@@ -110,10 +111,8 @@ def load_proof(proof_dir: Path) -> dict:
             tags = [canonicalize_tag(t) for t in meta["tags"]]
         else:
             tags = auto_tag(proof_data["claim_natural"])
-        featured = meta.get("featured", proof_data.get("featured", False))
     else:
         tags = auto_tag(proof_data["claim_natural"])
-        featured = proof_data.get("featured", False)
 
     # Citation count
     citations = proof_data.get("citations")
@@ -130,7 +129,7 @@ def load_proof(proof_dir: Path) -> dict:
         "sections_audit": sections_audit,
         "verdict": verdict,
         "tags": tags,
-        "featured": featured,
+        "featured": False,
         "citation_count": citation_count,
         "search_count": search_count,
         "source_names": extract_source_names(proof_data),
@@ -142,8 +141,14 @@ def load_proof(proof_dir: Path) -> dict:
 
 def load_all_proofs(proofs_dir: Path) -> list[dict]:
     proofs_dir = Path(proofs_dir)
+    featured_slugs = load_featured_slugs(proofs_dir)
     proofs = []
     for slug_dir in sorted(proofs_dir.iterdir()):
+        # Skip dot-prefixed dirs (staging, backups) and non-proof dirs
+        if slug_dir.name.startswith("."):
+            continue
         if slug_dir.is_dir() and (slug_dir / "proof.json").exists():
-            proofs.append(load_proof(slug_dir))
+            proof = load_proof(slug_dir)
+            proof["featured"] = slug_dir.name in featured_slugs
+            proofs.append(proof)
     return proofs
