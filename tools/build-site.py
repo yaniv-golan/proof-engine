@@ -173,6 +173,100 @@ def build_audit_tables(proof_data):
     return result
 
 
+def build_citation_summary(proof_data):
+    """Build summary stats and flagged citations for the audit trail."""
+    citations = proof_data.get("citations", {})
+    if not citations:
+        return None
+
+    total = len(citations)
+    verified = 0
+    partial = 0
+    not_found = 0
+    fetch_failed = 0
+    flagged = []
+
+    for cid, cit in citations.items():
+        status = cit.get("status", "")
+        method = cit.get("method")
+        fetch_mode = cit.get("fetch_mode", "live")
+        cred = cit.get("credibility", {})
+        try:
+            tier = int(cred.get("tier", 3))
+        except (ValueError, TypeError):
+            tier = 3
+
+        # Normalize legacy "failed" → "fetch_failed" for consistent handling
+        if status == "failed":
+            status = "fetch_failed"
+
+        if status == "verified":
+            verified += 1
+        elif status == "partial":
+            partial += 1
+        elif status == "not_found":
+            not_found += 1
+        elif status == "fetch_failed":
+            fetch_failed += 1
+
+        # Flag citations that deserve expanded detail
+        reasons = []
+        if status == "fetch_failed":
+            reasons.append("source could not be fetched")
+        elif status == "not_found":
+            reasons.append("quote not found on page")
+        elif status == "partial" and method == "fragment":
+            pct = cit.get("coverage_pct")
+            reasons.append(f"{pct:.0f}% word match" if pct else "partial word match")
+        elif status == "partial" and method == "aggressive_normalization":
+            reasons.append("matched after normalization")
+        elif status == "partial":
+            reasons.append(f"partial match ({method})" if method else "partial match")
+        elif status == "verified" and method not in ("full_quote", None):
+            if method == "unicode_normalized":
+                reasons.append("matched after Unicode normalization")
+            elif method == "fragment":
+                pct = cit.get("coverage_pct")
+                reasons.append(f"verified via fragment match ({pct:.0f}%)" if pct else "verified via fragment match")
+            else:
+                reasons.append(f"verified via non-exact method: {method}")
+        if fetch_mode == "wayback":
+            reasons.append("fetched from Wayback Machine")
+        if tier <= 1:
+            reasons.append("flagged unreliable source")
+
+        if reasons:
+            flagged.append({
+                "id": cid,
+                "source_name": cit.get("source_name", cid),
+                "url": cit.get("url", ""),
+                "status": status,
+                "reasons": reasons,
+            })
+
+    # Determine overall health
+    # "warning" = data integrity issues (missing quotes, unreachable sources)
+    # "notice"  = citation exists but has caveats (partial match, wayback, tier-1, non-exact method)
+    # "clean"   = all citations fully verified with no flags
+    if not_found > 0 or fetch_failed > 0:
+        health = "warning"
+    elif flagged:
+        health = "notice"
+    else:
+        health = "clean"
+
+    return {
+        "total": total,
+        "verified": verified,
+        "partial": partial,
+        "not_found": not_found,
+        "fetch_failed": fetch_failed,
+        "unflagged": total - len(flagged),
+        "health": health,
+        "flagged": flagged,
+    }
+
+
 def main():
     args = parse_args()
     site_dir = Path(args.site_dir)
@@ -230,6 +324,7 @@ def main():
             og_type="article",
             citations=proof["proof_data"].get("citations", {}),
             audit_tables=build_audit_tables(proof["proof_data"]),
+            citation_summary=build_citation_summary(proof["proof_data"]),
             has_custom_thumbnail=has_custom_thumbnail,
         ))
         shutil.copy2(src_dir / "proof.py", proof_out / "proof.py")

@@ -13,6 +13,7 @@ _bs_spec = importlib.util.spec_from_file_location(
 _bs_mod = importlib.util.module_from_spec(_bs_spec)
 _bs_spec.loader.exec_module(_bs_mod)
 compute_stats = _bs_mod.compute_stats
+build_citation_summary = _bs_mod.build_citation_summary
 
 
 @pytest.fixture
@@ -502,7 +503,7 @@ def test_proof_page_friendly_download_labels(site_fixture):
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
     assert "run the proof (Python)" in html
-    assert "full audit trail" in html
+    assert "original audit log" in html
     assert "raw data (JSON)" in html
 
 
@@ -548,3 +549,473 @@ def test_proof_page_og_image(site_fixture):
     assert 'og-image.png' in html
     # Check OG image file was generated
     assert (site_fixture / "_site" / "proofs" / "test-claim" / "og-image.png").exists()
+
+
+# --- Citation summary unit tests ---
+
+
+def test_citation_summary_all_clean():
+    """All verified, full_quote, live, tier>=3 → clean health, no flags."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "Source A", "url": "https://example.com/a",
+                "status": "verified", "method": "full_quote", "fetch_mode": "live",
+                "credibility": {"tier": 4, "source_type": "academic"},
+            },
+            "B2": {
+                "source_name": "Source B", "url": "https://example.com/b",
+                "status": "verified", "method": "full_quote", "fetch_mode": "live",
+                "credibility": {"tier": 3, "source_type": "major_news"},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert summary["total"] == 2
+    assert summary["verified"] == 2
+    assert summary["health"] == "clean"
+    assert summary["unflagged"] == 2
+    assert summary["flagged"] == []
+
+
+def test_citation_summary_partial_flagged():
+    """Partial citation with aggressive_normalization is flagged."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "Clean Source", "url": "https://example.com/a",
+                "status": "verified", "method": "full_quote", "fetch_mode": "live",
+                "credibility": {"tier": 4},
+            },
+            "B2": {
+                "source_name": "Normalized Source", "url": "https://example.com/b",
+                "status": "partial", "method": "aggressive_normalization",
+                "fetch_mode": "live", "credibility": {"tier": 4},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert summary["health"] == "notice"
+    assert summary["unflagged"] == 1
+    assert len(summary["flagged"]) == 1
+    assert summary["flagged"][0]["id"] == "B2"
+    assert "matched after normalization" in summary["flagged"][0]["reasons"]
+
+
+def test_citation_summary_not_found_flagged():
+    """not_found citation triggers warning health."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "Good Source", "url": "https://example.com/a",
+                "status": "verified", "method": "full_quote", "fetch_mode": "live",
+                "credibility": {"tier": 3},
+            },
+            "B2": {
+                "source_name": "Missing Source", "url": "https://example.com/b",
+                "status": "not_found", "method": None, "fetch_mode": "live",
+                "credibility": {"tier": 4},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert summary["health"] == "warning"
+    assert summary["not_found"] == 1
+    assert len(summary["flagged"]) == 1
+    assert "quote not found on page" in summary["flagged"][0]["reasons"]
+
+
+def test_citation_summary_wayback_flagged():
+    """Wayback fetch is flagged even if status is verified."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "Wayback Source", "url": "https://example.com/a",
+                "status": "verified", "method": "full_quote", "fetch_mode": "wayback",
+                "credibility": {"tier": 4},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert summary["health"] == "notice"
+    assert summary["verified"] == 1
+    assert summary["unflagged"] == 0
+    assert len(summary["flagged"]) == 1
+    assert "fetched from Wayback Machine" in summary["flagged"][0]["reasons"]
+
+
+def test_citation_summary_snapshot_not_flagged():
+    """Snapshot fetch_mode is clean — embedded offline copy."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "Snapshot Source", "url": "https://example.com/a",
+                "status": "verified", "method": "full_quote", "fetch_mode": "snapshot",
+                "credibility": {"tier": 4},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert summary["health"] == "clean"
+    assert summary["flagged"] == []
+    assert summary["unflagged"] == 1
+
+
+def test_citation_summary_tier2_not_flagged():
+    """Tier 2 sources are NOT flagged — too common to be noise."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "Tier 2 Source", "url": "https://example.com/a",
+                "status": "verified", "method": "full_quote", "fetch_mode": "live",
+                "credibility": {"tier": 2, "source_type": "unknown"},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert summary["health"] == "clean"
+    assert summary["flagged"] == []
+    assert summary["unflagged"] == 1
+
+
+def test_citation_summary_no_citations():
+    """No citations returns None."""
+    assert build_citation_summary({}) is None
+    assert build_citation_summary({"citations": {}}) is None
+
+
+def test_citation_summary_fragment_with_coverage():
+    """Fragment match shows coverage percentage in reason."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "Fragment Source", "url": "https://example.com/a",
+                "status": "partial", "method": "fragment", "fetch_mode": "live",
+                "coverage_pct": 48.6, "credibility": {"tier": 3},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert len(summary["flagged"]) == 1
+    assert "49% word match" in summary["flagged"][0]["reasons"]
+
+
+def test_citation_summary_fetch_failed_distinct():
+    """fetch_failed is counted separately from not_found."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "Blocked Source", "url": "https://example.com/a",
+                "status": "fetch_failed", "method": None, "fetch_mode": "live",
+                "credibility": {"tier": 3},
+            },
+            "B2": {
+                "source_name": "Missing Source", "url": "https://example.com/b",
+                "status": "not_found", "method": None, "fetch_mode": "live",
+                "credibility": {"tier": 3},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert summary["health"] == "warning"
+    assert summary["fetch_failed"] == 1
+    assert summary["not_found"] == 1
+    assert len(summary["flagged"]) == 2
+    reasons_b1 = summary["flagged"][0]["reasons"]
+    reasons_b2 = summary["flagged"][1]["reasons"]
+    assert "source could not be fetched" in reasons_b1
+    assert "quote not found on page" in reasons_b2
+
+
+def test_citation_summary_verified_unicode_normalized_flagged():
+    """verified + unicode_normalized is flagged with appropriate reason."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "Unicode Source", "url": "https://example.com/a",
+                "status": "verified", "method": "unicode_normalized", "fetch_mode": "live",
+                "credibility": {"tier": 4},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert summary["verified"] == 1
+    assert summary["health"] == "notice"
+    assert len(summary["flagged"]) == 1
+    assert summary["unflagged"] == 0
+    assert "matched after Unicode normalization" in summary["flagged"][0]["reasons"]
+
+
+def test_citation_summary_verified_fragment_flagged():
+    """verified + fragment is flagged."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "High Fragment Source", "url": "https://example.com/a",
+                "status": "verified", "method": "fragment", "fetch_mode": "live",
+                "coverage_pct": 85.0, "credibility": {"tier": 3},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert summary["verified"] == 1
+    assert len(summary["flagged"]) == 1
+    assert summary["health"] == "notice"
+    assert "verified via fragment match (85%)" in summary["flagged"][0]["reasons"]
+
+
+def test_citation_summary_tier1_flagged_notice():
+    """Tier 1 (unreliable/satire) is flagged and escalates health to notice."""
+    proof_data = {
+        "citations": {
+            "B1": {
+                "source_name": "Satire Site", "url": "https://theonion.com/article",
+                "status": "verified", "method": "full_quote", "fetch_mode": "live",
+                "credibility": {"tier": 1, "source_type": "satire"},
+            },
+        },
+    }
+    summary = build_citation_summary(proof_data)
+    assert summary["verified"] == 1
+    assert summary["health"] == "notice"
+    assert len(summary["flagged"]) == 1
+    assert summary["unflagged"] == 0
+
+
+# --- Citation summary integration tests ---
+
+
+def test_citation_summary_renders_clean(site_fixture):
+    """Clean proof renders summary badge with no flagged items."""
+    proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
+    data = json.loads(proof_json_path.read_text())
+    data["citations"] = {
+        "B1": {
+            "source_name": "Test Source", "url": "https://example.com/source",
+            "status": "verified", "source_key": "test_src", "quote": "Test quote",
+            "method": "full_quote", "fetch_mode": "live",
+            "credibility": {"domain": "example.com", "source_type": "academic", "tier": 4, "note": "Test"},
+        },
+    }
+    proof_json_path.write_text(json.dumps(data))
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "cs-clean" in html
+    assert "1/1 verified" in html
+    assert "cs-flagged-item" not in html
+    assert "citation-summary-bar" in html
+    assert 'class="audit-header"' in html
+    assert "Citation Verification Details</span>" not in html
+
+
+def test_citation_summary_renders_flagged(site_fixture):
+    """Flagged proof renders summary badge, flagged items, and preserves audit log."""
+    proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
+    data = json.loads(proof_json_path.read_text())
+    data["citations"] = {
+        "B1": {
+            "source_name": "Good Source", "url": "https://example.com/a",
+            "status": "verified", "source_key": "src_a", "quote": "Quote A",
+            "method": "full_quote", "fetch_mode": "live",
+            "credibility": {"domain": "example.com", "source_type": "academic", "tier": 4, "note": "Test"},
+        },
+        "B2": {
+            "source_name": "Partial Source", "url": "https://example.com/b",
+            "status": "partial", "source_key": "src_b", "quote": "Quote B",
+            "method": "aggressive_normalization", "fetch_mode": "live",
+            "credibility": {"domain": "other.com", "source_type": "unknown", "tier": 2, "note": "Test"},
+        },
+    }
+    proof_json_path.write_text(json.dumps(data))
+
+    audit_path = site_fixture / "site" / "proofs" / "test-claim" / "proof_audit.md"
+    audit_text = audit_path.read_text()
+    audit_text += (
+        "\n\n## Citation Verification Details\n\n"
+        "**B1 — Good Source**\n- Status: verified\n\n"
+        "**B2 — Partial Source**\n- Status: partial\n"
+        "- Impact: Low impact — claim does not depend solely on this source.\n"
+    )
+    audit_path.write_text(audit_text)
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "cs-notice" in html
+    assert "cs-flagged-item" in html
+    assert "matched after normalization" in html
+    assert "1/2 unflagged" in html
+    assert "citation-summary-bar" in html
+    assert "Citation Verification Details</span>" not in html
+    assert "cs-full-details" in html
+    assert "Impact: Low impact" in html
+
+
+def test_citation_summary_absent_for_math_proof(site_fixture):
+    """Pure-math proof (no citations) has no citation summary."""
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "citation-summary-bar" not in html
+
+
+def test_citation_summary_renders_fetch_failed(site_fixture):
+    """fetch_failed renders with distinct badge text and reason."""
+    proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
+    data = json.loads(proof_json_path.read_text())
+    data["fact_registry"]["B2"] = {"label": "blocked source"}
+    data["citations"] = {
+        "B1": {
+            "source_name": "Good Source", "url": "https://example.com/a",
+            "status": "verified", "source_key": "src_a", "quote": "Quote A",
+            "method": "full_quote", "fetch_mode": "live",
+            "credibility": {"domain": "example.com", "source_type": "academic", "tier": 4, "note": "Test"},
+        },
+        "B2": {
+            "source_name": "Blocked Source", "url": "https://example.com/b",
+            "status": "fetch_failed", "source_key": "src_b", "quote": "Quote B",
+            "method": None, "fetch_mode": "live",
+            "credibility": {"domain": "other.com", "source_type": "unknown", "tier": 3, "note": "Test"},
+        },
+    }
+    proof_json_path.write_text(json.dumps(data))
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "cs-warning" in html
+    assert "fetch failed" in html
+    assert "source could not be fetched" in html
+    assert "evidence-failed" in html
+    assert "Fetch Failed" in html
+
+
+def test_citation_summary_evidence_table_legacy_failed(site_fixture):
+    """Legacy 'failed' status renders as 'Fetch Failed' in evidence table."""
+    proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
+    data = json.loads(proof_json_path.read_text())
+    data["citations"] = {
+        "B1": {
+            "source_name": "Legacy Source", "url": "https://example.com/a",
+            "status": "failed", "source_key": "src_a", "quote": "Quote A",
+            "method": None, "fetch_mode": "live",
+            "credibility": {"domain": "example.com", "source_type": "unknown", "tier": 3, "note": "Test"},
+        },
+    }
+    proof_json_path.write_text(json.dumps(data))
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "cs-warning" in html
+    assert "source could not be fetched" in html
+    assert "evidence-failed" in html
+    assert "Fetch Failed" in html
+
+
+def test_citation_summary_renders_wayback(site_fixture):
+    """Wayback-fetched citation renders with flag reason."""
+    proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
+    data = json.loads(proof_json_path.read_text())
+    data["citations"] = {
+        "B1": {
+            "source_name": "Wayback Source", "url": "https://example.com/a",
+            "status": "verified", "source_key": "src_a", "quote": "Quote A",
+            "method": "full_quote", "fetch_mode": "wayback",
+            "credibility": {"domain": "example.com", "source_type": "academic", "tier": 4, "note": "Test"},
+        },
+    }
+    proof_json_path.write_text(json.dumps(data))
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "cs-flagged-item" in html
+    assert "fetched from Wayback Machine" in html
+
+
+def test_citation_summary_clean_has_full_details(site_fixture):
+    """Clean proof still has 'Original audit log' expandable when audit section exists."""
+    proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
+    data = json.loads(proof_json_path.read_text())
+    data["citations"] = {
+        "B1": {
+            "source_name": "Test Source", "url": "https://example.com/source",
+            "status": "verified", "source_key": "test_src", "quote": "Test quote",
+            "method": "full_quote", "fetch_mode": "live",
+            "credibility": {"domain": "example.com", "source_type": "academic", "tier": 4, "note": "Test"},
+        },
+    }
+    proof_json_path.write_text(json.dumps(data))
+
+    audit_path = site_fixture / "site" / "proofs" / "test-claim" / "proof_audit.md"
+    audit_text = audit_path.read_text()
+    audit_text += "\n\n## Citation Verification Details\n\n**B1 — Test Source**\n- Status: verified\n"
+    audit_path.write_text(audit_text)
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "cs-all-clean" in html
+    assert "cs-full-details" in html
+
+
+def test_citation_audit_fallback_no_structured_citations(site_fixture):
+    """Proof with no citations in proof.json but with Citation Verification Details
+    in proof_audit.md still renders the audit section via the fallback path."""
+    proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
+    data = json.loads(proof_json_path.read_text())
+    data.pop("citations", None)
+    proof_json_path.write_text(json.dumps(data))
+
+    audit_path = site_fixture / "site" / "proofs" / "test-claim" / "proof_audit.md"
+    audit_text = audit_path.read_text()
+    audit_text += (
+        "\n\n## Citation Verification Details\n\n"
+        "**B1 — Example Source**\n- Status: verified\n"
+    )
+    audit_path.write_text(audit_text)
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "citation-summary-bar" not in html
+    assert "Citation Verification Details" in html
+    assert "Example Source" in html
+
+
+def test_citation_summary_stale_audit_json_authoritative(site_fixture):
+    """When proof.json says verified but proof_audit.md says fetch_failed,
+    the summary badge uses proof.json (authoritative)."""
+    proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
+    data = json.loads(proof_json_path.read_text())
+    data["citations"] = {
+        "B1": {
+            "source_name": "Re-run Source", "url": "https://example.com/a",
+            "status": "verified", "source_key": "src_a", "quote": "Quote A",
+            "method": "full_quote", "fetch_mode": "live",
+            "credibility": {"domain": "example.com", "source_type": "academic", "tier": 4, "note": "Test"},
+        },
+    }
+    proof_json_path.write_text(json.dumps(data))
+
+    audit_path = site_fixture / "site" / "proofs" / "test-claim" / "proof_audit.md"
+    audit_text = audit_path.read_text()
+    audit_text += (
+        "\n\n## Citation Verification Details\n\n"
+        "**B1 — Re-run Source**\n- Status: fetch_failed\n- Fetch mode: live (HTTP 403)\n"
+        "- Impact: This source could not be fetched.\n"
+    )
+    audit_path.write_text(audit_text)
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "cs-clean" in html
+    assert "1/1 verified" in html
+    assert "cs-full-details" in html
+    assert "fetch_failed" in html
+    assert "citation-summary-bar" in html
+    assert "Citation Verification Details</span>" not in html

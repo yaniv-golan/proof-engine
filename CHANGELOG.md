@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- **Structured citation verification summary** — replaces the noisy "Citation Verification Details" audit section with a data-driven summary badge (green/amber/red) that highlights only what's interesting. Clean proofs collapse to "3/3 verified"; flagged proofs show per-citation details with reasons (partial match, not found, fetch failed, Wayback fetch, unreliable source). Original audit markdown preserved as "Original audit log" expandable.
+- `build_citation_summary()` function in `build-site.py` — computes citation health, flag reasons, and unflagged counts from `proof.json` structured data
+- 22 new tests (12 unit + 10 integration) covering all citation status/method combinations, fallback rendering, and stale-audit scenarios
+
+### Changed
+
+- Download link label changed from "full audit trail" to "original audit log" to reflect that `proof_audit.md` may be stale relative to `proof.json`
+- Evidence table now shows "Fetch Failed" (instead of "No") for `fetch_failed` and legacy `failed` citation statuses
+- `proof.json` is authoritative for citation status; `proof_audit.md` is treated as a historical record
+
 ## [1.2.0] - 2026-03-29
 
 ### Added

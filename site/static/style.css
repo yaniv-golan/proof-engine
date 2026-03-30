@@ -203,6 +203,38 @@ a:hover { text-decoration: underline; }
 .audit-body { display: none; padding: 14px; font-size: 13px; line-height: 1.7; color: #c9d1d9; overflow-x: auto; }
 .audit-body.open { display: block; }
 
+/* Citation verification summary */
+.citation-summary-bar { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.cs-stat { font-size: 11px; padding: 2px 8px; border-radius: 3px; font-family: var(--font-mono); white-space: nowrap; }
+.cs-clean { background: var(--green-bg); color: var(--green-text); }
+.cs-notice { background: var(--amber-bg); color: var(--amber-text); }
+.cs-warning { background: var(--red-bg); color: var(--red-text); }
+.cs-flag-count { font-size: 11px; color: var(--amber-text); font-family: var(--font-mono); white-space: nowrap; }
+
+.cs-all-clean { color: var(--text-secondary); font-size: 13px; margin: 0; }
+.cs-intro { color: var(--text-secondary); font-size: 13px; margin: 0 0 12px 0; }
+
+.cs-flagged-item { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
+.cs-flagged-item:last-child { border-bottom: none; }
+.cs-flagged-header { display: flex; align-items: center; gap: 8px; font-size: 13px; flex-wrap: wrap; }
+.cs-flagged-id { font-family: var(--font-mono); color: var(--text-muted); font-size: 12px; min-width: 28px; }
+.cs-flagged-status { font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border-radius: 3px; }
+.cs-status-verified { background: var(--green-bg); color: var(--green-text); }
+.cs-status-partial { background: var(--amber-bg); color: var(--amber-text); }
+.cs-status-not_found { background: var(--red-bg); color: var(--red-text); }
+.cs-status-fetch_failed { background: var(--red-bg); color: var(--red-text); }
+.cs-flagged-source { color: var(--link); font-size: 13px; text-decoration: none; }
+.cs-flagged-source:hover { text-decoration: underline; }
+
+.cs-reasons { margin: 4px 0 0 36px; padding: 0; list-style: none; }
+.cs-reasons li { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.cs-reasons li::before { content: "→ "; color: var(--amber-text); }
+
+.cs-full-details { margin-top: 16px; border-top: 1px solid var(--border-subtle); padding-top: 12px; }
+.cs-full-details summary { font-size: 12px; color: var(--text-muted); cursor: pointer; font-family: var(--font-mono); }
+.cs-full-details summary:hover { color: var(--link); }
+.cs-full-details .proof-content { margin-top: 8px; }
+
 /* Downloads */
 .downloads { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
 .download-link { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; font-size: 11px; font-family: var(--font-mono); color: var(--link); }
