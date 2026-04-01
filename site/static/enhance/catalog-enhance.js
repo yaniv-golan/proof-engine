@@ -1,12 +1,13 @@
 // catalog-enhance.js — Progressive enhancement for the proof catalog.
-// Works ALONGSIDE catalog.js: creates a new #proof-list-enhanced container
-// with virtualized scrolling, hides the original #proof-list, and wires
-// filters via addEventListener (both handlers fire, but catalog.js
-// harmlessly updates a hidden container).
+// Works ALONGSIDE catalog.js: creates a new #proof-list-enhanced container,
+// hides the original #proof-list, renders all cards with animated filtering.
 // If anything fails: remove #proof-list-enhanced, unhide #proof-list.
-
-import { estimateCardHeight } from './pretext-measure.js';
-import { Virtualizer, elementScroll, observeElementRect, observeElementOffset, measureElement } from '../vendor/tanstack-virtual-core.esm.min.js';
+//
+// Approach: render all cards as normal DOM nodes (not virtualized).
+// On filter change, hide non-matching cards with CSS transitions
+// (max-height → 0, opacity → 0). Remaining cards smoothly collapse
+// together. For 106 proofs this is fast; virtualization can be added
+// later when the catalog grows to 500+.
 
 (function () {
     'use strict';
@@ -23,13 +24,9 @@ import { Virtualizer, elementScroll, observeElementRect, observeElementOffset, m
     };
 
     var allProofs = [];
-    var filteredProofs = [];
-    var cardHeights = {}; // slug -> height
-    var virtualizer = null;
-    var cleanupMount = null;
-    var originalList = null;   // #proof-list (catalog.js's container, never modified)
-    var enhancedList = null;   // #proof-list-enhanced (our container)
-    var innerContainer = null;
+    var cardElements = {}; // slug -> wrapper element
+    var originalList = null;
+    var enhancedList = null;
     var resultCountEl = null;
 
     function escapeHtml(s) {
@@ -57,29 +54,9 @@ import { Virtualizer, elementScroll, observeElementRect, observeElementOffset, m
             sourceHtml + '</div></a>';
     }
 
-    function estimateAllCards(proofs, containerWidth) {
-        var estimated = {};
-        for (var i = 0; i < proofs.length; i++) {
-            var p = proofs[i];
-            var key = p.slug || i;
-            var height = estimateCardHeight(p, containerWidth);
-            if (height === null) return null; // Pretext failed
-            estimated[key] = height;
-        }
-        return estimated;
-    }
-
-    function getCardHeight(index) {
-        var p = filteredProofs[index];
-        var key = p.slug || index;
-        // Use Pretext estimate as initial size; TanStack will correct
-        // with actual DOM measurement via measureElement after render
-        return cardHeights[key] || 100;
-    }
-
-    function updateResultCount() {
+    function updateResultCount(count) {
         if (resultCountEl) {
-            resultCountEl.textContent = 'showing ' + filteredProofs.length +
+            resultCountEl.textContent = 'showing ' + count +
                 ' of ' + allProofs.length + ' proofs';
         }
     }
@@ -89,61 +66,68 @@ import { Virtualizer, elementScroll, observeElementRect, observeElementOffset, m
         var verdictFilter = document.getElementById('verdict-filter');
         var tagFilter = document.getElementById('tag-filter');
 
-        var query = search ? search.value.toLowerCase() : '';
+        var queryRaw = search ? search.value.toLowerCase().trim() : '';
+        var queryWords = queryRaw ? queryRaw.split(/\s+/) : [];
         var verdict = verdictFilter ? verdictFilter.value : '';
         var tag = tagFilter ? tagFilter.value : '';
 
-        filteredProofs = allProofs.filter(function (p) {
-            var matchesSearch = !query || p.claim.toLowerCase().indexOf(query) !== -1;
+        var matchCount = 0;
+
+        allProofs.forEach(function (p) {
+            var slug = p.slug;
+            var wrapper = cardElements[slug];
+            if (!wrapper) return;
+
+            var claimLower = p.claim.toLowerCase();
+            var matchesSearch = queryWords.length === 0 || queryWords.every(function (w) {
+                return claimLower.indexOf(w) !== -1;
+            });
             var matchesVerdict = !verdict || p.verdict_filter === verdict;
             var matchesTag = !tag || (p.tags && p.tags.indexOf(tag) !== -1);
-            return matchesSearch && matchesVerdict && matchesTag;
+            var matches = matchesSearch && matchesVerdict && matchesTag;
+
+            if (matches) {
+                matchCount++;
+                if (wrapper.classList.contains('card-hidden')) {
+                    wrapper.classList.remove('card-hidden');
+                    // Clear inline collapse styles, restore height
+                    wrapper.style.opacity = '';
+                    wrapper.style.marginBottom = '';
+                    wrapper.style.maxHeight = wrapper.scrollHeight + 'px';
+                }
+            } else {
+                if (!wrapper.classList.contains('card-hidden')) {
+                    // Snapshot current height as inline style
+                    wrapper.style.maxHeight = wrapper.scrollHeight + 'px';
+                    // Force reflow so browser registers the starting value
+                    wrapper.offsetHeight; // eslint-disable-line no-unused-expressions
+                    // Now collapse to 0 via inline style (not CSS class,
+                    // because inline styles override class styles)
+                    wrapper.style.maxHeight = '0';
+                    wrapper.style.opacity = '0';
+                    wrapper.style.marginBottom = '0';
+                    wrapper.classList.add('card-hidden');
+                }
+            }
         });
 
-        updateResultCount();
+        updateResultCount(matchCount);
 
-        if (filteredProofs.length === 0) {
-            enhancedList.innerHTML = '<p class="empty-state">No proofs match your filters.</p>';
-            innerContainer = null;
-            virtualizer = null;
-            return;
+        // Show/hide empty state
+        var emptyMsg = enhancedList.querySelector('.empty-state');
+        if (matchCount === 0) {
+            if (!emptyMsg) {
+                emptyMsg = document.createElement('p');
+                emptyMsg.className = 'empty-state';
+                emptyMsg.textContent = 'No proofs match your filters.';
+                enhancedList.appendChild(emptyMsg);
+            }
+        } else if (emptyMsg) {
+            emptyMsg.parentNode.removeChild(emptyMsg);
         }
-
-        // Rebuild virtualizer with new items
-        setupVirtualizer();
     }
 
-    function renderVirtualItems() {
-        if (!virtualizer) return;
-
-        virtualizer._willUpdate();
-
-        var items = virtualizer.getVirtualItems();
-        var totalHeight = virtualizer.getTotalSize();
-        innerContainer.style.height = totalHeight + 'px';
-        innerContainer.style.position = 'relative';
-
-        // Clear and re-render visible items
-        while (innerContainer.firstChild) {
-            innerContainer.removeChild(innerContainer.firstChild);
-        }
-
-        items.forEach(function (item) {
-            var div = document.createElement('div');
-            div.className = 'virtual-item';
-            div.style.top = item.start + 'px';
-            div.setAttribute('data-index', item.index);
-            div.innerHTML = renderCard(filteredProofs[item.index]);
-            innerContainer.appendChild(div);
-        });
-    }
-
-    // Tear down the enhanced container and restore catalog.js visibility
     function teardown() {
-        if (cleanupMount) {
-            cleanupMount();
-            cleanupMount = null;
-        }
         if (enhancedList && enhancedList.parentNode) {
             enhancedList.parentNode.removeChild(enhancedList);
         }
@@ -153,72 +137,35 @@ import { Virtualizer, elementScroll, observeElementRect, observeElementOffset, m
         if (originalList) {
             originalList.style.display = '';
         }
-        virtualizer = null;
         enhancedList = null;
-        innerContainer = null;
         resultCountEl = null;
+        cardElements = {};
     }
 
-    function setupVirtualizer() {
-        if (!enhancedList) return;
-
-        try {
-            // Clean up previous mount if re-setting up
-            if (cleanupMount) {
-                cleanupMount();
-                cleanupMount = null;
-            }
-
-            // Build inner container
-            enhancedList.innerHTML = '';
-            innerContainer = document.createElement('div');
-            enhancedList.appendChild(innerContainer);
-
-            // TanStack Virtual Core is framework-agnostic and requires DOM adapter
-            // functions for scroll observation. We use the exported implementations
-            // that framework packages (react-virtual, etc.) normally supply.
-            //
-            // estimateSize gives Pretext's pre-computed estimate for initial layout.
-            // measureElement corrects with actual DOM height after render, so
-            // approximate estimates don't cause drift or overlap.
-            virtualizer = new Virtualizer({
-                count: filteredProofs.length,
-                getScrollElement: function () { return enhancedList; },
-                estimateSize: function (index) { return getCardHeight(index); },
-                measureElement: measureElement,
-                overscan: 5,
-                onChange: renderVirtualItems,
-                scrollToFn: elementScroll,
-                observeElementRect: observeElementRect,
-                observeElementOffset: observeElementOffset,
+    function buildCards() {
+        allProofs.forEach(function (p) {
+            var wrapper = document.createElement('div');
+            wrapper.className = 'card-wrapper';
+            wrapper.innerHTML = renderCard(p);
+            enhancedList.appendChild(wrapper);
+            cardElements[p.slug] = wrapper;
+        });
+        // After all cards are in DOM, set max-height to actual height
+        // so collapse animation is proportional to real card size
+        requestAnimationFrame(function () {
+            allProofs.forEach(function (p) {
+                var wrapper = cardElements[p.slug];
+                if (wrapper) {
+                    wrapper.style.maxHeight = wrapper.scrollHeight + 'px';
+                }
             });
-
-            // Set container height for scrolling
-            var viewportHeight = window.innerHeight;
-            var listTop = enhancedList.getBoundingClientRect().top;
-            var availableHeight = viewportHeight - listTop - 48; // 48px buffer for footer
-            enhancedList.style.height = Math.max(400, availableHeight) + 'px';
-
-            // Apply styles for virtual scrolling
-            enhancedList.style.overflowY = 'auto';
-            enhancedList.style.position = 'relative';
-
-            // TanStack lifecycle: mount after scroll element is in DOM
-            cleanupMount = virtualizer._didMount();
-
-            renderVirtualItems();
-        } catch (e) {
-            // Virtualizer failed — tear down enhanced container, unhide original
-            console.warn('catalog-enhance: Virtualizer failed, restoring fallback', e);
-            teardown();
-        }
+        });
     }
 
     function init() {
         originalList = document.getElementById('proof-list');
         if (!originalList) return;
 
-        // Wait for catalog.js to finish rendering cards
         var checkInterval = setInterval(function () {
             var existingCards = originalList.querySelectorAll('.proof-card');
             if (existingCards.length > 0 || originalList.querySelector('.empty-state')) {
@@ -227,12 +174,10 @@ import { Virtualizer, elementScroll, observeElementRect, observeElementOffset, m
             }
         }, 50);
 
-        // Timeout after 5 seconds — don't wait forever
         setTimeout(function () { clearInterval(checkInterval); }, 5000);
     }
 
     function enhance() {
-        // Fetch index.json independently (don't reuse catalog.js's data)
         var jsonUrl = window.CATALOG_JSON_URL;
         if (!jsonUrl) return;
 
@@ -242,30 +187,24 @@ import { Virtualizer, elementScroll, observeElementRect, observeElementOffset, m
                 allProofs = data.proofs || [];
                 if (allProofs.length === 0) return;
 
-                // Measure all card heights using originalList's width
-                var containerWidth = originalList.offsetWidth;
-                var measured = estimateAllCards(allProofs, containerWidth);
-                if (measured === null) return; // Pretext failed, keep catalog.js rendering
-
-                cardHeights = measured;
-                filteredProofs = allProofs.slice();
-
-                // Create the enhanced container as a sibling AFTER #proof-list
+                // Create the enhanced container
                 enhancedList = document.createElement('div');
                 enhancedList.id = 'proof-list-enhanced';
                 originalList.parentNode.insertBefore(enhancedList, originalList.nextSibling);
 
-                // Hide the original list (catalog.js keeps working, just invisible)
+                // Hide the original
                 originalList.style.display = 'none';
 
-                // Add result count element before the enhanced container
+                // Add result count
                 resultCountEl = document.createElement('div');
                 resultCountEl.className = 'result-count';
                 enhancedList.parentNode.insertBefore(resultCountEl, enhancedList);
-                updateResultCount();
+                updateResultCount(allProofs.length);
 
-                // Wire filter handlers on the SAME filter elements using addEventListener.
-                // Both handlers fire, but catalog.js harmlessly updates the hidden #proof-list.
+                // Render all cards
+                buildCards();
+
+                // Wire filter handlers
                 var search = document.getElementById('search');
                 var verdictFilter = document.getElementById('verdict-filter');
                 var tagFilter = document.getElementById('tag-filter');
@@ -273,26 +212,8 @@ import { Virtualizer, elementScroll, observeElementRect, observeElementOffset, m
                 if (search) search.addEventListener('input', applyFilters);
                 if (verdictFilter) verdictFilter.addEventListener('change', applyFilters);
                 if (tagFilter) tagFilter.addEventListener('change', applyFilters);
-
-                // Set up virtualization in the new container
-                setupVirtualizer();
-
-                // Handle resize with debounce
-                var resizeTimer;
-                window.addEventListener('resize', function () {
-                    clearTimeout(resizeTimer);
-                    resizeTimer = setTimeout(function () {
-                        var newWidth = enhancedList.offsetWidth;
-                        var remeasured = estimateAllCards(allProofs, newWidth);
-                        if (remeasured) {
-                            cardHeights = remeasured;
-                            setupVirtualizer();
-                        }
-                    }, 150);
-                });
             })
             .catch(function () {
-                // Fetch or measurement failed — tear down anything we created
                 teardown();
             });
     }
