@@ -31,10 +31,13 @@ var FONT_SYSTEM = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Ari
  */
 export function measureText(text, font, fontSize, maxWidth, lineHeight) {
     lineHeight = lineHeight || 1.5;
+    // Pretext's layout() expects lineHeight in absolute CSS pixels,
+    // not as a multiplier. Convert: 14px font × 1.5 multiplier = 21px.
+    var lineHeightPx = fontSize * lineHeight;
     var cssFont = fontSize + 'px ' + font;
     try {
         var prepared = prepare(text, cssFont);
-        var result = layout(prepared, maxWidth, lineHeight);
+        var result = layout(prepared, maxWidth, lineHeightPx);
         // layout() returns { height: number, lineCount: number }
         return {
             width: maxWidth,
@@ -63,6 +66,7 @@ export function measureText(text, font, fontSize, maxWidth, lineHeight) {
  */
 export function estimateCardHeight(cardData, containerWidth) {
     var PADDING_Y = 16 + 16; // top + bottom padding
+    var BORDER_Y = 1 + 1; // border: 1px solid (top + bottom)
     var GAP_CLAIM_META = 8; // margin-bottom on h3
 
     // Claim text — the only truly variable part, measured by Pretext
@@ -94,7 +98,7 @@ export function estimateCardHeight(cardData, containerWidth) {
         sourceHeight = 8 + (sourceResult ? sourceResult.height : 18); // 8px margin-top
     }
 
-    return PADDING_Y + claimResult.height + GAP_CLAIM_META +
+    return PADDING_Y + BORDER_Y + claimResult.height + GAP_CLAIM_META +
            metaHeight + sourceHeight + 12; // 12px margin-bottom on .proof-card
 }
 

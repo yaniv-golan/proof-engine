@@ -252,46 +252,6 @@ a:hover { text-decoration: underline; }
 .proof-meta { margin-bottom: 28px; }
 .proof-meta .date-info { color: var(--text-muted); font-size: 11px; font-family: var(--font-mono); }
 
-/* Verdict float — progressive enhancement via proof-enhance.js.
-   Uses <span> (not <div>) because it lives inside <h1>.proof-title.
-   display:block makes the span behave as a block for float purposes. */
-.verdict-float {
-    display: block;
-    float: right;
-    margin-left: 16px;
-    margin-bottom: 8px;
-    text-align: right;
-}
-.verdict-float .verdict-info {
-    display: block;
-    margin-top: 4px;
-    font-size: 11px;
-}
-/* Restore verdict glyph icons inside the float — originals are scoped
-   to .verdict-banner which gets hidden when the float activates. */
-.verdict-float .badge-proved::before { content: "\2713 "; }
-.verdict-float .badge-proved-qualified::before { content: "\2713 "; }
-.verdict-float .badge-disproved::before { content: "\2717 "; }
-.verdict-float .badge-disproved-qualified::before { content: "\2717 "; }
-.verdict-float .badge-partial::before { content: "\25D0 "; }
-.verdict-float .badge-undetermined::before { content: "? "; }
-.verdict-float .badge-supported::before { content: "\2713 "; }
-.verdict-float .badge-supported-qualified::before { content: "\2713 "; }
-
-/* Clear float before .proof-meta so tags/date don't wrap beside badge */
-.verdict-float-active .proof-meta {
-    clear: both;
-}
-
-@media (max-width: 640px) {
-    .verdict-float {
-        float: none;
-        margin-left: 0;
-        margin-bottom: 12px;
-        text-align: left;
-    }
-}
-
 /* Breadcrumb */
 .breadcrumb { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 16px; }
 .breadcrumb a { color: var(--link); }
