@@ -305,6 +305,26 @@ a:hover { text-decoration: underline; }
 .filter-input { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; color: var(--text); font-size: 13px; font-family: var(--font-mono); flex: 1; min-width: 200px; }
 .filter-select { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; color: var(--text); font-size: 13px; font-family: var(--font-mono); }
 
+/* Virtualized catalog container (progressive enhancement) */
+#proof-list-enhanced {
+    position: relative;
+    overflow-y: auto;
+}
+.virtual-spacer {
+    width: 100%;
+}
+.virtual-item {
+    position: absolute;
+    width: 100%;
+    left: 0;
+}
+.result-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-bottom: 12px;
+}
+
 /* Pagination */
 .pagination { display: flex; gap: 8px; justify-content: center; margin-top: 24px; }
 .pagination a, .pagination span { padding: 6px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; font-family: var(--font-mono); }
