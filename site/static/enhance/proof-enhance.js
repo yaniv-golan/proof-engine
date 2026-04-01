@@ -6,6 +6,59 @@
 (function () {
     'use strict';
 
+    function initVerdictFlow() {
+        var title = document.querySelector('.proof-title');
+        var banner = document.querySelector('.verdict-banner');
+        if (!title || !banner) return;
+
+        var badge = banner.querySelector('.badge');
+        var info = banner.querySelector('.verdict-info');
+        if (!badge) return;
+
+        // Create floating verdict container (hidden initially).
+        // Use <span> not <div> — .proof-title is an <h1>, and putting a
+        // block element inside an h1 is invalid HTML. We use display:block
+        // via the .verdict-float CSS class to get block layout from a span.
+        var floater = document.createElement('span');
+        floater.className = 'verdict-float';
+        floater.appendChild(badge.cloneNode(true));
+        if (info) {
+            floater.appendChild(info.cloneNode(true));
+        }
+
+        // State: is the float currently active?
+        var floatActive = false;
+
+        function activateFloat() {
+            if (floatActive) return;
+            title.insertBefore(floater, title.firstChild);
+            banner.style.display = 'none';
+            // Add class to parent so .proof-meta gets clear:both
+            title.parentNode.classList.add('verdict-float-active');
+            floatActive = true;
+        }
+
+        function deactivateFloat() {
+            if (!floatActive) return;
+            if (floater.parentNode) floater.parentNode.removeChild(floater);
+            banner.style.display = '';
+            title.parentNode.classList.remove('verdict-float-active');
+            floatActive = false;
+        }
+
+        // Use matchMedia so we respond to resize properly
+        var mql = window.matchMedia('(min-width: 641px)');
+        function handleViewport(e) {
+            if (e.matches) {
+                activateFloat();
+            } else {
+                deactivateFloat();
+            }
+        }
+        mql.addEventListener('change', handleViewport);
+        handleViewport(mql); // apply initial state
+    }
+
     function initAccordions() {
         var sections = document.querySelectorAll('.audit-section');
         if (!sections.length) return;
@@ -125,10 +178,15 @@
         });
     }
 
+    function init() {
+        initVerdictFlow();
+        initAccordions();
+    }
+
     // Run after DOM is ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initAccordions);
+        document.addEventListener('DOMContentLoaded', init);
     } else {
-        initAccordions();
+        init();
     }
 })();
