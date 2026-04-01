@@ -203,6 +203,26 @@ a:hover { text-decoration: underline; }
 .audit-body { display: none; padding: 14px; font-size: 13px; line-height: 1.7; color: #c9d1d9; overflow-x: auto; }
 .audit-body.open { display: block; }
 
+/* Animated audit accordion (progressive enhancement).
+   Uses visibility:hidden + max-height:0 instead of display:none so we can
+   animate, while keeping collapsed content out of the tab order via
+   inert attribute (set by JS). */
+.audit-body.animated {
+    display: block;
+    max-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: max-height 0.3s ease-out, visibility 0s 0.3s, overflow 0s 0.3s;
+    padding: 0 14px;
+}
+.audit-body.animated.open {
+    padding: 14px;
+    visibility: visible;
+    overflow-x: auto;  /* restore horizontal scrolling for wide tables/code blocks */
+    overflow-y: visible;
+    transition: max-height 0.3s ease-out, visibility 0s 0s, overflow 0s 0s;
+}
+
 /* Citation verification summary */
 .citation-summary-bar { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .cs-stat { font-size: 11px; padding: 2px 8px; border-radius: 3px; font-family: var(--font-mono); white-space: nowrap; }
