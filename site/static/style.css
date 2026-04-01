@@ -117,6 +117,94 @@ a:hover { text-decoration: underline; }
 .github-stars { display: flex; justify-content: center; margin-top: 16px; }
 .github-stars img { height: 20px; }
 
+/* Hero live proof demo (progressive enhancement) */
+.hero-demo {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    text-align: left;
+    max-width: 640px;
+    margin: 0 auto 24px;
+}
+.hero-pipeline-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+    padding-top: 4px;
+}
+.hero-pipeline-vertical .pipeline-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: var(--bg-card);
+    margin-bottom: 0;
+}
+.hero-pipeline-vertical .pipeline-icon.verdict-icon {
+    border-color: var(--green);
+    background: var(--green-bg);
+    color: var(--accent);
+}
+.hero-pipeline-vertical .pipeline-arrow-down {
+    text-align: center;
+    color: var(--border);
+    font-size: 10px;
+    line-height: 1;
+}
+.hero-demo-proof {
+    flex: 1;
+}
+.hero-demo-claim {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    border-left: 2px solid var(--border);
+    padding-left: 12px;
+}
+.hero-demo-label {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    display: block;
+    margin-bottom: 4px;
+}
+.hero-demo-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+.hero-demo-sources {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+.hero-demo-link {
+    color: var(--link);
+    font-size: 12px;
+    font-family: var(--font-mono);
+    margin-top: 8px;
+    display: inline-block;
+}
+
+@media (max-width: 640px) {
+    .hero-demo {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .hero-pipeline-vertical {
+        display: none;
+    }
+}
+
 /* How-it-works pipeline */
 .pipeline { display: flex; align-items: stretch; gap: 0; margin-bottom: 32px; max-width: 720px; margin-left: auto; margin-right: auto; }
 .pipeline-step { flex: 1; text-align: center; position: relative; }
