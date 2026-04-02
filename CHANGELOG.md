@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-04-02
+
+### Added
+
+- Site: redesigned landing page hero — new headline "Every claim, machine-verified", 3-stat bar (Proofs, Domains, Sources checked), updated CTAs, removed GitHub stars badge
+- Site: interactive "how it works" pipeline accordion — walks through a real proof's claim, sources, citations, code, and verdict with auto-cycle animation
+- Site: myth-busting "think you know the answer?" featured proofs section — hover-to-reveal verdicts with colored borders, quiz mode for disproved claims
+- Site: proof thumbnails displayed on myth-busting cards when available (64px, floated right)
+- Site: `PIPELINE_EXAMPLE_DATA` embed — build pipeline selects a featured disproved proof with citations and serializes its full proof data for the accordion
+- Site: `verdict_summary` field extracted from proof.md Conclusion section, strips bold verdict prefixes, used in myth cards and data embeds
+- Site: `pipeline-enhance.js` — pipeline accordion with keyboard navigation, auto-cycle, Pretext auto-fit for claim text
+- Site: shared `autoFitFontSize` export from `pretext-measure.js` — reusable by hero, pipeline, and myth-card modules
+
+### Changed
+
+- Site: featured proofs use `<article>` elements with `data-proof-url` instead of `<a>` wrappers — enables tap-to-reveal on mobile
+- Site: hero-enhance.js no longer hides the static pipeline section (responsibility moved to pipeline-enhance.js)
+- Site: `FEATURED_PROOFS_DATA` embed now includes `filter_value` and `verdict_summary`
+
 ## [1.4.0] - 2026-04-01
 
 ### Added

@@ -13,6 +13,7 @@ proofs/
 docs/internal/
 .superpowers/brainstorm/
 _site/
+_site_preview/
 .worktrees/
 tools/thumbnail-prompts.csv
 CLAUDE.md
