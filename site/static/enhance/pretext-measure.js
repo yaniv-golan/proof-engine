@@ -142,5 +142,40 @@ export function getTextLines(text, font, fontSize, maxWidth, lineHeight) {
     }
 }
 
+/**
+ * Find the largest font size that keeps text within a target line count.
+ * Binary search using Pretext measurement.
+ *
+ * @param {string} text - Text to fit
+ * @param {string} font - CSS font-family string
+ * @param {number} maxWidth - Container width in px
+ * @param {number} lineHeight - Line height multiplier (e.g. 1.4)
+ * @param {{ minFont?: number, maxFont?: number, targetLines?: number }} [opts]
+ * @returns {number|null} Best font size in px, or null if Pretext unavailable
+ */
+export function autoFitFontSize(text, font, maxWidth, lineHeight, opts) {
+    var minF = (opts && opts.minFont) || 16;
+    var maxF = (opts && opts.maxFont) || 34;
+    var targetLines = (opts && opts.targetLines) || 3;
+    var lo = minF;
+    var hi = maxF;
+    var bestSize = minF;
+
+    for (var i = 0; i < 20; i++) {
+        var mid = (lo + hi) / 2;
+        var result = measureText(text, font, mid, maxWidth, lineHeight);
+        if (!result) return null;
+
+        if (result.lines <= targetLines) {
+            bestSize = mid;
+            lo = mid;
+        } else {
+            hi = mid;
+        }
+    }
+
+    return Math.round(bestSize * 10) / 10;
+}
+
 // Re-export font constants for use by enhance modules
 export { FONT_SERIF, FONT_MONO, FONT_SYSTEM };

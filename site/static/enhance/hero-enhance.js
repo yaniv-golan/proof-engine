@@ -5,40 +5,10 @@
 // exact font size that fills the available width in 2-3 lines.
 // Falls back to current layout if this module fails.
 
-import { measureText, getTextLines, FONT_SERIF } from './pretext-measure.js';
+import { getTextLines, autoFitFontSize, FONT_SERIF } from './pretext-measure.js';
 
 (function () {
     'use strict';
-
-    // Auto-fit: find the largest font size that keeps text within
-    // targetLines lines at the given width. Binary search using Pretext.
-    var MIN_FONT = 16;
-    var MAX_FONT = 34;
-    var TARGET_LINES_MAX = 3;
-
-    function autoFitFontSize(text, maxWidth, lineHeight) {
-        // Binary search for the sweet spot
-        var lo = MIN_FONT;
-        var hi = MAX_FONT;
-        var bestSize = MIN_FONT;
-
-        for (var i = 0; i < 20; i++) { // 20 iterations = sub-pixel precision
-            var mid = (lo + hi) / 2;
-            var result = measureText(text, FONT_SERIF, mid, maxWidth, lineHeight);
-            if (!result) return null; // Pretext failed
-
-            if (result.lines <= TARGET_LINES_MAX) {
-                // Fits — try larger
-                bestSize = mid;
-                lo = mid;
-            } else {
-                // Too many lines — try smaller
-                hi = mid;
-            }
-        }
-
-        return Math.round(bestSize * 10) / 10; // round to 1 decimal
-    }
 
     var PIPELINE_STEPS = [
         { icon: '?', label: 'claim' },
@@ -108,7 +78,7 @@ import { measureText, getTextLines, FONT_SERIF } from './pretext-measure.js';
         var claimEl = proofEl.querySelector('.hero-demo-claim');
         if (!claimEl) return;
         var availableWidth = claimEl.clientWidth - 14;
-        var fittedSize = autoFitFontSize(claimText, availableWidth, 1.4);
+        var fittedSize = autoFitFontSize(claimText, FONT_SERIF, availableWidth, 1.4, { minFont: 16, maxFont: 34, targetLines: 3 });
         if (!fittedSize) return;
 
         claimEl.style.fontSize = fittedSize + 'px';
@@ -126,9 +96,10 @@ import { measureText, getTextLines, FONT_SERIF } from './pretext-measure.js';
         var label = claimEl.querySelector('.hero-demo-label');
         var labelHtml = label ? label.outerHTML + ' ' : '';
 
+        var lineH = Math.round(fittedSize * 1.4); // explicit height = Pretext's line height
         var linesHtml = lines.map(function (lineText, i) {
             var display = (i === 0 ? '\u201C' : '') + lineText + (i === lines.length - 1 ? '\u201D' : '');
-            return '<span class="hero-claim-line" style="display:block;overflow:hidden;">' +
+            return '<span class="hero-claim-line" style="display:block;overflow:hidden;height:' + lineH + 'px;">' +
                 '<span class="hero-claim-line-inner" style="display:block;opacity:0;transform:translateY(18px);transition:opacity 320ms ease-out ' + (i * LINE_STAGGER_MS) + 'ms,transform 320ms ease-out ' + (i * LINE_STAGGER_MS) + 'ms;">' +
                 escapeHtml(display) +
                 '</span></span>';
@@ -169,15 +140,6 @@ import { measureText, getTextLines, FONT_SERIF } from './pretext-measure.js';
         container.innerHTML = '<div class="hero-demo">' + pipelineHtml +
             '<div class="hero-demo-proof" style="transition: opacity ' + FADE_DURATION + 'ms ease-out, transform ' + FADE_DURATION + 'ms ease-out;">' +
             buildProofHtml(currentProof) + '</div></div>';
-
-        // Hide the horizontal pipeline section
-        var horizontalPipeline = document.querySelector('.pipeline');
-        var pipelineHeading = horizontalPipeline ?
-            horizontalPipeline.previousElementSibling : null;
-        if (horizontalPipeline) horizontalPipeline.style.display = 'none';
-        if (pipelineHeading && pipelineHeading.classList.contains('section-heading')) {
-            pipelineHeading.style.display = 'none';
-        }
 
         // Auto-fit initial claim with line-by-line entrance
         var proofEl = container.querySelector('.hero-demo-proof');
