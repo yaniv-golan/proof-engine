@@ -117,6 +117,94 @@ a:hover { text-decoration: underline; }
 .github-stars { display: flex; justify-content: center; margin-top: 16px; }
 .github-stars img { height: 20px; }
 
+/* Hero live proof demo (progressive enhancement) */
+.hero-demo {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    text-align: left;
+    max-width: 640px;
+    margin: 0 auto 24px;
+}
+.hero-pipeline-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+    padding-top: 4px;
+}
+.hero-pipeline-vertical .pipeline-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: var(--bg-card);
+    margin-bottom: 0;
+}
+.hero-pipeline-vertical .pipeline-icon.verdict-icon {
+    border-color: var(--green);
+    background: var(--green-bg);
+    color: var(--accent);
+}
+.hero-pipeline-vertical .pipeline-arrow-down {
+    text-align: center;
+    color: var(--border);
+    font-size: 10px;
+    line-height: 1;
+}
+.hero-demo-proof {
+    flex: 1;
+}
+.hero-demo-claim {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    border-left: 2px solid var(--border);
+    padding-left: 12px;
+}
+.hero-demo-label {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    display: block;
+    margin-bottom: 4px;
+}
+.hero-demo-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+.hero-demo-sources {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+.hero-demo-link {
+    color: var(--link);
+    font-size: 12px;
+    font-family: var(--font-mono);
+    margin-top: 8px;
+    display: inline-block;
+}
+
+@media (max-width: 640px) {
+    .hero-demo {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .hero-pipeline-vertical {
+        display: none;
+    }
+}
+
 /* How-it-works pipeline */
 .pipeline { display: flex; align-items: stretch; gap: 0; margin-bottom: 32px; max-width: 720px; margin-left: auto; margin-right: auto; }
 .pipeline-step { flex: 1; text-align: center; position: relative; }
@@ -203,6 +291,26 @@ a:hover { text-decoration: underline; }
 .audit-body { display: none; padding: 14px; font-size: 13px; line-height: 1.7; color: #c9d1d9; overflow-x: auto; }
 .audit-body.open { display: block; }
 
+/* Animated audit accordion (progressive enhancement).
+   Uses visibility:hidden + max-height:0 instead of display:none so we can
+   animate, while keeping collapsed content out of the tab order via
+   inert attribute (set by JS). */
+.audit-body.animated {
+    display: block;
+    max-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: max-height 0.3s ease-out, visibility 0s 0.3s, overflow 0s 0.3s;
+    padding: 0 14px;
+}
+.audit-body.animated.open {
+    padding: 14px;
+    visibility: visible;
+    overflow-x: auto;  /* restore horizontal scrolling for wide tables/code blocks */
+    overflow-y: visible;
+    transition: max-height 0.3s ease-out, visibility 0s 0s, overflow 0s 0s;
+}
+
 /* Citation verification summary */
 .citation-summary-bar { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .cs-stat { font-size: 11px; padding: 2px 8px; border-radius: 3px; font-family: var(--font-mono); white-space: nowrap; }
@@ -244,6 +352,25 @@ a:hover { text-decoration: underline; }
 .filters { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
 .filter-input { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; color: var(--text); font-size: 13px; font-family: var(--font-mono); flex: 1; min-width: 200px; }
 .filter-select { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; color: var(--text); font-size: 13px; font-family: var(--font-mono); }
+
+/* Enhanced catalog container (progressive enhancement) */
+#proof-list-enhanced {
+    position: relative;
+}
+/* Animated card wrapper — cards collapse/expand on filter */
+.card-wrapper {
+    overflow: hidden;
+    opacity: 1;
+    transition: max-height 0.3s ease-out, opacity 0.25s ease-out, margin-bottom 0.3s ease-out;
+}
+/* .card-hidden is a marker class — collapse is done via inline styles
+   to avoid specificity conflicts with the inline max-height values */
+.result-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-bottom: 12px;
+}
 
 /* Pagination */
 .pagination { display: flex; gap: 8px; justify-content: center; margin-top: 24px; }

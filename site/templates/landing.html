@@ -20,6 +20,10 @@
 <div class="hero">
     <h1>Verifiable Proofs</h1>
     <p class="hero-subtitle">// every fact cited · every calculation re-runnable</p>
+
+    <!-- Hero demo injected here by hero-enhance.js -->
+    <div id="hero-demo-container"></div>
+
     <div class="stats">
         <div class="stat">
             <div class="stat-value">{{ stats.total }}</div>
@@ -128,4 +132,24 @@
 })();
 </script>
 {% endif %}
+<script>
+window.FEATURED_PROOFS_DATA = [
+{% for proof in featured_proofs %}
+{
+    slug: "{{ proof.slug }}",
+    claim: {{ proof.proof_data.claim_natural | tojson }},
+    verdict: {{ proof.verdict.raw | tojson }},
+    verdict_category: "{{ proof.verdict.category }}",
+    tags: {{ proof.tags | tojson }},
+    source_names: {{ (proof.source_names or []) | tojson }},
+    source_names_extra: {{ proof.source_names_extra or 0 }},
+    url: "{{ base_url }}proofs/{{ proof.slug }}/"
+}{{ "," if not loop.last }}
+{% endfor %}
+];
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="{{ base_url }}static/enhance/hero-enhance.js"></script>
 {% endblock %}
