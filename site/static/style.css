@@ -263,6 +263,7 @@ a:hover { text-decoration: underline; }
     padding: 16px; cursor: default;
     transition: border-color 0.3s, background-color 0.3s;
 }
+.myth-card-thumb { float: right; width: 64px; height: 64px; border-radius: 6px; margin: 0 0 8px 12px; object-fit: cover; }
 .myth-card-claim { font-family: Georgia, 'Times New Roman', serif; font-size: 15px; line-height: 1.4; margin-bottom: 8px; color: var(--text); }
 .myth-card-meta { margin-bottom: 8px; }
 .myth-card-reveal-state { margin-bottom: 6px; }

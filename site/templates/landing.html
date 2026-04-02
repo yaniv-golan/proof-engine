@@ -98,7 +98,10 @@
 <p class="myth-subtext">Hover to reveal verdicts. Click to read the full proof.</p>
 <div id="myth-container">
 {% for proof in featured_proofs %}
-<article class="myth-card" data-proof-url="{{ base_url }}proofs/{{ proof.slug }}/" data-verdict-category="{{ proof.verdict.category }}" data-filter-value="{{ proof.verdict.filter_value }}">
+<article class="myth-card{% if proof.has_thumbnail %} myth-card-has-thumb{% endif %}" data-proof-url="{{ base_url }}proofs/{{ proof.slug }}/" data-verdict-category="{{ proof.verdict.category }}" data-filter-value="{{ proof.verdict.filter_value }}">
+    {% if proof.has_thumbnail %}
+    <img class="myth-card-thumb" src="{{ base_url }}proofs/{{ proof.slug }}/thumbnail.png" alt="" width="80" height="80" loading="lazy">
+    {% endif %}
     <div class="myth-card-claim">{{ proof.proof_data.claim_natural }}</div>
     <div class="myth-card-meta">
         {% for tag in proof.tags %}

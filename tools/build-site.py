@@ -402,6 +402,10 @@ def main():
 
     # Landing page — pass all featured proofs; JS picks 3 randomly per page load
     featured = [p for p in proofs if p.get("featured")]
+    for p in featured:
+        p["has_thumbnail"] = (
+            proofs_dir / p["slug"] / "thumbnail.png"
+        ).exists()
     pipeline_example = None
     disproved = [
         p for p in featured
