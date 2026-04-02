@@ -213,6 +213,81 @@ a:hover { text-decoration: underline; }
 .pipeline-desc { font-size: 10px; font-family: var(--font-mono); color: var(--text-muted); line-height: 1.4; }
 .pipeline-arrow { display: flex; align-items: center; color: var(--accent); font-size: 18px; font-family: var(--font-mono); padding: 0 4px; margin-top: -8px; }
 
+/* Interactive pipeline accordion (enhanced state) */
+.pipeline-accordion { max-width: 720px; margin: 0 auto 32px; }
+.pipeline-step-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; cursor: pointer;
+    border: 1px solid var(--border-subtle); border-radius: 6px;
+    margin-bottom: 4px; transition: border-color 0.2s;
+}
+.pipeline-step-row:hover,
+.pipeline-step-row:focus-visible { border-color: var(--accent); outline: none; }
+.pipeline-step-row .pipeline-icon { margin-bottom: 0; min-width: 28px; text-align: center; }
+.pipeline-step-row .pipeline-label { font-weight: 700; }
+.pipeline-step-row .pipeline-chevron { margin-left: auto; font-family: var(--font-mono); color: var(--text-muted); transition: transform 0.2s; }
+.pipeline-step-row[aria-expanded="true"] .pipeline-chevron { transform: rotate(90deg); }
+.pipeline-step-content {
+    overflow: hidden; max-height: 0; opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+    padding: 0 14px; margin-bottom: 4px;
+}
+.pipeline-step-content[data-open="true"] {
+    max-height: 400px; opacity: 1; padding: 12px 14px;
+}
+.pipeline-step-content pre {
+    background: var(--bg-alt); border: 1px solid var(--border-subtle);
+    border-radius: 4px; padding: 10px 12px; overflow-x: auto;
+    font-size: 12px; line-height: 1.5;
+}
+.pipeline-step-content .source-badge {
+    display: inline-block; font-size: 10px; padding: 2px 6px;
+    border: 1px solid var(--border); border-radius: 3px;
+    font-family: var(--font-mono); color: var(--text-muted);
+    margin-left: 6px;
+}
+.pipeline-step-content .cit-row {
+    display: flex; gap: 8px; align-items: baseline;
+    font-size: 12px; line-height: 1.6; margin-bottom: 4px;
+}
+.pipeline-step-content .cit-row .fact-id {
+    font-family: var(--font-mono); color: var(--text-muted);
+    min-width: 24px;
+}
+
+/* Myth-busting cards */
+.myth-subtext { font-size: 12px; font-family: var(--font-mono); color: var(--text-muted); margin-bottom: 16px; }
+#myth-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.myth-card {
+    border: 1px solid var(--border-subtle); border-radius: 8px;
+    padding: 16px; cursor: default;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+.myth-card-claim { font-family: Georgia, 'Times New Roman', serif; font-size: 15px; line-height: 1.4; margin-bottom: 8px; color: var(--text); }
+.myth-card-meta { margin-bottom: 8px; }
+.myth-card-reveal-state { margin-bottom: 6px; }
+.myth-card-reveal-state .badge-hidden { font-size: 10px; color: var(--text-muted); border: 1px dashed var(--border); padding: 2px 8px; border-radius: 3px; }
+.myth-card-summary { font-size: 12px; font-family: var(--font-mono); color: var(--text-muted); line-height: 1.5; margin-bottom: 8px; }
+.myth-card-link { font-size: 12px; font-family: var(--font-mono); color: var(--accent); }
+
+/* Myth card — JS-enhanced hidden states */
+.myth-card.myth-enhanced .myth-card-verdict-badge,
+.myth-card.myth-enhanced .myth-card-summary { opacity: 0; transition: opacity 0.3s; }
+.myth-card.myth-enhanced .badge-hidden { display: inline-block; }
+.myth-card.myth-enhanced.myth-revealed .myth-card-verdict-badge { opacity: 1; }
+.myth-card.myth-enhanced.myth-revealed .myth-card-summary { opacity: 1; }
+.myth-card.myth-enhanced.myth-revealed .badge-hidden { display: none; }
+.myth-card.myth-enhanced.myth-revealed { cursor: pointer; }
+
+/* Verdict-colored borders on reveal */
+.myth-card.myth-revealed[data-verdict-category="disproved"],
+.myth-card.myth-revealed[data-verdict-category="disproved-qualified"] { border-color: var(--red, #e05252); background: rgba(224,82,82,0.04); }
+.myth-card.myth-revealed[data-verdict-category="proved"],
+.myth-card.myth-revealed[data-verdict-category="proved-qualified"] { border-color: var(--green); background: var(--green-bg); }
+
+.myth-bottom-link { text-align: center; margin-bottom: 32px; }
+.myth-bottom-link a { font-size: 12px; font-family: var(--font-mono); color: var(--accent); }
+
 /* Section headings */
 .section-heading { font-size: 11px; font-family: var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin: 40px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); }
 
@@ -432,4 +507,6 @@ a:hover { text-decoration: underline; }
     .downloads { flex-direction: column; }
     .proof-content table { display: block; overflow-x: auto; }
     .audit-body { overflow-x: auto; }
+    #myth-container { grid-template-columns: 1fr; }
+    .pipeline-step-content pre { font-size: 11px; }
 }
