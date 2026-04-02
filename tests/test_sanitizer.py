@@ -17,7 +17,7 @@ def test_renders_table():
 def test_renders_fenced_code():
     md = "```python\nprint('hi')\n```"
     html = render_markdown(md)
-    assert "<code>" in html
+    assert "<code" in html
     assert "print" in html
 
 
