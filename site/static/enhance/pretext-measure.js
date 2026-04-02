@@ -7,7 +7,7 @@
 // shorthand strings like "14px Georgia". If the API differs from what's coded
 // here, update this module before committing.
 
-import { prepare, layout } from '../vendor/pretext.esm.min.js';
+import { prepare, layout, prepareWithSegments, layoutWithLines } from '../vendor/pretext.esm.min.js';
 
 // Site font stacks (must match style.css :root variables)
 var FONT_SERIF = "Georgia, 'Times New Roman', serif";
@@ -116,6 +116,30 @@ export function estimateCardHeights(cardDataArray, containerWidth) {
         heights.push(h);
     }
     return heights;
+}
+
+/**
+ * Split text into individual lines at a given width.
+ * Returns an array of line strings, or null if Pretext unavailable.
+ *
+ * @param {string} text
+ * @param {string} font - CSS font-family string
+ * @param {number} fontSize - in px
+ * @param {number} maxWidth
+ * @param {number} lineHeight - CSS multiplier (e.g. 1.4)
+ * @returns {string[]|null}
+ */
+export function getTextLines(text, font, fontSize, maxWidth, lineHeight) {
+    lineHeight = lineHeight || 1.5;
+    var lineHeightPx = fontSize * lineHeight;
+    var cssFont = fontSize + 'px ' + font;
+    try {
+        var prepared = prepareWithSegments(text, cssFont);
+        var result = layoutWithLines(prepared, maxWidth, lineHeightPx);
+        return result.lines.map(function (l) { return l.text; });
+    } catch (e) {
+        return null;
+    }
 }
 
 // Re-export font constants for use by enhance modules

@@ -5,7 +5,7 @@
 // exact font size that fills the available width in 2-3 lines.
 // Falls back to current layout if this module fails.
 
-import { measureText, FONT_SERIF } from './pretext-measure.js';
+import { measureText, getTextLines, FONT_SERIF } from './pretext-measure.js';
 
 (function () {
     'use strict';
@@ -102,15 +102,49 @@ import { measureText, FONT_SERIF } from './pretext-measure.js';
             '<a href="' + escapeHtml(proof.url) + '" class="hero-demo-link">\u2192 read full proof</a>';
     }
 
-    function fitClaim(proofEl, claimText) {
+    var LINE_STAGGER_MS = 70; // delay between each line's entrance
+
+    function fitClaim(proofEl, claimText, animate) {
         var claimEl = proofEl.querySelector('.hero-demo-claim');
         if (!claimEl) return;
         var availableWidth = claimEl.clientWidth - 14;
         var fittedSize = autoFitFontSize(claimText, availableWidth, 1.4);
-        if (fittedSize) {
-            claimEl.style.fontSize = fittedSize + 'px';
-            claimEl.style.lineHeight = '1.4';
-        }
+        if (!fittedSize) return;
+
+        claimEl.style.fontSize = fittedSize + 'px';
+        claimEl.style.lineHeight = '1.4';
+
+        if (!animate) return;
+
+        // Split claim text into lines using Pretext, then animate each line in
+        var lines = getTextLines(claimText, FONT_SERIF, fittedSize, availableWidth, 1.4);
+        if (!lines || lines.length <= 1) return; // single line: use existing block animation
+
+        // Replace the text node inside .hero-demo-claim with per-line spans
+        // The claim el contains: label span + opening quote + text + closing quote
+        // We need to preserve the label and quotes, wrapping only the text lines.
+        var label = claimEl.querySelector('.hero-demo-label');
+        var labelHtml = label ? label.outerHTML + ' ' : '';
+
+        var linesHtml = lines.map(function (lineText, i) {
+            var display = (i === 0 ? '\u201C' : '') + lineText + (i === lines.length - 1 ? '\u201D' : '');
+            return '<span class="hero-claim-line" style="display:block;overflow:hidden;">' +
+                '<span class="hero-claim-line-inner" style="display:block;opacity:0;transform:translateY(18px);transition:opacity 320ms ease-out ' + (i * LINE_STAGGER_MS) + 'ms,transform 320ms ease-out ' + (i * LINE_STAGGER_MS) + 'ms;">' +
+                escapeHtml(display) +
+                '</span></span>';
+        });
+
+        claimEl.innerHTML = labelHtml + linesHtml.join('');
+
+        // Trigger entrance — double-rAF so transitions fire after DOM paint
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                claimEl.querySelectorAll('.hero-claim-line-inner').forEach(function (inner) {
+                    inner.style.opacity = '1';
+                    inner.style.transform = 'translateY(0)';
+                });
+            });
+        });
     }
 
     function init() {
@@ -145,10 +179,10 @@ import { measureText, FONT_SERIF } from './pretext-measure.js';
             pipelineHeading.style.display = 'none';
         }
 
-        // Auto-fit initial claim
+        // Auto-fit initial claim with line-by-line entrance
         var proofEl = container.querySelector('.hero-demo-proof');
         requestAnimationFrame(function () {
-            fitClaim(proofEl, currentProof.claim);
+            fitClaim(proofEl, currentProof.claim, true);
         });
 
         // Cycle through proofs with slide + fade
@@ -170,8 +204,8 @@ import { measureText, FONT_SERIF } from './pretext-measure.js';
                     proofEl.style.transform = 'translateY(30px)';
                     proofEl.style.opacity = '0';
 
-                    // Fit new claim text
-                    fitClaim(proofEl, nextProof.claim);
+                    // Fit new claim text with line-by-line entrance
+                    fitClaim(proofEl, nextProof.claim, true);
 
                     // Force browser to commit the above state before re-enabling transition.
                     // Double-rAF ensures a paint happens between position reset and animation start.
