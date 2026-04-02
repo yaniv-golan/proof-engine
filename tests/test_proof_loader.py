@@ -167,3 +167,43 @@ def test_load_all_proofs_dangling_featured_raises(proof_dir):
     featured_path.write_text(json.dumps(["nonexistent-slug"]))
     with pytest.raises(ValueError, match="nonexistent-slug"):
         load_all_proofs(proof_dir)
+
+
+def test_verdict_summary_strips_bold_prefix(proof_dir):
+    """verdict_summary strips bold verdict prefix from Conclusion."""
+    (proof_dir / "test-claim" / "proof.md").write_text(
+        "# Proof\n\n## Key Findings\n\n- Found it\n\n"
+        "## Claim Interpretation\n\nMeans X.\n\n"
+        "## Evidence Summary\n\n| ID | Fact |\n|---|---|\n| B1 | X |\n\n"
+        "## Proof Logic\n\nBecause Y.\n\n"
+        "## Conclusion\n\n**PROVED.** The claim holds under all conditions.\n"
+    )
+    proof = load_proof(proof_dir / "test-claim")
+    assert proof["verdict_summary"] == "The claim holds under all conditions."
+
+
+def test_verdict_summary_no_bold_prefix(proof_dir):
+    """Conclusion without bold prefix uses first sentence as-is."""
+    (proof_dir / "test-claim" / "proof.md").write_text(
+        "# Proof\n\n## Key Findings\n\n- Found it\n\n"
+        "## Claim Interpretation\n\nMeans X.\n\n"
+        "## Evidence Summary\n\n| ID | Fact |\n|---|---|\n| B1 | X |\n\n"
+        "## Proof Logic\n\nBecause Y.\n\n"
+        "## Conclusion\n\nThe claim is PROVED.\n"
+    )
+    proof = load_proof(proof_dir / "test-claim")
+    assert proof["verdict_summary"] == "The claim is PROVED."
+
+
+def test_verdict_summary_disproved_prefix(proof_dir):
+    """DISPROVED bold prefix is stripped correctly."""
+    (proof_dir / "test-claim" / "proof.md").write_text(
+        "# Proof\n\n## Key Findings\n\n- Found it\n\n"
+        "## Claim Interpretation\n\nMeans X.\n\n"
+        "## Evidence Summary\n\n| ID | Fact |\n|---|---|\n| B1 | X |\n\n"
+        "## Proof Logic\n\nBecause Y.\n\n"
+        "## Conclusion\n\n**DISPROVED.** The spider myth is false. "
+        "All sources agree.\n"
+    )
+    proof = load_proof(proof_dir / "test-claim")
+    assert proof["verdict_summary"] == "The spider myth is false."

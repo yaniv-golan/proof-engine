@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 from pathlib import Path
 import yaml
@@ -46,6 +47,32 @@ def extract_source_names(proof_data, max_sources=3):
             seen.add(name)
             names.append(name)
     return names[:max_sources]
+
+
+_VERDICT_PREFIX_RE = re.compile(
+    r"^\*\*[A-Z ]+(?:\(.*?\))?\.\*\*\s*"
+)
+
+
+def extract_verdict_summary(
+    sections_md: dict[str, str],
+    verdict_raw: str,
+) -> str:
+    """Extract a one-sentence verdict summary from the Conclusion section."""
+    conclusion = sections_md.get("Conclusion", "")
+    if not conclusion:
+        return f"{verdict_raw} \u2014 see full proof for details."
+
+    text = _VERDICT_PREFIX_RE.sub("", conclusion).strip()
+    if not text:
+        return f"{verdict_raw} \u2014 see full proof for details."
+
+    first_dot = text.find(". ")
+    if first_dot != -1:
+        return text[: first_dot + 1]
+    if text.endswith("."):
+        return text.rstrip().rstrip(".") + "."
+    return text.split("\n")[0].strip()
 
 
 def load_proof(proof_dir: Path) -> dict:
@@ -137,6 +164,9 @@ def load_proof(proof_dir: Path) -> dict:
         "featured": False,
         "citation_count": citation_count,
         "search_count": search_count,
+        "verdict_summary": extract_verdict_summary(
+            sections_md, verdict["raw"]
+        ),
         "source_names": extract_source_names(proof_data),
         "source_names_extra": max(0, len({c.get("source_name") for c in proof_data.get("citations", {}).values() if c.get("source_name")}) - 3),
         "date": generator["generated_at"],
