@@ -402,15 +402,18 @@ def main():
 
     # Landing page — pass all featured proofs; JS picks 3 randomly per page load
     featured = [p for p in proofs if p.get("featured")]
-    pipeline_proof = next(
-        (p for p in featured if p["verdict"].get("filter_value") == "disproved"),
-        featured[0] if featured else None,
-    )
-    pipeline_example = (
-        build_pipeline_example_data(pipeline_proof, base_url, proofs_dir)
-        if pipeline_proof
-        else None
-    )
+    pipeline_example = None
+    disproved = [
+        p for p in featured
+        if p["verdict"].get("filter_value") == "disproved"
+    ]
+    candidates = disproved + featured
+    for p in candidates:
+        pipeline_example = build_pipeline_example_data(
+            p, base_url, proofs_dir
+        )
+        if pipeline_example is not None:
+            break
     tpl = env.get_template("landing.html")
     write_file(
         output_dir / "index.html",
