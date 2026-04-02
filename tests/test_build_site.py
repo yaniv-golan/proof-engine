@@ -14,6 +14,7 @@ _bs_mod = importlib.util.module_from_spec(_bs_spec)
 _bs_spec.loader.exec_module(_bs_mod)
 compute_stats = _bs_mod.compute_stats
 build_citation_summary = _bs_mod.build_citation_summary
+build_pipeline_example_data = _bs_mod.build_pipeline_example_data
 
 
 @pytest.fixture
@@ -55,6 +56,10 @@ def site_fixture(tmp_path):
             "generated_at": "2025-01-15",
         },
     }))
+
+    (proof_dir.parent / "featured.json").write_text(
+        json.dumps(["test-claim"]) + "\n",
+    )
 
     return tmp_path
 
@@ -151,6 +156,88 @@ def test_canonical_url_in_landing_page(site_fixture):
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     html = (site_fixture / "_site" / "index.html").read_text()
     assert '<link rel="canonical" href="https://example.com/proof-engine/">' in html
+
+
+def test_landing_page_has_verdict_summary_in_featured_data(site_fixture):
+    """FEATURED_PROOFS_DATA entries include verdict_summary."""
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "index.html").read_text()
+    assert "verdict_summary" in html
+
+
+def test_build_pipeline_example_data_with_citations(tmp_path):
+    """Pipeline example includes citations, sources, and code snippet when present."""
+    slug = "pipe-proof"
+    proof_dir = tmp_path / "proofs" / slug
+    proof_dir.mkdir(parents=True)
+    (proof_dir / "proof.py").write_text(
+        "x = 1\n"
+        "def run():\n"
+        "    compare(a, b)\n",
+    )
+    proof = {
+        "slug": slug,
+        "proof_data": {
+            "claim_natural": "Example claim",
+            "citations": {
+                "B1": {
+                    "source_name": "Source One",
+                    "url": "https://example.com/one",
+                    "status": "verified",
+                    "method": "full_quote",
+                    "quote": (
+                        "A quote that is long enough to test truncation " * 3
+                    ),
+                    "credibility": {
+                        "source_type": "government",
+                    },
+                },
+                "B2": {
+                    "source_name": "Source One",
+                    "url": "https://example.com/dup",
+                    "status": "partial",
+                    "method": "fragment",
+                    "quote": "short",
+                    "credibility": {"source_type": "unknown"},
+                },
+            },
+            "extractions": {
+                "B1": {"quote_snippet": "from extraction"},
+            },
+            "claim_formal": {
+                "subject": "S",
+                "property": "P",
+                "operator": ">",
+                "threshold": 0,
+            },
+        },
+        "verdict": {"raw": "PROVED", "category": "proved"},
+        "verdict_summary": "Summary line.",
+    }
+    out = build_pipeline_example_data(proof, "/base/", tmp_path / "proofs")
+    assert out is not None
+    assert out["slug"] == slug
+    assert out["proof_url"] == "/base/proofs/pipe-proof/"
+    assert len(out["sources"]) == 1
+    assert out["sources"][0]["source_type"] == "government"
+    assert len(out["citations"]) == 2
+    b1_row = next(r for r in out["citations"] if r["fact_id"] == "B1")
+    assert b1_row["quote_snippet"] == "from extraction"
+    b2_row = next(r for r in out["citations"] if r["fact_id"] == "B2")
+    assert b2_row["quote_snippet"] == "short"
+    assert out["claim_formal_summary"] == "S: P > 0"
+    assert "compare" in out["code_example"]["snippet"]
+    assert out["verdict"]["summary"] == "Summary line."
+
+
+def test_build_pipeline_example_data_no_citations_returns_none():
+    proof = {
+        "slug": "x",
+        "proof_data": {"claim_natural": "c", "citations": {}},
+        "verdict": {"raw": "PROVED", "category": "proved"},
+    }
+    assert build_pipeline_example_data(proof, "/", Path("/tmp")) is None
 
 
 def test_json_ld_preserved_on_proof_page(site_fixture):

@@ -143,6 +143,7 @@ window.FEATURED_PROOFS_DATA = [
     tags: {{ proof.tags | tojson }},
     source_names: {{ (proof.source_names or []) | tojson }},
     source_names_extra: {{ proof.source_names_extra or 0 }},
+    verdict_summary: {{ proof.verdict_summary | tojson }},
     url: "{{ base_url }}proofs/{{ proof.slug }}/"
 }{{ "," if not loop.last }}
 {% endfor %}

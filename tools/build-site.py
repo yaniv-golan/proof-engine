@@ -267,6 +267,117 @@ def build_citation_summary(proof_data):
     }
 
 
+_SOURCE_TYPE_LABELS = {
+    "academic": "academic",
+    "major_news": "news",
+    "reference": "reference",
+    "government": "government",
+    "unknown": "source",
+}
+
+
+def _extract_code_snippet(proof_py_path: Path) -> str:
+    """Extract a short computation snippet from proof.py."""
+    if not proof_py_path.exists():
+        return ""
+    lines = proof_py_path.read_text().splitlines()
+    targets = ("compare(", "cross_check(")
+    start = None
+    for i, line in enumerate(lines):
+        if any(t in line for t in targets):
+            start = i
+            while (
+                start > 0
+                and lines[start - 1].strip()
+                and not lines[start - 1].startswith("#")
+            ):
+                start -= 1
+            break
+    if start is None:
+        return ""
+    end = min(start + 10, len(lines))
+    return "\n".join(lines[start:end])
+
+
+def build_pipeline_example_data(
+    proof: dict,
+    base_url: str,
+    proofs_dir: Path,
+) -> dict | None:
+    """Build pipeline example dict for the landing page accordion."""
+    pd = proof["proof_data"]
+    citations = pd.get("citations", {})
+    if not citations:
+        return None
+
+    extractions = pd.get("extractions", {})
+
+    seen_sources: set[str] = set()
+    sources: list[dict] = []
+    for cit in citations.values():
+        name = cit.get("source_name", "")
+        if name and name not in seen_sources:
+            seen_sources.add(name)
+            cred = cit.get("credibility", {})
+            raw_type = cred.get("source_type", "unknown")
+            sources.append({
+                "source_name": name,
+                "source_type": _SOURCE_TYPE_LABELS.get(raw_type, "source"),
+                "url": cit.get("url", ""),
+            })
+        if len(sources) >= 3:
+            break
+
+    cit_rows: list[dict] = []
+    for fact_id, cit in citations.items():
+        ext = extractions.get(fact_id, {})
+        snippet = ext.get("quote_snippet", "")
+        if not snippet:
+            quote = cit.get("quote", "")
+            snippet = quote[:80] if quote else ""
+        cit_rows.append({
+            "fact_id": fact_id,
+            "source_name": cit.get("source_name", fact_id),
+            "status": cit.get("status", "unknown"),
+            "method": cit.get("method", ""),
+            "quote_snippet": snippet,
+            "url": cit.get("url", ""),
+        })
+
+    slug = proof["slug"]
+    proof_py_path = proofs_dir / slug / "proof.py"
+    code_snippet = _extract_code_snippet(proof_py_path)
+
+    cf = pd.get("claim_formal", {})
+    subject = cf.get("subject", "")
+    prop = cf.get("property", "")
+    op = cf.get("operator", "")
+    threshold = cf.get("threshold", "")
+    formal_summary = (
+        f"{subject}: {prop} {op} {threshold}"
+        if subject and prop
+        else ""
+    )
+
+    return {
+        "slug": slug,
+        "proof_url": f"{base_url}proofs/{slug}/",
+        "claim_natural": pd["claim_natural"],
+        "claim_formal_summary": formal_summary,
+        "sources": sources,
+        "citations": cit_rows,
+        "code_example": {
+            "language": "python",
+            "snippet": code_snippet,
+        },
+        "verdict": {
+            "raw": proof["verdict"]["raw"],
+            "category": proof["verdict"]["category"],
+            "summary": proof.get("verdict_summary", ""),
+        },
+    }
+
+
 def main():
     args = parse_args()
     site_dir = Path(args.site_dir)
@@ -291,8 +402,26 @@ def main():
 
     # Landing page — pass all featured proofs; JS picks 3 randomly per page load
     featured = [p for p in proofs if p.get("featured")]
+    pipeline_proof = next(
+        (p for p in featured if p["verdict"].get("filter_value") == "disproved"),
+        featured[0] if featured else None,
+    )
+    pipeline_example = (
+        build_pipeline_example_data(pipeline_proof, base_url, proofs_dir)
+        if pipeline_proof
+        else None
+    )
     tpl = env.get_template("landing.html")
-    write_file(output_dir / "index.html", tpl.render(**common, stats=stats, featured_proofs=featured, canonical_url=f"{site_url}{base_url}"))
+    write_file(
+        output_dir / "index.html",
+        tpl.render(
+            **common,
+            stats=stats,
+            featured_proofs=featured,
+            pipeline_example=pipeline_example,
+            canonical_url=f"{site_url}{base_url}",
+        ),
+    )
 
     # Catalog page
     tpl = env.get_template("catalog.html")
