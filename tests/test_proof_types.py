@@ -12,7 +12,7 @@ import typing
 from pathlib import Path
 
 from scripts.proof_types import (
-    SearchRegistryEntry, CitationEntry,
+    SearchRegistryEntry, CitationEntry, CoiFlag, CrossCheck,
     LoadedProof, ProofData, Generator, NormalizedVerdict,
 )
 
@@ -101,3 +101,34 @@ def test_types_match_published_proofs():
                     f"proof.json key '{key}' in {proof_dir.name} "
                     f"not in ProofData TypedDict"
                 )
+
+
+def test_coi_flag_has_required_fields():
+    """CoiFlag must have source_key, coi_type, relationship, direction, severity."""
+    cf_fields = set(typing.get_type_hints(CoiFlag).keys())
+    expected = {"source_key", "coi_type", "relationship", "direction", "severity"}
+    missing = expected - cf_fields
+    assert not missing, f"CoiFlag missing fields: {missing}"
+
+
+def test_cross_check_has_coi_flags():
+    """CrossCheck must include coi_flags field."""
+    cc_fields = set(typing.get_type_hints(CrossCheck).keys())
+    assert "coi_flags" in cc_fields, "CrossCheck missing coi_flags field"
+
+
+def test_cross_check_has_source_counting_fields():
+    """CrossCheck must include fields used by source-counting templates."""
+    cc_fields = set(typing.get_type_hints(CrossCheck).keys())
+    expected = {"n_sources_consulted", "n_sources_verified", "sources",
+                "independence_note", "tolerance"}
+    missing = expected - cc_fields
+    assert not missing, f"CrossCheck missing source-counting fields: {missing}"
+
+
+def test_cross_check_has_absence_fields():
+    """CrossCheck must include fields used by absence templates."""
+    cc_fields = set(typing.get_type_hints(CrossCheck).keys())
+    expected = {"n_databases_searched", "n_null_verified", "n_reviewed", "databases"}
+    missing = expected - cc_fields
+    assert not missing, f"CrossCheck missing absence fields: {missing}"
