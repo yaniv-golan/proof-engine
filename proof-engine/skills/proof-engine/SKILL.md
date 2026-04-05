@@ -31,7 +31,7 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **Don't use `int()` truncation as a cross-check**: `int(days / 365.2425) == calendar_years` is not independent — both are functions of the same input.
 - **Don't restate the proof as an adversarial check**: "70 years after 1948 is 2018, and 2026 > 2018" catches nothing. Search for counter-evidence.
 - **Handle Unicode in citations**: Real web pages use en-dashes, curly quotes, ring-above vs degree, non-breaking spaces. `verify_citations.py` handles this automatically.
-- **WebFetch paraphrases quotes** — Quotes from WebFetch may be silently altered. You cannot pre-verify them (WebFetch is the intermediary). Instead: (1) write the quote as-is, (2) run `verify_all_citations`, (3) if a quote returns `partial` or `not_found`, re-fetch the page asking for the exact sentence around a distinctive keyword, (4) update the quote and re-verify. For qualitative proofs where exact quotes matter less, prefer shorter distinctive phrases that are less likely to be paraphrased. A `partial` result with `coverage_pct >= 50` is acceptable if other fully-verified sources independently confirm the same point — the engine's own threshold for `verified` via fragment matching is `coverage >= 0.8` (80%), so anything below that returns `partial`.
+- **WebFetch/WebSearch return summaries, not verbatim text** — Never use text from WebFetch/WebSearch directly as the `quote` field in `empirical_facts`. Use these tools to identify sources, then obtain verbatim quotes via Python `requests.get()`, browser-captured `snapshot`, or Wayback archive. See [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for the full workflow. If a citation returns `partial`/`not_found` on a source you know contains the finding, suspect paraphrasing — obtain raw page text and update the quote.
 - **`explain_calc()` vs `compute_*()`**: Use named functions (`compute_percentage_change()`, `compute_age()`) when they match your computation — they self-document. Use `explain_calc()` for ad-hoc expressions. Don't wrap a `compute_*()` call in `explain_calc()`.
 - **Don't call `verify_extraction()` on data_values**: It's circular. Instead, call `verify_data_values(url, data_values, fact_id)` to confirm each value string appears on the source page, then cross-check across sources (Rule 6).
 - **Never create pseudo-quote fields for table data**: Don't store table cell values in fields like `cpi_1913_quote: "9.883"`. If the source evidence is a table cell or numeric grid, store it under `data_values` and verify with `verify_data_values()`. The validator will reject pseudo-quote fields containing bare numeric or date literals that are parsed as evidence.
@@ -53,7 +53,7 @@ Read these on demand, not all upfront.
 | File | Read when |
 |------|-----------|
 | [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) | **Step 3** — the 7 rules with bad/good examples |
-| [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) | **Step 3** — choose a template: date/age, numeric/table, qualitative consensus, compound, absence-of-evidence, or pure-math |
+| [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) | **Step 3** — read this index to choose a template, then read the specific template file it directs you to |
 | [output-specs.md](${CLAUDE_SKILL_DIR}/references/output-specs.md) | **Step 5** — proof.md and proof_audit.md structure |
 | [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md) | **Step 6** — before presenting results |
 | [advanced-patterns.md](${CLAUDE_SKILL_DIR}/references/advanced-patterns.md) | When encountering complex quotes or table-sourced data |
@@ -140,7 +140,7 @@ If the claim is an opinion or has no verifiable answer, do NOT attempt a proof. 
 Guiding questions:
 - Crisp true/false threshold? Extractable facts? Canonical sources? Clear disproof condition?
 - If fewer than 3 are true, consider a simpler factual summary instead.
-- For consensus claims, see the Qualitative Consensus Proof Template in [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md).
+- For consensus claims, see [template-qualitative.md](${CLAUDE_SKILL_DIR}/references/template-qualitative.md).
 
 ### Step 2: Gather Facts (Both Directions)
 
@@ -163,7 +163,7 @@ Find at least two independent sources (Rule 6). For math claims, plan two indepe
 If a source is likely to return 403 on automated fetch (common for .gov, .edu, and some aggregators), pre-fetch the page text using any available tool and include it as the `snapshot` field in `empirical_facts`. The proof script will verify against the snapshot instead of live-fetching. See [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for details.
 
 ### Step 3: Write the Proof Code
-Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 7 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) and choose the template that matches your claim type (date/age, numeric/table, qualitative consensus, compound, absence-of-evidence, or pure-math). **If the claim uses causal language** ("causes," "leads to," "promotes," "damages," "prevents"), **use the compound claim template** with SC-association + SC-causation sub-claims — see "Causal vs. associational claims" in the Verdicts section. For claims about absence of evidence ("there is no published evidence that X causes Y"), use the absence-of-evidence template. The proof script must be self-contained: `python proof.py` produces the full output.
+Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 7 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) to identify which template matches your claim type. Then read the specific template file it directs you to (e.g., `template-qualitative.md`, `template-compound.md`). Do not skip the second read — the index contains only the decision table, not the template code. **If the claim uses causal language** ("causes," "leads to," "promotes," "damages," "prevents"), **use the compound claim template** (`template-compound.md`) with SC-association + SC-causation sub-claims — see "Causal vs. associational claims" in the Verdicts section. For claims about absence of evidence, use `template-absence.md`. The proof script must be self-contained: `python proof.py` produces the full output.
 
 Required elements:
 - `CLAIM_FORMAL` dict with `operator_note` (Rule 4)
@@ -207,7 +207,7 @@ Before presenting results, run through the checklist in [self-critique-checklist
    - *Physical/mathematical*: peer-reviewed or established reference (textbook, standards body)
    - *Economic/statistical*: government or intergovernmental data source, or peer-reviewed analysis
    - *Other domains*: tier >= 3 credibility (no unclassified or flagged sources)
-3. **No majority COI**: No more than one of the threshold sources may have authors with a financial or commercial conflict of interest related to the claim.
+3. **No majority COI**: No more than half of the threshold sources may have a conflict of interest (per Rule 6's COI taxonomy: organizational, funding dependency, institutional co-benefit, competitive antagonism, revolving door, or advocacy/ideological) on the same side of the claim.
 4. **Documented in `operator_note`**: State why 3 sources are unavailable, confirm source quality, and disclose any known COI.
 
 If these conditions are not met, keep `threshold: 3`. If fewer than 3 qualifying sources exist and the quality gates are not met, the verdict should be **UNDETERMINED** (insufficient evidence), not PROVED at a lowered threshold.
