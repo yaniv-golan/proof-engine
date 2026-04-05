@@ -41,3 +41,29 @@ BLS, FRED, Federal Reserve, Census, and similar .gov sites systematically return
 - **Preferred:** Use reliable aggregators as citation URLs: rateinflation.com, inflationdata.com (for CPI); measuringworth.com, officialdata.org (for historical data); fred.stlouisfed.org (for FRED series). These are tier 3 (established reference) in credibility scoring.
 - **Fallback:** Use the snapshot workflow — fetch via browser during Step 2, embed as `snapshot` in `empirical_facts`
 - Note in the audit doc that aggregator sources republish data from the primary authority (e.g., "sourced from BLS via rateinflation.com")
+
+## International Organization Sites (.org / .int)
+
+UN agencies, ICJ, WHO, and similar intergovernmental orgs frequently return 403 or serve JS-rendered pages. Common offenders: `unrwa.org`, `ohchr.org`, `un.org` subdomains, `who.int`, `icj-cij.org`.
+
+- **Preferred:** Use the snapshot workflow — fetch via browser during Step 2, embed as `snapshot` in `empirical_facts`. Alternatively, use `wayback_fallback=True` — these domains are well-archived.
+- **Fallback:** Cite official press releases (often static HTML and more fetchable than main site pages).
+- **Last resort:** Cite major news coverage of the same finding. When doing this, warn that multiple news outlets may derive from the same press release or wire report — this does NOT count as independent sourcing for Rule 6. Note in the audit doc: "Primary source at [URL] returned 403; cited via [news outlet] coverage. Independence note: [outlet] reporting derives from [primary source] press release."
+- When using any alternative URL for a primary source, always document the substitution in the audit doc.
+
+## WebFetch / WebSearch Summaries Are Not Quotes
+
+WebFetch and WebSearch return processed summaries, not raw page text. Text from summaries must never be used directly as the `quote` field in `empirical_facts` — the wording may be paraphrased, reordered, or condensed.
+
+**Workflow for obtaining verbatim quotes:**
+1. Use WebFetch/WebSearch during Step 2 to identify relevant sources and understand their content.
+2. Note the key finding and a distinctive keyword or phrase.
+3. Before writing `empirical_facts`, obtain the actual page text via one of:
+   - (a) Python `requests.get()` in proof.py (this is what `verify_all_citations` will use anyway)
+   - (b) Browser fetch during Step 2, embedded as `snapshot`
+   - (c) Wayback Machine archive
+4. Extract the verbatim sentence from the raw page text and use it as the `quote` field.
+
+Do NOT re-fetch via WebFetch expecting verbatim text — WebFetch always returns summaries regardless of how you prompt it.
+
+If citation verification returns `not_found` or `partial` on a source you know contains the finding, suspect paraphrasing. Obtain the raw page text and update the quote before finalizing the proof.
