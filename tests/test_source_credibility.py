@@ -46,3 +46,64 @@ def test_existing_wikipedia_still_reference():
     result = assess_credibility("https://en.wikipedia.org/wiki/Example")
     assert result["tier"] == 3
     assert result["source_type"] == "reference"
+
+
+import pytest
+
+
+# --- Parametrized tests for all new domains ---
+
+NEW_GOVERNMENT_DOMAINS = [
+    ("unrwa.org", "UNRWA"),
+    ("ungeneva.org", "UN Geneva"),
+    ("wfp.org", "World Food Programme"),
+    ("unesco.org", "UNESCO"),
+    ("unodc.org", "UN Office on Drugs and Crime"),
+    ("unhabitat.org", "UN-Habitat"),
+    ("unwomen.org", "UN Women"),
+    ("unaids.org", "UNAIDS"),
+    ("unido.org", "UNIDO"),
+    ("unctad.org", "UNCTAD"),
+    ("unops.org", "UNOPS"),
+    ("reliefweb.int", "ReliefWeb"),
+    ("ohchr.org", "OHCHR"),
+]
+
+
+@pytest.mark.parametrize("domain,label", NEW_GOVERNMENT_DOMAINS)
+def test_un_agency_is_government(domain, label):
+    """Each new UN agency domain should be tier 5 government."""
+    result = assess_credibility(f"https://www.{domain}/example")
+    assert result["tier"] == 5, f"{label} ({domain}): expected tier 5, got {result}"
+    assert result["source_type"] == "government", f"{label} ({domain}): expected government, got {result['source_type']}"
+
+
+NEW_NEWS_DOMAINS = [
+    ("semafor.com", "Semafor"),
+    ("axios.com", "Axios"),
+    ("themarkup.org", "The Markup"),
+    ("restofworld.org", "Rest of World"),
+    ("defector.com", "Defector"),
+    ("theinformation.com", "The Information"),
+]
+
+
+@pytest.mark.parametrize("domain,label", NEW_NEWS_DOMAINS)
+def test_new_news_outlet_is_major_news(domain, label):
+    """Each new news outlet domain should be tier 3 major_news."""
+    result = assess_credibility(f"https://www.{domain}/example")
+    assert result["tier"] == 3, f"{label} ({domain}): expected tier 3, got {result}"
+    assert result["source_type"] == "major_news", f"{label} ({domain}): expected major_news, got {result['source_type']}"
+
+
+def test_un_int_subdomain_not_tier5():
+    """Regression: *.un.int subdomains must NOT auto-promote to tier 5.
+
+    un.int is intentionally excluded from known_domains because the subdomain
+    matching in source_credibility.py would promote all *.un.int hosts
+    (including member-state mission sites) to tier 5.
+    """
+    result = assess_credibility("https://missionofexample.un.int/statements")
+    assert result["tier"] != 5, (
+        f"*.un.int subdomain should NOT be tier 5 — got {result}"
+    )

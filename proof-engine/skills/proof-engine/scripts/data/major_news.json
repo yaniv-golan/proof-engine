@@ -1,5 +1,6 @@
 {
     "_comment": "Major news organizations with established editorial standards. Tier 3 (major news). Based on Wikipedia's Perennial Sources list (generally reliable).",
+    "_comment_newer_outlets": "Established newer outlets with editorial standards, added 2026-04.",
     "known_domains": [
         "apnews.com",
         "reuters.com",
@@ -55,6 +56,12 @@
         "popsci.com",
         "livescience.com",
         "sciencenews.org",
-        "theconversation.com"
+        "theconversation.com",
+        "semafor.com",
+        "axios.com",
+        "themarkup.org",
+        "restofworld.org",
+        "defector.com",
+        "theinformation.com"
     ]
 }

@@ -1,5 +1,6 @@
 {
     "_comment": "Government and intergovernmental TLDs and domain suffixes. Tier 5 (primary official source).",
+    "_comment_un_agencies": "UN subsidiary organs and specialized agencies. un.int excluded — subdomain matching would promote all *.un.int hosts (including member-state mission sites) to tier 5.",
     "tld_suffixes": [
         ".gov",
         ".gov.uk",
@@ -95,6 +96,19 @@
         "istat.it",
         "stats.govt.nz",
         "ecb.europa.eu",
-        "eurostat.ec.europa.eu"
+        "eurostat.ec.europa.eu",
+        "unrwa.org",
+        "ungeneva.org",
+        "wfp.org",
+        "unesco.org",
+        "unodc.org",
+        "unhabitat.org",
+        "unwomen.org",
+        "unaids.org",
+        "unido.org",
+        "unctad.org",
+        "unops.org",
+        "reliefweb.int",
+        "ohchr.org"
     ]
 }
