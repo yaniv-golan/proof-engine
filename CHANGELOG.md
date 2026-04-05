@@ -4,6 +4,37 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- Skill: **contested qualifier pattern** in compound template — claims with epistemic qualifiers ("verified," "confirmed," "proven") decompose into SC1 (provenance) + SC2 (epistemic warrant). SC1 holds + SC2 fails → DISPROVED (not PARTIALLY VERIFIED). Auto-detected via `"qualifier" in operator_note`
+- Skill: **COI framework** — 6-category conflict-of-interest taxonomy (financial, institutional, ideological, geographic, personal, litigation) with mechanical verdict override: >50% same-direction COI among confirmed sources → UNDETERMINED. Provenance sub-claims (SC1) bypass COI gate
+- Skill: split `proof-templates.md` (1,217 lines) into 6 focused template files: `template-date-age.md`, `template-numeric.md`, `template-qualitative.md`, `template-compound.md`, `template-absence.md`, `template-pure-math.md` — with 34-line decision index
+- Skill: epistemic qualifier routing in SKILL.md Step 3 — directs claims with "verified"/"confirmed"/"proven" to compound template's contested qualifier pattern
+- Skill: early snapshot guidance in Step 2 — pre-fetch all source pages during research, not just .gov/.edu
+- Skill: adversarial evidence prose-only gotcha — documents that adversarial_checks are not citation-verified, with mitigation strategies
+- Skill: WebFetch/verify_citations HTTP client divergence note
+- Skill: environment guidance for major news and advocacy site 403s
+- Scripts: `CoiFlag` TypedDict (5 fields) and expanded `CrossCheck` TypedDict (3→13 fields) in `proof_types.py`
+- Scripts: 13 UN agency domains added to `government_tlds.json` (tier 5)
+- Scripts: 7 news domains added to `major_news.json` including jpost.com, semafor.com, axios.com
+- Validator: COI flags presence check — warns when empirical proof has `cross_checks` without `coi_flags`
+- Validator: contested qualifier awareness — suppresses `proof_direction` false positive when `is_contested_qualifier` branch detected
+- Validator: `compound_operator` presence check for compound proofs
+- Tests: 7 contested qualifier verdict regression tests
+- Tests: 5 COI validator tests, 4 compound operator/proof direction tests
+- Tests: parametrized credibility tests for all new domains
+
+### Changed
+
+- Hardening rules: Rule 4 adds epistemic qualifier interpretation guidance
+- Hardening rules: Rule 5 adds adversarial precision — counter-evidence must come from genuinely independent investigation
+- Hardening rules: Rule 6 adds COI assessment requirement with taxonomy and override mechanics
+- Templates: all 6 templates now include `import os` (was missing from 5)
+- Templates: qualitative and absence templates add `else: verdict = "UNDETERMINED"` fallback branch
+- Templates: qualitative and compound templates add `if coi_flags else 0` guard on `max()` calls
+- Self-critique checklist: COI assessment item added, stale template reference fixed
+- Eval harness: component list updated for split template files
+
 ## [1.5.0] - 2026-04-02
 
 ### Added

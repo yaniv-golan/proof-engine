@@ -56,6 +56,18 @@ These aren't coding guidelines. Each one closes a specific, observed failure mod
 
 A static analyzer (`validate_proof.py`) runs before execution to catch common structural problems — missing `CLAIM_FORMAL`, hardcoded verdicts, probable hand-typed values. It's heuristic, not exhaustive: a fast first pass, not a proof of rule compliance.
 
+## Source independence and conflicts of interest
+
+Rule 6 requires independent cross-checks, but "independent" isn't binary. A news article and an advocacy report might both cite the same government intelligence dossier — technically different outlets, but not independent primary sources. And a source with a direct stake in the claim's outcome may confirm it for reasons other than truth.
+
+The system addresses this with two mechanisms:
+
+**COI taxonomy.** Each source in a proof's cross-checks can carry conflict-of-interest flags from six categories: financial, institutional, ideological, geographic, personal, and litigation. Each flag records the source key, COI category, direction (favorable or unfavorable to the claim's subject), and severity (direct or indirect). These are documented in the audit trail so reviewers can see which sources have potential biases.
+
+**Mechanical verdict override.** If more than half of a sub-claim's confirmed sources have COI flags pointing in the same direction, the verdict is forced to UNDETERMINED regardless of the count. This prevents a proof from reaching PROVED (or DISPROVED) when the confirming evidence is dominated by interested parties. The threshold is deliberately aggressive — a single clean source among several biased ones is enough to prevent the override.
+
+One exception: provenance sub-claims (SC1 in the contested qualifier pattern) bypass the COI gate entirely. A biased source can still reliably confirm that an allegation *was made* — COI doesn't undermine provenance, only epistemic claims about truth or verification.
+
 ## Citation verification is messier than you'd think
 
 Verifying that a quote appears on a web page sounds simple. In practice, the verification code handles Unicode mismatches (en-dashes, curly quotes, non-standard degree symbols), inline HTML tags, pages that return 403 or render via JavaScript, and quotes that partially match due to page updates.
@@ -104,6 +116,16 @@ Disproof is almost always easier. To prove "X is true" requires covering all rel
 The system leans into this. For crisp factual claims, a single credible source that contradicts the claim, with a verified quote, is sufficient for DISPROVED. For consensus-style claims ("scientists agree that..."), the system requires multiple independent sources — the default threshold is 3 — because a single source isn't consensus. The threshold is documented in `CLAIM_FORMAL` so reviewers can see and dispute it.
 
 This also means compound claims (X AND Y) often end up PARTIALLY VERIFIED — one sub-claim holds, another doesn't. The system decomposes compound claims and evaluates each part independently.
+
+### Contested qualifiers
+
+A special case arises when a claim bundles a factual assertion with an epistemic qualifier: "X was *verified*," "Y was *confirmed*," "Z was *proven*." These need two different kinds of evidence — did someone make the assertion (provenance), and has anyone independently confirmed it (epistemic warrant)?
+
+The compound template handles this via SC1/SC2 decomposition. SC1 checks provenance: did an identifiable source make the underlying claim? SC2 checks the qualifier: has any independent body confirmed it? Both must hold for PROVED. If SC1 holds but SC2 fails, the verdict is DISPROVED — the assertion exists, but the qualifier is false.
+
+This matters because a naive decomposition would produce PARTIALLY VERIFIED (one sub-claim holds, one doesn't). But for contested qualifiers, "the assertion was made but not verified" is a clean disproof of the *qualified* claim, not a partial verification. The system auto-detects contested qualifier claims from the `operator_note` and routes them to the DISPROVED branch.
+
+An expected consequence: SC2 often has zero empirical facts. When no independent body has confirmed a qualifier, there are simply no confirming sources to cite. Sources that *reject* the qualifier (an independent review finding "claims not substantiated") go in adversarial checks as counter-evidence, not in SC2's fact list — they support the disproof, but they aren't confirming sources for the qualifier.
 
 ## What a proof looks like in practice
 
