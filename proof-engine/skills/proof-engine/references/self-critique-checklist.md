@@ -33,3 +33,4 @@ Read this at **Step 6** before presenting results.
 - [ ] If claim uses causal language ("causes," "leads to," "promotes," "damages," "prevents"): decomposed into association + causation sub-claims via compound template; verdict is PARTIALLY VERIFIED if only associational evidence found
 - [ ] If `threshold < 3`: operator_note documents domain scarcity search, sources meet domain-appropriate quality bar, and no majority COI among threshold sources
 - [ ] For comparative/superlative claims: if the cited source flags overlapping uncertainty in the compared values, `uncertainty_override = True` is set and verdict is UNDETERMINED
+- [ ] If proof has `empirical_facts`: COI assessed for all citation sources. `coi_flags` populated in `cross_checks` (empty list if no COI identified). For source-counting proofs: majority COI check applied before verdict.

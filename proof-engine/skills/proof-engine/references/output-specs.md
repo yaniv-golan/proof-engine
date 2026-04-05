@@ -76,6 +76,8 @@ Section "Computation Traces": The explain_calc() and compare() output from proof
 
 Section "Independent Source Agreement (Rule 6)": Cross-check details — which values were independently sourced, whether they agree, source-to-source comparisons. Source: proof.py JSON summary `cross_checks`. For pure-math proofs, omit.
 
+If any cross-check sources have a conflict of interest with the claim's subject, the `coi_flags` field documents each COI with type, relationship, direction, and severity. The audit doc's Rule 6 section must list identified COIs and assess whether a majority of threshold sources share COI on the same side. If the proof has `empirical_facts` and no `cross_checks` entry contains a `coi_flags` key, this is a gap — the self-critique checklist requires explicit COI assessment (even if the result is an empty list).
+
 Section "Adversarial Checks (Rule 5)": Full records with questions, searches performed, findings, and whether each breaks the proof. Source: proof.py JSON summary `adversarial_checks`.
 
 Section "Source Credibility Assessment": Table with columns: Fact ID, Domain, Type, Tier, Note. Source: JSON summary `citations[fact_id].credibility`. For multi-source facts, use `citations[{fact_id}_source_{N}].credibility` for each sub-source. If any source has tier ≤ 1 (flagged unreliable or satire), add a note explaining why it was cited and whether the claim depends solely on it. Tier scale: 5=government/intergovernmental, 4=academic/peer-reviewed, 3=major news or established reference, 2=unclassified, 1=flagged unreliable. For pure-math proofs, omit.
