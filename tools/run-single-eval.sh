@@ -69,7 +69,7 @@ Only report issues the SKILL could fix. If the claim was inherently hard or ambi
 For each probe below, you MUST output the probe heading exactly as shown (e.g., "## Probe 1: Script errors"), followed by either your issue report(s) in the format below, or just "N/A" on the next line. Every probe heading must appear in your output.
 
 ### Format per issue (repeat block if multiple issues under one probe):
-- **Component:** [exact filename: SKILL.md | hardening-rules.md | proof-templates.md | output-specs.md | self-critique-checklist.md | advanced-patterns.md | environment-and-sources.md | extract_values.py | verify_citations.py | computations.py | smart_extract.py | source_credibility.py | validate_proof.py]
+- **Component:** [exact filename: SKILL.md | hardening-rules.md | proof-templates.md | template-date-age.md | template-numeric.md | template-qualitative.md | template-compound.md | template-absence.md | template-pure-math.md | output-specs.md | self-critique-checklist.md | advanced-patterns.md | environment-and-sources.md | extract_values.py | verify_citations.py | computations.py | smart_extract.py | source_credibility.py | validate_proof.py]
 - **Function:** [exact function name, or "N/A" if not function-specific]
 - **Severity:** [blocker | major | minor]
 - **What happened:** [one concrete sentence describing the observable problem]
@@ -88,7 +88,7 @@ Was there any point where SKILL.md or a reference file didn't tell you what to d
 Did validate_proof.py flag something that was actually correct (false positive)? Did you find a bug in your proof that validate_proof.py missed (false negative)?
 
 ## Probe 4: Template fit
-Did the template from proof-templates.md match your claim type? Did you have to significantly modify it or build from scratch?
+Did the template from proof-templates.md (or the specific template file it directed you to) match your claim type? Did you have to significantly modify it or build from scratch? Name the specific template file you used.
 
 ## Probe 5: Workflow deviations
 Did you follow Steps 1–6 in order? If you backtracked, skipped, or improvised, describe what and why.
