@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-04-05
+
 ### Added
 
 - Skill: **contested qualifier pattern** in compound template — claims with epistemic qualifiers ("verified," "confirmed," "proven") decompose into SC1 (provenance) + SC2 (epistemic warrant). SC1 holds + SC2 fails → DISPROVED (not PARTIALLY VERIFIED). Auto-detected via `"qualifier" in operator_note`
