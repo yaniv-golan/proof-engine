@@ -14,6 +14,7 @@ Proof: [compound claim text]
 Generated: [date]
 """
 import json
+import os
 import sys
 
 PROOF_ENGINE_ROOT = "..."  # LLM fills with actual path
@@ -110,7 +111,7 @@ if __name__ == "__main__":
     sc1_coi_unfavorable = {f["source_key"] for f in sc1_coi_flags
                            if f["direction"] == "unfavorable_to_subject"
                            and f["source_key"] in sc1_confirmed_keys}
-    sc1_coi_majority = max(len(sc1_coi_favorable), len(sc1_coi_unfavorable))
+    sc1_coi_majority = max(len(sc1_coi_favorable), len(sc1_coi_unfavorable)) if sc1_coi_flags else 0
     sc1_coi_override = n_sc1 > 0 and sc1_coi_majority > n_sc1 / 2
 
     sc2_confirmed_keys = {k for k in sc2_keys
@@ -121,15 +122,26 @@ if __name__ == "__main__":
     sc2_coi_unfavorable = {f["source_key"] for f in sc2_coi_flags
                            if f["direction"] == "unfavorable_to_subject"
                            and f["source_key"] in sc2_confirmed_keys}
-    sc2_coi_majority = max(len(sc2_coi_favorable), len(sc2_coi_unfavorable))
+    sc2_coi_majority = max(len(sc2_coi_favorable), len(sc2_coi_unfavorable)) if sc2_coi_flags else 0
     sc2_coi_override = n_sc2 > 0 and sc2_coi_majority > n_sc2 / 2
 
     any_coi_override = sc1_coi_override or sc2_coi_override
+
+    # Contested qualifier override: SC1 holds + SC2 fails → DISPROVED
+    # (assertion exists but the epistemic qualifier is not warranted).
+    # For non-contested-qualifier compounds, set is_contested_qualifier = False
+    # and this branch is skipped.
+    is_contested_qualifier = "qualifier" in CLAIM_FORMAL.get("operator_note", "").lower()
 
     if any_breaks:
         verdict = "UNDETERMINED"
     elif any_coi_override:
         verdict = "UNDETERMINED"
+    elif is_contested_qualifier and sc1_holds and not sc2_holds:
+        if any_unverified:
+            verdict = "DISPROVED (with unverified citations)"
+        else:
+            verdict = "DISPROVED"
     elif not claim_holds and n_holding > 0:
         verdict = "PARTIALLY VERIFIED"
     elif claim_holds and not any_unverified:
@@ -207,6 +219,7 @@ if __name__ == "__main__":
 
 **Key design points:**
 - `PARTIALLY VERIFIED` is checked BEFORE the `claim_holds` branches — mixed results short-circuit the verdict.
+- For **contested qualifier** claims: `is_contested_qualifier` auto-detects from `operator_note` and inserts a `sc1_holds and not sc2_holds → DISPROVED` branch before `PARTIALLY VERIFIED`. This ensures "assertion exists but qualifier is unwarranted" produces DISPROVED, not PARTIALLY VERIFIED. Standard compound claims are unaffected.
 - `UNDETERMINED` when no sub-claims meet threshold — for source-counting proofs, insufficient evidence is not disproof.
 - Per-sub-claim `compare()` calls use labels, so the computation trace is self-documenting.
 - `any_unverified` modifies PROVED → PROVED (with unverified citations). For PARTIALLY VERIFIED and UNDETERMINED, citation status is documented in proof.md's Conclusion section rather than changing the verdict label — those verdicts already signal incompleteness.
@@ -224,6 +237,15 @@ When a claim bundles a factual assertion with an epistemic qualifier ("verified,
 - **SC1 (provenance):** Do the underlying assertions exist and originate from an identifiable source? SC1 means "the assertion exists and can be traced to an identifiable source" — NOT "the assertion is true."
 - **SC2 (epistemic):** Has the assertion been independently verified/confirmed/etc. as claimed? SC2 is a meta-claim requiring different sources than SC1: independent audits, judicial findings, investigative bodies — entities that *evaluated* the evidence, not just reported it.
 
+**Empty SC2 is expected.** For many contested qualifier claims, no sources exist that *confirm* independent verification — the qualifier simply hasn't been warranted. In this case, `sc2_keys` is empty and `n_sc2 = 0`, which causes SC2 to fail naturally. This is the normal pattern, not an error. Sources that *reject* the qualifier (e.g., an independent review finding "claims not substantiated") belong in `adversarial_checks`, not in SC2's `empirical_facts` — they are counter-evidence, not confirming sources.
+
+**COI gate and provenance (SC1).** COI does not undermine provenance sources — a biased or interested party can still confirm that an allegation was made. For SC1 (provenance), bypass the COI gate:
+
+```python
+# In the COI gate section, replace the standard sc1_coi_override line with:
+sc1_coi_override = False  # Provenance: COI does not invalidate "allegation was made"
+```
+
 COI is especially critical for SC2 — apply Rule 6 COI check rigorously.
 
 **Verdict mapping** follows the compound template's existing logic:
@@ -236,7 +258,7 @@ COI is especially critical for SC2 — apply Rule 6 COI check rigorously.
 
 Note: SC1-fails/SC2-holds is not a realistic state for this pattern — if the assertion's provenance can't be established (SC1 fails), there's nothing for SC2 to verify. The compound template's standard `n_holding > 0` → PARTIALLY VERIFIED branch handles this edge case if it ever arises, but no special logic is needed.
 
-If SC1 fails because sources actively deny the assertion was ever made (not just absence of evidence), the overall claim is DISPROVED — use the compound template's existing distinction between "contradicted" and "insufficient evidence" for failed sub-claims.
+If SC1 fails because sources actively deny the assertion was ever made (not just absence of evidence), document this in `adversarial_checks` with `breaks_proof: True`. The `any_breaks` check at the top of the verdict block will force UNDETERMINED, and the proof.md Conclusion section should explain that the assertion's provenance itself is disputed.
 
 **Example CLAIM_FORMAL:**
 

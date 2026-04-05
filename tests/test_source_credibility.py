@@ -79,6 +79,7 @@ def test_un_agency_is_government(domain, label):
 
 
 NEW_NEWS_DOMAINS = [
+    ("jpost.com", "Jerusalem Post"),
     ("semafor.com", "Semafor"),
     ("axios.com", "Axios"),
     ("themarkup.org", "The Markup"),

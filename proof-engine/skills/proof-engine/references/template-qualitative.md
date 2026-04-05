@@ -17,6 +17,7 @@ Proof: [claim text]
 Generated: [date]
 """
 import json
+import os
 import sys
 
 PROOF_ENGINE_ROOT = "..."  # LLM fills this with the actual path at proof-writing time
@@ -81,7 +82,16 @@ print(f"  Confirmed sources: {n_confirmed} / {len(empirical_facts)}")
 claim_holds = compare(n_confirmed, CLAIM_FORMAL["operator"], CLAIM_FORMAL["threshold"],
                       label="verified source count vs threshold")
 
-# 7. ADVERSARIAL CHECKS (Rule 5)
+# 7. COI FLAGS — authored data, defined before verdict (like adversarial_checks)
+# Populate during proof writing. Empty list if no COI identified.
+coi_flags = [
+    # Example:
+    # {"source_key": "source_a", "coi_type": "organizational",
+    #  "relationship": "Source is a subsidiary of the claim's subject",
+    #  "direction": "favorable_to_subject", "severity": "direct"},
+]
+
+# 8. ADVERSARIAL CHECKS (Rule 5)
 adversarial_checks = [
     {
         "question": "...",
@@ -91,7 +101,7 @@ adversarial_checks = [
     },
 ]
 
-# 8. VERDICT AND STRUCTURED OUTPUT
+# 9. VERDICT AND STRUCTURED OUTPUT
 if __name__ == "__main__":
     # "partial" counts toward the threshold but is NOT fully verified —
     # only "verified" is clean. This preserves the existing semantics where
@@ -102,7 +112,21 @@ if __name__ == "__main__":
     is_disproof = CLAIM_FORMAL.get("proof_direction") == "disprove"
     any_breaks = any(ac.get("breaks_proof") for ac in adversarial_checks)
 
+    # COI GATE (Rule 6) — after counting, before verdict
+    confirmed_keys = {k for k in empirical_facts
+                      if citation_results[k]["status"] in COUNTABLE_STATUSES}
+    coi_favorable = {f["source_key"] for f in coi_flags
+                     if f["direction"] == "favorable_to_subject"
+                     and f["source_key"] in confirmed_keys}
+    coi_unfavorable = {f["source_key"] for f in coi_flags
+                       if f["direction"] == "unfavorable_to_subject"
+                       and f["source_key"] in confirmed_keys}
+    coi_majority = max(len(coi_favorable), len(coi_unfavorable)) if coi_flags else 0
+    coi_override = n_confirmed > 0 and coi_majority > n_confirmed / 2
+
     if any_breaks:
+        verdict = "UNDETERMINED"
+    elif coi_override:
         verdict = "UNDETERMINED"
     elif claim_holds and not any_unverified:
         verdict = "DISPROVED" if is_disproof else "PROVED"
@@ -110,6 +134,8 @@ if __name__ == "__main__":
         verdict = ("DISPROVED (with unverified citations)" if is_disproof
                    else "PROVED (with unverified citations)")
     elif not claim_holds:
+        verdict = "UNDETERMINED"
+    else:
         verdict = "UNDETERMINED"
 
     FACT_REGISTRY["A1"]["method"] = f"count(verified citations) = {n_confirmed}"
@@ -148,6 +174,7 @@ if __name__ == "__main__":
                 "n_sources_verified": n_confirmed,
                 "sources": {k: citation_results[k]["status"] for k in empirical_facts},
                 "independence_note": "Sources are from different publications/institutions",
+                "coi_flags": coi_flags,
             }
         ],
         "adversarial_checks": adversarial_checks,

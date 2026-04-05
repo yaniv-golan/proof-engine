@@ -10,6 +10,7 @@ Proof: [claim text]
 Generated: [date]
 """
 import json
+import os
 import sys
 
 # Path to proof-engine scripts directory (the directory containing SKILL.md).

@@ -819,6 +819,10 @@ class ProofValidator:
         The qualitative template uses CLAIM_FORMAL.get("proof_direction") == "disprove"
         to flip the verdict. If proof_direction is missing, the get() silently returns
         None, and the verdict defaults to the affirm path — a 180-degree flip.
+
+        Exception: contested qualifier proofs produce DISPROVED via the
+        is_contested_qualifier branch, not via proof_direction. Suppress
+        the warning when that branch is detected.
         """
         # Match any code that reads proof_direction:
         #   - is_disproof = CLAIM_FORMAL.get("proof_direction") == "disprove"
@@ -833,8 +837,11 @@ class ProofValidator:
             r'''["']proof_direction["']\s*:''',
             self.source,
         ))
+        has_contested_qualifier = bool(re.search(
+            r'is_contested_qualifier', self.source,
+        ))
 
-        if uses_disproof_logic and not has_proof_direction_key:
+        if uses_disproof_logic and not has_proof_direction_key and not has_contested_qualifier:
             self.issues.append((
                 "Verdict: Code references proof_direction but CLAIM_FORMAL has no "
                 "\"proof_direction\" key — verdict will silently default to affirm "
@@ -843,6 +850,22 @@ class ProofValidator:
             ))
         elif uses_disproof_logic and has_proof_direction_key:
             self.passed.append("Verdict: proof_direction present in CLAIM_FORMAL")
+        elif uses_disproof_logic and has_contested_qualifier:
+            self.passed.append("Verdict: contested qualifier branch handles disproof logic")
+
+    def check_compound_operator(self):
+        """Check that compound proofs include compound_operator in CLAIM_FORMAL."""
+        has_sub_claims = bool(re.search(r'"sub_claims"', self.source))
+        has_compound_operator = bool(re.search(
+            r'''["']compound_operator["']\s*:''', self.source,
+        ))
+        if has_sub_claims and not has_compound_operator:
+            self.warnings.append((
+                "Compound: sub_claims found but no compound_operator in CLAIM_FORMAL",
+                [],
+            ))
+        elif has_sub_claims and has_compound_operator:
+            self.passed.append("Compound: compound_operator present in CLAIM_FORMAL")
 
     # ------------------------------------------------------------------
     # Run all checks
@@ -870,6 +893,7 @@ class ProofValidator:
         self.check_unused_imports()
         self.check_verdict_branches()
         self.check_proof_direction()
+        self.check_compound_operator()
         self.check_coi_flags_presence()
 
         # Print report

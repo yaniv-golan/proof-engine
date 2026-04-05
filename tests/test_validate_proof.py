@@ -1103,3 +1103,91 @@ def test_no_empirical_no_coi_warning():
     """Pure-math proof should not warn about COI."""
     v = _validate_coi(NO_EMPIRICAL_NO_COI)
     assert not any("coi" in str(w).lower() for w in v.warnings)
+
+
+# ------------------------------------------------------------------
+# Contested qualifier suppresses proof_direction warning
+# ------------------------------------------------------------------
+
+CONTESTED_QUALIFIER_WITH_DISPROOF = '''
+CLAIM_FORMAL = {
+    "subject": "...",
+    "sub_claims": [{"id": "SC1"}, {"id": "SC2"}],
+    "compound_operator": "AND",
+    "operator_note": "contested qualifier claim",
+}
+is_disproof = CLAIM_FORMAL.get("proof_direction") == "disprove"
+is_contested_qualifier = "qualifier" in CLAIM_FORMAL.get("operator_note", "").lower()
+'''
+
+DISPROOF_WITHOUT_CONTESTED = '''
+CLAIM_FORMAL = {
+    "subject": "...",
+    "operator_note": "standard claim",
+}
+is_disproof = CLAIM_FORMAL.get("proof_direction") == "disprove"
+'''
+
+
+def _validate_proof_direction(source_code: str) -> ProofValidator:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_proof_direction()
+    os.unlink(f.name)
+    return v
+
+
+def test_contested_qualifier_suppresses_proof_direction_warning():
+    """Contested qualifier proofs should not warn about missing proof_direction."""
+    v = _validate_proof_direction(CONTESTED_QUALIFIER_WITH_DISPROOF)
+    assert not v.issues
+    assert any("contested qualifier" in p for p in v.passed)
+
+
+def test_non_contested_still_warns_proof_direction():
+    """Standard proofs using proof_direction without the key should still warn."""
+    v = _validate_proof_direction(DISPROOF_WITHOUT_CONTESTED)
+    assert len(v.issues) == 1
+    assert "proof_direction" in v.issues[0][0]
+
+
+# ------------------------------------------------------------------
+# Compound operator validation
+# ------------------------------------------------------------------
+
+COMPOUND_WITH_OPERATOR = '''
+CLAIM_FORMAL = {
+    "sub_claims": [{"id": "SC1"}, {"id": "SC2"}],
+    "compound_operator": "AND",
+}
+'''
+
+COMPOUND_WITHOUT_OPERATOR = '''
+CLAIM_FORMAL = {
+    "sub_claims": [{"id": "SC1"}, {"id": "SC2"}],
+}
+'''
+
+
+def _validate_compound_operator(source_code: str) -> ProofValidator:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_compound_operator()
+    os.unlink(f.name)
+    return v
+
+
+def test_compound_with_operator_passes():
+    v = _validate_compound_operator(COMPOUND_WITH_OPERATOR)
+    assert not v.warnings
+    assert any("compound_operator" in p for p in v.passed)
+
+
+def test_compound_without_operator_warns():
+    v = _validate_compound_operator(COMPOUND_WITHOUT_OPERATOR)
+    assert len(v.warnings) == 1
+    assert "compound_operator" in v.warnings[0][0]

@@ -204,6 +204,8 @@ if __name__ == "__main__":
             verdict = "PROVED (with unverified citations)"
     elif not claim_holds:
         verdict = "UNDETERMINED"
+    else:
+        verdict = "UNDETERMINED"
 
     FACT_REGISTRY["A1"]["method"] = f"unique accessible databases with null results = {n_null_verified}"
     FACT_REGISTRY["A1"]["result"] = str(n_null_verified)

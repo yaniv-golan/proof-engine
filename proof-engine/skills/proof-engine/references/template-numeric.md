@@ -28,6 +28,7 @@ Proof: [claim text]
 Generated: [date]
 """
 import json
+import os
 import sys
 
 PROOF_ENGINE_ROOT = "..."

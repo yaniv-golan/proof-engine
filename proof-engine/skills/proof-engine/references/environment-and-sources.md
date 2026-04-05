@@ -51,6 +51,16 @@ UN agencies, ICJ, WHO, and similar intergovernmental orgs frequently return 403 
 - **Last resort:** Cite major news coverage of the same finding. When doing this, warn that multiple news outlets may derive from the same press release or wire report — this does NOT count as independent sourcing for Rule 6. Note in the audit doc: "Primary source at [URL] returned 403; cited via [news outlet] coverage. Independence note: [outlet] reporting derives from [primary source] press release."
 - When using any alternative URL for a primary source, always document the substitution in the audit doc.
 
+## Major News and Advocacy Sites
+
+Many news sites (timesofisrael.com, npr.org) and advocacy/think-tank sites (fdd.org, embassies.gov.il) also return 403 or block automated fetching. This is increasingly common, not limited to .gov/.int domains.
+
+- **Preferred:** Use the snapshot workflow — fetch via browser during Step 2, embed as `snapshot` in `empirical_facts`.
+- **Fallback:** Find the same reporting on a secondary outlet that is fetchable. Document the substitution in the audit: "Primary source at [URL] returned 403; cited via [alternative outlet]. Same underlying reporting."
+- **Wayback:** Use `wayback_fallback=True` — major news sites are usually well-archived.
+
+When multiple primary sources are unfetchable for a topic, this is a signal to prioritize snapshot pre-fetching during Step 2 rather than discovering 403s at citation verification time.
+
 ## WebFetch / WebSearch Summaries Are Not Quotes
 
 WebFetch and WebSearch return processed summaries, not raw page text. Text from summaries must never be used directly as the `quote` field in `empirical_facts` — the wording may be paraphrased, reordered, or condensed.
