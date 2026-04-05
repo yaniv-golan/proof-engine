@@ -395,6 +395,37 @@ class ProofValidator:
                     [],
                 ))
 
+    def check_coi_flags_presence(self):
+        """Warn if proof has empirical_facts but no coi_flags key in cross_checks.
+
+        Checks that "coi_flags" appears as a dict key (quoted string followed
+        by colon) in non-comment code. This catches "COI not assessed" without
+        judging whether the flags are correct. The self-critique checklist
+        is the primary enforcement; this is a backstop.
+        """
+        has_empirical = self._has_nonempty_empirical_facts()
+        if not has_empirical:
+            return  # Pure-math or search-only — exempt
+
+        # Check for "coi_flags" or 'coi_flags' as a dict key in non-comment lines.
+        # Pattern: quoted "coi_flags" followed by optional whitespace and colon.
+        # Matches both `"coi_flags": [...]` and `'coi_flags': coi_flags`.
+        code_lines = [
+            line for line in self.lines
+            if not line.strip().startswith("#")
+        ]
+        code_body = "\n".join(code_lines)
+        has_coi_key = bool(re.search(r'''["']coi_flags["']\s*:''', code_body))
+
+        if has_coi_key:
+            self.passed.append("Rule 6: coi_flags key found in proof — COI assessment present")
+        else:
+            self.warnings.append((
+                "Rule 6: No \"coi_flags\" key found in proof with empirical_facts — "
+                "COI assessment may be missing (see self-critique checklist)",
+                [],
+            ))
+
     def check_rule7_no_hardcoded_constants(self):
         """Rule 7: No hard-coded well-known constants or formulas.
 
@@ -839,6 +870,7 @@ class ProofValidator:
         self.check_unused_imports()
         self.check_verdict_branches()
         self.check_proof_direction()
+        self.check_coi_flags_presence()
 
         # Print report
         print(f"Validating: {self.filename}")

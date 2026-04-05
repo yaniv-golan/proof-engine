@@ -1003,3 +1003,103 @@ def test_e2e_unused_verify_all_fails_both_rule2_and_imports():
     issue_strs = [str(iss) for iss in v.issues]
     assert any("Rule 2" in s for s in issue_strs), f"Expected Rule 2 issue, got: {issue_strs}"
     assert any("verify_all_citations" in s for s in issue_strs), f"Expected unused import issue, got: {issue_strs}"
+
+
+# ---------------------------------------------------------------------------
+# COI flags presence warning (check_coi_flags_presence)
+# ---------------------------------------------------------------------------
+
+def _validate_coi(source_code: str) -> ProofValidator:
+    """Write source to temp file, run COI flags check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_coi_flags_presence()
+    os.unlink(f.name)
+    return v
+
+
+COI_IN_CROSS_CHECKS = '''
+empirical_facts = {
+    "source_a": {"quote": "...", "url": "...", "source_name": "A"},
+    "source_b": {"quote": "...", "url": "...", "source_name": "B"},
+}
+coi_flags = []
+summary = {
+    "cross_checks": [
+        {"description": "...", "coi_flags": coi_flags},
+    ],
+}
+'''
+
+COI_MISSING_FROM_CROSS_CHECKS = '''
+empirical_facts = {
+    "source_a": {"quote": "...", "url": "...", "source_name": "A"},
+    "source_b": {"quote": "...", "url": "...", "source_name": "B"},
+}
+summary = {
+    "cross_checks": [
+        {"description": "..."},
+    ],
+}
+'''
+
+COI_ONLY_IN_COMMENT = '''
+empirical_facts = {
+    "source_a": {"quote": "...", "url": "...", "source_name": "A"},
+}
+# TODO: add coi_flags to cross_checks
+summary = {
+    "cross_checks": [
+        {"description": "..."},
+    ],
+}
+'''
+
+COI_SINGLE_QUOTED = '''
+empirical_facts = {
+    'source_a': {'quote': '...', 'url': '...', 'source_name': 'A'},
+}
+coi_flags = []
+summary = {
+    'cross_checks': [
+        {'description': '...', 'coi_flags': coi_flags},
+    ],
+}
+'''
+
+NO_EMPIRICAL_NO_COI = '''
+from scripts.computations import compare
+result = compare(5, ">", 3)
+'''
+
+
+def test_coi_in_cross_checks_passes():
+    """Proof with coi_flags as a key inside cross_checks dict should pass."""
+    v = _validate_coi(COI_IN_CROSS_CHECKS)
+    assert not any("coi" in str(w).lower() for w in v.warnings)
+
+
+def test_coi_missing_from_cross_checks_warns():
+    """Proof with empirical_facts but no coi_flags key in cross_checks should warn."""
+    v = _validate_coi(COI_MISSING_FROM_CROSS_CHECKS)
+    assert any("coi" in str(w).lower() for w in v.warnings)
+
+
+def test_coi_only_in_comment_warns():
+    """coi_flags in a comment should NOT satisfy the check."""
+    v = _validate_coi(COI_ONLY_IN_COMMENT)
+    assert any("coi" in str(w).lower() for w in v.warnings)
+
+
+def test_coi_single_quoted_passes():
+    """Single-quoted 'coi_flags' key should also pass."""
+    v = _validate_coi(COI_SINGLE_QUOTED)
+    assert not any("coi" in str(w).lower() for w in v.warnings)
+
+
+def test_no_empirical_no_coi_warning():
+    """Pure-math proof should not warn about COI."""
+    v = _validate_coi(NO_EMPIRICAL_NO_COI)
+    assert not any("coi" in str(w).lower() for w in v.warnings)
