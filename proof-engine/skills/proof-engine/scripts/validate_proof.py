@@ -395,6 +395,37 @@ class ProofValidator:
                     [],
                 ))
 
+    def check_coi_flags_presence(self):
+        """Warn if proof has empirical_facts but no coi_flags key in cross_checks.
+
+        Checks that "coi_flags" appears as a dict key (quoted string followed
+        by colon) in non-comment code. This catches "COI not assessed" without
+        judging whether the flags are correct. The self-critique checklist
+        is the primary enforcement; this is a backstop.
+        """
+        has_empirical = self._has_nonempty_empirical_facts()
+        if not has_empirical:
+            return  # Pure-math or search-only — exempt
+
+        # Check for "coi_flags" or 'coi_flags' as a dict key in non-comment lines.
+        # Pattern: quoted "coi_flags" followed by optional whitespace and colon.
+        # Matches both `"coi_flags": [...]` and `'coi_flags': coi_flags`.
+        code_lines = [
+            line for line in self.lines
+            if not line.strip().startswith("#")
+        ]
+        code_body = "\n".join(code_lines)
+        has_coi_key = bool(re.search(r'''["']coi_flags["']\s*:''', code_body))
+
+        if has_coi_key:
+            self.passed.append("Rule 6: coi_flags key found in proof — COI assessment present")
+        else:
+            self.warnings.append((
+                "Rule 6: No \"coi_flags\" key found in proof with empirical_facts — "
+                "COI assessment may be missing (see self-critique checklist)",
+                [],
+            ))
+
     def check_rule7_no_hardcoded_constants(self):
         """Rule 7: No hard-coded well-known constants or formulas.
 
@@ -788,6 +819,10 @@ class ProofValidator:
         The qualitative template uses CLAIM_FORMAL.get("proof_direction") == "disprove"
         to flip the verdict. If proof_direction is missing, the get() silently returns
         None, and the verdict defaults to the affirm path — a 180-degree flip.
+
+        Exception: contested qualifier proofs produce DISPROVED via the
+        is_contested_qualifier branch, not via proof_direction. Suppress
+        the warning when that branch is detected.
         """
         # Match any code that reads proof_direction:
         #   - is_disproof = CLAIM_FORMAL.get("proof_direction") == "disprove"
@@ -802,8 +837,11 @@ class ProofValidator:
             r'''["']proof_direction["']\s*:''',
             self.source,
         ))
+        has_contested_qualifier = bool(re.search(
+            r'is_contested_qualifier', self.source,
+        ))
 
-        if uses_disproof_logic and not has_proof_direction_key:
+        if uses_disproof_logic and not has_proof_direction_key and not has_contested_qualifier:
             self.issues.append((
                 "Verdict: Code references proof_direction but CLAIM_FORMAL has no "
                 "\"proof_direction\" key — verdict will silently default to affirm "
@@ -812,6 +850,22 @@ class ProofValidator:
             ))
         elif uses_disproof_logic and has_proof_direction_key:
             self.passed.append("Verdict: proof_direction present in CLAIM_FORMAL")
+        elif uses_disproof_logic and has_contested_qualifier:
+            self.passed.append("Verdict: contested qualifier branch handles disproof logic")
+
+    def check_compound_operator(self):
+        """Check that compound proofs include compound_operator in CLAIM_FORMAL."""
+        has_sub_claims = bool(re.search(r'"sub_claims"', self.source))
+        has_compound_operator = bool(re.search(
+            r'''["']compound_operator["']\s*:''', self.source,
+        ))
+        if has_sub_claims and not has_compound_operator:
+            self.warnings.append((
+                "Compound: sub_claims found but no compound_operator in CLAIM_FORMAL",
+                [],
+            ))
+        elif has_sub_claims and has_compound_operator:
+            self.passed.append("Compound: compound_operator present in CLAIM_FORMAL")
 
     # ------------------------------------------------------------------
     # Run all checks
@@ -839,6 +893,8 @@ class ProofValidator:
         self.check_unused_imports()
         self.check_verdict_branches()
         self.check_proof_direction()
+        self.check_compound_operator()
+        self.check_coi_flags_presence()
 
         # Print report
         print(f"Validating: {self.filename}")

@@ -12,7 +12,7 @@ Read this at **Step 6** before presenting results.
 - [ ] JSON summary contains required keys: fact_registry (with method/result for A-types), claim_formal, adversarial_checks, verdict, key_results
 - [ ] JSON summary contains `generator` block with `name`, `version`, `repo`, `generated_at`
 - [ ] For empirical proofs: JSON summary also contains citations (with normalized status/method/coverage_pct/credibility), extractions, cross_checks
-- [ ] For pure-math proofs: omit citations and extractions keys entirely. Use the pure-math template from proof-templates.md.
+- [ ] For pure-math proofs: omit citations and extractions keys entirely. Use [template-pure-math.md](template-pure-math.md).
 - [ ] FACT_REGISTRY keys in JSON match IDs used in both report documents
 - [ ] Every fact ID in proof.md appears in JSON summary fact_registry and proof_audit.md evidence table
 - [ ] All three files are consistent with each other
@@ -33,3 +33,4 @@ Read this at **Step 6** before presenting results.
 - [ ] If claim uses causal language ("causes," "leads to," "promotes," "damages," "prevents"): decomposed into association + causation sub-claims via compound template; verdict is PARTIALLY VERIFIED if only associational evidence found
 - [ ] If `threshold < 3`: operator_note documents domain scarcity search, sources meet domain-appropriate quality bar, and no majority COI among threshold sources
 - [ ] For comparative/superlative claims: if the cited source flags overlapping uncertainty in the compared values, `uncertainty_override = True` is set and verdict is UNDETERMINED
+- [ ] If proof has `empirical_facts`: COI assessed for all citation sources. `coi_flags` populated in `cross_checks` (empty list if no COI identified). For source-counting proofs: majority COI check applied before verdict.

@@ -127,13 +127,41 @@ class ExtractionRecord(TypedDict, total=False):
 
 
 # ---------------------------------------------------------------------------
+# Conflict of Interest flags
+# ---------------------------------------------------------------------------
+
+class CoiFlag(TypedDict, total=False):
+    source_key: str             # Top-level empirical_facts key
+    coi_type: str               # "organizational", "funding_dependency",
+                                # "institutional_co_benefit", "competitive_antagonism",
+                                # "revolving_door", "advocacy_ideological"
+    relationship: str           # Human-readable description
+    direction: str              # "favorable_to_subject", "unfavorable_to_subject", "unknown"
+    severity: str               # "direct", "indirect", "potential"
+
+
+# ---------------------------------------------------------------------------
 # Cross-checks and adversarial checks
 # ---------------------------------------------------------------------------
 
 class CrossCheck(TypedDict, total=False):
     description: str
+    # Numeric/date proofs:
     values_compared: list
     agreement: bool
+    tolerance: str              # e.g. "2% relative"
+    # Source-counting proofs (qualitative, compound):
+    n_sources_consulted: int
+    n_sources_verified: int
+    sources: dict[str, str]
+    independence_note: str
+    # Absence proofs:
+    n_databases_searched: int
+    n_null_verified: int
+    n_reviewed: int
+    databases: dict[str, dict]
+    # COI (all proof types with empirical sources):
+    coi_flags: list[CoiFlag]    # empty list if no COI identified
 
 
 class AdversarialCheck(TypedDict, total=False):

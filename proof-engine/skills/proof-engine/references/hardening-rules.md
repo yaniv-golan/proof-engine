@@ -206,6 +206,8 @@ CLAIM_FORMAL = {
 
 The `operator_note` is critical — it forces the LLM to articulate WHY it chose one operator over another, making the decision auditable.
 
+**Epistemic qualifiers:** If the claim contains words like "verified," "confirmed," "proven," "established," "debunked," or "disproven," these assert a specific evidentiary status — not just the underlying fact. Decompose using the Contested Qualifier pattern in the compound template (`template-compound.md`). The `operator_note` must identify the qualifier and explain why it creates a distinct sub-claim (SC1 for provenance, SC2 for the qualifier's warrant).
+
 **How validate_proof.py catches it**: Looks for `CLAIM_FORMAL` dict and checks for `operator_note`.
 
 ---
@@ -257,12 +259,14 @@ These are structurally independent: they don't re-derive the founding date or re
 - Look for **source hierarchy conflicts** (primary source disagrees with secondary summary)
 - Search for **edge cases where the operator choice matters** (claim is exactly at the threshold boundary)
 - Search for **methodological disputes** (different measurement approaches yield different numbers)
+- Distinguish **"not found verbatim" from "inconsistent with sources"** — Public sources frequently round figures. A precise number not appearing verbatim is not counter-evidence if it falls within the range sources report. Before flagging a figure as fabricated or unlocatable, check whether it's consistent with reported ranges. The correct framing is "precise figure not independently sourced" — not "appears fabricated." Reserve "fabricated" for figures that contradict or fall outside reported ranges.
 
 **`breaks_proof` must be justified when counter-evidence is found.** For each adversarial check:
 - If `breaks_proof: True` — the verdict is forced to UNDETERMINED. No further justification needed.
 - If `breaks_proof: False` AND the check found counter-evidence (not just a reproducibility confirmation or null result) — the `finding` field must contain an explicit rebuttal: *why* the counter-evidence does not invalidate the conclusion. "Does not break the proof" or "the proof still holds" is insufficient.
 - This rebuttal requirement does NOT apply to reproducibility checks, null-result checks, or edge-case checks where no counter-evidence was discovered.
 - **Red flag**: If the `finding` text contains "no significant difference," "does not confirm," "contradicts," "insufficient evidence," or "RCTs show no effect" — and `breaks_proof` is False — the rebuttal must explain why this specific contradiction does not apply. If you cannot write a specific rebuttal, set `breaks_proof: True`.
+- **Red flag**: If a `finding` says a number "appears to be fabricated" or "does not appear in any source" — verify whether the number is *inconsistent* with sources or merely *more precise* than sources. Rounding differences are not fabrication.
 
 **How validate_proof.py catches it**: Looks for "adversarial", "disproof", "counter-evidence" etc. in the code.
 
@@ -311,6 +315,23 @@ Now if one source has a different date, the assertion catches it. The cross-chec
 - Primary: symbolic algebra → Cross-check: numerical spot-check at specific values
 
 Re-computing the same formula with different variable names, a different loop structure, or a trivially equivalent expression is **NOT** an independent cross-check. The test: if a bug in the primary method's mathematical reasoning would also affect the cross-check, they are not independent.
+
+**Independence from the claim's subject (Conflict of Interest):**
+
+Sources must be independent not only of each other, but of the entity or claim being evaluated. COI types to check (drawn from IFCN/Cochrane/ICMJE frameworks):
+
+- **Organizational** — source is part of the same org, parent org, or subsidiary as the claim subject
+- **Funding dependency** — source receives material funding from the claim subject (or vice versa)
+- **Institutional co-benefit** — source's mission or reputation benefits from a particular verdict
+- **Competitive antagonism** — source is a direct competitor with incentive to discredit (inverse COI)
+- **Revolving door** — key personnel moved between source and claim subject recently
+- **Advocacy/ideological** — source exists to advance a position on the topic being evaluated
+
+A COI does not disqualify a source — it reduces the independence credit. Document identified COIs in the `coi_flags` field of the relevant `cross_checks` entry (see output-specs.md).
+
+**Majority COI override (source-counting proofs only):** For proofs where the verdict depends on how many independent sources confirm a finding (qualitative consensus, compound with source-counting sub-claims): if more than half of the confirmed sources have COI in the same `direction` (`favorable_to_subject` or `unfavorable_to_subject`), the verdict is forced to UNDETERMINED. Count unique source keys, not flag entries — a source with multiple COI types still counts as one source. This does NOT apply to date/age, numeric, or pure-math proofs where `threshold` represents a claim value rather than a source count.
+
+For compound proofs, the COI check runs per sub-claim, not globally.
 
 **How validate_proof.py catches it**: Counts distinct source references (`source_a`, `source_b`, etc.). Warns if only one source is found for an empirical proof.
 
