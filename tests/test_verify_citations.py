@@ -672,3 +672,71 @@ def test_normalize_mathml_without_alttext_preserves_content():
     text = 'value <math><mn>42</mn></math> here'
     result = vc_module.normalize_text(text)
     assert "value 42 here" in result
+
+
+# ---------------------------------------------------------------------------
+# Integration tests for all three false-negative classes
+# ---------------------------------------------------------------------------
+
+
+def test_pmc_exponent_fixture_quote_match():
+    """Integration: PMC page with cd/m<sup>2</sup> exponents and linked refs.
+    The original bug: <sup>2</sup> was stripped as a reference, breaking cd/m² matching."""
+    page_html = _read_fixture("pmc_exponents.html")
+    quote = (
+        "The luminance of a clear blue sky is around 5000 cd/m2 "
+        "(compared with 300 for a TV display and 150\u2013250 cd/m2 for a computer screen)"
+    )
+    result = vc_module._match_quote(page_html, quote, "test_pmc_exponent")
+    assert result is not None
+    assert result["status"] == "verified", f"Expected verified, got {result}"
+
+
+def test_pmc_exponent_fixture_refs_still_stripped():
+    """Integration: linked refs on the same page are still stripped correctly."""
+    page_html = _read_fixture("pmc_exponents.html")
+    quote = (
+        "Currently, there is no evidence that screen use and LEDs in normal use "
+        "are deleterious to the human retina."
+    )
+    result = vc_module._match_quote(page_html, quote, "test_pmc_ref_strip")
+    assert result is not None
+    assert result["status"] == "verified", f"Expected verified, got {result}"
+
+
+def test_wikipedia_scientific_notation_fixture():
+    """Integration: Wikipedia page with styled <span> around × and <sup> exponents.
+    Covers Class 1+2: styled spans creating fake word boundaries + sup exponents."""
+    page_html = _read_fixture("wikipedia_scientific.html")
+    quote = (
+        "Dark energy's density is very low: "
+        "7\u00d710\u221230 g/cm3 (6\u00d710\u221210 J/m3 in mass-energy), "
+        "much less than the density of ordinary matter or dark matter within galaxies."
+    )
+    result = vc_module._match_quote(page_html, quote, "test_wiki_scientific")
+    assert result is not None
+    assert result["status"] == "verified", f"Expected verified, got {result}"
+
+
+def test_arxiv_mathml_fixture():
+    """Integration: ar5iv page with MathML <math alttext='...'> containing LaTeX.
+    Covers Class 3: MathML extraction via alttext + LaTeX-to-text conversion.
+    The quote includes the full mathematical expression to verify LaTeX-to-text
+    actually produces meaningful output, not just stray digits."""
+    page_html = _read_fixture("arxiv_mathml.html")
+    # First verify normalize_text produces the expected math content
+    normalized = vc_module.normalize_text(page_html)
+    assert "0.315" in normalized
+    assert "0.007" in normalized
+    # The LaTeX \Omega should become Ω (U+03A9), then lowercase ω
+    assert "\u03c9" in normalized or "omega" in normalized  # lowercase omega
+    # Now test full _match_quote with a quote that requires the math structure.
+    # Note: LaTeX \pm produces a space after ± (from '\pm 0.007'), so the quote
+    # must also include the space to match the normalized page text.
+    quote = (
+        "The matter density parameter \u03a9m=0.315\u00b1 0.007 "
+        "is well constrained by CMB observations."
+    )
+    result = vc_module._match_quote(page_html, quote, "test_arxiv_mathml")
+    assert result is not None
+    assert result["status"] == "verified", f"Expected verified, got {result}"
