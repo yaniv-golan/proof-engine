@@ -100,6 +100,52 @@ For pure-math proofs, mark Rules 1, 2, and 6 as "N/A — pure computation, no em
 
 Section "Generator": Same footer as proof.md.
 
+## proof_narrative.md structure
+
+The plain-language narrative. Written AFTER proof.py, proof.md, proof_audit.md, and proof.json are complete. This is a **presentation** of the proof you already built — do not re-derive or reinterpret findings.
+
+**Structure (all sections required):**
+
+```
+# Proof Narrative: <claim_natural>
+
+## Verdict
+
+**Verdict: <exact verdict from proof.json>**
+
+<1-2 sentence hook — verdict-adapted tone>
+
+## What was claimed?
+
+<Plain-language restatement. Why someone might care. Do NOT copy CLAIM_FORMAL.>
+
+## What did we find?
+
+<3-6 paragraphs. Walk through evidence as a story, not a table.>
+<Verdict-adapted: PROVED/DISPROVED = linear strongest-first; SUPPORTED = evidence then gaps;
+PARTIALLY VERIFIED = what held then what didn't; UNDETERMINED = what was tried and why insufficient.>
+
+## What should you keep in mind?
+
+<Mandatory caveats. Edge cases, what evidence doesn't address, what surprised, limitations.>
+
+## How was this verified?
+
+<2-3 sentences. Name the process. Include these links:>
+[the structured proof report](proof.md)
+[the full verification audit](proof_audit.md)
+[re-run the proof yourself](proof.py)
+```
+
+**Constraints:**
+- 200-800 words total
+- No fact IDs (A1, B1, S1, etc.)
+- No jargon — accessible to a general audience
+- No tables — prose only
+- No CLAIM_FORMAL reproduction
+- Purpose-based language with explicit markdown links for formal outputs
+- Verdict declaration must use the EXACT full verdict string from proof.json (including qualifiers like "with unverified citations")
+
 ## Consistency rules
 
 - Every fact ID in proof.md must appear in the JSON summary's `fact_registry` and in proof_audit.md's evidence table. Exception: multi-source citations produce `{fact_id}_source_{N}` sub-entries in `citations` and the evidence table that derive from the parent `fact_registry` entry. These sub-IDs do not appear in `fact_registry` itself.
