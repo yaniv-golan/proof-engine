@@ -57,6 +57,12 @@ try:
 except ImportError:
     from fetch import fetch_page as _fetch_page
 
+# Import LaTeX-to-text conversion for MathML alttext extraction
+try:
+    from scripts.latex_text import latex_to_text
+except ImportError:
+    from latex_text import latex_to_text
+
 
 # Inline HTML tags that should be stripped WITHOUT inserting spaces.
 _INLINE_TAGS_RE = r'(?:span|sup|sub|a|em|strong|b|i|mark|small|code|abbr|cite|dfn|kbd|s|u|var|wbr)'
@@ -140,6 +146,8 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
            <a class="xref">[N,M]</a> (common in academic HTML like PMC).
            Only LINKED (<a>) or BRACKETED ([N]) refs are stripped.
       1.6a. Remove bare <sup>[N]</sup> bracketed refs (unambiguously references)
+      1.7.  MathML extraction — replace <math alttext="..."> with LaTeX-to-text
+            conversion. Must run before inline tag stripping.
       1.6b. Strip non-sup/sub inline tags (<span>, <a>, <em>, etc.) WITHOUT
             inserting spaces -- cleans preceding context for the sup heuristic
             and prevents CSS-styled spans from creating fake word boundaries.
@@ -195,6 +203,16 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
         '', text, flags=re.IGNORECASE)
     if n_bracketed > 0:
         _had_academic_refs = True
+
+    # 1.7. MathML extraction — replace <math> tags with alttext content.
+    def _math_to_text(match):
+        alt = re.search(r'alttext=["\']([^"\']+)["\']', match.group(0))
+        if alt:
+            return latex_to_text(alt.group(1))
+        inner = re.sub(r'<math[^>]*>', '', match.group(0))
+        inner = inner.replace('</math>', '')
+        return inner
+    text = re.sub(r'<math[^>]*>.*?</math>', _math_to_text, text, flags=re.DOTALL)
 
     # 1.6b. Strip non-sup/sub inline formatting tags WITHOUT inserting spaces.
     # Uses (?=[\s>]) lookahead after tag name so 's' doesn't match 'sup'/'sub'.
