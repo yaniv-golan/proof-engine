@@ -443,11 +443,116 @@ def test_normalize_strips_sup_a_span_refs():
     assert "markers of inflammation" in result
 
 
-def test_normalize_still_strips_bare_sup_refs():
-    """Regression: bare <sup>N</sup> must still be stripped (existing behavior)."""
+def test_normalize_strips_bare_sup_refs_after_long_word():
+    """Bare <sup>N</sup> after a long word (>=4 letters) is a reference -- strip it."""
     text = 'plasticity<sup>1</sup> throughout'
     result = vc_module.normalize_text(text)
     assert "plasticity throughout" in result
+
+
+def test_normalize_preserves_sup_exponents():
+    """Bare <sup>N</sup> in exponent context (digit, /, or compound unit) preserves digit."""
+    assert "cd/m2" in vc_module.normalize_text("cd/m<sup>2</sup>")
+    assert "109" in vc_module.normalize_text("10<sup>9</sup>")
+    assert "w/m2" in vc_module.normalize_text("W/m<sup>2</sup>")
+    assert "j/cm2" in vc_module.normalize_text("J/cm<sup>2</sup>")
+    assert "g/cm3" in vc_module.normalize_text("g/cm<sup>3</sup>")
+
+
+def test_normalize_strips_bare_sup_refs_after_long_words():
+    """Bare <sup>N</sup> after long words (>=4 letters) are references -- strip them."""
+    result = vc_module.normalize_text("plasticity<sup>1</sup> throughout")
+    assert "plasticity" in result
+    assert "throughout" in result
+    assert "plasticity throughout" in result  # digit removed, not preserved
+
+
+def test_normalize_strips_bare_sup_refs_after_short_words():
+    """Bare <sup>N</sup> after short common words are references -- strip them.
+    The heuristic is conservative: only digit, /, or alpha-in-compound-unit
+    counts as exponent context. Short words like 'the', 'DNA' are NOT units."""
+    result = vc_module.normalize_text("the<sup>1</sup> evidence")
+    assert "the evidence" in result  # digit stripped, not "the1 evidence"
+    result = vc_module.normalize_text("DNA<sup>3</sup> replication")
+    assert "dna replication" in result  # digit stripped
+
+
+def test_normalize_strips_bare_sup_refs_after_punctuation():
+    """Bare <sup>N</sup> after punctuation are references -- strip them."""
+    assert "results. the" in vc_module.normalize_text("results.<sup>1</sup> The")
+
+
+def test_normalize_preserves_sub_formulas():
+    """<sub> content should always be preserved as inline text."""
+    assert "h2o" in vc_module.normalize_text("H<sub>2</sub>O")
+    assert "co2" in vc_module.normalize_text("CO<sub>2</sub> emissions")
+
+
+def test_normalize_preserves_ordinals():
+    """Ordinal suffixes in <sup> should be preserved."""
+    assert "4th edition" in vc_module.normalize_text("4<sup>th</sup> edition")
+    assert "21st century" in vc_module.normalize_text("21<sup>st</sup> century")
+
+
+def test_normalize_strips_styled_spans_inline():
+    """CSS-styled <span> tags should not create word boundaries.
+    Wikipedia uses <span style="margin-left:0.25em">x</span> around operators."""
+    text = '7<span style="margin-left:0.25em">\u00d7</span>10<sup>30</sup>'
+    result = vc_module.normalize_text(text)
+    assert "7x1030" in result  # x normalizes to x, no spaces
+
+
+def test_normalize_mixed_exponent_and_linked_ref():
+    """Exponents preserved, linked refs stripped, no extra spaces."""
+    text = 'cd/m<sup>2</sup> value<sup><a href="#r1">1</a></sup> here'
+    result = vc_module.normalize_text(text)
+    assert "cd/m2 value here" in result
+
+
+def test_normalize_wikipedia_scientific_notation():
+    """Full Wikipedia scientific notation with styled spans and sup exponents."""
+    text = (
+        '<span class="nowrap">'
+        '<span data-sort-value="6973700000000000000\u2660"></span>'
+        '7<span style="margin-left:0.25em;margin-right:0.15em;">\u00d7</span>'
+        '10<sup>\u221230</sup>\u00a0g/cm<sup>3</sup>'
+        '</span>'
+    )
+    result = vc_module.normalize_text(text)
+    assert "7x10" in result      # x -> x, no spaces around it
+    assert "30" in result        # exponent content (-30) survives -- U+2212 prefix
+    assert "g/cm3" in result     # exponent preserved in compound unit
+
+
+def test_normalize_liberal_preserves_standalone_unit_sups():
+    """Liberal mode preserves bare <sup> content even without compound unit context."""
+    result = vc_module.normalize_text("500 km<sup>2</sup> area", preserve_ambiguous_sups=True)
+    assert "km2" in result
+
+
+def test_normalize_conservative_strips_standalone_unit_sups():
+    """Conservative mode (default) strips standalone unit sups as ambiguous."""
+    result = vc_module.normalize_text("500 km<sup>2</sup> area")
+    assert "km2" not in result
+    assert "km" in result
+
+
+def test_match_quote_standalone_unit_via_liberal_fallback():
+    """_match_quote two-pass: standalone km<sup>2</sup> matched via liberal fallback."""
+    page_html = '<p>The area spans 500 km<sup>2</sup> of forest.</p>'
+    quote = 'The area spans 500 km2 of forest.'
+    result = vc_module._match_quote(page_html, quote, "test_liberal_fallback")
+    assert result is not None
+    assert result["status"] == "verified"
+
+
+def test_match_quote_reference_digit_stripped_by_conservative():
+    """_match_quote: reference digit correctly stripped by conservative first pass."""
+    page_html = '<p>Evidence shows<sup>1</sup> that sleep is affected.</p>'
+    quote = 'Evidence shows that sleep is affected.'
+    result = vc_module._match_quote(page_html, quote, "test_conservative_ref")
+    assert result is not None
+    assert result["status"] == "verified"
 
 
 def test_normalize_strips_comma_separated_a_refs():
@@ -494,14 +599,14 @@ def test_quote_type_mismatch_full_quote_match():
 
 
 def test_normalize_collapses_letter_space_digit():
-    """Tag stripping of CO<sub>2</sub> produces 'CO 2' — should become 'co2'."""
+    """Inline tag stripping of CO<sub>2</sub> preserves 'co2' (no space inserted)."""
     text = "CO<sub>2</sub> emissions are rising"
     result = vc_module.normalize_text(text)
     assert "co2" in result
 
 
 def test_normalize_collapses_word_space_hyphen():
-    """Tag stripping of n<sup>-6</sup> produces 'n -6' — should become 'n-6'."""
+    """Inline tag stripping of n<sup>-6</sup> preserves 'n-6' (no space inserted)."""
     text = "increased n<sup>-6</sup> PUFA intake"
     result = vc_module.normalize_text(text)
     assert "n-6" in result

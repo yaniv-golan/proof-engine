@@ -58,6 +58,37 @@ except ImportError:
     from fetch import fetch_page as _fetch_page
 
 
+# Inline HTML tags that should be stripped WITHOUT inserting spaces.
+_INLINE_TAGS_RE = r'(?:span|sup|sub|a|em|strong|b|i|mark|small|code|abbr|cite|dfn|kbd|s|u|var|wbr)'
+
+
+def _is_exponent_context(preceding_text: str) -> bool:
+    """Determine if text preceding a bare <sup> suggests an exponent, not a reference.
+
+    Deliberately conservative -- a preserved reference digit breaks full_quote
+    containment in _match_quote() (hard false negative), while a missed exponent
+    only degrades to fragment matching (soft failure). So we err on stripping.
+
+    Heuristic:
+    - Preceded by digit -> scientific notation (10^9)
+    - Preceded by '/' -> unit denominator (cd/m^2, J/cm^2)
+    - Preceded by alpha in a compound unit (token contains '/') -> exponent (cd/m^2)
+    - Everything else -> reference footnote (strip)
+    """
+    if not preceding_text:
+        return False
+    last_char = preceding_text[-1]
+    if last_char.isdigit():
+        return True
+    if last_char == '/':
+        return True
+    if last_char.isalpha():
+        segments = preceding_text.split()
+        last_token = segments[-1] if segments else ''
+        return '/' in last_token
+    return False
+
+
 # ---------------------------------------------------------------------------
 # Result builder
 # ---------------------------------------------------------------------------
@@ -93,56 +124,100 @@ def _result(status, method=None, coverage_pct=None, fetch_error=None,
 # Text normalization
 # ---------------------------------------------------------------------------
 
-def normalize_text(text: str) -> str:
+def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
     """Normalize text for fragment matching.
 
+    Args:
+        text: The text to normalize (may contain HTML).
+        preserve_ambiguous_sups: If True, preserve bare <sup>N</sup> content
+            even when the preceding context is ambiguous. Used by _match_quote()
+            for a liberal fallback pass.
+
     Steps performed IN ORDER (this sequence matters):
-      1. Unicode normalization — NFKC + character substitution registry
-         (en-dashes → hyphens, curly quotes → straight, ˚ → °, etc.)
-      1.5. Strip inline reference elements — <sup>[N]</sup>, <sup><a>N</a></sup>,
-           <a class="xref">[N,M]</a> (common in academic HTML like PMC)
-      2. Strip HTML tags  — handles inline markup like <span>...</span>
-      2a. Decode HTML entities — &rsquo;, &nbsp;, &#8217;, &mdash;, etc.
-          Placed AFTER tag stripping so escaped HTML (&lt;sup&gt;) isn't
-          decoded into real tags then stripped.
-      2b. Second Unicode normalization pass — decoded entities may introduce
+      1. Unicode normalization -- NFKC + character substitution registry
+         (en-dashes -> hyphens, curly quotes -> straight, degree -> degree, etc.)
+      1.5. Strip inline reference elements -- <sup><a>N</a></sup>,
+           <a class="xref">[N,M]</a> (common in academic HTML like PMC).
+           Only LINKED (<a>) or BRACKETED ([N]) refs are stripped.
+      1.6a. Remove bare <sup>[N]</sup> bracketed refs (unambiguously references)
+      1.6b. Strip non-sup/sub inline tags (<span>, <a>, <em>, etc.) WITHOUT
+            inserting spaces -- cleans preceding context for the sup heuristic
+            and prevents CSS-styled spans from creating fake word boundaries.
+      1.6c. Context-dependent bare <sup>N</sup> handling -- definite exponents
+            preserved (preceded by digit, '/', or alpha in compound unit with '/').
+            Ambiguous cases (standalone alpha, punctuation) stripped by default,
+            or preserved if preserve_ambiguous_sups=True (used by _match_quote
+            liberal fallback). Runs after 1.6b so heuristic sees rendered text.
+      1.6d. Strip remaining <sup>/<sub> tags -- non-numeric content (ordinals,
+            chemical formulas) concatenates directly with surrounding text.
+      2. Strip remaining (block-level) HTML tags -- <p>, <div>, <td>, etc. get
+         replaced with spaces to create word boundaries.
+      2a. Decode HTML entities -- &rsquo;, &nbsp;, &#8217;, &mdash;, etc.
+      2b. Second Unicode normalization pass -- decoded entities may introduce
           curly quotes, em-dashes, etc. that need normalizing.
-      2.5. Strip orphaned reference markers [N] — ONLY if academic refs
-           were detected in step 1.5 (avoids false positives in non-academic text)
-      3. Remove spaces before punctuation — fixes "Ben-Gurion ," artifacts
-      4. Collapse whitespace — multiple spaces become one
-      5. Lowercase — case-insensitive matching
+      2.5. Strip orphaned reference markers [N] -- ONLY if academic refs
+           were detected in step 1.5 or 1.6a (avoids false positives)
+      3. Remove spaces before punctuation -- fixes "Ben-Gurion ," artifacts
+      4. Collapse whitespace -- multiple spaces become one
+      5. Lowercase -- case-insensitive matching
 
     This specific sequence was developed through real testing against NOAA
-    (climate.gov), NASA (science.nasa.gov), the IPCC, and the U.S. State
-    Department (history.state.gov).
+    (climate.gov), NASA (science.nasa.gov), the IPCC, the U.S. State
+    Department (history.state.gov), PMC/NIH, Wikipedia, and ar5iv.
     """
     # 1. Unicode normalization (handles en-dashes, curly quotes, degree symbols, etc.)
     text = normalize_unicode(text)
     # 1.5. Strip inline reference elements (common in academic HTML)
     _had_academic_refs = False
 
-    # Pattern 0 (NEW): <sup> with nested <span>/<a> combinations
-    # Catches PMC variants the main pattern below misses:
-    #   <sup><span class="ref"><a href="#r1">1</a></span></sup>
-    #   <sup id="..."><a href="#ref-2"><span>2</span></a></sup>
+    # Pattern 0: <sup> with nested <span>/<a> combinations
+    # Catches PMC variants: <sup><span class="ref"><a>1</a></span></sup>
     # Also handles comma-separated refs: <sup><a>5</a>,<a>6</a></sup>
     # Requires <a> inside (nested spans without links are formula exponents)
     text, n0 = re.subn(
         r'<sup[^>]*>\s*(?:<span[^>]*>\s*)*<a[^>]*>\s*(?:<span[^>]*>\s*)?\[?\d+(?:[,\-\u2013]\d+)*\]?\s*(?:</span>\s*)?</a>\s*(?:</span>\s*)*(?:,\s*(?:<span[^>]*>\s*)*<a[^>]*>\s*(?:<span[^>]*>\s*)?\[?\d+(?:[,\-\u2013]\d+)*\]?\s*(?:</span>\s*)?</a>\s*(?:</span>\s*)*)*</sup>',
         '', text, flags=re.IGNORECASE)
 
-    # Pattern 1 (UNCHANGED): existing regex for <sup>[N]</sup>, <sup><a>N</a></sup>, <sup>N</sup>
+    # Pattern 1: simple linked refs -- requires <a> tag inside <sup>
     text, n1 = re.subn(
-        r'<sup[^>]*>\s*(?:<a[^>]*>)?\s*\[?\d+(?:[,\-\u2013]\d+)*\]?\s*(?:</a>)?\s*</sup>',
+        r'<sup[^>]*>\s*<a[^>]*>\s*\[?\d+(?:[,\-\u2013]\d+)*\]?\s*</a>\s*</sup>',
         '', text, flags=re.IGNORECASE)
 
-    # Pattern 2 (UNCHANGED): xref links
+    # Pattern 2: xref links
     text, n2 = re.subn(
         r'<a[^>]*class="[^"]*xref[^"]*"[^>]*>\s*\[?\d+(?:[,\-\u2013]\d+)*\]?\s*</a>',
         '', text, flags=re.IGNORECASE)
     _had_academic_refs = (n0 + n1 + n2) > 0
-    # 2. Strip HTML tags
+
+    # 1.6a. Remove bare <sup> with bracketed content -- unambiguously references
+    text, n_bracketed = re.subn(
+        r'<sup[^>]*>\s*\[\d+(?:[,\-\u2013]\d+)*\]\s*</sup>',
+        '', text, flags=re.IGNORECASE)
+    if n_bracketed > 0:
+        _had_academic_refs = True
+
+    # 1.6b. Strip non-sup/sub inline formatting tags WITHOUT inserting spaces.
+    # Uses (?=[\s>]) lookahead after tag name so 's' doesn't match 'sup'/'sub'.
+    _NON_SUP_SUB_INLINE_RE = r'(?:span|abbr|cite|code|dfn|em|kbd|mark|small|strong|var|wbr|a|b|i|s|u)(?=[\s>/])'
+    text = re.sub(r'</?' + _NON_SUP_SUB_INLINE_RE + r'[^>]*>', '', text, flags=re.IGNORECASE)
+
+    # 1.6c. Context-dependent handling of bare <sup>N</sup>
+    def _bare_sup_handler(match):
+        preceding = match.group(1)
+        content = match.group(2)
+        if _is_exponent_context(preceding):
+            return preceding + content  # definite exponent: keep digit
+        if preserve_ambiguous_sups:
+            return preceding + content  # liberal mode: keep all
+        return preceding  # conservative: strip ambiguous
+    text = re.sub(
+        r'(\S*)<sup[^>]*>\s*(\d+(?:[,\-\u2013]\d+)*)\s*</sup>',
+        _bare_sup_handler, text, flags=re.IGNORECASE)
+
+    # 1.6d. Strip remaining inline tags (<sup>, <sub>) that survived 1.6c.
+    text = re.sub(r'</?(?:sup|sub)[^>]*>', '', text, flags=re.IGNORECASE)
+
+    # 2. Strip remaining (block-level) HTML tags
     text = re.sub(r'<[^>]+>', ' ', text)
     # 2a. Decode HTML entities — AFTER tag stripping so escaped HTML like
     # &lt;sup&gt; doesn't become a real tag and get stripped. Remaining entities
@@ -161,11 +236,6 @@ def normalize_text(text: str) -> str:
     text = text.replace('"', "'")
     # 3. Remove spaces before punctuation
     text = re.sub(r'\s+([,.:;!?\)\]])', r'\1', text)
-    # 3a. Collapse tag-stripping artifacts in compound terms:
-    #   - "CO 2" → "CO2" (letter + space + digit, from stripped <sub>/<sup>)
-    #   - "n -6" → "n-6" (word + space + hyphen + word, from stripped inline tags)
-    text = re.sub(r'([a-zA-Z]) +(\d)', r'\1\2', text)
-    text = re.sub(r'(\w) +-([\w])', r'\1-\2', text)
     # 4. Collapse whitespace
     text = ' '.join(text.split())
     # 5. Lowercase
@@ -248,10 +318,16 @@ def _match_quote(page_text_raw: str, expected_quote: str, fact_id: str,
     page_text = normalize_text(page_text_raw)
     norm_quote = normalize_text(expected_quote)
 
-    # 1. Try full quote match first — this is the real guarantee
+    # 1. Try full quote match first -- this is the real guarantee
     if norm_quote in page_text:
         return _result("verified", "full_quote", fetch_mode=fetch_mode,
                         message=f"Full quote verified for {fact_id}")
+
+    # 1b. Liberal fallback -- retry with ambiguous bare <sup> content preserved.
+    page_text_liberal = normalize_text(page_text_raw, preserve_ambiguous_sups=True)
+    if norm_quote in page_text_liberal:
+        return _result("verified", "full_quote", fetch_mode=fetch_mode,
+                        message=f"Full quote verified for {fact_id} (liberal sup handling)")
 
     # 2. Run diagnostics for aggressive normalization (Unicode edge cases)
     raw_page = re.sub(r'<[^>]+>', ' ', page_text_raw)
