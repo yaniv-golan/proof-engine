@@ -250,5 +250,11 @@ class LoadedProof(TypedDict, total=False):
     featured: bool
     citation_count: int | None
     search_count: int | None
+    verdict_summary: str
+    source_names: list[str]
+    source_names_extra: int
+    sections_narrative: dict[str, str]
+    verdict_declaration: str
+    verdict_hook: str
     date: str
     proof_engine_version: str

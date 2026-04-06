@@ -81,7 +81,9 @@ def test_loaded_proof_matches_loader_return():
     lp_fields = set(typing.get_type_hints(LoadedProof).keys())
     expected = {"slug", "proof_data", "sections_md", "sections_audit",
                 "verdict", "tags", "featured", "citation_count",
-                "search_count", "date", "proof_engine_version"}
+                "search_count", "date", "proof_engine_version",
+                "verdict_summary", "source_names", "source_names_extra",
+                "sections_narrative", "verdict_declaration", "verdict_hook"}
     missing = expected - lp_fields
     assert not missing, f"LoadedProof missing fields: {missing}"
 
