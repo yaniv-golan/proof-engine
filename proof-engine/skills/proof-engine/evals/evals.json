@@ -16,7 +16,7 @@
         "proof.py includes FACT_REGISTRY with A-prefixed IDs",
         "proof.py __main__ emits === PROOF SUMMARY (JSON) === block",
         "JSON summary contains fact_registry (A-types with method/result), claim_formal, verdict, key_results",
-        "Three output files: proof.py, proof.md, proof_audit.md",
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md",
         "proof.md has executive summary with key numbers under verdict",
         "proof.md uses inline fact references (A1, A2)",
         "proof_audit.md contains Type A facts table, computation traces, and hardening checklist",
@@ -41,7 +41,7 @@
         "proof.py includes FACT_REGISTRY mapping B1, B2 to source keys",
         "proof.py __main__ emits === PROOF SUMMARY (JSON) === block",
         "JSON summary citations use structured dict fields (status/method/coverage_pct/fetch_mode), not parsed from message strings",
-        "Three output files: proof.py, proof.md, proof_audit.md",
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md",
         "proof.md has executive summary with key numbers under verdict",
         "proof.md uses inline fact references (B1, B2)",
         "proof_audit.md contains full evidence table with quotes and URLs from JSON citations",
@@ -84,7 +84,7 @@
         "Fact IDs are consistent across proof.py JSON summary, proof.md, and proof_audit.md",
         "proof_audit.md extraction records include method narrative labeled as author analysis",
         "proof_audit.md computation traces reproduced verbatim from explain_calc inline output",
-        "Three output files: proof.py, proof.md, proof_audit.md",
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md",
         "validate_proof.py passes with no issues"
       ]
     },
@@ -101,7 +101,7 @@
         "FACT_REGISTRY maps fact IDs to source keys",
         "Values parsed from quotes using parse_number_from_quote, not hand-typed",
         "verify_extraction called on extracted values",
-        "Three output files: proof.py, proof.md, proof_audit.md",
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md",
         "validate_proof.py passes with no issues"
       ]
     },
@@ -118,7 +118,7 @@
         "Verdict is DISPROVED because ~874,000 < 1,000,000",
         "Adversarial check searches for whether the ratio could exceed 1 million under different conditions",
         "validate_proof.py passes with no issues",
-        "Three output files: proof.py, proof.md, proof_audit.md"
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md"
       ]
     },
     {
@@ -134,7 +134,7 @@
         "Values parsed from quotes using parse_number_from_quote",
         "Both sub-claims must be PROVED for overall PROVED verdict",
         "validate_proof.py passes with no issues",
-        "Three output files: proof.py, proof.md, proof_audit.md"
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md"
       ]
     },
     {
@@ -149,7 +149,7 @@
         "The proof explains why a definitive verdict cannot be reached",
         "Adversarial check includes studies showing limitations or confounders",
         "validate_proof.py passes with no issues",
-        "Three output files: proof.py, proof.md, proof_audit.md"
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md"
       ]
     },
     {
@@ -164,7 +164,7 @@
         "CLAIM_FORMAL captures the transitive chain structure",
         "All three heights cross-checked against at least two sources each or adversarial check confirms no contradicting heights",
         "validate_proof.py passes with no issues",
-        "Three output files: proof.py, proof.md, proof_audit.md"
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md"
       ]
     },
     {
@@ -191,7 +191,7 @@
         "No empirical sources needed — pure Type A computation",
         "Adversarial check verifies Fibonacci computation independently (e.g., closed-form or alternative algorithm)",
         "validate_proof.py passes with no issues",
-        "Three output files: proof.py, proof.md, proof_audit.md"
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md"
       ]
     },
     {
@@ -205,7 +205,7 @@
         "CLAIM_FORMAL has operator '>' with threshold 200 and operator_note",
         "Cross-check confirms sources agree on the >200% figure",
         "validate_proof.py passes with no issues",
-        "Three output files: proof.py, proof.md, proof_audit.md"
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md"
       ]
     },
     {
@@ -219,7 +219,7 @@
         "Verdict is DISPROVED",
         "Adversarial check searches for any sources claiming visibility and addresses them",
         "validate_proof.py passes with no issues",
-        "Three output files: proof.py, proof.md, proof_audit.md"
+        "Four output files: proof.py, proof.md, proof_audit.md, proof_narrative.md"
       ]
     }
   ]

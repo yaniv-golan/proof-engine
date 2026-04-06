@@ -15,7 +15,7 @@
 # Output structure:
 #   <output-dir>/
 #     001-slug/
-#       proof.py, proof.md, proof_audit.md   (proof artifacts)
+#       proof.py, proof.md, proof_audit.md, proof_narrative.md   (proof artifacts)
 #       phase1.log                            (raw CLI output from proof phase)
 #       feedback.md                           (skill improvement feedback)
 #     summary.md                              (aggregated feedback from all claims)
