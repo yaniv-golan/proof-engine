@@ -126,11 +126,19 @@ citation_results = verify_all_citations(empirical_facts)
 unverified = [k for k, v in citation_results.items() if v["status"] != "verified"]
 ```
 
-**Critical normalization details**: Real web pages contain two categories of mismatch that break naive string matching:
+**Critical normalization details**: Real web pages contain several categories of mismatch that break naive string matching:
 
-1. **HTML tags**: Government websites use inline markup (e.g., `<span class="tei-persname">Ben-Gurion</span>`). The script strips tags, removes spaces before punctuation, collapses whitespace, and lowercases — in that order.
+1. **HTML tags**: Government websites use inline markup (e.g., `<span class="tei-persname">Ben-Gurion</span>`). The script strips tags without injecting spaces, removes spaces before punctuation, collapses whitespace, and lowercases — in that order.
 
 2. **Unicode mismatches**: NOAA, NASA, and IPCC pages use en-dashes (– U+2013) where the LLM transcribes hyphens (-), curly quotes (' U+2019) where the LLM uses straight quotes ('), ring-above (˚ U+02DA) where degree signs (° U+00B0) are expected, and non-breaking spaces (U+00A0) where normal spaces are expected. The script applies `normalize_unicode()` from `smart_extract.py` before all other normalization.
+
+3. **Invisible Unicode characters**: Pages embed zero-width spaces (U+200B), zero-width non-joiners/joiners (U+200C/U+200D), word joiners (U+2060), BiDi marks (U+200E/U+200F), soft hyphens (U+00AD), and variation selectors (U+FE00–U+FE0F). These are invisible but break string matching. The script strips all of them during normalization.
+
+4. **Superscripts and subscripts**: `<sup>` and `<sub>` tags are handled context-dependently. In running prose (footnote markers like "study¹"), they are stripped. In mathematical/scientific contexts (exponents like "10²" or "m²"), they are preserved as numeric characters.
+
+5. **MathML markup**: Scientific pages embed `<math>` tags with LaTeX in the `alttext` attribute. The script extracts `alttext` and converts LaTeX notation (fractions, Greek letters, operators) to readable text via `latex_text.py`.
+
+The script uses **two-pass matching**: first exact match on the fully cleaned text, then substring search as fallback.
 
 When a quote still fails after automatic normalization, use `diagnose_mismatch()` to identify the specific character differences, then write a custom extraction function using the **two-phase extraction** pattern (see SKILL.md).
 

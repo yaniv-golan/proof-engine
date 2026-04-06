@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-04-06
+
+### Added
+
+- Scripts: context-dependent `<sup>`/`<sub>` handling — superscripts in running prose are stripped (e.g., footnote markers), but preserved as exponents in mathematical/scientific contexts (e.g., "10²", "m²")
+- Scripts: inline HTML tag stripping without injecting spaces — tags like `<span>`, `<em>`, `<a>` inside quotes no longer break matching
+- Scripts: two-pass matching — first try exact match on cleaned text, then fall back to substring search
+- Scripts: expanded Unicode invisible character normalization — strips zero-width spaces (U+200B), zero-width non-joiners (U+200C), zero-width joiners (U+200D), word joiners (U+2060), left-to-right/right-to-left marks (U+200E/U+200F), soft hyphens (U+00AD), and variation selectors (U+FE00–U+FE0F)
+- Scripts: MathML `<math>` tag extraction — extracts `alttext` attribute content and converts LaTeX notation to readable text via new `latex_text.py` module
+- Scripts: `latex_text.py` — converts LaTeX math notation (fractions, Greek letters, operators, superscripts/subscripts) to plain text for citation matching
+- Tests: integration tests for all three false-negative classes (superscript/inline-tag, invisible Unicode, MathML alttext)
+
+### Fixed
+
+- 4 site proofs upgraded from "with unverified citations" to clean verdicts: `smartphone-screens...`, `the-assertion-that-no-arab-state...`, `the-schwarzschild-radius...`, `current-ai-systems-have-already...`
+
 ## [1.6.0] - 2026-04-05
 
 ### Added
