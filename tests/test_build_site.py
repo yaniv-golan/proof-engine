@@ -169,7 +169,9 @@ def test_meta_description_in_proof_page(site_fixture):
     result = _run_build(site_fixture)
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
-    assert '<meta name="description" content="PROVED: Test claim is true' in html
+    # Meta description now uses verdict hook from narrative
+    assert '<meta name="description" content="PROVED: ' in html
+    assert "confirmed true" in html
 
 
 def test_og_tags_in_proof_page(site_fixture):
@@ -177,7 +179,7 @@ def test_og_tags_in_proof_page(site_fixture):
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
     assert 'og:title" content="PROVED: Test claim is true"' in html
-    assert 'og:description" content="PROVED: Test claim is true' in html
+    assert 'og:description" content="PROVED: ' in html
     assert 'og:url" content="https://example.com/proof-engine/proofs/test-claim/"' in html
     assert 'og:type" content="article"' in html
     assert 'og:site_name" content="Proof Engine"' in html
@@ -1181,3 +1183,32 @@ def test_citation_summary_stale_audit_json_authoritative(site_fixture):
     assert "fetch_failed" in html
     assert "citation-summary-bar" in html
     assert "Citation Verification Details</span>" not in html
+
+
+def test_proof_page_has_narrative_content(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "What was claimed?" in html or "What Was Claimed?" in html
+    assert "What did we find?" in html or "What Did We Find?" in html
+
+
+def test_proof_page_has_detailed_evidence_collapsible(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "Detailed Evidence" in html
+
+
+def test_proof_page_meta_description_uses_hook(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "confirmed true" in html or "overwhelming" in html
+
+
+def test_proof_page_share_bar_has_hook(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "data-hook=" in html
