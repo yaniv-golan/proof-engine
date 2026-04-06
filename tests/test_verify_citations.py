@@ -617,3 +617,58 @@ def test_normalize_infinity_symbol():
     text = "division of \u221E/\u221E results in NaN"
     result = vc_module.normalize_text(text)
     assert "infinity/infinity" in result
+
+
+def test_normalize_strips_invisible_unicode():
+    """Invisible Unicode characters should be removed or normalized to spaces."""
+    # Soft hyphen (U+00AD) — used for line-break hints, invisible in rendering
+    assert "overnight" in vc_module.normalize_text("over\u00ADnight")
+    # Zero-width non-joiner (U+200C)
+    assert "test" in vc_module.normalize_text("te\u200Cst")
+    # Zero-width joiner (U+200D)
+    assert "test" in vc_module.normalize_text("te\u200Dst")
+    # Word joiner (U+2060)
+    assert "test" in vc_module.normalize_text("te\u2060st")
+    # BOM / zero-width no-break space (U+FEFF)
+    assert "test" in vc_module.normalize_text("\uFEFFtest")
+    # Minus sign (U+2212) → ASCII hyphen
+    assert "10-30" in vc_module.normalize_text("10\u221230")
+
+
+# ---------------------------------------------------------------------------
+# MathML extraction tests
+# ---------------------------------------------------------------------------
+
+
+def test_normalize_extracts_mathml_alttext():
+    """MathML <math> tags should be replaced with their alttext content."""
+    text = (
+        'matter density parameter '
+        '<math alttext="\\Omega_{\\mathrm{m}}=0.315\\pm 0.007">'
+        '<semantics><mrow><msub><mi>\u03A9</mi><mi>m</mi></msub>'
+        '<mo>=</mo><mn>0.315</mn><mo>\u00b1</mo><mn>0.007</mn>'
+        '</mrow></semantics></math>'
+    )
+    result = vc_module.normalize_text(text)
+    assert "0.315" in result
+    assert "0.007" in result
+
+
+def test_normalize_mathml_single_quoted_alttext():
+    """MathML with single-quoted alttext should also be extracted."""
+    text = (
+        "energy "
+        "<math alttext='E=mc^{2}'>"
+        "<semantics><mrow><mi>E</mi><mo>=</mo><mi>m</mi>"
+        "<msup><mi>c</mi><mn>2</mn></msup></mrow></semantics></math>"
+    )
+    result = vc_module.normalize_text(text)
+    assert "e=mc2" in result.lower() or "e = mc2" in result.lower()
+
+
+def test_normalize_mathml_without_alttext_preserves_content():
+    """MathML without alttext should strip <math> wrapper but keep inner content.
+    Word boundaries must be preserved — 'value 42 here', not 'value42 here'."""
+    text = 'value <math><mn>42</mn></math> here'
+    result = vc_module.normalize_text(text)
+    assert "value 42 here" in result

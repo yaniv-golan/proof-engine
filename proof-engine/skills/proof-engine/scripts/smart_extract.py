@@ -80,7 +80,15 @@ UNICODE_NORMALIZATIONS = [
     # Spaces
     ("\u00A0", " ", "non-breaking space → space"),
     ("\u2009", " ", "thin space → space"),
+    # Math/typography symbols that should normalize to ASCII equivalents
+    ("\u2212", "-", "minus sign → ASCII hyphen"),
+    # Invisible characters (zero-width / formatting)
+    ("\u00AD", "", "soft hyphen → removed"),
     ("\u200B", "", "zero-width space → removed"),
+    ("\u200C", "", "zero-width non-joiner → removed"),
+    ("\u200D", "", "zero-width joiner → removed"),
+    ("\u2060", "", "word joiner → removed"),
+    ("\uFEFF", "", "BOM / zero-width no-break space → removed"),
     # Other common web characters
     ("\u2026", "...", "ellipsis → three dots"),
     ("\u00D7", "x", "multiplication sign → x"),
