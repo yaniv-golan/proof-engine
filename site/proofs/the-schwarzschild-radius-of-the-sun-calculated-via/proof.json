@@ -93,8 +93,8 @@
       "source_name": "Wikipedia \u2014 Solar mass (TCG-compatible GM\u2609 estimate)",
       "url": "https://en.wikipedia.org/wiki/Solar_mass",
       "quote": "1.32712442099",
-      "status": "partial",
-      "method": "aggressive_normalization",
+      "status": "verified",
+      "method": "full_quote",
       "coverage_pct": null,
       "fetch_mode": "live",
       "credibility": {
@@ -131,7 +131,7 @@
   "data_value_verification": {
     "B1": {
       "G_mantissa": {
-        "found": false,
+        "found": true,
         "value": "6.674 30",
         "fetch_mode": "live"
       },
@@ -143,21 +143,21 @@
     },
     "B2": {
       "c_value": {
-        "found": false,
+        "found": true,
         "value": "299 792 458",
         "fetch_mode": "live"
       }
     },
     "B3": {
       "GM_sun": {
-        "found": true,
+        "found": false,
         "value": "1.3271244",
         "fetch_mode": "live"
       }
     },
     "B4": {
       "GM_sun_tcg": {
-        "found": false,
+        "found": true,
         "value": "1.32712442099",
         "fetch_mode": "live"
       }
@@ -212,7 +212,7 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED (with unverified citations)",
+  "verdict": "PROVED",
   "key_results": {
     "rs_primary_km": 2.95325007610025,
     "rs_crosscheck_km": 2.95325007610025,
@@ -225,8 +225,8 @@
   },
   "generator": {
     "name": "proof-engine",
-    "version": "0.10.0",
+    "version": "1.7.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-03-28"
+    "generated_at": "2026-04-06"
   }
 }

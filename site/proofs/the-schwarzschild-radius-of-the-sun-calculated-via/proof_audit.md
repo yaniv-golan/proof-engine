@@ -48,7 +48,7 @@
 | B1 | Newtonian gravitational constant G | NIST 2022 CODATA | [nist.gov](https://physics.nist.gov/cgi-bin/cuu/Value?bg) | "Newtonian constant of gravitation" | verified | full_quote | Tier 5 (government) |
 | B2 | Speed of light c | NIST 2022 CODATA | [nist.gov](https://physics.nist.gov/cgi-bin/cuu/Value?c) | "speed of light in vacuum" | verified | full_quote | Tier 5 (government) |
 | B3 | Nominal solar mass parameter GM☉^N | IAU 2015 Resolution B3 | [arxiv.org](https://ar5iv.labs.arxiv.org/html/1510.07674) | "nominal solar mass parameter" | verified | full_quote | Tier 4 (academic) |
-| B4 | Solar mass cross-check | Wikipedia — Solar mass | [wikipedia.org](https://en.wikipedia.org/wiki/Solar_mass) | "1.32712442099" | partial | aggressive_normalization | Tier 3 (reference) |
+| B4 | Solar mass cross-check | Wikipedia — Solar mass | [wikipedia.org](https://en.wikipedia.org/wiki/Solar_mass) | "1.32712442099" | verified | full_quote | Tier 3 (reference) |
 
 *Source: proof.py JSON summary*
 
@@ -70,10 +70,9 @@
 - **Fetch mode:** live
 
 ### B4: Solar mass cross-check (Wikipedia)
-- **Status:** partial
-- **Method:** aggressive_normalization (alphanumeric_only)
+- **Status:** verified
+- **Method:** full_quote
 - **Fetch mode:** live
-- **Impact:** B4 is used only as a cross-check source. The primary computation relies on B1, B2, and B3 (all fully verified). The partial status of B4 does not affect the conclusion. *Source: author analysis*
 
 *Source: proof.py JSON summary*
 
@@ -156,7 +155,7 @@ Extraction method: Values parsed from `data_values` strings which are formatted 
 ## Hardening Checklist
 
 - **Rule 1:** Values extracted from data_values strings, not hand-typed
-- **Rule 2:** All 4 citations fetched live; 3 verified (full_quote), 1 partial (aggressive_normalization)
+- **Rule 2:** All 4 citations fetched live; all 4 verified (full_quote)
 - **Rule 3:** N/A — no date-dependent logic in this proof
 - **Rule 4:** CLAIM_FORMAL with operator_note documents the compound operator choice and source substitution for solar mass
 - **Rule 5:** Three adversarial checks searched for independent counter-evidence (G uncertainty, time coordinate, external sources)

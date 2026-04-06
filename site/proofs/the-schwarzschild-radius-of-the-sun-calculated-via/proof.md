@@ -1,7 +1,7 @@
 # Proof: The Schwarzschild radius of the Sun lies strictly between 2.95 km and 2.96 km
 
 - **Generated:** 2026-03-28
-- **Verdict:** PROVED (with unverified citations)
+- **Verdict:** PROVED
 - **Audit trail:** [proof_audit.md](proof_audit.md) | [proof.py](proof.py)
 
 ## Key Findings
@@ -26,7 +26,7 @@
 | B1 | Newtonian gravitational constant G (2022 CODATA) | Yes |
 | B2 | Speed of light c (2022 CODATA, exact) | Yes |
 | B3 | Nominal solar mass parameter GM☉^N (IAU 2015 Resolution B3) | Yes |
-| B4 | Solar mass cross-check (Wikipedia) | Partial (aggressive normalization) |
+| B4 | Solar mass cross-check (Wikipedia) | Yes |
 | A1 | rs via separate G and M (primary) | Computed: 2.953250 km |
 | A2 | rs via GM☉ directly (cross-check) | Computed: 2.953250 km |
 
@@ -55,7 +55,7 @@ Since 2.95 < 2.953250 < 2.96, both strict inequalities hold.
 
 ## Conclusion
 
-**PROVED (with unverified citations).** The Schwarzschild radius of the Sun, computed as rs = 2GM/c² = 2.953250 km, lies strictly between 2.95 km and 2.96 km. The primary sources (NIST CODATA for G and c, IAU 2015 Resolution B3 for GM☉) are all fully verified. The Wikipedia cross-check source (B4) achieved only partial verification due to Unicode normalization but is not required for the conclusion — three verified sources independently confirm the input constants.
+**PROVED.** The Schwarzschild radius of the Sun, computed as rs = 2GM/c² = 2.953250 km, lies strictly between 2.95 km and 2.96 km. All four sources are fully verified: NIST CODATA for G and c, IAU 2015 Resolution B3 for GM☉, and the Wikipedia cross-check for GM☉ (TCG-compatible).
 
 ---
 

@@ -61,10 +61,10 @@ sub_claims:
 
 | ID | Fact | Source | URL | Quote (first 80 chars) | Status | Method | Credibility |
 |----|------|--------|-----|------------------------|--------|--------|-------------|
-| B1 | SC1: PMC screen luminance | Ouyang et al. 2023 | pmc.ncbi.nlm.nih.gov | "The luminance of a clear blue sky is around 5000 cd/m2 (compared with 300 for a…" | partial | aggressive_normalization | Tier 5 (government) |
+| B1 | SC1: PMC screen luminance | Ouyang et al. 2023 | pmc.ncbi.nlm.nih.gov | "The luminance of a clear blue sky is around 5000 cd/m2 (compared with 300 for a…" | verified | full_quote | Tier 5 (government) |
 | B2 | SC1: Harvard iPhone brightness | Harvard Health | health.harvard.edu | "recent iPhones have a maximum brightness of around 625 candelas per square meter" | verified | full_quote | Tier 4 (academic) |
 | B3 | SC2: Wikipedia sunlight lux | Wikipedia | en.wikipedia.org | "32,000–100,000 Direct sunlight" | verified | full_quote | Tier 3 (reference) |
-| B4 | SC2: Green Business Light sunlight | Green Business Light | greenbusinesslight.com | "Direct Sunlight 32,000 to 100,000" | verified | unicode_normalized | Tier 2 (unclassified) |
+| B4 | SC2: Green Business Light sunlight | Green Business Light | greenbusinesslight.com | "Direct Sunlight 32,000 to 100,000" | verified | full_quote | Tier 2 (unclassified) |
 | B5 | SC3: Harvard no retinal harm | Harvard Health | health.harvard.edu | "The amount of blue light from electronic devices, including smartphones, tablets…" | verified | full_quote | Tier 4 (academic) |
 | B6 | SC3: AAO no eye damage | AAO | aao.org | "there is no scientific evidence that blue light from digital devices causes dama…" | verified | full_quote | Tier 2 (unclassified) |
 | B7 | SC3: PMC no retinal harm | Ouyang et al. 2023 | pmc.ncbi.nlm.nih.gov | "Currently, there is no evidence that screen use and LEDs in normal use are delet…" | verified | full_quote | Tier 5 (government) |
@@ -78,13 +78,13 @@ sub_claims:
 
 ## Citation Verification Details
 
-**B1 (sc1_source_a):** Status: partial. Method: aggressive_normalization (alphanumeric-only matching). Fetch mode: live. Impact: B1 supports SC1's luminance range. SC1 also has B2 (fully verified), so the conclusion does not depend solely on B1. *Source: author analysis*
+**B1 (sc1_source_a):** Status: verified. Method: full_quote. Fetch mode: live.
 
 **B2 (sc1_source_b):** Status: verified. Method: full_quote. Fetch mode: live.
 
 **B3 (sc2_source_a):** Status: verified. Method: full_quote. Fetch mode: live.
 
-**B4 (sc2_source_b):** Status: verified. Method: unicode_normalized. Fetch mode: live.
+**B4 (sc2_source_b):** Status: verified. Method: full_quote. Fetch mode: live.
 
 **B5 (sc3_source_a):** Status: verified. Method: full_quote. Fetch mode: live.
 
@@ -120,7 +120,7 @@ compound: all sub-claims hold: 5 == 5 = True
 ## Independent Source Agreement (Rule 6)
 
 ### SC1: Smartphone screen luminance
-- 2 sources consulted, 2 verified (1 partial, 1 full)
+- 2 sources consulted, 2 verified
 - PMC peer-reviewed review and Harvard Health — independent publications
 - Sources agree: screen luminance 150–625 cd/m², far below sunlight
 - COI flags: none identified
@@ -208,7 +208,7 @@ For this qualitative/consensus proof, extractions record citation verification s
 
 | Fact ID | Value | Value in Quote | Quote Snippet |
 |---------|-------|----------------|---------------|
-| B1 | partial | Yes (countable) | "The luminance of a clear blue sky is around 5000 cd/m2 (compared with 300 for a…" |
+| B1 | verified | Yes | "The luminance of a clear blue sky is around 5000 cd/m2 (compared with 300 for a…" |
 | B2 | verified | Yes | "recent iPhones have a maximum brightness of around 625 candelas per square meter" |
 | B3 | verified | Yes | "32,000–100,000 Direct sunlight" |
 | B4 | verified | Yes | "Direct Sunlight 32,000 to 100,000" |
@@ -226,7 +226,7 @@ For this qualitative/consensus proof, extractions record citation verification s
 ## Hardening Checklist
 
 - **Rule 1:** N/A — qualitative consensus proof, no numeric value extraction from quotes
-- **Rule 2:** All 12 citation URLs fetched live; 11 verified (full_quote, unicode_normalized, or fragment), 1 partial (aggressive normalization). `verify_all_citations()` with `wayback_fallback=True` used.
+- **Rule 2:** All 12 citation URLs fetched live; all 12 verified (full_quote, unicode_normalized, or fragment). `verify_all_citations()` with `wayback_fallback=True` used.
 - **Rule 3:** `date.today()` used — proof generation date anchored to system time
 - **Rule 4:** `CLAIM_FORMAL` with detailed `operator_note` for each of 5 sub-claims. Causal language in SC4 explicitly documented with association + causation decomposition. SC5's DLMO vs. sleep latency ambiguity documented.
 - **Rule 5:** 5 adversarial checks conducted via web search. Counter-evidence found for SC3 (lab studies at high intensity), SC5 (90 min = DLMO not sleep latency), and SC4 (content engagement criticism). All addressed with specific rebuttals.
@@ -238,4 +238,4 @@ For this qualitative/consensus proof, extractions record citation verification s
 
 ---
 
-Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.6.0 on 2026-04-06.
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.7.0 on 2026-04-06.

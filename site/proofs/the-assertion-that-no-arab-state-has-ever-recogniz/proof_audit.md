@@ -58,11 +58,11 @@
 
 | ID | Fact | Source | URL | Quote | Status | Method | Credibility |
 |----|------|--------|-----|-------|--------|--------|-------------|
-| B1 | Egypt treaty 1979 | Wikipedia: Egypt–Israel peace treaty | https://en.wikipedia.org/wiki/Egypt%E2%80%93Israel_peace_treaty | "The Egypt–Israel peace treaty was signed in Washington, D.C., United States, on 26 March 1979, following the 1978 Camp David Accords." | Partial | aggressive_normalization | Tier 3 (reference) |
+| B1 | Egypt treaty 1979 | Wikipedia: Egypt–Israel peace treaty | https://en.wikipedia.org/wiki/Egypt%E2%80%93Israel_peace_treaty | "The Egypt–Israel peace treaty was signed in Washington, D.C., United States, on 26 March 1979, following the 1978 Camp David Accords." | Verified | fragment (81%) | Tier 3 (reference) |
 | B2 | Egypt treaty 1979 (cross-check) | U.S. Department of State, Office of the Historian | https://history.state.gov/milestones/1977-1980/camp-david | "the Egyptian-Israeli Peace Treaty was formally signed on March 26." | Verified | full_quote | Tier 5 (government) |
 | B3 | Jordan treaty 1994 | Wikipedia: Israel–Jordan peace treaty | https://en.wikipedia.org/wiki/Israel%E2%80%93Jordan_peace_treaty | "The signing ceremony took place at the southern border crossing of Arabah on 26 October 1994. Jordan was the second Arab country, after Egypt, to sign a peace accord with Israel." | Verified | full_quote | Tier 3 (reference) |
 | B4 | Jordan 1994 cross-reference | Wikipedia: Abraham Accords | https://en.wikipedia.org/wiki/Abraham_Accords | "The UAE and Bahrain became the first Arab countries to formally recognize Israel since Jordan in 1994." | Verified | full_quote | Tier 3 (reference) |
-| B5 | Abraham Accords UAE/Bahrain/Morocco | Encyclopaedia Britannica: Abraham Accords | https://www.britannica.com/topic/Abraham-Accords | "The accords, all of which were signed in the latter half of 2020, consist of a general declaration alongside individual bilateral agreements between Israel and each of the following countries: United Arab Emirates, Bahrain, Morocco." | Partial | fragment (48.6%) | Tier 3 (reference) |
+| B5 | Abraham Accords UAE/Bahrain/Morocco | Encyclopaedia Britannica: Abraham Accords | https://www.britannica.com/topic/Abraham-Accords | "The accords, all of which were signed in the latter half of 2020, consist of a general declaration alongside individual bilateral agreements between Israel and each of the following countries: United Arab Emirates, Bahrain, Morocco." | Verified | fragment (80%) | Tier 3 (reference) |
 | B6 | Sudan joins Abraham Accords | Wikipedia: Abraham Accords (Sudan signing) | https://en.wikipedia.org/wiki/Abraham_Accords | 'On January 6, 2021, the government of Sudan signed the "Abraham Accords Declaration" in Khartoum.' | Verified | full_quote | Tier 3 (reference) |
 
 *Source: proof.py JSON summary*
@@ -72,10 +72,10 @@
 ## Citation Verification Details
 
 **B1 — Wikipedia: Egypt–Israel peace treaty**
-- Status: **partial**
-- Method: aggressive_normalization (fragment match, 4 words matched)
+- Status: **verified**
+- Method: fragment (81% coverage)
 - Fetch mode: live
-- Impact: SC1 does not depend solely on B1. The US State Dept (B2, tier 5, fully verified) independently confirms Egypt signed a peace treaty with Israel on March 26. SC1 conclusion stands on B2 alone.
+- Impact: N/A (fully verified)
 
 **B2 — U.S. Department of State, Office of the Historian**
 - Status: **verified**
@@ -96,10 +96,10 @@
 - Impact: N/A (fully verified)
 
 **B5 — Encyclopaedia Britannica: Abraham Accords**
-- Status: **partial** (fragment match, coverage 48.6%)
-- Method: fragment
+- Status: **verified**
+- Method: fragment (80% coverage)
 - Fetch mode: live
-- Impact: The country names UAE, Bahrain, and Morocco are each confirmed present in the B5 quote text via `verify_extraction` (all three return True). The partial status reflects partial page-text coverage, not missing country names. SC3 for those three countries is supported by keyword extraction from B5's verified quote text. Sudan is covered by B6 (fully verified).
+- Impact: N/A (fully verified)
 
 **B6 — Wikipedia: Abraham Accords (Sudan signing)**
 - Status: **verified**
@@ -217,7 +217,7 @@ All sources are tier 3 (established reference) or higher. No low-credibility sou
 ## Hardening Checklist
 
 - **Rule 1 — No hand-typed values:** ✅ All keywords ("1979", "March 26", "1994", "Jordan in 1994", "United Arab Emirates", "Bahrain", "Morocco", "Abraham Accords Declaration") verified via `verify_extraction()` against quote text.
-- **Rule 2 — Citation URLs fetched:** ✅ All 6 citations fetched live; B1 and B5 returned partial matches, B2/B3/B4/B6 fully verified.
+- **Rule 2 — Citation URLs fetched:** ✅ All 6 citations fetched live and verified (B1 and B5 via fragment match, B2/B3/B4/B6 via full quote).
 - **Rule 3 — System time anchored:** ✅ `date.today()` used; system date confirmed to match proof generation date (2026-03-27).
 - **Rule 4 — Explicit claim interpretation:** ✅ `CLAIM_FORMAL` with compound sub-claims, operator_note explaining threshold choice for each SC.
 - **Rule 5 — Adversarial checks:** ✅ Three independent adversarial searches performed (treaty revocation, normalization vs recognition, Sudan unratified status). None broke the proof.

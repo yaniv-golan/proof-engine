@@ -75,9 +75,9 @@
       "source_name": "Wikipedia: Egypt\u2013Israel peace treaty",
       "url": "https://en.wikipedia.org/wiki/Egypt%E2%80%93Israel_peace_treaty",
       "quote": "The Egypt\u2013Israel peace treaty was signed in Washington, D.C., United States, on 26 March 1979, following the 1978 Camp David Accords.",
-      "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
+      "status": "verified",
+      "method": "fragment",
+      "coverage_pct": 81.0,
       "fetch_mode": "live",
       "credibility": {
         "domain": "wikipedia.org",
@@ -143,9 +143,9 @@
       "source_name": "Encyclopaedia Britannica: Abraham Accords",
       "url": "https://www.britannica.com/topic/Abraham-Accords",
       "quote": "The accords, all of which were signed in the latter half of 2020, consist of a general declaration alongside individual bilateral agreements between Israel and each of the following countries: United Arab Emirates, Bahrain, Morocco.",
-      "status": "partial",
+      "status": "verified",
       "method": "fragment",
-      "coverage_pct": 48.6,
+      "coverage_pct": 80.0,
       "fetch_mode": "live",
       "credibility": {
         "domain": "britannica.com",
@@ -261,7 +261,7 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED (with unverified citations)",
+  "verdict": "PROVED",
   "key_results": {
     "sc1_egypt_1979": {
       "n_confirming": 2,
@@ -279,11 +279,11 @@
     "n_sub_claims_total": 3,
     "claim_holds": true
   },
-  "date_note": "Proof generated for 2026-03-27; running on 2026-03-28.",
+  "date_note": "Proof generated for 2026-03-27; running on 2026-04-06.",
   "generator": {
     "name": "proof-engine",
     "version": "0.10.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-03-28"
+    "generated_at": "2026-04-06"
   }
 }

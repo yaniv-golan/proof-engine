@@ -1,6 +1,6 @@
 # Audit: Current AI systems have already achieved Artificial General Intelligence (AGI).
 
-- Generated: 2026-03-29
+- Generated: 2026-04-06
 - Reader summary: [proof_agi.md](proof_agi.md)
 - Proof script: [proof_agi.py](proof_agi.py)
 
@@ -37,7 +37,7 @@ Source: proof_agi.py JSON summary `fact_registry`.
 
 | ID | Fact | Method | Result |
 |----|------|--------|--------|
-| A1 | Verified source count meeting disproof threshold | count(verified citations) = 3 | 3 |
+| A1 | Verified source count meeting disproof threshold | count(verified citations) = 4 | 4 |
 
 ### Type B (Empirical) Facts
 
@@ -45,9 +45,9 @@ Source: proof_agi.py JSON summary `citations`.
 
 | ID | Fact | Source | URL | Quote (truncated) | Status | Method | Credibility |
 |----|------|--------|-----|---------------------|--------|--------|-------------|
-| B1 | DeepMind Levels of AGI framework | Google DeepMind (Morris et al., 2023) | https://arxiv.org/abs/2311.02462 | "We propose a framework for classifying the capabilities and behavior of AGI models..." | partial | fragment (48.8%) | Tier 4 (academic) |
+| B1 | DeepMind Levels of AGI framework | Google DeepMind (Morris et al., 2023) | https://arxiv.org/abs/2311.02462 | "We propose a framework for classifying the capabilities and behavior of AGI models..." | verified | fragment (81.4%) | Tier 4 (academic) |
 | B2 | Gary Marcus on AGI | Gary Marcus — Substack | https://garymarcus.substack.com/p/rumors-of-agis-arrival-have-been | "Current AI systems are powerful and increasingly useful tools, but they do not exhibit..." | verified | full_quote | Tier 2 (unknown) |
-| B3 | Cogni analysis on AGI | Cogni Down Under — Medium | https://medium.com/@cognidownunder/... | "Current models lack autonomous goal formation..." | fetch_failed | — | Tier 2 (unknown) |
+| B3 | Cogni analysis on AGI | Cogni Down Under — Medium | https://medium.com/@cognidownunder/... | "Current models lack autonomous goal formation..." | verified | full_quote | Tier 2 (unknown) |
 | B4 | Tim Dettmers on AGI | Tim Dettmers (UW) | https://timdettmers.com/2025/12/10/why-agi-will-not-happen/ | "For linear improvements, we previously had exponential growth as GPUs..." | verified | full_quote | Tier 2 (unknown) |
 
 ## Citation Verification Details
@@ -55,10 +55,9 @@ Source: proof_agi.py JSON summary `citations`.
 Source: proof_agi.py JSON summary `citations`.
 
 **B1 (deepmind_levels):**
-- Status: partial
-- Method: fragment match, coverage_pct = 48.8%
+- Status: verified
+- Method: fragment match, coverage_pct = 81.4%
 - Fetch mode: live
-- Impact: Partial verification is expected for arXiv academic HTML, which embeds inline reference markers. The quote content is from the paper's abstract, which is a stable, well-known text. The partial status triggers the "with unverified citations" verdict variant but does not invalidate the source's contribution to the disproof — the DeepMind Levels of AGI paper is a widely-cited, peer-reviewed publication. (Author analysis)
 
 **B2 (gary_marcus):**
 - Status: verified
@@ -66,10 +65,9 @@ Source: proof_agi.py JSON summary `citations`.
 - Fetch mode: live
 
 **B3 (cogni_analysis):**
-- Status: fetch_failed
-- Method: —
-- Fetch mode: live (HTTP 403)
-- Impact: This source could not be fetched. However, the disproof does not depend on this source — 3 other sources (B1, B2, B4) provide sufficient coverage. The quote was obtained via WebFetch during research and confirmed the article's content, but the live Python fetch was blocked by Medium's bot protection. (Author analysis)
+- Status: verified
+- Method: full_quote
+- Fetch mode: live
 
 **B4 (tim_dettmers):**
 - Status: verified
@@ -81,8 +79,8 @@ Source: proof_agi.py JSON summary `citations`.
 Source: proof_agi.py inline output (execution trace).
 
 ```
-  Confirmed sources: 3 / 4
-  verified source count vs disproof threshold: 3 >= 3 = True
+  Confirmed sources: 4 / 4
+  verified source count vs disproof threshold: 4 >= 3 = True
 ```
 
 ## Independent Source Agreement (Rule 6)
@@ -93,9 +91,9 @@ Four independent sources were consulted from different institutions and individu
 
 | Source | Institution | Reasoning approach | Verification status |
 |--------|------------|-------------------|-------------------|
-| B1 | Google DeepMind | Formal AGI taxonomy | partial |
+| B1 | Google DeepMind | Formal AGI taxonomy | verified |
 | B2 | Gary Marcus (NYU/independent) | Philosophy of mind / cognitive science | verified |
-| B3 | Cogni Down Under (independent) | Capability gap analysis | fetch_failed |
+| B3 | Cogni Down Under (independent) | Capability gap analysis | verified |
 | B4 | Tim Dettmers (University of Washington) | Physical computation limits | verified |
 
 All four sources reach the same conclusion — AGI has not been achieved — via fundamentally different reasoning approaches, providing strong independent corroboration.
@@ -140,9 +138,9 @@ For this qualitative/consensus proof, extractions record citation verification s
 
 | Fact ID | Value (status) | Countable | Quote snippet |
 |---------|---------------|-----------|---------------|
-| B1 | partial | Yes | "We propose a framework for classifying the capabilities and behavior of Artifici" |
+| B1 | verified | Yes | "We propose a framework for classifying the capabilities and behavior of Artifici" |
 | B2 | verified | Yes | "Current AI systems are powerful and increasingly useful tools, but they do not e" |
-| B3 | fetch_failed | No | "Current models lack autonomous goal formation. They respond brilliantly to promp" |
+| B3 | verified | Yes | "Current models lack autonomous goal formation. They respond brilliantly to promp" |
 | B4 | verified | Yes | "For linear improvements, we previously had exponential growth as GPUs which canc" |
 
 ## Hardening Checklist
@@ -157,4 +155,4 @@ For this qualitative/consensus proof, extractions record citation verification s
 - validate_proof.py result: **PASS with warnings** (14/15 checks passed, 0 issues, 1 warning about missing else branch in verdict assignment)
 
 ---
-Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.2.0 on 2026-03-29.
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.7.0 on 2026-04-06.
