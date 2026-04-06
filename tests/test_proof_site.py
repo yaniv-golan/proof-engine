@@ -70,6 +70,37 @@ def source_proof(tmp_path):
             "generated_at": "2026-03-30",
         },
     }))
+    (src / "proof_narrative.md").write_text(
+        "# Proof Narrative: Water boils at 100C\n\n"
+        "## Verdict\n\n**Verdict: PROVED**\n\n"
+        "Yes — water boils at 100 degrees Celsius at standard atmospheric pressure. "
+        "This is confirmed by thermodynamic computation and matches established constants.\n\n"
+        "## What was claimed?\n\n"
+        "Water boils at 100C at standard pressure. This is fundamental chemistry "
+        "and matters because boiling point is a key reference in science and cooking. "
+        "Getting this right underpins countless practical and theoretical applications.\n\n"
+        "## What did we find?\n\n"
+        "Thermodynamic computation confirms the boiling point at exactly 100 degrees Celsius "
+        "at standard atmospheric pressure of 101.325 kilopascals. "
+        "The result matches established physical constants from NIST reference data. "
+        "Independent verification through the Clausius-Clapeyron equation agrees within tolerance. "
+        "Cross-referencing against published chemistry reference tables showed exact agreement. "
+        "The Antoine equation yields 99.97 degrees Celsius at standard pressure, "
+        "confirming the result within rounding precision. "
+        "Multiple independent thermodynamic databases were consulted and all concur. "
+        "No contradictory evidence was found in any authoritative source. "
+        "Adversarial checks for altitude effects and impurity impacts "
+        "confirmed these only matter at non-standard conditions.\n\n"
+        "## What should you keep in mind?\n\n"
+        "This applies at standard atmospheric pressure only. "
+        "At higher altitudes or different pressures the boiling point changes. "
+        "Dissolved substances also raise the boiling point through colligative effects.\n\n"
+        "## How was this verified?\n\n"
+        "Verified through computation. "
+        "See [the structured proof report](proof.md), "
+        "[the full verification audit](proof_audit.md), "
+        "or [re-run the proof yourself](proof.py).\n"
+    )
     return src
 
 
@@ -166,3 +197,20 @@ def test_publish_bad_thumbnail(site_dir, source_proof):
     result = run_cli("publish", str(source_proof), "--site-dir", str(site_dir))
     assert result.returncode != 0
     assert "240x240" in result.stderr
+
+
+def test_publish_rejects_missing_narrative(source_proof, tmp_path):
+    """proof-site.py publish must fail when proof_narrative.md is missing."""
+    narrative = source_proof / "proof_narrative.md"
+    if narrative.exists():
+        narrative.unlink()
+    site_dir = tmp_path / "site"
+    site_dir.mkdir()
+    (site_dir / "proofs").mkdir()
+    result = subprocess.run(
+        [sys.executable, str(TOOL_PATH), "publish",
+         str(source_proof), "--site-dir", str(site_dir)],
+        capture_output=True, text=True,
+    )
+    assert result.returncode != 0
+    assert "proof_narrative.md" in result.stdout or "proof_narrative.md" in result.stderr
