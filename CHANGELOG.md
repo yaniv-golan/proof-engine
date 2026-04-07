@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- **proof_narrative.md** — fourth required output artifact. Plain-language, verdict-adapted narrative targeting social media visitors with zero context. Five sections: Verdict (with hook), What Was Claimed?, What Did We Find?, What Should You Keep In Mind?, How Was This Verified?
+- **proof_narrative.md** — fourth required output artifact. Plain-language, verdict-adapted narrative for readers with zero context. Five sections: Verdict (with hook), What Was Claimed?, What Did We Find?, What Should You Keep In Mind?, How Was This Verified?
 - Narrative validation library (`tools/lib/narrative_validator.py`) — structural and semantic checks: required sections, word count (200–800), fact ID rejection with context-aware filtering (vitamin B12 etc. excluded), table rejection, verdict match, hook length, claim drift warning
 - Proof loader: loads and validates `proof_narrative.md` sections, parses verdict declaration and hook text for template rendering
 - Site template: narrative sections are now the primary proof page content; proof.md sections moved to collapsible "Detailed Evidence" panel
