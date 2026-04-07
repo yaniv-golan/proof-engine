@@ -13,7 +13,8 @@ def build_citation_context(
     date = generator["generated_at"]
     year = date[:4] if date else ""
     claim = proof_data["claim_natural"]
-    title = f"Proof Engine Verification: {claim}"
+    verdict = proof_data.get("verdict", "")
+    title = f"Proof Engine Verification ({verdict}): {claim}"
     slug_sanitized = slug.replace("-", "_")
 
     doi = None

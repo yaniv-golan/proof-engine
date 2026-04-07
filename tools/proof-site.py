@@ -315,8 +315,8 @@ def cmd_mint_doi(args) -> int:
     base_url = "/proof-engine/"
     proof_url = f"{site_url}{base_url}proofs/{slug}/"
 
-    title = f"Proof Engine Verification: {claim}"
     verdict = proof_data.get("verdict", "")
+    title = f"Proof Engine Verification ({verdict}): {claim}"
     version = proof_data.get("generator", {}).get("version", "")
 
     # Extract Key Findings from proof.md (full text, converted to HTML)

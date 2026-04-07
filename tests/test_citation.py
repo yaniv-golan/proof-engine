@@ -23,7 +23,7 @@ SAMPLE_SLUG = "us-dollar-purchasing-power"
 
 def test_build_citation_context_no_doi():
     ctx = build_citation_context(SAMPLE_PROOF_DATA, SAMPLE_URL, SAMPLE_SLUG, doi_data=None)
-    assert ctx["title"] == "Proof Engine Verification: The US dollar has lost 95% of its purchasing power"
+    assert ctx["title"] == "Proof Engine Verification (PROVED): The US dollar has lost 95% of its purchasing power"
     assert ctx["author"] == "Proof Engine"
     assert ctx["year"] == "2026"
     assert ctx["date"] == "2026-04-07"
@@ -122,13 +122,13 @@ def test_generate_cite_txt_with_doi():
 def test_generate_apa_no_doi():
     ctx = build_citation_context(SAMPLE_PROOF_DATA, SAMPLE_URL, SAMPLE_SLUG, doi_data=None)
     apa = generate_apa(ctx)
-    assert apa == f"Proof Engine. (2026). Proof Engine Verification: The US dollar has lost 95% of its purchasing power. {SAMPLE_URL}"
+    assert apa == f"Proof Engine. (2026). Proof Engine Verification (PROVED): The US dollar has lost 95% of its purchasing power. {SAMPLE_URL}"
 
 
 def test_generate_chicago_no_doi():
     ctx = build_citation_context(SAMPLE_PROOF_DATA, SAMPLE_URL, SAMPLE_SLUG, doi_data=None)
     chicago = generate_chicago(ctx)
-    assert chicago == f'Proof Engine. "Proof Engine Verification: The US dollar has lost 95% of its purchasing power." 2026. {SAMPLE_URL}.'
+    assert chicago == f'Proof Engine. "Proof Engine Verification (PROVED): The US dollar has lost 95% of its purchasing power." 2026. {SAMPLE_URL}.'
 
 
 def test_bibtex_escapes_special_chars():
