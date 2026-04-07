@@ -323,9 +323,8 @@ def cmd_mint_doi(args) -> int:
         text = proof_md_path.read_text()
         match = re.search(r"## Key Findings\n\n(.+?)(?=\n---|\n## )", text, re.DOTALL)
         if match:
-            key_findings = match.group(1).strip()[:500]
-            # Strip markdown formatting for Zenodo plain-text description
-            key_findings = re.sub(r'\*{1,2}([^*]+)\*{1,2}', r'\1', key_findings)
+            # Strip markdown formatting before truncating
+            key_findings = re.sub(r'\*+', '', match.group(1).strip())[:500]
     description = f"Verdict: {verdict}\n\n{key_findings}" if key_findings else f"Verdict: {verdict}"
 
     try:
