@@ -1212,3 +1212,120 @@ def test_proof_page_share_bar_has_hook(site_fixture):
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
     assert "data-hook=" in html
+
+
+def test_citation_files_generated(site_fixture):
+    """Build should generate cite.bib, cite.ris, cite.txt for each proof."""
+    _run_build(site_fixture)
+    out = site_fixture / "_site" / "proofs" / "test-claim"
+    assert (out / "cite.bib").exists()
+    assert (out / "cite.ris").exists()
+    assert (out / "cite.txt").exists()
+
+
+def test_citation_bibtex_content(site_fixture):
+    _run_build(site_fixture)
+    bib = (site_fixture / "_site" / "proofs" / "test-claim" / "cite.bib").read_text()
+    assert "@misc{proofengine_test_claim," in bib
+    assert "Proof Engine" in bib
+    assert "2025" in bib  # from fixture's generated_at
+
+
+def test_citation_ris_content(site_fixture):
+    _run_build(site_fixture)
+    ris = (site_fixture / "_site" / "proofs" / "test-claim" / "cite.ris").read_text()
+    assert "TY  - DATA" in ris
+    assert "ER  -" in ris
+
+
+def test_citation_txt_has_apa_and_chicago(site_fixture):
+    _run_build(site_fixture)
+    txt = (site_fixture / "_site" / "proofs" / "test-claim" / "cite.txt").read_text()
+    assert "APA:" in txt
+    assert "Chicago:" in txt
+
+
+def test_citation_with_doi_json(site_fixture):
+    """When doi.json exists, citation files include the DOI."""
+    proof_dir = site_fixture / "site" / "proofs" / "test-claim"
+    (proof_dir / "doi.json").write_text(json.dumps({
+        "doi": "10.5281/zenodo.999",
+        "zenodo_id": "999",
+        "concept_doi": "10.5281/zenodo.990",
+        "concept_zenodo_id": "990",
+        "claim_natural": "Test claim is true",
+        "minted_at": "2026-01-01",
+    }))
+    _run_build(site_fixture)
+    bib = (site_fixture / "_site" / "proofs" / "test-claim" / "cite.bib").read_text()
+    assert "10.5281/zenodo.999" in bib
+    ris = (site_fixture / "_site" / "proofs" / "test-claim" / "cite.ris").read_text()
+    assert "10.5281/zenodo.999" in ris
+
+
+def test_built_proof_json_has_citation_block(site_fixture):
+    """The built proof.json should include a citation block."""
+    _run_build(site_fixture)
+    built = json.loads(
+        (site_fixture / "_site" / "proofs" / "test-claim" / "proof.json").read_text()
+    )
+    assert "citation" in built
+    assert built["citation"]["author"] == "Proof Engine"
+    assert built["citation"]["url"].endswith("/proofs/test-claim/")
+
+
+def test_index_json_has_doi_field(site_fixture):
+    """The site index.json should include doi per proof (null when no DOI)."""
+    _run_build(site_fixture)
+    index = json.loads((site_fixture / "_site" / "index.json").read_text())
+    proof_entry = index["proofs"][0]
+    assert "doi" in proof_entry
+    assert proof_entry["doi"] is None
+
+
+def test_index_json_has_doi_when_present(site_fixture):
+    proof_dir = site_fixture / "site" / "proofs" / "test-claim"
+    (proof_dir / "doi.json").write_text(json.dumps({
+        "doi": "10.5281/zenodo.999",
+        "zenodo_id": "999",
+        "concept_doi": "10.5281/zenodo.990",
+        "concept_zenodo_id": "990",
+        "claim_natural": "Test claim is true",
+        "minted_at": "2026-01-01",
+    }))
+    _run_build(site_fixture)
+    index = json.loads((site_fixture / "_site" / "index.json").read_text())
+    assert index["proofs"][0]["doi"] == "10.5281/zenodo.999"
+
+
+def test_proof_page_has_cite_section(site_fixture):
+    """The rendered proof page should contain the citation details element."""
+    _run_build(site_fixture)
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert 'class="cite-section"' in html
+    assert "Cite this proof" in html
+    assert "cite-apa" in html
+    assert "cite-bibtex" in html
+
+
+def test_proof_page_cite_has_download_links(site_fixture):
+    _run_build(site_fixture)
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "cite.bib" in html
+    assert "cite.ris" in html
+
+
+def test_proof_page_cite_shows_doi_when_present(site_fixture):
+    proof_dir = site_fixture / "site" / "proofs" / "test-claim"
+    (proof_dir / "doi.json").write_text(json.dumps({
+        "doi": "10.5281/zenodo.999",
+        "zenodo_id": "999",
+        "concept_doi": "10.5281/zenodo.990",
+        "concept_zenodo_id": "990",
+        "claim_natural": "Test claim is true",
+        "minted_at": "2026-01-01",
+    }))
+    _run_build(site_fixture)
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "10.5281/zenodo.999" in html
+    assert "doi.org/10.5281/zenodo.999" in html

@@ -144,10 +144,43 @@
         });
     }
 
+    // Citation copy button — progressive enhancement
+    function initCiteCopy() {
+        var copyBtn = document.querySelector('.cite-copy-btn');
+        if (!copyBtn || !navigator.clipboard) return;
+        copyBtn.style.display = '';
+        copyBtn.addEventListener('click', function() {
+            var panels = {
+                'cite-apa': 'panel-apa',
+                'cite-chicago': 'panel-chicago',
+                'cite-bibtex': 'panel-bibtex',
+                'cite-ris': 'panel-ris'
+            };
+            var text = '';
+            for (var id in panels) {
+                if (document.getElementById(id) && document.getElementById(id).checked) {
+                    var panel = document.getElementById(panels[id]);
+                    if (panel) text = panel.querySelector('.cite-text').textContent;
+                    break;
+                }
+            }
+            if (text) {
+                navigator.clipboard.writeText(text).then(function() {
+                    copyBtn.textContent = 'copied!';
+                    setTimeout(function() { copyBtn.textContent = 'copy'; }, 1500);
+                });
+            }
+        });
+    }
+
     // Run after DOM is ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initAccordions);
+        document.addEventListener('DOMContentLoaded', function() {
+            initAccordions();
+            initCiteCopy();
+        });
     } else {
         initAccordions();
+        initCiteCopy();
     }
 })();

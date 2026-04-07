@@ -428,6 +428,25 @@ a:hover { text-decoration: underline; }
 .download-link { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; font-size: 11px; font-family: var(--font-mono); color: var(--link); }
 .download-link:hover { text-decoration: none; background: #1c2129; }
 
+/* Citation */
+.cite-section { margin-top: 24px; margin-bottom: 8px; }
+.cite-section summary { cursor: pointer; font-size: 13px; font-family: var(--font-mono); color: var(--link); padding: 8px 0; }
+.cite-section summary:hover { text-decoration: underline; }
+.cite-body { padding: 12px 0; }
+.cite-doi { font-family: var(--font-mono); font-size: 12px; margin-bottom: 12px; color: var(--text-secondary); }
+.cite-doi a { color: var(--link); }
+.cite-tabs { position: relative; }
+.cite-tabs input[type="radio"] { display: none; }
+.cite-tabs label { display: inline-block; padding: 4px 12px; font-size: 12px; font-family: var(--font-mono); color: var(--text-secondary); cursor: pointer; border: 1px solid transparent; border-radius: 4px 4px 0 0; }
+.cite-tabs input[type="radio"]:checked + label { color: var(--text); background: var(--bg-card); border-color: var(--border); border-bottom-color: var(--bg-card); }
+.cite-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-radius: 0 6px 6px 6px; padding: 12px; margin-top: -1px; }
+#cite-apa:checked ~ #panel-apa,
+#cite-chicago:checked ~ #panel-chicago,
+#cite-bibtex:checked ~ #panel-bibtex,
+#cite-ris:checked ~ #panel-ris { display: block; }
+.cite-text { white-space: pre-wrap; word-break: break-word; font-size: 12px; font-family: var(--font-mono); color: var(--text); margin: 0; line-height: 1.5; }
+.cite-actions { display: flex; gap: 8px; margin-top: 8px; }
+
 /* Filters */
 .filters { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
 .filter-input { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; color: var(--text); font-size: 13px; font-family: var(--font-mono); flex: 1; min-width: 200px; }

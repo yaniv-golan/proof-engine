@@ -156,3 +156,73 @@ def test_finalize_force_replaces_existing(source_dir, tmp_path):
     finalize_proof(staging, target, force=True)
     assert (target / "proof.py").read_text() != "old"
     assert not (target / "old-file.txt").exists()
+
+
+def test_stage_proof_copies_doi_json(source_dir):
+    """doi.json should be staged as an optional artifact."""
+    (source_dir / "doi.json").write_text(json.dumps({
+        "doi": "10.5281/zenodo.123",
+        "zenodo_id": "123",
+        "concept_doi": "10.5281/zenodo.100",
+        "concept_zenodo_id": "100",
+        "claim_natural": "Test claim",
+        "minted_at": "2026-04-07",
+    }))
+    staging = stage_proof(source_dir)
+    try:
+        assert (Path(staging) / "doi.json").exists()
+    finally:
+        shutil.rmtree(staging)
+
+
+def test_finalize_force_preserves_doi_json(source_dir, tmp_path):
+    """When force-replacing, doi.json from existing proof is preserved if claim matches."""
+    target = tmp_path / "site" / "proofs" / "test-claim"
+    target.mkdir(parents=True)
+    (target / "proof.py").write_text("old")
+    (target / "proof.json").write_text(json.dumps({"claim_natural": "Test claim"}))
+    (target / "doi.json").write_text(json.dumps({
+        "doi": "10.5281/zenodo.123",
+        "zenodo_id": "123",
+        "concept_doi": "10.5281/zenodo.100",
+        "concept_zenodo_id": "100",
+        "claim_natural": "Test claim",
+        "minted_at": "2026-04-07",
+    }))
+    staging = stage_proof(source_dir)
+    finalize_proof(staging, target, force=True)
+    assert (target / "doi.json").exists()
+    doi = json.loads((target / "doi.json").read_text())
+    assert doi["doi"] == "10.5281/zenodo.123"
+
+
+def test_finalize_force_rejects_doi_claim_mismatch(source_dir, tmp_path):
+    """When force-replacing, doi.json is NOT preserved if claim_natural differs."""
+    target = tmp_path / "site" / "proofs" / "test-claim"
+    target.mkdir(parents=True)
+    (target / "proof.py").write_text("old")
+    (target / "proof.json").write_text(json.dumps({"claim_natural": "Different claim entirely"}))
+    (target / "doi.json").write_text(json.dumps({
+        "doi": "10.5281/zenodo.123",
+        "zenodo_id": "123",
+        "concept_doi": "10.5281/zenodo.100",
+        "concept_zenodo_id": "100",
+        "claim_natural": "Different claim entirely",
+        "minted_at": "2026-04-07",
+    }))
+    staging = stage_proof(source_dir)
+    # The incoming proof has claim_natural "Test claim" (from fixture's proof.json)
+    # The existing doi.json has claim_natural "Different claim entirely"
+    with pytest.raises(ValueError, match="DOI was minted for a different claim"):
+        finalize_proof(staging, target, force=True)
+
+
+def test_finalize_force_no_doi_json_works(source_dir, tmp_path):
+    """Force-replace works fine when there's no existing doi.json."""
+    target = tmp_path / "site" / "proofs" / "test-claim"
+    target.mkdir(parents=True)
+    (target / "proof.py").write_text("old")
+    staging = stage_proof(source_dir)
+    finalize_proof(staging, target, force=True)
+    assert (target / "proof.py").exists()
+    assert not (target / "doi.json").exists()

@@ -82,3 +82,35 @@ def test_rating_value_supported_qualified():
     result = json.loads(generate_claim_review(data, "https://example.com/proof"))
     assert result["reviewRating"]["ratingValue"] == 3
     assert result["reviewRating"]["alternateName"] == "SUPPORTED (with unverified citations)"
+
+
+def test_json_ld_no_doi_by_default():
+    result = json.loads(generate_claim_review(
+        proof_data=SAMPLE_PROOF_DATA,
+        canonical_url="https://example.com/proofs/test/",
+    ))
+    assert "sameAs" not in result
+    assert "identifier" not in result
+
+
+def test_json_ld_with_doi():
+    result = json.loads(generate_claim_review(
+        proof_data=SAMPLE_PROOF_DATA,
+        canonical_url="https://example.com/proofs/test/",
+        doi="10.5281/zenodo.1234567",
+        concept_doi="10.5281/zenodo.1234560",
+    ))
+    assert result["sameAs"] == ["https://doi.org/10.5281/zenodo.1234567", "https://doi.org/10.5281/zenodo.1234560"]
+    assert result["identifier"] == "10.5281/zenodo.1234567"
+
+
+def test_json_ld_concept_doi_as_additional_same_as():
+    result = json.loads(generate_claim_review(
+        proof_data=SAMPLE_PROOF_DATA,
+        canonical_url="https://example.com/proofs/test/",
+        doi="10.5281/zenodo.1234567",
+        concept_doi="10.5281/zenodo.1234560",
+    ))
+    assert result["identifier"] == "10.5281/zenodo.1234567"
+    assert "https://doi.org/10.5281/zenodo.1234567" in result["sameAs"]
+    assert "https://doi.org/10.5281/zenodo.1234560" in result["sameAs"]
