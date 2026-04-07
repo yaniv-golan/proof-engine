@@ -19,7 +19,7 @@ Read this at **Step 6** before presenting results.
 
 ## Verify (quality and completeness)
 
-- [ ] All 7 hardening rules checked in proof_audit.md hardening checklist
+- [ ] All 8 hardening rules checked in proof_audit.md hardening checklist
 - [ ] proof.md has executive summary with key numbers directly under verdict
 - [ ] proof.md verification statuses derivable from JSON summary `citations[].status` (not from message strings)
 - [ ] proof.md conclusion addresses unverified/partially verified citations with impact analysis (if any)
@@ -34,3 +34,4 @@ Read this at **Step 6** before presenting results.
 - [ ] If `threshold < 3`: operator_note documents domain scarcity search, sources meet domain-appropriate quality bar, and no majority COI among threshold sources
 - [ ] For comparative/superlative claims: if the cited source flags overlapping uncertainty in the compared values, `uncertainty_override = True` is set and verdict is UNDETERMINED
 - [ ] If proof has `empirical_facts`: COI assessed for all citation sources. `coi_flags` populated in `cross_checks` (empty list if no COI identified). For source-counting proofs: majority COI check applied before verdict.
+- [ ] Formalization fidelity: CLAIM_FORMAL captures all elements of the natural-language claim, or operator_note documents what was narrowed/excluded/proxied

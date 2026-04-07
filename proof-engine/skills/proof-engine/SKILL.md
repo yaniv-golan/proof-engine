@@ -9,7 +9,7 @@ description: >
   questions with no verifiable answer.
 metadata:
   author: Yaniv Golan
-  version: "1.8.0"
+  version: "1.9.0"
   license: MIT
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
@@ -40,11 +40,13 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **Dynamic/JS-rendered sites**: Many aggregators (officialdata.org, in2013dollars.com, inflationdata.com) render page chrome via JavaScript. Live fetch gets raw HTML — data tables may be static but page titles, headings, and navigation are often JS-rendered. Quote verification on page titles commonly fails even when data is correct. Use `verify_data_values()` as the primary verification for table data; treat quote verification as a bonus, not a requirement.
 - **`cross_check()` mode and tolerance**: Use `mode="absolute"` for computed results that should match closely. Use `mode="relative"` for source-to-source comparisons. Tolerance heuristics for government statistics: expect 1-5% variation across aggregators due to rounding, month selection (annual avg vs December), and base-period differences. If sources disagree by more than 5%, investigate: find a third source, check if they use different base periods or date ranges, and document the discrepancy in adversarial checks. Don't silently ignore large disagreements — they may indicate one source is wrong.
 - **Quote selection for qualitative claims**: Pick quotes that directly state the claim's core assertion, not tangential mentions. A source that says "the brain is remarkable" does not support "adult neurogenesis occurs." The quote must be specific enough that citation verification confirms the source actually addresses the claim.
+- **Citation presence ≠ citation entailment**: `verify_all_citations()` confirms a quote exists on the page — not that it supports the claim's conclusion. Each Type B quote must name or describe the specific subject of the claim. A quote stating a generic principle (e.g., "falsifiability is a hallmark of science") does not entail a conclusion about a specific subject (e.g., "math washing is not valid science") without author reasoning to bridge the gap. If the bridge requires inference, document it in `operator_note` and note it as an entailment gap in proof.md's Claim Interpretation section.
 - **Academic HTML degrades citation matches**: PMC and journal pages embed inline reference markers (`[1]`, superscripts) that inject noise after HTML stripping. If a real verbatim quote gets `partial` status, check whether the source is academic HTML before suspecting the quote itself. Use `snapshot` to capture clean text if needed.
 - **Don't conflate source count with evidence strength**: 5 news articles citing the same study count as 1 independent source, not 5. For qualitative consensus proofs, check whether sources trace to independent primary research. Document the independence rationale in the cross-checks section.
 - **Absence claims need search documentation**: For "no evidence exists" claims, use the Absence-of-Evidence template. Document what was searched (databases, query terms, date ranges), not just what was found. The `search_registry` structure makes this machine-checkable.
 - **Don't weaken causal claims to prove them**: If the claim says X "causes" Y, you cannot redefine it to X "is associated with" Y in `operator_note` and then PROVE the weaker version. Decompose into SC-association + SC-causation sub-claims using the compound claim template. If only observational evidence exists without causal inference methods (Bradford Hill, Mendelian randomization, natural experiments), the result is PARTIALLY VERIFIED (association confirmed, causation not established), not PROVED.
 - **Don't rank from point estimates when the source says they overlap**: If Our World in Data says "nuclear: 0.07/TWh, solar: 0.05/TWh" but also says "the uncertainties mean these values are likely to overlap," you cannot conclude solar is safer than nuclear. Set `uncertainty_override = True` and return UNDETERMINED.
+- **Don't hardcode decisive variables**: Any variable assigned `True` or `False` that is later passed to `compare()` circumvents evidence-based verdict computation. The validator catches `*_holds` names, but other names (e.g., `rh_is_solved = False`) must also be computed from evidence. Use `compare()` or derive from `verify_*()` / `extract_*()` results.
 - **Adversarial evidence is prose-only, not citation-verified**: Sources in `adversarial_checks` are documented as prose in `verification_performed` — they are not machine-verified by `verify_all_citations()`. For contested qualifier proofs, this means the strongest counter-evidence (e.g., independent reviews rejecting a qualifier) is only as trustworthy as the proof author's characterization. Mitigate by: (1) quoting specific findings verbatim in `verification_performed`, (2) citing the source URL so reviewers can check, and (3) using multiple adversarial sources that independently reach the same conclusion.
 
 ## Reference Files
@@ -53,7 +55,7 @@ Read these on demand, not all upfront.
 
 | File | Read when |
 |------|-----------|
-| [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) | **Step 3** — the 7 rules with bad/good examples |
+| [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) | **Step 3** — the 8 rules with bad/good examples |
 | [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) | **Step 3** — read this index to choose a template, then read the specific template file it directs you to |
 | [output-specs.md](${CLAUDE_SKILL_DIR}/references/output-specs.md) | **Step 5** — proof.md, proof_audit.md, and proof_narrative.md structure |
 | [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md) | **Step 6** — before presenting results |
@@ -117,7 +119,7 @@ For environment-specific details (Claude Code, ChatGPT, sandboxed), paywalled so
 
 **Every proof has three parts**: (1) Fact Registry — numbered facts tagged Type A, B, or S, (2) Proof Logic — a self-contained Python script, (3) Verdict — one of the levels below.
 
-## The 7 Hardening Rules
+## The 8 Hardening Rules
 
 | Rule | Closes failure mode | Enforced by |
 |------|-------------------|-------------|
@@ -128,6 +130,7 @@ For environment-specific details (Claude Code, ChatGPT, sandboxed), paywalled so
 | 5. Independent adversarial check | Confirmation bias | Counter-evidence web searches |
 | 6. Independent cross-checks | Shared-variable bugs | Multiple sources parsed separately |
 | 7. Never hard-code constants/formulas | LLM misremembers values | `scripts/computations.py` |
+| 8. Evidence relevance for rejection | Weak/off-subject rejection sources | `adversarial_checks` documentation |
 
 See [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for detailed examples of each.
 
@@ -137,6 +140,8 @@ See [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for 
 Classify: mathematical (Type A), empirical (Type B), or mixed. Identify ambiguous terms. Determine what constitutes proof AND disproof. For compound claims (X AND Y, X BECAUSE Y), decompose into sub-claims. Write a brief proof strategy and share with the user before proceeding.
 
 If the claim is an opinion or has no verifiable answer, do NOT attempt a proof. Offer a related factual claim instead.
+
+Normative claims ("X is valid," "X is ethical," "X is proper scientific practice") that can only be operationalized by counting authorities who agree must be declined or explicitly disclosed as proxy operationalizations in `operator_note`. If the proof's supporting citations state generic principles (e.g., Popper on falsifiability) without naming the specific subject of the claim, the entailment gap must be disclosed in `operator_note` and in proof.md's Claim Interpretation section.
 
 Guiding questions:
 - Crisp true/false threshold? Extractable facts? Canonical sources? Clear disproof condition?
@@ -164,7 +169,7 @@ Find at least two independent sources (Rule 6). For math claims, plan two indepe
 **Pre-fetch snapshots early, not late.** Many news and advocacy sites now return 403 to automated fetches — not just .gov/.edu. During Step 2 research, pre-fetch the full page text for every source you plan to cite and include it as the `snapshot` field in `empirical_facts`. This avoids discovering fetch failures late during `verify_all_citations()`, which forces source substitution under time pressure. Note: WebFetch and `verify_all_citations()` use different HTTP clients — a WebFetch 403 does not mean the script will also get 403, and vice versa. If both fail, the snapshot is your only recourse. See [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for details.
 
 ### Step 3: Write the Proof Code
-Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 7 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) to identify which template matches your claim type. Then read the specific template file it directs you to (e.g., `template-qualitative.md`, `template-compound.md`). Do not skip the second read — the index contains only the decision table, not the template code. **If the claim uses an epistemic qualifier** ("verified," "confirmed," "proven," "established"), **use the compound claim template** (`template-compound.md`) with the contested qualifier pattern: SC1 (provenance — do the numbers come from a credible source?) + SC2 (epistemic warrant — has the qualifier been independently confirmed?). **If the claim uses causal language** ("causes," "leads to," "promotes," "damages," "prevents"), **use the compound claim template** (`template-compound.md`) with SC-association + SC-causation sub-claims — see "Causal vs. associational claims" in the Verdicts section. For claims about absence of evidence, use `template-absence.md`. The proof script must be self-contained: `python proof.py` produces the full output.
+Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 8 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) to identify which template matches your claim type. Then read the specific template file it directs you to (e.g., `template-qualitative.md`, `template-compound.md`). Do not skip the second read — the index contains only the decision table, not the template code. **If the claim uses an epistemic qualifier** ("verified," "confirmed," "proven," "established"), **use the compound claim template** (`template-compound.md`) with the contested qualifier pattern: SC1 (provenance — do the numbers come from a credible source?) + SC2 (epistemic warrant — has the qualifier been independently confirmed?). **If the claim uses causal language** ("causes," "leads to," "promotes," "damages," "prevents"), **use the compound claim template** (`template-compound.md`) with SC-association + SC-causation sub-claims — see "Causal vs. associational claims" in the Verdicts section. For claims about absence of evidence, use `template-absence.md`. The proof script must be self-contained: `python proof.py` produces the full output.
 
 Required elements:
 - `CLAIM_FORMAL` dict with `operator_note` (Rule 4)
@@ -174,6 +179,8 @@ Required elements:
 - Cross-checks from independent sources/methods (Rule 6)
 - `FACT_REGISTRY` mapping report IDs to proof-script keys
 - JSON summary block in `__main__` ending with `=== PROOF SUMMARY (JSON) ===`
+
+**Formalization fidelity check (before Step 4):** Re-read the natural-language claim and `CLAIM_FORMAL` side by side. Confirm each element of the natural claim is captured in the formal spec. If any aspect is narrowed, excluded, or operationalized by proxy, it must be documented in `operator_note` and the proof.md Claim Interpretation section's formalization scope note. Flag unresolvable divergences to the user before continuing.
 
 ### Step 4: Validate
 Run `python ${CLAUDE_SKILL_DIR}/scripts/validate_proof.py proof_file.py` and fix issues.

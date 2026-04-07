@@ -16,7 +16,7 @@ The Riemann Hypothesis is definitively unsolved. Wikipedia's dedicated article o
 
 A second, independently maintained Wikipedia article on the Millennium Prize Problems separately confirms that the Riemann Hypothesis is among the six problems that "remain unsolved, despite a large number of unsatisfactory proofs by both amateur and professional mathematicians." These two sources have separate editorial histories and cannot both be wrong simultaneously about such a high-profile result.
 
-The Clay Mathematics Institute — the body that would award the $1 million prize — still lists the Riemann Hypothesis as an open prize problem. If anyone had solved it, the prize process would have been triggered. No such process is underway.
+The Clay Mathematics Institute — the body that would award the $1 million prize — still lists the Riemann Hypothesis as "Unsolved" on its official Millennium Prize page. If anyone had solved it, the prize process would have been triggered. No such process is underway.
 
 Looking specifically at TikTok-based claims, a search for credible mathematical evaluations of any TikTok-originating proof turned up nothing. What it did find was a pattern of amateur claimed proofs — and at least one debunking video explicitly addressing a viral TikTok claim. This is consistent with the historical pattern: many people have claimed to solve the Riemann Hypothesis over the years, and none have succeeded.
 
@@ -32,4 +32,4 @@ The one-week timeframe and social-media origin are not themselves disqualifying 
 
 ## How was this verified?
 
-This claim was evaluated by checking authoritative sources on the current status of the Riemann Hypothesis, then testing whether the conditions the claim requires — a valid, accepted mathematical proof — are actually met. Full details are in [the structured proof report](proof.md) and [the full verification audit](proof_audit.md). You can also [re-run the proof yourself](proof.py).
+This claim was evaluated by checking three independent authoritative sources on the current status of the Riemann Hypothesis, then testing whether the conditions the claim requires — a valid, accepted mathematical proof — are actually met. All three citations were verified by live-fetching the source URLs and confirming the quoted text. Full details are in [the structured proof report](proof.md) and [the full verification audit](proof_audit.md). You can also [re-run the proof yourself](proof.py).

@@ -2,7 +2,7 @@
 validate_proof.py — Static analysis of proof scripts for Hardening Rule compliance.
 
 Runs BEFORE execution to catch LLM errors early. Checks that the generated
-proof code follows all 7 Hardening Rules without actually running it.
+proof code follows all 8 Hardening Rules without actually running it.
 
 Usage:
     python scripts/validate_proof.py proof_file.py
@@ -704,6 +704,48 @@ class ProofValidator:
                     self.passed.append("Verdict: claim_holds assigned from compare() (inside __main__)")
                     return
 
+    def check_hardcoded_compare_input(self):
+        """Check that variables passed as the first arg to compare() are not hardcoded True/False.
+
+        Complements check_claim_holds_computed() which only catches *_holds* variable names.
+        This catches patterns like:
+            rh_is_solved = False
+            claim_holds = compare(rh_is_solved, "==", True)
+        """
+        # Step 1: Find all varname = True/False assignments
+        # (skip comments, UPPER_CASE constants, *_holds* names already handled)
+        bool_assignments = {}  # varname -> (line_number, value)
+        assign_pattern = re.compile(r'\s*(\w+)\s*=\s*(True|False)\s*$')
+        for i, line in enumerate(self.lines, 1):
+            stripped = line.strip()
+            if stripped.startswith("#"):
+                continue
+            m = assign_pattern.match(line)
+            if m:
+                var_name = m.group(1)
+                if var_name.isupper():
+                    continue
+                if "claim_holds" in var_name or var_name.endswith("_holds"):
+                    continue
+                bool_assignments[var_name] = (i, m.group(2))
+
+        # Step 2: Find compare() calls and check if first arg is a hardcoded var
+        compare_pattern = re.compile(r'compare\(\s*(\w+)\s*,')
+        for i, line in enumerate(self.lines, 1):
+            stripped = line.strip()
+            if stripped.startswith("#"):
+                continue
+            for cm in compare_pattern.finditer(line):
+                first_arg = cm.group(1)
+                if first_arg in bool_assignments:
+                    assign_line, assign_val = bool_assignments[first_arg]
+                    self.issues.append((
+                        f"Verdict: {first_arg} is hardcoded to {assign_val} "
+                        f"(line {assign_line}) but passed to compare() (line {i}) "
+                        "— must be computed from evidence",
+                        [],
+                    ))
+
     def check_unused_imports(self):
         """Check for imported-but-unused functions from scripts.*
 
@@ -890,6 +932,7 @@ class ProofValidator:
         self.check_table_data_integrity()
         self.check_general_selfcontained()
         self.check_claim_holds_computed()
+        self.check_hardcoded_compare_input()
         self.check_unused_imports()
         self.check_verdict_branches()
         self.check_proof_direction()

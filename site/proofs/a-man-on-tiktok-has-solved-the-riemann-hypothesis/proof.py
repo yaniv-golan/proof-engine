@@ -1,6 +1,6 @@
 """
 Proof: A man on TikTok has solved the Riemann Hypothesis after one week of work.
-Generated: 2026-03-28
+Generated: 2026-04-07
 """
 import json
 import os
@@ -16,7 +16,7 @@ from scripts.computations import compare
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "A man on TikTok has solved the Riemann Hypothesis after one week of work."
 CLAIM_FORMAL = {
-    "subject": "Riemann Hypothesis — solved status",
+    "subject": "Riemann Hypothesis \u2014 solved status",
     "property": "whether a valid proof has been accepted by the mathematical community",
     "operator": "==",
     "threshold": True,
@@ -29,8 +29,13 @@ CLAIM_FORMAL = {
         "authoritative evidence the hypothesis remains unsolved. "
         "The claim has three sub-claims: (SC1) the solver is a man on TikTok; "
         "(SC2) the work took ~1 week; (SC3) the solution is mathematically valid. "
-        "SC3 is decisive — if SC3 is false, the whole claim is false regardless of SC1/SC2. "
-        "This proof focuses on disproving SC3 via authoritative independent sources."
+        "SC3 is decisive \u2014 if SC3 is false, the whole claim is false regardless of SC1/SC2. "
+        "This proof focuses on disproving SC3 via authoritative independent sources. "
+        "Formalization scope: 'solved' is operationalized as 'accepted by the mathematical "
+        "community,' which does not logically exclude the bare possibility of a valid proof "
+        "that has not yet been recognized. However, the claim's public framing ('a man on "
+        "TikTok') implies public knowledge and community awareness, making this operationalization "
+        "appropriate for the claim as stated."
     ),
 }
 
@@ -38,15 +43,15 @@ CLAIM_FORMAL = {
 FACT_REGISTRY = {
     "B1": {
         "key": "source_wikipedia_rh",
-        "label": "Wikipedia: Riemann Hypothesis — 2026 survey confirms no proof is known",
+        "label": "Wikipedia: Riemann Hypothesis \u2014 2026 survey confirms no proof is known",
     },
     "B2": {
         "key": "source_wikipedia_mpp",
-        "label": "Wikipedia: Millennium Prize Problems — RH listed among six remaining unsolved problems",
+        "label": "Wikipedia: Millennium Prize Problems \u2014 RH listed among six remaining unsolved problems",
     },
     "B3": {
         "key": "source_clay",
-        "label": "Clay Mathematics Institute — official Millennium Prize page for Riemann Hypothesis",
+        "label": "Clay Mathematics Institute \u2014 official problem status: Unsolved",
     },
     "A1": {
         "label": "Logical conclusion: if RH is unsolved per authoritative sources, no TikTok claim can constitute a valid solution",
@@ -74,11 +79,7 @@ empirical_facts = {
         "source_name": "Wikipedia: Millennium Prize Problems",
     },
     "source_clay": {
-        "quote": (
-            "The Riemann hypothesis asserts that all the "
-            "\u2018non-obvious\u2019 zeros of the zeta function are complex numbers "
-            "with real part 1/2."
-        ),
+        "quote": "Unsolved",
         "url": "https://www.claymath.org/millennium/riemann-hypothesis/",
         "source_name": "Clay Mathematics Institute: Riemann Hypothesis (Millennium Prize)",
     },
@@ -89,14 +90,16 @@ citation_results = verify_all_citations(empirical_facts, wayback_fallback=True)
 
 # 5. CROSS-CHECK (Rule 6)
 # B1 (Wikipedia RH article) and B2 (Wikipedia Millennium Prize Problems article) are
-# independently authored pages with separate editorial histories. Both confirm the
-# Riemann Hypothesis has no accepted proof as of 2026.
-b1_confirmed = citation_results.get("source_wikipedia_rh", {}).get("status") in ("verified", "partial")
-b2_confirmed = citation_results.get("source_wikipedia_mpp", {}).get("status") in ("verified", "partial")
+# independently authored pages with separate editorial histories. B3 (Clay Mathematics
+# Institute) is the authoritative prize administrator. All three confirm the RH is unsolved.
+COUNTABLE_STATUSES = ("verified", "partial")
+b1_confirmed = citation_results.get("source_wikipedia_rh", {}).get("status") in COUNTABLE_STATUSES
+b2_confirmed = citation_results.get("source_wikipedia_mpp", {}).get("status") in COUNTABLE_STATUSES
+b3_confirmed = citation_results.get("source_clay", {}).get("status") in COUNTABLE_STATUSES
 cross_check_agreement = b1_confirmed and b2_confirmed
 
-# 6. SYSTEM TIME (Rule 3) — anchor proof to current date for reproducibility
-PROOF_GENERATION_DATE = date(2026, 3, 28)
+# 6. SYSTEM TIME (Rule 3)
+PROOF_GENERATION_DATE = date(2026, 4, 7)
 today = date.today()
 if today == PROOF_GENERATION_DATE:
     date_note = "System date matches proof generation date."
@@ -104,9 +107,14 @@ else:
     date_note = f"Proof generated on {PROOF_GENERATION_DATE}; running on {today}."
 
 # 7. CLAIM EVALUATION
-# The Riemann Hypothesis is still officially unsolved per B1 and B2.
-# The claim requires rh_is_solved == True; evidence establishes rh_is_solved = False.
-rh_is_solved = False  # established by B1 ("no proof is known") and B2 ("remain unsolved")
+# Derive rh_is_solved from citation verification results — not hardcoded.
+# B1 says "no proof is known"; B2 says problems "remain unsolved"; B3 says "Unsolved".
+# If at least two of three sources are confirmed, the evidence establishes RH is unsolved.
+n_sources_confirming_unsolved = sum([b1_confirmed, b2_confirmed, b3_confirmed])
+rh_is_solved = compare(
+    n_sources_confirming_unsolved, "<", 2,
+    label="SC3: fewer than 2 sources confirm RH unsolved (would mean solved)"
+)
 claim_holds = compare(
     rh_is_solved, "==", True,
     label="SC3: Riemann Hypothesis is validly solved"
@@ -148,8 +156,8 @@ adversarial_checks = [
         ),
         "finding": (
             "The mathematical community responds rapidly to claimed proofs of famous problems. "
-            "The Clay Institute's 2026 Millennium Prize page still lists RH as unsolved and "
-            "the $1M prize is still available. No lag in review could explain the complete "
+            "The Clay Institute's 2026 Millennium Prize page still designates RH as 'Unsolved' "
+            "and the $1M prize is still available. No lag in review could explain the complete "
             "absence of any accepted or even actively-evaluated proof."
         ),
         "breaks_proof": False,
@@ -162,7 +170,7 @@ adversarial_checks = [
         "verification_performed": (
             "Reviewed history of solved Millennium Prize Problems. "
             "The only solved problem, the Poincare conjecture, was proved by Grigori Perelman "
-            "over several years through peer-reviewed academic papers — not social media. "
+            "over several years through peer-reviewed academic papers \u2014 not social media. "
             "Wikipedia MPP states the remaining six 'remain unsolved, despite a large number "
             "of unsatisfactory proofs by both amateur and professional mathematicians.'"
         ),
@@ -171,7 +179,7 @@ adversarial_checks = [
             "by informal one-week effort. All serious claimed proofs have come through "
             "peer-reviewed academic channels. The claim's social-media origin and one-week "
             "timeframe are inconsistent with the depth of work the Riemann Hypothesis requires, "
-            "though the decisive disproof is the Clay Institute's current 'unsolved' designation."
+            "though the decisive disproof is the Clay Institute's current 'Unsolved' designation."
         ),
         "breaks_proof": False,
     },
@@ -192,15 +200,17 @@ if __name__ == "__main__":
     else:
         verdict = "UNDETERMINED"
 
-    FACT_REGISTRY["A1"]["method"] = "compare(rh_is_solved, '==', True)"
+    FACT_REGISTRY["A1"]["method"] = (
+        "compare(n_sources_confirming_unsolved, '<', 2) => rh_is_solved; "
+        "compare(rh_is_solved, '==', True)"
+    )
     FACT_REGISTRY["A1"]["result"] = (
-        f"False — rh_is_solved={rh_is_solved}, claim requires True. "
-        f"Two independent sources (B1, B2) confirm no proof is known."
+        f"False \u2014 {n_sources_confirming_unsolved} of 3 sources confirm RH unsolved, "
+        f"so rh_is_solved=False. Claim requires True."
     )
 
     citation_detail = build_citation_detail(FACT_REGISTRY, citation_results, empirical_facts)
 
-    # No value extraction in this qualitative proof (Rule 1 auto-passes)
     extractions = {}
 
     summary = {
@@ -215,13 +225,14 @@ if __name__ == "__main__":
         "cross_checks": [
             {
                 "description": (
-                    "B1 (Wikipedia RH article) and B2 (Wikipedia MPP article) independently "
-                    "confirm the Riemann Hypothesis is unsolved as of 2026 — different pages, "
-                    "different editorial histories, same conclusion."
+                    "B1 (Wikipedia RH article), B2 (Wikipedia MPP article), and B3 (Clay "
+                    "Mathematics Institute) independently confirm the Riemann Hypothesis is "
+                    "unsolved as of 2026."
                 ),
                 "values_compared": [
                     citation_results.get("source_wikipedia_rh", {}).get("status", "unknown"),
                     citation_results.get("source_wikipedia_mpp", {}).get("status", "unknown"),
+                    citation_results.get("source_clay", {}).get("status", "unknown"),
                 ],
                 "agreement": cross_check_agreement,
             }
@@ -230,9 +241,9 @@ if __name__ == "__main__":
         "verdict": verdict,
         "key_results": {
             "rh_is_solved": rh_is_solved,
+            "n_sources_confirming_unsolved": n_sources_confirming_unsolved,
             "claim_requires_solved": True,
             "claim_holds": claim_holds,
-            "sources_confirming_unsolved": 2,
             "date_note": date_note,
         },
         "generator": {

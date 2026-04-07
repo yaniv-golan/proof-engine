@@ -183,6 +183,56 @@ def test_subclaim_holds_hardcoded_fails():
     assert len(v.issues) > 0
 
 
+def _validate_hardcoded_compare(source_code: str) -> ProofValidator:
+    """Write source to temp file, run hardcoded_compare_input check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_hardcoded_compare_input()
+    os.unlink(f.name)
+    return v
+
+
+HARDCODED_BOOL_TO_COMPARE = '''
+rh_is_solved = False
+claim_holds = compare(rh_is_solved, "==", True)
+'''
+
+COMPUTED_BOOL_TO_COMPARE = '''
+rh_is_solved = check_millennium_prizes("Riemann Hypothesis")
+claim_holds = compare(rh_is_solved, "==", True)
+'''
+
+UPPER_CASE_CONSTANT_TO_COMPARE = '''
+DEBUG_MODE = False
+result = compare(DEBUG_MODE, "==", True)
+'''
+
+HOLDS_VAR_TO_COMPARE = '''
+subclaim_a_holds = False
+claim_holds = compare(subclaim_a_holds, "==", True)
+'''
+
+
+def test_hardcoded_bool_to_compare_fails():
+    v = _validate_hardcoded_compare(HARDCODED_BOOL_TO_COMPARE)
+    assert len(v.issues) > 0
+    assert "rh_is_solved" in v.issues[0][0]
+
+def test_computed_bool_to_compare_passes():
+    v = _validate_hardcoded_compare(COMPUTED_BOOL_TO_COMPARE)
+    assert len(v.issues) == 0
+
+def test_upper_case_constant_not_flagged():
+    v = _validate_hardcoded_compare(UPPER_CASE_CONSTANT_TO_COMPARE)
+    assert len(v.issues) == 0
+
+def test_holds_var_deferred_to_other_check():
+    v = _validate_hardcoded_compare(HOLDS_VAR_TO_COMPARE)
+    assert len(v.issues) == 0  # _holds vars handled by check_claim_holds_computed
+
+
 def _validate_full(source_code: str) -> ProofValidator:
     """Write source to temp file, run unused imports + verdict branch checks."""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:

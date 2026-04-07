@@ -1,33 +1,37 @@
-# Proof Narrative: "Math washing" a spreadsheet (presenting empirical observations as universal theorems) is valid scientific practice.
+# Proof Narrative: Presenting empirical spreadsheet observations as universal theorems violates the hypothetico-deductive method as defined by mainstream philosophy of science.
 
 ## Verdict
 
-**Verdict: DISPROVED**
+**Verdict: PROVED**
 
-The claim that dressing up spreadsheet patterns as universal theorems counts as science has been directly refuted by three independent authoritative sources. This is not a close call.
+Three independent authoritative sources confirm that presenting spreadsheet observations as universal theorems omits requirements that the scientific method demands. The violation is structural, not a matter of opinion.
 
 ## What was claimed?
 
-The claim is that "math washing" — taking patterns you notice in a dataset and presenting them as if they were proven universal theorems — is a legitimate scientific practice. This matters because math washing shows up whenever someone mines data for correlations and then asserts those correlations as fundamental laws, skipping the hard work of actually testing whether the pattern holds beyond the data in front of them.
+The original claim was that "math washing" a spreadsheet — treating patterns found in data as universal theorems — is valid scientific practice. That is a normative judgment that cannot be directly proved or disproved. So the claim was re-framed as a factual question: does this practice violate the hypothetico-deductive method, the dominant framework in mainstream philosophy of science? If it does, then whatever else might be said about the practice, it fails to meet a well-established standard for scientific reasoning.
 
 ## What did we find?
 
-The scientific community has clear, well-established standards for what makes a claim scientific — and presenting spreadsheet observations as universal theorems fails those standards on multiple independent grounds.
+The hypothetico-deductive method has specific requirements, and three authoritative sources each identify a different one that this practice omits.
 
-The most foundational objection comes from the philosophy of science itself. A theory only qualifies as scientific if it is possible, in principle, to show that it is false. A pattern you noticed in a dataset and declared a theorem has not been exposed to any attempt to disprove it. It cannot tell you what observations would contradict it. That is not science — it is storytelling with numbers.
+Encyclopaedia Britannica, summarizing Karl Popper's criterion of falsifiability, states that "a theory is genuinely scientific only if it is possible in principle to establish that it is false." Presenting spreadsheet observations as universal theorems makes no provision for falsifiability. The observations are treated as self-evidently true rather than as claims that could, in principle, be refuted.
 
-Beyond falsifiability, valid scientific reasoning requires more than observation alone. Careful observation is where science starts, not where it ends. The scientific method demands hypothesis formation, theoretical grounding, and systematic testing — all of which are absent when someone reads off patterns from a spreadsheet and calls them laws.
+The Stanford Encyclopedia of Philosophy, in its article on scientific method, states that science "requires a logic as a system of reasoning for properly arranging, but also inferring beyond, what is known by observation." Observation alone is not enough. The practice of presenting data patterns as theorems treats observation as sufficient, skipping the step of forming hypotheses and deriving testable predictions from them.
 
-There is also a recognized name for the distortion that math washing produces: data-dredging. When unplanned statistical patterns are presented as if they were predicted by a prespecified theory, the result is systematic inflation of false positives. This is not a fringe critique — it is documented as a named methodological error in the evidence-based medicine literature.
+The Catalog of Bias, maintained by the Centre for Evidence-Based Medicine at the University of Oxford, defines data-dredging as "a distortion that arises from presenting the results of unplanned statistical tests as if they were a fully prespecified course of analyses." This is precisely the pattern: unplanned pattern-finding in a spreadsheet is presented as if it were a hypothesis-driven, prespecified result.
 
-Three adversarial hypotheses were investigated to see whether any scientific tradition might defend math washing. The oldest candidate, Baconian inductivism, still requires systematic collection, replication, and bias elimination before generalizing — and no form of inductivism endorses labeling observed patterns as universal *theorems* rather than empirical generalizations. Exploratory Data Analysis, far from endorsing math washing, explicitly describes itself as hypothesis-*generating*, not hypothesis-confirming. And in fields like empirical economics, economists invented the term "stylized facts" specifically to describe data regularities that are *not* universal theorems — precisely because the distinction matters.
+Each source addresses a distinct failure mode — falsifiability, reasoning beyond observation, and pre-specified analysis — and all three were verified by fetching the original pages and confirming the exact quoted text.
+
+The proof also searched for counter-arguments. The strongest candidate was Bacon's inductivism, which defends generalizing from observations. But even Bacon's model requires systematic collection, replication, and bias elimination before generalizing — and no form of inductivism endorses calling data patterns "theorems," a term that implies deductive necessity. Exploratory Data Analysis was considered too, but Tukey's framework explicitly distinguishes hypothesis generation from hypothesis confirmation. No scientific domain was found that endorses presenting data patterns as universal theorems without further theoretical grounding.
 
 ## What should you keep in mind?
 
-This verdict addresses the specific practice of presenting observations as universal theorems — claims that hold without exception for all cases. It does not say that finding patterns in data is useless or unscientific. Pattern-finding is a valuable first step; the error is in stopping there and calling the pattern a theorem. The distinction between a dataset regularity and a universal law is exactly what science is built around.
+This proof is scoped to the hypothetico-deductive method specifically. It does not claim that the practice is invalid under every conceivable philosophy of science — only that it violates the dominant one. The term "universal theorem" is interpreted strictly: a claim of deductive necessity holding without exception, not a statistical regularity or empirical generalization.
 
-One source used (the Catalog of Bias) comes from a domain the automated credibility system could not classify. That source is associated with Oxford's Centre for Evidence-Based Medicine and is a recognized resource in its field — but the verdict does not depend on it. The other two sources, from Encyclopaedia Britannica and the Stanford Encyclopedia of Philosophy, independently establish the disproof on their own.
+The cited sources state general principles of the scientific method. None of them specifically names "spreadsheet observations presented as theorems." The connection between the general principles and the specific practice is an inference documented in the proof, not something stated directly by the sources.
+
+One of the three sources — the Catalog of Bias — comes from a domain that is not classified in the credibility database, though it is maintained by Oxford's Centre for Evidence-Based Medicine. The proof's conclusion does not depend solely on this source.
 
 ## How was this verified?
 
-This proof was built by identifying three independent authoritative sources — spanning philosophy of science and research methodology — that each confirm a distinct way math washing violates scientific standards, then checking whether any recognized scientific tradition could defend the practice. You can read the full structured argument in [the structured proof report](proof.md), examine every citation and verification step in [the full verification audit](proof_audit.md), or [re-run the proof yourself](proof.py).
+This claim was evaluated by checking three independent authoritative sources on the requirements of the hypothetico-deductive method, then testing whether the practice of presenting empirical spreadsheet observations as universal theorems omits those requirements. All three citations were verified by live-fetching the source URLs and confirming the quoted text. Full details are in [the structured proof report](proof.md) and [the full verification audit](proof_audit.md). You can also [re-run the proof yourself](proof.py).

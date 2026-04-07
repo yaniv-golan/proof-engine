@@ -17,7 +17,7 @@ For proof templates, see [proof-templates.md](${CLAUDE_SKILL_DIR}/references/pro
 
 ## Rule Applicability by Proof Type
 
-The validator checks all 7 rules for every proof. Some rules auto-pass when
+The validator checks all 8 rules for every proof. Some rules auto-pass when
 the proof doesn't contain the patterns they target. This table shows typical
 validator behavior — the "Auto-pass when" column describes the heuristic.
 
@@ -399,3 +399,21 @@ approx_years = explain_calc("total_days / DAYS_PER_GREGORIAN_YEAR", locals())
 The three-column output (symbolic → substituted → result) makes every step auditable. Use `explain_calc()` for any computation whose output the human needs to verify.
 
 **How validate_proof.py catches it**: Flags hard-coded `365.24*` or `365.25` literals, `eval()` calls, and inline year-subtraction age calculations when `compute_age` is not imported.
+
+---
+
+## Rule 8: Evidence Relevance for Rejection Verdicts
+
+**Failure mode**: A proof reaches DISPROVED by counting sources that don't directly study the claim's subject. Example: a macaque study counts as evidence against a human-neurogenesis claim; a review that "questions" findings counts equally with one that "finds no evidence."
+
+**Subject-match requirement:** For claims about a specific species, organ, population, or domain, at least 2 of 3 rejection sources in the threshold set must directly study that specific subject. A source studying a different species, population, or domain may corroborate but does not count toward the rejection threshold.
+
+**Hedged-language downgrade:** A source that "questions," "challenges," or "casts doubt on" a finding provides weaker evidence than one that "rejects," "finds no evidence for," or "refutes." If any source in the rejection threshold set uses hedged language, the verdict must be SUPPORTED (against) rather than DISPROVED, unless the hedged source is replaced by a direct-rejection source that meets the subject-match requirement.
+
+**How to apply:**
+1. For each rejection source, note whether it directly studies the claim's subject
+2. For each rejection source, classify its language as "direct rejection" or "hedged challenge"
+3. If fewer than 2 of 3 sources pass the subject-match test, downgrade to SUPPORTED (against)
+4. If any threshold source uses hedged language and no replacement is available, downgrade to SUPPORTED (against)
+
+Document the subject-match and language classification in the `adversarial_checks` finding field.

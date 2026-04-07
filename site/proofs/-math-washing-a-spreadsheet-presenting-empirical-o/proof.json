@@ -1,8 +1,9 @@
 {
+  "verdict": "PROVED",
   "fact_registry": {
     "B1": {
       "key": "source_britannica_popper",
-      "label": "Britannica: Popper's falsifiability criterion \u2014 scientific validity requires falsifiability"
+      "label": "Britannica: Popper's falsifiability criterion — scientific theories must be falsifiable in principle"
     },
     "B2": {
       "key": "source_sep_scientific_method",
@@ -10,27 +11,27 @@
     },
     "B3": {
       "key": "source_catalog_of_bias",
-      "label": "Catalog of Bias: data-dredging is a recognized methodological distortion in science"
+      "label": "Catalog of Bias: presenting unplanned analyses as prespecified is a recognized methodological distortion"
     },
     "A1": {
-      "label": "Count of authoritative sources confirming math-washing is not valid scientific practice",
+      "label": "Count of authoritative sources confirming HD method requirements that the practice omits",
       "method": "count(verified citations) = 3",
       "result": "3 sources confirmed (threshold: 3)"
     }
   },
   "claim_formal": {
-    "subject": "Math washing (presenting empirical spreadsheet observations as universal theorems)",
-    "property": "constitutes valid scientific practice",
+    "subject": "Presenting empirical spreadsheet observations as universal theorems",
+    "property": "violates the hypothetico-deductive method as defined by mainstream philosophy of science",
     "operator": ">=",
-    "operator_note": "'Valid scientific practice' is interpreted as methodology meeting the standards recognized by the scientific community: specifically, the hypothetico-deductive model requiring hypothesis formation, falsifiability, and controlled testing. The DISPROOF threshold is 3 independent authoritative sources that confirm that presenting empirical observations alone as universal theorems\u2014without hypothesis formation, testing for falsifiability, and independent replication\u2014violates these standards. 'Universal theorem' is interpreted in the strict sense: a claim that holds without exception for all instances, not merely a statistical regularity or empirical generalization. A threshold of 3 is used to require broad expert consensus; a single contrary source would be insufficient.",
+    "operator_note": "The claim asserts a factual violation: the practice of presenting empirical spreadsheet observations as universal theorems omits steps that the hypothetico-deductive (HD) method requires. We count independent authoritative sources that define HD method requirements (falsifiability, reasoning beyond observation, pre-specified hypotheses) which this practice structurally omits. A threshold of 3 is used to require broad consensus across distinct philosophical and methodological traditions. Entailment note: the cited sources define general requirements of the scientific method / HD method. None specifically names 'spreadsheet observations presented as theorems.' The entailment bridge is: (1) the HD method requires steps X, Y, Z; (2) presenting observations as universal theorems without hypothesis formation, falsifiability testing, or pre-specified analysis omits X, Y, Z; therefore (3) the practice violates the HD method. This inference is logically valid but requires the author-reasoning bridge documented here. Formalization scope: 'universal theorem' is interpreted strictly — a claim of deductive necessity holding without exception, not a statistical regularity or empirical generalization. 'Violates' means the practice omits one or more requirements that the HD method mandates. The proof does not address whether the practice might be valid under non-HD frameworks (e.g., pure inductivism); adversarial check 1 addresses this limitation.",
     "threshold": 3,
-    "proof_direction": "disprove"
+    "proof_direction": "prove"
   },
-  "claim_natural": "\"Math washing\" a spreadsheet (presenting empirical observations as universal theorems) is valid scientific practice.",
+  "claim_natural": "Presenting empirical spreadsheet observations as universal theorems violates the hypothetico-deductive method as defined by mainstream philosophy of science.",
   "citations": {
     "B1": {
       "source_key": "source_britannica_popper",
-      "source_name": "Encyclopaedia Britannica \u2014 criterion of falsifiability",
+      "source_name": "Encyclopaedia Britannica — criterion of falsifiability",
       "url": "https://www.britannica.com/topic/criterion-of-falsifiability",
       "quote": "a theory is genuinely scientific only if it is possible in principle to establish that it is false.",
       "status": "verified",
@@ -47,7 +48,7 @@
     },
     "B2": {
       "source_key": "source_sep_scientific_method",
-      "source_name": "Stanford Encyclopedia of Philosophy \u2014 scientific method",
+      "source_name": "Stanford Encyclopedia of Philosophy — scientific method",
       "url": "https://plato.stanford.edu/entries/scientific-method/",
       "quote": "In addition to careful observation, then, scientific method requires a logic as a system of reasoning for properly arranging, but also inferring beyond, what is known by observation.",
       "status": "verified",
@@ -64,7 +65,7 @@
     },
     "B3": {
       "source_key": "source_catalog_of_bias",
-      "source_name": "Catalog of Bias \u2014 data-dredging bias",
+      "source_name": "Catalog of Bias — data-dredging bias",
       "url": "https://catalogofbias.org/biases/data-dredging-bias/",
       "quote": "A distortion that arises from presenting the results of unplanned statistical tests as if they were a fully prespecified course of analyses.",
       "status": "verified",
@@ -76,7 +77,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     }
   },
@@ -99,28 +100,27 @@
   },
   "cross_checks": [
     {
-      "description": "Multiple independent authoritative sources consulted (Britannica, SEP, Catalog of Bias)",
-      "n_sources_consulted": 3,
-      "n_sources_verified": 3,
-      "sources": {
-        "source_britannica_popper": "verified",
-        "source_sep_scientific_method": "verified",
-        "source_catalog_of_bias": "verified"
-      },
-      "independence_note": "Sources are from different institutions and traditions: encyclopedic philosophy (Britannica), academic philosophy reference (Stanford Encyclopedia), and medical/scientific methodology catalog (Oxford-affiliated Catalog of Bias). Each addresses a distinct failure mode of math-washing: falsifiability failure (B1), insufficiency of observation alone (B2), and data-dredging distortion (B3)."
+      "description": "Three independent authoritative sources from distinct traditions (encyclopedic philosophy, academic philosophy reference, medical/scientific methodology catalog) each confirm a different HD method requirement that the practice omits: falsifiability (B1), reasoning beyond observation (B2), pre-specified hypotheses (B3).",
+      "values_compared": [
+        "verified",
+        "verified",
+        "verified"
+      ],
+      "agreement": true,
+      "coi_flags": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Is there a scientific tradition that validates presenting inductive generalizations from data as universal laws without further testing?",
       "verification_performed": "Searched 'defense inductive reasoning empirical observations sufficient universal scientific laws' and 'Bacon inductivism valid science pattern observation'. Found inductivism (Bacon's model) as a candidate defense.",
-      "finding": "Even Bacon's inductivism \u2014 the strongest defense of inductive science \u2014 requires systematic collection, replication, and elimination of observer bias before generalizing. Naive inductivism has been largely discredited in philosophy of science (Popper, 1934; Hempel, 1965). More importantly, no form of inductivism endorses presenting patterns as universal 'theorems' (a term implying deductive necessity) rather than empirical generalizations.",
+      "finding": "Even Bacon's inductivism — the strongest defense of inductive science — requires systematic collection, replication, and elimination of observer bias before generalizing. Naive inductivism has been largely discredited in philosophy of science (Popper, 1934; Hempel, 1965). More importantly, no form of inductivism endorses presenting patterns as universal 'theorems' (a term implying deductive necessity) rather than empirical generalizations. This check does not break the proof but limits the verdict's scope: the proof establishes violation of the HD method specifically, not all possible philosophies of science.",
       "breaks_proof": false
     },
     {
       "question": "Does Exploratory Data Analysis (EDA) validate presenting spreadsheet patterns as scientific findings?",
       "verification_performed": "Searched 'Tukey exploratory data analysis purpose hypothesis generation not confirmation'. Reviewed EDA methodology documentation.",
-      "finding": "EDA (Tukey 1977) is an explicitly hypothesis-generating practice, not hypothesis-confirming. Tukey's framework is designed to produce candidate hypotheses for subsequent testing, not to generate universal theorems. This supports the disproof: the EDA literature itself distinguishes pattern-finding from universal claims.",
+      "finding": "EDA (Tukey 1977) is an explicitly hypothesis-generating practice, not hypothesis-confirming. Tukey's framework is designed to produce candidate hypotheses for subsequent testing, not to generate universal theorems. This supports the proof: the EDA literature itself distinguishes pattern-finding from universal claims.",
       "breaks_proof": false
     },
     {
@@ -130,18 +130,19 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,
     "operator": ">=",
     "claim_holds": true,
-    "proof_direction": "disprove"
+    "proof_direction": "prove",
+    "any_unverified_citations": false,
+    "date_note": "System date matches proof generation date."
   },
   "generator": {
     "name": "proof-engine",
-    "version": "1.0.0",
+    "version": "1.8.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-03-28"
+    "generated_at": "2026-04-07"
   }
 }

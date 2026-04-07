@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-04-07
+
+### Added
+
+- **Rule 8: Evidence Relevance for Rejection Verdicts** — subject-match requirement (≥2 of 3 rejection sources must directly study the claim's subject) and hedged-language downgrade (sources using "questions"/"challenges" language downgrade verdict to SUPPORTED)
+- Validator: `check_hardcoded_compare_input()` — flags variables hardcoded to `True`/`False` that are passed as first arg to `compare()`, preventing circumvention of evidence-based verdict computation
+- SKILL.md: normative claim guardrails — normative claims must be declined or disclosed as proxy operationalizations; entailment gaps between generic citations and specific claims must be documented
+- SKILL.md: "Citation presence ≠ citation entailment" gotcha — distinguishes quote-found-on-page from quote-supports-conclusion
+- SKILL.md: "Don't hardcode decisive variables" gotcha
+- SKILL.md: formalization fidelity check at end of Step 3 — verify CLAIM_FORMAL captures all elements of natural-language claim
+- Output-specs: mandatory "Formalization scope" note in Claim Interpretation section
+- Output-specs: citation entailment clarification for Type B "Verified" status
+- Self-critique checklist: formalization fidelity check item
+- Tests: 4 new validator tests for hardcoded-compare-input detection
+
+### Changed
+
+- Site framing: "Every Claim, Machine-Verified" → "Every Fact Cited, Every Calculation Re-Runnable" (landing page title, meta, JSON-LD, hero)
+- Site framing: "No LLM trust required." → "Reasoning transparent and auditable." (landing page meta, proof page trust bar)
+- Hardening rules count: 7 → 8 across SKILL.md, validate_proof.py, self-critique-checklist.md, hardening-rules.md
+
+### Content
+
+- **TikTok/Riemann proof** re-run: `rh_is_solved` now derived from citation evidence via `compare()` instead of hardcoded; B3 updated to Clay Institute "Unsolved" status label
+- **Neurogenesis proof** re-run: replaced cross-species macaque study and hedged review with Spalding 2013 (direct human C14 study); threshold 3→2 with domain-scarcity justification per Rule 8
+- **Math washing proof** re-framed: normative claim ("is valid scientific practice") → factual claim ("violates the hypothetico-deductive method"); verdict DISPROVED → PROVED; entailment gap documented throughout
+
 ## [1.8.0] - 2026-04-07
 
 ### Added

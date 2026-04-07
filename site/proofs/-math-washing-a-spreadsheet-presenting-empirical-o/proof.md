@@ -1,36 +1,31 @@
-# Proof: "Math washing" a spreadsheet (presenting empirical observations as universal theorems) is valid scientific practice.
+# Proof: Presenting empirical spreadsheet observations as universal theorems violates the hypothetico-deductive method as defined by mainstream philosophy of science.
 
-- Generated: 2026-03-28
-- Verdict: **DISPROVED**
-- Audit trail: [proof_audit.md](proof_audit.md) | [proof.py](proof.py)
+- **Generated:** 2026-04-07
+- **Verdict:** PROVED
+- **Audit trail:** [proof_audit.md](proof_audit.md) · [proof.py](proof.py)
 
 ---
 
 ## Key Findings
 
-- **3 out of 3** independent authoritative sources — Encyclopaedia Britannica, Stanford Encyclopedia of Philosophy, and the Catalog of Bias — confirm that presenting empirical observations as universal theorems (without falsifiability, hypothesis testing, and replication) violates core standards of scientific validity. (A1)
-- **Popper's falsifiability criterion** (Britannica, B1): a theory is only genuinely scientific if it is possible to establish that it is false — ruling out patterns that were never exposed to disconfirmation.
-- **The scientific method** (Stanford Encyclopedia, B2): valid science requires systematic reasoning that goes *beyond* what observation alone can establish — not just cataloging data.
-- **Data-dredging** (Catalog of Bias, B3): presenting the results of unplanned statistical tests *as if* they were a prespecified analysis is a recognized methodological distortion that generates false positives.
-- All three adversarial hypotheses — Baconian inductivism, Exploratory Data Analysis, and domain-limited empiricism — were searched and found not to support the claim.
+- Three independently verified authoritative sources confirm that the hypothetico-deductive (HD) method requires steps that the practice of presenting empirical spreadsheet observations as universal theorems structurally omits.
+- Popper's falsifiability criterion requires that scientific theories be testable in principle — presenting observations as universal theorems bypasses this requirement (B1 — verified).
+- The Stanford Encyclopedia of Philosophy confirms that scientific method requires reasoning *beyond* observation — observation alone is insufficient (B2 — verified).
+- The Catalog of Bias identifies presenting unplanned analyses as prespecified as a recognized methodological distortion (B3 — verified).
 
 ---
 
 ## Claim Interpretation
 
-**Natural language claim:** "Math washing" a spreadsheet (presenting empirical observations as universal theorems) is valid scientific practice.
+**Note: This claim was re-framed from the original.** The original claim was normative: "'Math washing' a spreadsheet (presenting empirical observations as universal theorems) is valid scientific practice." That claim could not be directly proved or disproved because "valid scientific practice" is a normative judgment. The re-framed claim is factual: it asks whether the practice violates the hypothetico-deductive method as defined by mainstream philosophy of science.
 
-**Formal interpretation:**
+**Natural language:** Presenting empirical spreadsheet observations as universal theorems violates the hypothetico-deductive method as defined by mainstream philosophy of science.
 
-| Field | Value |
-|-------|-------|
-| Subject | Math washing (presenting empirical spreadsheet observations as universal theorems) |
-| Property | Constitutes valid scientific practice |
-| Operator | ≥ |
-| Threshold | 3 independent authoritative sources confirming this practice violates scientific standards |
-| Proof direction | Disprove |
+**Formal interpretation:** The claim asserts a factual violation: the practice of presenting empirical spreadsheet observations as universal theorems omits steps that the hypothetico-deductive (HD) method requires. We count independent authoritative sources that define HD method requirements — falsifiability, reasoning beyond observation, pre-specified hypotheses — which this practice structurally omits. A threshold of 3 is used to require broad consensus across distinct philosophical and methodological traditions.
 
-**Operator rationale:** "Valid scientific practice" is interpreted as methodology meeting the standards recognized by the scientific community: specifically, the hypothetico-deductive model requiring hypothesis formation, falsifiability, and controlled testing. The disproof threshold requires 3 independent authoritative sources confirming that presenting empirical observations alone as universal theorems violates these standards. "Universal theorem" is interpreted in the strict sense: a claim that holds without exception for all instances, not merely a statistical regularity or empirical generalization. A threshold of 3 ensures broad expert consensus rather than relying on a single contrary voice.
+**Entailment note:** The cited sources define general requirements of the scientific method / HD method. None specifically names "spreadsheet observations presented as theorems." The entailment bridge is: (1) the HD method requires steps X, Y, Z; (2) presenting observations as universal theorems without hypothesis formation, falsifiability testing, or pre-specified analysis omits X, Y, Z; therefore (3) the practice violates the HD method. This inference is logically valid but requires the author-reasoning bridge documented here.
+
+**Formalization scope:** "Universal theorem" is interpreted strictly — a claim of deductive necessity holding without exception, not a statistical regularity or empirical generalization. "Violates" means the practice omits one or more requirements that the HD method mandates. The proof does not address whether the practice might be valid under non-HD frameworks (e.g., pure inductivism); adversarial check 1 addresses this limitation.
 
 *Source: proof.py JSON summary*
 
@@ -40,28 +35,27 @@
 
 | ID | Fact | Verified |
 |----|------|----------|
-| B1 | Britannica: Popper's falsifiability criterion — scientific validity requires falsifiability | Yes |
+| B1 | Britannica: Popper's falsifiability criterion — scientific theories must be falsifiable in principle | Yes |
 | B2 | Stanford Encyclopedia of Philosophy: scientific method requires reasoning beyond observation | Yes |
-| B3 | Catalog of Bias: data-dredging is a recognized methodological distortion in science | Yes |
-| A1 | Count of authoritative sources confirming math-washing is not valid scientific practice | Computed: 3 sources confirmed (threshold: 3) |
-
-*Source: proof.py JSON summary*
+| B3 | Catalog of Bias: presenting unplanned analyses as prespecified is a recognized methodological distortion | Yes |
+| A1 | Count of authoritative sources confirming HD method requirements that the practice omits | Computed: 3 sources confirmed — meets threshold of 3 independent authorities |
 
 ---
 
 ## Proof Logic
 
-The claim asserts that "math washing" — taking patterns observed in a spreadsheet and presenting them as universal theorems — constitutes valid scientific practice.
+The proof establishes that presenting empirical spreadsheet observations as universal theorems violates the hypothetico-deductive method by showing that three independent authoritative sources each identify a distinct HD method requirement that this practice omits.
 
-To disprove this, the proof establishes that this methodology violates the foundational standards of scientific validity as articulated by three independent authoritative sources:
+The `n_confirmed` value is **derived from citation verification results**, not hardcoded. Three sources are checked: each must be verified to count toward the threshold of 3.
 
-**Falsifiability failure (B1):** Encyclopaedia Britannica states that "a theory is genuinely scientific only if it is possible in principle to establish that it is false." Patterns extracted from a spreadsheet and declared universal theorems have typically not been subjected to attempts at falsification. A claim derived solely by inspecting what a dataset shows has not been tested for what it forbids — it cannot predict what observations would contradict it. This directly fails Popper's demarcation criterion for science.
+1. **B1** — Encyclopaedia Britannica's article on Popper's criterion of falsifiability states that *"a theory is genuinely scientific only if it is possible in principle to establish that it is false."* Presenting empirical observations as universal theorems makes no provision for falsifiability — the observations are treated as self-evidently true rather than as claims that could in principle be shown false. This omits the falsifiability requirement of the HD method.
 
-**Insufficiency of observation alone (B2):** The Stanford Encyclopedia of Philosophy states that "scientific method requires a logic as a system of reasoning for properly arranging, but also inferring beyond, what is known by observation." Observation is necessary but not sufficient. Valid scientific inference requires the superstructure of hypothesis formation, theoretical grounding, and systematic testing — all absent from raw pattern presentation.
+2. **B2** — The Stanford Encyclopedia of Philosophy's article on scientific method states that *"scientific method requires a logic as a system of reasoning for properly arranging, but also inferring beyond, what is known by observation."* Presenting spreadsheet observations as theorems treats observation as sufficient, omitting the requirement for reasoning beyond observation — hypothesis formation, deductive prediction, and testing.
 
-**Data-dredging distortion (B3):** The Catalog of Bias defines data-dredging as "a distortion that arises from presenting the results of unplanned statistical tests as if they were a fully prespecified course of analyses." Math washing is structurally identical to this distortion: patterns identified post-hoc in a dataset are reframed as if they were predicted theorems. This practice generates false positives and is explicitly cataloged as a methodological error.
+3. **B3** — The Catalog of Bias defines data-dredging as *"a distortion that arises from presenting the results of unplanned statistical tests as if they were a fully prespecified course of analyses."* Presenting spreadsheet observations as universal theorems follows exactly this pattern: unplanned pattern-finding is presented as if it were a prespecified, hypothesis-driven result.
 
-Together, these three sources cover the three main failure modes of math washing: it lacks falsifiability (B1), it over-extends what observation can establish (B2), and it misrepresents the analytical process as theory-driven when it is pattern-driven (B3). All three citations were fully verified on their live source pages (A1: 3/3 confirmed ≥ threshold of 3).
+**Logical chain:**
+(1) Three independently verified sources each identify a distinct HD method requirement that the practice omits → (2) `compare(n_confirmed=3, ">=", 3)` → True → (3) The claim holds: the practice violates the HD method as defined by mainstream philosophy of science.
 
 *Source: author analysis*
 
@@ -69,33 +63,33 @@ Together, these three sources cover the three main failure modes of math washing
 
 ## Counter-Evidence Search
 
-Three adversarial hypotheses were investigated before writing this proof:
+Three adversarial checks were performed before writing this proof:
 
-**1. Is there a scientific tradition that endorses inductive generalization from data as universal law?**
-Baconian inductivism (Francis Bacon's model) is the strongest historical candidate. However, even Bacon's framework requires systematic observation, replication, and elimination of observer bias. Naive inductivism has been largely discredited in philosophy of science (Popper 1934; Hempel 1965). No form of inductivism endorses labeling data patterns as universal *theorems* (a term implying deductive necessity) rather than empirical generalizations.
+**1. Is there a scientific tradition that validates presenting inductive generalizations from data as universal laws without further testing?**
+Searched for defenses of inductivism and found Bacon's inductivism as the strongest candidate. Even Bacon's model requires systematic collection, replication, and elimination of observer bias before generalizing. Naive inductivism has been largely discredited in philosophy of science (Popper 1934, Hempel 1965). More importantly, no form of inductivism endorses presenting patterns as universal "theorems" (a term implying deductive necessity) rather than empirical generalizations. This check does not break the proof but limits the verdict's scope: the proof establishes violation of the HD method specifically, not all possible philosophies of science.
 
 **2. Does Exploratory Data Analysis (EDA) validate presenting spreadsheet patterns as scientific findings?**
-Tukey's EDA framework (1977) is an explicitly hypothesis-*generating* practice, not hypothesis-confirming. EDA is designed to produce candidate hypotheses for subsequent rigorous testing — not universal theorems. The EDA literature itself draws this distinction, supporting the disproof.
+Reviewed EDA methodology documentation and found that EDA (Tukey 1977) is an explicitly hypothesis-generating practice, not hypothesis-confirming. Tukey's framework produces candidate hypotheses for subsequent testing, not universal theorems. The EDA literature itself distinguishes pattern-finding from universal claims.
 
-**3. Could math washing be valid in limited domains (actuarial science, empirical economics, physics phenomenology)?**
-Empirical economics explicitly distinguishes "stylized facts" (data regularities) from theorems. Kaldor (1961) introduced "stylized facts" precisely because observed patterns do NOT constitute universal theorems without theoretical grounding. In physics, empirical regularities like Kepler's laws were only accepted as scientific law after derivation from deeper theoretical principles (Newton's mechanics). No domain endorses raw pattern-to-theorem promotion.
+**3. Could "math washing" be valid in limited empirical domains like actuarial science, empirical economics, or physics phenomenology?**
+Searched for domain-specific practices. Empirical economics explicitly distinguishes between "stylized facts" (regularities observed in data) and economic laws or theorems. Kaldor (1961) introduced "stylized facts" precisely because observed patterns do not constitute universal theorems without theoretical grounding. Even in phenomenological physics, empirical regularities (e.g., Kepler's laws) were only elevated to scientific law status after being derived from deeper theoretical principles (Newton's mechanics). No domain endorses presenting data patterns as universal theorems directly.
 
-None of these adversarial checks found evidence that breaks or qualifies the disproof.
+None of these checks produce counter-evidence that breaks the proof.
 
-*Source: author analysis*
+*Source: proof.py JSON summary*
 
 ---
 
 ## Conclusion
 
-**Verdict: DISPROVED**
+**Verdict: PROVED**
 
-Three independent authoritative sources — Encyclopaedia Britannica (B1), Stanford Encyclopedia of Philosophy (B2), and the Catalog of Bias (B3) — all confirmed (3/3, threshold ≥ 3) that presenting empirical observations as universal theorems without falsifiability testing, hypothesis formation, and independent replication violates the foundational standards of scientific validity. All three citations were fully verified on live source pages.
+Three independently verified authoritative sources — from encyclopedic philosophy (B1), academic philosophy (B2), and scientific methodology (B3) — each confirm a distinct requirement of the hypothetico-deductive method that the practice of presenting empirical spreadsheet observations as universal theorems structurally omits: falsifiability, reasoning beyond observation, and pre-specified hypotheses. All three citations were verified by live fetch with full quote match (3/3, threshold >= 3).
 
-No adversarial search found a scientific tradition, framework, or domain that endorses direct pattern-to-universal-theorem inference from spreadsheet data. The practice of math washing fails the scientific method on at least three independent grounds: it lacks falsifiability (Popper), it over-extends what observation alone can establish (SEP), and it constitutes the recognized methodological distortion of data-dredging (Catalog of Bias).
+Note: One citation (B3, catalogofbias.org) comes from an unclassified domain (credibility tier 2). See Source Credibility Assessment in the [audit trail](proof_audit.md). The Catalog of Bias is maintained by the Centre for Evidence-Based Medicine at the University of Oxford, but its domain is not classified in the credibility database. The proof's conclusion does not depend solely on B3 — the two higher-tier sources (B1 tier 3, B2 tier 4) independently establish the violation.
 
-**Note:** Citation B3 (catalogofbias.org) is classified as credibility tier 2 (unclassified domain). This source is published by a project affiliated with the University of Oxford's Centre for Evidence-Based Medicine (CEBM). The conclusion does not depend solely on B3 — it is independently supported by the fully verified tier-3 (B1) and tier-4 (B2) sources.
+Note: The cited sources state general principles of the HD method, not specifically naming "spreadsheet observations presented as theorems." The proof relies on an author-reasoning bridge connecting these general principles to the specific practice. This entailment gap is documented in the Claim Interpretation section.
 
 ---
 
-*Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.0.0 on 2026-03-28.*
+*Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.8.0 on 2026-04-07.*
