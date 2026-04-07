@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use Proof Engine, please cite it as below."
+type: software
+title: "Proof Engine"
+authors:
+  - name: "Proof Engine"
+url: "https://github.com/yaniv-golan/proof-engine"
+repository-code: "https://github.com/yaniv-golan/proof-engine"
+license: MIT
+version: 1.9.0
