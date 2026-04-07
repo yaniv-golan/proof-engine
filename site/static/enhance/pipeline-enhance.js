@@ -129,6 +129,17 @@ import { autoFitFontSize, FONT_SERIF } from './pretext-measure.js';
         function open(index) {
             rows[index].setAttribute('aria-expanded', 'true');
             contents[index].setAttribute('data-open', 'true');
+            // Set explicit max-height from content so CSS transition works,
+            // then unlock after transition so content isn't clipped.
+            var el = contents[index];
+            el.style.maxHeight = el.scrollHeight + 'px';
+            var onEnd = function () {
+                el.removeEventListener('transitionend', onEnd);
+                if (el.getAttribute('data-open') === 'true') {
+                    el.style.maxHeight = 'none';
+                }
+            };
+            el.addEventListener('transitionend', onEnd);
 
             if (index === 0 && data.claim_natural) {
                 var claimEl = contents[0].querySelector('.pipeline-claim-text');
@@ -144,8 +155,13 @@ import { autoFitFontSize, FONT_SERIF } from './pretext-measure.js';
         }
 
         function close(index) {
+            // Re-set explicit height so CSS transition animates the collapse
+            var el = contents[index];
+            el.style.maxHeight = el.scrollHeight + 'px';
+            el.offsetHeight; // force reflow
+            el.style.maxHeight = '';  // fall back to CSS (0 when data-open removed)
             rows[index].setAttribute('aria-expanded', 'false');
-            contents[index].removeAttribute('data-open');
+            el.removeAttribute('data-open');
         }
 
         interactiveEl.appendChild(accordion);

@@ -233,7 +233,8 @@ a:hover { text-decoration: underline; }
     padding: 0 14px; margin-bottom: 4px;
 }
 .pipeline-step-content[data-open="true"] {
-    max-height: 400px; opacity: 1; padding: 12px 14px;
+    opacity: 1; padding: 12px 14px;
+    /* max-height set by JS for animated expand; falls back to none */
 }
 .pipeline-step-content pre {
     background: var(--bg-alt); border: 1px solid var(--border-subtle);
