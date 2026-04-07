@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path
 
 REQUIRED_ARTIFACTS = ["proof.py", "proof.md", "proof_audit.md", "proof_narrative.md"]
-OPTIONAL_ARTIFACTS = ["proof.json", "thumbnail.png", "meta.yaml"]
+OPTIONAL_ARTIFACTS = ["proof.json", "thumbnail.png", "meta.yaml", "doi.json"]
 
 
 def check_required_artifacts(source_dir: Path) -> list[str]:
@@ -64,6 +64,12 @@ def finalize_proof(staging_dir: str, target_dir: Path, force: bool = False) -> N
     If force=True and target exists, uses atomic swap: rename old to backup,
     move new into place, then delete backup. If the move fails, the backup
     is renamed back so the old proof is preserved.
+
+    When force-replacing a proof that has a doi.json, the claim_natural in
+    doi.json is compared against the incoming proof.json. If they differ,
+    raises ValueError to prevent attaching an old DOI to a new proof.
+    If they match, doi.json is preserved into the new directory.
+
     Raises FileExistsError if target exists and force=False.
     """
     target_dir = Path(target_dir)
@@ -74,6 +80,32 @@ def finalize_proof(staging_dir: str, target_dir: Path, force: bool = False) -> N
     if target_dir.exists():
         if not force:
             raise FileExistsError(f"Target already exists: {target_dir}")
+
+        # Check doi.json identity before swapping
+        existing_doi_path = target_dir / "doi.json"
+        doi_to_preserve = None
+        if existing_doi_path.exists():
+            doi_data = json.loads(existing_doi_path.read_text())
+            doi_claim = doi_data.get("claim_natural", "")
+
+            # Read incoming proof.json to compare claim
+            incoming_proof_json = staging_path / "proof.json"
+            if incoming_proof_json.exists():
+                incoming_data = json.loads(incoming_proof_json.read_text())
+                incoming_claim = incoming_data.get("claim_natural", "")
+            else:
+                incoming_claim = ""
+
+            if doi_claim and incoming_claim and doi_claim != incoming_claim:
+                raise ValueError(
+                    f"DOI was minted for a different claim. "
+                    f"Existing DOI claim: {doi_claim!r}. "
+                    f"Incoming claim: {incoming_claim!r}. "
+                    f"Delete the existing doi.json manually to discard the old DOI, "
+                    f"or use a different slug."
+                )
+            doi_to_preserve = existing_doi_path.read_bytes()
+
         backup_dir = target_dir.with_name("." + target_dir.name + ".backup")
         target_dir.rename(backup_dir)
         try:
@@ -81,6 +113,11 @@ def finalize_proof(staging_dir: str, target_dir: Path, force: bool = False) -> N
         except Exception:
             backup_dir.rename(target_dir)
             raise
+
+        # Restore doi.json if it was preserved
+        if doi_to_preserve is not None and not (target_dir / "doi.json").exists():
+            (target_dir / "doi.json").write_bytes(doi_to_preserve)
+
         shutil.rmtree(backup_dir)
     else:
         shutil.move(str(staging_path), str(target_dir))
