@@ -69,18 +69,32 @@
                 var isOpen = body.classList.contains('open');
 
                 if (isOpen) {
-                    // Collapse
+                    // Collapse: re-set explicit height so transition works
+                    // (max-height may be 'none' after expand completed)
+                    body.style.maxHeight = body.scrollHeight + 'px';
+                    // Force reflow before setting to 0
+                    body.offsetHeight; // eslint-disable-line no-unused-expressions
                     body.style.maxHeight = '0';
                     body.classList.remove('open');
                     body.setAttribute('inert', '');
                     if (toggle) toggle.textContent = '▸';
                 } else {
-                    // Expand
+                    // Expand: animate to measured height, then unlock
                     var expandedHeight = measureHeight();
                     body.style.maxHeight = expandedHeight + 'px';
                     body.classList.add('open');
                     body.removeAttribute('inert');
                     if (toggle) toggle.textContent = '▾';
+
+                    // After transition, remove max-height cap so nested
+                    // <details> expansions aren't clipped.
+                    var onEnd = function () {
+                        body.removeEventListener('transitionend', onEnd);
+                        if (body.classList.contains('open')) {
+                            body.style.maxHeight = 'none';
+                        }
+                    };
+                    body.addEventListener('transitionend', onEnd);
 
                     // Fire GA event (preserve existing analytics)
                     var sectionName = newHeader.querySelector('span');
