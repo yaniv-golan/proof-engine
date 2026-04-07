@@ -18,6 +18,10 @@ from tools.lib.proof_loader import load_all_proofs
 from tools.lib.sanitizer import render_markdown
 from tools.lib.section_extractor import extract_sections
 from tools.lib.json_ld import generate_claim_review
+from tools.lib.citation import (
+    build_citation_context, generate_bibtex, generate_ris, generate_cite_txt,
+    generate_apa, generate_chicago,
+)
 
 SITE_GENERATOR_VERSION = "1.0.0"
 PROOFS_PER_TAG_PAGE = 50
@@ -438,13 +442,31 @@ def main():
 
     # Proof detail pages
     tpl = env.get_template("proof.html")
+    proof_dois = {}  # slug -> doi string or None
     for proof in proofs:
         rendered_md = render_proof_sections(proof["sections_md"])
         rendered_audit = render_proof_sections(proof["sections_audit"])
         rendered_narrative = render_proof_sections(proof["sections_narrative"])
         rendered_verdict_hook = render_markdown(proof["verdict_hook"])
         canonical_url = f"{site_url}{base_url}proofs/{proof['slug']}/"
-        json_ld = generate_claim_review(proof["proof_data"], canonical_url)
+
+        # Read doi.json sidecar if present
+        doi_json_path = proofs_dir / proof["slug"] / "doi.json"
+        doi_data = None
+        if doi_json_path.exists():
+            doi_data = json.loads(doi_json_path.read_text())
+        proof_dois[proof["slug"]] = doi_data["doi"] if doi_data else None
+
+        json_ld = generate_claim_review(
+            proof["proof_data"], canonical_url,
+            doi=doi_data["doi"] if doi_data else None,
+            concept_doi=doi_data.get("concept_doi") if doi_data else None,
+        )
+
+        # Build citation context and files
+        citation_ctx = build_citation_context(
+            proof["proof_data"], canonical_url, proof["slug"], doi_data=doi_data,
+        )
 
         proof_out = output_dir / "proofs" / proof["slug"]
         src_dir = proofs_dir / proof["slug"]
@@ -452,6 +474,24 @@ def main():
         if has_custom_thumbnail:
             proof_out.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src_dir / "thumbnail.png", proof_out / "thumbnail.png")
+
+        # Generate citation files
+        bibtex_str = generate_bibtex(citation_ctx)
+        ris_str = generate_ris(citation_ctx)
+        apa_str = generate_apa(citation_ctx)
+        chicago_str = generate_chicago(citation_ctx)
+
+        write_file(proof_out / "cite.bib", bibtex_str)
+        write_file(proof_out / "cite.ris", ris_str)
+        write_file(proof_out / "cite.txt", generate_cite_txt(citation_ctx))
+
+        # Pre-rendered citation strings for the template
+        citation_formats = {
+            "apa": apa_str,
+            "chicago": chicago_str,
+            "bibtex": bibtex_str.rstrip("\n"),
+            "ris": ris_str.rstrip("\n"),
+        }
 
         write_file(proof_out / "index.html", tpl.render(
             **common, proof=proof,
@@ -466,6 +506,8 @@ def main():
             audit_tables=build_audit_tables(proof["proof_data"]),
             citation_summary=build_citation_summary(proof["proof_data"]),
             has_custom_thumbnail=has_custom_thumbnail,
+            citation=citation_ctx,
+            citation_formats=citation_formats,
         ))
         shutil.copy2(src_dir / "proof.py", proof_out / "proof.py")
         shutil.copy2(src_dir / "proof_audit.md", proof_out / "proof_audit.md")
@@ -474,6 +516,14 @@ def main():
 
         augmented = dict(proof["proof_data"])
         augmented["proof_py_url"] = f"{base_url}proofs/{proof['slug']}/proof.py"
+        augmented["citation"] = {
+            "doi": citation_ctx["doi"],
+            "concept_doi": citation_ctx["concept_doi"],
+            "url": canonical_url,
+            "author": citation_ctx["author"],
+            "cite_bib_url": f"{base_url}proofs/{proof['slug']}/cite.bib",
+            "cite_ris_url": f"{base_url}proofs/{proof['slug']}/cite.ris",
+        }
         write_file(proof_out / "proof.json", json.dumps(augmented, indent=2, default=str))
 
     # Tag pages
@@ -539,6 +589,7 @@ def main():
                 "source_names": p.get("source_names", []),
                 "source_names_extra": p.get("source_names_extra", 0),
                 "has_citations": bool(p["proof_data"].get("citations")),
+                "doi": proof_dois.get(p["slug"]),
             }
             for p in proofs
         ],
