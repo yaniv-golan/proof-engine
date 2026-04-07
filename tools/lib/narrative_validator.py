@@ -16,6 +16,11 @@ REQUIRED_NARRATIVE_SECTIONS = [
 ]
 
 _FACT_ID_PATTERN = re.compile(r"\b[ABS]\d+(?:_source_\d+)?\b")
+# Context words that precede legitimate non-fact-ID uses (e.g., "vitamin B12")
+_FACT_ID_CONTEXT_PREFIXES = re.compile(
+    r"(?:vitamin|hemoglobin|type|class|protein|grade|stage|level|group)\s+$",
+    re.IGNORECASE,
+)
 _PIPE_TABLE_PATTERN = re.compile(r"^\|.*\|.*\|", re.MULTILINE)
 _HTML_TABLE_PATTERN = re.compile(r"<table[\s>]", re.IGNORECASE)
 _VERDICT_DECL_PATTERN = re.compile(r"^\*\*Verdict:\s*(.+?)\*\*", re.MULTILINE)
@@ -35,7 +40,7 @@ def _tokenize(text: str) -> list[str]:
     return [re.sub(r"[^\w]", "", w) for w in words if re.sub(r"[^\w]", "", w)]
 
 
-def _extract_verdict_declaration(section_content: str) -> tuple[str | None, str]:
+def extract_verdict_declaration(section_content: str) -> tuple[str | None, str]:
     """Extract the **Verdict: X** line and the remaining hook text.
 
     Returns (declaration_line, hook_text) where declaration_line is the full
@@ -100,8 +105,11 @@ def validate_narrative(
         errors.append(f"Narrative too long: {word_count} words (maximum 800)")
 
     # --- Fact ID check ---
-    if _FACT_ID_PATTERN.search(all_content):
-        errors.append("Narrative contains fact IDs (A1, B1, S1, etc.) — use prose instead")
+    for m in _FACT_ID_PATTERN.finditer(all_content):
+        preceding = all_content[:m.start()]
+        if not _FACT_ID_CONTEXT_PREFIXES.search(preceding):
+            errors.append("Narrative contains fact IDs (A1, B1, S1, etc.) — use prose instead")
+            break
 
     # --- Table check ---
     if _PIPE_TABLE_PATTERN.search(narrative_md):
@@ -117,7 +125,7 @@ def validate_narrative(
     # --- Verdict section checks ---
     verdict_section = sections.get("Verdict", "")
     if verdict_section:
-        decl_verdict, hook_text = _extract_verdict_declaration(verdict_section)
+        decl_verdict, hook_text = extract_verdict_declaration(verdict_section)
 
         # Verdict declaration must match proof.json exactly
         if decl_verdict is None:

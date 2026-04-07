@@ -11,6 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.lib.verdict import VERDICT_TAXONOMY
+from tools.lib.narrative_validator import validate_narrative
 from tools.lib.proof_runner import run_proof_and_extract_json
 
 # Import ProofData to get the known keys for unknown-key detection
@@ -177,6 +178,19 @@ def main():
                 "the Conclusion must contain one of the known verdict strings "
                 f"({known})"
             )
+
+    # 4. Narrative validation
+    narrative_path = proof_dir / "proof_narrative.md"
+    if narrative_path.exists():
+        narrative_errors, narrative_warnings = validate_narrative(
+            narrative_path.read_text(),
+            verdict=proof_data.get("verdict", ""),
+            claim_natural=proof_data.get("claim_natural", ""),
+        )
+        errors.extend(narrative_errors)
+        warnings.extend(narrative_warnings)
+    else:
+        errors.append("proof_narrative.md not found")
 
     print_results(errors, warnings)
     sys.exit(1 if errors else 0)

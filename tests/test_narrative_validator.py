@@ -85,6 +85,13 @@ def test_fact_id_rejected():
     assert any("fact id" in e.lower() for e in errors)
 
 
+def test_fact_id_with_vitamin_context_not_rejected():
+    """vitamin B12, vitamin B6 etc. should not trigger the fact ID check."""
+    ok = VALID_NARRATIVE.replace("something is true", "vitamin B12 is essential")
+    errors, _ = validate_narrative(ok, verdict="PROVED", claim_natural="Test claim is true")
+    assert not any("fact id" in e.lower() for e in errors)
+
+
 def test_missing_proof_md_link():
     bad = VALID_NARRATIVE.replace("(proof.md)", "(other.md)")
     errors, _ = validate_narrative(bad, verdict="PROVED", claim_natural="Test claim is true")

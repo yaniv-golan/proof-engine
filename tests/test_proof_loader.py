@@ -42,6 +42,38 @@ def proof_dir(tmp_path):
             "generated_at": "2025-01-15",
         },
     }))
+    (slug_dir / "proof_narrative.md").write_text(
+        "# Proof Narrative: Test claim is true\n\n"
+        "## Verdict\n\n"
+        "**Verdict: PROVED**\n\n"
+        "Yes — the test claim is confirmed true beyond any reasonable doubt whatsoever. "
+        "The evidence is overwhelming and consistent across every source examined.\n\n"
+        "## What was claimed?\n\n"
+        "Test claim is true. This matters for science "
+        "and has real consequences for how we understand validity. "
+        "Getting this right affects downstream decisions.\n\n"
+        "## What did we find?\n\n"
+        "We found strong evidence supporting the claim. "
+        "Multiple independent sources confirmed the core assertion "
+        "from different angles and methodologies. "
+        "The data was consistent across all measurements taken "
+        "over the full range of conditions tested. "
+        "No contradictory evidence was identified in any source. "
+        "The primary computation matched theoretical predictions within tight tolerance. "
+        "Secondary verification through independent calculation confirmed the same figure. "
+        "Cross-referencing against published reference data showed agreement within one percent. "
+        "Statistical significance exceeds conventional thresholds by a wide margin. "
+        "Adversarial scenarios designed to break the conclusion all failed.\n\n"
+        "## What should you keep in mind?\n\n"
+        "This covers the specific claim as stated only. "
+        "Different framings might yield different results. "
+        "The methodology is optimized for quantitative claims.\n\n"
+        "## How was this verified?\n\n"
+        "Verified through computation. "
+        "See [the structured proof report](proof.md), "
+        "[the full verification audit](proof_audit.md), "
+        "or [re-run the proof yourself](proof.py).\n"
+    )
     return tmp_path
 
 
@@ -207,3 +239,70 @@ def test_verdict_summary_disproved_prefix(proof_dir):
     )
     proof = load_proof(proof_dir / "test-claim")
     assert proof["verdict_summary"] == "The spider myth is false."
+
+
+VALID_NARRATIVE = (
+    "# Proof Narrative: Test claim is true\n\n"
+    "## Verdict\n\n"
+    "**Verdict: PROVED**\n\n"
+    "Yes — the test claim is confirmed true beyond any reasonable doubt whatsoever.\n\n"
+    "## What was claimed?\n\n"
+    "Test claim is true. This matters for science.\n\n"
+    "## What did we find?\n\n"
+    "We found strong evidence supporting the claim. "
+    "Multiple independent sources confirmed the core assertion. "
+    "The data was consistent across all measurements taken. "
+    "No contradictory evidence was identified.\n\n"
+    "## What should you keep in mind?\n\n"
+    "This covers the specific claim as stated only.\n\n"
+    "## How was this verified?\n\n"
+    "Verified through computation. "
+    "See [the structured proof report](proof.md), "
+    "[the full verification audit](proof_audit.md), "
+    "or [re-run the proof yourself](proof.py).\n"
+)
+
+
+def test_load_proof_has_narrative_fields(proof_dir):
+    (proof_dir / "test-claim" / "proof_narrative.md").write_text(VALID_NARRATIVE)
+    proof = load_proof(proof_dir / "test-claim")
+    assert "sections_narrative" in proof
+    assert "verdict_declaration" in proof
+    assert "verdict_hook" in proof
+
+
+def test_load_proof_narrative_sections(proof_dir):
+    (proof_dir / "test-claim" / "proof_narrative.md").write_text(VALID_NARRATIVE)
+    proof = load_proof(proof_dir / "test-claim")
+    assert "Verdict" in proof["sections_narrative"]
+    assert "What Was Claimed?" in proof["sections_narrative"]
+    assert "What Did We Find?" in proof["sections_narrative"]
+    assert "What Should You Keep In Mind?" in proof["sections_narrative"]
+    assert "How Was This Verified?" in proof["sections_narrative"]
+
+
+def test_load_proof_verdict_declaration(proof_dir):
+    (proof_dir / "test-claim" / "proof_narrative.md").write_text(VALID_NARRATIVE)
+    proof = load_proof(proof_dir / "test-claim")
+    assert proof["verdict_declaration"] == "**Verdict: PROVED**"
+
+
+def test_load_proof_verdict_hook(proof_dir):
+    (proof_dir / "test-claim" / "proof_narrative.md").write_text(VALID_NARRATIVE)
+    proof = load_proof(proof_dir / "test-claim")
+    assert "confirmed true" in proof["verdict_hook"]
+    # Hook should not contain the declaration line
+    assert "**Verdict:" not in proof["verdict_hook"]
+
+
+def test_load_proof_missing_narrative_raises(proof_dir):
+    (proof_dir / "test-claim" / "proof_narrative.md").unlink()
+    with pytest.raises(ValueError, match="proof_narrative.md"):
+        load_proof(proof_dir / "test-claim")
+
+
+def test_load_proof_narrative_missing_section_raises(proof_dir):
+    bad = VALID_NARRATIVE.replace("## What should you keep in mind?", "## Other Section")
+    (proof_dir / "test-claim" / "proof_narrative.md").write_text(bad)
+    with pytest.raises(ValueError, match="missing required"):
+        load_proof(proof_dir / "test-claim")

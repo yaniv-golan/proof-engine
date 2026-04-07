@@ -4,6 +4,35 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-04-07
+
+### Added
+
+- **proof_narrative.md** — fourth required output artifact. Plain-language, verdict-adapted narrative targeting social media visitors with zero context. Five sections: Verdict (with hook), What Was Claimed?, What Did We Find?, What Should You Keep In Mind?, How Was This Verified?
+- Narrative validation library (`tools/lib/narrative_validator.py`) — structural and semantic checks: required sections, word count (200–800), fact ID rejection with context-aware filtering (vitamin B12 etc. excluded), table rejection, verdict match, hook length, claim drift warning
+- Proof loader: loads and validates `proof_narrative.md` sections, parses verdict declaration and hook text for template rendering
+- Site template: narrative sections are now the primary proof page content; proof.md sections moved to collapsible "Detailed Evidence" panel
+- Social sharing: meta description and share text use verdict hook instead of raw claim
+- proof.md and proof_narrative.md now available as downloads from proof pages
+- Migration script (`tools/generate-narratives.py`) — generates narratives for existing proofs via `claude -p` CLI with validation and rollback on failure. Supports `--proof-dir`, `--batch`, `--all-in`, `--dry-run`
+- CI: example proof narrative validation step in GitHub Actions workflow
+- Eval tooling: `run-single-eval.sh` enforces four-file output (proof.py, proof.md, proof_audit.md, proof_narrative.md)
+- SKILL.md: `### proof_narrative.md` output spec section (numbered list format)
+- `output-specs.md`: narrative structure reference
+- Tests: 17 narrative validator tests, 7 proof loader narrative tests, 3 site validator narrative tests, updated build/publish/eval fixtures
+
+### Changed
+
+- Publication gate requires `proof_narrative.md` in `REQUIRED_ARTIFACTS`
+- Site validator checks narrative presence and delegates to `validate_narrative()`
+- Build pipeline renders narrative sections and verdict hook, copies proof.md and proof_narrative.md to output
+- Documentation updated from "three artifacts" to "four artifacts" across README.md, DESIGN.md, submit.md, evals.json
+
+### Content
+
+- 107 site proofs: proof_narrative.md generated and validated (0 failures)
+- 2 example proofs: proof_narrative.md generated and validated
+
 ## [1.7.0] - 2026-04-06
 
 ### Added

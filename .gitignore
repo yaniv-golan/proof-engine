@@ -19,3 +19,7 @@ tools/thumbnail-prompts.csv
 CLAUDE.md
 .claude/
 _build/
+
+# Runtime artifacts from example proof execution
+docs/examples/*/proof.json
+docs/examples/*/output.txt
