@@ -140,6 +140,9 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
             for a liberal fallback pass.
 
     Steps performed IN ORDER (this sequence matters):
+      0. Mojibake repair -- detect and fix double-encoded UTF-8 (Latin-1
+         roundtrip). Servers that serve UTF-8 bytes decoded as Latin-1
+         produce garbage like â\x80\x93 instead of en-dash.
       1. Unicode normalization -- NFKC + character substitution registry
          (en-dashes -> hyphens, curly quotes -> straight, degree -> degree, etc.)
       1.5. Strip inline reference elements -- <sup><a>N</a></sup>,
@@ -176,6 +179,18 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
     (climate.gov), NASA (science.nasa.gov), the IPCC, the U.S. State
     Department (history.state.gov), PMC/NIH, Wikipedia, and ar5iv.
     """
+    # 0. Repair mojibake (double-encoded UTF-8) — some servers serve UTF-8
+    # bytes decoded as Latin-1 then re-encoded to UTF-8, producing garbage
+    # like â\x80\x93 instead of an en-dash. Try latin-1 → utf-8 roundtrip.
+    try:
+        repaired = text.encode('latin-1').decode('utf-8')
+        # Only use repaired text if it's shorter (mojibake inflates length)
+        # and doesn't contain replacement characters
+        if len(repaired) < len(text) and '\ufffd' not in repaired:
+            text = repaired
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        pass  # Not mojibake — keep original
+
     # 1. Unicode normalization (handles en-dashes, curly quotes, degree symbols, etc.)
     text = normalize_unicode(text)
     # 1.5. Strip inline reference elements (common in academic HTML)

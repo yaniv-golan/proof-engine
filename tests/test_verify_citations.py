@@ -719,6 +719,27 @@ def test_wikipedia_scientific_notation_fixture():
 
 
 # ---------------------------------------------------------------------------
+# Fix: mojibake (double-encoded UTF-8) repair
+# Real pattern from chronobiologyinmedicine.org (B9 case study)
+# ---------------------------------------------------------------------------
+
+
+def test_normalize_repairs_mojibake_en_dash():
+    """Double-encoded en-dash (â\\x80\\x93) should be repaired to actual en-dash, then normalized."""
+    # \xc3\xa2\xc2\x80\xc2\x93 is the double-encoded form of en-dash U+2013
+    mojibake = '460\u00e2\u0080\u0093 480 nm'  # â\x80\x93 = en-dash double-encoded
+    result = vc_module.normalize_text(mojibake)
+    assert '460-480' in result, f"Expected '460-480' in '{result}'"
+
+
+def test_normalize_mojibake_preserves_clean_text():
+    """Normal ASCII/Unicode text should not be altered by mojibake repair."""
+    clean = 'normal text with en-dash \u2013 and quotes \u201c'
+    result = vc_module.normalize_text(clean)
+    assert 'normal text' in result
+
+
+# ---------------------------------------------------------------------------
 # Fix: bare bracketed linked refs [<a>N</a>] without <sup> or class="xref"
 # Real HTML from PMC9920460 (microplastics exposure)
 # ---------------------------------------------------------------------------

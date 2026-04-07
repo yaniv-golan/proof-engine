@@ -82,7 +82,7 @@
         "property": "Smartphone screens deliver approximately 80-100 lux at the eye",
         "operator": ">=",
         "threshold": 2,
-        "operator_note": "SC1 checks whether smartphone screens deliver ~80-100 lux of illuminance at the viewer's eye. Note: smartphones are typically specified in luminance (cd/m2 or nits), not illuminance (lux). The conversion depends on screen size, brightness setting, and viewing distance. Threshold reduced to 2 because specific lux-at-eye measurements for smartphones are scarce in peer-reviewed literature \u2014 most studies report luminance (cd/m2) or melanopic EDI instead. Domain scarcity documented."
+        "operator_note": "SC1 checks whether smartphone screens deliver ~80-100 lux of illuminance at the viewer's eye. Note: smartphones are typically specified in luminance (cd/m2 or nits), not illuminance (lux). The conversion depends on screen size, brightness setting, and viewing distance. Threshold reduced to 2 because specific lux-at-eye measurements for smartphones are scarce in peer-reviewed literature — most studies report luminance (cd/m2) or melanopic EDI instead. Domain scarcity documented."
       },
       {
         "id": "SC2",
@@ -103,7 +103,7 @@
         "property": "Evening smartphone use suppresses melatonin via ipRGC/melanopsin pathway (causal)",
         "operator": ">=",
         "threshold": 3,
-        "operator_note": "SC4 uses causal language ('suppresses... via'). Per proof-engine rules, causal claims require decomposition into association + causation. Here: (a) Association: evening screen light is associated with melatonin suppression \u2014 established by multiple controlled studies (Chang et al. 2015 PNAS, others). (b) Causation via ipRGC/melanopsin: established by RCTs where participants were randomized to screen vs. print conditions, plus established neuroscience of the melanopsin/ipRGC/SCN pathway. The RCT design (within-subject crossover) establishes causation, not merely association. The mechanistic pathway (melanopsin in ipRGCs -> SCN -> pineal -> melatonin suppression) is textbook neuroscience confirmed by multiple independent research groups. Both association and causation are thus established at RCT level."
+        "operator_note": "SC4 uses causal language ('suppresses... via'). Per proof-engine rules, causal claims require decomposition into association + causation. Here: (a) Association: evening screen light is associated with melatonin suppression — established by multiple controlled studies (Chang et al. 2015 PNAS, others). (b) Causation via ipRGC/melanopsin: established by RCTs where participants were randomized to screen vs. print conditions, plus established neuroscience of the melanopsin/ipRGC/SCN pathway. The RCT design (within-subject crossover) establishes causation, not merely association. The mechanistic pathway (melanopsin in ipRGCs -> SCN -> pineal -> melatonin suppression) is textbook neuroscience confirmed by multiple independent research groups. Both association and causation are thus established at RCT level."
       },
       {
         "id": "SC5",
@@ -122,7 +122,7 @@
       "source_key": "sc1_source_a",
       "source_name": "PMC - Blue Light Exposure: Ocular Hazards and Prevention (Ouyang et al. 2023)",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9938358/",
-      "quote": "The luminance of a clear blue sky is around 5000 cd/m2 (compared with 300 for a TV display and 150\u2013250 cd/m2 for a computer screen)",
+      "quote": "The luminance of a clear blue sky is around 5000 cd/m2 (compared with 300 for a TV display and 150–250 cd/m2 for a computer screen)",
       "status": "verified",
       "method": "full_quote",
       "coverage_pct": null,
@@ -156,7 +156,7 @@
       "source_key": "sc2_source_a",
       "source_name": "Wikipedia - Lux",
       "url": "https://en.wikipedia.org/wiki/Lux",
-      "quote": "32,000\u2013100,000 Direct sunlight",
+      "quote": "32,000–100,000 Direct sunlight",
       "status": "verified",
       "method": "full_quote",
       "coverage_pct": null,
@@ -183,7 +183,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B5": {
@@ -217,7 +217,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B7": {
@@ -239,7 +239,7 @@
     },
     "B8": {
       "source_key": "sc4_source_a",
-      "source_name": "PMC - Effects of evening smartphone use on sleep (Cabr\u00e9-Riera et al. 2024)",
+      "source_name": "PMC - Effects of evening smartphone use on sleep (Cabré-Riera et al. 2024)",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11154150/",
       "quote": "Short-wavelength light stimulating the melanopsin-containing ipRGCs entrains circadian rhythms via the suprachiasmatic nuclei (SCN) in the hypothalamus",
       "status": "verified",
@@ -258,17 +258,17 @@
       "source_key": "sc4_source_b",
       "source_name": "Chronobiology in Medicine - Blue Light Impacts on Circadian Rhythm (2024)",
       "url": "https://www.chronobiologyinmedicine.org/journal/view.php?number=167",
-      "quote": "Short wavelength blue light (460\u2013480 nm) has been shown to suppress nocturnal melatonin most substantially due to the peak ipRGC sensitivity occurring within this range",
+      "quote": "Short wavelength blue light (460–480 nm) has been shown to suppress nocturnal melatonin most substantially due to the peak ipRGC sensitivity occurring within this range",
       "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 80.0,
+      "method": "full_quote",
+      "coverage_pct": null,
       "fetch_mode": "live",
       "credibility": {
         "domain": "chronobiologyinmedicine.org",
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B10": {
@@ -302,7 +302,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B12": {
@@ -319,7 +319,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     }
   },
@@ -337,7 +337,7 @@
     "B3": {
       "value": "verified",
       "value_in_quote": true,
-      "quote_snippet": "32,000\u2013100,000 Direct sunlight"
+      "quote_snippet": "32,000–100,000 Direct sunlight"
     },
     "B4": {
       "value": "verified",
@@ -367,7 +367,7 @@
     "B9": {
       "value": "verified",
       "value_in_quote": true,
-      "quote_snippet": "Short wavelength blue light (460\u2013480 nm) has been shown to suppress nocturnal me"
+      "quote_snippet": "Short wavelength blue light (460–480 nm) has been shown to suppress nocturnal me"
     },
     "B10": {
       "value": "verified",
@@ -394,7 +394,7 @@
         "sc1_source_a": "verified",
         "sc1_source_b": "verified"
       },
-      "independence_note": "PMC peer-reviewed review and Harvard Health \u2014 independent publications",
+      "independence_note": "PMC peer-reviewed review and Harvard Health — independent publications",
       "coi_flags": []
     },
     {
@@ -405,7 +405,7 @@
         "sc2_source_a": "verified",
         "sc2_source_b": "verified"
       },
-      "independence_note": "Wikipedia (citing IEC/ISO standards) and Engineering Toolbox \u2014 independently published references",
+      "independence_note": "Wikipedia (citing IEC/ISO standards) and Engineering Toolbox — independently published references",
       "coi_flags": []
     },
     {
@@ -417,7 +417,7 @@
         "sc3_source_b": "verified",
         "sc3_source_c": "verified"
       },
-      "independence_note": "Harvard Health, AAO, and PMC peer-reviewed review \u2014 three independent medical authorities",
+      "independence_note": "Harvard Health, AAO, and PMC peer-reviewed review — three independent medical authorities",
       "coi_flags": []
     },
     {
@@ -429,7 +429,7 @@
         "sc4_source_b": "verified",
         "sc4_source_c": "verified"
       },
-      "independence_note": "Cabr\u00e9-Riera et al. 2024 (PMC), Chronobiology in Medicine 2024 review, and Chang et al. 2015 (PNAS) \u2014 three independent research groups",
+      "independence_note": "Cabré-Riera et al. 2024 (PMC), Chronobiology in Medicine 2024 review, and Chang et al. 2015 (PNAS) — three independent research groups",
       "coi_flags": []
     },
     {
@@ -440,7 +440,7 @@
         "sc5_source_a": "verified",
         "sc5_source_b": "verified"
       },
-      "independence_note": "Sleep Foundation and Chronobiology in Medicine \u2014 independent publications",
+      "independence_note": "Sleep Foundation and Chronobiology in Medicine — independent publications",
       "coi_flags": []
     }
   ],
@@ -486,12 +486,12 @@
     {
       "question": "Is there clinical evidence that smartphone blue light DOES cause retinal damage, contradicting SC3?",
       "verification_performed": "Searched for 'smartphone blue light retinal damage clinical evidence human study'. Found Frontiers in Aging Neuroscience 2024 review and PMC studies on cell cultures and animal models. One PMC study (2021) claimed clinical observational evidence of chronic retinal light injury from cell phones.",
-      "finding": "Laboratory studies (cell culture, animal models) show blue light CAN damage retinal cells at high intensities. However, the AAO, Harvard Health, and multiple narrative reviews emphasize that the intensity levels from consumer electronics are orders of magnitude below harmful thresholds. The PMC 2021 observational study (Zhao et al.) is a single small study that has not been replicated and does not override the consensus from major ophthalmology bodies. The retinal risk is considered zero below 10,000 cd/m2 \u2014 far above any consumer screen.",
+      "finding": "Laboratory studies (cell culture, animal models) show blue light CAN damage retinal cells at high intensities. However, the AAO, Harvard Health, and multiple narrative reviews emphasize that the intensity levels from consumer electronics are orders of magnitude below harmful thresholds. The PMC 2021 observational study (Zhao et al.) is a single small study that has not been replicated and does not override the consensus from major ophthalmology bodies. The retinal risk is considered zero below 10,000 cd/m2 — far above any consumer screen.",
       "breaks_proof": false
     },
     {
       "question": "Does the '90 minutes' delay refer to sleep onset latency or melatonin onset (DLMO)? Could this conflation invalidate SC5?",
-      "verification_performed": "Searched for 'Chang 2015 PNAS eReader sleep latency vs DLMO delay'. The Chang et al. study found: DLMO delayed ~1.5 hours, but sleep onset latency increased by only ~10 minutes. The Sleep Foundation says 'bright bedroom lighting can decrease the nocturnal production of melatonin by as much as 90 minutes' \u2014 this is about melatonin suppression duration, not time-to-fall-asleep. A 2024 NSF expert panel did NOT reach consensus on whether blue light from screens impairs sleep in adults.",
+      "verification_performed": "Searched for 'Chang 2015 PNAS eReader sleep latency vs DLMO delay'. The Chang et al. study found: DLMO delayed ~1.5 hours, but sleep onset latency increased by only ~10 minutes. The Sleep Foundation says 'bright bedroom lighting can decrease the nocturnal production of melatonin by as much as 90 minutes' — this is about melatonin suppression duration, not time-to-fall-asleep. A 2024 NSF expert panel did NOT reach consensus on whether blue light from screens impairs sleep in adults.",
       "finding": "The 90-minute figure genuinely refers to DLMO/melatonin onset delay, NOT sleep onset latency (time to fall asleep). Sleep onset latency increases are typically 10-30 minutes in controlled studies. The claim says 'delays sleep onset by up to 90 minutes' which conflates these measures. If 'sleep onset' means time-to-fall-asleep, 90 minutes is not supported. If it means circadian phase delay affecting when one feels sleepy, ~90 minutes is supported. This ambiguity weakens SC5.",
       "breaks_proof": false
     },
@@ -504,7 +504,7 @@
     {
       "question": "Is there evidence that smartphone screens deliver LESS than 80 lux, making even the lower bound wrong?",
       "verification_performed": "Searched for 'smartphone screen illuminance lux eye level low brightness'. At minimum brightness settings, phones may deliver <10 lux. At moderate indoor settings, estimates range from 30-150 lux depending on model and distance.",
-      "finding": "The range is highly variable. '80-100 lux' is not a universal measurement \u2014 it depends on brightness setting, screen size, and viewing distance. Some conditions produce less, some more. The claim's use of '~' acknowledges this imprecision. SC1 is the weakest sub-claim due to this variability.",
+      "finding": "The range is highly variable. '80-100 lux' is not a universal measurement — it depends on brightness setting, screen size, and viewing distance. Some conditions produce less, some more. The claim's use of '~' acknowledges this imprecision. SC1 is the weakest sub-claim due to this variability.",
       "breaks_proof": false
     }
   ],
