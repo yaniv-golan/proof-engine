@@ -441,6 +441,8 @@ def main():
     for proof in proofs:
         rendered_md = render_proof_sections(proof["sections_md"])
         rendered_audit = render_proof_sections(proof["sections_audit"])
+        rendered_narrative = render_proof_sections(proof["sections_narrative"])
+        rendered_verdict_hook = render_markdown(proof["verdict_hook"])
         canonical_url = f"{site_url}{base_url}proofs/{proof['slug']}/"
         json_ld = generate_claim_review(proof["proof_data"], canonical_url)
 
@@ -455,6 +457,8 @@ def main():
             **common, proof=proof,
             rendered_sections_md=rendered_md,
             rendered_sections_audit=rendered_audit,
+            rendered_sections_narrative=rendered_narrative,
+            rendered_verdict_hook=rendered_verdict_hook,
             json_ld=json_ld,
             canonical_url=canonical_url,
             og_type="article",
@@ -465,6 +469,8 @@ def main():
         ))
         shutil.copy2(src_dir / "proof.py", proof_out / "proof.py")
         shutil.copy2(src_dir / "proof_audit.md", proof_out / "proof_audit.md")
+        shutil.copy2(src_dir / "proof.md", proof_out / "proof.md")
+        shutil.copy2(src_dir / "proof_narrative.md", proof_out / "proof_narrative.md")
 
         augmented = dict(proof["proof_data"])
         augmented["proof_py_url"] = f"{base_url}proofs/{proof['slug']}/proof.py"
@@ -620,8 +626,8 @@ def main():
         "## Submitting Proofs\n"
         "\n"
         f"- [Submit a Proof]({site_url}{base_url}submit/): Submit a verified proof via GitHub pull request. "
-        "Generate proof files with proof-engine (produces proof.py, proof.md, proof_audit.md), "
-        "run the proof to create proof.json, then fork the repo and PR all four files to "
+        "Generate proof files with proof-engine (produces proof.py, proof.md, proof_audit.md, proof_narrative.md), "
+        "run the proof to create proof.json, then fork the repo and PR all five files to "
         "site/proofs/your-claim-slug/. CI validates automatically.\n"
         "\n"
         "## Generating Proofs\n"

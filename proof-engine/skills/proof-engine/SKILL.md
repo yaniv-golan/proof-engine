@@ -9,7 +9,7 @@ description: >
   questions with no verifiable answer.
 metadata:
   author: Yaniv Golan
-  version: "1.7.0"
+  version: "1.8.0"
   license: MIT
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
@@ -21,7 +21,7 @@ compatibility: >
 
 LLMs hallucinate facts and make reasoning errors. This skill overcomes both by offloading all verification to **code** and **citations**. Every fact is either computed by Python code anyone can re-run (Type A) or backed by a specific source, URL, and exact quote (Type B).
 
-Produces three outputs: a re-runnable `proof.py` script, a reader-facing `proof.md`, and a `proof_audit.md` with full verification details.
+Produces four outputs: a re-runnable `proof.py` script, a reader-facing `proof.md`, a `proof_audit.md` with full verification details, and a `proof_narrative.md` plain-language narrative.
 
 ## Gotchas
 
@@ -55,7 +55,7 @@ Read these on demand, not all upfront.
 |------|-----------|
 | [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) | **Step 3** — the 7 rules with bad/good examples |
 | [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) | **Step 3** — read this index to choose a template, then read the specific template file it directs you to |
-| [output-specs.md](${CLAUDE_SKILL_DIR}/references/output-specs.md) | **Step 5** — proof.md and proof_audit.md structure |
+| [output-specs.md](${CLAUDE_SKILL_DIR}/references/output-specs.md) | **Step 5** — proof.md, proof_audit.md, and proof_narrative.md structure |
 | [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md) | **Step 6** — before presenting results |
 | [advanced-patterns.md](${CLAUDE_SKILL_DIR}/references/advanced-patterns.md) | When encountering complex quotes or table-sourced data |
 | [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) | When facing fetch failures, paywalls, or .gov 403s |
@@ -179,9 +179,31 @@ Required elements:
 Run `python ${CLAUDE_SKILL_DIR}/scripts/validate_proof.py proof_file.py` and fix issues.
 
 ### Step 5: Execute and Report
-Run the proof script. Write three files: proof.py, proof.md, proof_audit.md.
+Run the proof script. Write four files: proof.py, proof.md, proof_audit.md, proof_narrative.md.
 
 For detailed output specifications, see [output-specs.md](${CLAUDE_SKILL_DIR}/references/output-specs.md).
+
+### proof_narrative.md — Reader-Facing Narrative
+
+The fourth and final output file. Written AFTER proof.py, proof.md, proof_audit.md, and proof.json are complete. This is a **presentation** of the proof you already built — do not re-derive or reinterpret findings.
+
+**Structure (all sections required, use these exact headings):**
+
+1. Title line: `# Proof Narrative: <claim_natural>`
+2. Section `Verdict` — contains `**Verdict: <exact verdict from proof.json>**` followed by 1-2 sentence hook with verdict-adapted tone
+3. Section `What was claimed?` — plain-language restatement, why someone might care, do NOT copy CLAIM_FORMAL
+4. Section `What did we find?` — 3-6 paragraphs walking through evidence as a story, not a table. Verdict-adapted: PROVED/DISPROVED = linear strongest-first; SUPPORTED = evidence then gaps; PARTIALLY VERIFIED = what held then what didn't; UNDETERMINED = what was tried and why insufficient
+5. Section `What should you keep in mind?` — mandatory caveats, edge cases, what evidence doesn't address, what surprised, limitations
+6. Section `How was this verified?` — 2-3 sentences naming the process, with these links: `[the structured proof report](proof.md)`, `[the full verification audit](proof_audit.md)`, `[re-run the proof yourself](proof.py)`
+
+**Constraints:**
+- 200-800 words total
+- No fact IDs (A1, B1, S1, etc.)
+- No jargon — accessible to a general audience
+- No tables — prose only
+- No CLAIM_FORMAL reproduction
+- Purpose-based language with explicit markdown links for formal outputs
+- Verdict declaration must use the EXACT full verdict string from proof.json (including qualifiers like "with unverified citations")
 
 ### Step 6: Self-Critique
 Before presenting results, run through the checklist in [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md).

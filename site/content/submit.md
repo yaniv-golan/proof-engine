@@ -4,11 +4,11 @@ Share your verified proofs with the community.
 
 ## How to Submit
 
-1. **Generate your proof** using Proof Engine — this produces `proof.py`, `proof.md`, and `proof_audit.md`
+1. **Generate your proof** using Proof Engine — this produces `proof.py`, `proof.md`, `proof_audit.md`, and `proof_narrative.md`
 
 2. **Run your proof** and save the JSON output as `proof.json`
 
-3. **Fork the repo**, add all four files to `site/proofs/your-claim-slug/`, and open a PR
+3. **Fork the repo**, add all five files to `site/proofs/your-claim-slug/`, and open a PR
 
 CI validates your submission automatically. A maintainer reviews and merges. Your proof goes live on the next deploy.
 

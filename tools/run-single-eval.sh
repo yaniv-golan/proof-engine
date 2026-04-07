@@ -25,7 +25,7 @@ mkdir -p "$OUTPUT_DIR"
 
 # Clean stale markers and artifacts from previous runs
 rm -f "$OUTPUT_DIR/.success" "$OUTPUT_DIR/.failed"
-rm -f "$OUTPUT_DIR/proof.py" "$OUTPUT_DIR/proof.md" "$OUTPUT_DIR/proof_audit.md"
+rm -f "$OUTPUT_DIR/proof.py" "$OUTPUT_DIR/proof.md" "$OUTPUT_DIR/proof_audit.md" "$OUTPUT_DIR/proof_narrative.md"
 rm -f "$OUTPUT_DIR/phase1.log" "$OUTPUT_DIR/feedback.md"
 
 # Save the original claim for later reference
@@ -45,8 +45,8 @@ claude -p \
     --session-id "$SESSION_ID" \
     "Using /proof-engine, prove that: $CLAIM
 
-Write the three output files to this exact directory: $OUTPUT_DIR/
-Use exactly these filenames: proof.py, proof.md, proof_audit.md" \
+Write the four output files to this exact directory: $OUTPUT_DIR/
+Use exactly these filenames: proof.py, proof.md, proof_audit.md, proof_narrative.md" \
     > "$OUTPUT_DIR/phase1.log" 2>&1 \
     || PHASE1_EXIT=$?
 
@@ -62,7 +62,7 @@ echo "[$(date '+%H:%M:%S')] Phase 1 done: $(basename "$(pwd)")"
 read -r -d '' FEEDBACK_PROMPT << 'FEEDBACK_EOF' || true
 You just ran the proof-engine skill. You are now a QA tester filing bug reports — not writing a review. Be specific and critical. Vague praise is useless. "N/A" is better than "worked fine."
 
-Before answering, re-read the generated proof.py, proof.md, and proof_audit.md files in the current directory. Also re-run the validator on proof.py using its full path from the skill's scripts directory (the same path you used during the proof workflow). Base your answers on what you observe in the actual files and validator output, not just your memory of writing them.
+Before answering, re-read the generated proof.py, proof.md, proof_audit.md, and proof_narrative.md files in the current directory. Also re-run the validator on proof.py using its full path from the skill's scripts directory (the same path you used during the proof workflow). Base your answers on what you observe in the actual files and validator output, not just your memory of writing them.
 
 Only report issues the SKILL could fix. If the claim was inherently hard or ambiguous, that's not a skill issue.
 
@@ -126,6 +126,19 @@ done
 if [ ! -s "$OUTPUT_DIR/feedback.md" ] || [ -n "$MISSING_PROBES" ]; then
     echo "[$(date '+%H:%M:%S')] Phase 2 produced malformed feedback: $(basename "$(pwd)")"
     echo "Phase 2 exited 0 but feedback.md is missing probe headings:$MISSING_PROBES. Phase 1 succeeded." > "$OUTPUT_DIR/.failed"
+    exit 0
+fi
+
+# Verify all four proof artifacts were generated
+MISSING_ARTIFACTS=""
+for artifact in proof.py proof.md proof_audit.md proof_narrative.md; do
+    if [ ! -f "$OUTPUT_DIR/$artifact" ]; then
+        MISSING_ARTIFACTS="$MISSING_ARTIFACTS $artifact"
+    fi
+done
+if [ -n "$MISSING_ARTIFACTS" ]; then
+    echo "[$(date '+%H:%M:%S')] Missing artifacts:$MISSING_ARTIFACTS: $(basename "$(pwd)")"
+    echo "Phase 1 completed but missing artifacts:$MISSING_ARTIFACTS" > "$OUTPUT_DIR/.failed"
     exit 0
 fi
 

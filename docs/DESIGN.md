@@ -1,6 +1,6 @@
 # Design Principles
 
-Proof Engine is an AI agent skill — a set of instructions and bundled Python scripts that plug into LLM coding tools (Claude Desktop, Claude Cowork, Claude Code, Codex CLI, Cursor, Windsurf, Manus, ChatGPT, and others via the [Agent Skills](https://agentskills.io) standard). When a user asks the LLM to verify a factual claim, the skill directs it to produce three artifacts: a re-runnable `proof.py` script, a reader-facing `proof.md` summary, and a `proof_audit.md` with full verification details.
+Proof Engine is an AI agent skill — a set of instructions and bundled Python scripts that plug into LLM coding tools (Claude Desktop, Claude Cowork, Claude Code, Codex CLI, Cursor, Windsurf, Manus, ChatGPT, and others via the [Agent Skills](https://agentskills.io) standard). When a user asks the LLM to verify a factual claim, the skill directs it to produce four artifacts: a re-runnable `proof.py` script, a structured `proof.md` proof report, a `proof_audit.md` with full verification details, and a `proof_narrative.md` reader-facing narrative summary.
 
 This document describes the design ideas behind it — what problems it solves, what makes the approach unusual, and where it falls short.
 
@@ -149,11 +149,11 @@ The engine is explicit about these limits. It will decline claims that are opini
 
 Every proof is designed to be re-runnable. Computation proofs are pure Python with no external dependencies beyond standard libraries and sympy. Empirical proofs default to live fetching (with optional Wayback Machine fallback), and can also embed snapshots — pre-fetched page text included in the proof script — for full offline reproducibility. The checked-in examples use live fetch, not snapshots.
 
-The three output files (proof.py, proof.md, proof_audit.md) form a complete record of the proof. When snapshots are embedded, the proof can verify against them without network access. When they aren't, the proof depends on the source URLs remaining available (or archived). The fallback chain — live → snapshot → Wayback — is tracked in the audit trail so you can see how each citation was resolved.
+The four output files (proof.py, proof.md, proof_audit.md, proof_narrative.md) form a complete record of the proof. When snapshots are embedded, the proof can verify against them without network access. When they aren't, the proof depends on the source URLs remaining available (or archived). The fallback chain — live → snapshot → Wayback — is tracked in the audit trail so you can see how each citation was resolved.
 
 ## Separation of concerns
 
-The proof has three output files because it serves three audiences. `proof.py` is for anyone who wants to re-run the verification. `proof.md` is for a reader who wants the verdict, key numbers, and a short explanation. `proof_audit.md` is for a reviewer who wants the citation-by-citation evidence trail and hardening-rule checklist. Combining them into one artifact would force every reader through material meant for someone else.
+The proof has four output files because it serves four audiences. `proof.py` is for anyone who wants to re-run the verification. `proof.md` is the structured proof report with verdict and key numbers. `proof_audit.md` is for a reviewer who wants the citation-by-citation evidence trail and hardening-rule checklist. `proof_narrative.md` is a plain-language narrative summary for general readers. Combining them into one artifact would force every reader through material meant for someone else.
 
 A similar separation applies to the skill instructions: a short main file with gotchas and a reference index, and detailed rules/templates/checklists in separate files loaded on-demand at specific workflow steps.
 

@@ -2,7 +2,7 @@
 
 {% block title %}{{ proof.proof_data.claim_natural | truncate(80) }} — Proof Engine{% endblock %}
 
-{% block meta_description %}{{ proof.verdict.raw }}: {{ proof.proof_data.claim_natural | truncate(120) }} — verified by Proof Engine{% endblock %}
+{% block meta_description %}{{ proof.verdict.raw }}: {{ proof.verdict_hook | replace('**', '') | replace('*', '') | replace('[', '') | replace(']', '') | replace('\n', ' ') | truncate(140) | e }} — Proof Engine{% endblock %}
 
 {% block og_title %}{{ proof.verdict.raw }}: {{ proof.proof_data.claim_natural }}{% endblock %}
 
@@ -55,6 +55,7 @@
 <div class="share-bar"
      data-verdict="{{ proof.verdict.raw | e }}"
      data-claim="{{ proof.proof_data.claim_natural | e }}"
+     data-hook="{{ proof.verdict_hook | replace('**', '') | replace('*', '') | replace('[', '') | replace(']', '') | replace('\n', ' ') | truncate(120) | e }}"
      data-url="{{ canonical_url | e }}"
      data-has-citations="{{ 'true' if citations else 'false' }}">
     <span class="share-bar-label">share</span>
@@ -68,10 +69,11 @@
     var verdict = bar.dataset.verdict;
     var claim = bar.dataset.claim;
     var url = bar.dataset.url;
+    var hook = bar.dataset.hook;
     var verdictText = verdict + ': "' + claim + '" — ' + url;
 
     var hasCitations = bar.dataset.hasCitations === 'true';
-    var shareDetail = hasCitations ? ' — verified with sources. ' : ' — verified by computation. ';
+    var shareDetail = hook ? ' — ' + hook + ' ' : (hasCitations ? ' — verified with sources. ' : ' — verified by computation. ');
     document.getElementById('share-twitter').href =
         'https://twitter.com/intent/tweet?text=' +
         encodeURIComponent(verdict + ': "' + claim + '"' + shareDetail + url);
@@ -107,48 +109,68 @@
     <a href="{{ base_url }}submit/">submit your own</a>
 </div>
 
-{% for section_name in ["Key Findings", "Claim Interpretation"] %}
-{% if section_name in rendered_sections_md %}
+{# --- Narrative (primary content) --- #}
+{{ rendered_verdict_hook | safe }}
+
+{% for section_name in ["What Was Claimed?", "What Did We Find?", "What Should You Keep In Mind?", "How Was This Verified?"] %}
+{% if section_name in rendered_sections_narrative %}
 <h2 class="section-heading">{{ section_name }}</h2>
-<div class="proof-content">{{ rendered_sections_md[section_name] | safe }}</div>
+<div class="proof-content">{{ rendered_sections_narrative[section_name] | safe }}</div>
 {% endif %}
 {% endfor %}
 
-{% if "Evidence Summary" in rendered_sections_md %}
-<h2 class="section-heading">evidence summary</h2>
-<div class="proof-content">
-    {{ rendered_sections_md["Evidence Summary"] | safe }}
-    {% if citations %}
-    <h3>Linked Sources</h3>
-    <table class="evidence-table">
-        <thead>
-            <tr><th>Source</th><th>ID</th><th>Verified</th></tr>
-        </thead>
-        <tbody>
-        {% for fact_id, fact in proof.proof_data.fact_registry.items() %}
-            <tr>
-                <td>{% if fact_id in citations %}<a href="{{ citations[fact_id].url }}">{{ citations[fact_id].source_name }}</a>{% else %}{{ fact.label }}{% endif %}</td>
-                <td>{{ fact_id }}</td>
-                <td>{% if fact_id in citations %}{% set st = citations[fact_id].status %}<span class="{% if st == 'verified' %}evidence-verified{% elif st == 'partial' %}evidence-computed{% elif st in ('failed', 'not_found', 'fetch_failed') %}evidence-failed{% else %}evidence-unknown{% endif %}">{% if st == "verified" %}Yes{% elif st == "partial" %}Partial{% elif st == "not_found" %}Not Found{% elif st in ("failed", "fetch_failed") %}Fetch Failed{% else %}{{ st | capitalize }}{% endif %}</span>{% elif fact.method is defined %}<span class="evidence-computed">Computed</span>{% endif %}</td>
-            </tr>
+{# --- Detailed Evidence (collapsible, was primary content) --- #}
+<h2 class="section-heading">detailed evidence</h2>
+<div class="audit-section">
+    <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
+        <span>Detailed Evidence</span>
+        <span class="toggle">▸</span>
+    </div>
+    <div class="audit-body">
+        {% for section_name in ["Key Findings", "Claim Interpretation"] %}
+        {% if section_name in rendered_sections_md %}
+        <h3>{{ section_name }}</h3>
+        <div class="proof-content">{{ rendered_sections_md[section_name] | safe }}</div>
+        {% endif %}
         {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
+
+        {% if "Evidence Summary" in rendered_sections_md %}
+        <h3>Evidence Summary</h3>
+        <div class="proof-content">
+            {{ rendered_sections_md["Evidence Summary"] | safe }}
+            {% if citations %}
+            <h4>Linked Sources</h4>
+            <table class="evidence-table">
+                <thead>
+                    <tr><th>Source</th><th>ID</th><th>Verified</th></tr>
+                </thead>
+                <tbody>
+                {% for fact_id, fact in proof.proof_data.fact_registry.items() %}
+                    <tr>
+                        <td>{% if fact_id in citations %}<a href="{{ citations[fact_id].url }}">{{ citations[fact_id].source_name }}</a>{% else %}{{ fact.label }}{% endif %}</td>
+                        <td>{{ fact_id }}</td>
+                        <td>{% if fact_id in citations %}{% set st = citations[fact_id].status %}<span class="{% if st == 'verified' %}evidence-verified{% elif st == 'partial' %}evidence-computed{% elif st in ('failed', 'not_found', 'fetch_failed') %}evidence-failed{% else %}evidence-unknown{% endif %}">{% if st == "verified" %}Yes{% elif st == "partial" %}Partial{% elif st == "not_found" %}Not Found{% elif st in ("failed", "fetch_failed") %}Fetch Failed{% else %}{{ st | capitalize }}{% endif %}</span>{% elif fact.method is defined %}<span class="evidence-computed">Computed</span>{% endif %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% for section_name in ["Proof Logic", "Conclusion"] %}
+        {% if section_name in rendered_sections_md %}
+        <h3>{{ section_name }}</h3>
+        <div class="proof-content">{{ rendered_sections_md[section_name] | safe }}</div>
+        {% endif %}
+        {% endfor %}
+
+        {% if "Counter-Evidence Search" in rendered_sections_md %}
+        <h3>Counter-Evidence Search</h3>
+        <div class="proof-content">{{ rendered_sections_md["Counter-Evidence Search"] | safe }}</div>
+        {% endif %}
+    </div>
 </div>
-{% endif %}
-
-{% for section_name in ["Proof Logic", "Conclusion"] %}
-{% if section_name in rendered_sections_md %}
-<h2 class="section-heading">{{ section_name }}</h2>
-<div class="proof-content">{{ rendered_sections_md[section_name] | safe }}</div>
-{% endif %}
-{% endfor %}
-
-{% if "Counter-Evidence Search" in rendered_sections_md %}
-<h2 class="section-heading">counter-evidence search</h2>
-<div class="proof-content">{{ rendered_sections_md["Counter-Evidence Search"] | safe }}</div>
-{% endif %}
 
 <h2 class="section-heading">audit trail</h2>
 
@@ -294,6 +316,8 @@
 {% endif %}
 
 <div class="downloads">
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.md" class="download-link" download onclick="gtag('event','download',{file_type:'proof_md',proof_slug:'{{ proof.slug }}'})">↓ structured proof report</a>
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_narrative.md" class="download-link" download onclick="gtag('event','download',{file_type:'narrative',proof_slug:'{{ proof.slug }}'})">↓ narrative summary</a>
     <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.py" class="download-link" download onclick="gtag('event','download',{file_type:'proof_py',proof_slug:'{{ proof.slug }}'})">↓ run the proof (Python)</a>
     <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_audit.md" class="download-link" download onclick="gtag('event','download',{file_type:'audit_trail',proof_slug:'{{ proof.slug }}'})">↓ original audit log</a>
     <a href="https://github.com/yaniv-golan/proof-engine/tree/main/site/proofs/{{ proof.slug }}" class="download-link" rel="nofollow" onclick="gtag('event','download',{file_type:'github',proof_slug:'{{ proof.slug }}'})">view on github</a>

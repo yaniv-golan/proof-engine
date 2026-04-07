@@ -5,7 +5,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
-REQUIRED_ARTIFACTS = ["proof.py", "proof.md", "proof_audit.md"]
+REQUIRED_ARTIFACTS = ["proof.py", "proof.md", "proof_audit.md", "proof_narrative.md"]
 OPTIONAL_ARTIFACTS = ["proof.json", "thumbnail.png", "meta.yaml"]
 
 

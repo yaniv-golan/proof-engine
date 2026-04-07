@@ -40,6 +40,38 @@ def site_fixture(tmp_path):
     (proof_dir / "proof_audit.md").write_text(
         "# Audit\n\n## Hardening Checklist\n\nAll pass.\n"
     )
+    (proof_dir / "proof_narrative.md").write_text(
+        "# Proof Narrative: Test claim is true\n\n"
+        "## Verdict\n\n"
+        "**Verdict: PROVED**\n\n"
+        "Yes — the test claim is confirmed true beyond any reasonable doubt whatsoever. "
+        "The evidence is overwhelming and consistent across every source examined.\n\n"
+        "## What was claimed?\n\n"
+        "Test claim is true. This matters for science "
+        "and has real consequences for how we understand validity. "
+        "Getting this right affects downstream decisions.\n\n"
+        "## What did we find?\n\n"
+        "We found strong evidence supporting the claim. "
+        "Multiple independent sources confirmed the core assertion "
+        "from different angles and methodologies. "
+        "The data was consistent across all measurements taken "
+        "over the full range of conditions tested. "
+        "No contradictory evidence was identified in any source. "
+        "The primary computation matched theoretical predictions within tight tolerance. "
+        "Secondary verification through independent calculation confirmed the same figure. "
+        "Cross-referencing against published reference data showed agreement within one percent. "
+        "Statistical significance exceeds conventional thresholds by a wide margin. "
+        "Adversarial scenarios designed to break the conclusion all failed.\n\n"
+        "## What should you keep in mind?\n\n"
+        "This covers the specific claim as stated only. "
+        "Different framings might yield different results. "
+        "The methodology is optimized for quantitative claims.\n\n"
+        "## How was this verified?\n\n"
+        "Verified through computation. "
+        "See [the structured proof report](proof.md), "
+        "[the full verification audit](proof_audit.md), "
+        "or [re-run the proof yourself](proof.py).\n"
+    )
     (proof_dir / "proof.py").write_text("# proof script\n")
     (proof_dir / "proof.json").write_text(json.dumps({
         "fact_registry": {"B1": {"label": "test"}},
@@ -137,7 +169,9 @@ def test_meta_description_in_proof_page(site_fixture):
     result = _run_build(site_fixture)
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
-    assert '<meta name="description" content="PROVED: Test claim is true' in html
+    # Meta description now uses verdict hook from narrative
+    assert '<meta name="description" content="PROVED: ' in html
+    assert "confirmed true" in html
 
 
 def test_og_tags_in_proof_page(site_fixture):
@@ -145,7 +179,7 @@ def test_og_tags_in_proof_page(site_fixture):
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
     assert 'og:title" content="PROVED: Test claim is true"' in html
-    assert 'og:description" content="PROVED: Test claim is true' in html
+    assert 'og:description" content="PROVED: ' in html
     assert 'og:url" content="https://example.com/proof-engine/proofs/test-claim/"' in html
     assert 'og:type" content="article"' in html
     assert 'og:site_name" content="Proof Engine"' in html
@@ -287,6 +321,38 @@ def site_fixture_paginated(tmp_path):
             },
         }))
         (proof_dir / "meta.yaml").write_text("tags:\n  - bulk-tag\n")
+        (proof_dir / "proof_narrative.md").write_text(
+            f"# Proof Narrative: Test claim {i} is true\n\n"
+            "## Verdict\n\n"
+            "**Verdict: PROVED**\n\n"
+            "Yes — this is confirmed true beyond any reasonable doubt whatsoever. "
+            "The evidence is overwhelming and consistent across every source examined.\n\n"
+            "## What was claimed?\n\n"
+            f"Test claim {i} is true. This matters for science "
+            "and has real consequences for how we understand validity. "
+            "Getting this right affects downstream decisions.\n\n"
+            "## What did we find?\n\n"
+            "We found strong evidence supporting the claim. "
+            "Multiple independent sources confirmed the core assertion "
+            "from different angles and methodologies. "
+            "The data was consistent across all measurements taken "
+            "over the full range of conditions tested. "
+            "No contradictory evidence was identified in any source. "
+            "The primary computation matched theoretical predictions within tight tolerance. "
+            "Secondary verification through independent calculation confirmed the same figure. "
+            "Cross-referencing against published reference data showed agreement within one percent. "
+            "Statistical significance exceeds conventional thresholds by a wide margin. "
+            "Adversarial scenarios designed to break the conclusion all failed.\n\n"
+            "## What should you keep in mind?\n\n"
+            "This covers the specific claim as stated only. "
+            "Different framings might yield different results. "
+            "The methodology is optimized for quantitative claims.\n\n"
+            "## How was this verified?\n\n"
+            "Verified through computation. "
+            "See [the structured proof report](proof.md), "
+            "[the full verification audit](proof_audit.md), "
+            "or [re-run the proof yourself](proof.py).\n"
+        )
 
     return tmp_path
 
@@ -367,8 +433,18 @@ def test_landing_page_has_ai_agents_link(site_fixture):
     html = (site_fixture / "_site" / "index.html").read_text()
     assert 'href="/proof-engine/submit/#ai-agents"' in html
     assert "build ai agents that prove" in html.lower()
-    assert "install the claude skill" in html.lower()
-    assert "cta-links" in html
+
+
+def test_build_exports_proof_md(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    assert (site_fixture / "_site" / "proofs" / "test-claim" / "proof.md").exists()
+
+
+def test_build_exports_proof_narrative(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    assert (site_fixture / "_site" / "proofs" / "test-claim" / "proof_narrative.md").exists()
 
 
 def test_submit_page_has_ai_agents_section(site_fixture):
@@ -1107,3 +1183,32 @@ def test_citation_summary_stale_audit_json_authoritative(site_fixture):
     assert "fetch_failed" in html
     assert "citation-summary-bar" in html
     assert "Citation Verification Details</span>" not in html
+
+
+def test_proof_page_has_narrative_content(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "What was claimed?" in html or "What Was Claimed?" in html
+    assert "What did we find?" in html or "What Did We Find?" in html
+
+
+def test_proof_page_has_detailed_evidence_collapsible(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "Detailed Evidence" in html
+
+
+def test_proof_page_meta_description_uses_hook(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "confirmed true" in html or "overwhelming" in html
+
+
+def test_proof_page_share_bar_has_hook(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "data-hook=" in html

@@ -60,6 +60,9 @@ jobs:
           if missing:
               print(f'FAIL: missing keys: {missing}')
               sys.exit(1)
+          # Write proof.json so narrative validation can use it
+          with open('${d}proof.json', 'w') as f:
+              json.dump(data, f, indent=2)
           print(f'PASS: verdict={data[\"verdict\"]}')
           " || FAILED=1
               else
@@ -75,6 +78,45 @@ jobs:
             exit 1
           fi
           echo "All example proofs passed."
+
+      - name: Validate example proof narratives
+        run: |
+          python -c "
+          import sys, json
+          from pathlib import Path
+          sys.path.insert(0, '.')
+          from tools.lib.narrative_validator import validate_narrative
+
+          exit_code = 0
+          for d in sorted(Path('docs/examples').iterdir()):
+              if not d.is_dir():
+                  continue
+              narrative = d / 'proof_narrative.md'
+              if not narrative.exists():
+                  print(f'ERROR: {d.name}: proof_narrative.md not found')
+                  exit_code = 1
+                  continue
+              # proof.json was written by the prior step from stdout output
+              proof_json = d / 'proof.json'
+              if not proof_json.exists():
+                  print(f'ERROR: {d.name}: proof.json not found — did the prior proof execution step fail?')
+                  exit_code = 1
+                  continue
+              data = json.loads(proof_json.read_text())
+              errors, warnings = validate_narrative(
+                  narrative.read_text(),
+                  verdict=data.get('verdict', ''),
+                  claim_natural=data.get('claim_natural', ''),
+              )
+              for w in warnings:
+                  print(f'WARNING: {d.name}: {w}')
+              for e in errors:
+                  print(f'ERROR: {d.name}: {e}')
+                  exit_code = 1
+              if not errors:
+                  print(f'PASS: {d.name}')
+          sys.exit(exit_code)
+          "
 
   validate-site:
     runs-on: ubuntu-latest

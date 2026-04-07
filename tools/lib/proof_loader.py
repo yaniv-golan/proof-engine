@@ -5,6 +5,7 @@ from pathlib import Path
 import yaml
 
 from tools.lib.featured import load_featured_slugs
+from tools.lib.narrative_validator import extract_verdict_declaration, REQUIRED_NARRATIVE_SECTIONS
 from tools.lib.section_extractor import extract_sections, validate_required_sections
 from tools.lib.tagger import auto_tag, canonicalize_tag
 from tools.lib.verdict import normalize_verdict
@@ -32,6 +33,7 @@ OPTIONAL_AUDIT_SECTIONS = [
 ]
 
 OPTIONAL_MD_SECTIONS = ["Counter-Evidence Search"]
+
 
 
 def extract_source_names(proof_data, max_sources=3):
@@ -130,6 +132,21 @@ def load_proof(proof_dir: Path) -> dict:
         print(f"WARNING: {slug}: proof.md missing optional sections: {missing_md_opt}",
               file=sys.stderr)
 
+    # Extract sections from proof_narrative.md
+    narrative_path = proof_dir / "proof_narrative.md"
+    if not narrative_path.exists():
+        raise ValueError(f"{slug}: missing required artifact: proof_narrative.md")
+    narrative_md = narrative_path.read_text()
+    sections_narrative = extract_sections(narrative_md)
+    missing_narrative = validate_required_sections(sections_narrative, REQUIRED_NARRATIVE_SECTIONS)
+    if missing_narrative:
+        raise ValueError(f"{slug}: proof_narrative.md missing required sections: {missing_narrative}")
+
+    # Parse verdict declaration and hook from narrative
+    verdict_declaration_str, verdict_hook = extract_verdict_declaration(
+        sections_narrative.get("Verdict", "")
+    )
+
     # Tags: meta.yaml override or auto-tag
     meta_path = proof_dir / "meta.yaml"
     if meta_path.exists():
@@ -171,6 +188,9 @@ def load_proof(proof_dir: Path) -> dict:
         "source_names_extra": max(0, len({c.get("source_name") for c in proof_data.get("citations", {}).values() if c.get("source_name")}) - 3),
         "date": generator["generated_at"],
         "proof_engine_version": generator["version"],
+        "sections_narrative": sections_narrative,
+        "verdict_declaration": verdict_declaration_str or "",
+        "verdict_hook": verdict_hook,
     }
 
 
