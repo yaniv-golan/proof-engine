@@ -88,13 +88,18 @@
 
                     // After transition, remove max-height cap so nested
                     // <details> expansions aren't clipped.
-                    var onEnd = function () {
-                        body.removeEventListener('transitionend', onEnd);
+                    var unlocked = false;
+                    var unlock = function () {
+                        if (unlocked) return;
+                        unlocked = true;
+                        body.removeEventListener('transitionend', unlock);
                         if (body.classList.contains('open')) {
                             body.style.maxHeight = 'none';
                         }
                     };
-                    body.addEventListener('transitionend', onEnd);
+                    body.addEventListener('transitionend', unlock);
+                    // Timeout fallback — transitionend can silently fail
+                    setTimeout(unlock, 350);
 
                     // Fire GA event (preserve existing analytics)
                     var sectionName = newHeader.querySelector('span');

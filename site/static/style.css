@@ -383,10 +383,13 @@ a:hover { text-decoration: underline; }
 .audit-body.animated.open {
     padding: 14px;
     visibility: visible;
-    overflow-x: auto;  /* restore horizontal scrolling for wide tables/code blocks */
-    overflow-y: visible;
+    overflow: visible;  /* let nested <details> expand the container freely —
+                           overflow-x:auto would force overflow-y:auto per CSS spec,
+                           creating a scroll container instead of expanding */
     transition: max-height 0.3s ease-out, visibility 0s 0s, overflow 0s 0s;
 }
+/* Horizontal scrolling for wide content INSIDE audit bodies only */
+.audit-body pre, .audit-body table { overflow-x: auto; }
 
 /* Citation verification summary */
 .citation-summary-bar { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
