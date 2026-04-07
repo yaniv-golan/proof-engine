@@ -316,7 +316,8 @@ def cmd_mint_doi(args) -> int:
     proof_url = f"{site_url}{base_url}proofs/{slug}/"
 
     verdict = proof_data.get("verdict", "")
-    title = f"Proof Engine Verification ({verdict}): {claim}"
+    verdict_display = verdict.capitalize() if verdict else ""
+    title = f'Claim Verification: \u201c{claim}\u201d \u2014 {verdict_display}'
     version = proof_data.get("generator", {}).get("version", "")
 
     # Extract Key Findings from proof.md (full text, converted to HTML)

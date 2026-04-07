@@ -14,7 +14,8 @@ def build_citation_context(
     year = date[:4] if date else ""
     claim = proof_data["claim_natural"]
     verdict = proof_data.get("verdict", "")
-    title = f"Proof Engine Verification ({verdict}): {claim}"
+    verdict_display = verdict.capitalize() if verdict else ""
+    title = f'Claim Verification: \u201c{claim}\u201d \u2014 {verdict_display}'
     slug_sanitized = slug.replace("-", "_")
 
     doi = None
