@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-04-07
+
+### Added
+
+- **Formal citation support** — every proof page now has a "Cite this proof" section with APA, Chicago, BibTeX, and RIS formats via CSS-only tab switching
+- Citation export files (`cite.bib`, `cite.ris`, `cite.txt`) generated at build time for each proof
+- **Zenodo DOI minting** — `proof-site.py mint-doi <slug>` creates permanent DOIs via Zenodo REST API; `--force` creates new versions under the same concept DOI
+- `doi.json` sidecar pattern for DOI persistence across proof regeneration, with claim identity check on force-publish
+- `CITATION.cff` at repo root for GitHub's "Cite this repository" widget; version synced via `bump-version.sh`
+- JSON-LD `ClaimReview` enriched with `identifier` (DOI) and `sameAs` (DOI URLs) when DOI is present
+- Built `proof.json` includes `citation` block (doi, concept_doi, url, cite_bib_url, cite_ris_url)
+- `index.json` includes `doi` field per proof entry
+- Zenodo client library (`tools/lib/zenodo.py`) and citation generation library (`tools/lib/citation.py`)
+- JS progressive enhancement: copy button for citation text (clipboard API)
+
+### Content
+
+- **30 proofs minted with permanent Zenodo DOIs** across health, climate, neuroscience, cosmology, political/historical, economics, and AI categories
+
 ## [1.9.0] - 2026-04-07
 
 ### Added
