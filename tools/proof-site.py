@@ -336,6 +336,23 @@ def cmd_mint_doi(args) -> int:
             version_resp = client.new_version(int(existing["zenodo_id"]))
             dep_id = version_resp["id"]
             bucket_url = version_resp["links"]["bucket"]
+            # Clear inherited files and update metadata on the new version draft
+            client.delete_all_files(dep_id)
+            from datetime import date
+            client.update_metadata(dep_id, {
+                "upload_type": "dataset",
+                "title": title,
+                "description": description,
+                "creators": [{"name": "Proof Engine"}],
+                "keywords": keywords,
+                "license": "MIT",
+                "publication_date": date.today().isoformat(),
+                "related_identifiers": [{
+                    "identifier": proof_url,
+                    "relation": "isSupplementedBy",
+                    "scheme": "url",
+                }],
+            })
         else:
             # Create new deposition
             log("Creating Zenodo deposition...")

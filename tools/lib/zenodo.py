@@ -76,3 +76,25 @@ class ZenodoClient:
         )
         self._check(resp, "new version")
         return resp.json()
+
+    def delete_all_files(self, deposition_id: int) -> None:
+        resp = requests.get(
+            f"{self.base_url}/deposit/depositions/{deposition_id}/files",
+            headers=self.headers,
+        )
+        self._check(resp, "list files")
+        for f in resp.json():
+            del_resp = requests.delete(
+                f"{self.base_url}/deposit/depositions/{deposition_id}/files/{f['id']}",
+                headers=self.headers,
+            )
+            self._check(del_resp, f"delete file {f['filename']}")
+
+    def update_metadata(self, deposition_id: int, metadata: dict) -> dict:
+        resp = requests.put(
+            f"{self.base_url}/deposit/depositions/{deposition_id}",
+            headers={**self.headers, "Content-Type": "application/json"},
+            data=json.dumps({"metadata": metadata}),
+        )
+        self._check(resp, "update metadata")
+        return resp.json()
