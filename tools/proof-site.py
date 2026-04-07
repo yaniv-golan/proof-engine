@@ -17,6 +17,8 @@ from tools.lib.publish import (
     check_required_artifacts, validate_thumbnail, stage_proof, finalize_proof,
     REQUIRED_ARTIFACTS,
 )
+from tools.lib.zenodo import ZenodoClient, ZenodoError
+from tools.lib.tagger import auto_tag, canonicalize_tag
 
 
 def log(msg: str) -> None:
@@ -258,6 +260,137 @@ def cmd_repair_featured(args) -> int:
     return 0
 
 
+def cmd_mint_doi(args) -> int:
+    import os
+    import re
+    from datetime import date
+
+    site_dir = Path(args.site_dir)
+    proofs_dir = site_dir / "proofs"
+    slug = args.slug
+    proof_dir = proofs_dir / slug
+
+    if not proof_dir.is_dir() or not (proof_dir / "proof.json").exists():
+        error(f"Proof not found: {slug}")
+        return 1
+
+    doi_json_path = proof_dir / "doi.json"
+
+    # Check for existing DOI
+    if doi_json_path.exists() and not args.force:
+        existing = json.loads(doi_json_path.read_text())
+        error(
+            f"DOI already exists: {existing.get('doi')}. "
+            f"Use --force to create a new version."
+        )
+        return 1
+
+    # Read proof data
+    proof_data = json.loads((proof_dir / "proof.json").read_text())
+    claim = proof_data["claim_natural"]
+
+    # Resolve tags (same logic as proof_loader)
+    meta_path = proof_dir / "meta.yaml"
+    if meta_path.exists():
+        import yaml
+        meta = yaml.safe_load(meta_path.read_text()) or {}
+        if "tags" in meta:
+            tags = [canonicalize_tag(t) for t in meta["tags"]]
+        else:
+            tags = auto_tag(claim)
+    else:
+        tags = auto_tag(claim)
+    keywords = tags + ["proof-engine", "fact-checking", "automated-verification"]
+
+    # Get token
+    token = os.environ.get("ZENODO_TOKEN")
+    if not token:
+        error("ZENODO_TOKEN environment variable not set")
+        return 1
+
+    sandbox = args.sandbox
+    client = ZenodoClient(token=token, sandbox=sandbox)
+
+    site_url = "https://yaniv-golan.github.io"
+    base_url = "/proof-engine/"
+    proof_url = f"{site_url}{base_url}proofs/{slug}/"
+
+    title = f"Proof Engine Verification: {claim}"
+    verdict = proof_data.get("verdict", "")
+    key_findings = ""
+    proof_md_path = proof_dir / "proof.md"
+    if proof_md_path.exists():
+        text = proof_md_path.read_text()
+        match = re.search(r"## Key Findings\n\n(.+?)(?=\n---|\n## )", text, re.DOTALL)
+        if match:
+            key_findings = match.group(1).strip()[:500]
+    description = f"Verdict: {verdict}\n\n{key_findings}" if key_findings else f"Verdict: {verdict}"
+
+    try:
+        if args.force and doi_json_path.exists():
+            # Create new version
+            existing = json.loads(doi_json_path.read_text())
+            log(f"Creating new version of Zenodo record {existing['zenodo_id']}...")
+            version_resp = client.new_version(int(existing["zenodo_id"]))
+            dep_id = version_resp["id"]
+            bucket_url = version_resp["links"]["bucket"]
+        else:
+            # Create new deposition
+            log("Creating Zenodo deposition...")
+            dep = client.create_deposition(
+                title=title,
+                description=description,
+                creators=[{"name": "Proof Engine"}],
+                keywords=keywords,
+                license="MIT",
+                related_identifiers=[{
+                    "identifier": proof_url,
+                    "relation": "isSupplementedBy",
+                    "scheme": "url",
+                }],
+            )
+            dep_id = dep["id"]
+            bucket_url = dep["links"]["bucket"]
+
+        # Upload artifacts
+        artifacts = ["proof.py", "proof.md", "proof_audit.md", "proof_narrative.md", "proof.json"]
+        for artifact in artifacts:
+            path = proof_dir / artifact
+            if path.exists():
+                log(f"Uploading {artifact}...")
+                client.upload_file(bucket_url, path)
+
+        # Publish
+        log("Publishing...")
+        result = client.publish(dep_id)
+        doi = result["doi"]
+        concept_doi = result.get("conceptdoi", "")
+        zenodo_id = str(result["id"])
+        concept_zenodo_id = str(result.get("conceptrecid", ""))
+
+        # Write doi.json
+        doi_data = {
+            "doi": doi,
+            "zenodo_id": zenodo_id,
+            "concept_doi": concept_doi,
+            "concept_zenodo_id": concept_zenodo_id,
+            "claim_natural": claim,
+            "minted_at": date.today().isoformat(),
+        }
+        doi_json_path.write_text(json.dumps(doi_data, indent=2) + "\n")
+
+        success(f"DOI minted: {doi}")
+        if concept_doi:
+            log(f"Concept DOI (all versions): {concept_doi}")
+        log(f"Zenodo record: https://{'sandbox.' if sandbox else ''}zenodo.org/records/{zenodo_id}")
+        log("Rebuild the site to pick up the DOI in citation files.")
+        return 0
+
+    except ZenodoError as e:
+        error(f"Zenodo API error: {e}")
+        return 1
+
+
 def add_site_dir_arg(p):
     """Add --site-dir to a subparser so it works after the subcommand."""
     p.add_argument(
@@ -296,6 +429,13 @@ def main():
     )
     add_site_dir_arg(repair)
 
+    # mint-doi
+    mint = subparsers.add_parser("mint-doi", help="Mint a Zenodo DOI for a proof")
+    mint.add_argument("slug", help="Slug of the proof to mint a DOI for")
+    mint.add_argument("--force", action="store_true", help="Create new version if DOI exists")
+    mint.add_argument("--sandbox", action="store_true", help="Use Zenodo sandbox")
+    add_site_dir_arg(mint)
+
     args = parser.parse_args()
 
     if args.command == "publish":
@@ -306,6 +446,8 @@ def main():
         sys.exit(cmd_unfeature(args))
     elif args.command == "repair-featured":
         sys.exit(cmd_repair_featured(args))
+    elif args.command == "mint-doi":
+        sys.exit(cmd_mint_doi(args))
 
 
 if __name__ == "__main__":
