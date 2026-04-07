@@ -42,9 +42,9 @@
       "source_name": "Encyclopaedia Britannica",
       "url": "https://www.britannica.com/question/Was-Napoleon-short",
       "quote": "At the time of his death in 1821, Napoleon measured about 5 feet 7 inches (roughly 1.68 meters) tall.",
-      "status": "partial",
+      "status": "verified",
       "method": "fragment",
-      "coverage_pct": 47.4,
+      "coverage_pct": 84.2,
       "fetch_mode": "live",
       "credibility": {
         "domain": "britannica.com",
@@ -58,17 +58,17 @@
       "source_key": "history_com",
       "source_name": "History.com (A&E Networks)",
       "url": "https://www.history.com/articles/napoleon-complex-short",
-      "quote": "Three French sources\u2014his valet Constant, General Gourgaud, and his personal physician Francesco Antommarchi\u2014said that Napoleon's height was just over 5 pieds 2 pouces (5'2\"). Applying the French measurements of the time, that equals around 1.67 meters, or just under 5'6\", which is a little above average for a French man in the early 1800s.",
+      "quote": "Three French sources—his valet Constant, General Gourgaud, and his personal physician Francesco Antommarchi—said that Napoleon's height was just over 5 pieds 2 pouces (5'2\"). Applying the French measurements of the time, that equals around 1.67 meters, or just under 5'6\", which is a little above average for a French man in the early 1800s.",
       "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
+      "method": "fragment",
+      "coverage_pct": 50.0,
       "fetch_mode": "live",
       "credibility": {
         "domain": "history.com",
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B3": {
@@ -85,7 +85,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B4": {

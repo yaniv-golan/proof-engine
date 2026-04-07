@@ -2,15 +2,15 @@
   "fact_registry": {
     "B1": {
       "key": "ieee754_wiki",
-      "label": "Wikipedia: IEEE 754 \u2014 division by zero is a defined exception type, not a glitch"
+      "label": "Wikipedia: IEEE 754 — division by zero is a defined exception type, not a glitch"
     },
     "B2": {
       "key": "divbyzero_wiki",
-      "label": "Wikipedia: Division by zero \u2014 IEEE arithmetic defines well-specified, deterministic behavior"
+      "label": "Wikipedia: Division by zero — IEEE arithmetic defines well-specified, deterministic behavior"
     },
     "B3": {
       "key": "osdev_exceptions",
-      "label": "OSDev Wiki: x86 Divide Error (#DE) \u2014 standard hardware exception since early x86"
+      "label": "OSDev Wiki: x86 Divide Error (#DE) — standard hardware exception since early x86"
     },
     "A1": {
       "label": "Count of verified sources refuting the claim (SC1 + SC2)",
@@ -55,8 +55,8 @@
       "source_name": "Wikipedia: Division by zero",
       "url": "https://en.wikipedia.org/wiki/Division_by_zero",
       "quote": "In IEEE arithmetic, division of 0/0 or infinity/infinity results in NaN, but otherwise division always produces a well-defined result.",
-      "status": "partial",
-      "method": "aggressive_normalization",
+      "status": "verified",
+      "method": "full_quote",
       "coverage_pct": null,
       "fetch_mode": "live",
       "credibility": {
@@ -81,7 +81,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     }
   },
@@ -100,20 +100,20 @@
   "adversarial_checks": [
     {
       "question": "Does any credible source document a '2026 patch' for division-by-zero in CPUs or IEEE 754?",
-      "verification_performed": "Searched the web for 'division by zero patch 2026', 'CPU divide by zero fix 2026', 'IEEE 754 division by zero bug patch 2026', 'computers math glitch division zero 2026 patch'. Also reviewed Microsoft March 2026 Patch Tuesday (BleepingComputer) which listed 79 CVEs \u2014 none related to arithmetic division-by-zero behavior.",
+      "verification_performed": "Searched the web for 'division by zero patch 2026', 'CPU divide by zero fix 2026', 'IEEE 754 division by zero bug patch 2026', 'computers math glitch division zero 2026 patch'. Also reviewed Microsoft March 2026 Patch Tuesday (BleepingComputer) which listed 79 CVEs — none related to arithmetic division-by-zero behavior.",
       "finding": "No credible source documents any 2026 patch addressing division-by-zero behavior. Microsoft's March 2026 Patch Tuesday addressed SQL Server, .NET, and Windows security vulnerabilities; no arithmetic behavior was changed. No IEEE 754 revision was issued in 2026. The '2026 patch' component of the claim is entirely fabricated.",
       "breaks_proof": false
     },
     {
       "question": "Could there be an obscure CPU microcode update in 2026 affecting division by zero?",
       "verification_performed": "Searched for 'Intel errata division by zero 2026', 'AMD microcode division by zero 2026', 'ARM Cortex divide by zero errata 2026'. Reviewed processor errata reports from major vendors.",
-      "finding": "No hardware errata from Intel, AMD, or ARM in 2026 pertains to division-by-zero behavior. The x86 #DE (divide error) exception has been stable since the Intel 8086 (1978). The 1994 Intel Pentium FDIV bug was a floating-point division *accuracy* bug for specific operand pairs \u2014 not a division-by-zero issue \u2014 and was resolved in 1994, not 2026.",
+      "finding": "No hardware errata from Intel, AMD, or ARM in 2026 pertains to division-by-zero behavior. The x86 #DE (divide error) exception has been stable since the Intel 8086 (1978). The 1994 Intel Pentium FDIV bug was a floating-point division *accuracy* bug for specific operand pairs — not a division-by-zero issue — and was resolved in 1994, not 2026.",
       "breaks_proof": false
     },
     {
       "question": "Was division-by-zero handling ever described as a 'hidden glitch' in mainstream computer science?",
       "verification_performed": "Searched for 'division by zero glitch CPU hidden', 'division by zero unintentional computer design', 'division by zero bug computer history'. Reviewed IEEE 754-1985 historical background.",
-      "finding": "Division-by-zero raising a hardware exception (#DE) has been intentional since at least the Intel 8086 (1978) and IBM S/360 (1964). IEEE 754-1985 explicitly standardized floating-point division-by-zero as returning \u00b1infinity (or NaN for 0/0), with an optional exception flag. No mainstream CS literature characterizes this as a 'hidden glitch'.",
+      "finding": "Division-by-zero raising a hardware exception (#DE) has been intentional since at least the Intel 8086 (1978) and IBM S/360 (1964). IEEE 754-1985 explicitly standardized floating-point division-by-zero as returning ±infinity (or NaN for 0/0), with an optional exception flag. No mainstream CS literature characterizes this as a 'hidden glitch'.",
       "breaks_proof": false
     }
   ],

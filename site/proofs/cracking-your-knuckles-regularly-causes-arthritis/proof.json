@@ -55,15 +55,15 @@
       "url": "https://www.jabfm.org/content/24/2/169",
       "quote": "A history of habitual KC does not seem to be a risk factor for hand OA.",
       "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
+      "method": "fragment",
+      "coverage_pct": 50.0,
       "fetch_mode": "live",
       "credibility": {
         "domain": "jabfm.org",
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B3": {
@@ -97,7 +97,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     }
   },
@@ -134,7 +134,7 @@
         "castellanos_1990": "verified",
         "hopkins_arthritis": "verified"
       },
-      "independence_note": "Sources are from different institutions: Harvard Medical School, Journal of the American Board of Family Medicine (peer-reviewed study), Annals of the Rheumatic Diseases (peer-reviewed study via PMC), and Johns Hopkins Arthritis Center. These represent independent research groups and editorial boards \u2014 not republications of the same study."
+      "independence_note": "Sources are from different institutions: Harvard Medical School, Journal of the American Board of Family Medicine (peer-reviewed study), Annals of the Rheumatic Diseases (peer-reviewed study via PMC), and Johns Hopkins Arthritis Center. These represent independent research groups and editorial boards — not republications of the same study."
     }
   ],
   "adversarial_checks": [

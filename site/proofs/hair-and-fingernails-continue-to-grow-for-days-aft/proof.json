@@ -51,15 +51,15 @@
       "url": "https://uamshealth.com/medical-myths/do-a-persons-hair-and-fingernails-continue-to-grow-after-death/",
       "quote": "Hair and fingernails may appear longer after death, but not because they are still growing. After death, dehydration causes the skin and other soft tissues to shrink. This occurs while the hair and nails remain the same length. This change in the body creates the optical illusion of growth people observe.",
       "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
+      "method": "fragment",
+      "coverage_pct": 51.0,
       "fetch_mode": "live",
       "credibility": {
         "domain": "uamshealth.com",
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B3": {
@@ -68,15 +68,15 @@
       "url": "https://factmyth.com/factoids/hair-and-nails-continue-to-grow-after-death/",
       "quote": "Hair and nail growth requires active, living cells. When a person dies, their heart stops pumping blood, meaning the hair follicles no longer receive the necessary nutrients and oxygen for cell division.",
       "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
+      "method": "fragment",
+      "coverage_pct": 50.0,
       "fetch_mode": "live",
       "credibility": {
         "domain": "factmyth.com",
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     }
   },
@@ -107,7 +107,7 @@
         "source_uams": "partial",
         "source_factmyth": "partial"
       },
-      "independence_note": "Sources are from independent institutions: BMJ (peer-reviewed journal via PMC), UAMS (university medical center), and FactMyth (science reference). Each independently explains the myth using the same underlying biology (dehydration/retraction), which strengthens the disproof \u2014 independent sources converge on the same explanation."
+      "independence_note": "Sources are from independent institutions: BMJ (peer-reviewed journal via PMC), UAMS (university medical center), and FactMyth (science reference). Each independently explains the myth using the same underlying biology (dehydration/retraction), which strengthens the disproof — independent sources converge on the same explanation."
     }
   ],
   "adversarial_checks": [

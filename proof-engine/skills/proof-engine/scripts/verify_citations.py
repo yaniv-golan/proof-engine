@@ -143,14 +143,16 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
       1. Unicode normalization -- NFKC + character substitution registry
          (en-dashes -> hyphens, curly quotes -> straight, degree -> degree, etc.)
       1.5. Strip inline reference elements -- <sup><a>N</a></sup>,
-           <a class="xref">[N,M]</a> (common in academic HTML like PMC).
-           Only LINKED (<a>) or BRACKETED ([N]) refs are stripped.
+           <a class="xref">[N,M]</a>, and bare [<a>N</a>] (common in
+           academic HTML like PMC). Linked, bracketed, or sup-wrapped refs.
       1.6a. Remove bare <sup>[N]</sup> bracketed refs (unambiguously references)
       1.7.  MathML extraction — replace <math alttext="..."> with LaTeX-to-text
             conversion. Must run before inline tag stripping.
       1.6b. Strip non-sup/sub inline tags (<span>, <a>, <em>, etc.) WITHOUT
             inserting spaces -- cleans preceding context for the sup heuristic
             and prevents CSS-styled spans from creating fake word boundaries.
+      1.6b2. Strip non-numeric <sup> reference markers -- asterisks (*),
+             daggers (†‡), letter+digit combos (w24). Unambiguously refs.
       1.6c. Context-dependent bare <sup>N</sup> handling -- definite exponents
             preserved (preceded by digit, '/', or alpha in compound unit with '/').
             Ambiguous cases (standalone alpha, punctuation) stripped by default,
@@ -167,6 +169,7 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
            were detected in step 1.5 or 1.6a (avoids false positives)
       3. Remove spaces before punctuation -- fixes "Ben-Gurion ," artifacts
       4. Collapse whitespace -- multiple spaces become one
+      4b. Collapse spaces after hyphens in numeric ranges -- "460- 480" -> "460-480"
       5. Lowercase -- case-insensitive matching
 
     This specific sequence was developed through real testing against NOAA
@@ -195,7 +198,15 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
     text, n2 = re.subn(
         r'<a[^>]*class="[^"]*xref[^"]*"[^>]*>\s*\[?\d+(?:[,\-\u2013]\d+)*\]?\s*</a>',
         '', text, flags=re.IGNORECASE)
-    _had_academic_refs = (n0 + n1 + n2) > 0
+    # Pattern 3: bare bracketed linked refs WITHOUT <sup> or xref class
+    # Catches PMC variants: [<a href="#B32-ijerph">32</a>] and multi-refs
+    # separated by commas, semicolons, or dashes: [<a>1</a>, <a>2</a>],
+    # [<a>1</a>; <a>2</a>], [<a>1</a>-<a>3</a>].
+    # Requires <a> inside brackets with numeric content.
+    text, n3 = re.subn(
+        r'\[\s*<a[^>]*>\s*\d+\s*</a>\s*(?:[,;\-\u2013]\s*<a[^>]*>\s*\d+\s*</a>\s*)*\]',
+        '', text, flags=re.IGNORECASE)
+    _had_academic_refs = (n0 + n1 + n2 + n3) > 0
 
     # 1.6a. Remove bare <sup> with bracketed content -- unambiguously references
     text, n_bracketed = re.subn(
@@ -218,6 +229,16 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
     # Uses (?=[\s>]) lookahead after tag name so 's' doesn't match 'sup'/'sub'.
     _NON_SUP_SUB_INLINE_RE = r'(?:span|abbr|cite|code|dfn|em|kbd|mark|small|strong|var|wbr|a|b|i|s|u)(?=[\s>/])'
     text = re.sub(r'</?' + _NON_SUP_SUB_INLINE_RE + r'[^>]*>', '', text, flags=re.IGNORECASE)
+
+    # 1.6b2. Strip non-numeric <sup> reference markers — asterisks (*),
+    # daggers (†‡), letter+digit combos (w24, a3), and section marks (§).
+    # These are unambiguously reference markers, never exponents.
+    # Must run after 1.6b so inner <a>/<span> tags are already gone.
+    text, n_nonnumeric_sup = re.subn(
+        r'<sup[^>]*>\s*(?:[*\u2020\u2021\u00a7]+|[a-z]\d+)\s*</sup>',
+        '', text, flags=re.IGNORECASE)
+    if n_nonnumeric_sup > 0:
+        _had_academic_refs = True
 
     # 1.6c. Context-dependent handling of bare <sup>N</sup>
     def _bare_sup_handler(match):
@@ -246,7 +267,7 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
     text = normalize_unicode(text)
     # 2.5. Strip orphaned reference markers — ONLY in academic HTML
     if _had_academic_refs:
-        text = re.sub(r'\[\d+(?:[,\-\u2013]\d+)*\]', '', text)
+        text = re.sub(r'\[\d+(?:[,;\s\-\u2013]+\d+)*\]', '', text)
     # 2c. Unify quote characters — after Unicode normalization has already
     # converted curly quotes to straight, collapse double quotes to single
     # so 'toxic' matches "toxic". Done in normalize_text (matching) only,
@@ -256,6 +277,10 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
     text = re.sub(r'\s+([,.:;!?\)\]])', r'\1', text)
     # 4. Collapse whitespace
     text = ' '.join(text.split())
+    # 4b. Collapse spaces after hyphens in numeric ranges — handles
+    # "460- 480" → "460-480" (common when source has "460– 480" and
+    # the en-dash is normalized to hyphen but the space remains).
+    text = re.sub(r'(\d)-\s+(\d)', r'\1-\2', text)
     # 5. Lowercase
     text = text.lower()
     return text

@@ -22,7 +22,7 @@
     "subject": "Bulls (Bos taurus, particularly fighting bulls)",
     "property": "Whether charging behavior is caused by rage triggered by the color red",
     "operator": ">=",
-    "operator_note": "This is a causal claim with two components: (1) bulls perceive and are enraged by red, and (2) this rage causes their charging behavior. Scientific evidence shows cattle are dichromatic and cannot distinguish red from green, and that movement \u2014 not color \u2014 triggers charging. We disprove by finding >= 3 independent authoritative sources that reject the claim. The threshold of 3 reflects strong scientific consensus.",
+    "operator_note": "This is a causal claim with two components: (1) bulls perceive and are enraged by red, and (2) this rage causes their charging behavior. Scientific evidence shows cattle are dichromatic and cannot distinguish red from green, and that movement — not color — triggers charging. We disprove by finding >= 3 independent authoritative sources that reject the claim. The threshold of 3 reflects strong scientific consensus.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
@@ -47,12 +47,12 @@
     },
     "B2": {
       "source_key": "source_b",
-      "source_name": "West Texas A&M University \u2014 Science Questions with Surprising Answers",
+      "source_name": "West Texas A&M University — Science Questions with Surprising Answers",
       "url": "https://www.wtamu.edu/~cbaird/sq/2012/12/12/what-is-it-about-red-that-makes-bulls-so-angry/",
       "quote": "The color red does not make bulls angry. Cattle lack the red retina receptor and can only see yellow, green, blue, and violet colors.",
       "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
+      "method": "fragment",
+      "coverage_pct": 50.0,
       "fetch_mode": "live",
       "credibility": {
         "domain": "wtamu.edu",
@@ -64,7 +64,7 @@
     },
     "B3": {
       "source_key": "source_c",
-      "source_name": "ScienceABC \u2014 Do Bulls Really Hate the Color Red?",
+      "source_name": "ScienceABC — Do Bulls Really Hate the Color Red?",
       "url": "https://www.scienceabc.com/nature/animals/do-bulls-really-hate-red-colour-blind.html",
       "quote": "It's not the color, but rather the movement of the cape and the bullfighter that makes bulls so angry.",
       "status": "verified",
@@ -76,7 +76,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     }
   },

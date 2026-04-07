@@ -6,11 +6,11 @@
     },
     "B2": {
       "key": "pmc_2022",
-      "label": "Nave et al. (2022): largest meta-analysis (N=26k+); r = 0.24, range 0.10\u20130.37"
+      "label": "Nave et al. (2022): largest meta-analysis (N=26k+); r = 0.24, range 0.10–0.37"
     },
     "B3": {
       "key": "wiki_conditional",
-      "label": "Wikipedia Neuroscience & Intelligence: r \u2248 0.4 for healthy adults, high-quality tests"
+      "label": "Wikipedia Neuroscience & Intelligence: r ≈ 0.4 for healthy adults, high-quality tests"
     },
     "A1": {
       "label": "SC1-A: |r_Pietschnig - 0.40|",
@@ -37,7 +37,7 @@
     "subject": "Pearson r correlation between human brain volume (total in vivo, MRI) and intelligence (IQ/g)",
     "property": "meta-analytic correlation coefficient",
     "operator": "within",
-    "operator_note": "r = 0.4 is interpreted as r within \u00b10.05 of 0.40 (i.e., 0.35 \u2264 r \u2264 0.45). This is a standard rounding tolerance for meta-analytic correlations. Two sub-claims are evaluated: SC1 tests whether the unconditional overall meta-analytic estimate equals r \u2248 0.40 (this would be false if major meta-analyses converge on r \u2248 0.24). SC2 tests whether the conditional estimate\u2014restricted to healthy adults using high-quality intelligence tests\u2014equals r \u2248 0.40. 'Brain volume' means total in vivo brain volume via MRI. 'Intelligence' means psychometric IQ or g-factor test scores.",
+    "operator_note": "r = 0.4 is interpreted as r within ±0.05 of 0.40 (i.e., 0.35 ≤ r ≤ 0.45). This is a standard rounding tolerance for meta-analytic correlations. Two sub-claims are evaluated: SC1 tests whether the unconditional overall meta-analytic estimate equals r ≈ 0.40 (this would be false if major meta-analyses converge on r ≈ 0.24). SC2 tests whether the conditional estimate—restricted to healthy adults using high-quality intelligence tests—equals r ≈ 0.40. 'Brain volume' means total in vivo brain volume via MRI. 'Intelligence' means psychometric IQ or g-factor test scores.",
     "threshold": 0.4,
     "tolerance": 0.05
   },
@@ -45,7 +45,7 @@
   "citations": {
     "B1": {
       "source_key": "pietschnig_2015",
-      "source_name": "Pietschnig et al. (2015), Neuroscience & Biobehavioral Reviews \u2014 PubMed",
+      "source_name": "Pietschnig et al. (2015), Neuroscience & Biobehavioral Reviews — PubMed",
       "url": "https://pubmed.ncbi.nlm.nih.gov/26449760/",
       "quote": "Our results showed significant positive associations of brain volume and IQ (r=.24, R(2)=.06) that generalize over age (children vs. adults), IQ domain (full-scale, performance, and verbal IQ), and sex.",
       "status": "verified",
@@ -62,12 +62,12 @@
     },
     "B2": {
       "source_key": "pmc_2022",
-      "source_name": "Nave et al. (2022), Royal Society Open Science \u2014 PMC",
+      "source_name": "Nave et al. (2022), Royal Society Open Science — PMC",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9096623/",
       "quote": "Brain size and IQ associations yielded r = 0.24, with the strongest effects observed for more g-loaded tests and in healthy samples that generalize across participant sex and age bands.",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 50.0,
+      "status": "verified",
+      "method": "full_quote",
+      "coverage_pct": null,
       "fetch_mode": "live",
       "credibility": {
         "domain": "nih.gov",
@@ -79,7 +79,7 @@
     },
     "B3": {
       "source_key": "wiki_conditional",
-      "source_name": "Wikipedia \u2014 Neuroscience and intelligence",
+      "source_name": "Wikipedia — Neuroscience and intelligence",
       "url": "https://en.wikipedia.org/wiki/Neuroscience_and_intelligence",
       "quote": "In healthy adults, the correlation of total brain volume and IQ is approximately 0.4 when high-quality tests are used.",
       "status": "verified",
@@ -149,8 +149,8 @@
   "adversarial_checks": [
     {
       "question": "Does any major unconditional meta-analysis report r = 0.40 for brain volume vs. IQ?",
-      "verification_performed": "Searched for 'brain volume IQ meta-analysis r = 0.4 overall' and reviewed McDaniel (2005), Pietschnig et al. (2015), and Nave et al. (2022). McDaniel (2005) found r = 0.33 overall (37 samples, n = 1,530). Pietschnig et al. (2015) found r = .24 (88 studies, 8,000+ subjects). Nave et al. (2022) found r = 0.24 (86 studies, N = 26,000+, range 0.10\u20130.37). Gignac & Bates (2017) concluded r \u2248 0.40 only as a conditional estimate (excellent-quality tests), not unconditionally.",
-      "finding": "No major meta-analysis reports r = 0.40 as the unconditional overall estimate. The three principal meta-analyses converge on r = 0.24\u20130.33.",
+      "verification_performed": "Searched for 'brain volume IQ meta-analysis r = 0.4 overall' and reviewed McDaniel (2005), Pietschnig et al. (2015), and Nave et al. (2022). McDaniel (2005) found r = 0.33 overall (37 samples, n = 1,530). Pietschnig et al. (2015) found r = .24 (88 studies, 8,000+ subjects). Nave et al. (2022) found r = 0.24 (86 studies, N = 26,000+, range 0.10–0.37). Gignac & Bates (2017) concluded r ≈ 0.40 only as a conditional estimate (excellent-quality tests), not unconditionally.",
+      "finding": "No major meta-analysis reports r = 0.40 as the unconditional overall estimate. The three principal meta-analyses converge on r = 0.24–0.33.",
       "breaks_proof": false
     },
     {
@@ -161,8 +161,8 @@
     },
     {
       "question": "Is the Wikipedia source for SC2 citing a credible peer-reviewed finding?",
-      "verification_performed": "Wikipedia's claim (r \u2248 0.4 for healthy adults, high-quality tests) cites Gignac & Bates (2017), published in Intelligence (Elsevier). That paper found corrected correlations of .23 (fair quality), .32 (good quality), .39 (excellent quality) and concluded the association is 'arguably best characterised as r \u2248 .40.' This is a published peer-reviewed finding, though it applies only to healthy adult samples using the best IQ tests.",
-      "finding": "SC2 is supported by peer-reviewed research. The conditional r \u2248 0.40 is a credible finding, not a fringe estimate. However, it requires specifying the condition (excellent-quality tests, healthy adults).",
+      "verification_performed": "Wikipedia's claim (r ≈ 0.4 for healthy adults, high-quality tests) cites Gignac & Bates (2017), published in Intelligence (Elsevier). That paper found corrected correlations of .23 (fair quality), .32 (good quality), .39 (excellent quality) and concluded the association is 'arguably best characterised as r ≈ .40.' This is a published peer-reviewed finding, though it applies only to healthy adult samples using the best IQ tests.",
+      "finding": "SC2 is supported by peer-reviewed research. The conditional r ≈ 0.40 is a credible finding, not a fringe estimate. However, it requires specifying the condition (excellent-quality tests, healthy adults).",
       "breaks_proof": false
     }
   ],

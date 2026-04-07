@@ -44,7 +44,7 @@
   "citations": {
     "B1": {
       "source_key": "wiki_cc_problem",
-      "source_name": "Wikipedia \u2014 Cosmological constant problem",
+      "source_name": "Wikipedia — Cosmological constant problem",
       "url": "https://en.wikipedia.org/wiki/Cosmological_constant_problem",
       "quote": "Using Planck mass as the cut-off for a cut-off regularization scheme provides a difference of 120 orders of magnitude between the vacuum energy and the cosmological constant.",
       "status": "verified",
@@ -61,12 +61,12 @@
     },
     "B2": {
       "source_key": "wiki_dark_energy",
-      "source_name": "Wikipedia \u2014 Dark energy",
+      "source_name": "Wikipedia — Dark energy",
       "url": "https://en.wikipedia.org/wiki/Dark_energy",
-      "quote": "Dark energy's density is very low: 7\u00d710\u221230 g/cm3 (6\u00d710\u221210 J/m3 in mass-energy), much less than the density of ordinary matter or dark matter within galaxies.",
+      "quote": "Dark energy's density is very low: 7×10−30 g/cm3 (6×10−10 J/m3 in mass-energy), much less than the density of ordinary matter or dark matter within galaxies.",
       "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
+      "method": "fragment",
+      "coverage_pct": 52.0,
       "fetch_mode": "live",
       "credibility": {
         "domain": "wikipedia.org",
@@ -78,7 +78,7 @@
     },
     "B3": {
       "source_key": "cosmoverse",
-      "source_name": "CosmoVerse COST Action \u2014 Quantum vacuum: the cosmological constant problem",
+      "source_name": "CosmoVerse COST Action — Quantum vacuum: the cosmological constant problem",
       "url": "https://cosmoversetensions.eu/learn-cosmology/quantum-vacuum-the-cosmological-constant-problem/",
       "quote": "at least 55 orders of magnitude smaller than the value predicted within the Standard Model",
       "status": "verified",
@@ -90,7 +90,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     }
   },
@@ -103,7 +103,7 @@
     "B2": {
       "value": "6e-10 J/m^3 (dark energy density)",
       "value_in_quote": true,
-      "quote_snippet": "Dark energy's density is very low: 7\u00d710\u221230 g/cm3 (6\u00d710\u221210 J/m3 in mass-energy), "
+      "quote_snippet": "Dark energy's density is very low: 7×10−30 g/cm3 (6×10−10 J/m3 in mass-energy), "
     },
     "B3": {
       "value": "~10^-47 GeV^4 (observed rho_vac)",

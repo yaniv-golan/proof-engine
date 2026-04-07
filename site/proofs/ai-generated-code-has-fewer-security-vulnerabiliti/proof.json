@@ -63,7 +63,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B3": {
@@ -80,7 +80,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B4": {
@@ -89,15 +89,15 @@
       "url": "https://www.theregister.com/2026/03/26/ai_coding_assistant_not_more_secure/",
       "quote": "Claude Code alone now appears in more than 4 percent of public commits on GitHub. If AI were truly responsible for only 74 out of 50,000 public vulnerabilities, that would imply AI-generated code is orders of magnitude safer than human-written code. We do not think that is credible.",
       "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
+      "method": "fragment",
+      "coverage_pct": 50.0,
       "fetch_mode": "live",
       "credibility": {
         "domain": "theregister.com",
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     }
   },
@@ -134,7 +134,7 @@
         "source_coderabbit": "verified",
         "source_register": "partial"
       },
-      "independence_note": "Sources are from independent institutions using different methodologies: (1) Stanford \u2014 controlled user study with 47 participants, (2) Veracode \u2014 automated testing of 100+ LLMs across 80 tasks, (3) CodeRabbit \u2014 analysis of 470 real-world GitHub PRs, (4) Georgia Tech \u2014 CVE tracking across open-source ecosystem. No two sources share methodology or data."
+      "independence_note": "Sources are from independent institutions using different methodologies: (1) Stanford — controlled user study with 47 participants, (2) Veracode — automated testing of 100+ LLMs across 80 tasks, (3) CodeRabbit — analysis of 470 real-world GitHub PRs, (4) Georgia Tech — CVE tracking across open-source ecosystem. No two sources share methodology or data."
     }
   ],
   "adversarial_checks": [

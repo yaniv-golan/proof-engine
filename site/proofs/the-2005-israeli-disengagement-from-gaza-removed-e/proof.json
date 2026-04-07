@@ -139,7 +139,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B4": {
@@ -148,8 +148,8 @@
       "url": "https://en.wikipedia.org/wiki/2006_Palestinian_legislative_election",
       "quote": "Legislative elections were held in the Palestinian territories on 25 January 2006 in order to elect the second Palestinian Legislative Council. The result was a victory for Hamas, contesting under the list name of Change and Reform, which received 44.45% of the vote and won 74 of the 132 seats.",
       "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
+      "method": "fragment",
+      "coverage_pct": 50.0,
       "fetch_mode": "live",
       "credibility": {
         "domain": "wikipedia.org",
@@ -173,7 +173,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     },
     "B6": {
@@ -207,7 +207,7 @@
         "source_type": "unknown",
         "tier": 2,
         "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+        "note": "Unclassified domain — verify source authority manually"
       }
     }
   },
@@ -290,7 +290,7 @@
     {
       "question": "Does 'resulted in' require proving strict causation between disengagement and Hamas's election win?",
       "verification_performed": "Reviewed academic literature and policy analyses on causes of Hamas's 2006 win. Searched 'Hamas 2006 election win causes disengagement Fatah corruption'.",
-      "finding": "Strict causal proof is contested: analysts cite Fatah corruption, poor governance, and Hamas's social service network as co-causes. The temporal sequence (disengagement Sep 2005 \u2192 Hamas election Jan 2006 \u2192 Hamas takeover Jun 2007) is uncontested across all sources. The proof interprets 'resulted in' as verified temporal sequence with widely recognized causal context; no source disputes the sequence.",
+      "finding": "Strict causal proof is contested: analysts cite Fatah corruption, poor governance, and Hamas's social service network as co-causes. The temporal sequence (disengagement Sep 2005 → Hamas election Jan 2006 → Hamas takeover Jun 2007) is uncontested across all sources. The proof interprets 'resulted in' as verified temporal sequence with widely recognized causal context; no source disputes the sequence.",
       "breaks_proof": false
     }
   ],

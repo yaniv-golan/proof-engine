@@ -718,6 +718,116 @@ def test_wikipedia_scientific_notation_fixture():
     assert result["status"] == "verified", f"Expected verified, got {result}"
 
 
+# ---------------------------------------------------------------------------
+# Fix: bare bracketed linked refs [<a>N</a>] without <sup> or class="xref"
+# Real HTML from PMC9920460 (microplastics exposure)
+# ---------------------------------------------------------------------------
+
+
+def test_normalize_strips_bare_bracketed_linked_refs():
+    """Bare [<a href="#B32">32</a>] refs (no <sup>, no xref class) should be stripped."""
+    html = 'seafood contaminated with microplastics [<a href="#B32-ijerph-20-02468">32</a>]. The second route'
+    result = vc_module.normalize_text(html)
+    assert "microplastics. the second" in result or "microplastics . the second" in result
+    assert "32" not in result
+
+
+def test_normalize_strips_bare_bracketed_linked_refs_multiple():
+    """Multiple bare [<a>N</a>,<a>M</a>] refs should all be stripped."""
+    html = 'exposure routes [<a href="#B32">32</a>,<a href="#B33">33</a>] are well documented'
+    result = vc_module.normalize_text(html)
+    assert "routes are well" in result or "routes  are well" in result
+    assert "32" not in result
+    assert "33" not in result
+
+
+def test_normalize_strips_bare_bracketed_linked_refs_semicolon():
+    """Semicolon-separated bare [<a>1</a>; <a>2</a>] refs should be stripped."""
+    html = 'data [<a href="#r1">1</a>; <a href="#r2">2</a>] here'
+    result = vc_module.normalize_text(html)
+    assert "data here" in result
+    assert "1" not in result.replace("data", "")  # avoid matching 'a' in 'data'
+
+
+def test_normalize_strips_bare_bracketed_linked_refs_dash_range():
+    """Dash-range bare [<a>1</a>-<a>3</a>] refs should be stripped."""
+    html = 'data [<a href="#r1">1</a>-<a href="#r3">3</a>] here'
+    result = vc_module.normalize_text(html)
+    assert "data here" in result
+
+
+def test_normalize_preserves_bracketed_non_numeric_links():
+    """Bracketed non-numeric links like [<a>here</a>] should NOT be stripped."""
+    html = 'see [<a href="/about">here</a>] for details'
+    result = vc_module.normalize_text(html)
+    assert "here" in result
+
+
+def test_normalize_bare_bracket_ref_sets_academic_flag():
+    """Bare [<a>N</a>] refs should trigger orphaned [N] stripping downstream."""
+    html = 'first claim [<a href="#r1">1</a>] and later evidence [5] supports it'
+    result = vc_module.normalize_text(html)
+    assert "first claim and later evidence supports it" in result
+
+
+# ---------------------------------------------------------------------------
+# Fix: non-numeric <sup> reference markers (<sup>w24</sup>, <sup>*</sup>)
+# Real HTML from PMC2151163 (hair growth) and JVL (settlements)
+# ---------------------------------------------------------------------------
+
+
+def test_normalize_strips_sup_alpha_numeric_refs():
+    """<sup>w24</sup> (letter+digits) ref markers should be stripped, not concatenated."""
+    html = 'retraction of the skin around the hair or nails.<sup>w24</sup> The actual growth'
+    result = vc_module.normalize_text(html)
+    assert "nails. the actual" in result
+    assert "w24" not in result
+
+
+def test_normalize_strips_sup_asterisk_refs():
+    """<sup>*</sup> asterisk ref markers should be stripped."""
+    html = 'population data<sup>*</sup> As of January 1'
+    result = vc_module.normalize_text(html)
+    assert "data as of" in result or "data  as of" in result
+    assert "*" not in result
+
+
+def test_normalize_strips_sup_dagger_refs():
+    """<sup>†</sup> dagger ref markers should be stripped."""
+    html = 'significant results<sup>\u2020</sup> compared with'
+    result = vc_module.normalize_text(html)
+    assert "results compared" in result or "results  compared" in result
+
+
+def test_normalize_preserves_sup_exponents_still():
+    """Exponent contexts must still be preserved after non-numeric ref stripping."""
+    html = 'density is 7x10<sup>-30</sup> g/cm<sup>3</sup>'
+    result = vc_module.normalize_text(html)
+    assert "10-30" in result
+    assert "cm3" in result
+
+
+# ---------------------------------------------------------------------------
+# Fix: space after dash in numeric ranges (460– 480 → 460-480)
+# Real HTML from chronobiologyinmedicine.org (B9 case study)
+# ---------------------------------------------------------------------------
+
+
+def test_normalize_collapses_space_after_dash_in_range():
+    """Spaces after dashes in numeric ranges should be collapsed: '460- 480' → '460-480'."""
+    # After Unicode normalization, en-dash becomes hyphen, but space remains
+    html = 'blue light (460\u2013 480 nm) has been shown'
+    result = vc_module.normalize_text(html)
+    assert "460-480" in result
+
+
+def test_normalize_preserves_dash_space_in_non_range():
+    """Dash-space should be preserved when NOT in a numeric range context."""
+    html = 'the results - however surprising - were clear'
+    result = vc_module.normalize_text(html)
+    assert "results - however" in result
+
+
 def test_arxiv_mathml_fixture():
     """Integration: ar5iv page with MathML <math alttext='...'> containing LaTeX.
     Covers Class 3: MathML extraction via alttext + LaTeX-to-text conversion.
