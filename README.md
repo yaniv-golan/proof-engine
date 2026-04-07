@@ -176,6 +176,42 @@ Note: disproof is often easier than proof — for crisp factual claims, a single
 | "This painting is beautiful" | Subjective — no factual decomposition possible |
 | "The defendant is guilty" | Requires legal interpretation, not fact-checking |
 
+## Citing Proofs
+
+Every proof on the site includes a **"Cite this proof"** section with export formats for researchers, journalists, and tools:
+
+- **APA / Chicago** — plain-text citation strings
+- **BibTeX / RIS** — downloadable files for reference managers (Zotero, Mendeley, etc.)
+- **DOI** — 30 proofs have permanent [Zenodo](https://zenodo.org) DOIs, resolvable via `https://doi.org/10.5281/zenodo.NNNNNNN`
+- **JSON-LD** — machine-readable `ClaimReview` schema with DOI in `identifier` / `sameAs` fields
+- **JSON API** — each proof's `proof.json` includes a `citation` block with DOI and export URLs
+
+Citation files (`cite.bib`, `cite.ris`, `cite.txt`) are generated at build time. DOIs are stored in `doi.json` sidecar files that persist across proof regeneration.
+
+### Minting DOIs
+
+DOIs are minted via Zenodo's REST API. Requires a [Zenodo personal access token](https://zenodo.org/account/settings/applications/) with `deposit:write` and `deposit:actions` scopes.
+
+```bash
+# Set your token
+export ZENODO_TOKEN=your-token-here
+
+# Mint a DOI for a proof
+python tools/proof-site.py mint-doi <slug> --site-dir site
+
+# Create a new version of an existing DOI
+python tools/proof-site.py mint-doi <slug> --site-dir site --force
+
+# Test against Zenodo sandbox first
+python tools/proof-site.py mint-doi <slug> --site-dir site --sandbox
+```
+
+After minting, rebuild the site to pick up the DOI in citation files and the proof page UI.
+
+### Citing the tool itself
+
+The repo includes a [`CITATION.cff`](CITATION.cff) file for GitHub's "Cite this repository" feature. This cites Proof Engine as software; individual proofs use their own per-proof citations.
+
 ## How This Differs From...
 
 **Theorem provers (Lean, Coq, Isabelle)** — These prove mathematical theorems from axioms. Proof Engine verifies real-world claims against web sources and computation. Lean can prove the irrationality of sqrt(2); it cannot verify that a country's GDP grew by 5% last year. Different problem, different tool.

@@ -171,6 +171,16 @@ A proof can produce the right verdict and still be structurally unsound — shar
 
 The eval harness tests for this. It runs claims across 9 domains (neuroscience, economics, physics, history, pure math, common myths, VC/startups, Israel-Palestine, global politics) and checks both verdict correctness and rule compliance. The claims are deliberately adversarial — "0.999... repeating is strictly less than 1" (it isn't), "The integer 1 is a prime number" (it isn't), "The Goldbach conjecture holds for every even integer" (unproven — the engine should return UNDETERMINED, not attempt a proof).
 
+## Citation and DOI architecture
+
+Proofs are citable artifacts. Each proof page includes BibTeX, RIS, APA, and Chicago citation exports, generated at build time from a single source of truth (`tools/lib/citation.py`). The template renders pre-formatted strings — no duplicate formatting logic.
+
+DOI state lives in a `doi.json` sidecar file in each proof's source directory, not in `proof.json` (which is a generated artifact that gets overwritten on regeneration). The sidecar stores the version-specific DOI, concept DOI (all versions), Zenodo record IDs, and the original `claim_natural` text. On force-publish, the publish pipeline compares the sidecar's `claim_natural` against the incoming proof's — if they differ, publish aborts. This prevents silently attaching an old DOI to a new proof after a slug is reused.
+
+Citations use the version-specific DOI for reproducibility. The concept DOI (which resolves to the latest version) is surfaced as an additional "all versions" link in the UI and JSON-LD `sameAs` array.
+
+At build time, `build-site.py` reads `doi.json` (if present), generates citation export files (`cite.bib`, `cite.ris`, `cite.txt`), injects a `citation` block into the built `proof.json`, adds `doi` to `index.json` entries, and enriches the JSON-LD `ClaimReview` with `identifier` and `sameAs` fields.
+
 ## Design choices that might seem wrong
 
 **Why not use an LLM to verify citations?** The whole point is removing LLM trust from the verification chain. If an LLM writes the quote and an LLM verifies it, you've added a step without adding reliability. The verification is mechanical: fetch, normalize, match.
