@@ -1296,3 +1296,36 @@ def test_index_json_has_doi_when_present(site_fixture):
     _run_build(site_fixture)
     index = json.loads((site_fixture / "_site" / "index.json").read_text())
     assert index["proofs"][0]["doi"] == "10.5281/zenodo.999"
+
+
+def test_proof_page_has_cite_section(site_fixture):
+    """The rendered proof page should contain the citation details element."""
+    _run_build(site_fixture)
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert 'class="cite-section"' in html
+    assert "Cite this proof" in html
+    assert "cite-apa" in html
+    assert "cite-bibtex" in html
+
+
+def test_proof_page_cite_has_download_links(site_fixture):
+    _run_build(site_fixture)
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "cite.bib" in html
+    assert "cite.ris" in html
+
+
+def test_proof_page_cite_shows_doi_when_present(site_fixture):
+    proof_dir = site_fixture / "site" / "proofs" / "test-claim"
+    (proof_dir / "doi.json").write_text(json.dumps({
+        "doi": "10.5281/zenodo.999",
+        "zenodo_id": "999",
+        "concept_doi": "10.5281/zenodo.990",
+        "concept_zenodo_id": "990",
+        "claim_natural": "Test claim is true",
+        "minted_at": "2026-01-01",
+    }))
+    _run_build(site_fixture)
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "10.5281/zenodo.999" in html
+    assert "doi.org/10.5281/zenodo.999" in html

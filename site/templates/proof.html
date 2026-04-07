@@ -315,6 +315,47 @@
 </div>
 {% endif %}
 
+<details class="cite-section">
+    <summary>Cite this proof</summary>
+    <div class="cite-body">
+        {% if citation and citation.doi %}
+        <div class="cite-doi">DOI: <a href="https://doi.org/{{ citation.doi }}">{{ citation.doi }}</a>
+        {% if citation.concept_doi and citation.concept_doi != citation.doi %}
+         · <a href="https://doi.org/{{ citation.concept_doi }}">all versions</a>
+        {% endif %}
+        </div>
+        {% endif %}
+        <div class="cite-tabs">
+            <input type="radio" name="cite-format" id="cite-apa" checked>
+            <label for="cite-apa">APA</label>
+            <input type="radio" name="cite-format" id="cite-chicago">
+            <label for="cite-chicago">Chicago</label>
+            <input type="radio" name="cite-format" id="cite-bibtex">
+            <label for="cite-bibtex">BibTeX</label>
+            <input type="radio" name="cite-format" id="cite-ris">
+            <label for="cite-ris">RIS</label>
+
+            <div class="cite-panel" id="panel-apa">
+                <pre class="cite-text">{{ citation_formats.apa | e }}</pre>
+            </div>
+            <div class="cite-panel" id="panel-chicago">
+                <pre class="cite-text">{{ citation_formats.chicago | e }}</pre>
+            </div>
+            <div class="cite-panel" id="panel-bibtex">
+                <pre class="cite-text">{{ citation_formats.bibtex | e }}</pre>
+            </div>
+            <div class="cite-panel" id="panel-ris">
+                <pre class="cite-text">{{ citation_formats.ris | e }}</pre>
+            </div>
+        </div>
+        <div class="cite-actions">
+            <button class="cite-copy-btn share-btn" style="display:none">copy</button>
+            <a href="{{ base_url }}proofs/{{ proof.slug }}/cite.bib" class="share-btn" download>download .bib</a>
+            <a href="{{ base_url }}proofs/{{ proof.slug }}/cite.ris" class="share-btn" download>download .ris</a>
+        </div>
+    </div>
+</details>
+
 <div class="downloads">
     <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.md" class="download-link" download onclick="gtag('event','download',{file_type:'proof_md',proof_slug:'{{ proof.slug }}'})">↓ structured proof report</a>
     <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_narrative.md" class="download-link" download onclick="gtag('event','download',{file_type:'narrative',proof_slug:'{{ proof.slug }}'})">↓ narrative summary</a>
