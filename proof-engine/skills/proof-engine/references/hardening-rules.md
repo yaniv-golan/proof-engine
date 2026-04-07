@@ -259,6 +259,8 @@ The `verification_performed` field describes what was done to investigate the qu
 
 These are structurally independent: they don't re-derive the founding date or recompute the age. They search for entirely different facts that, if found, would invalidate the proof's assumptions. Perform these via actual web searches BEFORE writing the proof code.
 
+**Search against your emerging conclusion, not just against the claim.** "Counter-evidence" means evidence that contradicts *your current verdict direction*. If your proof is converging on PROVED, search for reasons the claim is false. If converging on UNDETERMINED or DISPROVED, search for evidence that *supports* the claim — that's the real adversarial check when your finding is negative. The goal is to stress-test whichever conclusion you're about to reach.
+
 **Tactics for effective adversarial search:**
 - Search for **alternative definitions** of key terms (e.g., "founding" = proclamation vs recognition vs UN admission)
 - Search for **later or earlier milestone dates** that could shift the result past the threshold

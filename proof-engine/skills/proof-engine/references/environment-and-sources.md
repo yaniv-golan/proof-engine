@@ -61,6 +61,14 @@ Many news sites (timesofisrael.com, npr.org) and advocacy/think-tank sites (fdd.
 
 When multiple primary sources are unfetchable for a topic, this is a signal to prioritize snapshot pre-fetching during Step 2 rather than discovering 403s at citation verification time.
 
+## Academic Conference and Review Sites
+
+OpenReview (openreview.net), ACL Anthology, and similar academic platforms frequently return 403 to automated fetches. These are primary sources for ML/NLP paper reviews, rebuttals, and discussion — important when evaluating claims about research papers.
+
+- **Preferred:** Use the snapshot workflow — fetch via browser during Step 2, embed as `snapshot` in `empirical_facts`.
+- **Fallback:** For OpenReview, try the paper's PDF URL directly (often more fetchable than the HTML review page). For reviewer comments, use the snapshot workflow since there is no alternative URL.
+- **Wayback:** OpenReview pages are sometimes archived, but coverage is inconsistent. Try `wayback_fallback=True` but don't rely on it.
+
 ## WebFetch / WebSearch Summaries Are Not Quotes
 
 WebFetch and WebSearch return processed summaries, not raw page text. Text from summaries must never be used directly as the `quote` field in `empirical_facts` — the wording may be paraphrased, reordered, or condensed.

@@ -158,6 +158,13 @@ Guiding questions:
 
 **Recency check:** If your best sources are older than 12 months, search specifically for newer data. Fast-moving fields (AI benchmarks, politics, economics, medicine) require sources from the current year when available. Prefer recent primary sources over older ones when they cover the same data.
 
+**Academic paper claims — additional searches:** When the claim is *about* a research paper (its findings, validity, or implications), the three standard searches above are necessary but insufficient. Also perform:
+
+4. **Search for follow-up work by the same authors** — researchers often publish extensions, corrections, or reinforcing results. Search for the lead authors' names + the topic (e.g., "Mirzadeh Bengio reasoning LLM 2025"). This catches sequels the original paper's citation page may not yet list.
+5. **Search for the broader phenomenon, not just the specific benchmark** — generate synonym and hypernym search terms. If the paper introduces "GSM-NoOp," also search for "irrelevant information robustness LLM," "distractor reasoning models," "math word problem perturbation." Benchmark names are jargon; the phenomenon they test has multiple names in the literature.
+6. **Read the actual paper, not just its metadata** — fetch and read the PDF (or at minimum the full-text HTML). Abstracts omit methodology caveats, appendix rebuttals, and statistical details that are often decisive. If the paper has multiple arXiv versions, read the latest version and note substantive changes between versions. Use PyMuPDF or pdfplumber for PDF extraction.
+7. **Check the citation network** — search for "paper title" + "cited by" or check Google Scholar / Semantic Scholar for papers that cite it. Look specifically for replications, critiques, and meta-analyses that reference the original work.
+
 **If web search is unavailable** in your environment, note this limitation in the proof audit under adversarial checks and flag that sources may not reflect the latest data.
 
 Find at least two independent sources (Rule 6). For math claims, plan two independent computation approaches.
