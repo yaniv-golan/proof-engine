@@ -967,3 +967,48 @@ def test_arxiv_mathml_fixture():
     result = vc_module._match_quote(page_html, quote, "test_arxiv_mathml")
     assert result is not None
     assert result["status"] == "verified", f"Expected verified, got {result}"
+
+
+# ---------------------------------------------------------------------------
+# Math operator spacing collapse
+# ---------------------------------------------------------------------------
+
+
+def test_normalize_collapses_greek_latin_spacing():
+    """ar5iv MathML splits 'Ωm' into 'Ω m' — space should be collapsed."""
+    text = 'parameter \u03a9 m'
+    result = vc_module.normalize_text(text)
+    # After lowercase: Ω m → ωm (no space). Greek preserved (not from LaTeX).
+    assert "\u03c9m" in result
+
+
+def test_normalize_collapses_spaces_around_equals():
+    """Spaces around = between numbers/symbols should be collapsed."""
+    text = 'parameter \u03a9m = 0.315'
+    result = vc_module.normalize_text(text)
+    # After lowercase: ωm = 0.315 → ωm=0.315. Greek preserved (not from LaTeX).
+    assert "\u03c9m=0.315" in result
+
+
+def test_normalize_collapses_spaces_around_pm():
+    """Spaces around ± between numbers should be collapsed."""
+    text = '0.315 \u00b1 0.007'
+    result = vc_module.normalize_text(text)
+    assert "0.315\u00b10.007" in result or "0.315+-0.007" in result
+
+
+def test_normalize_preserves_spaces_in_prose():
+    """Spaces around words should NOT be collapsed by math spacing rule."""
+    text = 'the value is approximately equal to 42'
+    result = vc_module.normalize_text(text)
+    assert "is approximately equal to" in result
+
+
+def test_normalize_ar5iv_full_expression():
+    """Full ar5iv-style: Ω m = 0.315 ± 0.007 → ωm=0.315±0.007 (Greek join + operator collapse)."""
+    text = 'matter density parameter \u03a9 m = 0.315 \u00b1 0.007'
+    result = vc_module.normalize_text(text)
+    # Step 3a joins Ω+m, step 3b collapses =. Greek preserved (not from LaTeX).
+    assert "\u03c9m=0.315" in result
+    assert " = " not in result
+    assert " \u00b1 " not in result

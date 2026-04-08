@@ -344,6 +344,18 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
     text = text.replace('"', "'")
     # 3. Remove spaces before punctuation
     text = re.sub(r'\s+([,.:;!?\)\]])', r'\1', text)
+    # 3a. Collapse spaces between Greek letters and adjacent Latin letters
+    # or digits.  ar5iv MathML rendering can produce "Ω m" instead of "Ωm".
+    # Only applies when a Greek letter is directly adjacent to [a-zA-Z0-9].
+    text = re.sub(
+        r'([\u03b1-\u03c9\u0391-\u03a9])\s+([a-zA-Z0-9])', r'\1\2', text)
+    text = re.sub(
+        r'([a-zA-Z0-9])\s+([\u03b1-\u03c9\u0391-\u03a9])', r'\1\2', text)
+
+    # 3b. Collapse spaces around math operators (=, ±, ×) when between
+    # digits, Greek letters, or decimal points. Handles ar5iv MathML output
+    # where LaTeX rendering inserts spaces: "0.315 ± 0.007".
+    text = re.sub(r'(?<=[\d.\u03b1-\u03c9\u0391-\u03a9a-zA-Z])\s*([=\u00b1\u00d7])\s*(?=[\d.\u03b1-\u03c9\u0391-\u03a9])', r'\1', text)
     # 4. Collapse whitespace
     text = ' '.join(text.split())
     # 4b. Collapse spaces after hyphens in numeric ranges — handles
