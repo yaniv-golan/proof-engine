@@ -16,9 +16,12 @@ Read this at **Step 6** before presenting results.
 - [ ] FACT_REGISTRY keys in JSON match IDs used in both report documents
 - [ ] Every fact ID in proof.md appears in JSON summary fact_registry and proof_audit.md evidence table
 - [ ] All three files are consistent with each other
+- [ ] For empirical proofs: `verify_all_citations()` returns "verified" for all citations. If any return "partial" or "not_found", the quote is likely paraphrased — fetch the raw page and replace with verbatim text before proceeding
 
 ## Verify (quality and completeness)
 
+- [ ] All `quote` fields are verbatim substrings of the source page, not paraphrases (spot-check: does the first word match? are parenthetical insertions preserved?)
+- [ ] PDF citations include `snapshot` with extracted text for re-run reproducibility
 - [ ] All 8 hardening rules checked in proof_audit.md hardening checklist
 - [ ] proof.md has executive summary with key numbers directly under verdict
 - [ ] proof.md verification statuses derivable from JSON summary `citations[].status` (not from message strings)
