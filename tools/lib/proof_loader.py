@@ -108,7 +108,7 @@ def load_proof(proof_dir: Path) -> dict:
     sections_md = extract_sections(proof_md)
     missing = validate_required_sections(sections_md, REQUIRED_PROOF_MD_SECTIONS)
     if missing:
-        raise ValueError(f"{slug}: proof.md missing required sections: {missing}")
+        raise ValueError(f"{slug}: proof.md missing required sections: {missing}. Found: {sorted(sections_md.keys())}")
 
     # Extract sections from proof_audit.md
     audit_md = (proof_dir / "proof_audit.md").read_text()
@@ -117,7 +117,7 @@ def load_proof(proof_dir: Path) -> dict:
     # Warn about missing optional sections
     missing_audit = validate_required_sections(sections_audit, OPTIONAL_AUDIT_SECTIONS)
     if missing_audit:
-        print(f"WARNING: {slug}: proof_audit.md missing optional sections: {missing_audit}",
+        print(f"WARNING: {slug}: proof_audit.md missing optional sections: {missing_audit}. Found: {sorted(sections_audit.keys())}",
               file=sys.stderr)
 
     # Absence proofs: check for Type S (Search) Facts section
@@ -129,7 +129,7 @@ def load_proof(proof_dir: Path) -> dict:
 
     missing_md_opt = validate_required_sections(sections_md, OPTIONAL_MD_SECTIONS)
     if missing_md_opt:
-        print(f"WARNING: {slug}: proof.md missing optional sections: {missing_md_opt}",
+        print(f"WARNING: {slug}: proof.md missing optional sections: {missing_md_opt}. Found: {sorted(sections_md.keys())}",
               file=sys.stderr)
 
     # Extract sections from proof_narrative.md
@@ -140,7 +140,7 @@ def load_proof(proof_dir: Path) -> dict:
     sections_narrative = extract_sections(narrative_md)
     missing_narrative = validate_required_sections(sections_narrative, REQUIRED_NARRATIVE_SECTIONS)
     if missing_narrative:
-        raise ValueError(f"{slug}: proof_narrative.md missing required sections: {missing_narrative}")
+        raise ValueError(f"{slug}: proof_narrative.md missing required sections: {missing_narrative}. Found: {sorted(sections_narrative.keys())}")
 
     # Parse verdict declaration and hook from narrative
     verdict_declaration_str, verdict_hook = extract_verdict_declaration(

@@ -306,3 +306,16 @@ def test_load_proof_narrative_missing_section_raises(proof_dir):
     (proof_dir / "test-claim" / "proof_narrative.md").write_text(bad)
     with pytest.raises(ValueError, match="missing required"):
         load_proof(proof_dir / "test-claim")
+
+
+def test_load_proof_missing_section_shows_found(proof_dir):
+    """Error message should include the sections that WERE found."""
+    # Remove "Evidence Summary" section heading from proof.md
+    claim_dir = proof_dir / "test-claim"
+    proof_md = claim_dir / "proof.md"
+    content = proof_md.read_text()
+    content = content.replace("## Evidence Summary", "## Facts & Evidence")
+    proof_md.write_text(content)
+
+    with pytest.raises(ValueError, match="Found:"):
+        load_proof(claim_dir)
