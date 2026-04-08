@@ -32,6 +32,8 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **Don't restate the proof as an adversarial check**: "70 years after 1948 is 2018, and 2026 > 2018" catches nothing. Search for counter-evidence.
 - **Handle Unicode in citations**: Real web pages use en-dashes, curly quotes, ring-above vs degree, non-breaking spaces. `verify_citations.py` handles this automatically.
 - **WebFetch/WebSearch return summaries, not verbatim text** — Never use text from WebFetch/WebSearch directly as the `quote` field in `empirical_facts`. Use these tools to identify sources, then obtain verbatim quotes via Python `requests.get()`, browser-captured `snapshot`, or Wayback archive. See [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for the full workflow. If a citation returns `partial`/`not_found` on a source you know contains the finding, suspect paraphrasing — obtain raw page text and update the quote.
+- **Quotes must be VERBATIM, never paraphrased**: The `quote` field in `empirical_facts` must be an exact substring copied from the source page — not recalled from memory, rephrased, condensed, or "cleaned up." If the page says "16 study participants" do not write "Sixteen participants." If the page says "returned to the level back then" do not write "returned to the level of that year." Paraphrased quotes are the #1 cause of citation verification failures (14 of 25 in field testing). When in doubt, copy a shorter exact substring rather than a longer paraphrased one. Workflow: fetch the URL via `requests.get()`, find the relevant sentence in the response, copy it character-for-character into `quote`.
+- **PDF sources need snapshots**: When citing a PDF, use your native PDF reading (or PyMuPDF/pdfplumber) to extract the text during Step 2. Copy the verbatim quote and include the full extracted text as `snapshot` in `empirical_facts`. Without a snapshot, re-run verification requires `pdfplumber` to be installed — which is an optional dependency. The snapshot makes the proof self-contained.
 - **`explain_calc()` vs `compute_*()`**: Use named functions (`compute_percentage_change()`, `compute_age()`) when they match your computation — they self-document. Use `explain_calc()` for ad-hoc expressions. Don't wrap a `compute_*()` call in `explain_calc()`.
 - **Don't call `verify_extraction()` on data_values**: It's circular. Instead, call `verify_data_values(url, data_values, fact_id)` to confirm each value string appears on the source page, then cross-check across sources (Rule 6).
 - **Never create pseudo-quote fields for table data**: Don't store table cell values in fields like `cpi_1913_quote: "9.883"`. If the source evidence is a table cell or numeric grid, store it under `data_values` and verify with `verify_data_values()`. The validator will reject pseudo-quote fields containing bare numeric or date literals that are parsed as evidence.
@@ -175,6 +177,26 @@ Find at least two independent sources (Rule 6). For math claims, plan two indepe
 
 **Pre-fetch snapshots early, not late.** Many news and advocacy sites now return 403 to automated fetches — not just .gov/.edu. During Step 2 research, pre-fetch the full page text for every source you plan to cite and include it as the `snapshot` field in `empirical_facts`. This avoids discovering fetch failures late during `verify_all_citations()`, which forces source substitution under time pressure. Note: WebFetch and `verify_all_citations()` use different HTTP clients — a WebFetch 403 does not mean the script will also get 403, and vice versa. If both fail, the snapshot is your only recourse. See [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for details.
 
+**Quote Harvesting (required before Step 3).** For each source you plan to cite, obtain the verbatim quote from the *rendered* page text — not from WebSearch/WebFetch summaries (which paraphrase). Open the URL in a browser or use Python to fetch and extract the visible text. The quote should match what a human reader sees on the page, not the raw HTML — `verify_all_citations()` strips HTML tags and decodes entities before matching, so your quote should be plain text without markup. For PDFs, use Claude Code's Read tool or PyMuPDF. For pages that 403, use the snapshot workflow or Wayback. WebFetch/WebSearch are fine for *discovering* sources, but never use their returned text as a quote — it's summarized, not verbatim.
+
+Pay attention to:
+- Lowercase vs uppercase in paper titles and benchmark names (e.g., `gsm8k` not `GSM8K`)
+- En-dashes vs hyphens, curly vs straight quotes
+- LaTeX artifacts on academic pages (`$\Lambda$CDM`, `$H_0$`)
+- For arXiv papers, prefer `ar5iv.labs.arxiv.org/html/PAPER_ID` over `arxiv.org/abs/PAPER_ID` — the former serves full paper HTML with verifiable quotes; the latter is an abstract-only page with limited text
+
+**Verify as you go.** After assembling each `empirical_facts` entry (including its `snapshot` if pre-fetched), run a quick verification before moving to the next source:
+```python
+from scripts.verify_citations import verify_citation
+result = verify_citation(url, quote, "test",
+                         snapshot=snapshot_text,  # pass pre-fetched snapshot if available
+                         wayback_fallback=True)
+print(result["status"], result.get("closest_passage", ""))
+```
+If the status is `not_found` or `partial`, check `closest_passage` in the result — it's a **diagnostic hint** showing approximately where on the page your quote might be. Do NOT copy `closest_passage` directly into your quote — it uses simplified HTML cleaning and may have word-boundary artifacts. Instead, use it to locate the right region on the page, then copy the visible rendered text (what a reader sees, not raw HTML). If `closest_passage` is `None`, the page likely doesn't contain relevant text — find a different source. Note: always pass the `snapshot` field if you have one — many sources 403 on live fetch, and omitting the snapshot will produce false `fetch_failed` results.
+
+Do not proceed to Step 3 with fixable `not_found` or `partial` results — these usually mean the quote was paraphrased and can be corrected. However, `fetch_failed` from known-unfetchable sources (403, JS-rendered, paywalled) is expected — document these and proceed. The "with unverified citations" verdict exists for exactly this case.
+
 ### Step 3: Write the Proof Code
 Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 8 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) to identify which template matches your claim type. Then read the specific template file it directs you to (e.g., `template-qualitative.md`, `template-compound.md`). Do not skip the second read — the index contains only the decision table, not the template code. **If the claim uses an epistemic qualifier** ("verified," "confirmed," "proven," "established"), **use the compound claim template** (`template-compound.md`) with the contested qualifier pattern: SC1 (provenance — do the numbers come from a credible source?) + SC2 (epistemic warrant — has the qualifier been independently confirmed?). **If the claim uses causal language** ("causes," "leads to," "promotes," "damages," "prevents"), **use the compound claim template** (`template-compound.md`) with SC-association + SC-causation sub-claims — see "Causal vs. associational claims" in the Verdicts section. For claims about absence of evidence, use `template-absence.md`. The proof script must be self-contained: `python proof.py` produces the full output.
 
@@ -186,6 +208,8 @@ Required elements:
 - Cross-checks from independent sources/methods (Rule 6)
 - `FACT_REGISTRY` mapping report IDs to proof-script keys
 - JSON summary block in `__main__` ending with `=== PROOF SUMMARY (JSON) ===`
+
+**Pre-flight citation check (before Step 4):** Run `verify_all_citations(empirical_facts, wayback_fallback=True)` interactively and inspect the results. Fix any `not_found`, `partial`, or `fetch_failed` entries. Use `closest_passage` as a diagnostic hint to locate the right region, then copy the visible rendered text from the page. Do not proceed to Step 4 with known citation failures that are fixable.
 
 **Formalization fidelity check (before Step 4):** Re-read the natural-language claim and `CLAIM_FORMAL` side by side. Confirm each element of the natural claim is captured in the formal spec. If any aspect is narrowed, excluded, or operationalized by proxy, it must be documented in `operator_note` and the proof.md Claim Interpretation section's formalization scope note. Flag unresolvable divergences to the user before continuing.
 
@@ -218,6 +242,25 @@ The fourth and final output file. Written AFTER proof.py, proof.md, proof_audit.
 - No CLAIM_FORMAL reproduction
 - Purpose-based language with explicit markdown links for formal outputs
 - Verdict declaration must use the EXACT full verdict string from proof.json (including qualifiers like "with unverified citations")
+
+### Step 5.5: Citation Recovery
+
+After executing proof.py, check the citation verification output. If any citation has status `not_found` or `partial`:
+
+1. **Diagnose:** Fetch the failing URL with `requests.get()` (not WebFetch — it returns summaries) and search the raw response text for your attempted quote. Common causes:
+   - (a) WebSearch summary was paraphrased, not verbatim — the #1 failure cause
+   - (b) Case mismatch (e.g., `gsm8k` vs `GSM8K`, `PaLM-540b` vs `PaLMB`)
+   - (c) LaTeX/Unicode artifacts on academic pages (`$\Lambda$CDM`, MathML whitespace)
+   - (d) Abstract page cited instead of full paper HTML (use ar5iv instead of arxiv.org/abs)
+   - (e) Page content has drifted since you last checked — find the current wording
+
+2. **Fix the quote:** Use `closest_passage` from the verification result as a diagnostic hint to locate the right region on the page — it shows approximately where your quote might be, but do NOT copy it directly (it uses simplified cleaning that may introduce artifacts). Instead, locate the passage on the rendered page and copy the visible text into `empirical_facts`. The verifier strips HTML tags and decodes entities before matching, so your quote should be plain text matching what a reader sees. If the page doesn't contain any relevant text (JS-rendered, paywall), try the Wayback archive (`wayback_fallback=True`) or find an alternative URL for the same source.
+
+3. **Re-run:** Execute proof.py again and verify the citation now passes.
+
+4. **Iterate:** Repeat until all citations are `verified`, or until you've exhausted recovery options. If a citation remains `not_found` after recovery attempts, document why in `proof_audit.md`'s Citation Verification Details (Impact field).
+
+Do not skip this step. The difference between `PROVED` and `PROVED (with unverified citations)` is often a fixable quote mismatch, not a genuinely missing source. A 5-minute recovery loop is almost always worth the verdict upgrade.
 
 ### Step 6: Self-Critique
 Before presenting results, run through the checklist in [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md).
