@@ -154,6 +154,123 @@ def _result(status, method=None, coverage_pct=None, fetch_error=None,
 
 
 # ---------------------------------------------------------------------------
+# Light cleaning (for closest-passage original-text output)
+# ---------------------------------------------------------------------------
+
+def _light_clean(html_text: str) -> str:
+    """Strip HTML tags and decode entities, but preserve original case and punctuation.
+
+    This produces text suitable for returning as a closest-passage suggestion —
+    good enough for the author to locate the right passage, though they should
+    still copy the final quote from the rendered page or raw source.
+
+    Mirrors normalize_text()'s inline-tag logic: inline formatting tags
+    (span, em, strong, a, b, i, etc.) are removed WITHOUT inserting spaces,
+    while block-level tags (div, p, li, etc.) are replaced with spaces.
+    This avoids introducing fake word boundaries in the middle of phrases.
+    """
+    # 1. Remove <script> and <style> blocks entirely (contents + tags).
+    #    On JS-rendered pages these contain app boilerplate that would otherwise
+    #    pollute the closest-passage search with irrelevant matches.
+    text = re.sub(r'<script[^>]*>.*?</script>', ' ', html_text,
+                  flags=re.IGNORECASE | re.DOTALL)
+    text = re.sub(r'<style[^>]*>.*?</style>', ' ', text,
+                  flags=re.IGNORECASE | re.DOTALL)
+    # 2. Strip inline formatting tags without inserting spaces (same set as
+    #    normalize_text step 1.6b).
+    _INLINE_TAG_RE = r'(?:span|abbr|cite|code|dfn|em|kbd|mark|small|strong|var|wbr|a|b|i|s|u|sub|sup)(?=[\s>/])'
+    text = re.sub(r'</?' + _INLINE_TAG_RE + r'[^>]*>', '', text,
+                  flags=re.IGNORECASE)
+    # 3. Replace remaining tags (block-level) with spaces.
+    text = re.sub(r'<[^>]+>', ' ', text)
+    # 4. Decode HTML entities.
+    text = html.unescape(text)
+    # 5. Collapse whitespace.
+    text = ' '.join(text.split())
+    return text
+
+
+def _find_closest_passage(page_text_raw: str, expected_quote: str,
+                          threshold: float = 0.3) -> tuple[str | None, float]:
+    """Find the page passage most similar to the expected quote.
+
+    Operates on two representations: lightly-cleaned text (for output) and
+    normalized text (for scoring). Returns original-case text.
+
+    Args:
+        page_text_raw: Raw HTML page text.
+        expected_quote: The quote to find a match for.
+        threshold: Minimum Jaccard similarity to return a suggestion.
+
+    Returns:
+        (passage, similarity) — passage is original-case text or None,
+        similarity is 0-1 float.
+    """
+    def _word_set(norm_text: str) -> set:
+        """Extract word tokens, stripping leading/trailing punctuation from each
+        word so that 'models.' and 'models' are treated as the same token."""
+        return set(re.sub(r'[^\w\s]', '', norm_text).split())
+
+    cleaned = _light_clean(page_text_raw)
+    cleaned_words = cleaned.split()
+
+    norm_quote = normalize_text(expected_quote)
+    quote_word_set = _word_set(norm_quote)
+    quote_len = len(quote_word_set)
+
+    if quote_len == 0 or len(cleaned_words) == 0:
+        return None, 0.0
+
+    window_size = len(norm_quote.split())
+    if window_size > len(cleaned_words):
+        # Page shorter than quote — compare whole page but cap output
+        norm_page = normalize_text(cleaned)
+        page_word_set = _word_set(norm_page)
+        union = quote_word_set | page_word_set
+        sim = len(quote_word_set & page_word_set) / len(union) if union else 0.0
+        if sim >= threshold:
+            # Cap to ~500 chars to avoid persisting entire short pages
+            return cleaned[:500], sim
+        return None, 0.0
+
+    # When the page is short (< 3× the query length), sliding windows become
+    # noisy: the query words are scattered across the whole page and no single
+    # window covers them all.  In this regime, compare the full page word-set
+    # against the query and return the full page text as the passage hint.
+    if len(cleaned_words) < window_size * 3:
+        norm_page = normalize_text(cleaned)
+        page_word_set = _word_set(norm_page)
+        union = quote_word_set | page_word_set
+        sim = len(quote_word_set & page_word_set) / len(union) if union else 0.0
+        if sim >= threshold:
+            return cleaned[:500], sim
+        return None, 0.0
+
+    stride = max(1, window_size // 2)
+    best_passage = None
+    best_sim = 0.0
+
+    for start in range(0, len(cleaned_words) - window_size + 1, stride):
+        window_words = cleaned_words[start:start + window_size]
+        window_text = ' '.join(window_words)
+        norm_window = normalize_text(window_text)
+        window_word_set = _word_set(norm_window)
+
+        union = quote_word_set | window_word_set
+        if not union:
+            continue
+        sim = len(quote_word_set & window_word_set) / len(union)
+
+        if sim > best_sim:
+            best_sim = sim
+            best_passage = window_text
+
+    if best_sim >= threshold:
+        return best_passage, best_sim
+    return None, 0.0
+
+
+# ---------------------------------------------------------------------------
 # Text normalization
 # ---------------------------------------------------------------------------
 
@@ -548,11 +665,21 @@ def verify_citation(
     if page_text is not None:
         result = _match_quote(page_text, expected_quote, fact_id, fetch_mode=fetch_mode)
         if result is not None:
+            if result["status"] == "partial":
+                passage, sim = _find_closest_passage(page_text, expected_quote)
+                if passage is not None:
+                    result["closest_passage"] = passage
+                    result["closest_similarity"] = sim
             return _with_credibility(result)
-        # Page fetched but quote not found
+        # Page fetched but quote not found — suggest closest passage
         fragment = _extract_fragment(normalize_text(expected_quote), min_words=6)
-        return _with_credibility(_result("not_found", fetch_mode=fetch_mode,
-                        message=f"Quote NOT found for {fact_id}. Searched: '{fragment[:60]}...'"))
+        result = _result("not_found", fetch_mode=fetch_mode,
+                        message=f"Quote NOT found for {fact_id}. Searched: '{fragment[:60]}...'")
+        passage, sim = _find_closest_passage(page_text, expected_quote)
+        if passage is not None:
+            result["closest_passage"] = passage
+            result["closest_similarity"] = sim
+        return _with_credibility(result)
 
     # All fetch methods exhausted
     return _with_credibility(_result("fetch_failed", fetch_error=fetch_error_msg,
@@ -837,6 +964,11 @@ def _print_status(fact_id: str, result: dict):
         print(f"  [✗] {fact_id}{mode_tag}: {msg}{cred_tag}")
     else:  # fetch_failed
         print(f"  [?] {fact_id}{mode_tag}: {msg}{cred_tag}")
+    cp = result.get("closest_passage")
+    if cp:
+        sim_pct = result.get("closest_similarity", 0) * 100
+        print(f"        💡 Hint — closest match ({sim_pct:.0f}% similar): \"{cp[:120]}...\"")
+        print(f"        ⚠️  Do not copy this directly — locate this text on the page and copy the rendered version.")
 
 
 # ---------------------------------------------------------------------------

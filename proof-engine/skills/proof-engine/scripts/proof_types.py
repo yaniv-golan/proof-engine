@@ -112,6 +112,8 @@ class VerificationResult(TypedDict, total=False):
     fetch_mode: str
     message: str
     credibility: CredibilityAssessment
+    closest_passage: str | None    # Diagnostic hint for not_found/partial (NOT persisted)
+    closest_similarity: float | None  # Jaccard similarity score (0-1)
 
 
 # ---------------------------------------------------------------------------

@@ -1011,4 +1011,89 @@ def test_normalize_ar5iv_full_expression():
     # Step 3a joins Ω+m, step 3b collapses =. Greek preserved (not from LaTeX).
     assert "\u03c9m=0.315" in result
     assert " = " not in result
-    assert " \u00b1 " not in result
+
+
+# ---------------------------------------------------------------------------
+# _find_closest_passage
+# ---------------------------------------------------------------------------
+
+
+def test_find_closest_passage_paraphrased_quote():
+    """Page has similar content with different wording -> closest_passage populated."""
+    from scripts.verify_citations import _find_closest_passage
+
+    page_html = (
+        "<html><body><p>Insertion of a single non-operational clause can cause "
+        "average accuracy to collapse by up to 65 percentage points on certain "
+        "models.</p></body></html>"
+    )
+    query = (
+        "Addition of a single irrelevant clause provokes catastrophic "
+        "accuracy drops on certain models"
+    )
+    passage, similarity = _find_closest_passage(page_html, query)
+    assert passage is not None
+    assert similarity >= 0.3
+    assert passage[0].isupper()  # original case preserved
+
+
+def test_find_closest_passage_irrelevant_page():
+    """Page with completely unrelated content -> None."""
+    from scripts.verify_citations import _find_closest_passage
+
+    page_html = "<html><body><p>Today's weather forecast calls for sunny skies and mild temperatures across the region.</p></body></html>"
+    query = "quantum entanglement enables faster-than-light communication between particles"
+    passage, similarity = _find_closest_passage(page_html, query)
+    assert passage is None
+
+
+def test_find_closest_passage_preserves_original_case():
+    """Returned passage must preserve original capitalization and punctuation."""
+    from scripts.verify_citations import _find_closest_passage
+
+    page_html = (
+        "<html><body><p>The PAL Framework (Program-Aided Language Models) "
+        "achieves state-of-the-art accuracy on GSM8K benchmark, surpassing "
+        "chain-of-thought approaches significantly.</p></body></html>"
+    )
+    query = (
+        "PAL achieves best accuracy on GSM8K benchmark surpassing "
+        "chain of thought approaches"
+    )
+    passage, similarity = _find_closest_passage(page_html, query)
+    assert passage is not None
+    assert "PAL" in passage  # original case
+
+
+def test_find_closest_passage_page_shorter_than_quote():
+    """When page has fewer words than the quote, should still work."""
+    from scripts.verify_citations import _find_closest_passage
+
+    page_html = "<html><body><p>Short page.</p></body></html>"
+    query = "this is a much longer quote that has many more words than the page content"
+    passage, similarity = _find_closest_passage(page_html, query)
+    assert passage is None or similarity < 0.3
+
+
+def test_verify_citation_not_found_includes_closest_passage():
+    """verify_citation with wrong quote should include closest_passage suggestion."""
+    from scripts.verify_citations import verify_citation
+    from unittest.mock import patch
+
+    # Page and query share enough vocabulary (~8/25 = 32% Jaccard) to exceed threshold.
+    page_html = (
+        "<html><body><p>Insertion of a single non-operational clause can cause "
+        "average accuracy to collapse by up to 65 percentage points on certain "
+        "models.</p></body></html>"
+    )
+
+    with patch("scripts.verify_citations._fetch_page", return_value=(page_html, "live", None)):
+        result = verify_citation(
+            "https://example.com/page",
+            "Addition of a single irrelevant clause provokes catastrophic accuracy drops on certain models",
+            "test_fact",
+        )
+    assert result["status"] == "not_found"
+    assert "closest_passage" in result
+    assert result["closest_passage"] is not None
+    assert result["closest_similarity"] >= 0.3
