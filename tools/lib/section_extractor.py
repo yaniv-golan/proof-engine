@@ -30,12 +30,15 @@ def extract_sections(markdown: str) -> dict:
 def validate_required_sections(sections: dict, required: list[str]) -> list[str]:
     """Check that all required sections are present.
 
-    Comparison is case-insensitive (both sides normalized via title()).
+    Comparison is case-insensitive and ignores parenthetical suffixes,
+    so "Adversarial Checks (Rule 5)" matches required name "Adversarial Checks".
     Returns list of missing section names.
     """
-    section_names = {name.lower() for name in sections}
+    # Strip parenthetical suffixes like "(Rule 5)" for matching
+    paren_re = re.compile(r"\s*\(.*\)\s*$")
+    section_bases = {paren_re.sub("", name).lower().strip() for name in sections}
     missing = []
     for req in required:
-        if req.lower() not in section_names:
+        if req.lower() not in section_bases:
             missing.append(req)
     return missing
