@@ -1,0 +1,87 @@
+{
+  "fact_registry": {
+    "A1": {
+      "label": "Per-company investment: $50M / 25 companies = $2M each",
+      "method": "fund_size_m / n_companies",
+      "result": "$2.0M"
+    },
+    "A2": {
+      "label": "Total return under claimed scenario: (1\u00d750 + 2\u00d710) \u00d7 $2M = $140M",
+      "method": "(n_50x \u00d7 multiple_50x + n_10x \u00d7 multiple_10x) \u00d7 per_company_m",
+      "result": "$140.0M"
+    },
+    "A3": {
+      "label": "Gross multiple achieved: $140M / $50M = 2.8x",
+      "method": "total_return_m / fund_size_m",
+      "result": "2.8000x"
+    },
+    "A4": {
+      "label": "Cross-check via direct portfolio sum: 1\u00d7$100M + 2\u00d7$20M + 22\u00d7$0M = $140M",
+      "method": "sum([50x\u00d7$2M, 10x\u00d7$2M, 10x\u00d7$2M, 0x\u00d7$2M \u00d7 22])",
+      "result": "$140.0M \u2192 2.8000x"
+    },
+    "A5": {
+      "label": "Claim evaluation: gross_multiple == 3.0",
+      "method": "compare(2.8000, '==', 3.0)",
+      "result": "False"
+    }
+  },
+  "claim_formal": {
+    "subject": "A VC fund with $50M invested equally across 25 startups",
+    "property": "whether 1\u00d750x + 2\u00d710x returns (others=0) achieves a 3x gross multiple",
+    "operator": "==",
+    "operator_note": "Interpreted as a sufficiency claim: the stated returns (1 company at 50x, 2 at 10x, 22 at 0x) are sufficient to achieve a 3x gross multiple. Per-company investment: $50M/25 = $2M. Required return for 3x gross: $50M \u00d7 3 = $150M. Actual return under claimed scenario: (1\u00d750 + 2\u00d710)\u00d7$2M = $140M. $140M < $150M, so the claim is false. The claim also fails as a necessity claim: 3x is reachable without any 50x return.",
+    "threshold": 3.0,
+    "proof_direction": "disprove"
+  },
+  "claim_natural": "A venture capital fund investing $50 million in 25 startups at equal sizes requires at least one 50x return and two 10x returns to achieve a 3x gross multiple.",
+  "cross_checks": [
+    {
+      "description": "Independent computation: explicit per-company list sum vs. algebraic formula",
+      "values_compared": [
+        "2.8000x",
+        "2.8000x"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Can a 3x gross multiple be achieved without any 50x return? If yes, the 'necessity' reading of the claim is also false.",
+      "verification_performed": "Computed two alternative portfolios: (a) 15 companies at 5x each: 15 \u00d7 5 \u00d7 $2M = $150M \u2192 3.0x gross. (b) 5 companies at 15x each: 5 \u00d7 15 \u00d7 $2M = $150M \u2192 3.0x gross. Both achieve exactly 3x without any 50x return.",
+      "finding": "3x gross is achievable without any 50x return. Example: 15 companies at 5.0x each yields 3.0x gross; 5 companies at 15.0x each yields 3.0x gross. The claim fails as a necessity condition as well as a sufficiency condition.",
+      "breaks_proof": false
+    },
+    {
+      "question": "What if the fund has fewer companies (e.g., 20 instead of 25), keeping the same 1\u00d750x + 2\u00d710x pattern? Does the gross multiple change?",
+      "verification_performed": "Computed: $50M / 20 companies = $2.5M each. Return: (1\u00d750 + 2\u00d710) \u00d7 $2.5M = $175.0M. Gross multiple: $175.0M / $50M = 3.50x.",
+      "finding": "With 20 equal-size investments, the same 1\u00d750x + 2\u00d710x pattern yields 3.50x gross \u2014 which exceeds 3x. This shows the number of companies matters critically: the minimum required per-company investment to reach 3x with 1\u00d750x + 2\u00d710x is $150M / 70 = $2.143M, which requires \u2264 23 companies in a $50M fund. The claim specifies 25 companies ($2M each), which is too many to hit 3x with this pattern.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the claim hold if 'gross multiple' refers to a return ON INVESTED capital rather than total value returned (i.e., 2.8x TVPI vs. 3x MOIC interpretation)?",
+      "verification_performed": "Confirmed standard VC terminology: gross multiple = TVPI (total value to paid-in), which is total proceeds divided by total invested capital. MOIC (multiple on invested capital) is computed identically at the fund level. Both give 2.8x for this scenario.",
+      "finding": "Both TVPI and MOIC yield 2.8x for this scenario. No alternative definition of 'gross multiple' changes the arithmetic. The claim is false under any standard VC accounting convention.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "DISPROVED",
+  "key_results": {
+    "fund_size_m": 50.0,
+    "n_companies": 25,
+    "per_company_m": 2.0,
+    "total_return_m": 140.0,
+    "gross_multiple": 2.8,
+    "required_multiple": 3.0,
+    "shortfall_m": 10.0,
+    "threshold": 3.0,
+    "operator": "==",
+    "claim_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.10.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-08"
+  }
+}

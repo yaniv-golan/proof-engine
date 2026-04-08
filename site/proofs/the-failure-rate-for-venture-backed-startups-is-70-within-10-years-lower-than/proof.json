@@ -1,0 +1,128 @@
+{
+  "claim_natural": "The failure rate for venture-backed startups is 70% within 10 years, lower than the commonly cited 90% for all startups.",
+  "claim_formal": {
+    "subject": "Failure rate of venture-backed startups within 10 years",
+    "property": "Percentage that fail, compared to the commonly-cited 90% general startup failure rate",
+    "operator": "compound",
+    "compound_operator": "AND",
+    "operator_note": "SC1: The failure rate for VC-backed startups is approximately 70% within 10 years. SC2: The 90% figure for all startups is 'commonly cited' (not asserted as accurate). SC3: The VC-backed rate is lower than the all-startup rate. Definitions matter: 'failure' can mean (a) business closure/cessation, (b) never returning invested capital to investors, or (c) falling below investors' return expectations. BLS data uses definition (a) \u2014 business survival. Ghosh/Harvard research uses definition (b) \u2014 returning capital to investors. Note: The '90% of startups fail' figure is widely cited but disputed as a myth; BLS data shows ~50% of businesses survive 5 years and ~35% survive 10 years, implying a 65% failure rate at 10 years for all businesses, not 90%. The VC-backed failure rate under definition (a) is not well-established in public research at exactly 70%; Ghosh finds 75% under definition (b).",
+    "threshold": 2
+  },
+  "fact_registry": {
+    "B1": {
+      "key": "B1",
+      "label": "Ghosh/HBS: 75% of VC-backed startups never return cash to investors"
+    },
+    "B2": {
+      "key": "B2",
+      "label": "Inc Magazine: confirms Ghosh 75% VC-backed failure figure"
+    },
+    "B3": {
+      "key": "B3",
+      "label": "LLC.org/BLS: 70% of all businesses fail within 10 years"
+    }
+  },
+  "computed_values": {
+    "vc_failure_ghosh_pct": 75.0,
+    "general_failure_bls_pct": 70.0
+  },
+  "sub_claims": {
+    "sc1": {
+      "description": "VC-backed failure rate \u2248 70% within 10 years",
+      "n_confirmed": 0,
+      "note": "Best source (Ghosh) says 75% never return capital, not 70%",
+      "holds": false
+    },
+    "sc2": {
+      "description": "90% all-startup failure rate is 'commonly cited'",
+      "n_confirmed": 1,
+      "note": "Commonly cited but disputed; BLS shows ~65% at 10 years",
+      "holds": true
+    }
+  },
+  "citation_details": {
+    "B1": {
+      "source_key": "B1",
+      "source_name": "Harvard Business School News: The Venture Capital Secret (Shikhar Ghosh)",
+      "url": "https://www.hbs.edu/news/Pages/item.aspx?num=487",
+      "quote": "as many as 75 percent of venture-backed companies never return cash to investors",
+      "status": "fetch_failed",
+      "method": null,
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "hbs.edu",
+        "source_type": "academic",
+        "tier": 4,
+        "flags": [],
+        "note": "Academic domain (.edu)"
+      }
+    },
+    "B2": {
+      "source_key": "B2",
+      "source_name": "Inc. Magazine: Report \u2014 3 Out of 4 Venture-Backed Start-Ups Fail",
+      "url": "https://www.inc.com/john-mcdermott/report-3-out-of-4-venture-backed-start-ups-fail.html",
+      "quote": "as many as 75 percent of venture-backed U.S. companies never return cash to investors",
+      "status": "fetch_failed",
+      "method": null,
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "inc.com",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    },
+    "B3": {
+      "source_key": "B3",
+      "source_name": "LLC.org: Startup Failure Rate Statistics (citing BLS data)",
+      "url": "https://www.llc.org/startup-failure-rate-statistics/",
+      "quote": "Small businesses have a 70 percent failure rate within 10 years of opening",
+      "status": "partial",
+      "method": "aggressive_normalization",
+      "coverage_pct": null,
+      "fetch_mode": "live",
+      "credibility": {
+        "domain": "llc.org",
+        "source_type": "unknown",
+        "tier": 2,
+        "flags": [],
+        "note": "Unclassified domain \u2014 verify source authority manually"
+      }
+    }
+  },
+  "adversarial_checks": [
+    {
+      "description": "The 70% VC-backed figure is for ALL businesses (BLS), not specifically VC-backed",
+      "verification_performed": "BLS Business Employment Dynamics data shows ~70% of all businesses fail within 10 years \u2014 not specifically venture-backed startups. The claim appears to cite the all-business BLS rate (70%) as the VC-backed rate. When applied specifically to VC-backed startups, the most credible study (Ghosh/Harvard, 2,000+ VC-backed companies) finds 75% never return capital, which is HIGHER than 70%, not lower. This means the claim's first assertion (70% VC-backed failure) may be applying the wrong failure rate to the wrong population.",
+      "breaks_proof": true
+    },
+    {
+      "description": "The '90% of all startups fail' figure is widely cited but disputed",
+      "verification_performed": "Searched: 'Is it true that 90% of startups fail?' Multiple fact-checks find the 90% figure is a myth or misquotation. BLS data shows ~50% of businesses survive 5 years and ~35% survive 10 years (implying a 65% failure rate at 10 years). The 90% figure has unclear provenance and is commonly described as not grounded in BLS or comparable government data. If the 90% general figure is incorrect, the comparative claim ('lower than 90%') is comparing against a false baseline.",
+      "breaks_proof": true
+    },
+    {
+      "description": "Definition of 'failure' is inconsistent across sources",
+      "verification_performed": "BLS tracks business survival (closure of the legal entity). Ghosh/Harvard tracks return of capital to investors. These definitions produce different failure rates for the same population. A VC-backed company that was acquired at a below-cost valuation is a 'failure' under definition (b) but not under definition (a) if the acquirer keeps the business running. Mixing definitions without disclosure makes the claim imprecise.",
+      "breaks_proof": true
+    }
+  ],
+  "verdict": "PARTIALLY VERIFIED",
+  "verdict_holds": false,
+  "key_results": {
+    "vc_failure_ghosh_pct": 75.0,
+    "general_failure_bls_pct": 70.0,
+    "n_confirmed_sc1": 0,
+    "any_breaks": true,
+    "claim_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.11.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-08"
+  }
+}

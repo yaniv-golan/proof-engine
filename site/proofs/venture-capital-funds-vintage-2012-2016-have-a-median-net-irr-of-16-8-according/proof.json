@@ -1,0 +1,60 @@
+{
+  "claim_natural": "Venture capital funds vintage 2012-2016 have a median net IRR of 16.8% according to Cambridge Associates but 18.2% according to Preqin.",
+  "claim_formal": {
+    "subject": "Median net IRR of US venture capital funds with vintage years 2012-2016",
+    "property": "Median net Internal Rate of Return as reported by two specific benchmarking firms",
+    "operator": "==",
+    "operator_note": "The claim asserts two specific empirical figures from two specific named sources: (SC1) Cambridge Associates reports a median net IRR of 16.8% for VC vintage 2012-2016, and (SC2) Preqin reports 18.2% for the same cohort. 'Net IRR' means after management fees and carried interest. 'Vintage year' refers to the year a fund made its first investment. Both Cambridge Associates and Preqin are subscription-only benchmarking databases; their full benchmark tables are not publicly accessible. Verification requires either: (a) a paid subscription to these databases, (b) a publicly available press release or summary report citing these exact figures, or (c) an academic paper reproducing these specific data points with attribution.",
+    "threshold": 2,
+    "compound_operator": "AND"
+  },
+  "fact_registry": {
+    "SC1": "Cambridge Associates: median net IRR for VC vintage 2012-2016 = 16.8% \u2014 no public source found",
+    "SC2": "Preqin: median net IRR for VC vintage 2012-2016 = 18.2% \u2014 no public source found"
+  },
+  "sub_claims": {
+    "sc1": {
+      "description": "Cambridge Associates reports 16.8% median net IRR for VC vintage 2012-2016",
+      "n_confirmed": 0,
+      "threshold": 1,
+      "holds": false
+    },
+    "sc2": {
+      "description": "Preqin reports 18.2% median net IRR for VC vintage 2012-2016",
+      "n_confirmed": 0,
+      "threshold": 1,
+      "holds": false
+    }
+  },
+  "adversarial_checks": [
+    {
+      "description": "Are Cambridge Associates benchmark figures publicly available at all?",
+      "verification_performed": "Searched cambridgeassociates.com/research/ \u2014 the benchmark landing page confirms they publish US PE and VC benchmarks but requires a subscription or institutional access. The Q3 2025 public PDF (ca.com) contains only aggregate 5/10/20-year horizon returns, not per-vintage-year median net IRR tables. No public summary report containing '16.8%' for VC vintage 2012-2016 was found in over 30 URL attempts across CA's site, academic databases (SSRN, NBER), and financial news outlets.",
+      "breaks_proof": true
+    },
+    {
+      "description": "Are Preqin benchmark figures publicly available at all?",
+      "verification_performed": "Searched preqin.com/benchmarks \u2014 requires login. Searched Preqin press releases and the Preqin Global Alternatives Reports (annual public PDFs): these cite aggregate venture return quartiles but not the specific 18.2% vintage 2012-2016 median net IRR figure. Searched 'Preqin venture 2012 2016 IRR 18.2' in Google and academic databases \u2014 no match found. No public source contains this figure.",
+      "breaks_proof": true
+    },
+    {
+      "description": "Do the two figures (16.8% vs 18.2%) appear in any secondary source?",
+      "verification_performed": "Searched for the specific pairing '16.8% Cambridge Associates' and '18.2% Preqin' in financial literature. No secondary source reproduces both figures together for VC vintage 2012-2016. The figures may be correct but originate from proprietary database downloads that are not publicly citable. The 1.4 percentage-point gap is plausible given known methodology differences (CA uses cash-on-cash timing; Preqin uses its own fund database with different fund universe and valuation timing).",
+      "breaks_proof": true
+    }
+  ],
+  "verdict": "UNDETERMINED",
+  "verdict_holds": false,
+  "verdict_reason": "Both sub-claims rely on proprietary subscription-only databases (Cambridge Associates and Preqin). No publicly accessible source was found that reproduces the specific figures (16.8% and 18.2%) for VC vintage 2012-2016. Verification would require paid access to these benchmarking services.",
+  "key_results": {
+    "sc1_cambridge_confirmed": false,
+    "sc2_preqin_confirmed": false,
+    "claim_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.11.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-08"
+  }
+}

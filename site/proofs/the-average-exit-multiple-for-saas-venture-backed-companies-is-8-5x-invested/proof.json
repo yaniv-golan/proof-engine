@@ -1,0 +1,61 @@
+{
+  "claim_natural": "The average exit multiple for SaaS venture-backed companies is 8.5x invested capital, higher than for consumer internet companies.",
+  "claim_formal": {
+    "subject": "Average exit multiple for SaaS venture-backed companies",
+    "property": "Multiple of invested capital (MOIC) at exit, compared to consumer internet",
+    "operator": "==",
+    "operator_note": "The claim asserts two things: (SC1) the average SaaS exit multiple is 8.5\u00d7 invested capital (MOIC \u2014 not EV/Revenue), and (SC2) this exceeds the consumer internet average. 'Multiple of invested capital' (MOIC or TVPI) measures (total exit value) / (total capital invested), the standard VC return metric. This is distinct from EV/Revenue multiples (valuation relative to annual revenue), which is a separate measure used in M&A pricing. Public SaaS M&A data typically reports EV/Revenue, not MOIC. MOIC data by sector requires access to proprietary VC fund databases (PitchBook, CB Insights premium, Carta). No public source was found providing average MOIC by sector for VC-backed exits.",
+    "threshold": 2,
+    "compound_operator": "AND"
+  },
+  "fact_registry": {
+    "SC1": "SaaS average exit MOIC = 8.5\u00d7 \u2014 no public source found; 8.5\u00d7 EV/Revenue found but is a different metric",
+    "SC2": "SaaS MOIC > consumer internet MOIC \u2014 no public comparable data found"
+  },
+  "sub_claims": {
+    "sc1": {
+      "description": "Average SaaS exit multiple is 8.5\u00d7 invested capital (MOIC)",
+      "n_confirmed": 0,
+      "threshold": 2,
+      "holds": false
+    },
+    "sc2": {
+      "description": "SaaS exit multiple exceeds consumer internet exit multiple",
+      "n_confirmed": 0,
+      "threshold": 2,
+      "holds": false
+    }
+  },
+  "adversarial_checks": [
+    {
+      "description": "Is the 8.5x figure actually EV/Revenue rather than MOIC?",
+      "verification_performed": "Searched for '8.5x SaaS' in financial literature. Found: Aventis Advisors (543 SaaS M&A deals, 2015-2026) reports top-quartile EV/Revenue above 8.1\u00d7 and median EV/Revenue at 4.5\u00d7. SaaS Capital annual private SaaS surveys report EV/NTM Revenue medians ranging 3.3\u00d7-6.4\u00d7 depending on year. The 8.5\u00d7 figure, if it exists, almost certainly refers to EV/Revenue (enterprise value as a multiple of annual revenue), not MOIC (exit value as a multiple of capital invested). These are fundamentally different metrics and not interchangeable.",
+      "breaks_proof": true
+    },
+    {
+      "description": "Is MOIC data by sector publicly available from any source?",
+      "verification_performed": "Searched PitchBook, CB Insights, Carta, NVCA, and academic databases for sector-level MOIC data on VC-backed exits. All primary MOIC databases require paid subscriptions. The Kauffman Foundation and NVCA publish aggregate VC return data but not sector breakdowns by MOIC. No public source provides average MOIC for SaaS specifically.",
+      "breaks_proof": true
+    },
+    {
+      "description": "Are there any academic papers reporting SaaS vs consumer internet MOIC?",
+      "verification_performed": "Searched SSRN, NBER, and Google Scholar for VC exit multiples by sector. Found papers on VC returns generally (Gompers, Kaplan, Metrick) but none that isolate SaaS vs consumer internet MOIC with a 8.5\u00d7 benchmark. The SaaS category as a distinct VC sector is relatively recent (<2015 mainstream) and longitudinal MOIC data is sparse even in academic literature.",
+      "breaks_proof": true
+    }
+  ],
+  "verdict": "UNDETERMINED",
+  "verdict_holds": false,
+  "verdict_reason": "The specific metric in the claim (MOIC \u2014 multiple of invested capital) is not publicly available by sector. Public sources report EV/Revenue multiples for SaaS, which is a different metric. No public source provides average MOIC for SaaS or a SaaS vs consumer internet MOIC comparison.",
+  "key_results": {
+    "n_confirmed_sc1": 0,
+    "n_confirmed_sc2": 0,
+    "any_breaks": true,
+    "claim_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.11.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-08"
+  }
+}

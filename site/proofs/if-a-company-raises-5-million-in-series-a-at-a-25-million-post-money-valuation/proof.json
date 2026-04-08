@@ -1,0 +1,65 @@
+{
+  "claim_natural": "If a company raises $5 million in Series A at a $25 million post-money valuation and exits at $500 million seven years later, the annualized return to the Series A investor exceeds 40% before dilution.",
+  "claim_formal": {
+    "subject": "Annualized return (CAGR) to Series A investor in described scenario",
+    "property": "CAGR over 7-year hold period, before dilution",
+    "operator": ">",
+    "operator_note": "'Before dilution' means the investor retains the full ownership stake from Series A through exit \u2014 no intermediate rounds are modeled. Ownership = invested / post-money = $5M / $25M = 20.0%. Exit proceeds = ownership \u00d7 exit_value = 20% \u00d7 $500M = $100M. MOIC = exit_proceeds / invested = $100M / $5M = 20x. CAGR = MOIC^(1/years) - 1 = 20^(1/7) - 1. Threshold is 0.40 (40%). The claim is TRUE if CAGR > 0.40.",
+    "threshold": 0.4
+  },
+  "fact_registry": {
+    "A1": "ownership \u2014 Series A ownership stake",
+    "A2": "exit_proceeds \u2014 exit proceeds with no dilution",
+    "A3": "moic \u2014 multiple on invested capital",
+    "A4": "cagr_sympy \u2014 annualized return (CAGR) via sympy exact solve"
+  },
+  "computed_values": {
+    "ownership_pct": 20.0,
+    "exit_proceeds_usd": 100000000.0,
+    "moic": 20.0,
+    "cagr_sympy": 0.5341274,
+    "cagr_scipy": 0.5341274,
+    "cagr_pct": 53.4127
+  },
+  "cross_checks": [
+    {
+      "description": "sympy exact symbolic vs scipy brentq NPV=0",
+      "value_a": 0.5341274,
+      "value_b": 0.5341274,
+      "tolerance": 1e-08,
+      "passed": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "description": "Post-money vs pre-money valuation interpretation",
+      "verification_performed": "Confirmed 'post-money valuation' is the standard VC term meaning valuation AFTER the investment closes. Pre-money = $25M - $5M = $20M. Investor ownership = $5M / $25M = 20.0%. No alternative interpretation of 'post-money' exists in standard VC practice.",
+      "breaks_proof": false
+    },
+    {
+      "description": "Effect of dilution if 'before dilution' caveat removed",
+      "verification_performed": "Modeled 3 subsequent rounds at 20% dilution each: ownership \u2192 20% \u00d7 0.80^3 \u2248 10.24%. Exit proceeds \u2192 $51.2M. MOIC \u2192 10.24x. CAGR \u2192 10.24^(1/7) - 1 \u2248 39.5% < 40%. The 'before dilution' qualifier is therefore load-bearing: typical dilution would push the IRR near or below 40%. The claim is mathematically correct for the stated (no-dilution) scenario.",
+      "breaks_proof": false
+    },
+    {
+      "description": "Is CAGR the correct measure for 'annualized return'?",
+      "verification_performed": "CAGR (compound annual growth rate) is the standard measure of annualized return for a single lump-sum investment with a single exit. It is equivalent to IRR when there are only two cash flows (initial investment and final exit). No alternative annualized return formula would change the result for this simple two-cashflow scenario.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "verdict_holds": true,
+  "key_results": {
+    "ownership_pct": 20.0,
+    "moic": 20.0,
+    "cagr_pct": 53.4127,
+    "threshold_pct": 40.0,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.11.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-08"
+  }
+}
