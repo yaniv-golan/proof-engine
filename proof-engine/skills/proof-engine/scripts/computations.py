@@ -61,6 +61,55 @@ Using this avoids eval() and ensures the operator string in CLAIM_FORMAL
 is executed correctly."""
 
 
+# ---------------------------------------------------------------------------
+# Verdict qualifier
+# ---------------------------------------------------------------------------
+
+VALID_BASE_VERDICTS = {
+    "PROVED", "DISPROVED", "PARTIALLY VERIFIED", "SUPPORTED", "UNDETERMINED"
+}
+"""The five base verdict strings. Each may appear as-is in proof output.
+Only PROVED, DISPROVED, and SUPPORTED can have the '(with unverified citations)'
+suffix appended."""
+
+QUALIFIABLE_VERDICTS = {"PROVED", "DISPROVED", "SUPPORTED"}
+"""Verdicts that accept the '(with unverified citations)' suffix.
+PARTIALLY VERIFIED and UNDETERMINED already signal incompleteness."""
+
+
+def apply_verdict_qualifier(base_verdict: str, any_unverified: bool) -> str:
+    """Apply '(with unverified citations)' only to verdicts that support it.
+
+    PARTIALLY VERIFIED and UNDETERMINED never get this suffix — those
+    verdicts already signal incompleteness. Validates the base verdict
+    string against the taxonomy before applying.
+
+    Args:
+        base_verdict: One of VALID_BASE_VERDICTS (without suffix).
+        any_unverified: Whether any citation has status != "verified".
+
+    Returns:
+        The final verdict string (with or without suffix).
+
+    Raises:
+        ValueError: If base_verdict is not recognized.
+
+    Example:
+        >>> apply_verdict_qualifier("PROVED", True)
+        'PROVED (with unverified citations)'
+        >>> apply_verdict_qualifier("PARTIALLY VERIFIED", True)
+        'PARTIALLY VERIFIED'
+    """
+    if base_verdict not in VALID_BASE_VERDICTS:
+        raise ValueError(
+            f"Invalid base verdict: {base_verdict!r}. "
+            f"Must be one of: {sorted(VALID_BASE_VERDICTS)}"
+        )
+    if any_unverified and base_verdict in QUALIFIABLE_VERDICTS:
+        return f"{base_verdict} (with unverified citations)"
+    return base_verdict
+
+
 def compare(value, op_str: str, threshold, label=None) -> bool:
     """Compare a value against a threshold using a string operator.
 
@@ -152,6 +201,10 @@ def compute_percentage_change(old_value, new_value, label=None, mode="increase")
         mode: "increase" (default) computes (new - old) / old * 100.
               "decline" computes (1 - old / new) * 100 — e.g., purchasing
               power decline from CPI values.
+
+    WARNING: mode="decline" is for purchasing-power decline only
+    (denominator is the new value). For standard year-over-year decline
+    where new < old, use mode="increase" — the result will be negative.
 
     Returns:
         float — percentage. Always positive for "decline" mode when new > old.
