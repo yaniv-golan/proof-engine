@@ -1360,3 +1360,208 @@ FACT_REGISTRY = {"B1": {"key": "source_a", "type": "empirical"}}
     warning_texts = [w[0] if isinstance(w, tuple) else w for w in v.warnings]
     assert any("ellipsis" in w.lower() for w in warning_texts), \
         "validate() should include quote accuracy check — ellipsis not detected"
+
+
+# ---------------------------------------------------------------------------
+# Part A: check_verdict_validity()
+# ---------------------------------------------------------------------------
+
+def _validate_verdict(source_code: str) -> ProofValidator:
+    """Write source to temp file, run verdict validity check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_verdict_validity()
+    os.unlink(f.name)
+    return v
+
+
+VERDICT_VALID_BASE = '''
+base_verdict = "PROVED"
+verdict = apply_verdict_qualifier(base_verdict, any_unverified)
+'''
+
+VERDICT_VALID_QUALIFIED = '''
+verdict = "PROVED (with unverified citations)"
+'''
+
+VERDICT_INVALID_PARTIALLY_QUALIFIED = '''
+verdict = "PARTIALLY VERIFIED (with unverified citations)"
+'''
+
+VERDICT_PLUS_EQUALS_ANTIPATTERN = '''
+verdict = "SUPPORTED"
+if any_unverified:
+    verdict += " (with unverified citations)"
+'''
+
+VERDICT_VALID_IN_COMMENT = '''
+# verdict = "PARTIALLY VERIFIED (with unverified citations)"
+verdict = "UNDETERMINED"
+'''
+
+
+def test_verdict_validity_valid_base():
+    v = _validate_verdict(VERDICT_VALID_BASE)
+    assert len(v.issues) == 0
+
+
+def test_verdict_validity_valid_qualified():
+    v = _validate_verdict(VERDICT_VALID_QUALIFIED)
+    assert len(v.issues) == 0
+
+
+def test_verdict_validity_invalid_partially_qualified():
+    v = _validate_verdict(VERDICT_INVALID_PARTIALLY_QUALIFIED)
+    assert len(v.issues) > 0
+    assert "PARTIALLY VERIFIED (with unverified citations)" in v.issues[0][0]
+
+
+def test_verdict_validity_plus_equals_flagged():
+    v = _validate_verdict(VERDICT_PLUS_EQUALS_ANTIPATTERN)
+    assert len(v.issues) > 0
+    assert "+=" in v.issues[0][0] or "apply_verdict_qualifier" in v.issues[0][0]
+
+
+def test_verdict_validity_comment_ignored():
+    v = _validate_verdict(VERDICT_VALID_IN_COMMENT)
+    assert len(v.issues) == 0
+
+
+# ---------------------------------------------------------------------------
+# Part B: check_verdict_branches() — apply_verdict_qualifier pattern
+# ---------------------------------------------------------------------------
+
+VERDICT_VIA_APPLY_QUALIFIER = '''
+if __name__ == "__main__":
+    base_verdict = "PROVED"
+    verdict = apply_verdict_qualifier(base_verdict, any_unverified)
+'''
+
+
+def _validate_verdict_branches(source_code: str) -> ProofValidator:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_verdict_branches()
+    os.unlink(f.name)
+    return v
+
+
+def test_verdict_branches_apply_qualifier_passes():
+    v = _validate_verdict_branches(VERDICT_VIA_APPLY_QUALIFIER)
+    assert len(v.issues) == 0
+    assert any("apply_verdict_qualifier" in msg for msg in v.passed)
+
+
+# ---------------------------------------------------------------------------
+# Part C: check_fact_registry_format()
+# ---------------------------------------------------------------------------
+
+def _validate_fact_registry_format(source_code: str) -> ProofValidator:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_fact_registry_format()
+    os.unlink(f.name)
+    return v
+
+
+FACT_REGISTRY_DICT_ENTRIES = '''
+FACT_REGISTRY = {
+    "B1": {"key": "source_a", "label": "Source A"},
+    "A1": {"label": "computed", "method": None, "result": None},
+}
+'''
+
+FACT_REGISTRY_STRING_B_ENTRY = '''
+FACT_REGISTRY = {
+    "B1": "source_a label",
+}
+'''
+
+FACT_REGISTRY_STRING_A_ENTRY = '''
+FACT_REGISTRY = {
+    "A1": "computed label",
+}
+'''
+
+FACT_REGISTRY_STRING_SC_ENTRY = '''
+FACT_REGISTRY = {
+    "SC1": "sub-claim description",
+}
+'''
+
+
+def test_fact_registry_dict_entries_pass():
+    v = _validate_fact_registry_format(FACT_REGISTRY_DICT_ENTRIES)
+    assert len(v.issues) == 0
+
+
+def test_fact_registry_string_b_entry_fails():
+    v = _validate_fact_registry_format(FACT_REGISTRY_STRING_B_ENTRY)
+    assert len(v.issues) > 0
+    assert "B1" in v.issues[0][0]
+    assert "key" in v.issues[0][0]
+
+
+def test_fact_registry_string_a_entry_fails():
+    v = _validate_fact_registry_format(FACT_REGISTRY_STRING_A_ENTRY)
+    assert len(v.issues) > 0
+    assert "A1" in v.issues[0][0]
+    assert "method" in v.issues[0][0]
+
+
+def test_fact_registry_string_sc_entry_fails():
+    v = _validate_fact_registry_format(FACT_REGISTRY_STRING_SC_ENTRY)
+    assert len(v.issues) > 0
+    assert "SC1" in v.issues[0][0]
+    assert "label" in v.issues[0][0]
+
+
+# ---------------------------------------------------------------------------
+# Part D: check_claim_natural_key()
+# ---------------------------------------------------------------------------
+
+def _validate_claim_natural(source_code: str) -> ProofValidator:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_claim_natural_key()
+    os.unlink(f.name)
+    return v
+
+
+SUMMARY_WITH_CLAIM_NATURAL = '''
+print("=== PROOF SUMMARY (JSON) ===")
+summary = {"claim_natural": CLAIM_NATURAL, "claim_formal": CLAIM_FORMAL}
+'''
+
+SUMMARY_WITH_BARE_CLAIM = '''
+print("=== PROOF SUMMARY (JSON) ===")
+summary = {"claim": CLAIM_NATURAL, "claim_formal": CLAIM_FORMAL}
+'''
+
+SUMMARY_NO_MARKER = '''
+summary = {"claim": CLAIM_NATURAL}
+'''
+
+
+def test_claim_natural_correct_passes():
+    v = _validate_claim_natural(SUMMARY_WITH_CLAIM_NATURAL)
+    assert len(v.issues) == 0
+
+
+def test_bare_claim_key_fails():
+    v = _validate_claim_natural(SUMMARY_WITH_BARE_CLAIM)
+    assert len(v.issues) > 0
+    assert "claim_natural" in v.issues[0][0]
+
+
+def test_no_summary_marker_skips():
+    v = _validate_claim_natural(SUMMARY_NO_MARKER)
+    assert len(v.issues) == 0  # skipped, no error

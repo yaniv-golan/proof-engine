@@ -20,6 +20,15 @@ except ImportError:
     from ast_helpers import extract_script_imports, find_call_sites, extract_dict_keys
 
 
+VALID_VERDICTS = {
+    "PROVED", "PROVED (with unverified citations)",
+    "DISPROVED", "DISPROVED (with unverified citations)",
+    "PARTIALLY VERIFIED",
+    "SUPPORTED", "SUPPORTED (with unverified citations)",
+    "UNDETERMINED",
+}
+
+
 class ProofValidator:
     """Static analyzer for proof-engine proof scripts."""
 
@@ -828,6 +837,17 @@ class ProofValidator:
             if re.search(r'\bverdict\s*=\s*["\']', line):
                 verdict_lines.append((i, line))
 
+        # Refactored pattern: base_verdict strings + apply_verdict_qualifier()
+        has_apply_qualifier = bool(re.search(
+            r'\bverdict\s*=\s*apply_verdict_qualifier\s*\(', self.source
+        ))
+        if has_apply_qualifier and not verdict_lines:
+            self.passed.append(
+                "Verdict: uses apply_verdict_qualifier() — verdict is taxonomy-validated"
+            )
+            return
+
+        # existing guard: proofs with neither apply_verdict_qualifier nor verdict literals
         if not verdict_lines:
             return
 
@@ -974,6 +994,107 @@ class ProofValidator:
                     [f"  '{quote[:60]}...'"],
                 ))
 
+    def check_verdict_validity(self):
+        """Check that all verdict string literals are valid taxonomy entries.
+
+        Also flags the verdict += antipattern.
+        """
+        verdict_assign_re = re.compile(
+            r'\b(?:verdict|base_verdict|VERDICT)\s*=\s*["\']([^"\']+)["\']'
+        )
+        plus_equals_re = re.compile(
+            r'\b(?:verdict|VERDICT)\s*\+='
+        )
+        found_issues = False
+        for i, line in enumerate(self.lines, 1):
+            stripped = line.strip()
+            if stripped.startswith("#"):
+                continue
+            # Check for += antipattern
+            if plus_equals_re.search(line):
+                self.issues.append((
+                    f"Verdict: verdict += on line {i} — do not append qualifiers manually. "
+                    "Import and use apply_verdict_qualifier(base, any_unverified) "
+                    "from scripts.computations.",
+                    [],
+                ))
+                found_issues = True
+            # Check string literals
+            m = verdict_assign_re.search(line)
+            if m:
+                verdict_str = m.group(1)
+                if verdict_str not in VALID_VERDICTS:
+                    self.issues.append((
+                        f"Verdict: '{verdict_str}' (line {i}) is not a valid verdict. "
+                        f"Valid: {sorted(VALID_VERDICTS)}",
+                        [],
+                    ))
+                    found_issues = True
+        if not found_issues:
+            self.passed.append("Verdict: all verdict string literals are valid taxonomy entries")
+
+    def check_fact_registry_format(self):
+        """Check that FACT_REGISTRY entries are dicts, not plain strings."""
+        # Find FACT_REGISTRY block using brace-depth walking
+        start_match = re.search(r'FACT_REGISTRY\s*=\s*\{', self.source)
+        if not start_match:
+            return  # check_fact_registry() already flags missing registry
+
+        block_start = start_match.end()
+        depth = 1
+        pos = block_start
+        while pos < len(self.source) and depth > 0:
+            ch = self.source[pos]
+            if ch == '{':
+                depth += 1
+            elif ch == '}':
+                depth -= 1
+            pos += 1
+        registry_block = self.source[start_match.start():pos]
+
+        # Scan for string-valued entries: "ID": "string"
+        entry_re = re.compile(r'["\']([A-Z]+\d+[a-z]?)["\']:\s*["\']')
+        found_issues = False
+        for m in entry_re.finditer(registry_block):
+            # Skip matches inside comments
+            line_start = registry_block.rfind('\n', 0, m.start()) + 1
+            line_text = registry_block[line_start:m.start()].strip()
+            if line_text.startswith('#'):
+                continue
+            fid = m.group(1)
+            found_issues = True
+            if fid.startswith("SC"):
+                expected = "{'label': '...'}"
+            elif fid.startswith("A"):
+                expected = "{'label': '...', 'method': None, 'result': None}"
+            else:
+                expected = "{'key': '...', 'label': '...'}"
+            self.issues.append((
+                f"FACT_REGISTRY['{fid}'] is a plain string. Expected: {expected}",
+                [],
+            ))
+        if not found_issues:
+            self.passed.append("Contract: FACT_REGISTRY entries are dicts (not strings)")
+
+    def check_claim_natural_key(self):
+        """Check that JSON summary uses 'claim_natural', not bare 'claim'."""
+        # Scope to after the PROOF SUMMARY marker
+        marker_idx = self.source.find("=== PROOF SUMMARY")
+        if marker_idx == -1:
+            return  # check_json_summary() already flags this
+
+        summary_block = self.source[marker_idx:]
+        # Negative lookahead: "claim" not followed by _formal or _natural
+        bare_claim_re = re.compile(r'"claim"(?!_formal|_natural)\s*:')
+        if bare_claim_re.search(summary_block):
+            self.issues.append((
+                'JSON summary uses "claim" key — should be "claim_natural". '
+                'The publish toolchain reads proof_data.get("claim_natural").',
+                [],
+            ))
+        else:
+            self.passed.append('Contract: JSON summary uses "claim_natural" (not bare "claim")')
+
     # ------------------------------------------------------------------
     # Run all checks
     # ------------------------------------------------------------------
@@ -1004,6 +1125,9 @@ class ProofValidator:
         self.check_compound_operator()
         self.check_coi_flags_presence()
         self.check_quote_accuracy()
+        self.check_verdict_validity()
+        self.check_fact_registry_format()
+        self.check_claim_natural_key()
 
         # Print report
         print(f"Validating: {self.filename}")
