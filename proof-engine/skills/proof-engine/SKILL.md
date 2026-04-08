@@ -167,6 +167,8 @@ Guiding questions:
 6. **Read the actual paper, not just its metadata** — fetch and read the PDF (or at minimum the full-text HTML). Abstracts omit methodology caveats, appendix rebuttals, and statistical details that are often decisive. If the paper has multiple arXiv versions, read the latest version and note substantive changes between versions. Use PyMuPDF or pdfplumber for PDF extraction.
 7. **Check the citation network** — search for "paper title" + "cited by" or check Google Scholar / Semantic Scholar for papers that cite it. Look specifically for replications, critiques, and meta-analyses that reference the original work.
 
+**Search for real-world demonstrations, not just benchmarks.** After finding academic benchmark sources, search separately for practical applications where the claimed mechanism has been demonstrated in the wild — production systems, notable achievements, or high-profile case studies. These often live in different communities and vocabularies than the academic literature, and can provide qualitatively stronger evidence. Example searches: "[mechanism] real-world success," "[mechanism] breakthrough application," "[domain] solved using [approach]." A benchmark paper shows something *can* work under controlled conditions; a real-world demonstration shows it *does* work. The strongest proofs combine both.
+
 **If web search is unavailable** in your environment, note this limitation in the proof audit under adversarial checks and flag that sources may not reflect the latest data.
 
 Find at least two independent sources (Rule 6). For math claims, plan two independent computation approaches.
