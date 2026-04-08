@@ -58,9 +58,35 @@ empirical_facts = {
         "source_name": "Encyclopaedia Britannica",
     },
     "ilsf": {
-        "quote": "eating before swimming does not increase the risk of drowning",
+        "quote": "There is no evidence that eating before swimming increases risk for drowning",
         "url": "https://www.ilsf.org/wp-content/uploads/2018/11/MPS-18-2014-Eating-before-Swimming.pdf",
         "source_name": "International Life Saving Federation (ILSF)",
+        "snapshot": (
+            "MEDICAL POSITION STATEMENT - MPS 18 EATING BEFORE SWIMMING "
+            "BACKGROUND There is a longstanding advice that one should wait after eating "
+            "before swimming. Often an hour of wait is recommended. This review is conducted "
+            "to evaluate the evidence that eating is a risk factor for drowning and that "
+            "waiting to swim after eating will decrease this risk. "
+            "Question Is there evidence that persons who have eaten recently have increased "
+            "risk (over that of the general population) to participate in bathing, recreation, "
+            "instruction and competition on and in-water activity? "
+            "STATEMENT There is no evidence that eating before swimming increases risk for "
+            "drowning. While eating has been associated with nausea, vomiting, and abdominal "
+            "pain, the causal relationship between these phenomena and drowning risk has not "
+            "been reported nor well studied. Therefore, recommendations on amounts, timing, "
+            "and food type when eating prior to swimming or water activities cannot be based "
+            "on scientific evidence. "
+            "SUMMARY There is little published scientific literature or even general "
+            "information on the effects of eating before swimming. The two swim studies, "
+            "both conducted in the 1960's, showed no effect on swimming performance and "
+            "minimal side effects at several different time intervals after a meal. No "
+            "reported cases of eating before swimming causing or contributing to fatal or "
+            "nonfatal drowning are reported in any of the literature searched. "
+            "No research, major medical or water safety organizations make any recommendations "
+            "to wait before swimming after eating. "
+            "RECOMMENDATIONS Food intake restrictions prior to swimming are unfounded. "
+            "Class II Recommendation"
+        ),
     },
 }
 
