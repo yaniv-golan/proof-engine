@@ -1241,3 +1241,122 @@ def test_compound_without_operator_warns():
     v = _validate_compound_operator(COMPOUND_WITHOUT_OPERATOR)
     assert len(v.warnings) == 1
     assert "compound_operator" in v.warnings[0][0]
+
+
+# ---------------------------------------------------------------------------
+# check_quote_accuracy tests (Task 6)
+# ---------------------------------------------------------------------------
+
+def test_validator_warns_on_ellipsis_in_quote():
+    """Quotes with ellipsis suggest spliced/omitted text and should warn."""
+    source = '''
+EMPIRICAL_FACTS = {
+    "source_a": {
+        "url": "https://example.com",
+        "quote": "The study found significant results... across all conditions",
+        "source_name": "Test",
+    }
+}
+'''
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        f.write(source)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_quote_accuracy()
+    os.unlink(f.name)
+    warning_texts = [w[0] if isinstance(w, tuple) else w for w in v.warnings]
+    assert any("ellipsis" in w.lower() for w in warning_texts)
+
+
+def test_validator_no_warning_on_clean_quote():
+    """A normal verbatim quote should produce no warnings."""
+    source = '''
+EMPIRICAL_FACTS = {
+    "source_a": {
+        "url": "https://example.com",
+        "quote": "Sixteen participants underwent brain imaging in the longitudinal study",
+        "source_name": "Test",
+    }
+}
+'''
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        f.write(source)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_quote_accuracy()
+    os.unlink(f.name)
+    assert len(v.warnings) == 0
+
+
+def test_validator_handles_multiline_quotes_with_ellipsis():
+    """Multiline triple-quoted quotes with ellipsis should be parsed and warned."""
+    source = '''
+EMPIRICAL_FACTS = {
+    "source_a": {
+        "url": "https://example.com",
+        "quote": """The first phase of the experiment showed
+promising results... but the second phase diverged""",
+        "source_name": "Test",
+    }
+}
+'''
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        f.write(source)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_quote_accuracy()
+    os.unlink(f.name)
+    warning_texts = [w[0] if isinstance(w, tuple) else w for w in v.warnings]
+    assert any("ellipsis" in w.lower() for w in warning_texts)
+
+
+def test_validator_detects_ellipsis_in_parenthesized_strings():
+    """Parenthesized adjacent string literals — common in this repo — should be parsed."""
+    source = '''
+EMPIRICAL_FACTS = {
+    "source_a": {
+        "url": "https://example.com",
+        "quote": (
+            "there was little evidence for a superior... "
+            "treatment intervention"
+        ),
+        "source_name": "Test",
+    }
+}
+'''
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        f.write(source)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_quote_accuracy()
+    os.unlink(f.name)
+    warning_texts = [w[0] if isinstance(w, tuple) else w for w in v.warnings]
+    assert any("ellipsis" in w.lower() for w in warning_texts)
+
+
+def test_validate_end_to_end_includes_quote_accuracy():
+    """validate() should run check_quote_accuracy — ellipsis warning appears in full validation."""
+    source = '''
+import sys
+sys.path.insert(0, "proof-engine/skills/proof-engine")
+from scripts.verify_citations import verify_all_citations
+CLAIM = "test"
+CLAIM_FORMAL = {"claim_raw": "test", "claim_natural": "test"}
+EMPIRICAL_FACTS = {
+    "source_a": {
+        "url": "https://example.com",
+        "quote": "The results were significant... across all conditions tested",
+        "source_name": "Test Source",
+    }
+}
+FACT_REGISTRY = {"B1": {"key": "source_a", "type": "empirical"}}
+'''
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        f.write(source)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.validate()
+    os.unlink(f.name)
+    warning_texts = [w[0] if isinstance(w, tuple) else w for w in v.warnings]
+    assert any("ellipsis" in w.lower() for w in warning_texts), \
+        "validate() should include quote accuracy check — ellipsis not detected"
