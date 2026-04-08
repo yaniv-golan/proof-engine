@@ -20,10 +20,35 @@ Read this when facing fetch failures, paywalled sources, or sandboxed environmen
 - `partial` — only a fragment matched (degraded verification)
 - `not_found` — page fetched but quote not there (wrong quote or URL)
 - `fetch_failed` — could not obtain page text by any method
+- `github_raw` — live content fetched from raw.githubusercontent.com (GitHub repo README)
 
 ## PDF Citations
 
-When a URL returns a PDF, `verify_citation()` extracts text using `pdfplumber` or `PyPDF2` (optional dependencies). Install with `pip install pdfplumber` for PDF support.
+When a source is a PDF (common for academic papers, government reports, and policy documents):
+
+**During proof creation (Step 2, LLM available):**
+1. Download the PDF via Python `requests.get()` or use the environment's file tools
+2. Read the PDF content — Claude Code's Read tool natively reads PDFs; other environments can use PyMuPDF (`fitz`) or `pdfplumber`
+3. Find the verbatim quote in the PDF text and copy it exactly into the `quote` field
+4. **Include the full PDF text as `snapshot`** in `empirical_facts` — this ensures re-run verification works without any PDF library
+
+**At re-run time (no LLM):**
+- If a `snapshot` is present, `verify_all_citations()` uses it directly (no PDF library needed)
+- If no snapshot is present and the URL returns a PDF, `fetch.py` attempts extraction via `pdfplumber` or `PyPDF2` (optional dependencies: `pip install pdfplumber`)
+- If no snapshot and no PDF library → `fetch_failed`
+
+**Best practice:** Always include a `snapshot` for PDF citations. This makes the proof self-contained and reproducible regardless of the runtime environment.
+
+## arXiv and Academic Papers
+
+For arXiv papers, prefer `ar5iv.labs.arxiv.org/html/PAPER_ID` over `arxiv.org/abs/PAPER_ID`:
+- **ar5iv** serves the full paper as HTML — all sections, tables, and figures are verifiable
+- **arxiv.org/abs/** is an abstract-only page with limited verifiable text
+- **arxiv.org/pdf/** returns a PDF — usable with snapshot workflow but ar5iv HTML is simpler
+
+Example: for paper 2410.05229, cite `https://ar5iv.labs.arxiv.org/html/2410.05229v1` instead of `https://arxiv.org/abs/2410.05229`. The ar5iv version contains full paper text that `verify_all_citations()` can match against.
+
+Note: ar5iv renders math via MathML, which `normalize_text()` handles (step 1.7). However, MathML rendering may insert spaces around operators (`Ω m = 0.315`) — the math-spacing normalization (step 3a/3b) handles this.
 
 ## Handling Paywalled Sources
 
@@ -77,11 +102,9 @@ WebFetch and WebSearch return processed summaries, not raw page text. Text from 
 1. Use WebFetch/WebSearch during Step 2 to identify relevant sources and understand their content.
 2. Note the key finding and a distinctive keyword or phrase.
 3. Before writing `empirical_facts`, obtain the actual page text via one of:
-   - (a) Python `requests.get()` in proof.py (this is what `verify_all_citations` will use anyway)
+   - (a) Python `requests.get()` in a scratch cell — search the response for your key phrase, then copy the exact surrounding sentence as your `quote`
    - (b) Browser fetch during Step 2, embedded as `snapshot`
    - (c) Wayback Machine archive
-4. Extract the verbatim sentence from the raw page text and use it as the `quote` field.
-
-Do NOT re-fetch via WebFetch expecting verbatim text — WebFetch always returns summaries regardless of how you prompt it.
-
-If citation verification returns `not_found` or `partial` on a source you know contains the finding, suspect paraphrasing. Obtain the raw page text and update the quote before finalizing the proof.
+   - (d) For PDFs: Claude Code's Read tool, PyMuPDF, or pdfplumber — save full text as `snapshot`
+4. **Copy-paste the exact sentence** from the raw page text into the `quote` field. Do NOT type it from memory or rephrase it. The quote must be a substring of the page text that `verify_all_citations()` will later fetch.
+5. Run `verify_citation(url, quote, fact_id)` immediately to confirm the quote verifies. If it returns `partial` or `not_found`, check `closest_passage` in the result — it shows you what the page actually says. You likely paraphrased — go back to step 3.

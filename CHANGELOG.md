@@ -8,6 +8,24 @@ All notable changes to this project will be documented in this file.
 
 - **Section matcher ignoring parenthetical suffixes** — `validate_required_sections` now strips suffixes like `(Rule 5)` before matching, so audit headings like `## Adversarial Checks (Rule 5)` correctly match the expected section name `Adversarial Checks`
 
+## [1.11.0] - 2026-04-08
+
+### Added
+
+- **Inline LaTeX `$...$` stripping** in `normalize_text()` — arXiv abstract pages with raw LaTeX like `$\Lambda$CDM` and `$H_0 = 67.4\pm 0.5$` now normalize correctly. Three-pass regex handles complex LaTeX, single-letter variables, and unadorned multi-letter tokens
+- **Scoped Greek-to-ASCII transliteration** — Greek letters from LaTeX output (Λ→L, Ω→O, etc.) are transliterated for matching, while non-LaTeX Greek (μm, ρ) is preserved to avoid false positives
+- **Math operator spacing collapse** — ar5iv MathML rendering produces `Ω m = 0.315 ± 0.007` with spaces; new steps 3a/3b collapse Greek-Latin spacing and operator spacing
+- **Closest-passage suggestion engine** — `_find_closest_passage()` uses Jaccard word-set similarity to show a diagnostic hint when quotes fail verification. Ephemeral (console output only, not persisted to proof.json)
+- **GitHub raw README fallback** — bare `github.com/owner/repo` URLs that return a JS-rendered React shell now fall back to `raw.githubusercontent.com` with multiple README filename candidates. Reports `fetch_mode='github_raw'`
+- **Ellipsis detection in `validate_proof.py`** — AST-based quote extraction warns when quotes contain `...` or `…`, a strong signal of spliced non-adjacent text
+- **Real-world demonstration search directive** — Step 2 now prompts searching for practical applications of the claimed mechanism (not just benchmarks), after field testing revealed this gap
+
+### Changed
+
+- **Verbatim quoting enforcement** — SKILL.md, hardening-rules.md, and environment-and-sources.md now explicitly prohibit paraphrased quotes with bad/good examples, a Quote Harvesting gate in Step 2, a pre-flight citation check in Step 3, and a Citation Recovery Loop as Step 5.5
+- **PDF citation guidance** — rewritten to recommend snapshot workflow using Claude Code's native PDF reading; arXiv section added recommending ar5iv HTML over arxiv.org/abs
+- **Self-critique checklist** — added verbatim quote verification and PDF snapshot checks
+
 ## [1.10.0] - 2026-04-07
 
 ### Added

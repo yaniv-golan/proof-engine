@@ -675,6 +675,102 @@ def test_normalize_mathml_without_alttext_preserves_content():
 
 
 # ---------------------------------------------------------------------------
+# Inline LaTeX $...$ handling (arXiv abstract pages)
+# ---------------------------------------------------------------------------
+
+
+def test_normalize_strips_inline_latex_simple():
+    """Inline LaTeX $\\Lambda$CDM should normalize to match ASCII 'lcdm'."""
+    text = 'the base-$\\Lambda$CDM cosmology'
+    result = vc_module.normalize_text(text)
+    # \Lambda -> Λ -> λ -> l (Greek-to-ASCII), so $\Lambda$CDM -> lcdm
+    assert "lcdm" in result
+    assert "$" not in result
+
+
+def test_normalize_preserves_non_latex_greek():
+    """Greek letters NOT from inline LaTeX should be preserved (scoped transliteration)."""
+    # Plain Greek text (e.g., from MathML alttext or direct HTML) is NOT transliterated.
+    # This prevents false matches like μm -> mm.
+    text = 'Ωm = 0.315 and μm wavelength'
+    result = vc_module.normalize_text(text)
+    # Greek letters survive lowercasing but are NOT converted to ASCII
+    assert "\u03c9" in result or "\u03a9" in result.upper()  # ω preserved
+    assert "\u03bc" in result  # μ preserved (NOT converted to 'm')
+
+
+def test_normalize_inline_latex_greek_is_transliterated():
+    """Greek from inline LaTeX IS transliterated to ASCII."""
+    text = 'the $\\Lambda$CDM model and $\\Omega_m$'
+    result = vc_module.normalize_text(text)
+    assert "lcdm" in result  # Λ from LaTeX -> L -> l
+    assert "$" not in result
+
+
+def test_normalize_strips_inline_latex_with_subscript():
+    """Inline LaTeX $H_0$ should become H0."""
+    text = 'the Hubble constant $H_0 = (67.4\\pm 0.5)$ km/s/Mpc'
+    result = vc_module.normalize_text(text)
+    assert "h0" in result
+    assert "67.4" in result
+    assert "$" not in result
+
+
+def test_normalize_strips_inline_latex_pm():
+    """Inline LaTeX \\pm should become ± (then normalized to +-)."""
+    text = 'value is $73.04\\pm 1.04$ km/s/Mpc'
+    result = vc_module.normalize_text(text)
+    assert "73.04" in result
+    assert "1.04" in result
+    assert "$" not in result
+
+
+def test_normalize_inline_latex_preserves_surrounding_text():
+    """Text around inline LaTeX should not be eaten."""
+    text = 'Assuming the base-$\\Lambda$CDM cosmology, the inferred'
+    result = vc_module.normalize_text(text)
+    assert "assuming" in result
+    assert "inferred" in result
+    assert "cosmology" in result
+    assert "lcdm" in result  # Greek-to-ASCII applied
+
+
+def test_normalize_strips_simple_inline_latex_variables():
+    """Simple inline LaTeX like $x$, $N$, $z$ should have $ stripped."""
+    text = 'for all values of $x$ and $N$ at redshift $z$'
+    result = vc_module.normalize_text(text)
+    assert "$" not in result
+    assert "x" in result
+    assert "n" in result  # lowercased
+    assert "z" in result
+
+
+def test_normalize_strips_inline_latex_multi_letter_token():
+    """Unadorned multi-letter tokens like $LCDM$, $pi$ should have $ stripped."""
+    text = 'the $LCDM$ model predicts $pi$ decay'
+    result = vc_module.normalize_text(text)
+    assert "$" not in result
+    assert "lcdm" in result
+    assert "pi" in result
+
+
+def test_normalize_inline_latex_does_not_affect_dollar_amounts():
+    """Bare dollar signs in financial context ($100) should not trigger LaTeX stripping."""
+    text = 'the cost was $100 and rose to $200'
+    result = vc_module.normalize_text(text)
+    assert "100" in result
+    assert "200" in result
+
+
+def test_normalize_inline_latex_does_not_affect_dollar_with_decimals():
+    """Dollar amounts with decimals ($2.5) should be preserved."""
+    text = 'revenue of $2.5 million and costs of $1,200'
+    result = vc_module.normalize_text(text)
+    assert "2.5" in result
+    assert "1,200" in result or "1200" in result
+
+
+# ---------------------------------------------------------------------------
 # Integration tests for all three false-negative classes
 # ---------------------------------------------------------------------------
 
@@ -871,3 +967,133 @@ def test_arxiv_mathml_fixture():
     result = vc_module._match_quote(page_html, quote, "test_arxiv_mathml")
     assert result is not None
     assert result["status"] == "verified", f"Expected verified, got {result}"
+
+
+# ---------------------------------------------------------------------------
+# Math operator spacing collapse
+# ---------------------------------------------------------------------------
+
+
+def test_normalize_collapses_greek_latin_spacing():
+    """ar5iv MathML splits 'Ωm' into 'Ω m' — space should be collapsed."""
+    text = 'parameter \u03a9 m'
+    result = vc_module.normalize_text(text)
+    # After lowercase: Ω m → ωm (no space). Greek preserved (not from LaTeX).
+    assert "\u03c9m" in result
+
+
+def test_normalize_collapses_spaces_around_equals():
+    """Spaces around = between numbers/symbols should be collapsed."""
+    text = 'parameter \u03a9m = 0.315'
+    result = vc_module.normalize_text(text)
+    # After lowercase: ωm = 0.315 → ωm=0.315. Greek preserved (not from LaTeX).
+    assert "\u03c9m=0.315" in result
+
+
+def test_normalize_collapses_spaces_around_pm():
+    """Spaces around ± between numbers should be collapsed."""
+    text = '0.315 \u00b1 0.007'
+    result = vc_module.normalize_text(text)
+    assert "0.315\u00b10.007" in result or "0.315+-0.007" in result
+
+
+def test_normalize_preserves_spaces_in_prose():
+    """Spaces around words should NOT be collapsed by math spacing rule."""
+    text = 'the value is approximately equal to 42'
+    result = vc_module.normalize_text(text)
+    assert "is approximately equal to" in result
+
+
+def test_normalize_ar5iv_full_expression():
+    """Full ar5iv-style: Ω m = 0.315 ± 0.007 → ωm=0.315±0.007 (Greek join + operator collapse)."""
+    text = 'matter density parameter \u03a9 m = 0.315 \u00b1 0.007'
+    result = vc_module.normalize_text(text)
+    # Step 3a joins Ω+m, step 3b collapses =. Greek preserved (not from LaTeX).
+    assert "\u03c9m=0.315" in result
+    assert " = " not in result
+
+
+# ---------------------------------------------------------------------------
+# _find_closest_passage
+# ---------------------------------------------------------------------------
+
+
+def test_find_closest_passage_paraphrased_quote():
+    """Page has similar content with different wording -> closest_passage populated."""
+    from scripts.verify_citations import _find_closest_passage
+
+    page_html = (
+        "<html><body><p>Insertion of a single non-operational clause can cause "
+        "average accuracy to collapse by up to 65 percentage points on certain "
+        "models.</p></body></html>"
+    )
+    query = (
+        "Addition of a single irrelevant clause provokes catastrophic "
+        "accuracy drops on certain models"
+    )
+    passage, similarity = _find_closest_passage(page_html, query)
+    assert passage is not None
+    assert similarity >= 0.3
+    assert passage[0].isupper()  # original case preserved
+
+
+def test_find_closest_passage_irrelevant_page():
+    """Page with completely unrelated content -> None."""
+    from scripts.verify_citations import _find_closest_passage
+
+    page_html = "<html><body><p>Today's weather forecast calls for sunny skies and mild temperatures across the region.</p></body></html>"
+    query = "quantum entanglement enables faster-than-light communication between particles"
+    passage, similarity = _find_closest_passage(page_html, query)
+    assert passage is None
+
+
+def test_find_closest_passage_preserves_original_case():
+    """Returned passage must preserve original capitalization and punctuation."""
+    from scripts.verify_citations import _find_closest_passage
+
+    page_html = (
+        "<html><body><p>The PAL Framework (Program-Aided Language Models) "
+        "achieves state-of-the-art accuracy on GSM8K benchmark, surpassing "
+        "chain-of-thought approaches significantly.</p></body></html>"
+    )
+    query = (
+        "PAL achieves best accuracy on GSM8K benchmark surpassing "
+        "chain of thought approaches"
+    )
+    passage, similarity = _find_closest_passage(page_html, query)
+    assert passage is not None
+    assert "PAL" in passage  # original case
+
+
+def test_find_closest_passage_page_shorter_than_quote():
+    """When page has fewer words than the quote, should still work."""
+    from scripts.verify_citations import _find_closest_passage
+
+    page_html = "<html><body><p>Short page.</p></body></html>"
+    query = "this is a much longer quote that has many more words than the page content"
+    passage, similarity = _find_closest_passage(page_html, query)
+    assert passage is None or similarity < 0.3
+
+
+def test_verify_citation_not_found_includes_closest_passage():
+    """verify_citation with wrong quote should include closest_passage suggestion."""
+    from scripts.verify_citations import verify_citation
+    from unittest.mock import patch
+
+    # Page and query share enough vocabulary (~8/25 = 32% Jaccard) to exceed threshold.
+    page_html = (
+        "<html><body><p>Insertion of a single non-operational clause can cause "
+        "average accuracy to collapse by up to 65 percentage points on certain "
+        "models.</p></body></html>"
+    )
+
+    with patch("scripts.verify_citations._fetch_page", return_value=(page_html, "live", None)):
+        result = verify_citation(
+            "https://example.com/page",
+            "Addition of a single irrelevant clause provokes catastrophic accuracy drops on certain models",
+            "test_fact",
+        )
+    assert result["status"] == "not_found"
+    assert "closest_passage" in result
+    assert result["closest_passage"] is not None
+    assert result["closest_similarity"] >= 0.3

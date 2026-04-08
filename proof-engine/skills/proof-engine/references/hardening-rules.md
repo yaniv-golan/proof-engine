@@ -142,6 +142,49 @@ The script uses **two-pass matching**: first exact match on the fully cleaned te
 
 When a quote still fails after automatic normalization, use `diagnose_mismatch()` to identify the specific character differences, then write a custom extraction function using the **two-phase extraction** pattern (see SKILL.md).
 
+**Verbatim quoting requirement:** The `quote` field must be a character-for-character substring of the source page text. A subtler variant of the hallucination problem: the LLM recalls the *gist* of what a source says and writes a plausible-sounding quote that captures the meaning but uses completely different wording. The URL is real, the source is real, but the quote is fabricated. This passes human review but fails machine verification because the exact words don't appear on the page.
+
+Common violations:
+- **Paraphrasing**: "Sixteen participants" when the page says "16 study participants"
+- **Splicing**: Stitching the start of one sentence to the end of another, skipping the middle
+- **Synthesizing**: Combining facts from different paragraphs into one "quote"
+- **Cleaning up**: Removing parenthetical insertions like "(Gold)" that appear in the original
+
+**Bad — quote written from memory (paraphrased):**
+```python
+empirical_facts = {
+    "source_a": {
+        # LLM recalled the gist but used different words
+        "quote": "Addition of a single irrelevant clause provokes catastrophic accuracy drops",
+        "url": "https://arxiv.org/html/2410.05229v1",
+        "source_name": "Mirzadeh et al., GSM-Symbolic (ICLR 2025)",
+    }
+}
+# verify_all_citations() returns not_found — the page uses different wording
+```
+
+**Good — quote copied from fetched page:**
+```python
+import requests
+resp = requests.get("https://arxiv.org/html/2410.05229v1")
+# Search resp.text for the relevant passage, then copy verbatim:
+empirical_facts = {
+    "source_a": {
+        "quote": (
+            "We add seemingly relevant but ultimately inconsequential statements "
+            "to GSM-Symbolic templates. Since these statements carry no operational "
+            "significance, we refer to them as No-Op"
+        ),
+        "url": "https://arxiv.org/html/2410.05229v1",
+        "source_name": "Mirzadeh et al., GSM-Symbolic (ICLR 2025)",
+    }
+}
+```
+
+If the exact text is too long or unwieldy, use a shorter exact substring that still captures the key finding. A 20-word verbatim quote that verifies is better than a 50-word paraphrase that doesn't.
+
+**Pre-verification workflow:** After writing `empirical_facts`, run `verify_all_citations()` immediately. If any citation returns `partial` or `not_found`, use `closest_passage` from the result to locate the actual wording on the page, then copy the visible rendered text. Fix the quote before proceeding.
+
 **Verdict impact**: If any citation can't be verified, the proof verdict downgrades to "PROVED (with unverified citations)".
 
 **How validate_proof.py catches it**: Looks for imports of `verify_citations` / `verify_all_citations`, or presence of `requests.get`.

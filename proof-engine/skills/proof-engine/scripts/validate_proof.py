@@ -909,6 +909,71 @@ class ProofValidator:
         elif has_sub_claims and has_compound_operator:
             self.passed.append("Compound: compound_operator present in CLAIM_FORMAL")
 
+    def _extract_quote_values(self) -> list:
+        """Extract "quote" string values from empirical_facts dicts in the source.
+
+        Uses the AST to reliably handle all Python string literal styles:
+        single-line, triple-quoted, and parenthesized adjacent strings.
+
+        Scoped to dicts that also contain a "url" key — this distinguishes
+        empirical_facts entries from other dicts that might have a "quote" key.
+        f-string values are skipped (can't statically evaluate).
+        """
+        import ast
+        quotes = []
+        try:
+            tree = ast.parse(self.source)
+        except SyntaxError:
+            return quotes  # Unparseable source — other checks will catch this
+
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Dict):
+                continue
+            # Only inspect dicts that look like empirical_facts entries
+            # (must have both "quote" and "url" keys)
+            key_names = set()
+            for key in node.keys:
+                if isinstance(key, ast.Constant) and isinstance(key.value, str):
+                    key_names.add(key.value)
+            if "quote" not in key_names or "url" not in key_names:
+                continue
+            for key, value in zip(node.keys, node.values):
+                if not isinstance(key, ast.Constant) or key.value != "quote":
+                    continue
+                # ast.Constant covers plain strings and auto-concatenated adjacent
+                # literals.  f-strings produce ast.JoinedStr — intentionally skipped
+                # since their runtime value can't be statically determined.
+                if isinstance(value, ast.Constant) and isinstance(value.value, str):
+                    if len(value.value) >= 5:
+                        quotes.append(value.value)
+        return quotes
+
+    def check_quote_accuracy(self):
+        """Warn about quote patterns that suggest non-verbatim quoting.
+
+        Heuristic (warning, not error):
+        - Quotes containing ellipsis ('...' or '\u2026') suggesting omitted/spliced text.
+          This is a strong signal — verbatim quotes should be contiguous substrings.
+
+        Handles common quote styles in this repo:
+        - "quote": "single line"
+        - "quote": \"\"\"triple quoted\"\"\"
+        - "quote": (
+              "parenthesized "
+              "adjacent strings"
+          ),
+        """
+        quotes = self._extract_quote_values()
+
+        for quote in quotes:
+            if '...' in quote or '\u2026' in quote:
+                self.warnings.append((
+                    f"Quote accuracy: quote contains ellipsis — may indicate "
+                    f"omitted text. verify_all_citations() requires the quote "
+                    f"to be a contiguous substring of the page.",
+                    [f"  '{quote[:60]}...'"],
+                ))
+
     # ------------------------------------------------------------------
     # Run all checks
     # ------------------------------------------------------------------
@@ -938,6 +1003,7 @@ class ProofValidator:
         self.check_proof_direction()
         self.check_compound_operator()
         self.check_coi_flags_presence()
+        self.check_quote_accuracy()
 
         # Print report
         print(f"Validating: {self.filename}")

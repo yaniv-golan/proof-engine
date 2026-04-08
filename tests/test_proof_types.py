@@ -134,3 +134,31 @@ def test_cross_check_has_absence_fields():
     expected = {"n_databases_searched", "n_null_verified", "n_reviewed", "databases"}
     missing = expected - cc_fields
     assert not missing, f"CrossCheck missing absence fields: {missing}"
+
+
+def test_closest_passage_not_in_citation_entry():
+    """closest_passage and closest_similarity must NOT leak into CitationEntry."""
+    from scripts.proof_types import CitationEntry
+    # CitationEntry is a TypedDict — its __annotations__ define allowed keys.
+    assert "closest_passage" not in CitationEntry.__annotations__
+    assert "closest_similarity" not in CitationEntry.__annotations__
+
+
+def test_build_citation_detail_excludes_closest_passage():
+    """build_citation_detail must not propagate closest_passage to output."""
+    from scripts.verify_citations import build_citation_detail
+
+    result = {
+        "status": "not_found",
+        "fetch_mode": "live",
+        "message": "Quote NOT found",
+        "closest_passage": "some diagnostic text",
+        "closest_similarity": 0.45,
+    }
+    detail = build_citation_detail(
+        {"B1": {"type": "B", "key": "src_a"}},
+        {"src_a": result},
+        {"src_a": {"source_name": "Test", "url": "https://example.com", "quote": "test quote"}},
+    )
+    assert "closest_passage" not in detail["B1"]
+    assert "closest_similarity" not in detail["B1"]

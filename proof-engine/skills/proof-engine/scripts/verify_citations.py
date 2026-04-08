@@ -64,6 +64,33 @@ except ImportError:
     from latex_text import latex_to_text
 
 
+# Greek-to-ASCII for LaTeX-derived text only.
+# Scoped to inline LaTeX output — NOT applied globally in normalize_text()
+# because scientific text uses Greek letters as distinct symbols (μm ≠ mm).
+_LATEX_GREEK_MULTI = [
+    ('\u0398', 'Th'), ('\u03b8', 'th'),  # Θ/θ -> Th/th
+    ('\u03a0', 'Pi'), ('\u03c0', 'pi'),  # Π/π -> Pi/pi
+    ('\u03a6', 'Ph'), ('\u03c6', 'ph'),  # Φ/φ -> Ph/ph
+    ('\u03a7', 'Ch'), ('\u03c7', 'ch'),  # Χ/χ -> Ch/ch
+    ('\u03a8', 'Ps'), ('\u03c8', 'ps'),  # Ψ/ψ -> Ps/ps
+]
+_LATEX_GREEK_SINGLE = str.maketrans(
+    '\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0399\u039a\u039b'
+    '\u039c\u039d\u039e\u039f\u03a1\u03a3\u03a4\u03a5\u03a9'
+    '\u03b1\u03b2\u03b3\u03b4\u03b5\u03b6\u03b7\u03b9\u03ba\u03bb'
+    '\u03bc\u03bd\u03be\u03bf\u03c1\u03c3\u03c4\u03c5\u03c9',
+    'ABGDEZEIKLMNXORSTUO'
+    'abgdezeiklmnxorstuo',
+)
+
+
+def _transliterate_latex_greek(text: str) -> str:
+    """Convert Greek letters to ASCII equivalents in LaTeX-derived text."""
+    for greek, ascii_eq in _LATEX_GREEK_MULTI:
+        text = text.replace(greek, ascii_eq)
+    return text.translate(_LATEX_GREEK_SINGLE)
+
+
 # Inline HTML tags that should be stripped WITHOUT inserting spaces.
 _INLINE_TAGS_RE = r'(?:span|sup|sub|a|em|strong|b|i|mark|small|code|abbr|cite|dfn|kbd|s|u|var|wbr)'
 
@@ -124,6 +151,135 @@ def _result(status, method=None, coverage_pct=None, fetch_error=None,
     if credibility is not None:
         result["credibility"] = credibility
     return result
+
+
+# ---------------------------------------------------------------------------
+# Light cleaning (for closest-passage original-text output)
+# ---------------------------------------------------------------------------
+
+# Inline tag pattern for _light_clean — compiled once at module level.
+_LIGHT_CLEAN_INLINE_RE = r'(?:span|abbr|cite|code|dfn|em|kbd|mark|small|strong|var|wbr|a|b|i|s|u|sub|sup)(?=[\s>/])'
+
+def _light_clean(html_text: str) -> str:
+    """Strip HTML tags and decode entities, but preserve original case and punctuation.
+
+    This produces text suitable for returning as a closest-passage suggestion —
+    good enough for the author to locate the right passage, though they should
+    still copy the final quote from the rendered page or raw source.
+
+    Mirrors normalize_text()'s inline-tag logic: inline formatting tags
+    (span, em, strong, a, b, i, etc.) are removed WITHOUT inserting spaces,
+    while block-level tags (div, p, li, etc.) are replaced with spaces.
+    This avoids introducing fake word boundaries in the middle of phrases.
+    """
+    # 1. Remove <script> and <style> blocks entirely (contents + tags).
+    #    On JS-rendered pages these contain app boilerplate that would otherwise
+    #    pollute the closest-passage search with irrelevant matches.
+    text = re.sub(r'<script[^>]*>.*?</script>', ' ', html_text,
+                  flags=re.IGNORECASE | re.DOTALL)
+    text = re.sub(r'<style[^>]*>.*?</style>', ' ', text,
+                  flags=re.IGNORECASE | re.DOTALL)
+    # 2. Strip inline formatting tags without inserting spaces (same set as
+    #    normalize_text step 1.6b).
+    text = re.sub(r'</?' + _LIGHT_CLEAN_INLINE_RE + r'[^>]*>', '', text,
+                  flags=re.IGNORECASE)
+    # 3. Replace remaining tags (block-level) with spaces.
+    text = re.sub(r'<[^>]+>', ' ', text)
+    # 4. Decode HTML entities.
+    text = html.unescape(text)
+    # 5. Collapse whitespace.
+    text = ' '.join(text.split())
+    return text
+
+
+def _find_closest_passage(page_text_raw: str, expected_quote: str,
+                          threshold: float = 0.3) -> tuple[str | None, float]:
+    """Find the page passage most similar to the expected quote.
+
+    Operates on two representations: lightly-cleaned text (for output) and
+    normalized text (for scoring). Returns original-case text.
+
+    Args:
+        page_text_raw: Raw HTML page text.
+        expected_quote: The quote to find a match for.
+        threshold: Minimum Jaccard similarity to return a suggestion.
+
+    Returns:
+        (passage, similarity) — passage is original-case text or None,
+        similarity is 0-1 float.
+    """
+    def _word_set(text: str) -> set:
+        """Extract word tokens, stripping punctuation so 'models.' == 'models'.
+
+        Note: this strips ALL non-word non-space chars, so hyphenated terms
+        like 'en-dash' become 'endash' and '1.5' becomes '15'. This is
+        acceptable for Jaccard similarity on natural language — exact numeric
+        matching is handled by normalize_text() in the main verification path.
+        """
+        return set(re.sub(r'[^\w\s]', '', text).split())
+
+    cleaned = _light_clean(page_text_raw)
+    cleaned_words = cleaned.split()
+
+    norm_quote = normalize_text(expected_quote)
+    quote_word_set = _word_set(norm_quote)
+    quote_len = len(quote_word_set)
+
+    if quote_len == 0 or len(cleaned_words) == 0:
+        return None, 0.0
+
+    window_size = len(norm_quote.split())
+    if window_size > len(cleaned_words):
+        # Page shorter than quote — compare whole page but cap output
+        norm_page = normalize_text(cleaned)
+        page_word_set = _word_set(norm_page)
+        union = quote_word_set | page_word_set
+        sim = len(quote_word_set & page_word_set) / len(union) if union else 0.0
+        if sim >= threshold:
+            # Cap to ~500 chars to avoid persisting entire short pages
+            return cleaned[:500], sim
+        return None, 0.0
+
+    # When the page is short (< 3× the query length), sliding windows become
+    # noisy: the query words are scattered across the whole page and no single
+    # window covers them all.  In this regime, compare the full page word-set
+    # against the query and return the full page text as the passage hint.
+    if len(cleaned_words) < window_size * 3:
+        norm_page = normalize_text(cleaned)
+        page_word_set = _word_set(norm_page)
+        union = quote_word_set | page_word_set
+        sim = len(quote_word_set & page_word_set) / len(union) if union else 0.0
+        if sim >= threshold:
+            return cleaned[:500], sim
+        return None, 0.0
+
+    # Pre-normalize the full cleaned text once, then do word-level sliding
+    # on the normalized version. This avoids calling normalize_text() per
+    # window (~500 calls on long pages), which is expensive (15+ regex ops).
+    norm_full = normalize_text(cleaned)
+    norm_words = norm_full.split()
+
+    stride = max(1, window_size // 2)
+    best_passage = None
+    best_sim = 0.0
+
+    for start in range(0, len(cleaned_words) - window_size + 1, stride):
+        # Use pre-normalized words for scoring, original words for output.
+        norm_window_words = norm_words[start:start + window_size]
+        window_word_set = _word_set(' '.join(norm_window_words))
+
+        union = quote_word_set | window_word_set
+        if not union:
+            continue
+        sim = len(quote_word_set & window_word_set) / len(union)
+
+        if sim > best_sim:
+            best_sim = sim
+            best_passage = window_text
+
+    if best_sim >= threshold:
+        return best_passage, best_sim
+    return None, 0.0
 
 
 # ---------------------------------------------------------------------------
@@ -240,6 +396,34 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
         return inner
     text = re.sub(r'<math[^>]*>.*?</math>', _math_to_text, text, flags=re.DOTALL)
 
+    # 1.8. Inline LaTeX stripping — replace $...$ with latex_to_text() output.
+    # arXiv abstract pages contain raw LaTeX like $\Lambda$CDM, $H_0 = 67.4\pm 0.5$.
+    # Also handles simple variable wrapping like $x$, $N$, $z$.
+    # Must NOT match bare dollar signs in financial context ($100, $2.5M).
+    #
+    # Strategy: two-pass approach.
+    # Pass A: Match $...$ containing a LaTeX command marker (backslash, _, ^).
+    #         These are unambiguously LaTeX, not currency.
+    # Pass B: Match $<single-letter>$ (e.g. $x$, $N$, $z$) — single alphabetic
+    #         character between $ signs. Currency never wraps a single letter.
+    # Pass C: Unadorned multi-letter all-alpha tokens (e.g. $pi$, $LCDM$, $CDM$)
+    #         Currency never wraps bare words in $...$.
+    def _inline_latex_to_text(match):
+        return _transliterate_latex_greek(latex_to_text(match.group(1)))
+    # Pass A: content with \, _, or ^ (complex LaTeX)
+    text = re.sub(
+        r'\$([^$]*(?:\\|_|\^)[^$]*)\$',
+        _inline_latex_to_text, text)
+    # Pass B: single alphabetic character (simple variable names)
+    text = re.sub(
+        r'\$([A-Za-z])\$',
+        _inline_latex_to_text, text)
+    # Pass C: unadorned multi-letter all-alpha tokens (e.g. $pi$, $LCDM$, $CDM$)
+    # Negative lookaround for digits prevents matching currency like $USD$50.
+    text = re.sub(
+        r'(?<!\d)\$([A-Za-z]{2,})\$(?!\d)',
+        _inline_latex_to_text, text)
+
     # 1.6b. Strip non-sup/sub inline formatting tags WITHOUT inserting spaces.
     # Uses (?=[\s>]) lookahead after tag name so 's' doesn't match 'sup'/'sub'.
     _NON_SUP_SUB_INLINE_RE = r'(?:span|abbr|cite|code|dfn|em|kbd|mark|small|strong|var|wbr|a|b|i|s|u)(?=[\s>/])'
@@ -290,6 +474,18 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
     text = text.replace('"', "'")
     # 3. Remove spaces before punctuation
     text = re.sub(r'\s+([,.:;!?\)\]])', r'\1', text)
+    # 3a. Collapse spaces between Greek letters and adjacent Latin letters
+    # or digits.  ar5iv MathML rendering can produce "Ω m" instead of "Ωm".
+    # Only applies when a Greek letter is directly adjacent to [a-zA-Z0-9].
+    text = re.sub(
+        r'([\u03b1-\u03c9\u0391-\u03a9])\s+([a-zA-Z0-9])', r'\1\2', text)
+    text = re.sub(
+        r'([a-zA-Z0-9])\s+([\u03b1-\u03c9\u0391-\u03a9])', r'\1\2', text)
+
+    # 3b. Collapse spaces around math operators (=, ±, ×) when between
+    # digits, Greek letters, or decimal points. Handles ar5iv MathML output
+    # where LaTeX rendering inserts spaces: "0.315 ± 0.007".
+    text = re.sub(r'(?<=[\d.\u03b1-\u03c9\u0391-\u03a9a-zA-Z])\s*([=\u00b1\u00d7])\s*(?=[\d.\u03b1-\u03c9\u0391-\u03a9])', r'\1', text)
     # 4. Collapse whitespace
     text = ' '.join(text.split())
     # 4b. Collapse spaces after hyphens in numeric ranges — handles
@@ -482,11 +678,21 @@ def verify_citation(
     if page_text is not None:
         result = _match_quote(page_text, expected_quote, fact_id, fetch_mode=fetch_mode)
         if result is not None:
+            if result["status"] == "partial":
+                passage, sim = _find_closest_passage(page_text, expected_quote)
+                if passage is not None:
+                    result["closest_passage"] = passage
+                    result["closest_similarity"] = sim
             return _with_credibility(result)
-        # Page fetched but quote not found
+        # Page fetched but quote not found — suggest closest passage
         fragment = _extract_fragment(normalize_text(expected_quote), min_words=6)
-        return _with_credibility(_result("not_found", fetch_mode=fetch_mode,
-                        message=f"Quote NOT found for {fact_id}. Searched: '{fragment[:60]}...'"))
+        result = _result("not_found", fetch_mode=fetch_mode,
+                        message=f"Quote NOT found for {fact_id}. Searched: '{fragment[:60]}...'")
+        passage, sim = _find_closest_passage(page_text, expected_quote)
+        if passage is not None:
+            result["closest_passage"] = passage
+            result["closest_similarity"] = sim
+        return _with_credibility(result)
 
     # All fetch methods exhausted
     return _with_credibility(_result("fetch_failed", fetch_error=fetch_error_msg,
@@ -771,6 +977,11 @@ def _print_status(fact_id: str, result: dict):
         print(f"  [✗] {fact_id}{mode_tag}: {msg}{cred_tag}")
     else:  # fetch_failed
         print(f"  [?] {fact_id}{mode_tag}: {msg}{cred_tag}")
+    cp = result.get("closest_passage")
+    if cp:
+        sim_pct = result.get("closest_similarity", 0) * 100
+        print(f"        💡 Hint — closest match ({sim_pct:.0f}% similar): \"{cp[:120]}...\"")
+        print(f"        ⚠️  Do not copy this directly — locate this text on the page and copy the rendered version.")
 
 
 # ---------------------------------------------------------------------------
