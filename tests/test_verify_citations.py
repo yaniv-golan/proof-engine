@@ -57,6 +57,23 @@ def test_build_citation_detail_multi_source():
     assert detail["B1_source_1"]["url"] == "http://b.com"
 
 
+def test_build_citation_detail_string_entry_raises():
+    """FACT_REGISTRY entries must be dicts, not strings."""
+    import pytest
+    from scripts.verify_citations import build_citation_detail
+    bad_registry = {"B1": "some_key"}
+    with pytest.raises(TypeError, match="FACT_REGISTRY\\['B1'\\].*str.*expected dict"):
+        build_citation_detail(bad_registry, {}, {})
+
+
+def test_build_citation_detail_none_key_skips():
+    """Entries with key=None should be skipped, not crash."""
+    from scripts.verify_citations import build_citation_detail
+    registry = {"A1": {"label": "computed fact", "method": None, "result": None, "key": None}}
+    result = build_citation_detail(registry, {}, {})
+    assert result == {}
+
+
 def test_build_citation_detail_multi_source_short_sources_list():
     """Guard: citation_results has more sub-keys than sources list."""
     fact_registry = {"B1": {"type": "B", "key": "src_a"}}

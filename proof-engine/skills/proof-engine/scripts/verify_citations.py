@@ -275,7 +275,7 @@ def _find_closest_passage(page_text_raw: str, expected_quote: str,
 
         if sim > best_sim:
             best_sim = sim
-            best_passage = window_text
+            best_passage = ' '.join(cleaned_words[start:start + window_size])
 
     if best_sim >= threshold:
         return best_passage, best_sim
@@ -905,6 +905,12 @@ def build_citation_detail(fact_registry: dict, citation_results: dict,
     """
     detail = {}
     for fact_id, info in fact_registry.items():
+        if not isinstance(info, dict):
+            raise TypeError(
+                f"FACT_REGISTRY['{fact_id}'] is a {type(info).__name__}, expected dict. "
+                f"Use: {{'key': '...', 'label': '...'}} for B/S-type, "
+                f"or {{'label': '...', 'method': None, 'result': None}} for A-type."
+            )
         key = info.get("key")
         if not key:
             continue
