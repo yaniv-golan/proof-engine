@@ -20,6 +20,7 @@ Read this when facing fetch failures, paywalled sources, or sandboxed environmen
 - `partial` — only a fragment matched (degraded verification)
 - `not_found` — page fetched but quote not there (wrong quote or URL)
 - `fetch_failed` — could not obtain page text by any method
+- `github_raw` — live content fetched from raw.githubusercontent.com (GitHub repo README)
 
 ## PDF Citations
 

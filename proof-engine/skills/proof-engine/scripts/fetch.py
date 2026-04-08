@@ -2,7 +2,7 @@
 fetch.py — HTTP fetching with fallback chain for proof-engine.
 
 Handles: live fetch -> snapshot -> Wayback Machine fallback.
-Also handles PDF text extraction.
+Also handles PDF text extraction and GitHub raw README fallback.
 
 Extracted from verify_citations.py to separate transport from matching logic.
 """
@@ -65,6 +65,45 @@ def try_wayback(url: str, timeout: int = 15) -> str | None:
 
 
 # ---------------------------------------------------------------------------
+# GitHub raw README fallback
+# ---------------------------------------------------------------------------
+
+_GITHUB_REPO_RE = re.compile(r'^https?://github\.com/([^/]+)/([^/]+)/?$')
+
+
+_README_CANDIDATES = ["README.md", "README.rst", "README.txt", "README", "readme.md"]
+
+
+def try_github_raw(url: str, timeout: int = 15) -> str | None:
+    """Try fetching a GitHub repo's raw README. Returns text or None.
+
+    Only applies to bare repo URLs (github.com/owner/repo). URLs with
+    file paths are not rewritten. GitHub renders repo pages via JavaScript,
+    so requests.get() gets a React shell instead of the README content.
+
+    Tries multiple README filenames (README.md, README.rst, README.txt,
+    README, readme.md) since repos vary in naming convention.
+    """
+    if requests is None:
+        return None
+    m = _GITHUB_REPO_RE.match(url)
+    if not m:
+        return None
+    owner, repo = m.group(1), m.group(2)
+    for readme_name in _README_CANDIDATES:
+        raw_url = f"https://raw.githubusercontent.com/{owner}/{repo}/HEAD/{readme_name}"
+        try:
+            resp = requests.get(raw_url, timeout=timeout,
+                                headers={"User-Agent": "proof-engine/1.0"},
+                                allow_redirects=True)
+            resp.raise_for_status()
+            return resp.text
+        except requests.exceptions.RequestException:
+            continue
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Page fetching with fallback chain
 # ---------------------------------------------------------------------------
 
@@ -84,7 +123,7 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
     Returns:
         (page_text, fetch_mode, error_message)
         - page_text: The page text, or None if all methods failed
-        - fetch_mode: "live", "snapshot", "wayback", or "fetch_failed"
+        - fetch_mode: "live", "snapshot", "wayback", "github_raw", or "fetch_failed"
         - error_message: Error description if failed, else None
     """
     # --- 1. Try live fetch ---
@@ -109,7 +148,18 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
                 else:
                     return pdf_text, "live", None
             else:
-                return resp.text, "live", None
+                page_text = resp.text
+                # --- 1.5. GitHub raw README fallback ---
+                # Only try if live fetch returned an empty/JS-shell page (< 500 chars of
+                # visible text after tag stripping) for a bare GitHub repo URL.
+                # This preserves quotes about repo metadata that appears on the rendered
+                # github.com page, falling back to raw README only when the live page
+                # didn't contain useful content.
+                if len(re.sub(r'<[^>]+>', '', page_text).strip()) < 500:
+                    github_text = try_github_raw(url, timeout)
+                    if github_text is not None:
+                        return github_text, "github_raw", None
+                return page_text, "live", None
 
         except requests.exceptions.Timeout:
             fetch_error_msg = f"Timeout after {timeout}s on {url}"
@@ -121,6 +171,11 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
             fetch_error_msg = f"{e}"
     else:
         fetch_error_msg = "requests package not installed — skipping live fetch"
+
+    # --- 1.5b. GitHub raw README fallback (when live fetch failed entirely) ---
+    github_text = try_github_raw(url, timeout)
+    if github_text is not None:
+        return github_text, "github_raw", None
 
     # --- 2. Try snapshot fallback ---
     if snapshot:

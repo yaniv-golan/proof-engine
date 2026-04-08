@@ -98,7 +98,7 @@ class CitationEntry(TypedDict, total=False):
     method: str                 # "full_quote", "unicode_normalized", "fragment",
                                 # "aggressive_normalization"
     coverage_pct: float | None
-    fetch_mode: str             # "live", "snapshot", "wayback"
+    fetch_mode: str             # "live", "snapshot", "wayback", "github_raw"
     credibility: CredibilityAssessment
 
 
@@ -109,7 +109,7 @@ class VerificationResult(TypedDict, total=False):
     method: str | None
     coverage_pct: float | None
     fetch_error: str | None
-    fetch_mode: str
+    fetch_mode: str             # "live", "snapshot", "wayback", "github_raw"
     message: str
     credibility: CredibilityAssessment
     closest_passage: str | None    # Diagnostic hint for not_found/partial (NOT persisted)
@@ -197,7 +197,7 @@ class SearchRegistryEntry(TypedDict, total=False):
 class DataValueVerificationEntry(TypedDict, total=False):
     found: bool
     value: str
-    fetch_mode: str             # "live", "snapshot", "wayback", "fetch_failed"
+    fetch_mode: str             # "live", "snapshot", "wayback", "github_raw", "fetch_failed"
     error: str
 
 

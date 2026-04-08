@@ -226,3 +226,160 @@ def test_extract_pdf_text_no_libraries():
     with patch.dict("sys.modules", {"pdfplumber": None, "PyPDF2": None}):
         result = extract_pdf_text(b"fake pdf content")
     assert result is None or isinstance(result, str)
+
+
+# ---------------------------------------------------------------------------
+# try_github_raw
+# ---------------------------------------------------------------------------
+
+def test_try_github_raw_bare_repo_url():
+    """Bare github.com/owner/repo URL fetches raw README."""
+    mock_resp = MagicMock()
+    mock_resp.text = "# My Project\nSome README content"
+    mock_resp.raise_for_status = MagicMock()
+
+    mock_requests = MagicMock()
+    mock_requests.get.return_value = mock_resp
+    mock_requests.exceptions = real_requests.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests):
+        from scripts.fetch import try_github_raw
+        result = try_github_raw("https://github.com/owner/repo")
+    assert result == "# My Project\nSome README content"
+    call_url = mock_requests.get.call_args[0][0]
+    assert call_url == "https://raw.githubusercontent.com/owner/repo/HEAD/README.md"
+
+
+def test_try_github_raw_trailing_slash():
+    """Trailing slash on repo URL still rewrites correctly."""
+    mock_resp = MagicMock()
+    mock_resp.text = "readme content"
+    mock_resp.raise_for_status = MagicMock()
+
+    mock_requests = MagicMock()
+    mock_requests.get.return_value = mock_resp
+    mock_requests.exceptions = real_requests.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests):
+        from scripts.fetch import try_github_raw
+        result = try_github_raw("https://github.com/owner/repo/")
+    assert result == "readme content"
+
+
+def test_try_github_raw_file_path_returns_none():
+    """URL with file path should not be rewritten."""
+    from scripts.fetch import try_github_raw
+    result = try_github_raw("https://github.com/owner/repo/blob/main/file.py")
+    assert result is None
+
+
+def test_try_github_raw_non_github_returns_none():
+    """Non-GitHub URL returns None."""
+    from scripts.fetch import try_github_raw
+    result = try_github_raw("https://example.com/some/page")
+    assert result is None
+
+
+def test_try_github_raw_falls_back_to_rst():
+    """When README.md 404s, should try README.rst and succeed."""
+    def mock_get(url, **kwargs):
+        resp = MagicMock()
+        if url.endswith("README.md"):
+            raise real_requests.exceptions.HTTPError("404")
+        resp.text = "RST readme content"
+        resp.raise_for_status = MagicMock()
+        return resp
+
+    mock_requests = MagicMock()
+    mock_requests.get.side_effect = mock_get
+    mock_requests.exceptions = real_requests.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests):
+        from scripts.fetch import try_github_raw
+        result = try_github_raw("https://github.com/owner/repo")
+    assert result == "RST readme content"
+    # Second call should be README.rst
+    call_url = mock_requests.get.call_args_list[1][0][0]
+    assert "README.rst" in call_url
+
+
+def test_try_github_raw_all_404_returns_none():
+    """404 on all README variants returns None."""
+    mock_requests = MagicMock()
+    mock_requests.get.side_effect = real_requests.exceptions.HTTPError("404")
+    mock_requests.exceptions = real_requests.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests):
+        from scripts.fetch import try_github_raw
+        result = try_github_raw("https://github.com/owner/repo")
+    assert result is None
+
+
+def test_try_github_raw_no_requests_returns_none():
+    """When requests is None, returns None."""
+    with patch("scripts.fetch.requests", None):
+        from scripts.fetch import try_github_raw
+        result = try_github_raw("https://github.com/owner/repo")
+    assert result is None
+
+
+def test_fetch_page_github_falls_back_to_raw_on_js_shell():
+    """GitHub repo URL with JS-shell response should fall back to raw README."""
+    js_shell = "<html><div id='react-root'></div><script src='app.js'></script></html>"
+    readme_text = "# My Project\nReal README content"
+
+    call_count = [0]
+    def mock_get(url, **kwargs):
+        call_count[0] += 1
+        resp = MagicMock()
+        resp.headers = {"Content-Type": "text/html"}
+        if "raw.githubusercontent.com" in url:
+            resp.text = readme_text
+        else:
+            resp.text = js_shell
+        resp.raise_for_status = MagicMock()
+        return resp
+
+    mock_requests = MagicMock()
+    mock_requests.get.side_effect = mock_get
+    mock_requests.exceptions = real_requests.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests):
+        text, mode, err = fetch_page("https://github.com/owner/repo")
+    assert text == readme_text
+    assert mode == "github_raw"
+    assert err is None
+
+
+def test_fetch_page_github_uses_live_when_content_present():
+    """GitHub repo URL with real content should use live fetch, not raw fallback."""
+    real_page = "<html><body>" + "x" * 600 + "</body></html>"
+
+    mock_resp = MagicMock()
+    mock_resp.text = real_page
+    mock_resp.headers = {"Content-Type": "text/html"}
+    mock_resp.raise_for_status = MagicMock()
+
+    mock_requests = MagicMock()
+    mock_requests.get.return_value = mock_resp
+    mock_requests.exceptions = real_requests.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests):
+        text, mode, err = fetch_page("https://github.com/owner/repo")
+    assert mode == "live"  # Did NOT fall back to github_raw
+
+
+def test_fetch_page_non_github_skips_raw():
+    """Non-GitHub URLs should not attempt GitHub raw fetch."""
+    mock_resp = MagicMock()
+    mock_resp.text = "<html>normal page</html>"
+    mock_resp.headers = {"Content-Type": "text/html"}
+    mock_resp.raise_for_status = MagicMock()
+
+    mock_requests = MagicMock()
+    mock_requests.get.return_value = mock_resp
+    mock_requests.exceptions = real_requests.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests):
+        text, mode, err = fetch_page("https://example.com")
+    assert mode == "live"
