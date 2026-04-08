@@ -50,6 +50,12 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **Don't rank from point estimates when the source says they overlap**: If Our World in Data says "nuclear: 0.07/TWh, solar: 0.05/TWh" but also says "the uncertainties mean these values are likely to overlap," you cannot conclude solar is safer than nuclear. Set `uncertainty_override = True` and return UNDETERMINED.
 - **Don't hardcode decisive variables**: Any variable assigned `True` or `False` that is later passed to `compare()` circumvents evidence-based verdict computation. The validator catches `*_holds` names, but other names (e.g., `rh_is_solved = False`) must also be computed from evidence. Use `compare()` or derive from `verify_*()` / `extract_*()` results.
 - **Adversarial evidence is prose-only, not citation-verified**: Sources in `adversarial_checks` are documented as prose in `verification_performed` — they are not machine-verified by `verify_all_citations()`. For contested qualifier proofs, this means the strongest counter-evidence (e.g., independent reviews rejecting a qualifier) is only as trustworthy as the proof author's characterization. Mitigate by: (1) quoting specific findings verbatim in `verification_performed`, (2) citing the source URL so reviewers can check, and (3) using multiple adversarial sources that independently reach the same conclusion.
+- **Verdict qualifier suffix**: `PARTIALLY VERIFIED` and `UNDETERMINED` never get `(with unverified citations)`. Always use `apply_verdict_qualifier(base_verdict, any_unverified)` — never `verdict +=` or manual if/elif chains for the suffix. The function validates the base verdict string and only applies the suffix to PROVED, DISPROVED, and SUPPORTED.
+- **`PROOF_ENGINE_ROOT` is an absolute path by design**: `${CLAUDE_SKILL_DIR}` resolves to an absolute path at proof-writing time. Do not replace it with `os.path.dirname(__file__)` traversal — the path breaks when the proof is staged to a temp directory during publishing, or run from a different working directory. Proofs are tied to the machine they were generated on; this is an accepted tradeoff.
+- **`FACT_REGISTRY` entries must be dicts, not strings**: B/S-type: `{"key": "source_a", "label": "..."}`. A-type: `{"label": "...", "method": None, "result": None}`. Plain strings like `{"B1": "source_a"}` crash `build_citation_detail()` which calls `.get("key")` on each entry.
+- **`compute_percentage_change(mode="decline")` is for purchasing-power decline only**: It computes `(1 - old/new) * 100` — the denominator is the new value. For standard year-over-year decline, use the default `mode="increase"` with `(old_value, new_value)` — the result will be negative when new < old.
+- **`parse_percentage_from_quote(quote, fact_id)` has no `pattern` kwarg**: For pattern-based extraction, use `parse_number_from_quote(quote, pattern, fact_id)` instead. The two functions have different signatures — check the Bundled Scripts table.
+- **JSON summary key is `claim_natural`, not `claim`**: The publish toolchain reads `proof_data.get("claim_natural")`. Using `"claim"` as the key silently drops the claim text from the published proof.
 
 ## Reference Files
 
@@ -91,6 +97,9 @@ explain_calc(expr_str, scope, label=None) -> object
 #   Prints symbolic -> substituted -> result. RETURNS the computed value.
 compare(value, op_str, threshold, label=None) -> bool
 #   Prints "{label}: {value} {op_str} {threshold} = {result}". Label defaults to "compare".
+apply_verdict_qualifier(base_verdict, any_unverified) -> str
+#   Validates base_verdict, applies "(with unverified citations)" only to
+#   PROVED, DISPROVED, SUPPORTED. PARTIALLY VERIFIED and UNDETERMINED pass through.
 
 # verify_citations.py
 build_citation_detail(fact_registry, citation_results, empirical_facts) -> dict
