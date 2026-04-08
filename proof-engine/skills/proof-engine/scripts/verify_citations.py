@@ -64,6 +64,33 @@ except ImportError:
     from latex_text import latex_to_text
 
 
+# Greek-to-ASCII for LaTeX-derived text only.
+# Scoped to inline LaTeX output — NOT applied globally in normalize_text()
+# because scientific text uses Greek letters as distinct symbols (μm ≠ mm).
+_LATEX_GREEK_MULTI = [
+    ('\u0398', 'Th'), ('\u03b8', 'th'),  # Θ/θ -> Th/th
+    ('\u03a0', 'Pi'), ('\u03c0', 'pi'),  # Π/π -> Pi/pi
+    ('\u03a6', 'Ph'), ('\u03c6', 'ph'),  # Φ/φ -> Ph/ph
+    ('\u03a7', 'Ch'), ('\u03c7', 'ch'),  # Χ/χ -> Ch/ch
+    ('\u03a8', 'Ps'), ('\u03c8', 'ps'),  # Ψ/ψ -> Ps/ps
+]
+_LATEX_GREEK_SINGLE = str.maketrans(
+    '\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0399\u039a\u039b'
+    '\u039c\u039d\u039e\u039f\u03a1\u03a3\u03a4\u03a5\u03a9'
+    '\u03b1\u03b2\u03b3\u03b4\u03b5\u03b6\u03b7\u03b9\u03ba\u03bb'
+    '\u03bc\u03bd\u03be\u03bf\u03c1\u03c3\u03c4\u03c5\u03c9',
+    'ABGDEZEIKLMNXORSTUO'
+    'abgdezeiklmnxorstuo',
+)
+
+
+def _transliterate_latex_greek(text: str) -> str:
+    """Convert Greek letters to ASCII equivalents in LaTeX-derived text."""
+    for greek, ascii_eq in _LATEX_GREEK_MULTI:
+        text = text.replace(greek, ascii_eq)
+    return text.translate(_LATEX_GREEK_SINGLE)
+
+
 # Inline HTML tags that should be stripped WITHOUT inserting spaces.
 _INLINE_TAGS_RE = r'(?:span|sup|sub|a|em|strong|b|i|mark|small|code|abbr|cite|dfn|kbd|s|u|var|wbr)'
 
@@ -239,6 +266,33 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
         inner = inner.replace('</math>', '')
         return inner
     text = re.sub(r'<math[^>]*>.*?</math>', _math_to_text, text, flags=re.DOTALL)
+
+    # 1.8. Inline LaTeX stripping — replace $...$ with latex_to_text() output.
+    # arXiv abstract pages contain raw LaTeX like $\Lambda$CDM, $H_0 = 67.4\pm 0.5$.
+    # Also handles simple variable wrapping like $x$, $N$, $z$.
+    # Must NOT match bare dollar signs in financial context ($100, $2.5M).
+    #
+    # Strategy: two-pass approach.
+    # Pass A: Match $...$ containing a LaTeX command marker (backslash, _, ^).
+    #         These are unambiguously LaTeX, not currency.
+    # Pass B: Match $<single-letter>$ (e.g. $x$, $N$, $z$) — single alphabetic
+    #         character between $ signs. Currency never wraps a single letter.
+    # Pass C: Unadorned multi-letter all-alpha tokens (e.g. $pi$, $LCDM$, $CDM$)
+    #         Currency never wraps bare words in $...$.
+    def _inline_latex_to_text(match):
+        return _transliterate_latex_greek(latex_to_text(match.group(1)))
+    # Pass A: content with \, _, or ^ (complex LaTeX)
+    text = re.sub(
+        r'\$([^$]*(?:\\|_|\^)[^$]*)\$',
+        _inline_latex_to_text, text)
+    # Pass B: single alphabetic character (simple variable names)
+    text = re.sub(
+        r'\$([A-Za-z])\$',
+        _inline_latex_to_text, text)
+    # Pass C: unadorned multi-letter all-alpha tokens (e.g. $pi$, $LCDM$, $CDM$)
+    text = re.sub(
+        r'\$([A-Za-z]{2,})\$',
+        _inline_latex_to_text, text)
 
     # 1.6b. Strip non-sup/sub inline formatting tags WITHOUT inserting spaces.
     # Uses (?=[\s>]) lookahead after tag name so 's' doesn't match 'sup'/'sub'.

@@ -675,6 +675,102 @@ def test_normalize_mathml_without_alttext_preserves_content():
 
 
 # ---------------------------------------------------------------------------
+# Inline LaTeX $...$ handling (arXiv abstract pages)
+# ---------------------------------------------------------------------------
+
+
+def test_normalize_strips_inline_latex_simple():
+    """Inline LaTeX $\\Lambda$CDM should normalize to match ASCII 'lcdm'."""
+    text = 'the base-$\\Lambda$CDM cosmology'
+    result = vc_module.normalize_text(text)
+    # \Lambda -> Λ -> λ -> l (Greek-to-ASCII), so $\Lambda$CDM -> lcdm
+    assert "lcdm" in result
+    assert "$" not in result
+
+
+def test_normalize_preserves_non_latex_greek():
+    """Greek letters NOT from inline LaTeX should be preserved (scoped transliteration)."""
+    # Plain Greek text (e.g., from MathML alttext or direct HTML) is NOT transliterated.
+    # This prevents false matches like μm -> mm.
+    text = 'Ωm = 0.315 and μm wavelength'
+    result = vc_module.normalize_text(text)
+    # Greek letters survive lowercasing but are NOT converted to ASCII
+    assert "\u03c9" in result or "\u03a9" in result.upper()  # ω preserved
+    assert "\u03bc" in result  # μ preserved (NOT converted to 'm')
+
+
+def test_normalize_inline_latex_greek_is_transliterated():
+    """Greek from inline LaTeX IS transliterated to ASCII."""
+    text = 'the $\\Lambda$CDM model and $\\Omega_m$'
+    result = vc_module.normalize_text(text)
+    assert "lcdm" in result  # Λ from LaTeX -> L -> l
+    assert "$" not in result
+
+
+def test_normalize_strips_inline_latex_with_subscript():
+    """Inline LaTeX $H_0$ should become H0."""
+    text = 'the Hubble constant $H_0 = (67.4\\pm 0.5)$ km/s/Mpc'
+    result = vc_module.normalize_text(text)
+    assert "h0" in result
+    assert "67.4" in result
+    assert "$" not in result
+
+
+def test_normalize_strips_inline_latex_pm():
+    """Inline LaTeX \\pm should become ± (then normalized to +-)."""
+    text = 'value is $73.04\\pm 1.04$ km/s/Mpc'
+    result = vc_module.normalize_text(text)
+    assert "73.04" in result
+    assert "1.04" in result
+    assert "$" not in result
+
+
+def test_normalize_inline_latex_preserves_surrounding_text():
+    """Text around inline LaTeX should not be eaten."""
+    text = 'Assuming the base-$\\Lambda$CDM cosmology, the inferred'
+    result = vc_module.normalize_text(text)
+    assert "assuming" in result
+    assert "inferred" in result
+    assert "cosmology" in result
+    assert "lcdm" in result  # Greek-to-ASCII applied
+
+
+def test_normalize_strips_simple_inline_latex_variables():
+    """Simple inline LaTeX like $x$, $N$, $z$ should have $ stripped."""
+    text = 'for all values of $x$ and $N$ at redshift $z$'
+    result = vc_module.normalize_text(text)
+    assert "$" not in result
+    assert "x" in result
+    assert "n" in result  # lowercased
+    assert "z" in result
+
+
+def test_normalize_strips_inline_latex_multi_letter_token():
+    """Unadorned multi-letter tokens like $LCDM$, $pi$ should have $ stripped."""
+    text = 'the $LCDM$ model predicts $pi$ decay'
+    result = vc_module.normalize_text(text)
+    assert "$" not in result
+    assert "lcdm" in result
+    assert "pi" in result
+
+
+def test_normalize_inline_latex_does_not_affect_dollar_amounts():
+    """Bare dollar signs in financial context ($100) should not trigger LaTeX stripping."""
+    text = 'the cost was $100 and rose to $200'
+    result = vc_module.normalize_text(text)
+    assert "100" in result
+    assert "200" in result
+
+
+def test_normalize_inline_latex_does_not_affect_dollar_with_decimals():
+    """Dollar amounts with decimals ($2.5) should be preserved."""
+    text = 'revenue of $2.5 million and costs of $1,200'
+    result = vc_module.normalize_text(text)
+    assert "2.5" in result
+    assert "1,200" in result or "1200" in result
+
+
+# ---------------------------------------------------------------------------
 # Integration tests for all three false-negative classes
 # ---------------------------------------------------------------------------
 
