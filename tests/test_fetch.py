@@ -225,7 +225,7 @@ def test_extract_pdf_text_no_libraries():
     """When no PDF library is available, returns None."""
     with patch.dict("sys.modules", {"pdfplumber": None, "PyPDF2": None}):
         result = extract_pdf_text(b"fake pdf content")
-    assert result is None or isinstance(result, str)
+    assert result is None
 
 
 # ---------------------------------------------------------------------------

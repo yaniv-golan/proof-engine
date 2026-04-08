@@ -157,6 +157,9 @@ def _result(status, method=None, coverage_pct=None, fetch_error=None,
 # Light cleaning (for closest-passage original-text output)
 # ---------------------------------------------------------------------------
 
+# Inline tag pattern for _light_clean — compiled once at module level.
+_LIGHT_CLEAN_INLINE_RE = r'(?:span|abbr|cite|code|dfn|em|kbd|mark|small|strong|var|wbr|a|b|i|s|u|sub|sup)(?=[\s>/])'
+
 def _light_clean(html_text: str) -> str:
     """Strip HTML tags and decode entities, but preserve original case and punctuation.
 
@@ -178,8 +181,7 @@ def _light_clean(html_text: str) -> str:
                   flags=re.IGNORECASE | re.DOTALL)
     # 2. Strip inline formatting tags without inserting spaces (same set as
     #    normalize_text step 1.6b).
-    _INLINE_TAG_RE = r'(?:span|abbr|cite|code|dfn|em|kbd|mark|small|strong|var|wbr|a|b|i|s|u|sub|sup)(?=[\s>/])'
-    text = re.sub(r'</?' + _INLINE_TAG_RE + r'[^>]*>', '', text,
+    text = re.sub(r'</?' + _LIGHT_CLEAN_INLINE_RE + r'[^>]*>', '', text,
                   flags=re.IGNORECASE)
     # 3. Replace remaining tags (block-level) with spaces.
     text = re.sub(r'<[^>]+>', ' ', text)
@@ -206,10 +208,15 @@ def _find_closest_passage(page_text_raw: str, expected_quote: str,
         (passage, similarity) — passage is original-case text or None,
         similarity is 0-1 float.
     """
-    def _word_set(norm_text: str) -> set:
-        """Extract word tokens, stripping leading/trailing punctuation from each
-        word so that 'models.' and 'models' are treated as the same token."""
-        return set(re.sub(r'[^\w\s]', '', norm_text).split())
+    def _word_set(text: str) -> set:
+        """Extract word tokens, stripping punctuation so 'models.' == 'models'.
+
+        Note: this strips ALL non-word non-space chars, so hyphenated terms
+        like 'en-dash' become 'endash' and '1.5' becomes '15'. This is
+        acceptable for Jaccard similarity on natural language — exact numeric
+        matching is handled by normalize_text() in the main verification path.
+        """
+        return set(re.sub(r'[^\w\s]', '', text).split())
 
     cleaned = _light_clean(page_text_raw)
     cleaned_words = cleaned.split()
@@ -246,15 +253,20 @@ def _find_closest_passage(page_text_raw: str, expected_quote: str,
             return cleaned[:500], sim
         return None, 0.0
 
+    # Pre-normalize the full cleaned text once, then do word-level sliding
+    # on the normalized version. This avoids calling normalize_text() per
+    # window (~500 calls on long pages), which is expensive (15+ regex ops).
+    norm_full = normalize_text(cleaned)
+    norm_words = norm_full.split()
+
     stride = max(1, window_size // 2)
     best_passage = None
     best_sim = 0.0
 
     for start in range(0, len(cleaned_words) - window_size + 1, stride):
-        window_words = cleaned_words[start:start + window_size]
-        window_text = ' '.join(window_words)
-        norm_window = normalize_text(window_text)
-        window_word_set = _word_set(norm_window)
+        # Use pre-normalized words for scoring, original words for output.
+        norm_window_words = norm_words[start:start + window_size]
+        window_word_set = _word_set(' '.join(norm_window_words))
 
         union = quote_word_set | window_word_set
         if not union:
@@ -407,8 +419,9 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
         r'\$([A-Za-z])\$',
         _inline_latex_to_text, text)
     # Pass C: unadorned multi-letter all-alpha tokens (e.g. $pi$, $LCDM$, $CDM$)
+    # Negative lookaround for digits prevents matching currency like $USD$50.
     text = re.sub(
-        r'\$([A-Za-z]{2,})\$',
+        r'(?<!\d)\$([A-Za-z]{2,})\$(?!\d)',
         _inline_latex_to_text, text)
 
     # 1.6b. Strip non-sup/sub inline formatting tags WITHOUT inserting spaces.

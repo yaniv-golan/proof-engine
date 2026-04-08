@@ -173,9 +173,10 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
         fetch_error_msg = "requests package not installed — skipping live fetch"
 
     # --- 1.5b. GitHub raw README fallback (when live fetch failed entirely) ---
-    github_text = try_github_raw(url, timeout)
-    if github_text is not None:
-        return github_text, "github_raw", None
+    if 'github.com' in url:
+        github_text = try_github_raw(url, timeout)
+        if github_text is not None:
+            return github_text, "github_raw", None
 
     # --- 2. Try snapshot fallback ---
     if snapshot:

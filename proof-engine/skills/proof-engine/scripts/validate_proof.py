@@ -940,6 +940,9 @@ class ProofValidator:
             for key, value in zip(node.keys, node.values):
                 if not isinstance(key, ast.Constant) or key.value != "quote":
                     continue
+                # ast.Constant covers plain strings and auto-concatenated adjacent
+                # literals.  f-strings produce ast.JoinedStr — intentionally skipped
+                # since their runtime value can't be statically determined.
                 if isinstance(value, ast.Constant) and isinstance(value.value, str):
                     if len(value.value) >= 5:
                         quotes.append(value.value)
