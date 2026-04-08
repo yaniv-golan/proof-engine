@@ -22,7 +22,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
 from scripts.verify_citations import verify_all_citations, build_citation_detail
-from scripts.computations import compare
+from scripts.computations import compare, apply_verdict_qualifier
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -134,25 +134,20 @@ if __name__ == "__main__":
     is_contested_qualifier = "qualifier" in CLAIM_FORMAL.get("operator_note", "").lower()
 
     if any_breaks:
-        verdict = "UNDETERMINED"
+        base_verdict = "UNDETERMINED"
     elif any_coi_override:
-        verdict = "UNDETERMINED"
+        base_verdict = "UNDETERMINED"
     elif is_contested_qualifier and sc1_holds and not sc2_holds:
-        if any_unverified:
-            verdict = "DISPROVED (with unverified citations)"
-        else:
-            verdict = "DISPROVED"
+        base_verdict = "DISPROVED"
     elif not claim_holds and n_holding > 0:
-        verdict = "PARTIALLY VERIFIED"
-    elif claim_holds and not any_unverified:
-        verdict = "DISPROVED" if is_disproof else "PROVED"
-    elif claim_holds and any_unverified:
-        verdict = ("DISPROVED (with unverified citations)" if is_disproof
-                   else "PROVED (with unverified citations)")
+        base_verdict = "PARTIALLY VERIFIED"
+    elif claim_holds:
+        base_verdict = "DISPROVED" if is_disproof else "PROVED"
     elif not claim_holds and n_holding == 0:
-        verdict = "UNDETERMINED"
+        base_verdict = "UNDETERMINED"
     else:
-        verdict = "UNDETERMINED"
+        base_verdict = "UNDETERMINED"  # defensive fallback
+    verdict = apply_verdict_qualifier(base_verdict, any_unverified)
 
     FACT_REGISTRY["A1"]["method"] = f"count(verified sc1 citations) = {n_sc1}"
     FACT_REGISTRY["A1"]["result"] = str(n_sc1)

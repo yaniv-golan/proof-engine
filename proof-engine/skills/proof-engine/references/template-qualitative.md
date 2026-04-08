@@ -25,7 +25,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
 from scripts.verify_citations import verify_all_citations, build_citation_detail
-from scripts.computations import compare
+from scripts.computations import compare, apply_verdict_qualifier
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -125,18 +125,14 @@ if __name__ == "__main__":
     coi_override = n_confirmed > 0 and coi_majority > n_confirmed / 2
 
     if any_breaks:
-        verdict = "UNDETERMINED"
+        base_verdict = "UNDETERMINED"
     elif coi_override:
-        verdict = "UNDETERMINED"
-    elif claim_holds and not any_unverified:
-        verdict = "DISPROVED" if is_disproof else "PROVED"
-    elif claim_holds and any_unverified:
-        verdict = ("DISPROVED (with unverified citations)" if is_disproof
-                   else "PROVED (with unverified citations)")
-    elif not claim_holds:
-        verdict = "UNDETERMINED"
+        base_verdict = "UNDETERMINED"
+    elif claim_holds:
+        base_verdict = "DISPROVED" if is_disproof else "PROVED"
     else:
-        verdict = "UNDETERMINED"
+        base_verdict = "UNDETERMINED"
+    verdict = apply_verdict_qualifier(base_verdict, any_unverified)
 
     FACT_REGISTRY["A1"]["method"] = f"count(verified citations) = {n_confirmed}"
     FACT_REGISTRY["A1"]["result"] = str(n_confirmed)

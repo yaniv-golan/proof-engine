@@ -38,7 +38,7 @@ from datetime import date
 from scripts.smart_extract import normalize_unicode
 from scripts.verify_citations import verify_all_citations, build_citation_detail, verify_data_values
 from scripts.extract_values import parse_number_from_quote
-from scripts.computations import compare, explain_calc, cross_check, compute_percentage_change
+from scripts.computations import compare, explain_calc, cross_check, compute_percentage_change, apply_verdict_qualifier
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -131,19 +131,14 @@ if __name__ == "__main__":
     uncertainty_override = False  # change to True with documented reason if applicable
 
     if any_breaks:
-        verdict = "UNDETERMINED"
+        base_verdict = "UNDETERMINED"
     elif uncertainty_override:
-        verdict = "UNDETERMINED"
-    elif claim_holds and not any_unverified:
-        verdict = "PROVED"
-    elif claim_holds and any_unverified:
-        verdict = "PROVED (with unverified citations)"
-    elif not claim_holds and not any_unverified:
-        verdict = "DISPROVED"
-    elif not claim_holds and any_unverified:
-        verdict = "DISPROVED (with unverified citations)"
+        base_verdict = "UNDETERMINED"
+    elif claim_holds:
+        base_verdict = "PROVED"
     else:
-        verdict = "UNDETERMINED"
+        base_verdict = "DISPROVED"
+    verdict = apply_verdict_qualifier(base_verdict, any_unverified)
 
     FACT_REGISTRY["A1"]["method"] = "compute_percentage_change(mode='decline')"
     FACT_REGISTRY["A1"]["result"] = f"{decline_a:.4f}%"

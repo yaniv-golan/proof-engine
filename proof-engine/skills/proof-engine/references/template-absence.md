@@ -32,7 +32,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
 from scripts.verify_citations import verify_search_registry, verify_all_citations, build_citation_detail
-from scripts.computations import compare
+from scripts.computations import compare, apply_verdict_qualifier
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -194,18 +194,19 @@ if __name__ == "__main__":
     )
 
     if any_breaks:
-        verdict = "UNDETERMINED"
-    elif claim_holds and not any_unverified:
-        verdict = "SUPPORTED" if is_absence else ("DISPROVED" if CLAIM_FORMAL.get("proof_direction") == "disprove" else "PROVED")
-    elif claim_holds and any_unverified:
+        base_verdict = "UNDETERMINED"
+    elif claim_holds:
         if is_absence:
-            verdict = "SUPPORTED (with unverified citations)"
+            base_verdict = "SUPPORTED"
+        elif CLAIM_FORMAL.get("proof_direction") == "disprove":
+            base_verdict = "DISPROVED"
         else:
-            verdict = "PROVED (with unverified citations)"
+            base_verdict = "PROVED"
     elif not claim_holds:
-        verdict = "UNDETERMINED"
+        base_verdict = "UNDETERMINED"
     else:
-        verdict = "UNDETERMINED"
+        base_verdict = "UNDETERMINED"  # defensive fallback
+    verdict = apply_verdict_qualifier(base_verdict, any_unverified)
 
     FACT_REGISTRY["A1"]["method"] = f"unique accessible databases with null results = {n_null_verified}"
     FACT_REGISTRY["A1"]["result"] = str(n_null_verified)
