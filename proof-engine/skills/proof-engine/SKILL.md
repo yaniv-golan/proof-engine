@@ -9,7 +9,7 @@ description: >
   questions with no verifiable answer.
 metadata:
   author: Yaniv Golan
-  version: "1.10.0"
+  version: "1.11.0"
   license: MIT
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
@@ -177,7 +177,7 @@ Find at least two independent sources (Rule 6). For math claims, plan two indepe
 
 **Pre-fetch snapshots early, not late.** Many news and advocacy sites now return 403 to automated fetches — not just .gov/.edu. During Step 2 research, pre-fetch the full page text for every source you plan to cite and include it as the `snapshot` field in `empirical_facts`. This avoids discovering fetch failures late during `verify_all_citations()`, which forces source substitution under time pressure. Note: WebFetch and `verify_all_citations()` use different HTTP clients — a WebFetch 403 does not mean the script will also get 403, and vice versa. If both fail, the snapshot is your only recourse. See [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for details.
 
-**Quote Harvesting (required before Step 3).** For each source you plan to cite, obtain the verbatim quote from the *rendered* page text — not from WebSearch/WebFetch summaries (which paraphrase). Open the URL in a browser or use Python to fetch and extract the visible text. The quote should match what a human reader sees on the page, not the raw HTML — `verify_all_citations()` strips HTML tags and decodes entities before matching, so your quote should be plain text without markup. For PDFs, use Claude Code's Read tool or PyMuPDF. For pages that 403, use the snapshot workflow or Wayback. WebFetch/WebSearch are fine for *discovering* sources, but never use their returned text as a quote — it's summarized, not verbatim.
+**Quote Harvesting (required before Step 3).** For each source you plan to cite, obtain the verbatim quote from the *rendered* page text — not from WebSearch/WebFetch summaries (which paraphrase). Open the URL in a browser or use Python to fetch and extract the visible text. The quote should match what a human reader sees on the page, not the raw HTML — `verify_all_citations()` strips HTML tags and decodes entities before matching, so your quote should be plain text without markup. For PDFs, use your PDF Read tool or PyMuPDF. For pages that 403, use the snapshot workflow or Wayback. WebFetch/WebSearch are fine for *discovering* sources, but never use their returned text as a quote — it's summarized, not verbatim.
 
 Pay attention to:
 - Lowercase vs uppercase in paper titles and benchmark names (e.g., `gsm8k` not `GSM8K`)
