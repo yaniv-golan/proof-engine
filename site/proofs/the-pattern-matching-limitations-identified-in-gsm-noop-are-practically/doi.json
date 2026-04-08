@@ -1,0 +1,8 @@
+{
+  "doi": "10.5281/zenodo.19467525",
+  "zenodo_id": "19467525",
+  "concept_doi": "10.5281/zenodo.19467524",
+  "concept_zenodo_id": "19467524",
+  "claim_natural": "The pattern-matching limitations identified in GSM-NoOp are practically surmountable when LLMs are allowed to offload formal reasoning steps to code execution.",
+  "minted_at": "2026-04-08"
+}

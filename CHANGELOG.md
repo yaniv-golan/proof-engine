@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Section matcher ignoring parenthetical suffixes** — `validate_required_sections` now strips suffixes like `(Rule 5)` before matching, so audit headings like `## Adversarial Checks (Rule 5)` correctly match the expected section name `Adversarial Checks`
+
 ## [1.10.0] - 2026-04-07
 
 ### Added
