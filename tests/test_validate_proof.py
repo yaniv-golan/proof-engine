@@ -1565,3 +1565,88 @@ def test_bare_claim_key_fails():
 def test_no_summary_marker_skips():
     v = _validate_claim_natural(SUMMARY_NO_MARKER)
     assert len(v.issues) == 0  # skipped, no error
+
+
+# ---------------------------------------------------------------------------
+# check_emit_proof_summary() and check_json_summary() (emit_proof_summary path)
+# ---------------------------------------------------------------------------
+
+def _validate_emit_summary(source_code: str) -> ProofValidator:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_emit_proof_summary()
+    os.unlink(f.name)
+    return v
+
+
+USES_EMIT_PROOF_SUMMARY = '''
+from scripts.computations import emit_proof_summary
+summary = {"claim_natural": CLAIM_NATURAL}
+emit_proof_summary(summary)
+'''
+
+USES_RAW_JSON_DUMPS = '''
+import json
+print("=== PROOF SUMMARY (JSON) ===")
+print(json.dumps(summary, indent=2))
+'''
+
+USES_RAW_JSON_DUMPS_DEFAULT_STR = '''
+import json
+print("=== PROOF SUMMARY (JSON) ===")
+print(json.dumps(summary, indent=2, default=str))
+'''
+
+NO_SUMMARY_AT_ALL = '''
+print("done")
+'''
+
+USES_EMIT_PROOF_SUMMARY_FOR_JSON_CHECK = '''
+from scripts.computations import emit_proof_summary
+summary = {"claim_natural": CLAIM_NATURAL}
+emit_proof_summary(summary)
+'''
+
+
+def _validate_json_summary(source_code: str) -> ProofValidator:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_json_summary()
+    os.unlink(f.name)
+    return v
+
+
+def test_emit_summary_used_no_warning():
+    """Proofs using emit_proof_summary get no warning from this check."""
+    v = _validate_emit_summary(USES_EMIT_PROOF_SUMMARY)
+    assert len(v.issues) == 0
+    assert len(v.warnings) == 0
+
+
+def test_raw_json_dumps_warned():
+    v = _validate_emit_summary(USES_RAW_JSON_DUMPS)
+    assert len(v.warnings) > 0
+    assert "emit_proof_summary" in v.warnings[0][0]
+
+
+def test_raw_json_dumps_default_str_warned():
+    v = _validate_emit_summary(USES_RAW_JSON_DUMPS_DEFAULT_STR)
+    assert len(v.warnings) > 0
+    assert "emit_proof_summary" in v.warnings[0][0]
+
+
+def test_no_summary_skips():
+    v = _validate_emit_summary(NO_SUMMARY_AT_ALL)
+    assert len(v.issues) == 0
+    assert len(v.passed) == 0
+
+
+def test_json_summary_emit_proof_summary_passes():
+    """check_json_summary should accept emit_proof_summary as valid."""
+    v = _validate_json_summary(USES_EMIT_PROOF_SUMMARY_FOR_JSON_CHECK)
+    assert len(v.issues) == 0
+    assert any("emit_proof_summary" in msg for msg in v.passed)
