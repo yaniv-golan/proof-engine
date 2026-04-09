@@ -4,6 +4,17 @@ import json
 import os
 import subprocess
 import sys
+import typing
+from pathlib import Path
+
+# Resolve scripts path relative to this file's location (tools/lib/proof_runner.py)
+# so it works regardless of CWD.
+_scripts = str(Path(__file__).resolve().parent.parent.parent / "proof-engine" / "skills" / "proof-engine" / "scripts")
+if _scripts not in sys.path:
+    sys.path.insert(0, _scripts)
+from proof_types import ProofData
+
+_KNOWN_KEYS = set(typing.get_type_hints(ProofData).keys())
 
 
 def run_proof_and_extract_json(proof_py_path):
@@ -31,6 +42,19 @@ def run_proof_and_extract_json(proof_py_path):
 
     json_str = output[idx + len(marker):].strip()
     try:
-        return json.loads(json_str), None
+        proof_data = json.loads(json_str)
     except json.JSONDecodeError as e:
         return None, f"Invalid JSON in proof.py output: {e}"
+
+    # Strip unknown keys — defense-in-depth for proofs that bypass emit_proof_summary()
+    unknown = set(proof_data.keys()) - _KNOWN_KEYS
+    if unknown:
+        print(
+            f"WARNING: Stripping unknown keys from proof summary: {sorted(unknown)}. "
+            f"Update ProofData in proof_types.py if these are intentional.",
+            file=sys.stderr,
+        )
+        for k in unknown:
+            del proof_data[k]
+
+    return proof_data, None
