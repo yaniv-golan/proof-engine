@@ -9,7 +9,6 @@ A well-formed proof script has this structure. The structural elements (FACT_REG
 Proof: [claim text]
 Generated: [date]
 """
-import json
 import os
 import sys
 
@@ -23,7 +22,7 @@ from datetime import date
 # --- STRUCTURAL IMPORTS (always needed) ---
 from scripts.smart_extract import normalize_unicode, verify_extraction
 from scripts.verify_citations import verify_all_citations, build_citation_detail, verify_data_values
-from scripts.computations import compare, explain_calc, apply_verdict_qualifier
+from scripts.computations import compare, explain_calc, apply_verdict_qualifier, emit_proof_summary
 
 # --- CLAIM-SPECIFIC IMPORTS (adapt to your proof) ---
 from scripts.extract_values import parse_date_from_quote
@@ -156,6 +155,5 @@ if __name__ == "__main__":
         },
     }
 
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2, default=str))
+    emit_proof_summary(summary)
 ```

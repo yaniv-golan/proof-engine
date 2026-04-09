@@ -22,7 +22,6 @@ For claims about the absence of published evidence (e.g., "There is no published
 Proof: [claim text — e.g., "There is no published evidence that X causes Y"]
 Generated: [date]
 """
-import json
 import os
 import sys
 from urllib.parse import urlparse
@@ -32,7 +31,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
 from scripts.verify_citations import verify_search_registry, verify_all_citations, build_citation_detail
-from scripts.computations import compare, apply_verdict_qualifier
+from scripts.computations import compare, apply_verdict_qualifier, emit_proof_summary
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -288,8 +287,7 @@ if __name__ == "__main__":
         },
     }
 
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2, default=str))
+    emit_proof_summary(summary)
 ```
 
 ### Adaptation notes

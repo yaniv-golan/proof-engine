@@ -27,7 +27,6 @@ Instead, use `data_values` + `verify_data_values()` as shown below:
 Proof: [claim text]
 Generated: [date]
 """
-import json
 import os
 import sys
 
@@ -38,7 +37,7 @@ from datetime import date
 from scripts.smart_extract import normalize_unicode
 from scripts.verify_citations import verify_all_citations, build_citation_detail, verify_data_values
 from scripts.extract_values import parse_number_from_quote
-from scripts.computations import compare, explain_calc, cross_check, compute_percentage_change, apply_verdict_qualifier
+from scripts.computations import compare, explain_calc, cross_check, compute_percentage_change, apply_verdict_qualifier, emit_proof_summary
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -194,6 +193,5 @@ if __name__ == "__main__":
         },
     }
 
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2, default=str))
+    emit_proof_summary(summary)
 ```

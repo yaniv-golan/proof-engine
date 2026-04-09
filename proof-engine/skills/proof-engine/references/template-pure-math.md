@@ -9,7 +9,6 @@ For claims that are entirely mathematical (no empirical sources, no URLs, no cit
 Proof: [claim text]
 Generated: [date]
 """
-import json
 import os
 import sys
 
@@ -17,7 +16,7 @@ PROOF_ENGINE_ROOT = "..."
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
-from scripts.computations import compare, explain_calc
+from scripts.computations import compare, explain_calc, emit_proof_summary
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -99,8 +98,7 @@ if __name__ == "__main__":
         },
     }
 
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2, default=str))
+    emit_proof_summary(summary)
 ```
 
 Key differences from the empirical template:
