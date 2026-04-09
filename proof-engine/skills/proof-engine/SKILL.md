@@ -56,6 +56,7 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **`compute_percentage_change(mode="decline")` is for purchasing-power decline only**: It computes `(1 - old/new) * 100` — the denominator is the new value. For standard year-over-year decline, use the default `mode="increase"` with `(old_value, new_value)` — the result will be negative when new < old.
 - **`parse_percentage_from_quote(quote, fact_id)` has no `pattern` kwarg**: For pattern-based extraction, use `parse_number_from_quote(quote, pattern, fact_id)` instead. The two functions have different signatures — check the Bundled Scripts table.
 - **JSON summary key is `claim_natural`, not `claim`**: The publish toolchain reads `proof_data.get("claim_natural")`. Using `"claim"` as the key silently drops the claim text from the published proof.
+- **Use `emit_proof_summary(summary)` for the JSON summary, not raw `json.dumps`**: The helper validates all top-level keys against the `ProofData` schema. Unknown keys (like `computed_values`) are rejected immediately with a message listing allowed keys. If you need a new key, add it to `ProofData` in `proof_types.py` first — don't bypass the validation.
 
 ## Reference Files
 
@@ -100,6 +101,9 @@ compare(value, op_str, threshold, label=None) -> bool
 apply_verdict_qualifier(base_verdict, any_unverified) -> str
 #   Validates base_verdict, applies "(with unverified citations)" only to
 #   PROVED, DISPROVED, SUPPORTED. PARTIALLY VERIFIED and UNDETERMINED pass through.
+emit_proof_summary(summary) -> None
+#   Validates summary keys against ProofData schema, then prints
+#   "=== PROOF SUMMARY (JSON) ===" + json.dumps(). Rejects unknown keys.
 
 # verify_citations.py
 build_citation_detail(fact_registry, citation_results, empirical_facts) -> dict
