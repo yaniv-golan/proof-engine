@@ -1,9 +1,12 @@
 """Tests for computations.py — cross_check tolerance fixes."""
+import typing
 import pytest
 from scripts.computations import (
     cross_check, compare,
     apply_verdict_qualifier, VALID_BASE_VERDICTS, QUALIFIABLE_VERDICTS,
+    emit_proof_summary, KNOWN_SUMMARY_KEYS,
 )
+from scripts.proof_types import ProofData
 
 
 def test_cross_check_exact_match_zero_tolerance_absolute():
@@ -112,3 +115,70 @@ def test_valid_base_verdicts_is_five():
 def test_qualifiable_verdicts_is_three():
     assert len(QUALIFIABLE_VERDICTS) == 3
     assert QUALIFIABLE_VERDICTS == {"PROVED", "DISPROVED", "SUPPORTED"}
+
+
+# ---------------------------------------------------------------------------
+# emit_proof_summary tests
+# ---------------------------------------------------------------------------
+
+def test_emit_proof_summary_valid(capsys):
+    """Valid summary prints marker + JSON."""
+    summary = {
+        "fact_registry": {},
+        "claim_formal": {"subject": "X", "property": "Y", "operator": ">", "threshold": 0},
+        "claim_natural": "Test claim",
+        "verdict": "PROVED",
+        "key_results": {"value": 1},
+        "generator": {"name": "proof-engine", "version": "1.0.0",
+                       "repo": "https://github.com/test", "generated_at": "2026-01-01"},
+    }
+    emit_proof_summary(summary)
+    captured = capsys.readouterr()
+    assert "=== PROOF SUMMARY (JSON) ===" in captured.out
+    assert '"verdict": "PROVED"' in captured.out
+
+
+def test_emit_proof_summary_unknown_key_raises():
+    """Unknown keys should be rejected with a clear message."""
+    summary = {
+        "fact_registry": {},
+        "claim_natural": "Test",
+        "verdict": "PROVED",
+        "key_results": {},
+        "generator": {},
+        "claim_formal": {},
+        "computed_values": {"x": 1},
+    }
+    with pytest.raises(ValueError, match="Unknown keys.*computed_values"):
+        emit_proof_summary(summary)
+
+
+def test_emit_proof_summary_all_optional_keys_accepted(capsys):
+    """All ProofData optional keys should be accepted."""
+    summary = {
+        "fact_registry": {},
+        "claim_formal": {},
+        "claim_natural": "Test",
+        "verdict": "PROVED",
+        "key_results": {},
+        "generator": {},
+        "citations": {},
+        "extractions": {},
+        "cross_checks": [],
+        "adversarial_checks": [],
+        "search_registry": {},
+        "data_value_verification": {},
+        "date_note": "As of 2026",
+        "sub_claim_results": [],
+        "verdict_note": "Note",
+        "verdict_reason": "Reason",
+    }
+    emit_proof_summary(summary)
+    captured = capsys.readouterr()
+    assert "=== PROOF SUMMARY (JSON) ===" in captured.out
+
+
+def test_known_summary_keys_matches_proof_data():
+    """KNOWN_SUMMARY_KEYS must stay in sync with ProofData TypedDict."""
+    expected = set(typing.get_type_hints(ProofData).keys())
+    assert KNOWN_SUMMARY_KEYS == expected

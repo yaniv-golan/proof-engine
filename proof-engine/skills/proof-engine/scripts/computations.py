@@ -19,9 +19,16 @@ Usage as CLI:
 """
 
 import ast
+import json
 import sys
+import typing
 import datetime
 import operator
+
+try:
+    from proof_types import ProofData
+except ImportError:
+    from scripts.proof_types import ProofData
 
 
 # ---------------------------------------------------------------------------
@@ -108,6 +115,44 @@ def apply_verdict_qualifier(base_verdict: str, any_unverified: bool) -> str:
     if any_unverified and base_verdict in QUALIFIABLE_VERDICTS:
         return f"{base_verdict} (with unverified citations)"
     return base_verdict
+
+
+# ---------------------------------------------------------------------------
+# Proof summary emission
+# ---------------------------------------------------------------------------
+
+KNOWN_SUMMARY_KEYS = set(typing.get_type_hints(ProofData).keys())
+"""Allowed top-level keys in the proof JSON summary, derived from ProofData TypedDict."""
+
+
+def emit_proof_summary(summary: dict) -> None:
+    """Validate and print the proof JSON summary.
+
+    Rejects any top-level keys not defined in ProofData TypedDict.
+    This prevents agents from inventing new schema fields that bypass
+    the publish pipeline's validation.
+
+    Args:
+        summary: The proof summary dict to validate and print.
+
+    Raises:
+        ValueError: If summary contains keys not in KNOWN_SUMMARY_KEYS.
+
+    Example:
+        >>> emit_proof_summary({"fact_registry": {}, ...})
+        === PROOF SUMMARY (JSON) ===
+        { ... }
+    """
+    unknown = set(summary.keys()) - KNOWN_SUMMARY_KEYS
+    if unknown:
+        raise ValueError(
+            f"Unknown keys in proof summary: {sorted(unknown)}. "
+            f"Allowed keys: {sorted(KNOWN_SUMMARY_KEYS)}. "
+            f"If a new key is genuinely needed, add it to ProofData in "
+            f"proof_types.py first."
+        )
+    print("\n=== PROOF SUMMARY (JSON) ===")
+    print(json.dumps(summary, indent=2, default=str))
 
 
 def compare(value, op_str: str, threshold, label=None) -> bool:
