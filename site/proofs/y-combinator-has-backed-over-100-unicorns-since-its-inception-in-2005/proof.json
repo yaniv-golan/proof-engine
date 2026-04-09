@@ -17,12 +17,37 @@
       "label": "PitchBook: YC leads accelerators in unicorn creation (5.8% of 2010-2015 cohorts)"
     }
   },
-  "computed_values": {
+  "adversarial_checks": [
+    {
+      "description": "Failory (2025) counts only 82 active unicorns",
+      "verification_performed": "Failory.com publishes 'The Full List of 82 Unicorn Startups Backed by Y Combinator' as of 2025. This count is lower than 101 because it tracks only currently private companies valued at $1B+. Companies that went public (e.g., Airbnb, DoorDash, Coinbase, Reddit, Stripe via IPO), were acquired at unicorn valuations, or had their valuations marked down are excluded from this count. The claim's 'has backed' language encompasses all-time unicorns, making 101 (all-time) the appropriate comparator. The 82 active count does not contradict a cumulative count of >100.",
+      "breaks_proof": false
+    },
+    {
+      "description": "YC's own 'Top Companies' list is self-reported",
+      "verification_performed": "YC's Top Companies list is curated by YC itself and relies on self-reported or publicly disclosed valuations. For private companies, valuations are typically from their last funding round. YC has incentive to maximize the perceived value of its portfolio. However, PitchBook (an independent data provider) confirms YC's unicorn creation rate as the highest among all accelerators, corroborating the order of magnitude of the claim.",
+      "breaks_proof": false
+    },
+    {
+      "description": "Valuations fluctuate \u2014 some unicorns may have lost that status",
+      "verification_performed": "In 2022-2023, many private tech company valuations were marked down by 30-70%. Some YC companies that reached $1B+ valuations at peak (2021) may have been repriced below $1B. However, the claim uses present perfect ('has backed'), which covers historical unicorn achievement, not current valuations. Companies that were once valued at $1B+ but fell below still count under the cumulative interpretation.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
     "unicorn_count_b1": 101,
+    "threshold": 100,
     "n_confirming": 1,
-    "threshold": 1
+    "claim_holds": true
   },
-  "citation_details": {
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.11.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-08"
+  },
+  "citations": {
     "B1": {
       "source_key": "B1",
       "source_name": "Jared Heyman (Medium): 'On 101 Y Combinator unicorns' \u2014 Analysis of YC's official Top Companies list (August 2022)",
@@ -57,36 +82,5 @@
         "note": "Unclassified domain \u2014 verify source authority manually"
       }
     }
-  },
-  "adversarial_checks": [
-    {
-      "description": "Failory (2025) counts only 82 active unicorns",
-      "verification_performed": "Failory.com publishes 'The Full List of 82 Unicorn Startups Backed by Y Combinator' as of 2025. This count is lower than 101 because it tracks only currently private companies valued at $1B+. Companies that went public (e.g., Airbnb, DoorDash, Coinbase, Reddit, Stripe via IPO), were acquired at unicorn valuations, or had their valuations marked down are excluded from this count. The claim's 'has backed' language encompasses all-time unicorns, making 101 (all-time) the appropriate comparator. The 82 active count does not contradict a cumulative count of >100.",
-      "breaks_proof": false
-    },
-    {
-      "description": "YC's own 'Top Companies' list is self-reported",
-      "verification_performed": "YC's Top Companies list is curated by YC itself and relies on self-reported or publicly disclosed valuations. For private companies, valuations are typically from their last funding round. YC has incentive to maximize the perceived value of its portfolio. However, PitchBook (an independent data provider) confirms YC's unicorn creation rate as the highest among all accelerators, corroborating the order of magnitude of the claim.",
-      "breaks_proof": false
-    },
-    {
-      "description": "Valuations fluctuate \u2014 some unicorns may have lost that status",
-      "verification_performed": "In 2022-2023, many private tech company valuations were marked down by 30-70%. Some YC companies that reached $1B+ valuations at peak (2021) may have been repriced below $1B. However, the claim uses present perfect ('has backed'), which covers historical unicorn achievement, not current valuations. Companies that were once valued at $1B+ but fell below still count under the cumulative interpretation.",
-      "breaks_proof": false
-    }
-  ],
-  "verdict": "PROVED",
-  "verdict_holds": true,
-  "key_results": {
-    "unicorn_count_b1": 101,
-    "threshold": 100,
-    "n_confirming": 1,
-    "claim_holds": true
-  },
-  "generator": {
-    "name": "proof-engine",
-    "version": "1.11.0",
-    "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-04-08"
   }
 }

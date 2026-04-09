@@ -3,7 +3,6 @@ Proof: Y Combinator has backed over 100 unicorns since its inception in 2005.
 
 Generated: 2026-04-08
 """
-import json
 import os
 import sys
 
@@ -12,7 +11,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from scripts.extract_values import parse_number_from_quote
 from scripts.verify_citations import verify_all_citations, build_citation_detail
-from scripts.computations import compare, apply_verdict_qualifier
+from scripts.computations import compare, apply_verdict_qualifier, emit_proof_summary
 
 # =============================================================================
 # 1. CLAIM INTERPRETATION (Rule 4)
@@ -182,16 +181,10 @@ if __name__ == "__main__":
         "claim_natural": CLAIM_NATURAL,
         "claim_formal": CLAIM_FORMAL,
         "fact_registry": FACT_REGISTRY,
-        "computed_values": {
-            "unicorn_count_b1": int(unicorn_count_b1),
-            "n_confirming": n_confirming,
-            "threshold": threshold,
-        },
-        "citation_details": citation_detail,
+        "citations": citation_detail,
         "adversarial_checks": adversarial_checks,
         "verdict": VERDICT,
-        "verdict_holds": verdict_holds,
-        "key_results": {
+                "key_results": {
             "unicorn_count_b1": int(unicorn_count_b1),
             "threshold": CLAIM_FORMAL["threshold"],
             "n_confirming": n_confirming,
@@ -204,5 +197,4 @@ if __name__ == "__main__":
             "generated_at": "2026-04-08",
         },
     }
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2))
+    emit_proof_summary(summary)

@@ -6,14 +6,13 @@ according to Cambridge Associates but 18.2% according to Preqin.
 
 Generated: 2026-04-08
 """
-import json
 import os
 import sys
 
 PROOF_ENGINE_ROOT = "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine"
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
-from scripts.computations import compare
+from scripts.computations import compare, emit_proof_summary
 from scripts.verify_citations import verify_all_citations
 
 # =============================================================================
@@ -153,7 +152,7 @@ if __name__ == "__main__":
         "claim_natural": CLAIM_NATURAL,
         "claim_formal": CLAIM_FORMAL,
         "fact_registry": FACT_REGISTRY,
-        "sub_claims": {
+        "sub_claim_results": {
             "sc1": {
                 "description": "Cambridge Associates reports 16.8% median net IRR for VC vintage 2012-2016",
                 "n_confirmed": n_confirmed_sc1,
@@ -169,8 +168,7 @@ if __name__ == "__main__":
         },
         "adversarial_checks": adversarial_checks,
         "verdict": VERDICT,
-        "verdict_holds": verdict_holds,
-        "verdict_reason": (
+                "verdict_reason": (
             "Both sub-claims rely on proprietary subscription-only databases "
             "(Cambridge Associates and Preqin). No publicly accessible source was found "
             "that reproduces the specific figures (16.8% and 18.2%) for VC vintage 2012-2016. "
@@ -188,5 +186,4 @@ if __name__ == "__main__":
             "generated_at": "2026-04-08",
         },
     }
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2))
+    emit_proof_summary(summary)

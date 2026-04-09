@@ -7,7 +7,6 @@ to the Series A investor exceeds 40% before dilution.
 
 Generated: 2026-04-08
 """
-import json
 import os
 import sys
 
@@ -16,7 +15,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 import sympy as sp
 from scipy.optimize import brentq
-from scripts.computations import compare, explain_calc, cross_check
+from scripts.computations import compare, explain_calc, cross_check, emit_proof_summary
 
 # =============================================================================
 # 1. CLAIM INTERPRETATION (Rule 4)
@@ -158,14 +157,6 @@ if __name__ == "__main__":
         "claim_natural": CLAIM_NATURAL,
         "claim_formal": CLAIM_FORMAL,
         "fact_registry": FACT_REGISTRY,
-        "computed_values": {
-            "ownership_pct": round(ownership * 100, 4),
-            "exit_proceeds_usd": exit_proceeds,
-            "moic": round(moic, 6),
-            "cagr_sympy": round(cagr_sympy, 8),
-            "cagr_scipy": round(cagr_scipy, 8),
-            "cagr_pct": round(cagr_sympy * 100, 4),
-        },
         "cross_checks": [
             {
                 "description": "sympy exact symbolic vs scipy brentq NPV=0",
@@ -177,8 +168,7 @@ if __name__ == "__main__":
         ],
         "adversarial_checks": adversarial_checks,
         "verdict": VERDICT,
-        "verdict_holds": verdict_holds,
-        "key_results": {
+                "key_results": {
             "ownership_pct": round(ownership * 100, 4),
             "moic": round(moic, 6),
             "cagr_pct": round(cagr_sympy * 100, 4),
@@ -192,5 +182,4 @@ if __name__ == "__main__":
             "generated_at": "2026-04-08",
         },
     }
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2))
+    emit_proof_summary(summary)

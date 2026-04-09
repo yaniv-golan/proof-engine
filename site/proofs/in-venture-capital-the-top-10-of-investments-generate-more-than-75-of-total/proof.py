@@ -6,7 +6,6 @@ portfolio returns, following a power law distribution.
 
 Generated: 2026-04-08
 """
-import json
 import os
 import sys
 
@@ -15,7 +14,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from scripts.extract_values import parse_number_from_quote
 from scripts.verify_citations import verify_all_citations, build_citation_detail
-from scripts.computations import compare, apply_verdict_qualifier
+from scripts.computations import compare, apply_verdict_qualifier, emit_proof_summary
 
 # =============================================================================
 # 1. CLAIM INTERPRETATION (Rule 4)
@@ -217,13 +216,7 @@ if __name__ == "__main__":
         "claim_natural": CLAIM_NATURAL,
         "claim_formal": CLAIM_FORMAL,
         "fact_registry": FACT_REGISTRY,
-        "computed_values": {
-            "a16z_investment_pct": round(a16z_investment_pct, 1),
-            "a16z_return_pct": round(a16z_return_pct, 1),
-            "n_confirmed_power_law": n_confirmed_power_law,
-            "n_verbatim_threshold": n_verbatim_threshold,
-        },
-        "sub_claims": {
+        "sub_claim_results": {
             "sc_power_law": {
                 "description": "VC returns follow a power law (small % of deals → large % of returns)",
                 "n_confirmed": n_confirmed_power_law,
@@ -237,11 +230,10 @@ if __name__ == "__main__":
                 "note": "Not verbatim confirmed — best source (a16z) says 6%→60%, not 10%→75%",
             },
         },
-        "citation_details": citation_detail,
+        "citations": citation_detail,
         "adversarial_checks": adversarial_checks,
         "verdict": VERDICT,
-        "verdict_holds": verdict_holds,
-        "verdict_reason": (
+                "verdict_reason": (
             "The power law distribution of VC returns is well-supported by empirical data "
             "(a16z/Horsley Bridge: 6% of investments → 60% of returns; Cambridge Associates: "
             "top 10% of managers → 90%+ of industry returns). The directional claim is SUPPORTED. "
@@ -262,5 +254,4 @@ if __name__ == "__main__":
             "generated_at": "2026-04-08",
         },
     }
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2))
+    emit_proof_summary(summary)

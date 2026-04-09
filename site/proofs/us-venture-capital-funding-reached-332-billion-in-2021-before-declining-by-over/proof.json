@@ -23,14 +23,39 @@
       "label": "PitchBook-NVCA via Built In: 2022 US VC = $238.3B (down 30.8% from $344.7B)"
     }
   },
-  "computed_values": {
+  "adversarial_checks": [
+    {
+      "description": "PitchBook-NVCA reports only 30.8% decline (< 35% threshold)",
+      "verification_performed": "PitchBook-NVCA Q4 2022 Venture Monitor reports 2022 US VC at $238.3B, down 30.8% from the revised 2021 figure of $344.7B. This is below the claim's >35% threshold and directly contradicts SC2. PitchBook is the most authoritative VC data source for the US market. The discrepancy with CB Insights (-37% using $198.4B) reflects: (1) different fund universes included, (2) different treatment of corporate VC and CVC arms, (3) PitchBook's revised 2021 baseline of $344.7B vs CB Insights' lower baseline.",
+      "breaks_proof": true
+    },
+    {
+      "description": "$332B claim vs $329.9B actual (NVCA) \u2014 minor discrepancy",
+      "verification_performed": "The NVCA press release cites $329.9B for 2021 (initial estimate). PitchBook later revised this to $344.7B. The claim's $332B is between these two figures, suggesting it may reflect KPMG's Venture Pulse Q4 2021 or an intermediate estimate. No single major source publishes exactly $332B, but the figure is within the range of credible estimates.",
+      "breaks_proof": false
+    },
+    {
+      "description": "Global vs US figures \u2014 scope alignment",
+      "verification_performed": "The NVCA/PitchBook figures are for US-only venture capital. CB Insights also reports global figures (e.g., $415B global VC in 2021) which are higher. The claim uses 'US venture capital funding,' consistent with the NVCA/PitchBook scope. No scoping inconsistency in the sources used.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PARTIALLY VERIFIED",
+  "key_results": {
     "vc_2021_nvca_B": 329.9,
-    "vc_2022_cbi_B": 198.4,
-    "vc_2022_pb_B": 238.3,
     "decline_cbi_pct": 37.0,
-    "decline_pb_pct": 30.9
+    "decline_pb_pct": 30.9,
+    "sc1_holds": true,
+    "sc2_cbi_holds": true,
+    "claim_holds": false
   },
-  "sub_claims": {
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.11.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-08"
+  },
+  "sub_claim_results": {
     "sc1": {
       "description": "2021 US VC \u2248 $332B",
       "nvca_value_B": 329.9,
@@ -46,7 +71,7 @@
       "pb_confirms": false
     }
   },
-  "citation_details": {
+  "citations": {
     "B1": {
       "source_key": "B1",
       "source_name": "NVCA Press Release: U.S. VC Activity Soars to New Highs in 2021",
@@ -98,38 +123,5 @@
         "note": "Unclassified domain \u2014 verify source authority manually"
       }
     }
-  },
-  "adversarial_checks": [
-    {
-      "description": "PitchBook-NVCA reports only 30.8% decline (< 35% threshold)",
-      "verification_performed": "PitchBook-NVCA Q4 2022 Venture Monitor reports 2022 US VC at $238.3B, down 30.8% from the revised 2021 figure of $344.7B. This is below the claim's >35% threshold and directly contradicts SC2. PitchBook is the most authoritative VC data source for the US market. The discrepancy with CB Insights (-37% using $198.4B) reflects: (1) different fund universes included, (2) different treatment of corporate VC and CVC arms, (3) PitchBook's revised 2021 baseline of $344.7B vs CB Insights' lower baseline.",
-      "breaks_proof": true
-    },
-    {
-      "description": "$332B claim vs $329.9B actual (NVCA) \u2014 minor discrepancy",
-      "verification_performed": "The NVCA press release cites $329.9B for 2021 (initial estimate). PitchBook later revised this to $344.7B. The claim's $332B is between these two figures, suggesting it may reflect KPMG's Venture Pulse Q4 2021 or an intermediate estimate. No single major source publishes exactly $332B, but the figure is within the range of credible estimates.",
-      "breaks_proof": false
-    },
-    {
-      "description": "Global vs US figures \u2014 scope alignment",
-      "verification_performed": "The NVCA/PitchBook figures are for US-only venture capital. CB Insights also reports global figures (e.g., $415B global VC in 2021) which are higher. The claim uses 'US venture capital funding,' consistent with the NVCA/PitchBook scope. No scoping inconsistency in the sources used.",
-      "breaks_proof": false
-    }
-  ],
-  "verdict": "PARTIALLY VERIFIED",
-  "verdict_holds": false,
-  "key_results": {
-    "vc_2021_nvca_B": 329.9,
-    "decline_cbi_pct": 37.0,
-    "decline_pb_pct": 30.9,
-    "sc1_holds": true,
-    "sc2_cbi_holds": true,
-    "claim_holds": false
-  },
-  "generator": {
-    "name": "proof-engine",
-    "version": "1.11.0",
-    "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-04-08"
   }
 }

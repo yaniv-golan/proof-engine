@@ -12,20 +12,6 @@
     "SC1": "SaaS average exit MOIC = 8.5\u00d7 \u2014 no public source found; 8.5\u00d7 EV/Revenue found but is a different metric",
     "SC2": "SaaS MOIC > consumer internet MOIC \u2014 no public comparable data found"
   },
-  "sub_claims": {
-    "sc1": {
-      "description": "Average SaaS exit multiple is 8.5\u00d7 invested capital (MOIC)",
-      "n_confirmed": 0,
-      "threshold": 2,
-      "holds": false
-    },
-    "sc2": {
-      "description": "SaaS exit multiple exceeds consumer internet exit multiple",
-      "n_confirmed": 0,
-      "threshold": 2,
-      "holds": false
-    }
-  },
   "adversarial_checks": [
     {
       "description": "Is the 8.5x figure actually EV/Revenue rather than MOIC?",
@@ -44,7 +30,6 @@
     }
   ],
   "verdict": "UNDETERMINED",
-  "verdict_holds": false,
   "verdict_reason": "The specific metric in the claim (MOIC \u2014 multiple of invested capital) is not publicly available by sector. Public sources report EV/Revenue multiples for SaaS, which is a different metric. No public source provides average MOIC for SaaS or a SaaS vs consumer internet MOIC comparison.",
   "key_results": {
     "n_confirmed_sc1": 0,
@@ -57,5 +42,19 @@
     "version": "1.11.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-08"
+  },
+  "sub_claim_results": {
+    "sc1": {
+      "description": "Average SaaS exit multiple is 8.5\u00d7 invested capital (MOIC)",
+      "n_confirmed": 0,
+      "threshold": 2,
+      "holds": false
+    },
+    "sc2": {
+      "description": "SaaS exit multiple exceeds consumer internet exit multiple",
+      "n_confirmed": 0,
+      "threshold": 2,
+      "holds": false
+    }
   }
 }

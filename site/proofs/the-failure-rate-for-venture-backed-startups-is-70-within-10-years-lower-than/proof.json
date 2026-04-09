@@ -22,11 +22,38 @@
       "label": "LLC.org/BLS: 70% of all businesses fail within 10 years"
     }
   },
-  "computed_values": {
+  "adversarial_checks": [
+    {
+      "description": "The 70% VC-backed figure is for ALL businesses (BLS), not specifically VC-backed",
+      "verification_performed": "BLS Business Employment Dynamics data shows ~70% of all businesses fail within 10 years \u2014 not specifically venture-backed startups. The claim appears to cite the all-business BLS rate (70%) as the VC-backed rate. When applied specifically to VC-backed startups, the most credible study (Ghosh/Harvard, 2,000+ VC-backed companies) finds 75% never return capital, which is HIGHER than 70%, not lower. This means the claim's first assertion (70% VC-backed failure) may be applying the wrong failure rate to the wrong population.",
+      "breaks_proof": true
+    },
+    {
+      "description": "The '90% of all startups fail' figure is widely cited but disputed",
+      "verification_performed": "Searched: 'Is it true that 90% of startups fail?' Multiple fact-checks find the 90% figure is a myth or misquotation. BLS data shows ~50% of businesses survive 5 years and ~35% survive 10 years (implying a 65% failure rate at 10 years). The 90% figure has unclear provenance and is commonly described as not grounded in BLS or comparable government data. If the 90% general figure is incorrect, the comparative claim ('lower than 90%') is comparing against a false baseline.",
+      "breaks_proof": true
+    },
+    {
+      "description": "Definition of 'failure' is inconsistent across sources",
+      "verification_performed": "BLS tracks business survival (closure of the legal entity). Ghosh/Harvard tracks return of capital to investors. These definitions produce different failure rates for the same population. A VC-backed company that was acquired at a below-cost valuation is a 'failure' under definition (b) but not under definition (a) if the acquirer keeps the business running. Mixing definitions without disclosure makes the claim imprecise.",
+      "breaks_proof": true
+    }
+  ],
+  "verdict": "PARTIALLY VERIFIED",
+  "key_results": {
     "vc_failure_ghosh_pct": 75.0,
-    "general_failure_bls_pct": 70.0
+    "general_failure_bls_pct": 70.0,
+    "n_confirmed_sc1": 0,
+    "any_breaks": true,
+    "claim_holds": false
   },
-  "sub_claims": {
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.11.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-08"
+  },
+  "sub_claim_results": {
     "sc1": {
       "description": "VC-backed failure rate \u2248 70% within 10 years",
       "n_confirmed": 0,
@@ -40,7 +67,7 @@
       "holds": true
     }
   },
-  "citation_details": {
+  "citations": {
     "B1": {
       "source_key": "B1",
       "source_name": "Harvard Business School News: The Venture Capital Secret (Shikhar Ghosh)",
@@ -92,37 +119,5 @@
         "note": "Unclassified domain \u2014 verify source authority manually"
       }
     }
-  },
-  "adversarial_checks": [
-    {
-      "description": "The 70% VC-backed figure is for ALL businesses (BLS), not specifically VC-backed",
-      "verification_performed": "BLS Business Employment Dynamics data shows ~70% of all businesses fail within 10 years \u2014 not specifically venture-backed startups. The claim appears to cite the all-business BLS rate (70%) as the VC-backed rate. When applied specifically to VC-backed startups, the most credible study (Ghosh/Harvard, 2,000+ VC-backed companies) finds 75% never return capital, which is HIGHER than 70%, not lower. This means the claim's first assertion (70% VC-backed failure) may be applying the wrong failure rate to the wrong population.",
-      "breaks_proof": true
-    },
-    {
-      "description": "The '90% of all startups fail' figure is widely cited but disputed",
-      "verification_performed": "Searched: 'Is it true that 90% of startups fail?' Multiple fact-checks find the 90% figure is a myth or misquotation. BLS data shows ~50% of businesses survive 5 years and ~35% survive 10 years (implying a 65% failure rate at 10 years). The 90% figure has unclear provenance and is commonly described as not grounded in BLS or comparable government data. If the 90% general figure is incorrect, the comparative claim ('lower than 90%') is comparing against a false baseline.",
-      "breaks_proof": true
-    },
-    {
-      "description": "Definition of 'failure' is inconsistent across sources",
-      "verification_performed": "BLS tracks business survival (closure of the legal entity). Ghosh/Harvard tracks return of capital to investors. These definitions produce different failure rates for the same population. A VC-backed company that was acquired at a below-cost valuation is a 'failure' under definition (b) but not under definition (a) if the acquirer keeps the business running. Mixing definitions without disclosure makes the claim imprecise.",
-      "breaks_proof": true
-    }
-  ],
-  "verdict": "PARTIALLY VERIFIED",
-  "verdict_holds": false,
-  "key_results": {
-    "vc_failure_ghosh_pct": 75.0,
-    "general_failure_bls_pct": 70.0,
-    "n_confirmed_sc1": 0,
-    "any_breaks": true,
-    "claim_holds": false
-  },
-  "generator": {
-    "name": "proof-engine",
-    "version": "1.11.0",
-    "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-04-08"
   }
 }

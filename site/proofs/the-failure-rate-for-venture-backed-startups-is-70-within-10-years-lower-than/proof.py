@@ -6,7 +6,6 @@ lower than the commonly cited 90% for all startups.
 
 Generated: 2026-04-08
 """
-import json
 import os
 import sys
 
@@ -15,7 +14,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from scripts.extract_values import parse_number_from_quote
 from scripts.verify_citations import verify_all_citations, build_citation_detail
-from scripts.computations import compare, apply_verdict_qualifier
+from scripts.computations import compare, apply_verdict_qualifier, emit_proof_summary
 
 # =============================================================================
 # 1. CLAIM INTERPRETATION (Rule 4)
@@ -203,11 +202,7 @@ if __name__ == "__main__":
         "claim_natural": CLAIM_NATURAL,
         "claim_formal": CLAIM_FORMAL,
         "fact_registry": FACT_REGISTRY,
-        "computed_values": {
-            "vc_failure_ghosh_pct": round(vc_failure_rate_ghosh, 1),
-            "general_failure_bls_pct": round(general_failure_bls, 1),
-        },
-        "sub_claims": {
+        "sub_claim_results": {
             "sc1": {
                 "description": "VC-backed failure rate ≈ 70% within 10 years",
                 "n_confirmed": n_confirmed_sc1,
@@ -221,11 +216,10 @@ if __name__ == "__main__":
                 "holds": sc2_holds,
             },
         },
-        "citation_details": citation_detail,
+        "citations": citation_detail,
         "adversarial_checks": adversarial_checks,
         "verdict": VERDICT,
-        "verdict_holds": verdict_holds,
-        "key_results": {
+                "key_results": {
             "vc_failure_ghosh_pct": round(vc_failure_rate_ghosh, 1),
             "general_failure_bls_pct": round(general_failure_bls, 1),
             "n_confirmed_sc1": n_confirmed_sc1,
@@ -239,5 +233,4 @@ if __name__ == "__main__":
             "generated_at": "2026-04-08",
         },
     }
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2))
+    emit_proof_summary(summary)

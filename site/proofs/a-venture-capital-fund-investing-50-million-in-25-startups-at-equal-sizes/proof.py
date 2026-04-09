@@ -4,7 +4,6 @@ requires at least one 50x return and two 10x returns to achieve a 3x gross multi
 
 Generated: 2026-04-08
 """
-import json
 import os
 import sys
 
@@ -13,7 +12,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from datetime import date
 
-from scripts.computations import compare, explain_calc
+from scripts.computations import compare, explain_calc, emit_proof_summary
 
 # =============================================================================
 # 1. CLAIM INTERPRETATION (Rule 4)
@@ -349,5 +348,4 @@ if __name__ == "__main__":
         },
     }
 
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2, default=str))
+    emit_proof_summary(summary)

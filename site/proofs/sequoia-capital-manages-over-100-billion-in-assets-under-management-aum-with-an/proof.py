@@ -6,7 +6,6 @@ with an average fund multiple exceeding 4x net returns to investors.
 
 Generated: 2026-04-08
 """
-import json
 import os
 import sys
 
@@ -15,7 +14,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from scripts.extract_values import parse_number_from_quote
 from scripts.verify_citations import verify_all_citations, build_citation_detail
-from scripts.computations import compare, explain_calc, apply_verdict_qualifier
+from scripts.computations import compare, explain_calc, apply_verdict_qualifier, emit_proof_summary
 
 # =============================================================================
 # 1. CLAIM INTERPRETATION (Rule 4)
@@ -222,13 +221,7 @@ if __name__ == "__main__":
         "claim_natural": CLAIM_NATURAL,
         "claim_formal": CLAIM_FORMAL,
         "fact_registry": FACT_REGISTRY,
-        "computed_values": {
-            "aum_us_europe_B": round(aum_us_europe, 1),
-            "aum_hongshan_B": round(aum_hongshan, 1),
-            "aum_peak_xv_B": round(aum_peak_xv, 1),
-            "aum_combined_B": round(aum_combined, 1),
-        },
-        "sub_claims": {
+        "sub_claim_results": {
             "sc1": {
                 "description": "Sequoia manages over $100B AUM",
                 "us_europe_only_B": round(aum_us_europe, 1),
@@ -249,11 +242,10 @@ if __name__ == "__main__":
                 "note": "No public data available — VC fund returns are not publicly disclosed",
             },
         },
-        "citation_details": citation_detail,
+        "citations": citation_detail,
         "adversarial_checks": adversarial_checks,
         "verdict": VERDICT,
-        "verdict_holds": verdict_holds,
-        "verdict_reason": (
+                "verdict_reason": (
             "SC1 (>$100B AUM) holds when counting all three post-split successor entities "
             "($56.3B + $56B + $9B = $121.3B), but not when counting only the US/Europe entity. "
             "SC2 (>4x net average MOIC) cannot be verified — no public data exists. "
@@ -275,5 +267,4 @@ if __name__ == "__main__":
             "generated_at": "2026-04-08",
         },
     }
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2))
+    emit_proof_summary(summary)

@@ -6,14 +6,13 @@ invested capital, higher than for consumer internet companies.
 
 Generated: 2026-04-08
 """
-import json
 import os
 import sys
 
 PROOF_ENGINE_ROOT = "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine"
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
-from scripts.computations import compare
+from scripts.computations import compare, emit_proof_summary
 from scripts.verify_citations import verify_all_citations
 
 # =============================================================================
@@ -149,7 +148,7 @@ if __name__ == "__main__":
         "claim_natural": CLAIM_NATURAL,
         "claim_formal": CLAIM_FORMAL,
         "fact_registry": FACT_REGISTRY,
-        "sub_claims": {
+        "sub_claim_results": {
             "sc1": {
                 "description": "Average SaaS exit multiple is 8.5× invested capital (MOIC)",
                 "n_confirmed": n_confirmed_sc1,
@@ -165,8 +164,7 @@ if __name__ == "__main__":
         },
         "adversarial_checks": adversarial_checks,
         "verdict": VERDICT,
-        "verdict_holds": verdict_holds,
-        "verdict_reason": (
+                "verdict_reason": (
             "The specific metric in the claim (MOIC — multiple of invested capital) is not "
             "publicly available by sector. Public sources report EV/Revenue multiples for SaaS, "
             "which is a different metric. No public source provides average MOIC for SaaS "
@@ -185,5 +183,4 @@ if __name__ == "__main__":
             "generated_at": "2026-04-08",
         },
     }
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2))
+    emit_proof_summary(summary)

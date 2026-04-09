@@ -6,7 +6,6 @@ declining by over 35% in 2022.
 
 Generated: 2026-04-08
 """
-import json
 import os
 import sys
 
@@ -15,7 +14,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from scripts.extract_values import parse_number_from_quote
 from scripts.verify_citations import verify_all_citations
-from scripts.computations import compare, cross_check, explain_calc, apply_verdict_qualifier
+from scripts.computations import compare, cross_check, explain_calc, apply_verdict_qualifier, emit_proof_summary
 
 # =============================================================================
 # 1. CLAIM INTERPRETATION (Rule 4)
@@ -212,14 +211,7 @@ if __name__ == "__main__":
         "claim_natural": CLAIM_NATURAL,
         "claim_formal": CLAIM_FORMAL,
         "fact_registry": FACT_REGISTRY,
-        "computed_values": {
-            "vc_2021_nvca_B": round(vc_2021_nvca, 1),
-            "vc_2022_cbi_B": round(vc_2022_cbi, 1),
-            "vc_2022_pb_B": round(vc_2022_pb, 1),
-            "decline_cbi_pct": round(decline_cbi_pct, 1),
-            "decline_pb_pct": round(decline_pb_pct, 1),
-        },
-        "sub_claims": {
+        "sub_claim_results": {
             "sc1": {
                 "description": "2021 US VC ≈ $332B",
                 "nvca_value_B": round(vc_2021_nvca, 1),
@@ -235,11 +227,10 @@ if __name__ == "__main__":
                 "pb_confirms": sc2_pb_holds,
             },
         },
-        "citation_details": citation_detail,
+        "citations": citation_detail,
         "adversarial_checks": adversarial_checks,
         "verdict": VERDICT,
-        "verdict_holds": verdict_holds,
-        "key_results": {
+                "key_results": {
             "vc_2021_nvca_B": round(vc_2021_nvca, 1),
             "decline_cbi_pct": round(decline_cbi_pct, 1),
             "decline_pb_pct": round(decline_pb_pct, 1),
@@ -254,5 +245,4 @@ if __name__ == "__main__":
             "generated_at": "2026-04-08",
         },
     }
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2))
+    emit_proof_summary(summary)

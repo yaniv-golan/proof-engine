@@ -6,14 +6,13 @@ universities rather than market size or product traction.
 
 Generated: 2026-04-08
 """
-import json
 import os
 import sys
 
 PROOF_ENGINE_ROOT = "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine"
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
-from scripts.computations import compare
+from scripts.computations import compare, emit_proof_summary
 from scripts.verify_citations import verify_all_citations
 
 # =============================================================================
@@ -164,11 +163,8 @@ if __name__ == "__main__":
         "claim_natural": CLAIM_NATURAL,
         "claim_formal": CLAIM_FORMAL,
         "fact_registry": FACT_REGISTRY,
-        "n_confirming": n_confirming,
-        "threshold": CLAIM_FORMAL["threshold"],
         "adversarial_checks": adversarial_checks,
         "verdict": VERDICT,
-        "verdict_holds": verdict_holds,
         "verdict_reason": (
             "Research does not support founder pedigree as the 'superior' predictor compared "
             "to both market size and product traction. Multiple studies find pedigree explains "
@@ -191,5 +187,4 @@ if __name__ == "__main__":
             "generated_at": "2026-04-08",
         },
     }
-    print("\n=== PROOF SUMMARY (JSON) ===")
-    print(json.dumps(summary, indent=2))
+    emit_proof_summary(summary)

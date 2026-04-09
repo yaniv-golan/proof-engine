@@ -23,13 +23,40 @@
       "label": "Wikipedia: Peak XV Partners (formerly Sequoia India/SEA) AUM = $9B"
     }
   },
-  "computed_values": {
+  "adversarial_checks": [
+    {
+      "description": "The US/Europe Sequoia entity alone has only $56.3B AUM (< $100B)",
+      "verification_performed": "Wikipedia's Sequoia Capital article (the US/Europe entity) cites $56.3 billion AUM as of 2024. The original Sequoia Capital split in 2021-2023 into three independent entities. The US/Europe entity at $56.3B does not exceed $100B on its own. The $100B threshold is only reached by combining all three successor entities (US/Europe + HongShan China + Peak XV India/SEA = ~$121B). Whether 'Sequoia Capital' in the claim refers to the single US/Europe entity or all successor entities is ambiguous \u2014 and this ambiguity is material because it determines whether SC1 holds.",
+      "breaks_proof": true
+    },
+    {
+      "description": "Average net fund multiple > 4x is not publicly documented",
+      "verification_performed": "Searched for 'Sequoia Capital average fund multiple net returns', 'Sequoia Capital net MOIC', 'Sequoia Capital fund performance history'. Found: Sequoia is consistently ranked among the top-performing VC firms, with specific funds cited in press coverage (e.g., Sequoia Capital Global Equities fund launched in 2021). However, no public source provides a verified average net MOIC across all Sequoia funds. VC fund return data is not publicly disclosed unless reported in LP meeting presentations. Cambridge Associates and Preqin track this data but require paid subscriptions. The '>4x net' claim cannot be verified from public sources.",
+      "breaks_proof": true
+    },
+    {
+      "description": "Sequoia has both top-performing funds and below-average ones",
+      "verification_performed": "While Sequoia's iconic early bets (Apple, Google, Cisco, WhatsApp, Zoom, Airbnb) generated outsized returns, any calculation of 'average fund multiple' must include all funds, including newer and underperforming vintages. The Cambridge Associates benchmark for top-quartile VC funds (1985-2015 vintages) is typically 2-3x net TVPI. A '4x net average' would require Sequoia to consistently perform at 2x the top-quartile benchmark, which is plausible for their marquee funds but unverified as an average across their full fund history.",
+      "breaks_proof": true
+    }
+  ],
+  "verdict": "PARTIALLY VERIFIED",
+  "verdict_reason": "SC1 (>$100B AUM) holds when counting all three post-split successor entities ($56.3B + $56B + $9B = $121.3B), but not when counting only the US/Europe entity. SC2 (>4x net average MOIC) cannot be verified \u2014 no public data exists. The claim is PARTIALLY VERIFIED: the AUM figure is supportable under a broad interpretation, but the fund multiple figure lacks public evidence.",
+  "key_results": {
     "aum_us_europe_B": 56.3,
-    "aum_hongshan_B": 56.0,
-    "aum_peak_xv_B": 9.0,
-    "aum_combined_B": 121.3
+    "aum_combined_B": 121.3,
+    "threshold_B": 100.0,
+    "sc1_us_only": false,
+    "sc1_combined": true,
+    "claim_holds": false
   },
-  "sub_claims": {
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.11.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-08"
+  },
+  "sub_claim_results": {
     "sc1": {
       "description": "Sequoia manages over $100B AUM",
       "us_europe_only_B": 56.3,
@@ -46,7 +73,7 @@
       "note": "No public data available \u2014 VC fund returns are not publicly disclosed"
     }
   },
-  "citation_details": {
+  "citations": {
     "B1": {
       "source_key": "B1",
       "source_name": "Wikipedia: Sequoia Capital \u2014 AUM figure for US/Europe entity (2024)",
@@ -98,39 +125,5 @@
         "note": "Established reference source"
       }
     }
-  },
-  "adversarial_checks": [
-    {
-      "description": "The US/Europe Sequoia entity alone has only $56.3B AUM (< $100B)",
-      "verification_performed": "Wikipedia's Sequoia Capital article (the US/Europe entity) cites $56.3 billion AUM as of 2024. The original Sequoia Capital split in 2021-2023 into three independent entities. The US/Europe entity at $56.3B does not exceed $100B on its own. The $100B threshold is only reached by combining all three successor entities (US/Europe + HongShan China + Peak XV India/SEA = ~$121B). Whether 'Sequoia Capital' in the claim refers to the single US/Europe entity or all successor entities is ambiguous \u2014 and this ambiguity is material because it determines whether SC1 holds.",
-      "breaks_proof": true
-    },
-    {
-      "description": "Average net fund multiple > 4x is not publicly documented",
-      "verification_performed": "Searched for 'Sequoia Capital average fund multiple net returns', 'Sequoia Capital net MOIC', 'Sequoia Capital fund performance history'. Found: Sequoia is consistently ranked among the top-performing VC firms, with specific funds cited in press coverage (e.g., Sequoia Capital Global Equities fund launched in 2021). However, no public source provides a verified average net MOIC across all Sequoia funds. VC fund return data is not publicly disclosed unless reported in LP meeting presentations. Cambridge Associates and Preqin track this data but require paid subscriptions. The '>4x net' claim cannot be verified from public sources.",
-      "breaks_proof": true
-    },
-    {
-      "description": "Sequoia has both top-performing funds and below-average ones",
-      "verification_performed": "While Sequoia's iconic early bets (Apple, Google, Cisco, WhatsApp, Zoom, Airbnb) generated outsized returns, any calculation of 'average fund multiple' must include all funds, including newer and underperforming vintages. The Cambridge Associates benchmark for top-quartile VC funds (1985-2015 vintages) is typically 2-3x net TVPI. A '4x net average' would require Sequoia to consistently perform at 2x the top-quartile benchmark, which is plausible for their marquee funds but unverified as an average across their full fund history.",
-      "breaks_proof": true
-    }
-  ],
-  "verdict": "PARTIALLY VERIFIED",
-  "verdict_holds": false,
-  "verdict_reason": "SC1 (>$100B AUM) holds when counting all three post-split successor entities ($56.3B + $56B + $9B = $121.3B), but not when counting only the US/Europe entity. SC2 (>4x net average MOIC) cannot be verified \u2014 no public data exists. The claim is PARTIALLY VERIFIED: the AUM figure is supportable under a broad interpretation, but the fund multiple figure lacks public evidence.",
-  "key_results": {
-    "aum_us_europe_B": 56.3,
-    "aum_combined_B": 121.3,
-    "threshold_B": 100.0,
-    "sc1_us_only": false,
-    "sc1_combined": true,
-    "claim_holds": false
-  },
-  "generator": {
-    "name": "proof-engine",
-    "version": "1.11.0",
-    "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-04-08"
   }
 }

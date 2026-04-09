@@ -14,8 +14,6 @@
     "B3": "CB Insights \u2014 product-market fit failure is #1 startup cause (adversarial)",
     "B4": "Gompers et al. (2010) \u2014 management team ranked #1 by VCs but pedigree not isolated"
   },
-  "n_confirming": 0,
-  "threshold": 3,
   "adversarial_checks": [
     {
       "description": "arXiv/YC study: credentials explain <4% of startup funding variation",
@@ -44,7 +42,6 @@
     }
   ],
   "verdict": "UNDETERMINED",
-  "verdict_holds": false,
   "verdict_reason": "Research does not support founder pedigree as the 'superior' predictor compared to both market size and product traction. Multiple studies find pedigree explains little variance in outcomes, that it predicts VC access more than actual success, and that product-market fit (traction) and market size are the dominant factors in startup failure. No controlled study showing pedigree > traction + market size was found. The claim is UNDETERMINED due to absence of confirming evidence and presence of contradictory evidence.",
   "key_results": {
     "n_confirming": 0,

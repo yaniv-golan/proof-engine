@@ -13,14 +13,6 @@
     "A3": "moic \u2014 multiple on invested capital",
     "A4": "cagr_sympy \u2014 annualized return (CAGR) via sympy exact solve"
   },
-  "computed_values": {
-    "ownership_pct": 20.0,
-    "exit_proceeds_usd": 100000000.0,
-    "moic": 20.0,
-    "cagr_sympy": 0.5341274,
-    "cagr_scipy": 0.5341274,
-    "cagr_pct": 53.4127
-  },
   "cross_checks": [
     {
       "description": "sympy exact symbolic vs scipy brentq NPV=0",
@@ -48,7 +40,6 @@
     }
   ],
   "verdict": "PROVED",
-  "verdict_holds": true,
   "key_results": {
     "ownership_pct": 20.0,
     "moic": 20.0,
