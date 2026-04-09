@@ -8,6 +8,25 @@ All notable changes to this project will be documented in this file.
 
 - **Section matcher ignoring parenthetical suffixes** — `validate_required_sections` now strips suffixes like `(Rule 5)` before matching, so audit headings like `## Adversarial Checks (Rule 5)` correctly match the expected section name `Adversarial Checks`
 
+## [1.12.0] - 2026-04-09
+
+### Added
+
+- **`apply_verdict_qualifier()` helper** in `computations.py` — validates base verdict against the 5-value taxonomy and only appends "(with unverified citations)" to the 3 qualifiable verdicts (PROVED, DISPROVED, SUPPORTED). Prevents agents from constructing invalid verdict strings
+- **`emit_proof_summary()` helper** in `computations.py` — validates proof summary keys against the `ProofData` TypedDict schema before printing, raising `ValueError` on unknown keys. Prevents agents from inventing schema fields
+- **Verdict validity check** in `validate_proof.py` — detects invalid verdict strings and the `+=` antipattern for building verdicts
+- **FACT_REGISTRY format check** in `validate_proof.py` — ensures registry entries are dicts (not plain strings) with required keys per fact type
+- **`claim_natural` key check** in `validate_proof.py` — warns when bare `"claim"` is used instead of the required `"claim_natural"` key
+- **`emit_proof_summary` adoption check** in `validate_proof.py` — warns when proofs use raw `json.dumps` instead of the schema-validated helper
+- **Type guard in `verify_citations.py`** — `build_citation_detail()` raises `TypeError` with actionable message when FACT_REGISTRY entries are strings instead of dicts
+- **Key stripping in `proof_runner.py`** — unknown keys are silently stripped from proof JSON during publish, with stderr warning. Last line of defense after generation-time validation
+
+### Changed
+
+- **All 6 proof templates** refactored to use `apply_verdict_qualifier()` and `emit_proof_summary()`, replacing manual verdict construction and raw `json.dumps`
+- **`check_json_summary()`** updated to recognize `emit_proof_summary()` as a valid summary output method
+- **Missing-section errors** in `proof_loader.py` now include the list of found sections for easier debugging
+
 ## [1.11.0] - 2026-04-08
 
 ### Added
