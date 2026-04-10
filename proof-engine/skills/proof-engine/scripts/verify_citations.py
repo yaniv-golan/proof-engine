@@ -775,6 +775,7 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False) 
 
 def verify_data_values(url: str, data_values: dict, fact_id: str,
                        timeout: int = 15, snapshot: str = None,
+                       snapshot_file: str = None,
                        wayback_fallback: bool = False) -> dict:
     """Verify that data_values strings appear on the source page.
 
@@ -789,6 +790,7 @@ def verify_data_values(url: str, data_values: dict, fact_id: str,
         fact_id: Identifier for messages.
         timeout: Fetch timeout in seconds.
         snapshot: Pre-fetched page text for offline verification.
+        snapshot_file: Path to a local snapshot file to use when live fetch fails.
         wayback_fallback: If True, try Wayback Machine as fallback.
 
     Returns:
@@ -796,6 +798,7 @@ def verify_data_values(url: str, data_values: dict, fact_id: str,
     """
     page_text, fetch_mode, fetch_error = _fetch_page(
         url, timeout=timeout, snapshot=snapshot,
+        snapshot_file=snapshot_file,
         wayback_fallback=wayback_fallback,
     )
 

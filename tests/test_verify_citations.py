@@ -1156,3 +1156,35 @@ def test_verify_all_citations_passes_snapshot_file():
         assert results["src_a"]["fetch_mode"] == "snapshot"
     finally:
         os.unlink(tmppath)
+
+
+def test_verify_data_values_uses_snapshot_file():
+    """verify_data_values reads from snapshot_file when live fetch fails."""
+    import requests as real_req
+    from unittest.mock import patch, MagicMock
+    import os
+    import tempfile
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+        f.write("The CPI index value was 9.883 in 1913 and 308.417 in 2023.")
+        f.flush()
+        tmppath = f.name
+    try:
+        mock_requests = MagicMock()
+        mock_requests.get.side_effect = real_req.exceptions.ConnectionError("refused")
+        mock_requests.exceptions = real_req.exceptions
+
+        with patch("scripts.fetch.requests", mock_requests), \
+             patch("scripts.verify_citations.requests", mock_requests):
+            from scripts.verify_citations import verify_data_values
+            results = verify_data_values(
+                "https://paywalled-stats.gov/cpi",
+                {"cpi_1913": "9.883", "cpi_2023": "308.417"},
+                "B1",
+                snapshot_file=tmppath,
+            )
+
+        assert results["cpi_1913"]["found"] is True
+        assert results["cpi_2023"]["found"] is True
+    finally:
+        os.unlink(tmppath)
