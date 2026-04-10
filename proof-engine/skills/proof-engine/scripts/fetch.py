@@ -7,6 +7,7 @@ Also handles PDF text extraction and GitHub raw README fallback.
 Extracted from verify_citations.py to separate transport from matching logic.
 """
 
+import os
 import re
 
 try:
@@ -109,16 +110,20 @@ def try_github_raw(url: str, timeout: int = 15) -> str | None:
 
 def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
                wayback_fallback: bool = False,
-               skip_live_fetch: bool = False) -> tuple[str | None, str, str | None]:
+               skip_live_fetch: bool = False,
+               snapshot_file: str = None) -> tuple[str | None, str, str | None]:
     """Fetch page text using the standard fallback chain.
 
     Args:
         url: The URL to fetch.
         timeout: Fetch timeout in seconds.
-        snapshot: Pre-fetched page text for offline verification.
+        snapshot: Pre-fetched page text for offline verification (inline).
         wayback_fallback: If True, try Wayback Machine as last resort.
         skip_live_fetch: If True, skip live HTTP fetch (e.g., when requests
             is unavailable in the calling module).
+        snapshot_file: Path to a local file containing pre-fetched page text.
+            Used for paywalled content that cannot be embedded inline. Inline
+            snapshot takes precedence over snapshot_file.
 
     Returns:
         (page_text, fetch_mode, error_message)
@@ -181,6 +186,23 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
     # --- 2. Try snapshot fallback ---
     if snapshot:
         return snapshot, "snapshot", None
+
+    # --- 2b. Try snapshot_file fallback ---
+    if snapshot_file:
+        if os.path.isfile(snapshot_file):
+            try:
+                with open(snapshot_file, "r", encoding="utf-8") as f:
+                    return f.read(), "snapshot", None
+            except (OSError, UnicodeDecodeError) as exc:
+                read_err = f"snapshot_file '{snapshot_file}' could not be read: {exc}"
+                fetch_error_msg = f"{fetch_error_msg}; {read_err}" if fetch_error_msg else read_err
+        else:
+            # Record the missing file but continue to next fallback
+            snapshot_file_msg = f"snapshot_file '{snapshot_file}' not found (paywalled content stored locally only)"
+            if fetch_error_msg:
+                fetch_error_msg = f"{fetch_error_msg}; {snapshot_file_msg}"
+            else:
+                fetch_error_msg = snapshot_file_msg
 
     # --- 3. Try Wayback Machine ---
     if wayback_fallback:

@@ -1,5 +1,7 @@
 """Tests for fetch.py — HTTP transport layer with fallback chain."""
 
+import os
+import tempfile
 from unittest.mock import patch, MagicMock, PropertyMock
 import requests as real_requests
 from scripts.fetch import fetch_page, extract_pdf_text, try_wayback
@@ -383,3 +385,92 @@ def test_fetch_page_non_github_skips_raw():
     with patch("scripts.fetch.requests", mock_requests):
         text, mode, err = fetch_page("https://example.com")
     assert mode == "live"
+
+
+# ---------------------------------------------------------------------------
+# fetch_page: snapshot_file fallback
+# ---------------------------------------------------------------------------
+
+def test_fetch_page_snapshot_file_fallback_when_live_fails():
+    """When live fetch fails and snapshot_file exists, use file contents."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+        f.write("snapshot file content for verification")
+        f.flush()
+        tmppath = f.name
+    try:
+        mock_requests = MagicMock()
+        mock_requests.get.side_effect = real_requests.exceptions.ConnectionError("refused")
+        mock_requests.exceptions = real_requests.exceptions
+
+        with patch("scripts.fetch.requests", mock_requests):
+            text, mode, err = fetch_page(
+                "https://example.com",
+                snapshot_file=tmppath,
+            )
+        assert text == "snapshot file content for verification"
+        assert mode == "snapshot"
+        assert err is None
+    finally:
+        os.unlink(tmppath)
+
+
+def test_fetch_page_snapshot_file_missing_continues_to_wayback():
+    """When snapshot_file path doesn't exist, skip it and try Wayback."""
+    mock_requests = MagicMock()
+    mock_requests.get.side_effect = [
+        # Live fetch fails
+        real_requests.exceptions.ConnectionError("refused"),
+        # Wayback succeeds
+        MagicMock(text="<html>wayback</html>", raise_for_status=MagicMock()),
+    ]
+    mock_requests.exceptions = real_requests.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests):
+        text, mode, err = fetch_page(
+            "https://example.com",
+            snapshot_file="/nonexistent/path/snapshot.txt",
+            wayback_fallback=True,
+        )
+    assert text == "<html>wayback</html>"
+    assert mode == "wayback"
+
+
+def test_fetch_page_snapshot_file_missing_no_wayback_returns_fetch_failed():
+    """Missing snapshot_file with no Wayback returns fetch_failed with specific message."""
+    mock_requests = MagicMock()
+    mock_requests.get.side_effect = real_requests.exceptions.ConnectionError("refused")
+    mock_requests.exceptions = real_requests.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests):
+        text, mode, err = fetch_page(
+            "https://example.com",
+            snapshot_file="/nonexistent/snapshots/B2_snapshot.txt",
+        )
+    assert text is None
+    assert mode == "fetch_failed"
+    assert "snapshot_file" in err
+    assert "not found" in err.lower()
+
+
+def test_fetch_page_inline_snapshot_takes_precedence_over_snapshot_file():
+    """Inline snapshot takes precedence over snapshot_file."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+        f.write("file content")
+        f.flush()
+        tmppath = f.name
+    try:
+        mock_requests = MagicMock()
+        mock_requests.get.side_effect = real_requests.exceptions.ConnectionError("refused")
+        mock_requests.exceptions = real_requests.exceptions
+
+        with patch("scripts.fetch.requests", mock_requests):
+            text, mode, err = fetch_page(
+                "https://example.com",
+                snapshot="inline content",
+                snapshot_file=tmppath,
+            )
+        assert text == "inline content"
+        assert mode == "snapshot"
+        assert err is None
+    finally:
+        os.unlink(tmppath)
