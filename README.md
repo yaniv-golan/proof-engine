@@ -11,23 +11,28 @@
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-plugin-F97316)](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/plugins)
 [![Cursor Plugin](https://img.shields.io/badge/Cursor-plugin-00D886)](https://cursor.com/docs/plugins)
 
-An AI agent skill that creates formal, verifiable proofs of claims. Every fact is either computed by Python code anyone can re-run or backed by a specific source, URL, and exact quote. The LLM never asserts a fact on its own authority.
+An AI agent skill that verifies claims through code and live sources — not by asking the LLM to check itself. Every fact is either computed by Python code anyone can re-run or backed by a specific source, URL, and exact quote. The LLM never asserts a fact on its own authority.
 
 Uses the open [Agent Skills](https://agentskills.io) standard. Works with Claude Desktop, Claude Cowork, Claude Code, Codex CLI, Cursor, Windsurf, Manus, ChatGPT, and any other compatible tool.
 
-## What It Does
+## Why This Exists
 
-LLMs have two weaknesses that make them unreliable for factual claims: they hallucinate facts and they make reasoning errors. This skill overcomes both by:
+LLMs hallucinate facts — and they hallucinate the checks on those facts. Ask an LLM to verify its own claim and it runs the same error-prone process again. The check is circular.
 
-- **Offloading facts to citations** — every empirical claim must have a source, URL, and exact quote
-- **Offloading reasoning to code** — every computation is executable Python, not prose
-- **Enforcing 7 hardening rules** — closing specific failure modes where proof code looks correct but is silently wrong
-- **Optionally offline-reproducible** — embedded page snapshots let proofs run without network access
-- **Multi-mode verification** — live fetch, embedded snapshots, Wayback Machine archive, and PDF support
+Proof Engine breaks the circle by routing every claim through a gate the LLM can't fake:
+
+- **Computations are Python** — Python doesn't hallucinate. If the LLM sets up the wrong calculation, the result is wrong in a visible, re-runnable way.
+- **Citations are fetched and matched** — the script hits the URL and searches for the quoted text on the live page. A fabricated citation fails the match; a partial match downgrades the verdict so the gap is visible.
+- **7 hardening rules** close the remaining escape routes — don't hand-type values (parse them from quotes), don't trust the LLM's sense of today's date (use `date.today()`), don't hard-code constants (use reviewed libraries).
+
+The LLM is useful: it finds sources, writes code, formalizes claims. But it is never trusted to *be* the verification. When it hallucinates, the pipeline breaks visibly instead of hiding the error.
 
 The skill produces four outputs: a re-runnable `proof.py` script, a structured `proof.md` proof report with verdict, a `proof_audit.md` with full verification details, and a `proof_narrative.md` reader-facing narrative summary. Verdicts: PROVED, SUPPORTED, DISPROVED, PARTIALLY VERIFIED, UNDETERMINED, or qualified variants with unverified citations.
 
 ## Installation
+
+<details>
+<summary>Platform-specific instructions (click to expand)</summary>
 
 ### Claude.ai (Web)
 
@@ -102,6 +107,8 @@ Download [`proof-engine.zip`](https://github.com/yaniv-golan/proof-engine/releas
 
 - **Project-level**: `.agents/skills/` in your project root
 - **User-level**: `~/.agents/skills/`
+
+</details>
 
 ## Published Proofs
 
@@ -214,11 +221,15 @@ The repo includes a [`CITATION.cff`](CITATION.cff) file for GitHub's "Cite this 
 
 ## How This Differs From...
 
+**"Just ask ChatGPT to check"** — The check uses the same mechanism that produced the error. If the LLM hallucinated a fact, asking it to verify the fact just hallucination-checks the hallucination. Proof Engine moves verification out of the LLM entirely — into Python code and live page fetches that either pass or fail mechanically.
+
+**Search-grounded AI (Perplexity, etc.)** — Search-grounded tools find relevant pages but still let the LLM summarize and interpret what's on those pages. Proof Engine goes further: it fetches the URL, matches the quoted text against the live page, and extracts values programmatically. If the match is only partial, the verdict downgrades to flag it. The difference is between "the LLM read a source and told you what it said" and "here's the code that fetched the source, checked the text, and reported what matched — run it yourself."
+
 **Theorem provers (Lean, Coq, Isabelle)** — These prove mathematical theorems from axioms. Proof Engine verifies real-world claims against web sources and computation. Lean can prove the irrationality of sqrt(2); it cannot verify that a country's GDP grew by 5% last year. Different problem, different tool.
 
-**Probabilistic/Bayesian scorers** — The engine produces auditable pass/fail verdicts with full evidence trails, not confidence percentages. This is deliberate: a "73% confidence" score hides *why* it's 73%. The six-tier verdict system (PROVED, DISPROVED, PARTIALLY VERIFIED, UNDETERMINED, PROVED with unverified citations, DISPROVED with unverified citations) plus the complete audit trail lets reviewers see exactly which facts held and which didn't.
+**Probabilistic/Bayesian scorers** — The engine produces auditable pass/fail verdicts with full evidence trails, not confidence percentages. This is deliberate: a "73% confidence" score hides *why* it's 73%. The verdict system plus the complete audit trail lets reviewers see exactly which facts held and which didn't.
 
-**RAG pipelines** — RAG retrieves context to help an LLM generate an answer. This engine forces the LLM to *prove* its answer with re-runnable code and exact quotes. The output is a Python script (importing bundled verification modules) anyone can re-execute, not a chat response.
+**RAG pipelines** — RAG retrieves context to help an LLM generate an answer. This engine forces the LLM to *prove* its answer with re-runnable code and exact quotes. The output is a Python script anyone can re-execute, not a chat response.
 
 ## Security Model
 
