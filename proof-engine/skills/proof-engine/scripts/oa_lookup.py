@@ -9,6 +9,7 @@ fetch_failed so interactive recovery remains available.
 
 import os
 import re
+from urllib.parse import quote as _url_quote
 
 try:
     import requests
@@ -65,7 +66,7 @@ def lookup_oa_url(doi: str, email: str = None) -> str | None:
     if not email:
         return None
 
-    api_url = f"https://api.unpaywall.org/v2/{doi}?email={email}"
+    api_url = f"https://api.unpaywall.org/v2/{_url_quote(doi, safe='')}?email={_url_quote(email, safe='@')}"
     try:
         resp = requests.get(api_url, timeout=10,
                             headers={"User-Agent": "proof-engine/1.0"})
