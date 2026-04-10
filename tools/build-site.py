@@ -239,6 +239,8 @@ def build_citation_summary(proof_data):
                 reasons.append(f"verified via non-exact method: {method}")
         if fetch_mode == "wayback":
             reasons.append("fetched from Wayback Machine")
+        if fetch_mode == "oa_variant":
+            reasons.append("verified against open-access variant (wording may differ from published version)")
         if tier <= 1:
             reasons.append("flagged unreliable source")
 
