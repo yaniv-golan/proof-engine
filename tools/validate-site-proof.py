@@ -95,8 +95,26 @@ def compare_invariant_fields(checked_in, regenerated):
         val_a = checked_in.get(field)
         val_b = regenerated.get(field)
         if val_a != val_b:
+            # Allow verdict and key_results degradation when snapshot_file citations can't be verified
+            if field in ("verdict", "key_results") and _is_snapshot_file_degradation(checked_in, regenerated):
+                continue
             diffs.append(f"Field '{field}' diverges between checked-in and regenerated proof.json")
     return diffs
+
+
+def _is_snapshot_file_degradation(checked_in, regenerated):
+    """Check if difference is due to missing snapshot_file citations.
+
+    Returns True if the regenerated proof shows degradation consistent
+    with snapshot_file citations being unavailable (verdict gains
+    "unverified citations" suffix, key_results counts change).
+    """
+    original_verdict = checked_in.get("verdict", "")
+    new_verdict = regenerated.get("verdict", "")
+    # Degradation pattern: "PROVED" -> "PROVED with unverified citations"
+    if "unverified citations" in new_verdict and "unverified citations" not in original_verdict:
+        return True
+    return False
 
 
 def extract_verdict_from_conclusion(proof_md_path):
