@@ -49,7 +49,7 @@ Every proof published on this site includes a downloadable `proof.py` script. To
 3. **Run it:** `python proof.py`
 4. **Check the output** — the script prints a JSON summary with the verdict, key results, and citation verification details
 
-The proof is self-contained: it fetches sources, verifies citations, runs computations, and prints the result. If the verdict matches what's published here, the proof is independently confirmed.
+The proof is self-contained: it fetches sources, verifies citations, runs computations, and prints the result. If the verdict matches what's published here, the proof is independently confirmed. Some proofs cite paywalled sources via local snapshot files — if those files are absent when you re-run, the affected citations will show as unverified but the computation and remaining citations still run.
 """
 
 
