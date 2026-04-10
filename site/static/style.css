@@ -290,6 +290,118 @@ a:hover { text-decoration: underline; }
 .myth-bottom-link { text-align: center; margin-bottom: 32px; }
 .myth-bottom-link a { font-size: 12px; font-family: var(--font-mono); color: var(--accent); }
 
+/* --- Why section --- */
+.landing-why-section {
+    max-width: 680px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+.why-content p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+.why-content .why-lead {
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+.why-pullquote {
+    border-left: 3px solid var(--accent);
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* --- Limits section --- */
+.landing-limits-section {
+    max-width: 820px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+.limits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 640px) {
+    .limits-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.limits-col h3 {
+    font-size: 0.95rem;
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+}
+
+.limits-good h3 {
+    color: var(--green-text);
+}
+
+.limits-bad h3 {
+    color: var(--red-text);
+}
+
+.limits-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.limits-col li {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    padding-left: 1.25rem;
+    position: relative;
+}
+
+.limits-good li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--green-text);
+}
+
+.limits-bad li::before {
+    content: "✗";
+    position: absolute;
+    left: 0;
+    color: var(--red-text);
+}
+
+.limits-col li strong {
+    color: var(--text);
+}
+
+/* --- Comparison section --- */
+.landing-comparison-section {
+    max-width: 680px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+.comparison-content p {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+.comparison-content strong {
+    color: var(--text);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
 /* Section headings */
 .section-heading { font-size: 11px; font-family: var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin: 40px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); }
 

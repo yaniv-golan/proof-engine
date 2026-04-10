@@ -32,6 +32,7 @@ METHODOLOGY_SECTIONS_FROM_DESIGN = [
     "Separation of concerns",
     "Structured verdicts, not confidence scores",
     "The 7 hardening rules",
+    "What a proof looks like in practice",
     "Source independence and conflicts of interest",
     "Citation verification is messier than you'd think",
     "Asymmetry between proof and disproof",

@@ -23,3 +23,4 @@ _build/
 # Runtime artifacts from example proof execution
 docs/examples/*/proof.json
 docs/examples/*/output.txt
+docs/specs/

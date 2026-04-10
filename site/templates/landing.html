@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Proof Engine — Every Fact Cited, Every Calculation Re-Runnable{% endblock %}
+{% block title %}Proof Engine — AI That Proves Instead of Asserts{% endblock %}
 
-{% block meta_description %}Open-source AI skill that proves its work. Every fact cited, every calculation re-runnable. Reasoning transparent and auditable.{% endblock %}
+{% block meta_description %}Open-source AI skill that verifies claims through code and live sources — not by asking the LLM to check itself. Every fact cited, every calculation re-runnable.{% endblock %}
 
 {% block head_extra %}
 <script type="application/ld+json">
@@ -11,7 +11,7 @@
     "@type": "WebSite",
     "name": "Proof Engine",
     "url": "{{ canonical_url }}",
-    "description": "Open-source AI skill that proves its work. Every fact cited, every calculation re-runnable. Reasoning transparent and auditable."
+    "description": "Open-source AI skill that verifies claims through code and live sources — not by asking the LLM to check itself. Every fact cited, every calculation re-runnable."
 }
 </script>
 {% endblock %}
@@ -19,7 +19,7 @@
 {% block content %}
 <div class="hero">
     <h1>Every fact cited, every calculation re-runnable</h1>
-    <p class="hero-subtitle">// an AI skill that proves its work</p>
+    <p class="hero-subtitle">// AI that proves instead of asserts</p>
 
     <div id="hero-demo-container"></div>
 
@@ -91,6 +91,90 @@
         </div>
     </div>
     <div id="pipeline-interactive" hidden></div>
+</section>
+
+<section class="landing-why-section">
+    <h2 class="section-heading">why this exists</h2>
+    <div class="why-content">
+        <p class="why-lead">
+            LLMs hallucinate facts <em>and</em> hallucinate the checks on those facts.
+            Ask an LLM to verify its own claim and it runs the same error-prone process
+            again — the check is circular. "Double-checking" with an LLM is like asking
+            the same witness to corroborate their own testimony.
+        </p>
+        <p>
+            Proof Engine breaks the circle by routing every claim through a gate the LLM
+            can't fake. Numbers are computed by Python — Python doesn't hallucinate.
+            Quotes are fetched from live URLs and matched against the actual page text — a
+            fabricated citation fails the match, and a partial match downgrades the verdict
+            so the gap is visible. Constants come from reviewed, version-controlled
+            code — not from the LLM's memory.
+        </p>
+        <blockquote class="why-pullquote">
+            The design principle: when the LLM hallucinates, the error breaks visibly
+            rather than hiding.
+        </blockquote>
+        <p>
+            The LLM is useful: it finds sources, writes code, formalizes claims. But it is
+            never trusted to <em>be</em> the verification. It is an untrusted author whose
+            every claim must pass through a deterministic checkpoint. When it hallucinates,
+            the pipeline breaks visibly instead of hiding the error.
+        </p>
+    </div>
+</section>
+
+<section class="landing-limits-section">
+    <h2 class="section-heading">what it can and can't do</h2>
+    <div class="limits-grid">
+        <div class="limits-col limits-good">
+            <h3>works well for</h3>
+            <ul>
+                <li><strong>Factual claims with verifiable evidence</strong> — dates, numbers, quotes, statistics from citable sources</li>
+                <li><strong>Mathematical assertions</strong> — anything Python and sympy can compute deterministically</li>
+                <li><strong>Debunking or confirming specific claims</strong> — "Did X really say Y?" or "Is statistic Z accurate?"</li>
+                <li><strong>Compound claims</strong> — decomposes "X and Y" into independently verified sub-claims</li>
+            </ul>
+        </div>
+        <div class="limits-col limits-bad">
+            <h3>doesn't work for</h3>
+            <ul>
+                <li><strong>Causal claims</strong> — "X caused Y" gets PARTIALLY VERIFIED at best; the engine verifies facts but can't weigh competing causal theories</li>
+                <li><strong>Broad literature synthesis</strong> — "coffee reduces diabetes risk" requires a systematic review, not a proof</li>
+                <li><strong>JavaScript-rendered pages</strong> — citation verification degrades when the source requires a browser to render</li>
+                <li><strong>Absence-of-evidence</strong> — search-based facts reach SUPPORTED at best, never PROVED; the engine can't prove something doesn't exist</li>
+                <li><strong>Contested definitions</strong> — "Is a hot dog a sandwich?" depends on the definition, not evidence</li>
+                <li><strong>Deep original mathematics</strong> — the engine isn't a theorem prover; it handles computations, not novel conjectures</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="landing-comparison-section">
+    <h2 class="section-heading">how is this different?</h2>
+    <div class="comparison-content">
+        <p><strong>"Why not just ask ChatGPT to check?"</strong>
+        Because the check uses the same mechanism that produced the error.
+        If the LLM hallucinated a fact, asking it to verify the fact just
+        hallucination-checks the hallucination. Proof Engine moves verification
+        out of the LLM entirely — into Python code and live page fetches that
+        either pass or fail mechanically.</p>
+
+        <p><strong>"Why not use Perplexity / search-grounded AI?"</strong>
+        Search-grounded tools find relevant pages but still let the LLM
+        summarize and interpret what's on those pages. Proof Engine goes further:
+        it fetches the URL, matches the quoted text against the live page (after
+        normalizing Unicode and HTML), and extracts values from the matched text
+        programmatically. If the match is only partial, the verdict downgrades to
+        flag it. The difference is between "the LLM read a source and told you
+        what it said" and "here's the code that fetched the source, checked the
+        text, and reported what matched — run it yourself."</p>
+
+        <p><strong>"Why not just link to sources like Wikipedia?"</strong>
+        A link says "the evidence is over there." A proof says "here's the evidence,
+        here's the code that checked it, and here's what happened when it ran."
+        Every proof is a re-runnable Python script. You don't have to trust the
+        summary — you can execute it.</p>
+    </div>
 </section>
 
 {% if featured_proofs %}
