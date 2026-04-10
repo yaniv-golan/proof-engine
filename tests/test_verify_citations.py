@@ -1114,3 +1114,45 @@ def test_verify_citation_not_found_includes_closest_passage():
     assert "closest_passage" in result
     assert result["closest_passage"] is not None
     assert result["closest_similarity"] >= 0.3
+
+
+def test_verify_all_citations_passes_snapshot_file():
+    """verify_all_citations passes snapshot_file from empirical_facts to verify_citation."""
+    from unittest.mock import patch, MagicMock
+    import os
+    import tempfile
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+        f.write("The key finding is that X causes Y in all tested conditions.")
+        f.flush()
+        tmppath = f.name
+    try:
+        empirical_facts = {
+            "src_a": {
+                "url": "https://paywalled-journal.com/article",
+                "quote": "X causes Y in all tested conditions",
+                "source_name": "Journal A",
+                "snapshot_file": tmppath,
+            }
+        }
+        # Mock requests to return 403 (paywall)
+        import requests as real_req
+        mock_resp = MagicMock()
+        mock_resp.status_code = 403
+        mock_resp.raise_for_status.side_effect = real_req.exceptions.HTTPError(
+            response=mock_resp
+        )
+
+        mock_requests = MagicMock()
+        mock_requests.get.return_value = mock_resp
+        mock_requests.exceptions = real_req.exceptions
+
+        with patch("scripts.fetch.requests", mock_requests), \
+             patch("scripts.verify_citations.requests", mock_requests):
+            from scripts.verify_citations import verify_all_citations
+            results = verify_all_citations(empirical_facts)
+
+        assert results["src_a"]["status"] == "verified"
+        assert results["src_a"]["fetch_mode"] == "snapshot"
+    finally:
+        os.unlink(tmppath)

@@ -629,6 +629,7 @@ def verify_citation(
     fact_id: str,
     timeout: int = 15,
     snapshot: str = None,
+    snapshot_file: str = None,
     snapshot_fetched_at: str = None,
     wayback_fallback: bool = False,
 ) -> dict:
@@ -671,6 +672,7 @@ def verify_citation(
     # Fetch page text using fallback chain
     page_text, fetch_mode, fetch_error_msg = _fetch_page(
         url, timeout=timeout, snapshot=snapshot,
+        snapshot_file=snapshot_file,
         wayback_fallback=wayback_fallback,
         skip_live_fetch=(requests is None),
     )
@@ -740,6 +742,7 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False) 
                 result = verify_citation(
                     url, quote, check_id,
                     snapshot=source.get("snapshot"),
+                    snapshot_file=source.get("snapshot_file"),
                     snapshot_fetched_at=source.get("snapshot_fetched_at"),
                     wayback_fallback=wayback_fallback,
                 )
@@ -760,6 +763,7 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False) 
             result = verify_citation(
                 url, quote, fact_id,
                 snapshot=fact.get("snapshot"),
+                snapshot_file=fact.get("snapshot_file"),
                 snapshot_fetched_at=fact.get("snapshot_fetched_at"),
                 wayback_fallback=wayback_fallback,
             )
