@@ -14,6 +14,9 @@ CI validates your submission automatically. A maintainer reviews and merges. You
 
 ## Optional: Custom Tags
 
-By default, tags are auto-assigned from keywords in your claim. To override, add a `meta.yaml` to your proof directory:
+By default, tags are auto-assigned using LLM classification. To override with manually curated tags that won't be overwritten by automatic retagging, add a `meta.yaml` to your proof directory:
 
     tags: [economics, inflation]
+    tags_manual: true
+
+Without `tags_manual: true`, tags in `meta.yaml` are treated as auto-generated and may be overwritten when the vocabulary evolves. `tags_manual: true` without `tags` is invalid and will cause a load error.

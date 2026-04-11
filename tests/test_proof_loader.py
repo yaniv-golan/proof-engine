@@ -2,8 +2,16 @@ import json
 import os
 import pytest
 import tempfile
+from unittest.mock import patch
 import yaml
 from tools.lib.proof_loader import load_proof, load_all_proofs
+
+
+@pytest.fixture(autouse=True)
+def mock_llm_tag():
+    """Mock llm_tag globally so tests don't call the real claude CLI."""
+    with patch("tools.lib.proof_loader.llm_tag", return_value=["health"]) as m:
+        yield m
 
 
 @pytest.fixture
@@ -100,6 +108,12 @@ def test_load_proof_extracts_verdict(proof_dir):
 def test_load_proof_auto_tags(proof_dir):
     proof = load_proof(proof_dir / "test-claim")
     assert isinstance(proof["tags"], list)
+    assert proof["tags"] == ["health"]
+    # Should have cached to meta.yaml
+    meta_path = proof_dir / "test-claim" / "meta.yaml"
+    assert meta_path.exists()
+    meta = yaml.safe_load(meta_path.read_text())
+    assert meta["tags"] == ["health"]
 
 
 def test_load_proof_meta_yaml_override(proof_dir):
@@ -319,3 +333,19 @@ def test_load_proof_missing_section_shows_found(proof_dir):
 
     with pytest.raises(ValueError, match="Found:"):
         load_proof(claim_dir)
+
+
+def test_load_proof_tags_manual_without_tags_raises(proof_dir):
+    """tags_manual: true without tags should raise ValueError."""
+    meta_path = proof_dir / "test-claim" / "meta.yaml"
+    meta_path.write_text(yaml.dump({"tags_manual": True}))
+    with pytest.raises(ValueError, match="tags_manual.*no tags"):
+        load_proof(proof_dir / "test-claim")
+
+
+def test_load_proof_tags_manual_preserves_tags(proof_dir):
+    """tags_manual: true with tags should use those tags and not call LLM."""
+    meta_path = proof_dir / "test-claim" / "meta.yaml"
+    meta_path.write_text(yaml.dump({"tags": ["economics"], "tags_manual": True}))
+    proof = load_proof(proof_dir / "test-claim")
+    assert proof["tags"] == ["economics"]

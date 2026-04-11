@@ -7,7 +7,7 @@ import yaml
 from tools.lib.featured import load_featured_slugs
 from tools.lib.narrative_validator import extract_verdict_declaration, REQUIRED_NARRATIVE_SECTIONS
 from tools.lib.section_extractor import extract_sections, validate_required_sections
-from tools.lib.tagger import auto_tag, canonicalize_tag
+from tools.lib.tagger import llm_tag, canonicalize_tag
 from tools.lib.verdict import normalize_verdict
 
 REQUIRED_PROOF_MD_SECTIONS = [
@@ -147,7 +147,7 @@ def load_proof(proof_dir: Path) -> dict:
         sections_narrative.get("Verdict", "")
     )
 
-    # Tags: meta.yaml override or auto-tag
+    # Tags: meta.yaml cache or generate via LLM and cache
     meta_path = proof_dir / "meta.yaml"
     if meta_path.exists():
         meta = yaml.safe_load(meta_path.read_text()) or {}
@@ -156,12 +156,21 @@ def load_proof(proof_dir: Path) -> dict:
                 f"{slug}: meta.yaml contains deprecated 'featured' key — "
                 f"featured status is now managed via site/proofs/featured.json"
             )
-        if "tags" in meta:
-            tags = [canonicalize_tag(t) for t in meta["tags"]]
-        else:
-            tags = auto_tag(proof_data["claim_natural"])
     else:
-        tags = auto_tag(proof_data["claim_natural"])
+        meta = {}
+
+    if meta.get("tags_manual") and "tags" not in meta:
+        raise ValueError(
+            f"{slug}: meta.yaml has tags_manual: true but no tags — "
+            f"manual tagging requires explicit tags list"
+        )
+
+    if "tags" in meta:
+        tags = [canonicalize_tag(t) for t in meta["tags"]]
+    else:
+        tags = llm_tag(proof_data["claim_natural"])
+        meta["tags"] = tags
+        meta_path.write_text(yaml.dump(meta, default_flow_style=False))
 
     # Citation count
     citations = proof_data.get("citations")
