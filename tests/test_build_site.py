@@ -1340,3 +1340,80 @@ def test_proof_page_cite_shows_doi_when_present(site_fixture):
     html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
     assert "10.5281/zenodo.999" in html
     assert "doi.org/10.5281/zenodo.999" in html
+
+
+def test_v2_proof_renders_correctly(site_fixture):
+    """V2 proof should render with v2 section names and layout."""
+    v2_dir = site_fixture / "site" / "proofs" / "v2-test-proof"
+    v2_dir.mkdir(parents=True)
+
+    (v2_dir / "proof.json").write_text(json.dumps({
+        "format_version": 2,
+        "fact_registry": {"B1": {"label": "Test fact", "key": "test_fact"}},
+        "claim_formal": {"subject": "Test", "property": "value", "operator": ">",
+                         "operator_note": "Strictly greater", "threshold": 0},
+        "claim_natural": "Test v2 claim is true",
+        "verdict": "PROVED",
+        "key_results": {"value": 1},
+        "generator": {"name": "proof-engine", "version": "1.15.0",
+                       "repo": "https://github.com/yaniv-golan/proof-engine",
+                       "generated_at": "2026-04-11"},
+        "citations": {
+            "B1": {
+                "source_name": "Test Source", "url": "https://example.com",
+                "status": "verified", "method": "full_quote", "fetch_mode": "live",
+                "quote": "test quote",
+                "credibility": {"domain": "example.com", "source_type": "academic",
+                                "tier": 4, "note": ""},
+            }
+        },
+    }))
+
+    (v2_dir / "proof.md").write_text(
+        "# Proof: Test\n\n"
+        "## Evidence Summary\n| ID | Fact | Verified |\n|---|---|---|\n| B1 | Test | Yes |\n\n"
+        "## Proof Logic\nTest logic\n\n"
+        "## Conclusion\n**PROVED.** Test.\n\n"
+        "## What could challenge this verdict?\nNo counter-evidence found.\n"
+    )
+
+    (v2_dir / "proof_audit.md").write_text(
+        "# Audit: Test\n\n"
+        "## Claim Specification\n| Field | Value |\n|---|---|\n| Subject | test |\n\n"
+        "## Claim Interpretation\nTest interpretation moved here.\n\n"
+        "## Citation Verification Details\nAll verified.\n\n"
+        "## Quality Checks\nAll rules pass.\n\n"
+        "## Source Data\nB1: verified.\n"
+    )
+
+    (v2_dir / "proof_narrative.md").write_text(
+        "# Proof Narrative: Test v2 claim is true\n\n"
+        "## Verdict\n**Verdict: PROVED**\nTest hook.\n\n"
+        "## What Was Claimed?\nTest claim.\n\n"
+        "## What Did We Find?\nTest findings are strong. Multiple sources confirmed.\n\n"
+        "## What Should You Keep In Mind?\nTest caveats.\n\n"
+        "## How Was This Verified?\nTest method.\n"
+    )
+
+    (v2_dir / "meta.yaml").write_text("tags:\n  - science\n")
+    (v2_dir / "proof.py").write_text("# proof script\n")
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+
+    html = (site_fixture / "_site" / "proofs" / "v2-test-proof" / "index.html").read_text()
+
+    # V2 section names should appear
+    assert "What could challenge this verdict?" in html
+    assert "Quality Checks" in html
+    assert "Source Data" in html
+    assert "Claim Interpretation" in html
+
+    # V1-only sections should NOT appear
+    assert "Key Findings" not in html
+    assert "Hardening Checklist" not in html
+    assert "Extraction Records" not in html
+
+    # Canonical sources table should render
+    assert "sources-table" in html
+    assert "Academic" in html  # source_type_labels display value
