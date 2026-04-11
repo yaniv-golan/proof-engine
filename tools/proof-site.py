@@ -18,7 +18,7 @@ from tools.lib.publish import (
     REQUIRED_ARTIFACTS,
 )
 from tools.lib.zenodo import ZenodoClient, ZenodoError
-from tools.lib.tagger import auto_tag, canonicalize_tag
+from tools.lib.tagger import llm_tag, canonicalize_tag
 
 
 def log(msg: str) -> None:
@@ -175,6 +175,128 @@ def cmd_publish(args) -> int:
             )
             return 1
 
+    # 12. Vocabulary audit + retag (non-blocking)
+    try:
+        import yaml
+        from tools.lib.tagger import (
+            count_proofs, load_vocab_data, save_vocab_data,
+            audit_vocabulary, reload_vocabulary, check_publish_audit,
+            llm_tag as _llm_tag,
+        )
+        vocab_path = Path(__file__).parent / "lib" / "tag_vocabulary.json"
+        current_count = count_proofs(proofs_dir)
+        vocab_data = load_vocab_data(vocab_path)
+        action = check_publish_audit(vocab_data, current_count)
+
+        # --- Helper: run full retag, return (changed, failed) ---
+        def _run_retag():
+            import importlib.util
+            retag_spec = importlib.util.spec_from_file_location(
+                "retag_proofs",
+                Path(__file__).parent / "retag-proofs.py",
+            )
+            retag_mod = importlib.util.module_from_spec(retag_spec)
+            retag_spec.loader.exec_module(retag_mod)
+
+            failed = 0
+            changed = 0
+            for slug_dir in sorted(proofs_dir.iterdir()):
+                if slug_dir.name.startswith("."):
+                    continue
+                if not (slug_dir.is_dir() and (slug_dir / "proof.json").exists()):
+                    continue
+                try:
+                    if retag_mod.retag_proof(slug_dir, model="sonnet"):
+                        changed += 1
+                except RuntimeError as e:
+                    print(f"  WARNING: retag failed for {slug_dir.name}: {e}",
+                          file=sys.stderr)
+                    failed += 1
+            return changed, failed
+
+        # --- Path A: Pending retag from a previous publish ---
+        if action == "retag_pending":
+            log("Retag pending from previous publish — retrying...")
+            reload_vocabulary()
+            retag_changed, retag_failed = _run_retag()
+            if retag_failed == 0:
+                vocab_data["retag_pending"] = False
+                vocab_data["proof_count_at_last_audit"] = current_count
+                vocab_data["last_audit_at"] = (
+                    __import__("datetime").date.today().isoformat()
+                )
+                save_vocab_data(vocab_path, vocab_data)
+                success(f"Pending retag complete: {retag_changed} proofs updated")
+            else:
+                log(f"WARNING: {retag_failed} proofs still failing. "
+                    f"Will retry on next publish.")
+
+        # --- Path B: Audit needed (growth >= 10) ---
+        elif action == "audit":
+            growth = current_count - vocab_data.get("proof_count_at_last_audit", 0)
+            log(f"Vocabulary audit triggered ({growth} new proofs since last audit)...")
+
+            # Collect claims in-memory only — no meta.yaml writes during collection.
+            claims = {}
+            for slug_dir in sorted(proofs_dir.iterdir()):
+                if slug_dir.name.startswith("."):
+                    continue
+                if slug_dir.is_dir() and (slug_dir / "proof.json").exists():
+                    pd = json.loads((slug_dir / "proof.json").read_text())
+                    claim = pd.get("claim_natural", "")
+                    meta_path_iter = slug_dir / "meta.yaml"
+                    tags = []
+                    is_manual = False
+                    if meta_path_iter.exists():
+                        m = yaml.safe_load(meta_path_iter.read_text()) or {}
+                        tags = m.get("tags", [])
+                        is_manual = m.get("tags_manual", False)
+                    if not is_manual and not tags and claim:
+                        try:
+                            tags = _llm_tag(claim, model="sonnet")
+                        except RuntimeError:
+                            pass  # best-effort for audit context
+                    claims[slug_dir.name] = {
+                        "claim": claim,
+                        "tags": tags,
+                        "manual": is_manual,
+                    }
+
+            accepted = audit_vocabulary(claims, model="sonnet")
+
+            if accepted:
+                for prop in accepted:
+                    vocab_data["vocabulary"][prop["slug"]] = prop["description"]
+                    log(f"NEW TAG: {prop['slug']} — {prop['description']}")
+                vocab_data["retag_pending"] = True
+                save_vocab_data(vocab_path, vocab_data)
+                reload_vocabulary()
+
+                retag_changed, retag_failed = _run_retag()
+
+                if retag_failed == 0:
+                    vocab_data["retag_pending"] = False
+                    vocab_data["proof_count_at_last_audit"] = current_count
+                    vocab_data["last_audit_at"] = (
+                        __import__("datetime").date.today().isoformat()
+                    )
+                    save_vocab_data(vocab_path, vocab_data)
+                    success(f"Vocabulary audit: added {len(accepted)} new tag(s), "
+                            f"retagged {retag_changed} proofs")
+                else:
+                    log(f"WARNING: {retag_failed} proofs failed to retag. "
+                        f"retag_pending left set — will retry on next publish.")
+            else:
+                vocab_data["proof_count_at_last_audit"] = current_count
+                vocab_data["last_audit_at"] = (
+                    __import__("datetime").date.today().isoformat()
+                )
+                save_vocab_data(vocab_path, vocab_data)
+                success("Vocabulary audit: no new tags needed")
+    except Exception as e:
+        print(f"  WARNING: Vocabulary audit failed: {e}. Will retry after next publish.",
+              file=sys.stderr)
+
     return 0
 
 
@@ -297,9 +419,12 @@ def cmd_mint_doi(args) -> int:
         if "tags" in meta:
             tags = [canonicalize_tag(t) for t in meta["tags"]]
         else:
-            tags = auto_tag(claim)
+            tags = llm_tag(claim)
+            meta["tags"] = tags
+            meta_path.write_text(yaml.dump(meta, default_flow_style=False))
     else:
-        tags = auto_tag(claim)
+        tags = llm_tag(claim)
+        meta_path.write_text(yaml.dump({"tags": tags}, default_flow_style=False))
     keywords = tags + ["proof-engine", "fact-checking", "automated-verification"]
 
     # Get token
