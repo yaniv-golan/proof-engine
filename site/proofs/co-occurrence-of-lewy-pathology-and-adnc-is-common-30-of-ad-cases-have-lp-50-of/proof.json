@@ -340,5 +340,6 @@
     "version": "1.13.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-11"
-  }
+  },
+  "format_version": 2
 }
