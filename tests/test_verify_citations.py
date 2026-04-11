@@ -1114,3 +1114,193 @@ def test_verify_citation_not_found_includes_closest_passage():
     assert "closest_passage" in result
     assert result["closest_passage"] is not None
     assert result["closest_similarity"] >= 0.3
+
+
+def test_verify_all_citations_passes_snapshot_file():
+    """verify_all_citations passes snapshot_file from empirical_facts to verify_citation."""
+    from unittest.mock import patch, MagicMock
+    import os
+    import tempfile
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+        f.write("The key finding is that X causes Y in all tested conditions.")
+        f.flush()
+        tmppath = f.name
+    try:
+        empirical_facts = {
+            "src_a": {
+                "url": "https://paywalled-journal.com/article",
+                "quote": "X causes Y in all tested conditions",
+                "source_name": "Journal A",
+                "snapshot_file": tmppath,
+            }
+        }
+        # Mock requests to return 403 (paywall)
+        import requests as real_req
+        mock_resp = MagicMock()
+        mock_resp.status_code = 403
+        mock_resp.raise_for_status.side_effect = real_req.exceptions.HTTPError(
+            response=mock_resp
+        )
+
+        mock_requests = MagicMock()
+        mock_requests.get.return_value = mock_resp
+        mock_requests.exceptions = real_req.exceptions
+
+        with patch("scripts.fetch.requests", mock_requests), \
+             patch("scripts.verify_citations.requests", mock_requests):
+            from scripts.verify_citations import verify_all_citations
+            results = verify_all_citations(empirical_facts)
+
+        assert results["src_a"]["status"] == "verified"
+        assert results["src_a"]["fetch_mode"] == "snapshot"
+    finally:
+        os.unlink(tmppath)
+
+
+def test_verify_data_values_uses_snapshot_file():
+    """verify_data_values reads from snapshot_file when live fetch fails."""
+    import requests as real_req
+    from unittest.mock import patch, MagicMock
+    import os
+    import tempfile
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+        f.write("The CPI index value was 9.883 in 1913 and 308.417 in 2023.")
+        f.flush()
+        tmppath = f.name
+    try:
+        mock_requests = MagicMock()
+        mock_requests.get.side_effect = real_req.exceptions.ConnectionError("refused")
+        mock_requests.exceptions = real_req.exceptions
+
+        with patch("scripts.fetch.requests", mock_requests), \
+             patch("scripts.verify_citations.requests", mock_requests):
+            from scripts.verify_citations import verify_data_values
+            results = verify_data_values(
+                "https://paywalled-stats.gov/cpi",
+                {"cpi_1913": "9.883", "cpi_2023": "308.417"},
+                "B1",
+                snapshot_file=tmppath,
+            )
+
+        assert results["cpi_1913"]["found"] is True
+        assert results["cpi_2023"]["found"] is True
+    finally:
+        os.unlink(tmppath)
+
+
+# ---------------------------------------------------------------------------
+# OA lookup fallback tests
+# ---------------------------------------------------------------------------
+
+def test_verify_citation_tries_oa_after_fetch_failed():
+    """When fetch_page returns fetch_failed and URL has a DOI, try OA lookup."""
+    from unittest.mock import patch, MagicMock
+    import requests as real_req
+
+    # Live fetch returns 403
+    mock_requests = MagicMock()
+    mock_resp = MagicMock()
+    mock_resp.status_code = 403
+    mock_resp.raise_for_status.side_effect = real_req.exceptions.HTTPError(response=mock_resp)
+    mock_requests.get.return_value = mock_resp
+    mock_requests.exceptions = real_req.exceptions
+
+    # OA lookup returns a URL, and fetching that URL returns matching text
+    oa_page = "This study shows that X causes Y in all tested conditions."
+
+    with patch("scripts.fetch.requests", mock_requests), \
+         patch("scripts.verify_citations.requests", mock_requests), \
+         patch("scripts.verify_citations._try_oa_fallback") as mock_oa:
+        mock_oa.return_value = (oa_page, "https://oa.example.com/article")
+        from scripts.verify_citations import verify_citation
+        result = verify_citation(
+            "https://doi.org/10.1234/test",
+            "X causes Y in all tested conditions",
+            "B1",
+        )
+
+    assert result["status"] == "verified"
+    assert result["fetch_mode"] == "oa_variant"
+    mock_oa.assert_called_once()
+
+
+def test_verify_citation_oa_mismatch_returns_fetch_failed():
+    """When OA text doesn't match quote, return fetch_failed (not not_found)."""
+    from unittest.mock import patch, MagicMock
+    import requests as real_req
+
+    mock_requests = MagicMock()
+    mock_resp = MagicMock()
+    mock_resp.status_code = 403
+    mock_resp.raise_for_status.side_effect = real_req.exceptions.HTTPError(response=mock_resp)
+    mock_requests.get.return_value = mock_resp
+    mock_requests.exceptions = real_req.exceptions
+
+    # OA returns text that doesn't contain the quote (version drift)
+    oa_page = "This preprint discusses a completely different finding about Z."
+
+    with patch("scripts.fetch.requests", mock_requests), \
+         patch("scripts.verify_citations.requests", mock_requests), \
+         patch("scripts.verify_citations._try_oa_fallback") as mock_oa:
+        mock_oa.return_value = (oa_page, "https://oa.example.com/article")
+        from scripts.verify_citations import verify_citation
+        result = verify_citation(
+            "https://doi.org/10.1234/test",
+            "X causes Y in all tested conditions",
+            "B1",
+        )
+
+    # OA mismatch should return fetch_failed, NOT not_found
+    assert result["status"] == "fetch_failed"
+
+
+def test_verify_citation_no_doi_skips_oa():
+    """When URL has no DOI, OA lookup is not attempted."""
+    from unittest.mock import patch, MagicMock
+    import requests as real_req
+
+    mock_requests = MagicMock()
+    mock_requests.get.side_effect = real_req.exceptions.ConnectionError("refused")
+    mock_requests.exceptions = real_req.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests), \
+         patch("scripts.verify_citations.requests", mock_requests), \
+         patch("scripts.verify_citations._try_oa_fallback") as mock_oa:
+        mock_oa.return_value = (None, None)
+        from scripts.verify_citations import verify_citation
+        result = verify_citation(
+            "https://example.com/no-doi",
+            "some quote",
+            "B1",
+        )
+
+    assert result["status"] == "fetch_failed"
+
+
+def test_verify_citation_oa_disabled():
+    """When oa_lookup=False, OA is not attempted even with a DOI."""
+    from unittest.mock import patch, MagicMock
+    import requests as real_req
+
+    mock_requests = MagicMock()
+    mock_resp = MagicMock()
+    mock_resp.status_code = 403
+    mock_resp.raise_for_status.side_effect = real_req.exceptions.HTTPError(response=mock_resp)
+    mock_requests.get.return_value = mock_resp
+    mock_requests.exceptions = real_req.exceptions
+
+    with patch("scripts.fetch.requests", mock_requests), \
+         patch("scripts.verify_citations.requests", mock_requests), \
+         patch("scripts.verify_citations._try_oa_fallback") as mock_oa:
+        from scripts.verify_citations import verify_citation
+        result = verify_citation(
+            "https://doi.org/10.1234/test",
+            "some quote",
+            "B1",
+            oa_lookup=False,
+        )
+
+    mock_oa.assert_not_called()
+    assert result["status"] == "fetch_failed"

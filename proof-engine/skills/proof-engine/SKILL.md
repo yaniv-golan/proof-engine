@@ -122,7 +122,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 Full Type B verification requires **outbound HTTP** from Python. Fallback chain: live fetch -> snapshot -> Wayback Machine (opt-in). Type A proofs run entirely offline.
 
-For environment-specific details (Claude Code, ChatGPT, sandboxed), paywalled sources, and .gov workarounds, see [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md).
+For environment-specific details (Claude Code, ChatGPT, sandboxed), paywalled sources, and .gov workarounds, see [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md). When a source is paywalled, use `snapshot_file` (not inline `snapshot`) to keep copyrighted content out of the committed `proof.py` — see the "Handling Paywalled Sources" section in that reference.
 
 ## Core Concepts
 

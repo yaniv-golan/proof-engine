@@ -54,11 +54,31 @@ Note: ar5iv renders math via MathML, which `normalize_text()` handles (step 1.7)
 
 Many scientific papers and reports are behind paywalls. When a key source returns 403 or requires authentication:
 
-1. **Try the abstract URL** — PubMed (pubmed.ncbi.nlm.nih.gov), DOI resolver (doi.org), or Google Scholar often have abstracts with key findings. Cite the abstract URL instead.
-2. **Check for open-access versions** — many papers have preprints on arXiv, bioRxiv, medRxiv, or the author's institutional page.
-3. **Cite the abstract quote** — if the abstract contains the key finding, that's a valid citation. Note "cited from abstract; full text behind paywall" in the audit doc.
-4. **Find alternative sources** — if the claim is well-established, there are usually multiple sources. Prefer open-access ones.
-5. **Last resort** — if the paywalled source is essential and no alternative exists, cite it with whatever quote is publicly visible and mark as "Not verified (paywall)" in the audit doc. This does not invalidate the proof if other verified sources support the same finding.
+**If you're on campus or institutional VPN:** Just run the proof. IP-based institutional access works transparently with `requests.get()` — no changes needed. Only intervene for citations that actually fail.
+
+**Paywalled content policy:** Snapshots of paywalled content must NOT be embedded inline in `proof.py`. Use the `snapshot_file` approach:
+- Write the snapshot text to a local file: `snapshots/{fact_id}_snapshot.txt`
+- Reference it in `empirical_facts`: `"snapshot_file": "snapshots/B2_snapshot.txt"`
+- The `snapshots/` directory is `.gitignore`d — paywalled content stays local
+- Public-source snapshots (government sites, JS-rendered pages) may remain inline
+
+**Fallback strategy for paywalled sources:**
+
+1. **Check for open-access versions** — many papers have preprints on arXiv, bioRxiv, medRxiv, or the author's institutional page. Use ar5iv for arXiv papers (see above).
+2. **OA auto-discovery** — if the citation URL contains a DOI (or the `empirical_facts` entry has a `doi` field), `verify_all_citations()` will automatically query Unpaywall for an open-access version when the original URL fails. This resolves ~30-40% of paywalled citations automatically. Results show as `fetch_mode: "oa_variant"` — note in the audit doc that the OA version may differ from the published text.
+3. **Cite the abstract** — if the abstract contains the key finding, cite the PubMed or DOI abstract URL. Note "cited from abstract; full text behind paywall" in the audit doc.
+4. **Use browser to capture snapshot** — if browser use is available in your environment, navigate to the paywalled URL and capture the page text. Write it to `snapshots/` via `snapshot_file` (not inline). This works when the environment runs on a machine with institutional access.
+5. **Ask the user** — if verification fails with 403, ask: "Citation B2 at [URL] returned 403 (paywall). Can you open this in your browser and paste the full page text (or the full abstract/section)? A single sentence is not sufficient — I need enough context for quote matching." Write the pasted text to `snapshots/` via `snapshot_file`.
+6. **Find alternative sources** — if the claim is well-established, prefer open-access sources.
+7. **Last resort** — cite with whatever quote is publicly visible and mark as "Not verified (paywall)" in the audit doc.
+
+**`snapshot_source` tagging:** When using `snapshot_file`, include a `snapshot_source` field in `empirical_facts`:
+- `"paywalled:user_provided"` — user pasted from their authenticated browser
+- `"paywalled:browser_capture"` — captured via browser use in the LLM environment
+- `"public:pre_fetched"` — public content pre-fetched to work around bot blocking
+- `"public:browser_capture"` — public content captured via browser use
+
+The `paywalled:` prefix signals that the content must use `snapshot_file`, not inline `snapshot`.
 
 ## Government Statistics Sites (.gov)
 

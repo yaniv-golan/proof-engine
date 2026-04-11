@@ -57,6 +57,11 @@ try:
 except ImportError:
     from fetch import fetch_page as _fetch_page
 
+try:
+    from scripts.oa_lookup import extract_doi, lookup_oa_url
+except ImportError:
+    from oa_lookup import extract_doi, lookup_oa_url
+
 # Import LaTeX-to-text conversion for MathML alttext extraction
 try:
     from scripts.latex_text import latex_to_text
@@ -620,6 +625,39 @@ def _match_quote(page_text_raw: str, expected_quote: str, fact_id: str,
 
 
 # ---------------------------------------------------------------------------
+# OA fallback helper
+# ---------------------------------------------------------------------------
+
+def _try_oa_fallback(url: str, doi: str = None, timeout: int = 15) -> tuple:
+    """Try to find and fetch an OA version of a paywalled source.
+
+    Args:
+        url: Original citation URL (used for DOI extraction if doi not provided).
+        doi: Explicit DOI from empirical_facts.
+        timeout: Fetch timeout for the OA URL.
+
+    Returns:
+        (page_text, oa_url) — both None if no OA version found or fetch failed.
+    """
+    extracted_doi = extract_doi(url, doi=doi)
+    if not extracted_doi:
+        return None, None
+
+    oa_url = lookup_oa_url(extracted_doi)
+    if not oa_url:
+        return None, None
+
+    # Fetch the OA URL
+    page_text, fetch_mode, _ = _fetch_page(
+        oa_url, timeout=timeout,
+        skip_live_fetch=(requests is None),
+    )
+    if page_text is not None:
+        return page_text, oa_url
+    return None, None
+
+
+# ---------------------------------------------------------------------------
 # Main verification function
 # ---------------------------------------------------------------------------
 
@@ -629,8 +667,11 @@ def verify_citation(
     fact_id: str,
     timeout: int = 15,
     snapshot: str = None,
+    snapshot_file: str = None,
     snapshot_fetched_at: str = None,
     wayback_fallback: bool = False,
+    oa_lookup: bool = True,
+    doi: str = None,
 ) -> dict:
     """Fetch a URL and check whether the expected quote appears on the page.
 
@@ -671,6 +712,7 @@ def verify_citation(
     # Fetch page text using fallback chain
     page_text, fetch_mode, fetch_error_msg = _fetch_page(
         url, timeout=timeout, snapshot=snapshot,
+        snapshot_file=snapshot_file,
         wayback_fallback=wayback_fallback,
         skip_live_fetch=(requests is None),
     )
@@ -694,7 +736,18 @@ def verify_citation(
             result["closest_similarity"] = sim
         return _with_credibility(result)
 
-    # All fetch methods exhausted
+    # All fetch methods exhausted — try OA fallback before giving up
+    if oa_lookup:
+        oa_text, oa_url = _try_oa_fallback(url, doi=doi, timeout=timeout)
+        if oa_text is not None:
+            oa_result = _match_quote(oa_text, expected_quote, fact_id,
+                                     fetch_mode="oa_variant")
+            if oa_result is not None:
+                return _with_credibility(oa_result)
+            # OA text fetched but quote didn't match — version drift.
+            # Return fetch_failed (not not_found) so interactive recovery
+            # remains available. The mismatch is likely a version issue.
+
     return _with_credibility(_result("fetch_failed", fetch_error=fetch_error_msg,
                     message=f"Fetch failed for {fact_id}: {fetch_error_msg}"))
 
@@ -703,7 +756,8 @@ def verify_citation(
 # Batch verification
 # ---------------------------------------------------------------------------
 
-def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False) -> dict:
+def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
+                         oa_lookup: bool = True) -> dict:
     """Verify all empirical facts by fetching their citation URLs.
 
     Supports two formats per fact:
@@ -740,8 +794,11 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False) 
                 result = verify_citation(
                     url, quote, check_id,
                     snapshot=source.get("snapshot"),
+                    snapshot_file=source.get("snapshot_file"),
                     snapshot_fetched_at=source.get("snapshot_fetched_at"),
                     wayback_fallback=wayback_fallback,
+                    oa_lookup=oa_lookup,
+                    doi=source.get("doi"),
                 )
                 results[check_id] = result
                 _print_status(check_id, result)
@@ -760,8 +817,11 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False) 
             result = verify_citation(
                 url, quote, fact_id,
                 snapshot=fact.get("snapshot"),
+                snapshot_file=fact.get("snapshot_file"),
                 snapshot_fetched_at=fact.get("snapshot_fetched_at"),
                 wayback_fallback=wayback_fallback,
+                oa_lookup=oa_lookup,
+                doi=fact.get("doi"),
             )
             results[fact_id] = result
             _print_status(fact_id, result)
@@ -771,6 +831,7 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False) 
 
 def verify_data_values(url: str, data_values: dict, fact_id: str,
                        timeout: int = 15, snapshot: str = None,
+                       snapshot_file: str = None,
                        wayback_fallback: bool = False) -> dict:
     """Verify that data_values strings appear on the source page.
 
@@ -785,6 +846,7 @@ def verify_data_values(url: str, data_values: dict, fact_id: str,
         fact_id: Identifier for messages.
         timeout: Fetch timeout in seconds.
         snapshot: Pre-fetched page text for offline verification.
+        snapshot_file: Path to a local snapshot file to use when live fetch fails.
         wayback_fallback: If True, try Wayback Machine as fallback.
 
     Returns:
@@ -792,6 +854,7 @@ def verify_data_values(url: str, data_values: dict, fact_id: str,
     """
     page_text, fetch_mode, fetch_error = _fetch_page(
         url, timeout=timeout, snapshot=snapshot,
+        snapshot_file=snapshot_file,
         wayback_fallback=wayback_fallback,
     )
 
