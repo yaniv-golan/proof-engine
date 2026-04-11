@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """Batch retag proofs using LLM classification.
 
-Use after changing TAG_VOCABULARY to regenerate tags for all proofs.
-Respects tags_manual: true in meta.yaml (skips those proofs).
-
 Usage:
     python tools/retag-proofs.py --all-in site/proofs              # retag all
     python tools/retag-proofs.py --proof-dir site/proofs/slug      # retag one
-    python tools/retag-proofs.py --all-in site/proofs --dry-run    # preview
     python tools/retag-proofs.py --audit                           # vocabulary audit
+    python tools/retag-proofs.py --audit --all-in site/proofs      # audit + retag
+    python tools/retag-proofs.py --all-in site/proofs --dry-run    # preview
+    python tools/retag-proofs.py --all-in site/proofs -v          # verbose
 """
 
 import argparse
@@ -107,10 +106,124 @@ def main():
         print(f"Not a directory: {proofs_dir}", file=sys.stderr)
         sys.exit(1)
 
-    # --- Audit mode placeholder (filled in Task 5) ---
+    # --- Audit mode: full audit + retag cycle ---
+    # proofs_dir is guaranteed non-None here: resolved from --all-in or defaulted
+    # to site/proofs, and --audit --proof-dir is rejected by argparse above.
     if args.audit:
-        # TODO: filled in Task 5
-        pass
+        from tools.lib.tagger import (
+            audit_vocabulary, load_vocab_data, save_vocab_data,
+            reload_vocabulary, count_proofs,
+        )
+
+        vocab_path = Path(__file__).parent / "lib" / "tag_vocabulary.json"
+
+        import time
+
+        # Phase 1: Collect claims (in-memory only — no meta.yaml writes)
+        print("Phase 1: Collecting claims...")
+        proof_dirs = [d for d in sorted(proofs_dir.iterdir())
+                      if not d.name.startswith(".") and d.is_dir()
+                      and (d / "proof.json").exists()]
+        claims = {}
+        uncached = 0
+        for i, slug_dir in enumerate(proof_dirs, 1):
+            proof_data = json.loads((slug_dir / "proof.json").read_text())
+            claim = proof_data.get("claim_natural", "")
+            meta_path = slug_dir / "meta.yaml"
+            tags = []
+            is_manual = False
+            if meta_path.exists():
+                meta = yaml.safe_load(meta_path.read_text()) or {}
+                tags = meta.get("tags", [])
+                is_manual = meta.get("tags_manual", False)
+            if not is_manual and not tags and claim:
+                uncached += 1
+                try:
+                    tags = llm_tag(claim, model="sonnet")
+                    if not args.verbose:
+                        print(f"\r  [{i}/{len(proof_dirs)}] collecting (tagging uncached)...",
+                              end="", flush=True)
+                except RuntimeError as e:
+                    print(f"\n  WARNING: could not tag {slug_dir.name}: {e}",
+                          file=sys.stderr)
+            claims[slug_dir.name] = {
+                "claim": claim,
+                "tags": tags,
+                "manual": is_manual,
+            }
+        if uncached:
+            print(f"\n  Collected {len(claims)} claims ({uncached} needed tagging)")
+        else:
+            print(f"  Collected {len(claims)} claims (all cached)")
+
+        # Phase 2: Run audit
+        print("Phase 2: Running vocabulary audit (Sonnet)...")
+        t0 = time.monotonic()
+        try:
+            accepted = audit_vocabulary(claims, model="sonnet")
+        except RuntimeError as e:
+            print(f"  Vocabulary audit failed ({time.monotonic() - t0:.1f}s): {e}",
+                  file=sys.stderr)
+            sys.exit(1)
+
+        if not accepted:
+            print("  No new tags needed")
+            # Advance count so next publish doesn't re-audit immediately
+            if not args.dry_run:
+                vocab_data = load_vocab_data(vocab_path)
+                vocab_data["proof_count_at_last_audit"] = count_proofs(proofs_dir)
+                vocab_data["last_audit_at"] = (
+                    __import__("datetime").date.today().isoformat()
+                )
+                save_vocab_data(vocab_path, vocab_data)
+            return
+
+        for prop in accepted:
+            print(f"  NEW TAG: {prop['slug']} — {prop['description']}")
+
+        if args.dry_run:
+            print(f"  Would add {len(accepted)} new tag(s) to vocabulary (dry run)")
+            return
+
+        # Write new tags + retag_pending before retag starts
+        vocab_data = load_vocab_data(vocab_path)
+        for prop in accepted:
+            vocab_data["vocabulary"][prop["slug"]] = prop["description"]
+        vocab_data["retag_pending"] = True
+        save_vocab_data(vocab_path, vocab_data)
+        reload_vocabulary()
+        print(f"  Added {len(accepted)} new tag(s) to vocabulary")
+
+        # Phase 3: Full retag with expanded vocabulary
+        print(f"Phase 3: Retagging {len(proof_dirs)} proofs with expanded vocabulary...")
+        retag_failed = 0
+        retag_changed = 0
+        t1 = time.monotonic()
+        for i, slug_dir in enumerate(proof_dirs, 1):
+            try:
+                if retag_proof(slug_dir, dry_run=False, model="sonnet",
+                               verbose=args.verbose):
+                    retag_changed += 1
+                if not args.verbose:
+                    print(f"\r  [{i}/{len(proof_dirs)}] retagging...", end="", flush=True)
+            except RuntimeError as e:
+                print(f"\n  FAIL [{i}/{len(proof_dirs)}] {slug_dir.name}: {e}",
+                      file=sys.stderr)
+                retag_failed += 1
+        retag_elapsed = time.monotonic() - t1
+
+        if retag_failed == 0:
+            vocab_data["retag_pending"] = False
+            vocab_data["proof_count_at_last_audit"] = count_proofs(proofs_dir)
+            vocab_data["last_audit_at"] = (
+                __import__("datetime").date.today().isoformat()
+            )
+            save_vocab_data(vocab_path, vocab_data)
+            print(f"\n  Retag complete: {retag_changed} proofs updated ({retag_elapsed:.1f}s)")
+        else:
+            print(f"\n  WARNING: {retag_failed} proofs failed to retag ({retag_elapsed:.1f}s). "
+                  f"retag_pending left set — run --audit again or publish to retry.")
+
         return
 
     # --- Single proof retag ---
