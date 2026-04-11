@@ -76,9 +76,9 @@
 <div class="jump-links">
     <a href="#summary">summary</a>
     {%- set counter_ev = rendered_sections_md.get("Counter-Evidence Search") or rendered_sections_md.get("What Could Challenge This Verdict?") -%}
-    {%- if counter_ev %} · <a href="#caveats">caveats</a>{% endif -%}
-    {%- if citations %} · <a href="#sources">sources</a>{% endif -%}
-     · <a href="#audit-trail">audit trail</a>
+    {%- if counter_ev %} · <a href="#caveats">caveats</a>{%- endif %}
+    {%- if citations %} · <a href="#sources">sources</a>{%- endif %}
+    · <a href="#audit-trail">audit trail</a>
 </div>
 
 {# --- Narrative (primary content) --- #}
