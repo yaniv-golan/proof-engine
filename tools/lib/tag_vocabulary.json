@@ -1,0 +1,21 @@
+{
+  "proof_count_at_last_audit": 119,
+  "last_audit_at": "2026-04-11",
+  "retag_pending": false,
+  "vocabulary": {
+    "economics": "Macroeconomics, GDP, inflation, trade, monetary/fiscal policy, recessions",
+    "venture-capital": "VC funding, startup valuations, fund returns, exit multiples, power law returns",
+    "neuroscience": "Brain, neurons, synapses, cognition, neuroplasticity, memory",
+    "history": "Historical events, wars, empires, civilizations, historical claims",
+    "physics": "Quantum mechanics, relativity, thermodynamics, particles, gravity, cosmology",
+    "mathematics": "Proofs, theorems, number theory, equations, conjectures, arithmetic",
+    "politics": "Elections, legislation, diplomacy, geopolitics, sovereignty, international law",
+    "health": "Medicine, disease, therapy, wellness claims, fitness, supplements, sleep",
+    "nutrition": "Diet, calories, macronutrients, food science, obesity, weight loss",
+    "climate": "Carbon emissions, temperature, greenhouse gases, renewables, weather",
+    "ai": "Artificial intelligence, LLMs, machine learning, AI safety, deepfakes",
+    "biology": "Animals, plants, cells, genetics, evolutionary claims, folklore about nature",
+    "nuclear": "Nuclear energy, nuclear power, radiation, clean energy debates",
+    "technology": "Computers, smartphones, electronics, software, internet, blue light"
+  }
+}
