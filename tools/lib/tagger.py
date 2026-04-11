@@ -8,6 +8,56 @@ _vocab_data = json.loads((Path(__file__).parent / "tag_vocabulary.json").read_te
 TAG_VOCABULARY = _vocab_data["vocabulary"]
 
 
+def load_vocab_data(vocab_path: Path | None = None) -> dict:
+    """Load the full vocabulary JSON including audit metadata."""
+    if vocab_path is None:
+        vocab_path = Path(__file__).parent / "tag_vocabulary.json"
+    return json.loads(vocab_path.read_text())
+
+
+def save_vocab_data(vocab_path: Path, data: dict) -> None:
+    """Write vocabulary JSON with consistent formatting."""
+    vocab_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+
+
+def reload_vocabulary() -> None:
+    """Reload TAG_VOCABULARY from disk after vocab file changes.
+
+    Call this after save_vocab_data() when you need subsequent llm_tag()
+    calls in the same process to use the updated vocabulary.
+    """
+    global TAG_VOCABULARY, _vocab_data
+    _vocab_data = json.loads((Path(__file__).parent / "tag_vocabulary.json").read_text())
+    TAG_VOCABULARY = _vocab_data["vocabulary"]
+
+
+def count_proofs(proofs_dir: Path) -> int:
+    """Count proof directories using same discovery rule as proof_loader."""
+    count = 0
+    for d in proofs_dir.iterdir():
+        if d.name.startswith("."):
+            continue
+        if d.is_dir() and (d / "proof.json").exists():
+            count += 1
+    return count
+
+
+def check_publish_audit(vocab_data: dict, current_count: int) -> str:
+    """Decide what action the publish hook should take.
+
+    Returns one of:
+    - "retag_pending" — skip audit, retry retag from previous failure
+    - "audit" — run audit (growth >= 10)
+    - "skip" — no action needed
+    """
+    if vocab_data.get("retag_pending"):
+        return "retag_pending"
+    growth = current_count - vocab_data.get("proof_count_at_last_audit", 0)
+    if growth >= 10:
+        return "audit"
+    return "skip"
+
+
 def canonicalize_tag(tag: str) -> str:
     slug = tag.strip().lower()
     slug = re.sub(r"[\s_]+", "-", slug)

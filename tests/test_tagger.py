@@ -2,7 +2,10 @@ import json
 import pytest
 from unittest.mock import patch, MagicMock
 
-from tools.lib.tagger import canonicalize_tag, llm_tag, TAG_VOCABULARY, audit_vocabulary
+from tools.lib.tagger import (
+    canonicalize_tag, llm_tag, TAG_VOCABULARY, audit_vocabulary,
+    load_vocab_data, save_vocab_data, count_proofs, reload_vocabulary, check_publish_audit,
+)
 
 
 # --- canonicalize_tag tests (unchanged) ---
@@ -240,3 +243,151 @@ def test_audit_vocabulary_llm_failure_raises(mock_run):
     mock_run.return_value = mock
     with pytest.raises(RuntimeError):
         audit_vocabulary({"p1": {"claim": "C1", "tags": [], "manual": False}})
+
+
+import yaml
+
+
+def test_load_vocab_data(tmp_path):
+    vocab_file = tmp_path / "tag_vocabulary.json"
+    vocab_file.write_text(json.dumps({
+        "proof_count_at_last_audit": 50,
+        "last_audit_at": "2026-01-01",
+        "vocabulary": {"health": "Medicine"}
+    }))
+    data = load_vocab_data(vocab_file)
+    assert data["proof_count_at_last_audit"] == 50
+    assert data["vocabulary"]["health"] == "Medicine"
+
+
+def test_save_vocab_data(tmp_path):
+    vocab_file = tmp_path / "tag_vocabulary.json"
+    data = {
+        "proof_count_at_last_audit": 100,
+        "last_audit_at": "2026-04-11",
+        "vocabulary": {"ai": "Artificial intelligence"}
+    }
+    save_vocab_data(vocab_file, data)
+    loaded = json.loads(vocab_file.read_text())
+    assert loaded["proof_count_at_last_audit"] == 100
+
+
+def test_count_proofs(tmp_path):
+    for name in ["proof-a", "proof-b", "proof-c"]:
+        d = tmp_path / name
+        d.mkdir()
+        (d / "proof.json").write_text("{}")
+    dot_dir = tmp_path / ".staging"
+    dot_dir.mkdir()
+    (dot_dir / "proof.json").write_text("{}")
+    (tmp_path / "featured.json").write_text("[]")
+    assert count_proofs(tmp_path) == 3
+
+
+def _make_proofs_dir(tmp_path, count, claim_prefix="Claim"):
+    """Create N minimal proof dirs for threshold/audit testing."""
+    proofs = tmp_path / "proofs"
+    proofs.mkdir()
+    for i in range(count):
+        d = proofs / f"proof-{i}"
+        d.mkdir()
+        (d / "proof.json").write_text(json.dumps({
+            "claim_natural": f"{claim_prefix} {i}",
+            "verdict": "PROVED",
+        }))
+        (d / "meta.yaml").write_text(yaml.dump({"tags": ["health"]}))
+    return proofs
+
+
+def test_publish_audit_triggers_at_threshold(tmp_path):
+    proofs = _make_proofs_dir(tmp_path, count=110)
+    vocab_file = tmp_path / "tag_vocabulary.json"
+    vocab_file.write_text(json.dumps({
+        "proof_count_at_last_audit": 100,
+        "last_audit_at": "2026-01-01",
+        "retag_pending": False,
+        "vocabulary": {"health": "Medicine"}
+    }))
+    data = load_vocab_data(vocab_file)
+    assert check_publish_audit(data, count_proofs(proofs)) == "audit"
+
+
+def test_publish_audit_skips_below_threshold(tmp_path):
+    proofs = _make_proofs_dir(tmp_path, count=108)
+    vocab_file = tmp_path / "tag_vocabulary.json"
+    vocab_file.write_text(json.dumps({
+        "proof_count_at_last_audit": 100,
+        "last_audit_at": "2026-01-01",
+        "retag_pending": False,
+        "vocabulary": {"health": "Medicine"}
+    }))
+    data = load_vocab_data(vocab_file)
+    assert check_publish_audit(data, count_proofs(proofs)) == "skip"
+
+
+def test_publish_audit_retag_pending_overrides_threshold(tmp_path):
+    proofs = _make_proofs_dir(tmp_path, count=120)
+    vocab_file = tmp_path / "tag_vocabulary.json"
+    vocab_file.write_text(json.dumps({
+        "proof_count_at_last_audit": 100,
+        "last_audit_at": "2026-01-01",
+        "retag_pending": True,
+        "vocabulary": {"health": "Medicine"}
+    }))
+    data = load_vocab_data(vocab_file)
+    assert check_publish_audit(data, count_proofs(proofs)) == "retag_pending"
+
+
+@patch("tools.lib.tagger.subprocess.run")
+def test_audit_failure_preserves_count(mock_run, tmp_path):
+    mock = MagicMock()
+    mock.returncode = 1
+    mock.stdout = ""
+    mock.stderr = "model overloaded"
+    mock_run.return_value = mock
+
+    vocab_file = tmp_path / "tag_vocabulary.json"
+    vocab_file.write_text(json.dumps({
+        "proof_count_at_last_audit": 100,
+        "last_audit_at": "2026-01-01",
+        "retag_pending": False,
+        "vocabulary": {"health": "Medicine"}
+    }))
+
+    claims = {
+        "p1": {"claim": "Claim 1", "tags": ["health"], "manual": False},
+        "p2": {"claim": "Claim 2", "tags": ["health"], "manual": False},
+        "p3": {"claim": "Claim 3", "tags": ["health"], "manual": False},
+    }
+
+    vocab_data = load_vocab_data(vocab_file)
+    try:
+        audit_vocabulary(claims)
+        vocab_data["proof_count_at_last_audit"] = 999
+        save_vocab_data(vocab_file, vocab_data)
+    except RuntimeError:
+        pass
+
+    reloaded = load_vocab_data(vocab_file)
+    assert reloaded["proof_count_at_last_audit"] == 100
+    assert reloaded["retag_pending"] is False
+
+
+def test_retag_pending_cleared_on_success(tmp_path):
+    vocab_file = tmp_path / "tag_vocabulary.json"
+    vocab_data = {
+        "proof_count_at_last_audit": 100,
+        "last_audit_at": "2026-01-01",
+        "retag_pending": True,
+        "vocabulary": {"health": "Medicine"}
+    }
+    vocab_file.write_text(json.dumps(vocab_data))
+
+    vocab_data["retag_pending"] = False
+    vocab_data["proof_count_at_last_audit"] = 118
+    vocab_data["last_audit_at"] = "2026-04-11"
+    save_vocab_data(vocab_file, vocab_data)
+
+    reloaded = load_vocab_data(vocab_file)
+    assert reloaded["retag_pending"] is False
+    assert reloaded["proof_count_at_last_audit"] == 118
