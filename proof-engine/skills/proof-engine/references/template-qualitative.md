@@ -121,7 +121,7 @@ if __name__ == "__main__":
                        if f["direction"] == "unfavorable_to_subject"
                        and f["source_key"] in confirmed_keys}
     coi_majority = max(len(coi_favorable), len(coi_unfavorable)) if coi_flags else 0
-    coi_override = n_confirmed > 0 and coi_majority > n_confirmed / 2
+    coi_override = n_confirmed >= CLAIM_FORMAL["threshold"] and coi_majority > n_confirmed / 2
 
     if any_breaks:
         base_verdict = "UNDETERMINED"

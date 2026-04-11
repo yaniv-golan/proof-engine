@@ -111,7 +111,8 @@ if __name__ == "__main__":
                            if f["direction"] == "unfavorable_to_subject"
                            and f["source_key"] in sc1_confirmed_keys}
     sc1_coi_majority = max(len(sc1_coi_favorable), len(sc1_coi_unfavorable)) if sc1_coi_flags else 0
-    sc1_coi_override = n_sc1 > 0 and sc1_coi_majority > n_sc1 / 2
+    sc1_threshold = CLAIM_FORMAL["sub_claims"][0]["threshold"]
+    sc1_coi_override = n_sc1 >= sc1_threshold and sc1_coi_majority > n_sc1 / 2
 
     sc2_confirmed_keys = {k for k in sc2_keys
                           if citation_results[k]["status"] in COUNTABLE_STATUSES}
@@ -122,7 +123,8 @@ if __name__ == "__main__":
                            if f["direction"] == "unfavorable_to_subject"
                            and f["source_key"] in sc2_confirmed_keys}
     sc2_coi_majority = max(len(sc2_coi_favorable), len(sc2_coi_unfavorable)) if sc2_coi_flags else 0
-    sc2_coi_override = n_sc2 > 0 and sc2_coi_majority > n_sc2 / 2
+    sc2_threshold = CLAIM_FORMAL["sub_claims"][1]["threshold"]
+    sc2_coi_override = n_sc2 >= sc2_threshold and sc2_coi_majority > n_sc2 / 2
 
     any_coi_override = sc1_coi_override or sc2_coi_override
 
