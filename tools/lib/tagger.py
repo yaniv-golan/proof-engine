@@ -119,10 +119,20 @@ def llm_tag(claim_text: str, max_tags: int = 3, model: str = "haiku") -> list[st
             if text.startswith("```"):
                 text = re.sub(r"^```(?:json)?\s*", "", text)
                 text = re.sub(r"\s*```.*", "", text, flags=re.DOTALL)
+            elif text.startswith("`") and text.endswith("`"):
+                text = text.strip("`")
             try:
                 raw_tags = json.loads(text)
-            except json.JSONDecodeError as e:
-                raise RuntimeError(f"Failed to parse inner result as JSON: {e}\nResult: {inner[:200]}")
+            except json.JSONDecodeError:
+                # LLM may append extra text after valid JSON — try extracting first array
+                m = re.search(r"\[.*?\]", text, re.DOTALL)
+                if m:
+                    try:
+                        raw_tags = json.loads(m.group())
+                    except json.JSONDecodeError:
+                        raise RuntimeError(f"Failed to parse inner result as JSON\nResult: {inner[:200]}")
+                else:
+                    raise RuntimeError(f"Failed to parse inner result as JSON\nResult: {inner[:200]}")
         else:
             raise RuntimeError(f"Unexpected result type: {type(inner)}")
     else:
@@ -229,6 +239,8 @@ def audit_vocabulary(
             if text.startswith("```"):
                 text = re.sub(r"^```(?:json)?\s*", "", text)
                 text = re.sub(r"\s*```.*", "", text, flags=re.DOTALL)
+            elif text.startswith("`") and text.endswith("`"):
+                text = text.strip("`")
             try:
                 parsed = json.loads(text)
             except json.JSONDecodeError as e:

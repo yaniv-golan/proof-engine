@@ -88,6 +88,7 @@ def site_fixture(tmp_path):
             "generated_at": "2025-01-15",
         },
     }))
+    (proof_dir / "meta.yaml").write_text("tags:\n  - health\n")
 
     (proof_dir.parent / "featured.json").write_text(
         json.dumps(["test-claim"]) + "\n",

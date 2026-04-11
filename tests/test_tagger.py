@@ -124,6 +124,30 @@ def test_llm_tag_deduplicates(mock_run):
 
 
 @patch("tools.lib.tagger.subprocess.run")
+def test_llm_tag_handles_single_backtick_wrapper(mock_run):
+    """Handle case where claude wraps result in single backticks."""
+    mock = MagicMock()
+    mock.returncode = 0
+    mock.stdout = json.dumps({"result": '`["mathematics"]`'})
+    mock.stderr = ""
+    mock_run.return_value = mock
+    tags = llm_tag("641 divides 2^32+1")
+    assert tags == ["mathematics"]
+
+
+@patch("tools.lib.tagger.subprocess.run")
+def test_llm_tag_handles_extra_text_after_json(mock_run):
+    """Handle LLM returning extra text after valid JSON array."""
+    mock = MagicMock()
+    mock.returncode = 0
+    mock.stdout = json.dumps({"result": '["history", "biology"]\n\nWait let me reconsider.\n\n["history"]'})
+    mock.stderr = ""
+    mock_run.return_value = mock
+    tags = llm_tag("The Great Wall of China")
+    assert "history" in tags
+
+
+@patch("tools.lib.tagger.subprocess.run")
 def test_llm_tag_handles_raw_array_response(mock_run):
     """Handle case where claude returns a raw JSON array (no wrapper)."""
     mock = MagicMock()

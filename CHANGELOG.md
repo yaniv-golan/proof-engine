@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.14.0] - 2026-04-11
+
+### Added
+
+- **Tag evolution** — automatic vocabulary growth when proof catalog grows. `audit_vocabulary()` uses Sonnet to propose new tags when 3+ proofs cluster around an uncovered topic. Triggered automatically during `proof-site.py publish` when 10+ new proofs exist since last audit, or manually via `retag-proofs.py --audit`
+- **`tags_manual: true`** in `meta.yaml` — marks tags as human-curated so they are never overwritten by automatic retagging
+- **`retag_pending` flag** in `tag_vocabulary.json` — makes the audit+retag cycle restartable across interruptions
+- **`--verbose` flag** on `retag-proofs.py` — prints per-proof skip reasons and tag changes
+
+### Changed
+
+- **TAG_VOCABULARY extracted to JSON** — vocabulary and audit metadata now live in `tools/lib/tag_vocabulary.json` instead of a Python dict in `tagger.py`
+- **`retag_proof()` raises on failure** — returns `True` (changed) / `False` (no change), raises `RuntimeError` on LLM failure instead of silently returning `False`
+
+### Fixed
+
+- **LLM response parsing** — handles single-backtick wrapping and extra text after valid JSON from Claude CLI
+- **Test fixtures** for `test_build_site.py` and `test_mint_doi.py` — provide cached tags via `meta.yaml` so tests don't require the Claude CLI
+
 ## [1.13.0] - 2026-04-11
 
 ### Added

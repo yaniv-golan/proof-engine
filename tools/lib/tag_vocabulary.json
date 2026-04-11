@@ -16,6 +16,10 @@
     "ai": "Artificial intelligence, LLMs, machine learning, AI safety, deepfakes",
     "biology": "Animals, plants, cells, genetics, evolutionary claims, folklore about nature",
     "nuclear": "Nuclear energy, nuclear power, radiation, clean energy debates",
-    "technology": "Computers, smartphones, electronics, software, internet, blue light"
+    "technology": "Computers, smartphones, electronics, software, internet, blue light",
+    "biohacking": "Wellness interventions, recovery protocols, and body-optimization techniques popular on social media",
+    "middle-east": "Israel-Palestine conflict, Arab-Israeli relations, West Bank, Gaza, and regional geopolitics",
+    "cosmology": "Dark energy, Hubble constant, black holes, vacuum energy, and large-scale structure of the universe",
+    "sleep": "Sleep quality, circadian rhythm, sleep hygiene interventions, and melatonin disruption"
   }
 }

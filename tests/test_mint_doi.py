@@ -39,6 +39,7 @@ def proof_dir(tmp_path):
             "generated_at": "2026-04-07",
         },
     }))
+    (site / "meta.yaml").write_text("tags:\n  - health\n")
     return tmp_path
 
 
