@@ -38,7 +38,8 @@ def site_fixture(tmp_path):
         "## Conclusion\n\nThe claim is PROVED.\n"
     )
     (proof_dir / "proof_audit.md").write_text(
-        "# Audit\n\n## Hardening Checklist\n\nAll pass.\n"
+        "# Audit\n\n## Claim Specification\n\n| Field | Value |\n|---|---|\n| Subject | Test |\n\n"
+        "## Hardening Checklist\n\nAll pass.\n"
     )
     (proof_dir / "proof_narrative.md").write_text(
         "# Proof Narrative: Test claim is true\n\n"
@@ -304,7 +305,10 @@ def site_fixture_paginated(tmp_path):
             f"## Proof Logic\n\nBecause Y.\n\n"
             f"## Conclusion\n\nThe claim is PROVED.\n"
         )
-        (proof_dir / "proof_audit.md").write_text("# Audit\n\n## Hardening Checklist\n\nAll pass.\n")
+        (proof_dir / "proof_audit.md").write_text(
+            "# Audit\n\n## Claim Specification\n\n| Field | Value |\n|---|---|\n| Subject | Test |\n\n"
+            "## Hardening Checklist\n\nAll pass.\n"
+        )
         (proof_dir / "proof.py").write_text("# proof script\n")
         (proof_dir / "proof.json").write_text(json.dumps({
             "fact_registry": {},

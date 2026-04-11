@@ -10,12 +10,36 @@ from tools.lib.section_extractor import extract_sections, validate_required_sect
 from tools.lib.tagger import llm_tag, canonicalize_tag
 from tools.lib.verdict import normalize_verdict
 
-REQUIRED_PROOF_MD_SECTIONS = [
+# --- Format version 1 (existing proofs, no format_version in proof.json) ---
+REQUIRED_PROOF_MD_SECTIONS_V1 = [
     "Key Findings",
     "Claim Interpretation",
     "Evidence Summary",
     "Proof Logic",
     "Conclusion",
+]
+OPTIONAL_MD_SECTIONS_V1 = ["Counter-Evidence Search"]
+REQUIRED_AUDIT_SECTIONS_V1 = ["Claim Specification"]
+OPTIONAL_AUDIT_SECTIONS_V1 = [
+    "Citation Verification Details", "Computation Traces",
+    "Independent Source Agreement", "Adversarial Checks",
+    "Hardening Checklist", "Source Credibility Assessment",
+    "Extraction Records",
+]
+
+# --- Format version 2 (new proofs with format_version: 2) ---
+REQUIRED_PROOF_MD_SECTIONS_V2 = [
+    "Evidence Summary",
+    "Proof Logic",
+    "Conclusion",
+]
+OPTIONAL_MD_SECTIONS_V2 = ["What Could Challenge This Verdict?"]
+REQUIRED_AUDIT_SECTIONS_V2 = ["Claim Specification", "Claim Interpretation"]
+OPTIONAL_AUDIT_SECTIONS_V2 = [
+    "Citation Verification Details", "Computation Traces",
+    "Independent Source Agreement", "Adversarial Checks",
+    "Quality Checks", "Source Credibility Assessment",
+    "Source Data",
 ]
 
 REQUIRED_JSON_KEYS = ["fact_registry", "claim_formal", "claim_natural",
@@ -24,16 +48,6 @@ REQUIRED_JSON_KEYS = ["fact_registry", "claim_formal", "claim_natural",
 REQUIRED_GENERATOR_KEYS = ["name", "version", "repo", "generated_at"]
 
 REQUIRED_CLAIM_FORMAL_KEYS = []  # claim_formal structure varies by proof type
-
-OPTIONAL_AUDIT_SECTIONS = [
-    "Citation Verification Details", "Computation Traces",
-    "Independent Source Agreement", "Adversarial Checks",
-    "Hardening Checklist", "Source Credibility Assessment",
-    "Extraction Records",
-]
-
-OPTIONAL_MD_SECTIONS = ["Counter-Evidence Search"]
-
 
 
 def extract_source_names(proof_data, max_sources=3):
@@ -103,10 +117,25 @@ def load_proof(proof_dir: Path) -> dict:
     # Normalize verdict
     verdict = normalize_verdict(proof_data["verdict"])
 
+    # Determine format version
+    format_version = proof_data.get("format_version", 1)
+
     # Extract sections from proof.md
     proof_md = (proof_dir / "proof.md").read_text()
     sections_md = extract_sections(proof_md)
-    missing = validate_required_sections(sections_md, REQUIRED_PROOF_MD_SECTIONS)
+
+    if format_version >= 2:
+        required_md = REQUIRED_PROOF_MD_SECTIONS_V2
+        optional_md = OPTIONAL_MD_SECTIONS_V2
+        optional_audit = OPTIONAL_AUDIT_SECTIONS_V2
+        required_audit = REQUIRED_AUDIT_SECTIONS_V2
+    else:
+        required_md = REQUIRED_PROOF_MD_SECTIONS_V1
+        optional_md = OPTIONAL_MD_SECTIONS_V1
+        optional_audit = OPTIONAL_AUDIT_SECTIONS_V1
+        required_audit = REQUIRED_AUDIT_SECTIONS_V1
+
+    missing = validate_required_sections(sections_md, required_md)
     if missing:
         raise ValueError(f"{slug}: proof.md missing required sections: {missing}. Found: {sorted(sections_md.keys())}")
 
@@ -114,8 +143,13 @@ def load_proof(proof_dir: Path) -> dict:
     audit_md = (proof_dir / "proof_audit.md").read_text()
     sections_audit = extract_sections(audit_md)
 
+    # Validate required audit sections
+    missing_audit_req = validate_required_sections(sections_audit, required_audit)
+    if missing_audit_req:
+        raise ValueError(f"{slug}: proof_audit.md missing required sections: {missing_audit_req}. Found: {sorted(sections_audit.keys())}")
+
     # Warn about missing optional sections
-    missing_audit = validate_required_sections(sections_audit, OPTIONAL_AUDIT_SECTIONS)
+    missing_audit = validate_required_sections(sections_audit, optional_audit)
     if missing_audit:
         print(f"WARNING: {slug}: proof_audit.md missing optional sections: {missing_audit}. Found: {sorted(sections_audit.keys())}",
               file=sys.stderr)
@@ -127,7 +161,7 @@ def load_proof(proof_dir: Path) -> dict:
                   "(expected for absence proofs with search_registry)",
                   file=sys.stderr)
 
-    missing_md_opt = validate_required_sections(sections_md, OPTIONAL_MD_SECTIONS)
+    missing_md_opt = validate_required_sections(sections_md, optional_md)
     if missing_md_opt:
         print(f"WARNING: {slug}: proof.md missing optional sections: {missing_md_opt}. Found: {sorted(sections_md.keys())}",
               file=sys.stderr)
@@ -183,6 +217,7 @@ def load_proof(proof_dir: Path) -> dict:
     return {
         "slug": slug,
         "proof_data": proof_data,
+        "format_version": format_version,
         "sections_md": sections_md,
         "sections_audit": sections_audit,
         "verdict": verdict,

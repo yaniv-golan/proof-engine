@@ -28,7 +28,8 @@ def proof_dir(tmp_path):
         "## Conclusion\n\nThe claim is PROVED.\n"
     )
     (slug_dir / "proof_audit.md").write_text(
-        "# Audit\n\n## Hardening Checklist\n\nAll pass.\n"
+        "# Audit\n\n## Claim Specification\n\n| Field | Value |\n|---|---|\n| Subject | Test |\n\n"
+        "## Hardening Checklist\n\nAll pass.\n"
     )
     (slug_dir / "proof.py").write_text("# proof script\n")
     (slug_dir / "proof.json").write_text(json.dumps({
