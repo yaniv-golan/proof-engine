@@ -61,6 +61,43 @@ empirical_facts = {
     },
 }
 
+# 3b. SNAPSHOT FALLBACK — for sources that block automated fetches
+# Two approaches depending on source access:
+#
+# PUBLIC sources that block bots (PMC, .gov with JS rendering):
+#   Use inline "snapshot" — content is public, safe to commit.
+#
+# PAYWALLED sources (Nature, Springer, Elsevier, Wiley):
+#   Use "snapshot_file" pointing to snapshots/ directory (.gitignored).
+#   This keeps copyrighted content out of committed proof.py.
+#   See environment-and-sources.md "Handling Paywalled Sources" for details.
+
+_PROOF_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def _load_snapshot(fname):
+    fpath = os.path.join(_PROOF_DIR, fname)
+    try:
+        with open(fpath) as f:
+            return f.read()
+    except FileNotFoundError:
+        return None
+
+# Public source (PMC) — inline snapshot is fine:
+#   "source_a": {
+#       "quote": "...", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC...",
+#       "source_name": "...",
+#       "snapshot": _load_snapshot("pmc_source_a.html"),
+#       "snapshot_source": "public:pre_fetched",
+#   },
+#
+# Paywalled source — use snapshot_file (content stays in .gitignored snapshots/):
+#   "source_b": {
+#       "quote": "...", "url": "https://nature.com/articles/...",
+#       "source_name": "...",
+#       "snapshot_file": "snapshots/B2_snapshot.txt",
+#       "snapshot_source": "paywalled:user_provided",
+#   },
+
 # 4. CITATION VERIFICATION (Rule 2)
 citation_results = verify_all_citations(empirical_facts, wayback_fallback=True)
 
