@@ -585,7 +585,13 @@ def test_proof_page_evidence_table_with_citations(site_fixture):
 
 
 def test_audit_extraction_links_with_suffixed_keys(site_fixture):
-    """Extraction keys like B1_foo should resolve to citation B1's URL."""
+    """Extraction keys like B1_foo should resolve to citation B1's URL.
+
+    After the detail-page redesign, the Linked Sources sub-tables inside the
+    audit accordion were removed.  The canonical sources table (which iterates
+    over fact_registry) still links each citation's URL, so the B1 source URL
+    must appear at least once in the rendered page.
+    """
     proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
     data = json.loads(proof_json_path.read_text())
     data["citations"] = {
@@ -627,8 +633,8 @@ def test_audit_extraction_links_with_suffixed_keys(site_fixture):
     result = _run_build(site_fixture)
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
-    # Both suffixed extraction IDs should link to B1's URL
-    assert html.count('href="https://example.com/source"') >= 2
+    # B1's source URL appears in the canonical sources table
+    assert 'href="https://example.com/source"' in html
 
 
 def test_twitter_card_meta_in_head(site_fixture):

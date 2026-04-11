@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ proof.proof_data.claim_natural | truncate(80) }} — Proof Engine{% endblock %}
+{% block title %}{{ proof.proof_data.claim_natural | truncate(50) }} — Proof Engine{% endblock %}
 
 {% block meta_description %}{{ proof.verdict.raw }}: {{ proof.verdict_hook | replace('**', '') | replace('*', '') | replace('[', '') | replace(']', '') | replace('\n', ' ') | truncate(140) | e }} — Proof Engine{% endblock %}
 
@@ -50,8 +50,78 @@
             pure computation — no citations
         {% endif %}
     </span>
+    <div class="verdict-qualifier">
+        {% if not citation_summary %}
+            Verified by computation — no external sources required.
+        {% elif proof.verdict.category.startswith('proved') and not citation_summary.flagged %}
+            All sub-claims confirmed with {{ citation_summary.verified }} verified citation{{ "s" if citation_summary.verified != 1 }} and no disconfirming evidence found.
+        {% elif proof.verdict.category.startswith('proved') and citation_summary.flagged %}
+            All sub-claims confirmed. {{ citation_summary.flagged | length }} citation{{ "s" if citation_summary.flagged | length != 1 }} flagged for review — see audit trail.
+        {% else %}
+            Evidence assessed across {{ citation_summary.verified }} verified citation{{ "s" if citation_summary.verified != 1 }}.
+        {% endif %}
+    </div>
 </div>
 
+<div class="trust-bar">
+    <span class="trust-icon">⬡</span>
+    Verified by <a href="{{ base_url }}">Proof Engine</a> — an open-source tool that verifies claims using cited sources and executable code. Reasoning transparent and auditable.
+    <br>
+    <a href="{{ base_url }}methodology/">methodology</a> ·
+    <a href="https://github.com/yaniv-golan/proof-engine" rel="nofollow">github</a> ·
+    <a href="{{ base_url }}methodology/#how-to-re-run-a-proof">re-run this proof</a> ·
+    <a href="{{ base_url }}submit/">submit your own</a>
+</div>
+
+<div class="jump-links">
+    <a href="#summary">summary</a>
+    {%- set counter_ev = rendered_sections_md.get("Counter-Evidence Search") or rendered_sections_md.get("What Could Challenge This Verdict?") -%}
+    {%- if counter_ev %} · <a href="#caveats">caveats</a>{% endif -%}
+    {%- if citations %} · <a href="#sources">sources</a>{% endif -%}
+     · <a href="#audit-trail">audit trail</a>
+</div>
+
+{# --- Narrative (primary content) --- #}
+<div id="summary">
+{{ rendered_verdict_hook | safe }}
+
+{% for section_name in ["What Was Claimed?", "What Did We Find?", "What Should You Keep In Mind?", "How Was This Verified?"] %}
+{% if section_name in rendered_sections_narrative %}
+<h2 class="section-heading">{{ section_name }}</h2>
+<div class="proof-content">{{ rendered_sections_narrative[section_name] | safe }}</div>
+{% endif %}
+{% endfor %}
+</div>
+
+{# --- Promoted counter-evidence --- #}
+{% set counter_evidence = rendered_sections_md.get("Counter-Evidence Search") or rendered_sections_md.get("What Could Challenge This Verdict?") %}
+{% if counter_evidence %}
+<h2 class="section-heading" id="caveats">What could challenge this verdict?</h2>
+<div class="proof-content">{{ counter_evidence | safe }}</div>
+{% endif %}
+
+{# --- Canonical sources table --- #}
+{% if citations %}
+<h2 class="section-heading" id="sources">Sources</h2>
+<table class="evidence-table sources-table">
+    <thead>
+        <tr><th>Source</th><th>ID</th><th>Type</th><th>Verified</th></tr>
+    </thead>
+    <tbody>
+    {% for fact_id, fact in proof.proof_data.fact_registry.items() %}
+        {% set cit = citations.get(fact_id) %}
+        <tr>
+            <td>{% if cit %}<a href="{{ cit.url }}">{{ cit.source_name }}</a>{% else %}{{ fact.label }}{% endif %}</td>
+            <td>{{ fact_id }}</td>
+            <td>{% if cit and cit.credibility is defined %}{{ source_type_labels.get(cit.credibility.source_type | default("unknown"), "Unclassified") }}{% elif fact.method is defined %}—{% else %}—{% endif %}</td>
+            <td>{% if cit %}{% set st = cit.status %}<span class="{% if st == 'verified' %}evidence-verified{% elif st == 'partial' %}evidence-computed{% elif st in ('failed', 'not_found', 'fetch_failed') %}evidence-failed{% else %}evidence-unknown{% endif %}">{% if st == "verified" %}Yes{% elif st == "partial" %}Partial{% elif st == "not_found" %}Not Found{% elif st in ("failed", "fetch_failed") %}Fetch Failed{% else %}{{ st | capitalize }}{% endif %}</span>{% elif fact.method is defined %}<span class="evidence-computed">Computed</span>{% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{# --- Share bar (after narrative + counter-evidence + sources) --- #}
 <div class="share-bar"
      data-verdict="{{ proof.verdict.raw | e }}"
      data-claim="{{ proof.proof_data.claim_natural | e }}"
@@ -99,27 +169,7 @@
 })();
 </script>
 
-<div class="trust-bar">
-    <span class="trust-icon">⬡</span>
-    Verified by <a href="{{ base_url }}">Proof Engine</a> — an open-source tool that proves claims using cited sources and executable code. Reasoning transparent and auditable.
-    <br>
-    <a href="{{ base_url }}methodology/">methodology</a> ·
-    <a href="https://github.com/yaniv-golan/proof-engine" rel="nofollow">github</a> ·
-    <a href="{{ base_url }}methodology/#how-to-re-run-a-proof">re-run this proof</a> ·
-    <a href="{{ base_url }}submit/">submit your own</a>
-</div>
-
-{# --- Narrative (primary content) --- #}
-{{ rendered_verdict_hook | safe }}
-
-{% for section_name in ["What Was Claimed?", "What Did We Find?", "What Should You Keep In Mind?", "How Was This Verified?"] %}
-{% if section_name in rendered_sections_narrative %}
-<h2 class="section-heading">{{ section_name }}</h2>
-<div class="proof-content">{{ rendered_sections_narrative[section_name] | safe }}</div>
-{% endif %}
-{% endfor %}
-
-{# --- Detailed Evidence (collapsible, was primary content) --- #}
+{# --- Detailed Evidence (collapsible) --- #}
 <h2 class="section-heading">detailed evidence</h2>
 <div class="audit-section">
     <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
@@ -127,34 +177,10 @@
         <span class="toggle">▸</span>
     </div>
     <div class="audit-body">
-        {% for section_name in ["Key Findings", "Claim Interpretation"] %}
-        {% if section_name in rendered_sections_md %}
-        <h3>{{ section_name }}</h3>
-        <div class="proof-content">{{ rendered_sections_md[section_name] | safe }}</div>
-        {% endif %}
-        {% endfor %}
-
         {% if "Evidence Summary" in rendered_sections_md %}
         <h3>Evidence Summary</h3>
         <div class="proof-content">
             {{ rendered_sections_md["Evidence Summary"] | safe }}
-            {% if citations %}
-            <h4>Linked Sources</h4>
-            <table class="evidence-table">
-                <thead>
-                    <tr><th>Source</th><th>ID</th><th>Verified</th></tr>
-                </thead>
-                <tbody>
-                {% for fact_id, fact in proof.proof_data.fact_registry.items() %}
-                    <tr>
-                        <td>{% if fact_id in citations %}<a href="{{ citations[fact_id].url }}">{{ citations[fact_id].source_name }}</a>{% else %}{{ fact.label }}{% endif %}</td>
-                        <td>{{ fact_id }}</td>
-                        <td>{% if fact_id in citations %}{% set st = citations[fact_id].status %}<span class="{% if st == 'verified' %}evidence-verified{% elif st == 'partial' %}evidence-computed{% elif st in ('failed', 'not_found', 'fetch_failed') %}evidence-failed{% else %}evidence-unknown{% endif %}">{% if st == "verified" %}Yes{% elif st == "partial" %}Partial{% elif st == "not_found" %}Not Found{% elif st in ("failed", "fetch_failed") %}Fetch Failed{% else %}{{ st | capitalize }}{% endif %}</span>{% elif fact.method is defined %}<span class="evidence-computed">Computed</span>{% endif %}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% endif %}
         </div>
         {% endif %}
 
@@ -164,16 +190,13 @@
         <div class="proof-content">{{ rendered_sections_md[section_name] | safe }}</div>
         {% endif %}
         {% endfor %}
-
-        {% if "Counter-Evidence Search" in rendered_sections_md %}
-        <h3>Counter-Evidence Search</h3>
-        <div class="proof-content">{{ rendered_sections_md["Counter-Evidence Search"] | safe }}</div>
-        {% endif %}
     </div>
 </div>
 
-<h2 class="section-heading">audit trail</h2>
+{# --- Audit Trail --- #}
+<h2 class="section-heading" id="audit-trail">audit trail</h2>
 
+{# 1. Citation Verification (unchanged) #}
 {% if citation_summary %}
 <div class="audit-section">
     <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
@@ -226,13 +249,6 @@
 </div>
 {% endif %}
 
-{% set audit_sections_before = [
-    "Computation Traces",
-    "Independent Source Agreement",
-    "Adversarial Checks",
-    "Hardening Checklist",
-] %}
-
 {# Fallback: if proof has no structured citations in proof.json but DOES have
    a Citation Verification Details section in proof_audit.md, render it in the
    generic audit loop so it doesn't disappear silently. #}
@@ -249,19 +265,34 @@
     {% endif %}
 {% endif %}
 
-{% for section_name in audit_sections_before %}
-{% set content = rendered_sections_audit.get(section_name) %}
-{% if content %}
+{# 2. Claim Specification (from rendered_sections_audit) #}
+{% if rendered_sections_audit.get("Claim Specification") %}
 <div class="audit-section">
     <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
-        <span>{{ section_name }}</span>
+        <span>Claim Specification</span>
         <span class="toggle">▸</span>
     </div>
-    <div class="audit-body proof-content">{{ content | safe }}</div>
+    <div class="audit-body proof-content">{{ rendered_sections_audit["Claim Specification"] | safe }}</div>
 </div>
 {% endif %}
-{% endfor %}
 
+{# 3. Claim Interpretation (v1: from rendered_sections_md, v2: from rendered_sections_audit) #}
+{% if proof.format_version >= 2 %}
+    {% set claim_interp = rendered_sections_audit.get("Claim Interpretation") %}
+{% else %}
+    {% set claim_interp = rendered_sections_md.get("Claim Interpretation") %}
+{% endif %}
+{% if claim_interp %}
+<div class="audit-section">
+    <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
+        <span>Claim Interpretation</span>
+        <span class="toggle">▸</span>
+    </div>
+    <div class="audit-body proof-content">{{ claim_interp | safe }}</div>
+</div>
+{% endif %}
+
+{# 4. Source Credibility Assessment (prose only, no sub-table) #}
 {% if rendered_sections_audit.get("Source Credibility Assessment") %}
 <div class="audit-section">
     <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
@@ -270,48 +301,84 @@
     </div>
     <div class="audit-body proof-content">
         {{ rendered_sections_audit["Source Credibility Assessment"] | safe }}
-        {% if audit_tables.get("credibility") %}
-        <h3>Linked Sources</h3>
-        <table class="evidence-table">
-            <thead><tr><th>Fact ID</th><th>Domain</th><th>Source URL</th></tr></thead>
-            <tbody>
-            {% for row in audit_tables.credibility %}
-            <tr>
-                <td>{{ row.fact_id }}</td>
-                <td>{{ row.domain }}</td>
-                <td>{% if row.url %}<a href="{{ row.url }}">{{ row.url | truncate(60) }}</a>{% else %}—{% endif %}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {% endif %}
     </div>
 </div>
 {% endif %}
 
-{% if rendered_sections_audit.get("Extraction Records") %}
+{# 5. Computation Traces #}
+{% if rendered_sections_audit.get("Computation Traces") %}
 <div class="audit-section">
     <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
-        <span>Extraction Records</span>
+        <span>Computation Traces</span>
         <span class="toggle">▸</span>
     </div>
-    <div class="audit-body proof-content">
-        {{ rendered_sections_audit["Extraction Records"] | safe }}
-        {% if audit_tables.get("extractions") %}
-        <h3>Linked Sources</h3>
-        <table class="evidence-table">
-            <thead><tr><th>ID</th><th>Source URL</th></tr></thead>
-            <tbody>
-            {% for row in audit_tables.extractions %}
-            <tr>
-                <td>{% if row.url %}<a href="{{ row.url }}">{{ row.fact_id }}</a>{% else %}{{ row.fact_id }}{% endif %}</td>
-                <td>{% if row.url %}<a href="{{ row.url }}">{{ row.url | truncate(60) }}</a>{% else %}—{% endif %}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {% endif %}
+    <div class="audit-body proof-content">{{ rendered_sections_audit["Computation Traces"] | safe }}</div>
+</div>
+{% endif %}
+
+{# 6. Independent Source Agreement (with parenthetical suffix fallback) #}
+{% set ns = namespace(content=None) %}
+{% for key in rendered_sections_audit %}
+    {% if key == "Independent Source Agreement" or key.startswith("Independent Source Agreement (") %}
+        {% set ns.content = rendered_sections_audit[key] %}
+    {% endif %}
+{% endfor %}
+{% if ns.content %}
+<div class="audit-section">
+    <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
+        <span>Independent Source Agreement</span>
+        <span class="toggle">▸</span>
     </div>
+    <div class="audit-body proof-content">{{ ns.content | safe }}</div>
+</div>
+{% endif %}
+
+{# 7. Adversarial Checks (with parenthetical suffix fallback) #}
+{% set ns = namespace(content=None) %}
+{% for key in rendered_sections_audit %}
+    {% if key == "Adversarial Checks" or key.startswith("Adversarial Checks (") %}
+        {% set ns.content = rendered_sections_audit[key] %}
+    {% endif %}
+{% endfor %}
+{% if ns.content %}
+<div class="audit-section">
+    <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
+        <span>Adversarial Checks</span>
+        <span class="toggle">▸</span>
+    </div>
+    <div class="audit-body proof-content">{{ ns.content | safe }}</div>
+</div>
+{% endif %}
+
+{# 8. Quality Checks (v1: "Hardening Checklist", v2: "Quality Checks") — always display as "Quality Checks" #}
+{% if proof.format_version >= 2 %}
+    {% set quality_content = rendered_sections_audit.get("Quality Checks") %}
+{% else %}
+    {% set quality_content = rendered_sections_audit.get("Hardening Checklist") %}
+{% endif %}
+{% if quality_content %}
+<div class="audit-section">
+    <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
+        <span>Quality Checks</span>
+        <span class="toggle">▸</span>
+    </div>
+    <div class="audit-body proof-content">{{ quality_content | safe }}</div>
+</div>
+{% endif %}
+
+{# 9. Source Data (v1: "Extraction Records", v2: "Source Data") — always display as "Source Data", no sub-table #}
+{% if proof.format_version >= 2 %}
+    {% set source_data_content = rendered_sections_audit.get("Source Data") %}
+{% else %}
+    {% set source_data_content = rendered_sections_audit.get("Extraction Records") %}
+{% endif %}
+{% if source_data_content %}
+<div class="audit-section">
+    <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
+        <span>Source Data</span>
+        <span class="toggle">▸</span>
+    </div>
+    <div class="audit-body proof-content">{{ source_data_content | safe }}</div>
 </div>
 {% endif %}
 
@@ -356,14 +423,18 @@
     </div>
 </details>
 
-<div class="downloads">
-    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.md" class="download-link" download onclick="gtag('event','download',{file_type:'proof_md',proof_slug:'{{ proof.slug }}'})">↓ structured proof report</a>
-    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_narrative.md" class="download-link" download onclick="gtag('event','download',{file_type:'narrative',proof_slug:'{{ proof.slug }}'})">↓ narrative summary</a>
-    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.py" class="download-link" download onclick="gtag('event','download',{file_type:'proof_py',proof_slug:'{{ proof.slug }}'})">↓ run the proof (Python)</a>
-    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_audit.md" class="download-link" download onclick="gtag('event','download',{file_type:'audit_trail',proof_slug:'{{ proof.slug }}'})">↓ original audit log</a>
-    <a href="https://github.com/yaniv-golan/proof-engine/tree/main/site/proofs/{{ proof.slug }}" class="download-link" rel="nofollow" onclick="gtag('event','download',{file_type:'github',proof_slug:'{{ proof.slug }}'})">view on github</a>
-    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.json" class="download-link" onclick="gtag('event','download',{file_type:'proof_json',proof_slug:'{{ proof.slug }}'})">raw data (JSON)</a>
-</div>
+<details class="downloads-section">
+    <summary>Downloads & raw data</summary>
+    <div class="downloads">
+        <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.md" class="download-link" download onclick="gtag('event','download',{file_type:'proof_md',proof_slug:'{{ proof.slug }}'})">↓ structured proof report</a>
+        <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_narrative.md" class="download-link" download onclick="gtag('event','download',{file_type:'narrative',proof_slug:'{{ proof.slug }}'})">↓ narrative summary</a>
+        <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.py" class="download-link" download onclick="gtag('event','download',{file_type:'proof_py',proof_slug:'{{ proof.slug }}'})">↓ run the proof (Python)</a>
+        <a href="{{ base_url }}proofs/{{ proof.slug }}/proof_audit.md" class="download-link" download onclick="gtag('event','download',{file_type:'audit_trail',proof_slug:'{{ proof.slug }}'})">↓ original audit log</a>
+        <a href="https://github.com/yaniv-golan/proof-engine/tree/main/site/proofs/{{ proof.slug }}" class="download-link" rel="nofollow" onclick="gtag('event','download',{file_type:'github',proof_slug:'{{ proof.slug }}'})">view on github</a>
+        <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.json" class="download-link" onclick="gtag('event','download',{file_type:'proof_json',proof_slug:'{{ proof.slug }}'})">raw data (JSON)</a>
+    </div>
+</details>
+<p class="generator-footer">Generated by <a href="https://github.com/yaniv-golan/proof-engine">proof-engine</a> v{{ proof.proof_engine_version }} on {{ proof.date }}.</p>
 <p class="hero-trust" style="margin-top: 20px;">found this useful? <a href="https://github.com/yaniv-golan/proof-engine" rel="nofollow">★ star on github</a></p>
 <script>
 document.querySelectorAll('.audit-header').forEach(function(header) {
