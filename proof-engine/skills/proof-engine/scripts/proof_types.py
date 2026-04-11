@@ -213,6 +213,8 @@ class ProofData(TypedDict, total=False):
     verdict: str                # One of VERDICT_TAXONOMY keys
     key_results: dict[str, object]
     generator: Generator
+    # Format version (v2+ proofs only; absent on v1 proofs)
+    format_version: NotRequired[int]
     # Optional sections
     citations: dict[str, CitationEntry]
     extractions: dict[str, ExtractionRecord]
@@ -264,3 +266,4 @@ class LoadedProof(TypedDict, total=False):
     verdict_hook: str
     date: str
     proof_engine_version: str
+    format_version: NotRequired[int]

@@ -13,10 +13,6 @@ Header block:
 - Verdict: [VERDICT]
 - Audit trail: link to proof_audit.md and proof.py
 
-Section "Key Findings": 3-4 bullet points with the decisive numbers that justify the verdict. This is the executive summary — a reader who stops here should understand the result. Source: JSON summary `verdict` and `key_results`.
-
-Section "Claim Interpretation": CLAIM_FORMAL in prose. State the natural-language claim, the formal interpretation, the operator choice with rationale. Expand acronyms on first use (e.g., "greenhouse gases (GHGs)"). Include a "Formalization scope" note stating which aspects of the natural-language claim are narrowed, excluded, or operationalized by proxy in the formal interpretation (e.g., "The natural-language claim refers to 'valid scientific practice'; the formal interpretation operationalizes this as 'endorsed by ≥3 independent authorities,' which does not capture methodological validity per se."). If the formalization is a faithful 1:1 mapping, state that explicitly. Source: JSON summary `claim_formal` and `claim_natural`.
-
 Section "Evidence Summary": Table with columns ID, Fact, Verified. IDs and labels from JSON summary `fact_registry`. Multi-source sub-entries (`{fact_id}_source_{N}`) inherit their label from the parent `fact_registry` entry, appending the source index.
 - Type A facts: Verified = "Computed: [human-readable result]". The result should be meaningful to a non-technical reader — e.g., "Computed: 96.85%" or "Computed: True (all sub-claims hold)" or "Computed: 2 independent sources confirmed". Avoid bare numbers without context (not "Computed: 2" — say what 2 means).
 - Type B facts: Verified = "Yes", "No", or "Partial" with brief reason for No/Partial (e.g., "No (URL returned 403)"). Derive from JSON summary `citations[fact_id].status`. For multi-source facts, sub-entries are keyed `{fact_id}_source_{N}` — render one row per sub-entry.
@@ -26,7 +22,7 @@ Section "Evidence Summary": Table with columns ID, Fact, Verified. IDs and label
 
 Section "Proof Logic": Narrative explanation of the reasoning chain. Every key number must reference its fact ID inline, e.g., "Human activities account for ~95.5% of observed warming (B1, B3)." When multiple facts establish the same claim, note the redundancy: "Israel was founded on May 14, 1948 (B1, B2 — independently sourced)." Sub-claims get their own sub-sections if the proof has multiple parts. Source: author analysis.
 
-Section "Counter-Evidence Search": Results of adversarial checks — what counter-evidence was searched for and what was found. Use plain language, not "Rule 5". Source: JSON summary `adversarial_checks`.
+Section "What could challenge this verdict?": Results of adversarial checks — what counter-evidence was searched for and what was found. Use plain language, not "Rule 5". Source: JSON summary `adversarial_checks`.
 
 Section "Conclusion": Restate verdict with the key numbers. Verdict-specific:
 - PROVED/DISPROVED: If any citations are not fully verified, state which conclusions depend on them and whether those conclusions are independently supported by verified sources.
@@ -55,14 +51,16 @@ Header block:
 - Reader summary: link to proof.md
 - Proof script: link to proof.py
 
-Section "Claim Specification": CLAIM_FORMAL fields. Source: proof.py JSON summary `claim_formal`.
+Section "Claim Interpretation": Formal claim specification in prose. State the natural-language claim, the formal interpretation, the operator choice with rationale. Expand acronyms on first use (e.g., "greenhouse gases (GHGs)"). Include a "Formalization scope" note stating which aspects of the natural-language claim are narrowed, excluded, or operationalized by proxy in the formal interpretation (e.g., "The natural-language claim refers to 'valid scientific practice'; the formal interpretation operationalizes this as 'endorsed by ≥3 independent authorities,' which does not capture methodological validity per se."). If the formalization is a faithful 1:1 mapping, state that explicitly. Source: JSON summary `claim_formal` and `claim_natural`.
+
+Section "Claim Specification": Formal claim specification in readable table rows. Source: proof.py JSON summary `claim_formal`.
 
 Section "Fact Registry": FACT_REGISTRY showing ID-to-key mapping. Source: proof.py JSON summary `fact_registry`.
 
 Section "Full Evidence Table": Two sub-sections:
 
 - "Type A (Computed) Facts" — table with columns: ID, Fact, Method, Result. All fields from JSON summary `fact_registry` entries where `method` and `result` are present. Source: proof.py JSON summary.
-- "Type B (Empirical) Facts" — table with columns: ID, Fact, Source, URL, Quote, Status, Method, Credibility. One row per source. Source: proof.py JSON summary `citations` (which has normalized `status` and `method` fields — not free-form messages). The Credibility column shows "Tier N (type)" from `citations[fact_id].credibility`. For pure-math proofs, omit. Multi-source facts produce `{fact_id}_source_{N}` keys; render each as its own row.
+- "Type B (Empirical) Facts" — table with columns: ID, Fact, Source, URL, Quote, Status, Method, Credibility. One row per source. Source: proof.py JSON summary `citations` (which has normalized `status` and `method` fields — not free-form messages). The Credibility column shows the plain-language type only (e.g., Government, Academic, Major news, Advocacy organization, Unclassified) from `citations[fact_id].credibility`. For pure-math proofs, omit. Multi-source facts produce `{fact_id}_source_{N}` keys; render each as its own row.
 - "Type S (Search) Facts" — table with columns: ID, Database, Search URL, Query Terms, Date Range, Result Count, Status, Credibility. One row per search. Source: JSON summary `fact_registry` (S-type entries) cross-referenced with `search_registry`. For absence proofs only; omit for other proof types.
 
 Section "Citation Verification Details": For each Type B citation, four fields — all from structured JSON fields, not parsed from prose:
@@ -81,13 +79,13 @@ If any cross-check sources have a conflict of interest with the claim's subject,
 
 Section "Adversarial Checks (Rule 5)": Full records with questions, searches performed, findings, and whether each breaks the proof. Source: proof.py JSON summary `adversarial_checks`.
 
-Section "Source Credibility Assessment": Table with columns: Fact ID, Domain, Type, Tier, Note. Source: JSON summary `citations[fact_id].credibility`. For multi-source facts, use `citations[{fact_id}_source_{N}].credibility` for each sub-source. If any source has tier ≤ 1 (flagged unreliable or satire), add a note explaining why it was cited and whether the claim depends solely on it. Tier scale: 5=government/intergovernmental, 4=academic/peer-reviewed, 3=major news or established reference, 2=unclassified, 1=flagged unreliable. For pure-math proofs, omit.
+Section "Source Credibility Assessment": Table with columns: Fact ID, Domain, Type, Note. Source: JSON summary `citations[fact_id].credibility`. Use plain-language type only (Government, Academic, Major news, Advocacy organization, Unclassified). For multi-source facts, use `citations[{fact_id}_source_{N}].credibility` for each sub-source. If any source is flagged unreliable or satire, add a note explaining why it was cited and whether the claim depends solely on it. For pure-math proofs, omit.
 
-Section "Extraction Records": For each extracted value — fact ID, extracted value, whether value was found in quote. Source: JSON summary `extractions[fact_id]` (value, value_in_quote, quote_snippet). Plus: extraction method and normalization narrative. Source: author analysis (label as such). For pure-math proofs, omit.
+Section "Source Data": For each extracted value — fact ID, extracted value, whether value was found in quote. Source: JSON summary `extractions[fact_id]` (value, value_in_quote, quote_snippet). Plus: extraction method and normalization narrative. Source: author analysis (label as such). For pure-math proofs, omit.
 
-For qualitative/consensus proofs (no numeric extraction), the `extractions` field records citation verification status per source instead of extracted values: `value` = verification status string, `value_in_quote` = whether the citation was countable (verified or partial), `quote_snippet` = first 80 chars of the quote.
+For qualitative/consensus proofs (no numeric extraction), the `extractions` field records citation verification status per source instead of extracted values: `value` = verification status string, `value_in_quote` = whether the citation was verified or partial, `quote_snippet` = first 80 chars of the quote.
 
-Section "Hardening Checklist":
+Section "Quality Checks":
 - Rule 1: Every empirical value parsed from quote text, not hand-typed
 - Rule 2: Every citation URL fetched and quote checked
 - Rule 3: System time used for date-dependent logic
@@ -100,6 +98,19 @@ Section "Hardening Checklist":
 For pure-math proofs, mark Rules 1, 2, and 6 as "N/A — pure computation, no empirical facts."
 
 Section "Generator": Same footer as proof.md.
+
+## proof.json structure
+
+The machine-readable summary produced by proof.py. All four markdown documents derive their data from this file.
+
+Required top-level fields:
+- `format_version`: integer, must be `2` for proofs generated under this spec
+- `fact_registry`: dict of fact ID to FactRegistryEntry
+- `claim_formal`: ClaimFormal dict
+- `claim_natural`: string
+- `verdict`: one of the VERDICT_TAXONOMY keys
+- `key_results`: dict of result key to value
+- `generator`: Generator block with `name`, `version`, `repo`, `generated_at`
 
 ## proof_narrative.md structure
 

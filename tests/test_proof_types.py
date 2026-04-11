@@ -83,7 +83,8 @@ def test_loaded_proof_matches_loader_return():
                 "verdict", "tags", "featured", "citation_count",
                 "search_count", "date", "proof_engine_version",
                 "verdict_summary", "source_names", "source_names_extra",
-                "sections_narrative", "verdict_declaration", "verdict_hook"}
+                "sections_narrative", "verdict_declaration", "verdict_hook",
+                "format_version"}
     missing = expected - lp_fields
     assert not missing, f"LoadedProof missing fields: {missing}"
 
