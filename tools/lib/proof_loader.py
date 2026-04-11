@@ -19,8 +19,9 @@ REQUIRED_PROOF_MD_SECTIONS_V1 = [
     "Conclusion",
 ]
 OPTIONAL_MD_SECTIONS_V1 = ["Counter-Evidence Search"]
-REQUIRED_AUDIT_SECTIONS_V1 = ["Claim Specification"]
+REQUIRED_AUDIT_SECTIONS_V1 = []
 OPTIONAL_AUDIT_SECTIONS_V1 = [
+    "Claim Specification",
     "Citation Verification Details", "Computation Traces",
     "Independent Source Agreement", "Adversarial Checks",
     "Hardening Checklist", "Source Credibility Assessment",

@@ -271,7 +271,50 @@ def v1_proof_dir_missing_claim_spec(tmp_path):
     return d
 
 
-def test_v1_missing_claim_spec_raises(v1_proof_dir_missing_claim_spec):
-    """V1 proof without 'Claim Specification' in audit should raise ValueError."""
+def test_v1_missing_claim_spec_loads_with_warning(v1_proof_dir_missing_claim_spec, capsys):
+    """V1 proof without 'Claim Specification' in audit should load (optional), with warning."""
+    proof = load_proof(v1_proof_dir_missing_claim_spec)
+    assert proof["format_version"] == 1
+    captured = capsys.readouterr()
+    assert "Claim Specification" in captured.err
+
+
+def test_v2_missing_claim_spec_raises(tmp_path):
+    """V2 proof without 'Claim Specification' in audit should raise ValueError (required for v2)."""
+    import json
+    d = tmp_path / "test-v2-no-claim-spec"
+    d.mkdir()
+
+    proof_json = {
+        "format_version": 2,
+        "fact_registry": {"B1": {"label": "Test fact"}},
+        "claim_formal": {"subject": "test"},
+        "claim_natural": "Test claim",
+        "verdict": "PROVED",
+        "key_results": ["Test result"],
+        "generator": {
+            "name": "proof-engine", "version": "1.15.0",
+            "repo": "https://github.com/yaniv-golan/proof-engine",
+            "generated_at": "2026-04-11",
+        },
+    }
+    (d / "proof.json").write_text(json.dumps(proof_json))
+    (d / "proof.md").write_text(
+        "# Proof\n\n## Evidence Summary\nTest\n\n"
+        "## Proof Logic\nTest\n\n## Conclusion\nTest.\n"
+    )
+    (d / "proof_audit.md").write_text(
+        "# Audit\n\n## Claim Interpretation\nTest.\n\n## Quality Checks\nAll pass.\n"
+    )
+    (d / "proof_narrative.md").write_text(
+        "# Proof Narrative: Test\n\n"
+        "## Verdict\n**Verdict: PROVED**\nTest hook.\n\n"
+        "## What Was Claimed?\nTest.\n\n"
+        "## What Did We Find?\nTest findings.\n\n"
+        "## What Should You Keep In Mind?\nTest.\n\n"
+        "## How Was This Verified?\nTest.\n"
+    )
+    (d / "meta.yaml").write_text("tags:\n  - science\n")
+
     with pytest.raises(ValueError, match="missing required"):
-        load_proof(v1_proof_dir_missing_claim_spec)
+        load_proof(d)
