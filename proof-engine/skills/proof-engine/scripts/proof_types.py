@@ -20,7 +20,11 @@ Authoritative sources for these shapes:
   - tools/lib/verdict.py (VERDICT_TAXONOMY)
 """
 
-from typing import TypedDict, NotRequired
+try:
+    from typing import TypedDict, NotRequired
+except ImportError:
+    from typing import TypedDict
+    from typing_extensions import NotRequired
 
 
 # ---------------------------------------------------------------------------

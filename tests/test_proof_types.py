@@ -162,3 +162,58 @@ def test_build_citation_detail_excludes_closest_passage():
     )
     assert "closest_passage" not in detail["B1"]
     assert "closest_similarity" not in detail["B1"]
+
+
+def test_proof_types_has_not_required():
+    """NotRequired should be importable from proof_types regardless of Python version."""
+    from scripts.proof_types import ProofData, CitationEntry, VerificationResult
+    # These TypedDicts use NotRequired — if the import fallback is broken,
+    # the module-level import fails and this test never reaches these asserts
+    assert ProofData is not None
+    assert CitationEntry is not None
+    assert VerificationResult is not None
+
+
+def test_proof_types_fallback_import(monkeypatch):
+    """The typing_extensions fallback path must work when typing.NotRequired is absent.
+
+    Simulates Python 3.10 by temporarily removing NotRequired from typing,
+    then re-importing proof_types to exercise the except ImportError branch.
+
+    On Python 3.11+, typing_extensions.NotRequired is the same object as
+    typing.NotRequired, and typing.TypedDict's metaclass internally references
+    NotRequired by name within its own module — so removing it from typing
+    would crash the metaclass itself. We skip the simulation on 3.11+ and
+    instead verify the fallback guard is present in the source."""
+    import sys
+    import importlib
+
+    if sys.version_info >= (3, 11):
+        # On 3.11+, the fallback is unreachable (typing has NotRequired).
+        # Verify the try/except guard is present in the source instead.
+        import inspect
+        import scripts.proof_types as pt
+        src = inspect.getsource(pt)
+        assert "except ImportError" in src, (
+            "proof_types.py must contain an 'except ImportError' fallback for NotRequired"
+        )
+        assert "typing_extensions" in src, (
+            "proof_types.py must fall back to typing_extensions for NotRequired"
+        )
+        return
+
+    # Python 3.10 simulation: remove NotRequired from typing and re-import.
+    import typing
+    original = getattr(typing, "NotRequired", None)
+    if original is not None:
+        monkeypatch.delattr(typing, "NotRequired")
+
+    # Remove cached module so re-import hits the try/except
+    mod_name = "scripts.proof_types"
+    if mod_name in sys.modules:
+        monkeypatch.delitem(sys.modules, mod_name)
+
+    # Re-import — should succeed via typing_extensions fallback
+    mod = importlib.import_module(mod_name)
+    assert hasattr(mod, "ProofData")
+    assert hasattr(mod, "CitationEntry")
