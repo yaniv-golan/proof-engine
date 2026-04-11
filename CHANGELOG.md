@@ -4,9 +4,29 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.13.0] - 2026-04-11
+
+### Added
+
+- **Paywalled source access via `snapshot_file`** — proofs can reference local snapshots of paywalled content, wired through `fetch_page()`, `verify_citation()`, `verify_all_citations()`, and `verify_data_values()`
+- **Open Access fallback via Unpaywall** — new `oa_lookup.py` module extracts DOIs and queries the Unpaywall API for OA variants; integrated into `verify_citation()` as automatic fallback after fetch failure
+- **`oa_variant` fetch mode** in `proof_types.py` and `build-site.py` — proofs resolved via OA lookup are tagged accordingly
+
 ### Fixed
 
+- **Site proof validator** accepts `snapshot_file` verdict and `key_results` degradation levels
+- **Unpaywall API calls** URL-encode DOIs; `oa_variant` recognized in proof types and build-site
 - **Section matcher ignoring parenthetical suffixes** — `validate_required_sections` now strips suffixes like `(Rule 5)` before matching, so audit headings like `## Adversarial Checks (Rule 5)` correctly match the expected section name `Adversarial Checks`
+
+### Changed
+
+- **Paywall handling guidance** rewritten with `snapshot_file` workflow and OA discovery documentation
+- **README** rewritten with core thesis ("prove, don't assert") and practical comparisons
+- **Site homepage and methodology copy** improved for clarity
+
+### Content
+
+- **`snapshots/` directories** added to `.gitignore` per paywalled content policy
 
 ## [1.12.0] - 2026-04-09
 
@@ -40,7 +60,7 @@ All notable changes to this project will be documented in this file.
 - **Real-world demonstration search directive** — Step 2 now prompts searching for practical applications of the claimed mechanism (not just benchmarks), after field testing revealed this gap
 
 ### Changed
-
+ 
 - **Verbatim quoting enforcement** — SKILL.md, hardening-rules.md, and environment-and-sources.md now explicitly prohibit paraphrased quotes with bad/good examples, a Quote Harvesting gate in Step 2, a pre-flight citation check in Step 3, and a Citation Recovery Loop as Step 5.5
 - **PDF citation guidance** — rewritten to recommend snapshot workflow using Claude Code's native PDF reading; arXiv section added recommending ar5iv HTML over arxiv.org/abs
 - **Self-critique checklist** — added verbatim quote verification and PDF snapshot checks
