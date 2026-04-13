@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_cbs",
-      "label": "CBS News: Zahi Hawass statement on workers' tombs proving non-slave status"
-    },
-    "B2": {
-      "key": "source_aap",
-      "label": "AAP Fact Check: Dr. Karin Sowada on Wadi el-Jarf papyri describing skilled non-slave workers"
-    },
-    "B3": {
-      "key": "source_hawass_tombs",
-      "label": "Guardians.net: Zahi Hawass official description of pyramid builders as conscripted peasants, not slaves"
-    },
-    "A1": {
-      "label": "Verified source count (sources whose quotes appear on their cited page)",
-      "method": "count(verified citations rejecting 'built by slaves') = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Great Pyramid of Giza (Pyramid of Khufu)",
     "property": "primary workforce consisted of enslaved persons",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "The Pyramid of Giza was built by slaves.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_cbs",
-      "source_name": "CBS News \u2014 More Evidence Slaves Didn't Build Pyramids",
-      "url": "https://www.cbsnews.com/news/more-evidence-slaves-didnt-build-pyramids/",
-      "quote": "No way would they have been buried so honorably if they were slaves",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "cbsnews.com",
-        "source_type": "major_news",
-        "tier": 3,
-        "flags": [],
-        "note": "Major news organization"
+      "type": "empirical",
+      "label": "CBS News: Zahi Hawass statement on workers' tombs proving non-slave status",
+      "sub_claim": null,
+      "source": {
+        "name": "CBS News \u2014 More Evidence Slaves Didn't Build Pyramids",
+        "url": "https://www.cbsnews.com/news/more-evidence-slaves-didnt-build-pyramids/",
+        "quote": "No way would they have been buried so honorably if they were slaves"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "cbsnews.com",
+          "source_type": "major_news",
+          "tier": 3,
+          "flags": [],
+          "note": "Major news organization"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "No way would they have been buried so honorably if they were slaves"
       }
     },
     "B2": {
-      "source_key": "source_aap",
-      "source_name": "AAP FactCheck \u2014 The pyramids of Giza were not built by slaves",
-      "url": "https://www.aap.com.au/factcheck/the-pyramids-of-giza-were-not-built-by-slaves/",
-      "quote": "But the pyramids were not built by slaves.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "aap.com.au",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "AAP Fact Check: Dr. Karin Sowada on Wadi el-Jarf papyri describing skilled non-slave workers",
+      "sub_claim": null,
+      "source": {
+        "name": "AAP FactCheck \u2014 The pyramids of Giza were not built by slaves",
+        "url": "https://www.aap.com.au/factcheck/the-pyramids-of-giza-were-not-built-by-slaves/",
+        "quote": "But the pyramids were not built by slaves."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "aap.com.au",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "But the pyramids were not built by slaves."
       }
     },
     "B3": {
-      "source_key": "source_hawass_tombs",
-      "source_name": "Guardians.net \u2014 Zahi Hawass: Discovery of the Tombs of the Pyramid Builders",
-      "url": "https://www.guardians.net/hawass/buildtomb.htm",
-      "quote": "The pyramid builders were not slaves but peasants conscripted on a rotating part-time basis, working under the supervision of skilled artisans and craftsmen who not only built the pyramid complexes for the kings and nobility, but also designed and constructed their own, more modest tombs.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "guardians.net",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Guardians.net: Zahi Hawass official description of pyramid builders as conscripted peasants, not slaves",
+      "sub_claim": null,
+      "source": {
+        "name": "Guardians.net \u2014 Zahi Hawass: Discovery of the Tombs of the Pyramid Builders",
+        "url": "https://www.guardians.net/hawass/buildtomb.htm",
+        "quote": "The pyramid builders were not slaves but peasants conscripted on a rotating part-time basis, working under the supervision of skilled artisans and craftsmen who not only built the pyramid complexes for the kings and nobility, but also designed and constructed their own, more modest tombs."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "guardians.net",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The pyramid builders were not slaves but peasants conscripted on a rotating part"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "No way would they have been buried so honorably if they were slaves"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "But the pyramids were not built by slaves."
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The pyramid builders were not slaves but peasants conscripted on a rotating part"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count (sources whose quotes appear on their cited page)",
+      "sub_claim": null,
+      "method": "count(verified citations rejecting 'built by slaves') = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,7 +113,8 @@
         "source_aap": "verified",
         "source_hawass_tombs": "verified"
       },
-      "independence_note": "Source B1 is CBS News reporting on Egyptian government archaeology. Source B2 is AAP FactCheck citing Dr. Karin Sowada (Macquarie University). Source B3 is Zahi Hawass's own publication on the tomb discovery. All three are independently published; B2 traces to an independent academic source (Sowada) distinct from Hawass."
+      "independence_note": "Source B1 is CBS News reporting on Egyptian government archaeology. Source B2 is AAP FactCheck citing Dr. Karin Sowada (Macquarie University). Source B3 is Zahi Hawass's own publication on the tomb discovery. All three are independently published; B2 traces to an independent academic source (Sowada) distinct from Hawass.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -130,7 +137,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

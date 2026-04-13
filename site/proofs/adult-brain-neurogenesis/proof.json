@@ -1,40 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "pizzorusso_2002",
-      "label": "Pizzorusso et al. 2002: ChABC degrades PNNs and reactivates OD plasticity in adult rats"
-    },
-    "B2": {
-      "key": "hensch_bilimoria_2012",
-      "label": "Hensch & Bilimoria 2012: Multiple methods reopen critical period windows in adult brain"
-    },
-    "B3": {
-      "key": "gervain_2013",
-      "label": "Gervain et al. 2013: VPA (HDAC inhibitor) reopens critical-period learning of absolute pitch in adult humans"
-    },
-    "B4": {
-      "key": "nardou_2023",
-      "label": "Nardou et al. 2023: Psychedelics reopen social reward learning critical period in adult mice"
-    },
-    "B5": {
-      "key": "ribic_2020",
-      "label": "Ribic 2020: Abundant evidence for lifelong experience-dependent plasticity in adult sensory cortex"
-    },
-    "B6": {
-      "key": "patton_2018",
-      "label": "Patton et al. 2018: Thalamocortical plasticity does not disappear but becomes gated in adults"
-    },
-    "A1": {
-      "label": "Count of independent methods demonstrated to reopen critical periods in adults",
-      "method": "Count of confirmed reopening methods from independent sources",
-      "result": "5"
-    },
-    "A2": {
-      "label": "Assessment: Does evidence support permanent closure?",
-      "method": "Boolean evaluation: n_reopening_methods == 0",
-      "result": "False (found 5 methods) \u2192 sub-claim A DISPROVED"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Critical periods of cortical plasticity in mammalian brains",
     "property": "permanence of closure and adult reorganization capacity",
@@ -56,140 +21,190 @@
     "operator_note": "The claim asserts BOTH permanence AND incapability. The claim is true only if both sub-claims hold. If either is disproved, the overall claim is disproved."
   },
   "claim_natural": "Critical periods of heightened cortical plasticity close permanently after early development, rendering the adult brain largely incapable of experience-dependent reorganization comparable to juvenile levels.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "pizzorusso_2002",
-      "source_name": "Pizzorusso et al. 2002, Science 298:1248-1251",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/12424383/",
-      "quote": "After CSPG degradation with chondroitinase-ABC in adult rats, monocular deprivation caused an ocular dominance shift toward the nondeprived eye. The mature ECM is thus inhibitory for experience-dependent plasticity, and degradation of CSPGs reactivates cortical plasticity.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Pizzorusso et al. 2002: ChABC degrades PNNs and reactivates OD plasticity in adult rats",
+      "sub_claim": null,
+      "source": {
+        "name": "Pizzorusso et al. 2002, Science 298:1248-1251",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12424383/",
+        "quote": "After CSPG degradation with chondroitinase-ABC in adult rats, monocular deprivation caused an ocular dominance shift toward the nondeprived eye. The mature ECM is thus inhibitory for experience-dependent plasticity, and degradation of CSPGs reactivates cortical plasticity."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "reactivates=True, adult=True",
+        "value_in_quote": true,
+        "quote_snippet": "After CSPG degradation with chondroitinase-ABC in adult rats, monocular deprivat"
       }
     },
     "B2": {
-      "source_key": "hensch_bilimoria_2012",
-      "source_name": "Hensch & Bilimoria 2012, Cerebrum",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3574806/",
-      "quote": "data from animal studies now suggest that it may be possible to re-awaken youth-like plasticity in the adult brain",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Hensch & Bilimoria 2012: Multiple methods reopen critical period windows in adult brain",
+      "sub_claim": null,
+      "source": {
+        "name": "Hensch & Bilimoria 2012, Cerebrum",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3574806/",
+        "quote": "data from animal studies now suggest that it may be possible to re-awaken youth-like plasticity in the adult brain"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "re-awaken=True, adult_brain=True",
+        "value_in_quote": true,
+        "quote_snippet": "data from animal studies now suggest that it may be possible to re-awaken youth-"
       }
     },
     "B3": {
-      "source_key": "gervain_2013",
-      "source_name": "Gervain et al. 2013, Frontiers in Systems Neuroscience",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3848041/",
-      "quote": "histone-deacetylase inhibitors (HDAC inhibitors) enable adult mice to establish perceptual preferences that are otherwise impossible to acquire after youth",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Gervain et al. 2013: VPA (HDAC inhibitor) reopens critical-period learning of absolute pitch in adult humans",
+      "sub_claim": null,
+      "source": {
+        "name": "Gervain et al. 2013, Frontiers in Systems Neuroscience",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3848041/",
+        "quote": "histone-deacetylase inhibitors (HDAC inhibitors) enable adult mice to establish perceptual preferences that are otherwise impossible to acquire after youth"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "enable_adult=True, after_youth=True",
+        "value_in_quote": true,
+        "quote_snippet": "histone-deacetylase inhibitors (HDAC inhibitors) enable adult mice to establish "
       }
     },
     "B4": {
-      "source_key": "nardou_2023",
-      "source_name": "Nardou et al. 2023, Nature 618:790-798",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/37316665/",
-      "quote": "the ability to reopen the social reward learning critical period is a shared property across psychedelic drugs",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Nardou et al. 2023: Psychedelics reopen social reward learning critical period in adult mice",
+      "sub_claim": null,
+      "source": {
+        "name": "Nardou et al. 2023, Nature 618:790-798",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37316665/",
+        "quote": "the ability to reopen the social reward learning critical period is a shared property across psychedelic drugs"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "reopen=True",
+        "value_in_quote": true,
+        "quote_snippet": "the ability to reopen the social reward learning critical period is a shared pro"
       }
     },
     "B5": {
-      "source_key": "ribic_2020",
-      "source_name": "Ribic 2020, Frontiers in Cellular Neuroscience",
-      "url": "https://www.frontiersin.org/journals/cellular-neuroscience/articles/10.3389/fncel.2020.00076/full",
-      "quote": "abundant evidence supports that adult circuits exhibit both transient and long-term experience-induced plasticity",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "frontiersin.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "Ribic 2020: Abundant evidence for lifelong experience-dependent plasticity in adult sensory cortex",
+      "sub_claim": null,
+      "source": {
+        "name": "Ribic 2020, Frontiers in Cellular Neuroscience",
+        "url": "https://www.frontiersin.org/journals/cellular-neuroscience/articles/10.3389/fncel.2020.00076/full",
+        "quote": "abundant evidence supports that adult circuits exhibit both transient and long-term experience-induced plasticity"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "frontiersin.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "adult_circuits=True",
+        "value_in_quote": true,
+        "quote_snippet": "abundant evidence supports that adult circuits exhibit both transient and long-t"
       }
     },
     "B6": {
-      "source_key": "patton_2018",
-      "source_name": "Patton, Blundon & Zakharenko 2018, Current Opinion in Neurobiology",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6361689/",
-      "quote": "In adults, TC LTD/LTP in the ACx do not disappear but become gated",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Patton et al. 2018: Thalamocortical plasticity does not disappear but becomes gated in adults",
+      "sub_claim": null,
+      "source": {
+        "name": "Patton, Blundon & Zakharenko 2018, Current Opinion in Neurobiology",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6361689/",
+        "quote": "In adults, TC LTD/LTP in the ACx do not disappear but become gated"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "not_disappear=True",
+        "value_in_quote": true,
+        "quote_snippet": "In adults, TC LTD/LTP in the ACx do not disappear but become gated"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "reactivates=True, adult=True",
-      "value_in_quote": true,
-      "quote_snippet": "After CSPG degradation with chondroitinase-ABC in adult rats, monocular deprivat"
     },
-    "B2": {
-      "value": "re-awaken=True, adult_brain=True",
-      "value_in_quote": true,
-      "quote_snippet": "data from animal studies now suggest that it may be possible to re-awaken youth-"
+    "A1": {
+      "type": "computed",
+      "label": "Count of independent methods demonstrated to reopen critical periods in adults",
+      "sub_claim": null,
+      "method": "Count of confirmed reopening methods from independent sources",
+      "result": "5",
+      "depends_on": []
     },
-    "B3": {
-      "value": "enable_adult=True, after_youth=True",
-      "value_in_quote": true,
-      "quote_snippet": "histone-deacetylase inhibitors (HDAC inhibitors) enable adult mice to establish "
-    },
-    "B4": {
-      "value": "reopen=True",
-      "value_in_quote": true,
-      "quote_snippet": "the ability to reopen the social reward learning critical period is a shared pro"
-    },
-    "B5": {
-      "value": "adult_circuits=True",
-      "value_in_quote": true,
-      "quote_snippet": "abundant evidence supports that adult circuits exhibit both transient and long-t"
-    },
-    "B6": {
-      "value": "not_disappear=True",
-      "value_in_quote": true,
-      "quote_snippet": "In adults, TC LTD/LTP in the ACx do not disappear but become gated"
+    "A2": {
+      "type": "computed",
+      "label": "Assessment: Does evidence support permanent closure?",
+      "sub_claim": null,
+      "method": "Boolean evaluation: n_reopening_methods == 0",
+      "result": "False (found 5 methods) \u2192 sub-claim A DISPROVED",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -201,7 +216,8 @@
         "B4 (Nardou 2023, social reward, psychedelic): reopen=True",
         "B6 (Patton 2018, auditory cortex, genetic): not_disappear=True"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Different cortical systems show reopening (visual, auditory, social) \u2014 not system-specific",
@@ -210,7 +226,8 @@
         "Auditory cortex: B3 (VPA), B6 (A1R knockout)",
         "Social reward: B4 (psychedelics)"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -239,7 +256,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_reopening_methods": 5,
     "subclaim_a_permanent_closure": false,

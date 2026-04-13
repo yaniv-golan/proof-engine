@@ -1,41 +1,10 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_tinsley",
-      "label": "Tinsley & Nadolsky 2025 (SAGE Open Med Case Rep): Case series — lean soft tissue preserved or gained with structured resistance exercise and high protein during GLP-1 agonist treatment"
-    },
-    "B2": {
-      "key": "source_codella",
-      "label": "Codella et al. 2025 (Frontiers Clin Diabetes Healthcare): Resistance training attenuates lean body mass loss on GLP-1 drugs"
-    },
-    "B3": {
-      "key": "source_massgeneral",
-      "label": "Apovian et al. 2025 (Mass General Advances in Motion): Exercise + high protein has greatest benefit preserving muscle on GLP-1"
-    },
-    "B4": {
-      "key": "source_daneshgaran",
-      "label": "Daneshgaran et al. 2025 (Aesthetic Surg J Open Forum): Systematic review — evidence for GLP-1-specific facial fat atrophy is lacking"
-    },
-    "B5": {
-      "key": "source_haines",
-      "label": "Haines 2025 (ENDO 2025 / Endocrine Society): Higher protein intake may protect against semaglutide-associated muscle loss"
-    },
-    "A1": {
-      "label": "SC1 verified source count — lean-mass loss is avoidable",
-      "method": "count(status in ('verified', 'partial')) over SC1_KEYS",
-      "result": "3 of 3 SC1 sources verified (threshold >= 3)"
-    },
-    "A2": {
-      "label": "SC2 verified source count — 'Ozempic face' not GLP-1-specific",
-      "method": "count(status in ('verified', 'partial')) over SC2_KEYS",
-      "result": "2 of 2 SC2 sources verified (threshold >= 2)"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "GLP-1 receptor agonists (e.g., semaglutide / Ozempic)",
     "property": "cause (SC1) major lean-mass loss AND (SC2) 'Ozempic face' that are UNAVOIDABLE despite resistance exercise and high protein intake",
     "operator": ">=",
-    "operator_note": "This is a DISPROOF. The claim asserts unavoidability — 'even with exercise and high protein intake.' We disprove it by demonstrating that published evidence directly contradicts the unavoidability premise for both sub-claims. SC1 threshold: >= 3 independently verified sources confirming lean-mass loss IS substantially mitigated or eliminated by resistance exercise + high protein. SC2 threshold: >= 2 independently verified sources confirming 'Ozempic face' is not a GLP-1-specific unavoidable physiological effect. Proof direction: disprove. Empirical facts contain sources that REJECT the claim.",
+    "operator_note": "This is a DISPROOF. The claim asserts unavoidability \u2014 'even with exercise and high protein intake.' We disprove it by demonstrating that published evidence directly contradicts the unavoidability premise for both sub-claims. SC1 threshold: >= 3 independently verified sources confirming lean-mass loss IS substantially mitigated or eliminated by resistance exercise + high protein. SC2 threshold: >= 2 independently verified sources confirming 'Ozempic face' is not a GLP-1-specific unavoidable physiological effect. Proof direction: disprove. Empirical facts contain sources that REJECT the claim.",
     "threshold": 3,
     "sc2_threshold": 2,
     "proof_direction": "disprove",
@@ -45,118 +14,162 @@
     }
   },
   "claim_natural": "GLP-1 drugs like Ozempic cause unavoidable major muscle loss and \"Ozempic face\" even with exercise and high protein intake",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_tinsley",
-      "source_name": "Tinsley GM, Nadolsky S. SAGE Open Medical Case Reports 2025. Three patients performed resistance exercise 3–5 d/wk + high protein (1.6–2.3 g/kg FFM/d) during GLP-1 agonist treatment. DXA showed lean soft tissue preserved or net-gained in 2 of 3 cases; Case 1 lost only 8.7% of weight as lean mass vs. 26–40% expected without exercise.",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12536186/",
-      "quote": "Preservation of lean soft tissue during weight loss induced by GLP-1 and GLP-1/GIP receptor agonists: A case series",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Tinsley & Nadolsky 2025 (SAGE Open Med Case Rep): Case series \u2014 lean soft tissue preserved or gained with structured resistance exercise and high protein during GLP-1 agonist treatment",
+      "sub_claim": null,
+      "source": {
+        "name": "Tinsley GM, Nadolsky S. SAGE Open Medical Case Reports 2025. Three patients performed resistance exercise 3\u20135 d/wk + high protein (1.6\u20132.3 g/kg FFM/d) during GLP-1 agonist treatment. DXA showed lean soft tissue preserved or net-gained in 2 of 3 cases; Case 1 lost only 8.7% of weight as lean mass vs. 26\u201340% expected without exercise.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12536186/",
+        "quote": "Preservation of lean soft tissue during weight loss induced by GLP-1 and GLP-1/GIP receptor agonists: A case series"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
     },
     "B2": {
-      "source_key": "source_codella",
-      "source_name": "Codella R, Senesi P, Luzi L. Frontiers in Clinical Diabetes and Healthcare 2025. Narrative review of GLP-1 agonist pharmacotherapy and exercise interventions.",
-      "url": "https://www.frontiersin.org/journals/clinical-diabetes-and-healthcare/articles/10.3389/fcdhc.2025.1720794/full",
-      "quote": "Resistance training, rather aerobic exercise, attenuates lean body mass loss during weight-loss diets in adults with overweight or obesity",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "frontiersin.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "Codella et al. 2025 (Frontiers Clin Diabetes Healthcare): Resistance training attenuates lean body mass loss on GLP-1 drugs",
+      "sub_claim": null,
+      "source": {
+        "name": "Codella R, Senesi P, Luzi L. Frontiers in Clinical Diabetes and Healthcare 2025. Narrative review of GLP-1 agonist pharmacotherapy and exercise interventions.",
+        "url": "https://www.frontiersin.org/journals/clinical-diabetes-and-healthcare/articles/10.3389/fcdhc.2025.1720794/full",
+        "quote": "Resistance training, rather aerobic exercise, attenuates lean body mass loss during weight-loss diets in adults with overweight or obesity"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "frontiersin.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
     },
     "B3": {
-      "source_key": "source_massgeneral",
-      "source_name": "Apovian C, Yerevanian A, Dushay J. Mass General Advances in Motion 2025. Clinical guidance on preserving lean body mass during GLP-1 receptor agonist therapy.",
-      "url": "https://advances.massgeneral.org/endocrinology/article.aspx?id=1601",
-      "quote": "Combining a high protein diet and consistent exercise with GLP-1 treatment has the greatest benefit in preserving bone and muscle mass",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "massgeneral.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Apovian et al. 2025 (Mass General Advances in Motion): Exercise + high protein has greatest benefit preserving muscle on GLP-1",
+      "sub_claim": null,
+      "source": {
+        "name": "Apovian C, Yerevanian A, Dushay J. Mass General Advances in Motion 2025. Clinical guidance on preserving lean body mass during GLP-1 receptor agonist therapy.",
+        "url": "https://advances.massgeneral.org/endocrinology/article.aspx?id=1601",
+        "quote": "Combining a high protein diet and consistent exercise with GLP-1 treatment has the greatest benefit in preserving bone and muscle mass"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "massgeneral.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
     },
     "B4": {
-      "source_key": "source_daneshgaran",
-      "source_name": "Daneshgaran G, Shauly O, Gould DJ. Aesthetic Surgery Journal Open Forum 2025. Systematic review of GLP-1 agonist weight loss and 'Ozempic face' claims; found the term likely represents general rapid weight-loss facial changes.",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12232544/",
-      "quote": "Evidence to suggest that GLP-1 receptor agonists preferentially result in facial fat atrophy is lacking",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Daneshgaran et al. 2025 (Aesthetic Surg J Open Forum): Systematic review \u2014 evidence for GLP-1-specific facial fat atrophy is lacking",
+      "sub_claim": null,
+      "source": {
+        "name": "Daneshgaran G, Shauly O, Gould DJ. Aesthetic Surgery Journal Open Forum 2025. Systematic review of GLP-1 agonist weight loss and 'Ozempic face' claims; found the term likely represents general rapid weight-loss facial changes.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12232544/",
+        "quote": "Evidence to suggest that GLP-1 receptor agonists preferentially result in facial fat atrophy is lacking"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
     },
     "B5": {
-      "source_key": "source_haines",
-      "source_name": "Haines M. ENDO 2025, Endocrine Society. Clinical study (n=40): protein intake associated with reduced lean-mass loss on semaglutide; higher protein protective particularly in older adults and women.",
-      "url": "https://www.endocrine.org/news-and-advocacy/news-room/endo-annual-meeting/endo-2025-press-releases/haines-press-release",
-      "quote": "eating more protein may help protect against this",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "endocrine.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Haines 2025 (ENDO 2025 / Endocrine Society): Higher protein intake may protect against semaglutide-associated muscle loss",
+      "sub_claim": null,
+      "source": {
+        "name": "Haines M. ENDO 2025, Endocrine Society. Clinical study (n=40): protein intake associated with reduced lean-mass loss on semaglutide; higher protein protective particularly in older adults and women.",
+        "url": "https://www.endocrine.org/news-and-advocacy/news-room/endo-annual-meeting/endo-2025-press-releases/haines-press-release",
+        "quote": "eating more protein may help protect against this"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "endocrine.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
-    }
-  },
-  "extractions": {
-    "source_tinsley": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Preservation of lean soft tissue during weight loss induced by GLP-1 and GLP-1/G"
     },
-    "source_codella": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Resistance training, rather aerobic exercise, attenuates lean body mass loss dur"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count \u2014 lean-mass loss is avoidable",
+      "sub_claim": "SC1",
+      "method": "count(status in ('verified', 'partial')) over SC1_KEYS",
+      "result": "3 of 3 SC1 sources verified (threshold >= 3)",
+      "depends_on": []
     },
-    "source_massgeneral": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Combining a high protein diet and consistent exercise with GLP-1 treatment has t"
-    },
-    "source_daneshgaran": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Evidence to suggest that GLP-1 receptor agonists preferentially result in facial"
-    },
-    "source_haines": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "eating more protein may help protect against this"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count \u2014 'Ozempic face' not GLP-1-specific",
+      "sub_claim": "SC2",
+      "method": "count(status in ('verified', 'partial')) over SC2_KEYS",
+      "result": "2 of 2 SC2 sources verified (threshold >= 2)",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -168,45 +181,52 @@
         "B3 Apovian et al. (2025): clinical guidance from Mass General/Harvard"
       ],
       "agreement": true,
-      "independence_rationale": "Three independent institutions; primary research (case series with DXA), secondary literature review, and clinical practice guidance — different evidence types. None cite each other as primary source."
+      "independence_rationale": "Three independent institutions; primary research (case series with DXA), secondary literature review, and clinical practice guidance \u2014 different evidence types. None cite each other as primary source.",
+      "fact_ids": []
     },
     {
       "description": "SC2 disproof: Two independent sources (systematic review, clinical study) contradict the 'unavoidable GLP-1-specific' facial atrophy premise.",
       "values_compared": [
-        "B4 Daneshgaran et al. (2025): systematic review — GLP-1-specific facial atrophy lacks evidence",
+        "B4 Daneshgaran et al. (2025): systematic review \u2014 GLP-1-specific facial atrophy lacks evidence",
         "B5 Haines (ENDO 2025): protein protects against lean-mass loss including in high-risk groups"
       ],
       "agreement": true,
-      "independence_rationale": "Different institutions, different study designs (systematic review vs. clinical observational study), different primary evidence focus (facial vs. systemic lean mass). Neither cites the other as a primary source."
+      "independence_rationale": "Different institutions, different study designs (systematic review vs. clinical observational study), different primary evidence focus (facial vs. systemic lean mass). Neither cites the other as a primary source.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Is there any published RCT showing lean-mass loss is unavoidable despite structured resistance exercise + high protein?",
       "verification_performed": "Searched PubMed and Google Scholar for 'semaglutide lean mass loss unavoidable exercise protein RCT' and 'GLP-1 muscle loss despite resistance training.' The LEAN Mass Preservation Trial (NCT06885736) is registered but ongoing as of 2026; no results published. No RCT found demonstrating unavoidability of lean mass loss under optimized resistance training + high protein protocols.",
-      "finding": "No RCT has demonstrated that muscle loss is unavoidable with exercise + protein. The Tinsley/Nadolsky case series (2025) shows the opposite: two of three patients had net lean mass GAINS while losing total body weight. The absence of an RCT does not support the 'unavoidable' premise — the burden of proof for an absolute claim lies with the claimant.",
+      "finding": "No RCT has demonstrated that muscle loss is unavoidable with exercise + protein. The Tinsley/Nadolsky case series (2025) shows the opposite: two of three patients had net lean mass GAINS while losing total body weight. The absence of an RCT does not support the 'unavoidable' premise \u2014 the burden of proof for an absolute claim lies with the claimant.",
       "breaks_proof": false
     },
     {
       "question": "Does any cohort or observational study find lean-mass loss persists even with structured exercise + protein intervention?",
-      "verification_performed": "Searched for 'semaglutide lean mass loss exercise protein intervention cohort study.' Found Ren et al. (2025) retrospective cohort (Drug Des Dev Ther) showing semaglutide associated with muscle loss and functional decline in older adults with T2D, but this cohort had NO structured exercise + high protein intervention — it reflected standard clinical care. Authors explicitly noted 'the potential for nutritional supplementation and targeted exercise regimens to counteract semaglutide-associated muscle decline merits systematic investigation,' acknowledging the interventions may be protective.",
+      "verification_performed": "Searched for 'semaglutide lean mass loss exercise protein intervention cohort study.' Found Ren et al. (2025) retrospective cohort (Drug Des Dev Ther) showing semaglutide associated with muscle loss and functional decline in older adults with T2D, but this cohort had NO structured exercise + high protein intervention \u2014 it reflected standard clinical care. Authors explicitly noted 'the potential for nutritional supplementation and targeted exercise regimens to counteract semaglutide-associated muscle decline merits systematic investigation,' acknowledging the interventions may be protective.",
       "finding": "Ren et al. (2025) sarcopenia finding reflects outcomes WITHOUT exercise + protein intervention, not despite them. This is consistent with SC1 disproof: without mitigation, lean-mass loss occurs; WITH exercise + protein, it is substantially reduced or reversed. The study actually supports the interventions.",
       "breaks_proof": false
     },
     {
       "question": "Is 'Ozempic face' recognized as a GLP-1-specific medical condition with a distinct mechanism from general rapid weight loss?",
-      "verification_performed": "Searched for 'Ozempic face GLP-1 specific mechanism facial fat atrophy' and 'semaglutide facial volume loss independent of weight loss.' Daneshgaran et al. (2025) systematic review (PMC12232544) found no evidence that GLP-1 drugs cause preferential facial fat loss compared to other causes of equivalent rapid weight loss. Cleveland Clinic, Harvard Health, and UCLA Health guidance all identify rate of weight loss — not the drug mechanism — as the primary determinant.",
+      "verification_performed": "Searched for 'Ozempic face GLP-1 specific mechanism facial fat atrophy' and 'semaglutide facial volume loss independent of weight loss.' Daneshgaran et al. (2025) systematic review (PMC12232544) found no evidence that GLP-1 drugs cause preferential facial fat loss compared to other causes of equivalent rapid weight loss. Cleveland Clinic, Harvard Health, and UCLA Health guidance all identify rate of weight loss \u2014 not the drug mechanism \u2014 as the primary determinant.",
       "finding": "'Ozempic face' reflects general rapid weight-loss-associated facial volume reduction, not a pharmacologically distinct GLP-1 side effect. The rate of weight loss (adjustable via dose titration) is the primary determinant. The effect is not unique to GLP-1 drugs and is therefore not 'unavoidable' by any mechanism unique to this drug class.",
       "breaks_proof": false
     },
     {
       "question": "Could 'major' muscle loss refer to a specific threshold that exercise + protein cannot mitigate even if loss is reduced?",
-      "verification_performed": "Searched for clinical definitions of major muscle loss and sarcopenia (EWGSOP2: appendicular skeletal muscle index < 7.0 kg/m² men, < 5.5 kg/m² women; or >10% decline in muscle mass). Reviewed lean-mass outcomes in Tinsley/Nadolsky (2025): Cases 2–3 had net lean-mass GAINS; Case 1 lost only 8.7% of weight as lean tissue vs. 26–40% expected without exercise.",
+      "verification_performed": "Searched for clinical definitions of major muscle loss and sarcopenia (EWGSOP2: appendicular skeletal muscle index < 7.0 kg/m\u00b2 men, < 5.5 kg/m\u00b2 women; or >10% decline in muscle mass). Reviewed lean-mass outcomes in Tinsley/Nadolsky (2025): Cases 2\u20133 had net lean-mass GAINS; Case 1 lost only 8.7% of weight as lean tissue vs. 26\u201340% expected without exercise.",
       "finding": "Under clinical sarcopenia thresholds or any reasonable threshold for 'major,' the exercise + protein interventions in Tinsley/Nadolsky (2025) reduced lean-mass loss well below the unmitigated baseline, with two of three cases achieving net lean-mass gains. The claim's 'major' qualifier does not survive even a conservative interpretation when exercise + protein are used.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_confirmed_sources": 3,
     "sc1_threshold": 3,

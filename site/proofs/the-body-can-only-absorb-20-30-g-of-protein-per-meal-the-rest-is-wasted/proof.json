@@ -1,100 +1,106 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "schoenfeld_aragon_2018",
-      "label": "Schoenfeld & Aragon 2018 (JISSN) — protein dose-response review"
-    },
-    "B2": {
-      "key": "trommelen_2023",
-      "label": "Trommelen et al. 2023 (Cell Reports Medicine) — 100 g single-meal RCT"
-    },
-    "B3": {
-      "key": "deutz_wolfe_2013",
-      "label": "Deutz & Wolfe 2013 (Clinical Nutrition) — anabolic upper limit review"
-    },
-    "A1": {
-      "label": "Verified source count (peer-reviewed sources rejecting the 20-30 g cap claim)",
-      "method": "count(verified citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Human protein absorption and utilization per meal",
     "property": "Number of independent peer-reviewed sources establishing that (1) there is no fixed 20-30 g per-meal ceiling on protein absorption or utilization, AND (2) protein ingested above any such threshold is not simply 'wasted' (excreted unused)",
     "operator": ">=",
-    "operator_note": "The claim makes two assertions: (A) a hard 20-30 g per-meal protein absorption ceiling exists, and (B) protein above that ceiling is wasted. Both are tested together: a source qualifies as a rebuttal if it establishes that protein utilization or anabolism continues beyond 20-30 g/meal, or that excess amino acids are metabolized for energy/other purposes rather than excreted unused. Proof direction is 'disprove' — sources must REJECT the claim. Threshold of 3 independent peer-reviewed sources is required. Note: studies showing that MPS rates plateau around 20 g of whey protein in the short-term post-exercise window do NOT support the claim as stated, because they measure synthesis rate optimization, not absorption capacity, and do not show that excess protein is excreted unused.",
+    "operator_note": "The claim makes two assertions: (A) a hard 20-30 g per-meal protein absorption ceiling exists, and (B) protein above that ceiling is wasted. Both are tested together: a source qualifies as a rebuttal if it establishes that protein utilization or anabolism continues beyond 20-30 g/meal, or that excess amino acids are metabolized for energy/other purposes rather than excreted unused. Proof direction is 'disprove' \u2014 sources must REJECT the claim. Threshold of 3 independent peer-reviewed sources is required. Note: studies showing that MPS rates plateau around 20 g of whey protein in the short-term post-exercise window do NOT support the claim as stated, because they measure synthesis rate optimization, not absorption capacity, and do not show that excess protein is excreted unused.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
   "claim_natural": "The body can only absorb 20-30 g of protein per meal; the rest is wasted.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "schoenfeld_aragon_2018",
-      "source_name": "Schoenfeld BJ, Aragon AA. How much protein can the body use in a single meal for muscle-building? Implications for daily protein distribution. J Int Soc Sports Nutr. 2018;15(1):10. PMC5828430.",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5828430/",
-      "quote": "the preponderance of data indicate that while consumption of higher protein doses (> 20 g) results in greater AA oxidation, this is not the fate for all the additional ingested AAs as some are utilized for tissue-building purposes",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Schoenfeld & Aragon 2018 (JISSN) \u2014 protein dose-response review",
+      "sub_claim": null,
+      "source": {
+        "name": "Schoenfeld BJ, Aragon AA. How much protein can the body use in a single meal for muscle-building? Implications for daily protein distribution. J Int Soc Sports Nutr. 2018;15(1):10. PMC5828430.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5828430/",
+        "quote": "the preponderance of data indicate that while consumption of higher protein doses (> 20 g) results in greater AA oxidation, this is not the fate for all the additional ingested AAs as some are utilized for tissue-building purposes"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the preponderance of data indicate that while consumption of higher protein dose"
       }
     },
     "B2": {
-      "source_key": "trommelen_2023",
-      "source_name": "Trommelen J, van Lieshout GAA, Nyakayiru J, Holwerda AM, Smeets JSJ, Hendriks FK, van Kranenburg JMX, Zorenc AH, Senden JM, Goessens JPB, Gijsen AP, van Loon LJC. The anabolic response to protein ingestion during recovery from exercise has no upper limit in magnitude and duration in vivo in humans. Cell Rep Med. 2023;4(12):101324. PMC10772463.",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10772463/",
-      "quote": "The anabolic response to protein ingestion has no apparent upper limit in magnitude and duration in vivo in humans",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Trommelen et al. 2023 (Cell Reports Medicine) \u2014 100 g single-meal RCT",
+      "sub_claim": null,
+      "source": {
+        "name": "Trommelen J, van Lieshout GAA, Nyakayiru J, Holwerda AM, Smeets JSJ, Hendriks FK, van Kranenburg JMX, Zorenc AH, Senden JM, Goessens JPB, Gijsen AP, van Loon LJC. The anabolic response to protein ingestion during recovery from exercise has no upper limit in magnitude and duration in vivo in humans. Cell Rep Med. 2023;4(12):101324. PMC10772463.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10772463/",
+        "quote": "The anabolic response to protein ingestion has no apparent upper limit in magnitude and duration in vivo in humans"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The anabolic response to protein ingestion has no apparent upper limit in magnit"
       }
     },
     "B3": {
-      "source_key": "deutz_wolfe_2013",
-      "source_name": "Deutz NE, Wolfe RR. Is there a maximal anabolic response to protein intake with a meal? Clin Nutr. 2013;32(2):309-313. PMC3595342.",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3595342/",
-      "quote": "There is no practical upper limit to the anabolic response to protein or amino acid intake in the context of a meal",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Deutz & Wolfe 2013 (Clinical Nutrition) \u2014 anabolic upper limit review",
+      "sub_claim": null,
+      "source": {
+        "name": "Deutz NE, Wolfe RR. Is there a maximal anabolic response to protein intake with a meal? Clin Nutr. 2013;32(2):309-313. PMC3595342.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3595342/",
+        "quote": "There is no practical upper limit to the anabolic response to protein or amino acid intake in the context of a meal"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "There is no practical upper limit to the anabolic response to protein or amino a"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the preponderance of data indicate that while consumption of higher protein dose"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The anabolic response to protein ingestion has no apparent upper limit in magnit"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "There is no practical upper limit to the anabolic response to protein or amino a"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count (peer-reviewed sources rejecting the 20-30 g cap claim)",
+      "sub_claim": null,
+      "method": "count(verified citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,7 +113,8 @@
         "trommelen_2023": "verified",
         "deutz_wolfe_2013": "verified"
       },
-      "independence_note": "Sources are from different research groups and journals: Schoenfeld/Aragon (review, multiple US institutions, JISSN), Trommelen et al. (RCT, Maastricht University, Cell Reports Medicine), Deutz/Wolfe (review, Texas A&M/UT Medical Branch, Clinical Nutrition). All published in different peer-reviewed journals."
+      "independence_note": "Sources are from different research groups and journals: Schoenfeld/Aragon (review, multiple US institutions, JISSN), Trommelen et al. (RCT, Maastricht University, Cell Reports Medicine), Deutz/Wolfe (review, Texas A&M/UT Medical Branch, Clinical Nutrition). All published in different peer-reviewed journals.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -126,11 +133,16 @@
     {
       "question": "Is there a meaningful distinction between gut 'absorption' and cellular 'utilization' that could rescue any part of the claim?",
       "verification_performed": "Searched 'intestinal protein absorption capacity per meal physiology' and reviewed Boirie et al. 1997 (PNAS 94:14930) on fast vs slow proteins and Guadagni & Biolo 2009 (Curr Opin Clin Nutr Metab Care 12:58) on protein kinetics. Also reviewed the discussion section of Schoenfeld & Aragon 2018.",
-      "finding": "Gut absorption of dietary protein is essentially complete (>90%) for all common protein sources regardless of meal size — the intestine does not have a 20-30 g ceiling. What studies sometimes show is that MUSCLE PROTEIN SYNTHESIS STIMULATION has diminishing returns above ~20 g of fast whey in certain contexts. However, Schoenfeld & Aragon 2018 explicitly state that additional AAs go to tissue-building beyond 20 g, and Deutz & Wolfe 2013 note that higher protein also suppresses protein breakdown (net anabolism continues). Any rescue of the claim via this distinction would require redefining 'absorb' to mean 'maximally stimulate MPS from whey in isolation' — which is not the plain meaning of the claim.",
+      "finding": "Gut absorption of dietary protein is essentially complete (>90%) for all common protein sources regardless of meal size \u2014 the intestine does not have a 20-30 g ceiling. What studies sometimes show is that MUSCLE PROTEIN SYNTHESIS STIMULATION has diminishing returns above ~20 g of fast whey in certain contexts. However, Schoenfeld & Aragon 2018 explicitly state that additional AAs go to tissue-building beyond 20 g, and Deutz & Wolfe 2013 note that higher protein also suppresses protein breakdown (net anabolism continues). Any rescue of the claim via this distinction would require redefining 'absorb' to mean 'maximally stimulate MPS from whey in isolation' \u2014 which is not the plain meaning of the claim.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "epoch_ai_acceleration",
-      "label": "Epoch AI: AI capabilities progress has sped up, not plateaued"
-    },
-    "B2": {
-      "key": "epoch_substack_acceleration",
-      "label": "Epoch AI Substack: frontier model improvement nearly doubled in pace after April 2024"
-    },
-    "B3": {
-      "key": "swebench_leaderboard",
-      "label": "SWE-bench Verified leaderboard: top scores reached 80.9% by late 2025"
-    },
-    "B4": {
-      "key": "epoch_eci_page",
-      "label": "Epoch AI ECI: combines 42 benchmarks into general capability scale showing continued growth"
-    },
-    "A1": {
-      "label": "Verified source count",
-      "method": "count(verified citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "AI model capabilities (as measured by composite benchmarks)",
     "property": "rate of improvement since late 2024",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "AI progress in capabilities has largely plateaued since late 2024",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "epoch_ai_acceleration",
-      "source_name": "Epoch AI — AI capabilities progress has sped up",
-      "url": "https://epoch.ai/data-insights/ai-capabilities-progress-has-sped-up",
-      "quote": "The best score on the Epoch Capabilities Index grew almost twice as fast over the last two years as it did over the two years before that, with a 90% acceleration in April 2024",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "epoch.ai",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Epoch AI: AI capabilities progress has sped up, not plateaued",
+      "sub_claim": null,
+      "source": {
+        "name": "Epoch AI \u2014 AI capabilities progress has sped up",
+        "url": "https://epoch.ai/data-insights/ai-capabilities-progress-has-sped-up",
+        "quote": "The best score on the Epoch Capabilities Index grew almost twice as fast over the last two years as it did over the two years before that, with a 90% acceleration in April 2024"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "epoch.ai",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The best score on the Epoch Capabilities Index grew almost twice as fast over th"
       }
     },
     "B2": {
-      "source_key": "epoch_substack_acceleration",
-      "source_name": "Epoch AI Substack — Frontier AI capabilities accelerated in 2024",
-      "url": "https://epochai.substack.com/p/frontier-ai-capabilities-accelerated",
-      "quote": "frontier model improvement nearly doubled in pace, from ~8 points/year prior to April 2024, to ~15 points/year thereafter",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "substack.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Epoch AI Substack: frontier model improvement nearly doubled in pace after April 2024",
+      "sub_claim": null,
+      "source": {
+        "name": "Epoch AI Substack \u2014 Frontier AI capabilities accelerated in 2024",
+        "url": "https://epochai.substack.com/p/frontier-ai-capabilities-accelerated",
+        "quote": "frontier model improvement nearly doubled in pace, from ~8 points/year prior to April 2024, to ~15 points/year thereafter"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "substack.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "frontier model improvement nearly doubled in pace, from ~8 points/year prior to "
       }
     },
     "B3": {
-      "source_key": "swebench_leaderboard",
-      "source_name": "LLM Stats — SWE-bench Verified Leaderboard",
-      "url": "https://llm-stats.com/benchmarks/swe-bench-verified",
-      "quote": "Claude Opus 4.5",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "llm-stats.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "SWE-bench Verified leaderboard: top scores reached 80.9% by late 2025",
+      "sub_claim": null,
+      "source": {
+        "name": "LLM Stats \u2014 SWE-bench Verified Leaderboard",
+        "url": "https://llm-stats.com/benchmarks/swe-bench-verified",
+        "quote": "Claude Opus 4.5"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "llm-stats.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Claude Opus 4.5"
       }
     },
     "B4": {
-      "source_key": "epoch_eci_page",
-      "source_name": "Epoch AI — Epoch Capabilities Index",
-      "url": "https://epoch.ai/benchmarks/eci",
-      "quote": "combines scores from many different AI benchmarks into a single 'general capability' scale",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "epoch.ai",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Epoch AI ECI: combines 42 benchmarks into general capability scale showing continued growth",
+      "sub_claim": null,
+      "source": {
+        "name": "Epoch AI \u2014 Epoch Capabilities Index",
+        "url": "https://epoch.ai/benchmarks/eci",
+        "quote": "combines scores from many different AI benchmarks into a single 'general capability' scale"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "epoch.ai",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "combines scores from many different AI benchmarks into a single 'general capabil"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The best score on the Epoch Capabilities Index grew almost twice as fast over th"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "frontier model improvement nearly doubled in pace, from ~8 points/year prior to "
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Claude Opus 4.5"
-    },
-    "B4": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "combines scores from many different AI benchmarks into a single 'general capabil"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,19 +142,20 @@
         "swebench_leaderboard": "verified",
         "epoch_eci_page": "partial"
       },
-      "independence_note": "B1 and B2 are both from Epoch AI but report different analyses: B1 is the primary research article on ECI acceleration, B2 is the Substack summary with specific rate figures. B3 is an independent leaderboard (llm-stats.com) tracking SWE-bench Verified coding scores. B4 is the ECI methodology page confirming the 42-benchmark composite. Together they cover composite capabilities, coding, and math domains."
+      "independence_note": "B1 and B2 are both from Epoch AI but report different analyses: B1 is the primary research article on ECI acceleration, B2 is the Substack summary with specific rate figures. B3 is an independent leaderboard (llm-stats.com) tracking SWE-bench Verified coding scores. B4 is the ECI methodology page confirming the 42-benchmark composite. Together they cover composite capabilities, coding, and math domains.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Are there credible sources arguing AI capabilities HAVE plateaued?",
       "verification_performed": "Searched for 'AI plateau debunked OR wrong OR criticism 2025 2026'. Found Gary Marcus (neural scientist) quoted in Futurism: 'I don't hear a lot of companies using AI saying that 2025 models are a lot more useful to them than 2024 models, even though the 2025 models perform better on benchmarks.' Also found Bill Gates stated in 2023 that scalable AI had 'reached a plateau'. Found EDUCAUSE Review article (Sept 2025) titled 'An AI Plateau?' and Medium articles arguing both sides.",
-      "finding": "The plateau narrative exists but conflates two different things: (1) benchmark capability improvements (which are accelerating per Epoch AI), and (2) practical/deployment value improvements (which some argue have stalled). Marcus's own quote concedes models 'perform better on benchmarks' — his concern is about usefulness, not capabilities. The claim specifically states 'progress in capabilities', which is directly measured by benchmarks. Gates's comment predates the claimed period (2023). None of the plateau sources provide quantitative evidence of capability stagnation.",
+      "finding": "The plateau narrative exists but conflates two different things: (1) benchmark capability improvements (which are accelerating per Epoch AI), and (2) practical/deployment value improvements (which some argue have stalled). Marcus's own quote concedes models 'perform better on benchmarks' \u2014 his concern is about usefulness, not capabilities. The claim specifically states 'progress in capabilities', which is directly measured by benchmarks. Gates's comment predates the claimed period (2023). None of the plateau sources provide quantitative evidence of capability stagnation.",
       "breaks_proof": false
     },
     {
       "question": "Could benchmark saturation explain apparent progress while true capabilities plateau?",
-      "verification_performed": "Searched for 'AI benchmark saturation MMLU 2025 2026'. Found that original MMLU is indeed saturated (top scores >90%), but newer benchmarks (FrontierMath, SWE-bench Verified, GPQA, Humanity's Last Exam) were specifically designed to avoid saturation. Epoch AI's ECI composite index was created to track progress across difficulty levels. FrontierMath went from <2% (Nov 2024) to 47.6% (Mar 2026) — far from saturated.",
+      "verification_performed": "Searched for 'AI benchmark saturation MMLU 2025 2026'. Found that original MMLU is indeed saturated (top scores >90%), but newer benchmarks (FrontierMath, SWE-bench Verified, GPQA, Humanity's Last Exam) were specifically designed to avoid saturation. Epoch AI's ECI composite index was created to track progress across difficulty levels. FrontierMath went from <2% (Nov 2024) to 47.6% (Mar 2026) \u2014 far from saturated.",
       "finding": "Benchmark saturation is real for older benchmarks but does not apply to the evidence used in this proof. FrontierMath, SWE-bench Verified, and the ECI composite index are all designed to resist saturation, and all show continued rapid improvement through early 2026.",
       "breaks_proof": false
     },
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

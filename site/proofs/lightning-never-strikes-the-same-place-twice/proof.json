@@ -1,126 +1,134 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "nws_myths",
-      "label": "NWS Lightning Myths page: lightning often strikes same place repeatedly"
-    },
-    "B2": {
-      "key": "nssl_faq",
-      "label": "NOAA NSSL FAQ: lightning does hit the same spot more than once"
-    },
-    "B3": {
-      "key": "nasa_spinoff",
-      "label": "NASA Spinoff: lightning often strikes the same place twice"
-    },
-    "B4": {
-      "key": "britannica",
-      "label": "Britannica: lightning can and will strike the same place twice"
-    },
-    "A1": {
-      "label": "Verified source count confirming claim is false",
-      "method": "count(verified citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Lightning",
     "property": "whether lightning can strike the same location more than once",
     "operator": ">=",
-    "operator_note": "The claim asserts lightning NEVER strikes the same place twice — an absolute universal negative. To DISPROVE this, we need authoritative sources confirming that lightning DOES strike the same place repeatedly. A threshold of 3 independent authoritative sources confirming repeated strikes is used. The claim is disproved if >= 3 sources confirm it is false.",
+    "operator_note": "The claim asserts lightning NEVER strikes the same place twice \u2014 an absolute universal negative. To DISPROVE this, we need authoritative sources confirming that lightning DOES strike the same place repeatedly. A threshold of 3 independent authoritative sources confirming repeated strikes is used. The claim is disproved if >= 3 sources confirm it is false.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
   "claim_natural": "Lightning never strikes the same place twice.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "nws_myths",
-      "source_name": "National Weather Service (NWS)",
-      "url": "https://www.weather.gov/safety/lightning-myths",
-      "quote": "Lightning often strikes the same place repeatedly, especially if it's a tall, pointy, isolated object. The Empire State Building is hit an average of 23 times a year",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "weather.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NWS Lightning Myths page: lightning often strikes same place repeatedly",
+      "sub_claim": null,
+      "source": {
+        "name": "National Weather Service (NWS)",
+        "url": "https://www.weather.gov/safety/lightning-myths",
+        "quote": "Lightning often strikes the same place repeatedly, especially if it's a tall, pointy, isolated object. The Empire State Building is hit an average of 23 times a year"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "weather.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "Lightning often strikes the same place repeatedly, especially if it's a tall, po"
       }
     },
     "B2": {
-      "source_key": "nssl_faq",
-      "source_name": "NOAA National Severe Storms Laboratory (NSSL)",
-      "url": "https://www.nssl.noaa.gov/education/svrwx101/lightning/faq/",
-      "quote": "Lightning does hit the same spot (or almost the same spot) more than once, contrary to folk wisdom",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "noaa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NOAA NSSL FAQ: lightning does hit the same spot more than once",
+      "sub_claim": null,
+      "source": {
+        "name": "NOAA National Severe Storms Laboratory (NSSL)",
+        "url": "https://www.nssl.noaa.gov/education/svrwx101/lightning/faq/",
+        "quote": "Lightning does hit the same spot (or almost the same spot) more than once, contrary to folk wisdom"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "noaa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Lightning does hit the same spot (or almost the same spot) more than once, contr"
       }
     },
     "B3": {
-      "source_key": "nasa_spinoff",
-      "source_name": "NASA Spinoff",
-      "url": "https://spinoff.nasa.gov/Spinoff2005/ps_3.html",
-      "quote": "Contrary to popular misconception, lightning often strikes the same place twice",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nasa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NASA Spinoff: lightning often strikes the same place twice",
+      "sub_claim": null,
+      "source": {
+        "name": "NASA Spinoff",
+        "url": "https://spinoff.nasa.gov/Spinoff2005/ps_3.html",
+        "quote": "Contrary to popular misconception, lightning often strikes the same place twice"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nasa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Contrary to popular misconception, lightning often strikes the same place twice"
       }
     },
     "B4": {
-      "source_key": "britannica",
-      "source_name": "Encyclopaedia Britannica",
-      "url": "https://www.britannica.com/story/can-lightning-strike-the-same-place-twice",
-      "quote": "lightning can and will strike the same place twice, whether it be during the same storm or even centuries later",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "britannica.com",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Britannica: lightning can and will strike the same place twice",
+      "sub_claim": null,
+      "source": {
+        "name": "Encyclopaedia Britannica",
+        "url": "https://www.britannica.com/story/can-lightning-strike-the-same-place-twice",
+        "quote": "lightning can and will strike the same place twice, whether it be during the same storm or even centuries later"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "britannica.com",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "lightning can and will strike the same place twice, whether it be during the sam"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "Lightning often strikes the same place repeatedly, especially if it's a tall, po"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Lightning does hit the same spot (or almost the same spot) more than once, contr"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Contrary to popular misconception, lightning often strikes the same place twice"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "lightning can and will strike the same place twice, whether it be during the sam"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count confirming claim is false",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "nasa_spinoff": "verified",
         "britannica": "verified"
       },
-      "independence_note": "Sources are from 4 different institutions: NWS, NSSL, NASA, Britannica. NWS and NSSL are both NOAA entities but have separate editorial pipelines. NASA and Britannica are fully independent organizations."
+      "independence_note": "Sources are from 4 different institutions: NWS, NSSL, NASA, Britannica. NWS and NSSL are both NOAA entities but have separate editorial pipelines. NASA and Britannica are fully independent organizations.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

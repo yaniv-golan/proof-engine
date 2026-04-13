@@ -1,40 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_duke",
-      "label": "SC1 — Duke Univ. Libraries (Jan 2026): LLMs still hallucinate"
-    },
-    "B2": {
-      "key": "sc1_vectara",
-      "label": "SC1 — Vectara Hallucination Leaderboard (2025): top models >10% rate"
-    },
-    "B3": {
-      "key": "sc1_simpleqa",
-      "label": "SC1 — OpenAI SimpleQA paper (arXiv 2411.04368): benchmark for factual failures"
-    },
-    "B4": {
-      "key": "sc2_arcagi3",
-      "label": "SC2 — The Decoder (Mar 2026): ARC-AGI-3, all frontier models <1%"
-    },
-    "B5": {
-      "key": "sc2_arcprize",
-      "label": "SC2 — ARC Prize 2025 results: best AI 37.6% vs 100% human baseline"
-    },
-    "B6": {
-      "key": "sc2_hle",
-      "label": "SC2 — The Conversation (2025): Humanity's Last Exam, GPT-4o at 2.7%"
-    },
-    "A1": {
-      "label": "SC1 verified source count (disproof of near-zero hallucinations)",
-      "method": "count(verified SC1 disproof citations) = 3",
-      "result": "3 of 3 sources verified"
-    },
-    "A2": {
-      "label": "SC2 verified source count (disproof of human-level reasoning claim)",
-      "method": "count(verified SC2 disproof citations) = 3",
-      "result": "3 of 3 sources verified"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Current AI systems in 2026",
     "sub_claims": [
@@ -56,143 +21,193 @@
       }
     ],
     "compound_operator": "AND",
-    "operator_note": "Both sub-claims must be disproved for the compound claim to be DISPROVED. Because this is an AND claim, disproving either sub-claim is sufficient to disprove the whole — but the evidence disproves both."
+    "operator_note": "Both sub-claims must be disproved for the compound claim to be DISPROVED. Because this is an AND claim, disproving either sub-claim is sufficient to disprove the whole \u2014 but the evidence disproves both."
   },
   "claim_natural": "Current AI systems in 2026 have near-zero hallucinations and human-level reasoning across most domains.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_duke",
-      "source_name": "Duke University Libraries Blog (January 2026)",
-      "url": "https://blogs.library.duke.edu/blog/2026/01/05/its-2026-why-are-llms-still-hallucinating/",
-      "quote": "But one problem we highlighted back then persists today: LLMs still make stuff up. When I talk to Duke students, many describe first-hand encounters with AI hallucinations – plausible sounding, but factually incorrect AI-generated info.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "duke.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "SC1 \u2014 Duke Univ. Libraries (Jan 2026): LLMs still hallucinate",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Duke University Libraries Blog (January 2026)",
+        "url": "https://blogs.library.duke.edu/blog/2026/01/05/its-2026-why-are-llms-still-hallucinating/",
+        "quote": "But one problem we highlighted back then persists today: LLMs still make stuff up. When I talk to Duke students, many describe first-hand encounters with AI hallucinations \u2013 plausible sounding, but factually incorrect AI-generated info."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "duke.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "But one problem we highlighted back then persists today: LLMs still make stuff u"
       }
     },
     "B2": {
-      "source_key": "sc1_vectara",
-      "source_name": "Vectara Hallucination Leaderboard Blog (2025)",
-      "url": "https://www.vectara.com/blog/introducing-the-next-generation-of-vectaras-hallucination-leaderboard",
-      "quote": "Interestingly, the just-released Gemini-3-pro, which demonstrates top of the line reasoning capabilities, has a 13.6% hallucination rate, and didn't even make the top-25 list. Other notable thinking models like Claude Sonnet 4.5, GPT-5, GPT-OSS-120B, Grok-4, or Deepseek-R1 all have a hallucination rate > 10%.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "vectara.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "SC1 \u2014 Vectara Hallucination Leaderboard (2025): top models >10% rate",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Vectara Hallucination Leaderboard Blog (2025)",
+        "url": "https://www.vectara.com/blog/introducing-the-next-generation-of-vectaras-hallucination-leaderboard",
+        "quote": "Interestingly, the just-released Gemini-3-pro, which demonstrates top of the line reasoning capabilities, has a 13.6% hallucination rate, and didn't even make the top-25 list. Other notable thinking models like Claude Sonnet 4.5, GPT-5, GPT-OSS-120B, Grok-4, or Deepseek-R1 all have a hallucination rate > 10%."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "vectara.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Interestingly, the just-released Gemini-3-pro, which demonstrates top of the lin"
       }
     },
     "B3": {
-      "source_key": "sc1_simpleqa",
-      "source_name": "OpenAI SimpleQA benchmark paper (arXiv 2024)",
-      "url": "https://arxiv.org/abs/2411.04368",
-      "quote": "SimpleQA is a simple, targeted evaluation for whether models ‘know what they know,’ and our hope is that this benchmark will remain relevant for the next few generations of frontier models.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "arxiv.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "SC1 \u2014 OpenAI SimpleQA paper (arXiv 2411.04368): benchmark for factual failures",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "OpenAI SimpleQA benchmark paper (arXiv 2024)",
+        "url": "https://arxiv.org/abs/2411.04368",
+        "quote": "SimpleQA is a simple, targeted evaluation for whether models \u2018know what they know,\u2019 and our hope is that this benchmark will remain relevant for the next few generations of frontier models."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "arxiv.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "SimpleQA is a simple, targeted evaluation for whether models \u2018know what they kno"
       }
     },
     "B4": {
-      "source_key": "sc2_arcagi3",
-      "source_name": "The Decoder — ARC-AGI-3 results (March 2026)",
-      "url": "https://the-decoder.com/arc-agi-3-offers-2m-to-any-ai-that-matches-untrained-humans-yet-every-frontier-model-scores-below-1/",
-      "quote": "Every frontier model tested, meanwhile, scored below 1 percent: Gemini 3.1 Pro Preview hit 0.37 percent, GPT 5.4 reached 0.26 percent, Opus 4.6 managed 0.25 percent, and Grok-4.20 scored 0.00 percent.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "the-decoder.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "SC2 \u2014 The Decoder (Mar 2026): ARC-AGI-3, all frontier models <1%",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "The Decoder \u2014 ARC-AGI-3 results (March 2026)",
+        "url": "https://the-decoder.com/arc-agi-3-offers-2m-to-any-ai-that-matches-untrained-humans-yet-every-frontier-model-scores-below-1/",
+        "quote": "Every frontier model tested, meanwhile, scored below 1 percent: Gemini 3.1 Pro Preview hit 0.37 percent, GPT 5.4 reached 0.26 percent, Opus 4.6 managed 0.25 percent, and Grok-4.20 scored 0.00 percent."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "the-decoder.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Every frontier model tested, meanwhile, scored below 1 percent: Gemini 3.1 Pro P"
       }
     },
     "B5": {
-      "source_key": "sc2_arcprize",
-      "source_name": "ARC Prize 2025 Official Results (ARC-AGI-2, human baseline: 100%)",
-      "url": "https://arcprize.org/blog/arc-prize-2025-results-analysis",
-      "quote": "the top verified commercial model, Opus 4.5 (Thinking, 64k), scores 37.6% for $2.20/task",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "arcprize.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "SC2 \u2014 ARC Prize 2025 results: best AI 37.6% vs 100% human baseline",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "ARC Prize 2025 Official Results (ARC-AGI-2, human baseline: 100%)",
+        "url": "https://arcprize.org/blog/arc-prize-2025-results-analysis",
+        "quote": "the top verified commercial model, Opus 4.5 (Thinking, 64k), scores 37.6% for $2.20/task"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "arcprize.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the top verified commercial model, Opus 4.5 (Thinking, 64k), scores 37.6% for $2"
       }
     },
     "B6": {
-      "source_key": "sc2_hle",
-      "source_name": "The Conversation — Humanity's Last Exam (2025)",
-      "url": "https://theconversation.com/ai-is-failing-humanitys-last-exam-so-what-does-that-mean-for-machine-intelligence-274620",
-      "quote": "GPT-4o managed just 2.7% accuracy. Claude 3.5 Sonnet scored 4.1%. Even OpenAI’s most powerful model, o1, achieved only 8%.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "theconversation.com",
-        "source_type": "major_news",
-        "tier": 3,
-        "flags": [],
-        "note": "Major news organization"
+      "type": "empirical",
+      "label": "SC2 \u2014 The Conversation (2025): Humanity's Last Exam, GPT-4o at 2.7%",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "The Conversation \u2014 Humanity's Last Exam (2025)",
+        "url": "https://theconversation.com/ai-is-failing-humanitys-last-exam-so-what-does-that-mean-for-machine-intelligence-274620",
+        "quote": "GPT-4o managed just 2.7% accuracy. Claude 3.5 Sonnet scored 4.1%. Even OpenAI\u2019s most powerful model, o1, achieved only 8%."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "theconversation.com",
+          "source_type": "major_news",
+          "tier": 3,
+          "flags": [],
+          "note": "Major news organization"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "GPT-4o managed just 2.7% accuracy. Claude 3.5 Sonnet scored 4.1%. Even OpenAI\u2019s "
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "But one problem we highlighted back then persists today: LLMs still make stuff u"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Interestingly, the just-released Gemini-3-pro, which demonstrates top of the lin"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count (disproof of near-zero hallucinations)",
+      "sub_claim": "SC1",
+      "method": "count(verified SC1 disproof citations) = 3",
+      "result": "3 of 3 sources verified",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "SimpleQA is a simple, targeted evaluation for whether models ‘know what they kno"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Every frontier model tested, meanwhile, scored below 1 percent: Gemini 3.1 Pro P"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the top verified commercial model, Opus 4.5 (Thinking, 64k), scores 37.6% for $2"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "GPT-4o managed just 2.7% accuracy. Claude 3.5 Sonnet scored 4.1%. Even OpenAI’s "
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count (disproof of human-level reasoning claim)",
+      "sub_claim": "SC2",
+      "method": "count(verified SC2 disproof citations) = 3",
+      "result": "3 of 3 sources verified",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -205,7 +220,8 @@
         "sc1_vectara": "verified",
         "sc1_simpleqa": "verified"
       },
-      "independence_note": "Sources are from Duke University Libraries (institutional blog), Vectara (commercial AI company measuring hallucinations systematically), and OpenAI (paper introducing the SimpleQA benchmark) — three distinct institutions with independent methodologies."
+      "independence_note": "Sources are from Duke University Libraries (institutional blog), Vectara (commercial AI company measuring hallucinations systematically), and OpenAI (paper introducing the SimpleQA benchmark) \u2014 three distinct institutions with independent methodologies.",
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources on AI reasoning benchmarks vs. human baselines",
@@ -216,9 +232,52 @@
         "sc2_arcprize": "verified",
         "sc2_hle": "verified"
       },
-      "independence_note": "Sources from The Decoder (ARC-AGI-3 coverage, March 2026), ARC Prize official results blog (ARC-AGI-2 competition results), and The Conversation (academic journalism, Humanity's Last Exam). These cover three distinct benchmarks: ARC-AGI-3, ARC-AGI-2, and HLE."
+      "independence_note": "Sources from The Decoder (ARC-AGI-3 coverage, March 2026), ARC Prize official results blog (ARC-AGI-2 competition results), and The Conversation (academic journalism, Humanity's Last Exam). These cover three distinct benchmarks: ARC-AGI-3, ARC-AGI-2, and HLE.",
+      "fact_ids": []
     }
   ],
+  "adversarial_checks": [
+    {
+      "question": "Do Vectara's sub-1% hallucination rates for top summarization models support the 'near-zero hallucinations' claim for AI generally?",
+      "verification_performed": "Reviewed Vectara Hallucination Leaderboard (2025). Some top models achieve sub-1% rates on the document summarization task specifically. Vectara explicitly notes these are best-case scenario results for a narrow summarization context. The same leaderboard shows Gemini-3-pro at 13.6% and most frontier models >10% on general tasks. The research agent confirmed: 'Sub-1% rates are task-specific, not general.'",
+      "finding": "Sub-1% rates exist only in the narrow document-summarization context. General-purpose hallucination rates remain well above 10% for most frontier models. This does not support 'near-zero hallucinations' as a general property of AI systems.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Do saturated benchmarks (MMLU ~90%+, GSM8K ~97%) show AI has reached human-level reasoning, undermining our SC2 disproof?",
+      "verification_performed": "Searched for MMLU, GSM8K, HumanEval scores for frontier models vs. human baselines. Found: GPT-4o at ~88.7% on MMLU vs. ~89% human baseline; models at 97% on GSM8K vs. ~90% human baseline. However, MIT Technology Review (March 31, 2026) reports these benchmarks are saturated and likely contaminated with training data. ARC-AGI-3 (March 2026) shows all frontier models below 1% vs. 100% human baseline on novel abstract reasoning. HLE shows top models at 34-38% vs. ~90% expert human baseline.",
+      "finding": "AI scores at or above human level on saturated narrow benchmarks (MMLU, GSM8K, HumanEval), but these benchmarks are compromised by training-data contamination. On rigorous out-of-distribution benchmarks (ARC-AGI-3, HLE, BigCodeBench), AI falls far short of human-level performance. 'Most domains' cannot be satisfied by performance on contaminated narrow tests.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could 'most domains' be defined narrowly enough to make SC2 true \u2014 e.g., only counting domains where AI performs well?",
+      "verification_performed": "Examined domain coverage of AI performance claims. Reviewed Stanford HAI 2025 AI Index Report finding that 'AI surpasses humans on a growing number of narrow benchmarks while remaining clearly sub-human on measures of genuine expert reasoning, common sense, and out-of-distribution generalization.' Checked ARC-AGI-3 performance across novel interactive tasks (0.25-0.37%), Humanity's Last Exam across 100+ academic disciplines (2.7-38%), and legal/medical domains where hallucination rates run 43-88%. The original claim specifies 'most domains' without qualification.",
+      "finding": "The claim says 'most domains' without qualification. AI clearly falls short of human-level performance in novel abstract reasoning, expert academic knowledge, legal reasoning, medical reasoning, and interactive task-solving \u2014 domains that collectively represent the majority of human cognitive domains. Narrow successes in coding competitions and standardized test formats do not constitute 'most domains.'",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "n_holding": 2,
+    "n_total": 2,
+    "claim_holds": true,
+    "is_disproof": true,
+    "sc1_n_confirming": 3,
+    "sc1_threshold": 2,
+    "sc2_n_confirming": 3,
+    "sc2_threshold": 2
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.3.1",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-03-31"
+  },
   "sub_claim_results": [
     {
       "id": "SC1",
@@ -236,42 +295,5 @@
       "proof_direction": "disprove",
       "interpretation": "SC2 holds = AI does NOT have human-level reasoning across most domains"
     }
-  ],
-  "adversarial_checks": [
-    {
-      "question": "Do Vectara's sub-1% hallucination rates for top summarization models support the 'near-zero hallucinations' claim for AI generally?",
-      "verification_performed": "Reviewed Vectara Hallucination Leaderboard (2025). Some top models achieve sub-1% rates on the document summarization task specifically. Vectara explicitly notes these are best-case scenario results for a narrow summarization context. The same leaderboard shows Gemini-3-pro at 13.6% and most frontier models >10% on general tasks. The research agent confirmed: 'Sub-1% rates are task-specific, not general.'",
-      "finding": "Sub-1% rates exist only in the narrow document-summarization context. General-purpose hallucination rates remain well above 10% for most frontier models. This does not support 'near-zero hallucinations' as a general property of AI systems.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Do saturated benchmarks (MMLU ~90%+, GSM8K ~97%) show AI has reached human-level reasoning, undermining our SC2 disproof?",
-      "verification_performed": "Searched for MMLU, GSM8K, HumanEval scores for frontier models vs. human baselines. Found: GPT-4o at ~88.7% on MMLU vs. ~89% human baseline; models at 97% on GSM8K vs. ~90% human baseline. However, MIT Technology Review (March 31, 2026) reports these benchmarks are saturated and likely contaminated with training data. ARC-AGI-3 (March 2026) shows all frontier models below 1% vs. 100% human baseline on novel abstract reasoning. HLE shows top models at 34-38% vs. ~90% expert human baseline.",
-      "finding": "AI scores at or above human level on saturated narrow benchmarks (MMLU, GSM8K, HumanEval), but these benchmarks are compromised by training-data contamination. On rigorous out-of-distribution benchmarks (ARC-AGI-3, HLE, BigCodeBench), AI falls far short of human-level performance. 'Most domains' cannot be satisfied by performance on contaminated narrow tests.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Could 'most domains' be defined narrowly enough to make SC2 true — e.g., only counting domains where AI performs well?",
-      "verification_performed": "Examined domain coverage of AI performance claims. Reviewed Stanford HAI 2025 AI Index Report finding that 'AI surpasses humans on a growing number of narrow benchmarks while remaining clearly sub-human on measures of genuine expert reasoning, common sense, and out-of-distribution generalization.' Checked ARC-AGI-3 performance across novel interactive tasks (0.25-0.37%), Humanity's Last Exam across 100+ academic disciplines (2.7-38%), and legal/medical domains where hallucination rates run 43-88%. The original claim specifies 'most domains' without qualification.",
-      "finding": "The claim says 'most domains' without qualification. AI clearly falls short of human-level performance in novel abstract reasoning, expert academic knowledge, legal reasoning, medical reasoning, and interactive task-solving — domains that collectively represent the majority of human cognitive domains. Narrow successes in coding competitions and standardized test formats do not constitute 'most domains.'",
-      "breaks_proof": false
-    }
-  ],
-  "verdict": "DISPROVED",
-  "key_results": {
-    "n_holding": 2,
-    "n_total": 2,
-    "claim_holds": true,
-    "is_disproof": true,
-    "sc1_n_confirming": 3,
-    "sc1_threshold": 2,
-    "sc2_n_confirming": 3,
-    "sc2_threshold": 2
-  },
-  "generator": {
-    "name": "proof-engine",
-    "version": "1.3.1",
-    "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-03-31"
-  }
+  ]
 }

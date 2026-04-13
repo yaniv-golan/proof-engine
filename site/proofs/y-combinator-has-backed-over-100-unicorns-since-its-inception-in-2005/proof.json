@@ -1,5 +1,5 @@
 {
-  "claim_natural": "Y Combinator has backed over 100 unicorns since its inception in 2005.",
+  "format_version": 3,
   "claim_formal": {
     "subject": "Y Combinator portfolio companies",
     "property": "Number of portfolio companies that have achieved unicorn status ($1B+ valuation)",
@@ -7,16 +7,66 @@
     "operator_note": "'Has backed' is interpreted cumulatively: any YC-funded company that has ever reached a $1B+ valuation, regardless of whether it remains privately valued at $1B+ today (some may have been acquired, gone public, or lost value). 'Unicorn' = startup valued at $1 billion or more. 'Since inception in 2005' = from the first YC batch (March 2005) through the present. Threshold: > 100 companies. Note: Counts vary by source and methodology \u2014 sources counting only currently private unicorns give lower numbers (Failory: 82 as of 2025) vs analyses counting all companies that have ever achieved unicorn status (Jared Heyman analysis of YC Top Companies list: 101 as of August 2022).",
     "threshold": 100
   },
-  "fact_registry": {
+  "claim_natural": "Y Combinator has backed over 100 unicorns since its inception in 2005.",
+  "evidence": {
     "B1": {
-      "key": "B1",
-      "label": "Jared Heyman / YC Top Companies list (Aug 2022): 101 YC unicorns"
+      "type": "empirical",
+      "label": "Jared Heyman / YC Top Companies list (Aug 2022): 101 YC unicorns",
+      "sub_claim": null,
+      "source": {
+        "name": "Jared Heyman (Medium): 'On 101 Y Combinator unicorns' \u2014 Analysis of YC's official Top Companies list (August 2022)",
+        "url": "https://jaredheyman.medium.com/on-101-y-combinator-unicorns-9d14e7347eb6",
+        "quote": "In August 2022, Y Combinator released its latest Top Companies list, now including 314 private and 16 public YC startups each valued at over $150M. The 101 YC unicorns account for nearly 90% of all Top Companies' value"
+      },
+      "verification": {
+        "status": "partial",
+        "method": "fragment",
+        "coverage_pct": 50.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "medium.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     },
     "B2": {
-      "key": "B2",
-      "label": "PitchBook: YC leads accelerators in unicorn creation (5.8% of 2010-2015 cohorts)"
+      "type": "empirical",
+      "label": "PitchBook: YC leads accelerators in unicorn creation (5.8% of 2010-2015 cohorts)",
+      "sub_claim": null,
+      "source": {
+        "name": "PitchBook: Y Combinator leads among accelerators in unicorn-creation rate",
+        "url": "https://pitchbook.com/news/articles/y-combinator-accelerator-success-rate-unicorns",
+        "quote": "Around 5.8 percent of startups in Y Combinator's 2010 to 2015 cohorts have become unicorns, which means they're valued at over $1 billion"
+      },
+      "verification": {
+        "status": "fetch_failed",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "pitchbook.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     }
   },
+  "cross_checks": [],
   "adversarial_checks": [
     {
       "description": "Failory (2025) counts only 82 active unicorns",
@@ -34,7 +84,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "unicorn_count_b1": 101,
     "threshold": 100,
@@ -46,41 +101,5 @@
     "version": "1.11.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-08"
-  },
-  "citations": {
-    "B1": {
-      "source_key": "B1",
-      "source_name": "Jared Heyman (Medium): 'On 101 Y Combinator unicorns' \u2014 Analysis of YC's official Top Companies list (August 2022)",
-      "url": "https://jaredheyman.medium.com/on-101-y-combinator-unicorns-9d14e7347eb6",
-      "quote": "In August 2022, Y Combinator released its latest Top Companies list, now including 314 private and 16 public YC startups each valued at over $150M. The 101 YC unicorns account for nearly 90% of all Top Companies' value",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 50.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "medium.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
-      }
-    },
-    "B2": {
-      "source_key": "B2",
-      "source_name": "PitchBook: Y Combinator leads among accelerators in unicorn-creation rate",
-      "url": "https://pitchbook.com/news/articles/y-combinator-accelerator-success-rate-unicorns",
-      "quote": "Around 5.8 percent of startups in Y Combinator's 2010 to 2015 cohorts have become unicorns, which means they're valued at over $1 billion",
-      "status": "fetch_failed",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "pitchbook.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
-      }
-    }
   }
 }

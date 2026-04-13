@@ -1,32 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_huang",
-      "label": "SC1: Huang & Young 2015 — porous oral patch reduces AHI in mild OSA mouth-breathers (n=30)"
-    },
-    "B2": {
-      "key": "sc1_kim",
-      "label": "SC1: Kim et al. 2022 — mouth taping improves sleep apnea severity in mild OSA (n=20)"
-    },
-    "B3": {
-      "key": "sc2_huang",
-      "label": "SC2: Huang & Young 2015 — AHI 12.0 -> 7.8 with porous oral patch (P < .01)"
-    },
-    "B4": {
-      "key": "sc2_kim",
-      "label": "SC2: Kim et al. 2022 — AHI 8.3 -> 4.7 (47%, p=0.0002) with mouth tape in mild OSA"
-    },
-    "A1": {
-      "label": "SC1 confirmed source count",
-      "method": "count(verified sc1 citations) = 2",
-      "result": "2"
-    },
-    "A2": {
-      "label": "SC2 confirmed source count",
-      "method": "count(verified sc2 citations) = 2",
-      "result": "2"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "mouth taping during sleep",
     "sub_claims": [
@@ -50,96 +23,134 @@
     "operator_note": "Both sub-claims must hold for the compound claim to be PROVED. SC1 tests 'greatly improves sleep quality'; SC2 tests 'reduces sleep apnea'. PARTIALLY VERIFIED if only one holds. The claim uses causal language ('improves', 'reduces') requiring both association evidence and controlled study designs for each sub-claim."
   },
   "claim_natural": "Mouth taping during sleep greatly improves sleep quality and reduces sleep apnea.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_huang",
-      "source_name": "Huang & Young 2015 — Otolaryngol Head Neck Surg (PubMed abstract)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/25450408/",
-      "quote": "The median AHI score was significantly decreased by using a POP from 12.0 per hour before treatment to 7.8 per hour during treatment (P < .01).",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Huang & Young 2015 \u2014 porous oral patch reduces AHI in mild OSA mouth-breathers (n=30)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Huang & Young 2015 \u2014 Otolaryngol Head Neck Surg (PubMed abstract)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25450408/",
+        "quote": "The median AHI score was significantly decreased by using a POP from 12.0 per hour before treatment to 7.8 per hour during treatment (P < .01)."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The median AHI score was significantly decreased by using a POP from 12.0 per ho"
       }
     },
     "B2": {
-      "source_key": "sc1_kim",
-      "source_name": "Kim et al. 2022 — Healthcare (PMC full text)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9498537/",
-      "quote": "Mouth-taping during sleep improved snoring and the severity of sleep apnea in mouth-breathers with mild OSA, with AHI and SI being reduced by about half.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Kim et al. 2022 \u2014 mouth taping improves sleep apnea severity in mild OSA (n=20)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Kim et al. 2022 \u2014 Healthcare (PMC full text)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9498537/",
+        "quote": "Mouth-taping during sleep improved snoring and the severity of sleep apnea in mouth-breathers with mild OSA, with AHI and SI being reduced by about half."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Mouth-taping during sleep improved snoring and the severity of sleep apnea in mo"
       }
     },
     "B3": {
-      "source_key": "sc2_huang",
-      "source_name": "Huang & Young 2015 — Otolaryngol Head Neck Surg (PubMed abstract)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/25450408/",
-      "quote": "The median AHI score was significantly decreased by using a POP from 12.0 per hour before treatment to 7.8 per hour during treatment (P < .01).",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Huang & Young 2015 \u2014 AHI 12.0 -> 7.8 with porous oral patch (P < .01)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Huang & Young 2015 \u2014 Otolaryngol Head Neck Surg (PubMed abstract)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25450408/",
+        "quote": "The median AHI score was significantly decreased by using a POP from 12.0 per hour before treatment to 7.8 per hour during treatment (P < .01)."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The median AHI score was significantly decreased by using a POP from 12.0 per ho"
       }
     },
     "B4": {
-      "source_key": "sc2_kim",
-      "source_name": "Kim et al. 2022 — Healthcare (PMC full text)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9498537/",
-      "quote": "The median apnea/hypopnea index (AHI) decreased significantly, from 8.3 to 4.7 event/h (by 47%, p = 0.0002).",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 85.7,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Kim et al. 2022 \u2014 AHI 8.3 -> 4.7 (47%, p=0.0002) with mouth tape in mild OSA",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Kim et al. 2022 \u2014 Healthcare (PMC full text)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9498537/",
+        "quote": "The median apnea/hypopnea index (AHI) decreased significantly, from 8.3 to 4.7 event/h (by 47%, p = 0.0002)."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 85.7,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The median apnea/hypopnea index (AHI) decreased significantly, from 8.3 to 4.7 e"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The median AHI score was significantly decreased by using a POP from 12.0 per ho"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Mouth-taping during sleep improved snoring and the severity of sleep apnea in mo"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 confirmed source count",
+      "sub_claim": "SC1",
+      "method": "count(verified sc1 citations) = 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The median AHI score was significantly decreased by using a POP from 12.0 per ho"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The median apnea/hypopnea index (AHI) decreased significantly, from 8.3 to 4.7 e"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 confirmed source count",
+      "sub_claim": "SC2",
+      "method": "count(verified sc2 citations) = 2",
+      "result": "2",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -151,7 +162,8 @@
         "sc1_huang": "verified",
         "sc1_kim": "verified"
       },
-      "independence_note": "Huang & Young 2015 (Otolaryngol Head Neck Surg) and Kim et al. 2022 (Healthcare/MDPI) are independent publications from different institutions, countries, and years using different mouth-closure devices."
+      "independence_note": "Huang & Young 2015 (Otolaryngol Head Neck Surg) and Kim et al. 2022 (Healthcare/MDPI) are independent publications from different institutions, countries, and years using different mouth-closure devices.",
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources consulted for AHI reduction evidence",
@@ -161,23 +173,8 @@
         "sc2_huang": "verified",
         "sc2_kim": "verified"
       },
-      "independence_note": "Huang & Young 2015 (n=30, porous oral patch, Taiwan 2015) and Kim et al. 2022 (n=20, 3M tape, Taiwan 2022) are independent primary studies. Both are the only standalone-taping studies with significant AHI results per the 2025 systematic review."
-    }
-  ],
-  "sub_claim_results": [
-    {
-      "id": "SC1",
-      "n_confirming": 2,
-      "threshold": 3,
-      "holds": false,
-      "note": "SC1 fails: only 2 sources available, 3 required. Additionally, both sources measure AHI/snoring as proxies for sleep quality rather than validated sleep quality instruments. 'Greatly' is unsupported."
-    },
-    {
-      "id": "SC2",
-      "n_confirming": 2,
-      "threshold": 2,
-      "holds": true,
-      "note": "SC2 holds at threshold=2 (domain scarcity documented). Effect is limited to mild OSA patients with habitual mouth-breathing and patent nasal passages; not generalizable to broader populations."
+      "independence_note": "Huang & Young 2015 (n=30, porous oral patch, Taiwan 2015) and Kim et al. 2022 (n=20, 3M tape, Taiwan 2022) are independent primary studies. Both are the only standalone-taping studies with significant AHI results per the 2025 systematic review.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -190,7 +187,7 @@
     {
       "question": "Do most peer-reviewed studies confirm AHI reduction with standalone mouth taping?",
       "verification_performed": "Searched 'mouth taping sleep apnea systematic review 2025 results'. Reviewed 2025 systematic review PMC12094774 (10 studies, 213 patients) and 2024 scoping review PubMed 39662104 (9 studies).",
-      "finding": "The 2025 systematic review (PMC12094774): 'Only two of these studies (Lee et al. and Huang et al.) reported a significant decrease in AHI post-occlusion.' All 10 studies were rated low quality per the Newcastle-Ottawa assessment scale. 8 of 10 studies showed no significant AHI improvement. The scoping review: 'The literature on this subject is markedly heterogeneous, and there is little consensus on mouth-taping's benefits.' This is the strongest challenge to both SC1 and SC2. The rebuttal for SC2: the threshold was set to 2 precisely because the literature contains only 2 confirmed positive studies — SC2 reflects this narrow evidence base and holds only for the mild OSA mouth-breather subgroup. For SC1, this confirms the sub-claim fails.",
+      "finding": "The 2025 systematic review (PMC12094774): 'Only two of these studies (Lee et al. and Huang et al.) reported a significant decrease in AHI post-occlusion.' All 10 studies were rated low quality per the Newcastle-Ottawa assessment scale. 8 of 10 studies showed no significant AHI improvement. The scoping review: 'The literature on this subject is markedly heterogeneous, and there is little consensus on mouth-taping's benefits.' This is the strongest challenge to both SC1 and SC2. The rebuttal for SC2: the threshold was set to 2 precisely because the literature contains only 2 confirmed positive studies \u2014 SC2 reflects this narrow evidence base and holds only for the mild OSA mouth-breather subgroup. For SC1, this confirms the sub-claim fails.",
       "breaks_proof": false
     },
     {
@@ -202,11 +199,16 @@
     {
       "question": "Is there any evidence that mouth taping worsens sleep apnea in some patients?",
       "verification_performed": "Searched 'mouth taping worsens sleep apnea AHI increase negative outcome'. Reviewed 2025 systematic review PMC12094774 and Cleveland Clinic page.",
-      "finding": "The 2025 systematic review notes studies where oral occlusion worsened outcomes for patients with certain types of airway collapse (particularly at the soft palate). Cleveland Clinic: 'Forcing the mouth closed can be harmful for people who have certain types of airway collapse, particularly at the soft palate.' The systematic review also states: 'there is a potentially serious risk of harm for individuals indiscriminately practicing this trend.' These findings do not break SC2 (which is bounded to the screened subgroup) but confirm that the general claim as stated — without qualification — is misleading and SC1 correctly fails.",
+      "finding": "The 2025 systematic review notes studies where oral occlusion worsened outcomes for patients with certain types of airway collapse (particularly at the soft palate). Cleveland Clinic: 'Forcing the mouth closed can be harmful for people who have certain types of airway collapse, particularly at the soft palate.' The systematic review also states: 'there is a potentially serious risk of harm for individuals indiscriminately practicing this trend.' These findings do not break SC2 (which is bounded to the screened subgroup) but confirm that the general claim as stated \u2014 without qualification \u2014 is misleading and SC1 correctly fails.",
       "breaks_proof": false
     }
   ],
-  "verdict": "PARTIALLY VERIFIED",
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_holding": 1,
     "n_total": 2,
@@ -223,5 +225,21 @@
     "version": "1.3.1",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-01"
-  }
+  },
+  "sub_claim_results": [
+    {
+      "id": "SC1",
+      "n_confirming": 2,
+      "threshold": 3,
+      "holds": false,
+      "note": "SC1 fails: only 2 sources available, 3 required. Additionally, both sources measure AHI/snoring as proxies for sleep quality rather than validated sleep quality instruments. 'Greatly' is unsupported."
+    },
+    {
+      "id": "SC2",
+      "n_confirming": 2,
+      "threshold": 2,
+      "holds": true,
+      "note": "SC2 holds at threshold=2 (domain scarcity documented). Effect is limited to mild OSA patients with habitual mouth-breathing and patent nasal passages; not generalizable to broader populations."
+    }
+  ]
 }

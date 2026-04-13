@@ -1,5 +1,5 @@
 {
-  "claim_natural": "If a company raises $5 million in Series A at a $25 million post-money valuation and exits at $500 million seven years later, the annualized return to the Series A investor exceeds 40% before dilution.",
+  "format_version": 3,
   "claim_formal": {
     "subject": "Annualized return (CAGR) to Series A investor in described scenario",
     "property": "CAGR over 7-year hold period, before dilution",
@@ -7,11 +7,40 @@
     "operator_note": "'Before dilution' means the investor retains the full ownership stake from Series A through exit \u2014 no intermediate rounds are modeled. Ownership = invested / post-money = $5M / $25M = 20.0%. Exit proceeds = ownership \u00d7 exit_value = 20% \u00d7 $500M = $100M. MOIC = exit_proceeds / invested = $100M / $5M = 20x. CAGR = MOIC^(1/years) - 1 = 20^(1/7) - 1. Threshold is 0.40 (40%). The claim is TRUE if CAGR > 0.40.",
     "threshold": 0.4
   },
-  "fact_registry": {
-    "A1": "ownership \u2014 Series A ownership stake",
-    "A2": "exit_proceeds \u2014 exit proceeds with no dilution",
-    "A3": "moic \u2014 multiple on invested capital",
-    "A4": "cagr_sympy \u2014 annualized return (CAGR) via sympy exact solve"
+  "claim_natural": "If a company raises $5 million in Series A at a $25 million post-money valuation and exits at $500 million seven years later, the annualized return to the Series A investor exceeds 40% before dilution.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "ownership \u2014 Series A ownership stake",
+      "sub_claim": null,
+      "method": null,
+      "result": null,
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "exit_proceeds \u2014 exit proceeds with no dilution",
+      "sub_claim": null,
+      "method": null,
+      "result": null,
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "moic \u2014 multiple on invested capital",
+      "sub_claim": null,
+      "method": null,
+      "result": null,
+      "depends_on": []
+    },
+    "A4": {
+      "type": "computed",
+      "label": "cagr_sympy \u2014 annualized return (CAGR) via sympy exact solve",
+      "sub_claim": null,
+      "method": null,
+      "result": null,
+      "depends_on": []
+    }
   },
   "cross_checks": [
     {
@@ -19,7 +48,8 @@
       "value_a": 0.5341274,
       "value_b": 0.5341274,
       "tolerance": 1e-08,
-      "passed": true
+      "passed": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -39,7 +69,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "ownership_pct": 20.0,
     "moic": 20.0,

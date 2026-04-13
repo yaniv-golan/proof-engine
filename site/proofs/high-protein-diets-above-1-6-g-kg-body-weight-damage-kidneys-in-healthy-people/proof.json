@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "devries_2018",
-      "label": "Devries et al. (2018) Journal of Nutrition — meta-analysis of 28 RCTs, 1358 healthy adults: HP intakes do not adversely influence GFR"
-    },
-    "B2": {
-      "key": "van_elswyk_2018",
-      "label": "Van Elswyk et al. (2018) Advances in Nutrition — systematic review of RCTs and observational studies: higher protein consistent with normal kidney function"
-    },
-    "B3": {
-      "key": "cheng_2024",
-      "label": "Cheng et al. (2024) Frontiers in Nutrition — meta-analysis of 6 cohort studies, 148,051 participants: higher protein associated with lower CKD risk"
-    },
-    "A1": {
-      "label": "Verified source count (sources rejecting the claim)",
-      "method": "count(verified citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "High-protein diet above 1.6 g/kg body weight per day",
     "property": "whether it causes measurable kidney damage (GFR decline, proteinuria, or CKD development) in adults without pre-existing kidney disease",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "High-protein diets above 1.6 g/kg body weight damage kidneys in healthy people.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "devries_2018",
-      "source_name": "Devries MC et al. (2018) Changes in Kidney Function Do Not Differ between Healthy Adults Consuming Higher- Compared with Lower- or Normal-Protein Diets: A Systematic Review and Meta-Analysis. Journal of Nutrition, 148(11):1760-1775. DOI:10.1093/jn/nxy197",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/30383278/",
-      "quote": "Our analysis indicates that HP intakes do not adversely influence kidney function on GFR in healthy adults.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Devries et al. (2018) Journal of Nutrition \u2014 meta-analysis of 28 RCTs, 1358 healthy adults: HP intakes do not adversely influence GFR",
+      "sub_claim": null,
+      "source": {
+        "name": "Devries MC et al. (2018) Changes in Kidney Function Do Not Differ between Healthy Adults Consuming Higher- Compared with Lower- or Normal-Protein Diets: A Systematic Review and Meta-Analysis. Journal of Nutrition, 148(11):1760-1775. DOI:10.1093/jn/nxy197",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30383278/",
+        "quote": "Our analysis indicates that HP intakes do not adversely influence kidney function on GFR in healthy adults."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Our analysis indicates that HP intakes do not adversely influence kidney functio"
       }
     },
     "B2": {
-      "source_key": "van_elswyk_2018",
-      "source_name": "Van Elswyk ME et al. (2018) A Systematic Review of Renal Health in Healthy Individuals Associated with Protein Intake above the US Recommended Daily Allowance in Randomized Controlled Trials and Observational Studies. Advances in Nutrition, 9(4):404-418. DOI:10.1093/advances/nmy026",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6054213/",
-      "quote": "These data further indicate that, at least in the short term, higher protein intake within the range of recommended intakes for protein is consistent with normal kidney function in healthy individuals.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Van Elswyk et al. (2018) Advances in Nutrition \u2014 systematic review of RCTs and observational studies: higher protein consistent with normal kidney function",
+      "sub_claim": null,
+      "source": {
+        "name": "Van Elswyk ME et al. (2018) A Systematic Review of Renal Health in Healthy Individuals Associated with Protein Intake above the US Recommended Daily Allowance in Randomized Controlled Trials and Observational Studies. Advances in Nutrition, 9(4):404-418. DOI:10.1093/advances/nmy026",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6054213/",
+        "quote": "These data further indicate that, at least in the short term, higher protein intake within the range of recommended intakes for protein is consistent with normal kidney function in healthy individuals."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "These data further indicate that, at least in the short term, higher protein int"
       }
     },
     "B3": {
-      "source_key": "cheng_2024",
-      "source_name": "Cheng Y et al. (2024) Association between dietary protein intake and risk of chronic kidney disease: a systematic review and meta-analysis. Frontiers in Nutrition, 11:1408424. DOI:10.3389/fnut.2024.1408424",
-      "url": "https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2024.1408424/full",
-      "quote": "The data showed a lower CKD risk significantly associated higher-level dietary total, plant or animal protein (especially for fish and seafood) intake.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "frontiersin.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "Cheng et al. (2024) Frontiers in Nutrition \u2014 meta-analysis of 6 cohort studies, 148,051 participants: higher protein associated with lower CKD risk",
+      "sub_claim": null,
+      "source": {
+        "name": "Cheng Y et al. (2024) Association between dietary protein intake and risk of chronic kidney disease: a systematic review and meta-analysis. Frontiers in Nutrition, 11:1408424. DOI:10.3389/fnut.2024.1408424",
+        "url": "https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2024.1408424/full",
+        "quote": "The data showed a lower CKD risk significantly associated higher-level dietary total, plant or animal protein (especially for fish and seafood) intake."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "frontiersin.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The data showed a lower CKD risk significantly associated higher-level dietary t"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Our analysis indicates that HP intakes do not adversely influence kidney functio"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "These data further indicate that, at least in the short term, higher protein int"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The data showed a lower CKD risk significantly associated higher-level dietary t"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count (sources rejecting the claim)",
+      "sub_claim": null,
+      "method": "count(verified citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,14 +113,15 @@
         "van_elswyk_2018": "verified",
         "cheng_2024": "verified"
       },
-      "independence_note": "B1 (Devries 2018) and B2 (Van Elswyk 2018) are independent systematic reviews published simultaneously in different journals (Journal of Nutrition and Advances in Nutrition). B3 (Cheng 2024) is a more recent independent meta-analysis from a different author group. All three draw on overlapping but not identical underlying study pools."
+      "independence_note": "B1 (Devries 2018) and B2 (Van Elswyk 2018) are independent systematic reviews published simultaneously in different journals (Journal of Nutrition and Advances in Nutrition). B3 (Cheng 2024) is a more recent independent meta-analysis from a different author group. All three draw on overlapping but not identical underlying study pools.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Is there evidence that high-protein diets cause rapid kidney function decline in healthy adults?",
       "verification_performed": "Searched 'high protein diet rapid GFR decline healthy adults' and 'high protein kidney function decline cohort study'; found Jhee et al. (2019, Nephrology Dialysis Transplantation), a Korean community-based prospective cohort of 9,226 adults without kidney disease, reporting that the highest protein intake quartile had 1.32x higher odds of rapid eGFR decline vs the lowest quartile.",
-      "finding": "Jhee et al. (2019) is an observational association study, not an RCT. Observational findings cannot establish causation due to confounding (high animal protein often co-occurs with high sodium, red meat, etc.). The RCT meta-analysis by Devries et al. (2018) — the highest level of evidence — found no adverse GFR change when protein intake was experimentally manipulated in controlled trials. The observational association does not override the controlled trial evidence.",
+      "finding": "Jhee et al. (2019) is an observational association study, not an RCT. Observational findings cannot establish causation due to confounding (high animal protein often co-occurs with high sodium, red meat, etc.). The RCT meta-analysis by Devries et al. (2018) \u2014 the highest level of evidence \u2014 found no adverse GFR change when protein intake was experimentally manipulated in controlled trials. The observational association does not override the controlled trial evidence.",
       "breaks_proof": false
     },
     {
@@ -130,7 +137,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

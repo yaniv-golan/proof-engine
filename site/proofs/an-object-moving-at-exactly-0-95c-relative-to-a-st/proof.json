@@ -1,21 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Primary computation of \u03b3 via direct formula",
-      "method": "Direct float computation: \u03b3 = 1/\u221a(1 - 0.95\u00b2)",
-      "result": "3.2025630761"
-    },
-    "A2": {
-      "label": "Cross-check via high-precision decimal arithmetic",
-      "method": "50-digit Decimal arithmetic",
-      "result": "3.2025630761"
-    },
-    "A3": {
-      "label": "Cross-check via algebraic simplification \u03b3\u00b2 = 1/(1-\u03b2\u00b2)",
-      "method": "Exact rational: \u03b3\u00b2 = 400/39, verify \u03b3\u00b2 > (3.2)\u00b2 = 256/25",
-      "result": "\u03b3\u00b2 = 400/39 \u2248 10.2564102564, \u03b3 \u2248 3.2025630761"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Lorentz factor \u03b3 for an object at v = 0.95c",
     "property": "\u03b3 = 1 / sqrt(1 - \u03b2\u00b2) where \u03b2 = v/c = 0.95",
@@ -24,6 +8,32 @@
     "threshold": 3.2
   },
   "claim_natural": "An object moving at exactly 0.95c relative to a stationary observer experiences a Lorentz factor \u03b3 greater than 3.2.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Primary computation of \u03b3 via direct formula",
+      "sub_claim": null,
+      "method": "Direct float computation: \u03b3 = 1/\u221a(1 - 0.95\u00b2)",
+      "result": "3.2025630761",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Cross-check via high-precision decimal arithmetic",
+      "sub_claim": null,
+      "method": "50-digit Decimal arithmetic",
+      "result": "3.2025630761",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Cross-check via algebraic simplification \u03b3\u00b2 = 1/(1-\u03b2\u00b2)",
+      "sub_claim": null,
+      "method": "Exact rational: \u03b3\u00b2 = 400/39, verify \u03b3\u00b2 > (3.2)\u00b2 = 256/25",
+      "result": "\u03b3\u00b2 = 400/39 \u2248 10.2564102564, \u03b3 \u2248 3.2025630761",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Float vs 50-digit Decimal arithmetic",
@@ -31,7 +41,8 @@
         "3.2025630761",
         "3.2025630761"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Float vs exact rational (Fraction) arithmetic",
@@ -39,7 +50,8 @@
         "3.2025630761",
         "3.2025630761"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Exact rational squared comparison: \u03b3\u00b2 = 400/39 > 256/25 = (3.2)\u00b2",
@@ -47,7 +59,8 @@
         "400/39",
         "256/25"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -70,7 +83,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "gamma": 3.202563076101742,
     "threshold": 3.2,

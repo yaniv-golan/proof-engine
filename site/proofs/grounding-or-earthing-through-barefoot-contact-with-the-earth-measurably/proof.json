@@ -1,84 +1,35 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_review_coi",
-      "label": "SC1: Chevalier 2015 PMC review — earthing and inflammation biomarkers (COI source)"
-    },
-    "B2": {
-      "key": "sc1_surgery",
-      "label": "SC1: Post-surgical earthing RCT 2025 (n=42) — CRP reduction"
-    },
-    "B3": {
-      "key": "sc2_surgery",
-      "label": "SC2: Post-surgical earthing RCT 2025 (n=42) — creatine kinase and pain recovery"
-    },
-    "B4": {
-      "key": "sc2_bodyworkers_coi",
-      "label": "SC2: Bodyworkers grounding RCT 2018 — pain and physical function (COI source)"
-    },
-    "B5": {
-      "key": "sc3_sleep_rct",
-      "label": "SC3: Earthing mat sleep quality RCT 2025 (n=60) — PSQI/ISI indices"
-    },
-    "B6": {
-      "key": "sc4_surgery_rct",
-      "label": "SC4 causation: Post-surgical RCT 2025 (n=42) — RCT design evidence"
-    },
-    "B7": {
-      "key": "sc4_sleep_rct",
-      "label": "SC4 causation: Sleep quality RCT 2025 (n=60) — RCT design evidence"
-    },
-    "A1": {
-      "label": "SC1 qualifying source count (verified+partial)",
-      "method": "count(verified/partial sc1 citations) = 2",
-      "result": "2"
-    },
-    "A2": {
-      "label": "SC2 qualifying source count (verified+partial)",
-      "method": "count(verified/partial sc2 citations) = 2",
-      "result": "2"
-    },
-    "A3": {
-      "label": "SC3 qualifying source count (verified+partial)",
-      "method": "count(verified/partial sc3 citations) = 0",
-      "result": "0"
-    },
-    "A4": {
-      "label": "SC4 qualifying RCT count (verified+partial)",
-      "method": "count(verified/partial sc4 citations) = 1",
-      "result": "1"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
-    "subject": "Grounding/earthing — direct electrical contact of the human body with the Earth surface",
+    "subject": "Grounding/earthing \u2014 direct electrical contact of the human body with the Earth surface",
     "sub_claims": [
       {
         "id": "SC1",
         "property": "SC-association (inflammation): earthing is associated with measurable reductions in objective inflammation biomarkers (e.g., CRP, cytokines, white blood cells)",
         "operator": ">=",
         "threshold": 2,
-        "operator_note": "Threshold reduced from 3 to 2. Justification: (a) Domain scarcity — a PubMed search for 'earthing grounding inflammation RCT' returns fewer than 10 qualifying human controlled studies; (b) COI gate — the dominant research group (Chevalier, Oschman, Sinatra) hold equity in EarthFx Inc. and run the Earthing Institute; no more than 1 COI source counts toward the threshold per skill COI rules; (c) quality gate — clinical studies must have n>=30. The Chevalier 2015 PMC review counts as the 1 allowed COI source. The post-surgical RCT (n=42, 2025) is the required non-COI qualifying source."
+        "operator_note": "Threshold reduced from 3 to 2. Justification: (a) Domain scarcity \u2014 a PubMed search for 'earthing grounding inflammation RCT' returns fewer than 10 qualifying human controlled studies; (b) COI gate \u2014 the dominant research group (Chevalier, Oschman, Sinatra) hold equity in EarthFx Inc. and run the Earthing Institute; no more than 1 COI source counts toward the threshold per skill COI rules; (c) quality gate \u2014 clinical studies must have n>=30. The Chevalier 2015 PMC review counts as the 1 allowed COI source. The post-surgical RCT (n=42, 2025) is the required non-COI qualifying source."
       },
       {
         "id": "SC2",
         "property": "SC-association (recovery): earthing is associated with measurable improvements in physical recovery markers (e.g., creatine kinase, VAS pain score, DOMS)",
         "operator": ">=",
         "threshold": 2,
-        "operator_note": "Same threshold reduction rationale as SC1. The post-surgical RCT (n=42, non-COI) is the primary qualifying source. The DOMS pilot study (Chevalier et al., n=8) is excluded — fails n>=30 quality gate. The bodyworkers RCT (Chevalier et al., 2018) is included as the 1 allowed COI source. Note: the post-surgical paper is shared with SC1; it reports both inflammation (CRP) and recovery (creatine kinase, VAS) outcomes — the same paper can provide independent evidence for distinct outcome sub-claims."
+        "operator_note": "Same threshold reduction rationale as SC1. The post-surgical RCT (n=42, non-COI) is the primary qualifying source. The DOMS pilot study (Chevalier et al., n=8) is excluded \u2014 fails n>=30 quality gate. The bodyworkers RCT (Chevalier et al., 2018) is included as the 1 allowed COI source. Note: the post-surgical paper is shared with SC1; it reports both inflammation (CRP) and recovery (creatine kinase, VAS) outcomes \u2014 the same paper can provide independent evidence for distinct outcome sub-claims."
       },
       {
         "id": "SC3",
         "property": "SC-association (sleep): earthing is associated with measurable improvements in sleep quality (e.g., PSQI, ISI, actigraphy, sleep duration)",
         "operator": ">=",
         "threshold": 2,
-        "operator_note": "Same threshold reduction rationale. The 2025 sleep RCT (n=60, ScienceDirect) is the primary qualifying source. The Ghaly and Teplitz 2004 cortisol/sleep study (n=12) is excluded — fails n>=30 gate. Only one qualifying non-COI source with n>=30 was found for sleep specifically. If only this one source verifies, SC3 fails its threshold of 2."
+        "operator_note": "Same threshold reduction rationale. The 2025 sleep RCT (n=60, ScienceDirect) is the primary qualifying source. The Ghaly and Teplitz 2004 cortisol/sleep study (n=12) is excluded \u2014 fails n>=30 gate. Only one qualifying non-COI source with n>=30 was found for sleep specifically. If only this one source verifies, SC3 fails its threshold of 2."
       },
       {
         "id": "SC4",
         "property": "SC-causation: the observed associations are established by RCT-level evidence (randomized, placebo-controlled with sham-grounding arm), not merely observational",
         "operator": ">=",
         "threshold": 2,
-        "operator_note": "Per skill causation guidelines, causal claims require RCTs or equivalent. Threshold=2 per same domain scarcity rationale. Qualifying RCTs: post-surgical (n=42, 2025) and sleep quality (n=60, 2025). Important caveats: (1) blinding is imperfect — participants may detect skin sensations, introducing potential placebo bias; (2) a 2015 study failed to replicate 2010 DOMS findings, raising reproducibility concerns; (3) a systematic review found that 'the few studies with robust methodologies found no evidence of health benefits.' SC4 can at most weakly hold given these limitations."
+        "operator_note": "Per skill causation guidelines, causal claims require RCTs or equivalent. Threshold=2 per same domain scarcity rationale. Qualifying RCTs: post-surgical (n=42, 2025) and sleep quality (n=60, 2025). Important caveats: (1) blinding is imperfect \u2014 participants may detect skin sensations, introducing potential placebo bias; (2) a 2015 study failed to replicate 2010 DOMS findings, raising reproducibility concerns; (3) a systematic review found that 'the few studies with robust methodologies found no evidence of health benefits.' SC4 can at most weakly hold given these limitations."
       }
     ],
     "compound_operator": "AND",
@@ -86,205 +37,336 @@
     "operator_note": "All four sub-claims must hold for PROVED. 'Measurably' is interpreted as requiring objective biomarker or validated-instrument evidence (not solely self-report), from studies with n>=30. SC1 requires inflammation biomarkers. SC2 requires physical recovery markers. SC3 requires validated sleep instruments or actigraphy. SC4 requires RCT study design."
   },
   "claim_natural": "Grounding or earthing through barefoot contact with the Earth measurably reduces inflammation and improves recovery and sleep.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_review_coi",
-      "source_name": "PMC: Chevalier et al. 2015 — Earthing, Inflammation and Immune Response (COI: Chevalier and Oschman hold equity in EarthFx Inc.)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4378297/",
-      "quote": "Electrically conductive contact of the human body with the surface of the Earth produces measurable differences in the concentrations of white blood cells, cytokines, and other molecules involved in the inflammatory response.",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 50.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Chevalier 2015 PMC review \u2014 earthing and inflammation biomarkers (COI source)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "PMC: Chevalier et al. 2015 \u2014 Earthing, Inflammation and Immune Response (COI: Chevalier and Oschman hold equity in EarthFx Inc.)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4378297/",
+        "quote": "Electrically conductive contact of the human body with the surface of the Earth produces measurable differences in the concentrations of white blood cells, cytokines, and other molecules involved in the inflammatory response."
+      },
+      "verification": {
+        "status": "partial",
+        "method": "fragment",
+        "coverage_pct": 50.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "Electrically conductive contact of the human body with the surface of the Earth "
       }
     },
     "B2": {
-      "source_key": "sc1_surgery",
-      "source_name": "PMC/MDPI 2025 — Post-Spinal Surgery Earthing RCT (n=42)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12155732/",
-      "quote": "Earthing after spinal surgery seems to promote recovery by reducing inflammation and pain, and accelerating general healing",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Post-surgical earthing RCT 2025 (n=42) \u2014 CRP reduction",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "PMC/MDPI 2025 \u2014 Post-Spinal Surgery Earthing RCT (n=42)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12155732/",
+        "quote": "Earthing after spinal surgery seems to promote recovery by reducing inflammation and pain, and accelerating general healing"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Earthing after spinal surgery seems to promote recovery by reducing inflammation"
       }
     },
     "B3": {
-      "source_key": "sc2_surgery",
-      "source_name": "PMC/MDPI 2025 — Post-Spinal Surgery Earthing RCT (n=42) — recovery and pain outcomes",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12155732/",
-      "quote": "Earthing after spinal surgery seems to promote recovery by reducing inflammation and pain, and accelerating general healing",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Post-surgical earthing RCT 2025 (n=42) \u2014 creatine kinase and pain recovery",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "PMC/MDPI 2025 \u2014 Post-Spinal Surgery Earthing RCT (n=42) \u2014 recovery and pain outcomes",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12155732/",
+        "quote": "Earthing after spinal surgery seems to promote recovery by reducing inflammation and pain, and accelerating general healing"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Earthing after spinal surgery seems to promote recovery by reducing inflammation"
       }
     },
     "B4": {
-      "source_key": "sc2_bodyworkers_coi",
-      "source_name": "PubMed 2018 — Bodyworkers Grounding RCT (COI: Chevalier et al.; lead researcher affiliated with Earthing Institute)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/30448083/",
-      "quote": "Consistent beneficial effects of grounding in pain, physical function, and mood",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 54.5,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Bodyworkers grounding RCT 2018 \u2014 pain and physical function (COI source)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "PubMed 2018 \u2014 Bodyworkers Grounding RCT (COI: Chevalier et al.; lead researcher affiliated with Earthing Institute)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30448083/",
+        "quote": "Consistent beneficial effects of grounding in pain, physical function, and mood"
+      },
+      "verification": {
+        "status": "partial",
+        "method": "fragment",
+        "coverage_pct": 54.5,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "Consistent beneficial effects of grounding in pain, physical function, and mood"
       }
     },
     "B5": {
-      "source_key": "sc3_sleep_rct",
-      "source_name": "ScienceDirect 2025 — Earthing mat sleep quality double-blind RCT (n=60)",
-      "url": "https://www.sciencedirect.com/science/article/pii/S2212958825000059",
-      "quote": "Total sleep time was significantly increased compared to controls",
-      "status": "fetch_failed",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "sciencedirect.com",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "SC3: Earthing mat sleep quality RCT 2025 (n=60) \u2014 PSQI/ISI indices",
+      "sub_claim": "SC3",
+      "source": {
+        "name": "ScienceDirect 2025 \u2014 Earthing mat sleep quality double-blind RCT (n=60)",
+        "url": "https://www.sciencedirect.com/science/article/pii/S2212958825000059",
+        "quote": "Total sleep time was significantly increased compared to controls"
+      },
+      "verification": {
+        "status": "fetch_failed",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "sciencedirect.com",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "fetch_failed",
+        "value_in_quote": false,
+        "quote_snippet": "Total sleep time was significantly increased compared to controls"
       }
     },
     "B6": {
-      "source_key": "sc4_surgery_rct",
-      "source_name": "PMC/MDPI 2025 — Post-Spinal Surgery Earthing RCT (n=42) — RCT design confirmation",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12155732/",
-      "quote": "Earthing after spinal surgery seems to promote recovery by reducing inflammation and pain, and accelerating general healing",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC4 causation: Post-surgical RCT 2025 (n=42) \u2014 RCT design evidence",
+      "sub_claim": "SC4",
+      "source": {
+        "name": "PMC/MDPI 2025 \u2014 Post-Spinal Surgery Earthing RCT (n=42) \u2014 RCT design confirmation",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12155732/",
+        "quote": "Earthing after spinal surgery seems to promote recovery by reducing inflammation and pain, and accelerating general healing"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Earthing after spinal surgery seems to promote recovery by reducing inflammation"
       }
     },
     "B7": {
-      "source_key": "sc4_sleep_rct",
-      "source_name": "ScienceDirect 2025 — Sleep quality RCT (n=60) — RCT design confirmation",
-      "url": "https://www.sciencedirect.com/science/article/pii/S2212958825000059",
-      "quote": "Total sleep time was significantly increased compared to controls",
-      "status": "fetch_failed",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "sciencedirect.com",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "SC4 causation: Sleep quality RCT 2025 (n=60) \u2014 RCT design evidence",
+      "sub_claim": "SC4",
+      "source": {
+        "name": "ScienceDirect 2025 \u2014 Sleep quality RCT (n=60) \u2014 RCT design confirmation",
+        "url": "https://www.sciencedirect.com/science/article/pii/S2212958825000059",
+        "quote": "Total sleep time was significantly increased compared to controls"
+      },
+      "verification": {
+        "status": "fetch_failed",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "sciencedirect.com",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "fetch_failed",
+        "value_in_quote": false,
+        "quote_snippet": "Total sleep time was significantly increased compared to controls"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "Electrically conductive contact of the human body with the surface of the Earth "
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Earthing after spinal surgery seems to promote recovery by reducing inflammation"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 qualifying source count (verified+partial)",
+      "sub_claim": "SC1",
+      "method": "count(verified/partial sc1 citations) = 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Earthing after spinal surgery seems to promote recovery by reducing inflammation"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 qualifying source count (verified+partial)",
+      "sub_claim": "SC2",
+      "method": "count(verified/partial sc2 citations) = 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B4": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "Consistent beneficial effects of grounding in pain, physical function, and mood"
+    "A3": {
+      "type": "computed",
+      "label": "SC3 qualifying source count (verified+partial)",
+      "sub_claim": "SC3",
+      "method": "count(verified/partial sc3 citations) = 0",
+      "result": "0",
+      "depends_on": []
     },
-    "B5": {
-      "value": "fetch_failed",
-      "value_in_quote": false,
-      "quote_snippet": "Total sleep time was significantly increased compared to controls"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Earthing after spinal surgery seems to promote recovery by reducing inflammation"
-    },
-    "B7": {
-      "value": "fetch_failed",
-      "value_in_quote": false,
-      "quote_snippet": "Total sleep time was significantly increased compared to controls"
+    "A4": {
+      "type": "computed",
+      "label": "SC4 qualifying RCT count (verified+partial)",
+      "sub_claim": "SC4",
+      "method": "count(verified/partial sc4 citations) = 1",
+      "result": "1",
+      "depends_on": []
     }
   },
   "cross_checks": [
     {
-      "description": "SC1: inflammation — independent sources consulted",
+      "description": "SC1: inflammation \u2014 independent sources consulted",
       "n_sources_consulted": 2,
       "n_sources_verified": 2,
       "sources": {
         "sc1_review_coi": "partial",
         "sc1_surgery": "verified"
       },
-      "independence_note": "1 COI review article (Chevalier 2015) + 1 non-COI primary RCT (post-surgical). COI rule: at most 1 COI source counted. Both from different study contexts."
+      "independence_note": "1 COI review article (Chevalier 2015) + 1 non-COI primary RCT (post-surgical). COI rule: at most 1 COI source counted. Both from different study contexts.",
+      "fact_ids": []
     },
     {
-      "description": "SC2: recovery — independent sources consulted",
+      "description": "SC2: recovery \u2014 independent sources consulted",
       "n_sources_consulted": 2,
       "n_sources_verified": 2,
       "sources": {
         "sc2_surgery": "verified",
         "sc2_bodyworkers_coi": "partial"
       },
-      "independence_note": "Post-surgical RCT (non-COI, n=42) reports recovery outcomes (creatine kinase, VAS). Bodyworkers RCT (COI, Chevalier) is the 1 allowed COI source. Note: post-surgical paper shared with SC1 — different outcomes reported."
+      "independence_note": "Post-surgical RCT (non-COI, n=42) reports recovery outcomes (creatine kinase, VAS). Bodyworkers RCT (COI, Chevalier) is the 1 allowed COI source. Note: post-surgical paper shared with SC1 \u2014 different outcomes reported.",
+      "fact_ids": []
     },
     {
-      "description": "SC3: sleep — independent sources consulted",
+      "description": "SC3: sleep \u2014 independent sources consulted",
       "n_sources_consulted": 1,
       "n_sources_verified": 0,
       "sources": {
         "sc3_sleep_rct": "fetch_failed"
       },
-      "independence_note": "Only 1 qualifying source included (sleep RCT 2025, n=60, non-COI). Ghaly and Teplitz 2004 (n=12) excluded by quality gate. SC3 cannot meet threshold=2 with only 1 source — sub-claim fails regardless of verification status."
+      "independence_note": "Only 1 qualifying source included (sleep RCT 2025, n=60, non-COI). Ghaly and Teplitz 2004 (n=12) excluded by quality gate. SC3 cannot meet threshold=2 with only 1 source \u2014 sub-claim fails regardless of verification status.",
+      "fact_ids": []
     },
     {
-      "description": "SC4: causation — qualifying RCTs consulted",
+      "description": "SC4: causation \u2014 qualifying RCTs consulted",
       "n_sources_consulted": 2,
       "n_sources_verified": 1,
       "sources": {
         "sc4_surgery_rct": "verified",
         "sc4_sleep_rct": "fetch_failed"
       },
-      "independence_note": "Both SC4 sources are the same papers as SC1/SC3 — used here to confirm RCT design. Post-surgical (n=42) and sleep (n=60) are distinct study populations and designs."
+      "independence_note": "Both SC4 sources are the same papers as SC1/SC3 \u2014 used here to confirm RCT design. Post-surgical (n=42) and sleep (n=60) are distinct study populations and designs.",
+      "fact_ids": []
     }
   ],
+  "adversarial_checks": [
+    {
+      "question": "Does a 2015 replication study directly contradict the foundational 2010 DOMS earthing findings?",
+      "verification_performed": "Searched for 'earthing grounding DOMS replication 2015 no effect contradiction'. Africa Check reported: 'A 2010 study found large differences in inflammation and pain in earthing versus control groups, but a similar 2015 study found no significant differences.'",
+      "finding": "Confirmed: a direct replication attempt failed to reproduce the 2010 positive DOMS findings. This is significant counter-evidence for SC1 and SC2 specifically. However, the failed replication applies to the Chevalier DOMS study line \u2014 not directly to the 2025 post-surgical RCT or 2025 sleep RCT cited here, which are newer, distinct study populations, and designs. The replication failure raises serious concerns about the reliability of the overall earthing research program but does not directly falsify the specific newer RCTs used as qualifying sources.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Do independent physicists or medical review bodies find earthing claims physically implausible?",
+      "verification_performed": "Searched for 'earthing grounding physics critique pseudoscience debunked'. Science-Based Medicine states: 'From the perspective of basic physics, earthing makes no sense' and 'humans are not electrically isolated' \u2014 electrons from Earth are not unique or biologically special. Characterizes earthing as 'clearly on the pseudoscience side.'",
+      "finding": "Confirmed: a credible physics-based critique exists. The proposed antioxidant-electron transfer mechanism is disputed on grounds that electrons are fungible \u2014 there is no physical basis for Earth electrons being uniquely therapeutic. This critique challenges the proposed mechanism but not necessarily empirical findings: observed effects in RCTs could be real (mediated by an unknown mechanism) or could be placebo-driven. The physics argument alone does not override controlled experimental data, but it strengthens the prior probability that observed effects are non-specific.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the earthing research base predominantly authored by researchers with commercial COI?",
+      "verification_performed": "Searched for 'Chevalier Oschman Sinatra earthing conflict of interest EarthFx'. Africa Check and Science-Based Medicine both document: Chevalier and Oschman are independent contractors for EarthFx Inc. and own shares; Sinatra co-authored key studies and promotes earthing products; four of five major earthing studies share these authors. Sokal and Sokal (Polish researchers) identified as independent without commercial ties.",
+      "finding": "Confirmed: the dominant authorship group has direct financial COI. This is the most structurally significant weakness of the earthing evidence base. The proof's COI gate (at most 1 COI source per sub-claim threshold) directly limits the impact: no sub-claim relies entirely on COI-affiliated research. The post-surgical (2025) and sleep (2025) RCTs are cited without mention of Chevalier/Oschman/Sinatra as authors. However, the broader research tradition is shaped by the COI group, and independent replication remains limited.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Do systematic reviews find that robust earthing studies show no health benefits?",
+      "verification_performed": "Searched for 'systematic review earthing grounding health benefits methodology'. A PCOM systematic review (referenced in Science-Based Medicine) states: 'the majority of studies had significant methodological flaws, and the few studies with robust methodologies found no evidence of health benefits from grounding.'",
+      "finding": "Confirmed: at least one systematic review found that methodologically robust studies did not support earthing health claims. This is serious counter-evidence for SC4 (causation). The systematic review predates the 2025 RCTs, so those studies are not captured. The systematic review finding does not directly break the proof (the newer studies postdate it), but it establishes a pattern where improved methodology tends to reduce observed effects \u2014 a concerning pattern that limits confidence in SC4.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Are there large-scale independent RCTs (n > 100) from groups unaffiliated with the earthing industry that corroborate or refute the claims?",
+      "verification_performed": "Searched for 'earthing grounding randomized controlled trial n>100 large scale independent NIH funded'. No large independent RCT found. The largest identified studies are n=60 (sleep, 2025) and n=42 (post-surgical, 2025).",
+      "finding": "No large independent RCT (n>100) exists. The absence of large-scale independent replication is a gap in the evidence base. This does not break the proof but confirms that the claim rests on a small, methodologically limited literature.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "n_holding": 2,
+    "n_total": 4,
+    "claim_holds": false,
+    "sub_claim_summary": {
+      "SC1_inflammation": true,
+      "SC2_recovery": true,
+      "SC3_sleep": false,
+      "SC4_causation": false
+    }
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.3.1",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-01"
+  },
   "sub_claim_results": [
     {
       "id": "SC1",
@@ -310,55 +392,5 @@
       "threshold": 2,
       "holds": false
     }
-  ],
-  "adversarial_checks": [
-    {
-      "question": "Does a 2015 replication study directly contradict the foundational 2010 DOMS earthing findings?",
-      "verification_performed": "Searched for 'earthing grounding DOMS replication 2015 no effect contradiction'. Africa Check reported: 'A 2010 study found large differences in inflammation and pain in earthing versus control groups, but a similar 2015 study found no significant differences.'",
-      "finding": "Confirmed: a direct replication attempt failed to reproduce the 2010 positive DOMS findings. This is significant counter-evidence for SC1 and SC2 specifically. However, the failed replication applies to the Chevalier DOMS study line — not directly to the 2025 post-surgical RCT or 2025 sleep RCT cited here, which are newer, distinct study populations, and designs. The replication failure raises serious concerns about the reliability of the overall earthing research program but does not directly falsify the specific newer RCTs used as qualifying sources.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Do independent physicists or medical review bodies find earthing claims physically implausible?",
-      "verification_performed": "Searched for 'earthing grounding physics critique pseudoscience debunked'. Science-Based Medicine states: 'From the perspective of basic physics, earthing makes no sense' and 'humans are not electrically isolated' — electrons from Earth are not unique or biologically special. Characterizes earthing as 'clearly on the pseudoscience side.'",
-      "finding": "Confirmed: a credible physics-based critique exists. The proposed antioxidant-electron transfer mechanism is disputed on grounds that electrons are fungible — there is no physical basis for Earth electrons being uniquely therapeutic. This critique challenges the proposed mechanism but not necessarily empirical findings: observed effects in RCTs could be real (mediated by an unknown mechanism) or could be placebo-driven. The physics argument alone does not override controlled experimental data, but it strengthens the prior probability that observed effects are non-specific.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Is the earthing research base predominantly authored by researchers with commercial COI?",
-      "verification_performed": "Searched for 'Chevalier Oschman Sinatra earthing conflict of interest EarthFx'. Africa Check and Science-Based Medicine both document: Chevalier and Oschman are independent contractors for EarthFx Inc. and own shares; Sinatra co-authored key studies and promotes earthing products; four of five major earthing studies share these authors. Sokal and Sokal (Polish researchers) identified as independent without commercial ties.",
-      "finding": "Confirmed: the dominant authorship group has direct financial COI. This is the most structurally significant weakness of the earthing evidence base. The proof's COI gate (at most 1 COI source per sub-claim threshold) directly limits the impact: no sub-claim relies entirely on COI-affiliated research. The post-surgical (2025) and sleep (2025) RCTs are cited without mention of Chevalier/Oschman/Sinatra as authors. However, the broader research tradition is shaped by the COI group, and independent replication remains limited.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Do systematic reviews find that robust earthing studies show no health benefits?",
-      "verification_performed": "Searched for 'systematic review earthing grounding health benefits methodology'. A PCOM systematic review (referenced in Science-Based Medicine) states: 'the majority of studies had significant methodological flaws, and the few studies with robust methodologies found no evidence of health benefits from grounding.'",
-      "finding": "Confirmed: at least one systematic review found that methodologically robust studies did not support earthing health claims. This is serious counter-evidence for SC4 (causation). The systematic review predates the 2025 RCTs, so those studies are not captured. The systematic review finding does not directly break the proof (the newer studies postdate it), but it establishes a pattern where improved methodology tends to reduce observed effects — a concerning pattern that limits confidence in SC4.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Are there large-scale independent RCTs (n > 100) from groups unaffiliated with the earthing industry that corroborate or refute the claims?",
-      "verification_performed": "Searched for 'earthing grounding randomized controlled trial n>100 large scale independent NIH funded'. No large independent RCT found. The largest identified studies are n=60 (sleep, 2025) and n=42 (post-surgical, 2025).",
-      "finding": "No large independent RCT (n>100) exists. The absence of large-scale independent replication is a gap in the evidence base. This does not break the proof but confirms that the claim rests on a small, methodologically limited literature.",
-      "breaks_proof": false
-    }
-  ],
-  "verdict": "PARTIALLY VERIFIED",
-  "key_results": {
-    "n_holding": 2,
-    "n_total": 4,
-    "claim_holds": false,
-    "sub_claim_summary": {
-      "SC1_inflammation": true,
-      "SC2_recovery": true,
-      "SC3_sleep": false,
-      "SC4_causation": false
-    }
-  },
-  "generator": {
-    "name": "proof-engine",
-    "version": "1.3.1",
-    "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-04-01"
-  }
+  ]
 }

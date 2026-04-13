@@ -1,40 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_iea_grids",
-      "label": "SC1: IEA \u2014 grid investment must nearly double"
-    },
-    "B2": {
-      "key": "sc1_irena_grids",
-      "label": "SC1: IRENA \u2014 grid expansion and modernisation required"
-    },
-    "B3": {
-      "key": "sc1_iea_renewables",
-      "label": "SC1: IEA Renewables 2025 \u2014 curtailment from grid limits"
-    },
-    "B4": {
-      "key": "sc2_iea_grids_storage",
-      "label": "SC2: IEA \u2014 energy storage needed for flexibility"
-    },
-    "B5": {
-      "key": "sc2_irena_storage",
-      "label": "SC2: IRENA \u2014 storage key to renewable supply-demand gaps"
-    },
-    "B6": {
-      "key": "sc2_eia_battery",
-      "label": "SC2: EIA \u2014 24 GW battery storage planned for 2026"
-    },
-    "A1": {
-      "label": "SC1 verified source count",
-      "method": "count(verified sc1 citations) = 3",
-      "result": "3"
-    },
-    "A2": {
-      "label": "SC2 verified source count",
-      "method": "count(verified sc2 citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Solar and wind energy as fossil-fuel replacements",
     "sub_claims": [
@@ -58,140 +23,190 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Renewable energy (solar + wind) can replace fossil fuels without major grid upgrades or backups.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_iea_grids",
-      "source_name": "IEA \u2014 Electricity Grids and Secure Energy Transitions",
-      "url": "https://www.iea.org/reports/electricity-grids-and-secure-energy-transitions/executive-summary",
-      "quote": "To meet national climate targets, grid investment needs to nearly double by 2030 to over USD 600 billion per year after over a decade of stagnation at the global level",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "iea.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC1: IEA \u2014 grid investment must nearly double",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "IEA \u2014 Electricity Grids and Secure Energy Transitions",
+        "url": "https://www.iea.org/reports/electricity-grids-and-secure-energy-transitions/executive-summary",
+        "quote": "To meet national climate targets, grid investment needs to nearly double by 2030 to over USD 600 billion per year after over a decade of stagnation at the global level"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "iea.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "To meet national climate targets, grid investment needs to nearly double by 2030"
       }
     },
     "B2": {
-      "source_key": "sc1_irena_grids",
-      "source_name": "IRENA via PV Tech \u2014 Grid Infrastructure and Energy Storage Key to Energy Transition",
-      "url": "https://www.pv-tech.org/irena-grid-infrastructure-and-energy-storage-key-to-energy-transition/",
-      "quote": "The path to triple renewable power capacity by 2030 and beyond requires the expansion and modernisation of grids and scaling-up of storage capacities",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "pv-tech.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC1: IRENA \u2014 grid expansion and modernisation required",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "IRENA via PV Tech \u2014 Grid Infrastructure and Energy Storage Key to Energy Transition",
+        "url": "https://www.pv-tech.org/irena-grid-infrastructure-and-energy-storage-key-to-energy-transition/",
+        "quote": "The path to triple renewable power capacity by 2030 and beyond requires the expansion and modernisation of grids and scaling-up of storage capacities"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "pv-tech.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The path to triple renewable power capacity by 2030 and beyond requires the expa"
       }
     },
     "B3": {
-      "source_key": "sc1_iea_renewables",
-      "source_name": "IEA \u2014 Renewables 2025",
-      "url": "https://www.iea.org/reports/renewables-2025/renewable-electricity",
-      "quote": "Curtailment occurs when the power system cannot absorb all generated power because of transmission capacity limitations",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "iea.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC1: IEA Renewables 2025 \u2014 curtailment from grid limits",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "IEA \u2014 Renewables 2025",
+        "url": "https://www.iea.org/reports/renewables-2025/renewable-electricity",
+        "quote": "Curtailment occurs when the power system cannot absorb all generated power because of transmission capacity limitations"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "iea.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Curtailment occurs when the power system cannot absorb all generated power becau"
       }
     },
     "B4": {
-      "source_key": "sc2_iea_grids_storage",
-      "source_name": "IEA \u2014 Electricity Grids and Secure Energy Transitions",
-      "url": "https://www.iea.org/reports/electricity-grids-and-secure-energy-transitions/executive-summary",
-      "quote": "As the shares of variable renewables such as solar PV and wind increase, power systems need to become more flexible to accommodate the changes in output",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "iea.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC2: IEA \u2014 energy storage needed for flexibility",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "IEA \u2014 Electricity Grids and Secure Energy Transitions",
+        "url": "https://www.iea.org/reports/electricity-grids-and-secure-energy-transitions/executive-summary",
+        "quote": "As the shares of variable renewables such as solar PV and wind increase, power systems need to become more flexible to accommodate the changes in output"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "iea.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "As the shares of variable renewables such as solar PV and wind increase, power s"
       }
     },
     "B5": {
-      "source_key": "sc2_irena_storage",
-      "source_name": "IRENA via PV Tech \u2014 Grid Infrastructure and Energy Storage Key to Energy Transition",
-      "url": "https://www.pv-tech.org/irena-grid-infrastructure-and-energy-storage-key-to-energy-transition/",
-      "quote": "The deployment of grid infrastructure and energy storage is a key element to avoid delaying global energy transition",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "pv-tech.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC2: IRENA \u2014 storage key to renewable supply-demand gaps",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "IRENA via PV Tech \u2014 Grid Infrastructure and Energy Storage Key to Energy Transition",
+        "url": "https://www.pv-tech.org/irena-grid-infrastructure-and-energy-storage-key-to-energy-transition/",
+        "quote": "The deployment of grid infrastructure and energy storage is a key element to avoid delaying global energy transition"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "pv-tech.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The deployment of grid infrastructure and energy storage is a key element to avo"
       }
     },
     "B6": {
-      "source_key": "sc2_eia_battery",
-      "source_name": "U.S. Energy Information Administration (EIA)",
-      "url": "https://www.eia.gov/todayinenergy/detail.php?id=67205",
-      "quote": "Developers plan to add 24 GW of utility-scale battery storage to the grid this year",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "eia.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: EIA \u2014 24 GW battery storage planned for 2026",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "U.S. Energy Information Administration (EIA)",
+        "url": "https://www.eia.gov/todayinenergy/detail.php?id=67205",
+        "quote": "Developers plan to add 24 GW of utility-scale battery storage to the grid this year"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "eia.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Developers plan to add 24 GW of utility-scale battery storage to the grid this y"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "To meet national climate targets, grid investment needs to nearly double by 2030"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The path to triple renewable power capacity by 2030 and beyond requires the expa"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count",
+      "sub_claim": "SC1",
+      "method": "count(verified sc1 citations) = 3",
+      "result": "3",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Curtailment occurs when the power system cannot absorb all generated power becau"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "As the shares of variable renewables such as solar PV and wind increase, power s"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The deployment of grid infrastructure and energy storage is a key element to avo"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Developers plan to add 24 GW of utility-scale battery storage to the grid this y"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count",
+      "sub_claim": "SC2",
+      "method": "count(verified sc2 citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -204,7 +219,8 @@
         "sc1_irena_grids": "verified",
         "sc1_iea_renewables": "verified"
       },
-      "independence_note": "IEA Grids report, IRENA (via PV Tech), and IEA Renewables 2025 are from different IEA reports and an independent agency (IRENA). IEA and IRENA are separate institutions with independent research."
+      "independence_note": "IEA Grids report, IRENA (via PV Tech), and IEA Renewables 2025 are from different IEA reports and an independent agency (IRENA). IEA and IRENA are separate institutions with independent research.",
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources on storage requirements",
@@ -215,7 +231,8 @@
         "sc2_irena_storage": "verified",
         "sc2_eia_battery": "verified"
       },
-      "independence_note": "IEA Grids report, IRENA (via PV Tech), and U.S. EIA are three separate institutions with independent research and data."
+      "independence_note": "IEA Grids report, IRENA (via PV Tech), and U.S. EIA are three separate institutions with independent research and data.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -238,7 +255,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_holding": 2,
     "n_total": 2,

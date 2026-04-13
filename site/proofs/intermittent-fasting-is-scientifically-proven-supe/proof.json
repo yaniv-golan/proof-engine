@@ -1,32 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_source_a",
-      "label": "SC1-A: Systematic review & meta-analysis of IF vs. caloric restriction (PMC11930668, 2025) \u2014 weight loss difference not statistically significant"
-    },
-    "B2": {
-      "key": "sc1_source_b",
-      "label": "SC1-B: Meta-analysis of IF vs. caloric restriction in humans (PMC9108547, 2022) \u2014 IF outcomes did not differ from CR"
-    },
-    "B3": {
-      "key": "sc2_source_a",
-      "label": "SC2-A: Review of IF health benefits (PMC11262566, 2024) \u2014 human longevity studies are short-duration with high variability"
-    },
-    "B4": {
-      "key": "sc2_source_b",
-      "label": "SC2-B: American Heart Association newsroom, 2024 \u2014 time-restricted eating not associated with living longer"
-    },
-    "A1": {
-      "label": "SC1: count of verified rejection sources for fat loss superiority",
-      "method": "count(verified SC1 rejection sources) = 2",
-      "result": "2"
-    },
-    "A2": {
-      "label": "SC2: count of verified rejection sources for longevity superiority",
-      "method": "count(verified SC2 rejection sources) = 2",
-      "result": "2"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Intermittent fasting",
     "sub_claims": [
@@ -50,96 +23,134 @@
     "operator_note": "The original claim asserts BOTH (a) proven fat loss superiority AND (b) proven longevity superiority. An AND claim is false if either conjunct is false. This proof shows both conjuncts fail: (a) meta-analyses show IF produces equivalent \u2014 not superior \u2014 fat loss vs. matched caloric restriction, and (b) no adequate human evidence exists for longevity superiority. proof_direction='disprove': empirical_facts sources REJECT each sub-claim; claim_holds=True triggers verdict DISPROVED (not PROVED)."
   },
   "claim_natural": "Intermittent fasting is scientifically proven superior to other diets for fat loss and longevity.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_source_a",
-      "source_name": "Evaluation of the effectiveness of intermittent fasting versus caloric restriction in weight loss and improving cardiometabolic health: A systematic review and meta-analysis (PMC, 2025)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11930668/",
-      "quote": "IF resulted in a slightly greater, but statistically nonsignificant, decrease in weight",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1-A: Systematic review & meta-analysis of IF vs. caloric restriction (PMC11930668, 2025) \u2014 weight loss difference not statistically significant",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Evaluation of the effectiveness of intermittent fasting versus caloric restriction in weight loss and improving cardiometabolic health: A systematic review and meta-analysis (PMC, 2025)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11930668/",
+        "quote": "IF resulted in a slightly greater, but statistically nonsignificant, decrease in weight"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "IF resulted in a slightly greater, but statistically nonsignificant, decrease in"
       }
     },
     "B2": {
-      "source_key": "sc1_source_b",
-      "source_name": "Effects of Intermittent Fasting in Human Compared to a Non-intervention Diet and Caloric Restriction: A Meta-Analysis of Randomized Controlled Trials (PMC, 2022)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9108547/",
-      "quote": "IF outcomes did not differ from CR except for reduced WC",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1-B: Meta-analysis of IF vs. caloric restriction in humans (PMC9108547, 2022) \u2014 IF outcomes did not differ from CR",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Effects of Intermittent Fasting in Human Compared to a Non-intervention Diet and Caloric Restriction: A Meta-Analysis of Randomized Controlled Trials (PMC, 2022)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9108547/",
+        "quote": "IF outcomes did not differ from CR except for reduced WC"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "IF outcomes did not differ from CR except for reduced WC"
       }
     },
     "B3": {
-      "source_key": "sc2_source_a",
-      "source_name": "Review Article: Health Benefits of Intermittent Fasting (PMC, 2024)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11262566/",
-      "quote": "reported human studies have been of short duration, and the baseline parameters of the study populations are highly variable",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2-A: Review of IF health benefits (PMC11262566, 2024) \u2014 human longevity studies are short-duration with high variability",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Review Article: Health Benefits of Intermittent Fasting (PMC, 2024)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11262566/",
+        "quote": "reported human studies have been of short duration, and the baseline parameters of the study populations are highly variable"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "reported human studies have been of short duration, and the baseline parameters "
       }
     },
     "B4": {
-      "source_key": "sc2_source_b",
-      "source_name": "American Heart Association newsroom: 8-hour time-restricted eating linked to a 91% higher risk of cardiovascular death (AHA, 2024)",
-      "url": "https://newsroom.heart.org/news/8-hour-time-restricted-eating-linked-to-a-91-higher-risk-of-cardiovascular-death",
-      "quote": "Limiting food intake to less than 8 hours per day was not associated with living longer",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "heart.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC2-B: American Heart Association newsroom, 2024 \u2014 time-restricted eating not associated with living longer",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "American Heart Association newsroom: 8-hour time-restricted eating linked to a 91% higher risk of cardiovascular death (AHA, 2024)",
+        "url": "https://newsroom.heart.org/news/8-hour-time-restricted-eating-linked-to-a-91-higher-risk-of-cardiovascular-death",
+        "quote": "Limiting food intake to less than 8 hours per day was not associated with living longer"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "heart.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Limiting food intake to less than 8 hours per day was not associated with living"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "IF resulted in a slightly greater, but statistically nonsignificant, decrease in"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "IF outcomes did not differ from CR except for reduced WC"
+    "A1": {
+      "type": "computed",
+      "label": "SC1: count of verified rejection sources for fat loss superiority",
+      "sub_claim": "SC1",
+      "method": "count(verified SC1 rejection sources) = 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "reported human studies have been of short duration, and the baseline parameters "
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Limiting food intake to less than 8 hours per day was not associated with living"
+    "A2": {
+      "type": "computed",
+      "label": "SC2: count of verified rejection sources for longevity superiority",
+      "sub_claim": "SC2",
+      "method": "count(verified SC2 rejection sources) = 2",
+      "result": "2",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -151,7 +162,8 @@
         "sc1_source_a": "verified",
         "sc1_source_b": "verified"
       },
-      "independence_note": "Sources are from separate publications (2022 meta-analysis PMC9108547 and 2025 systematic review PMC11930668) with different author teams and data sets."
+      "independence_note": "Sources are from separate publications (2022 meta-analysis PMC9108547 and 2025 systematic review PMC11930668) with different author teams and data sets.",
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources consulted on human longevity evidence",
@@ -161,7 +173,8 @@
         "sc2_source_a": "verified",
         "sc2_source_b": "verified"
       },
-      "independence_note": "Sources are from separate institutions: a 2024 PMC review article (PMC11262566) and the American Heart Association newsroom reporting on a 2024 observational study of >20,000 US adults."
+      "independence_note": "Sources are from separate institutions: a 2024 PMC review article (PMC11262566) and the American Heart Association newsroom reporting on a 2024 observational study of >20,000 US adults.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -184,7 +197,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_holding": 2,
     "n_total": 2,

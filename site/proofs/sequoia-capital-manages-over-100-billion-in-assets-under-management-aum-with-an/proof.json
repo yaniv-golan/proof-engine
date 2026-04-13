@@ -1,5 +1,5 @@
 {
-  "claim_natural": "Sequoia Capital manages over $100 billion in assets under management (AUM), with an average fund multiple exceeding 4x net returns to investors.",
+  "format_version": 3,
   "claim_formal": {
     "subject": "Sequoia Capital",
     "property": "Total AUM and average net fund multiple",
@@ -9,20 +9,94 @@
     "threshold_sc1_usd_B": 100.0,
     "threshold_sc2_moic": 4.0
   },
-  "fact_registry": {
+  "claim_natural": "Sequoia Capital manages over $100 billion in assets under management (AUM), with an average fund multiple exceeding 4x net returns to investors.",
+  "evidence": {
     "B1": {
-      "key": "B1",
-      "label": "Wikipedia: Sequoia Capital US/Europe AUM = $56.3B (2024)"
+      "type": "empirical",
+      "label": "Wikipedia: Sequoia Capital US/Europe AUM = $56.3B (2024)",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Sequoia Capital \u2014 AUM figure for US/Europe entity (2024)",
+        "url": "https://en.wikipedia.org/wiki/Sequoia_Capital",
+        "quote": "AUM US$ 56.3 billion (2024)"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "unicode_normalized",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     },
     "B2": {
-      "key": "B2",
-      "label": "Wikipedia: HongShan (formerly Sequoia China) AUM = $56B"
+      "type": "empirical",
+      "label": "Wikipedia: HongShan (formerly Sequoia China) AUM = $56B",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: HongShan \u2014 formerly Sequoia China, now independent entity",
+        "url": "https://en.wikipedia.org/wiki/HongShan",
+        "quote": "Assets under management US$56 billion"
+      },
+      "verification": {
+        "status": "not_found",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     },
     "B3": {
-      "key": "B3",
-      "label": "Wikipedia: Peak XV Partners (formerly Sequoia India/SEA) AUM = $9B"
+      "type": "empirical",
+      "label": "Wikipedia: Peak XV Partners (formerly Sequoia India/SEA) AUM = $9B",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Peak XV Partners \u2014 formerly Sequoia India/Southeast Asia",
+        "url": "https://en.wikipedia.org/wiki/Peak_XV_Partners",
+        "quote": "Assets under management US$9 billion"
+      },
+      "verification": {
+        "status": "fetch_failed",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     }
   },
+  "cross_checks": [],
   "adversarial_checks": [
     {
       "description": "The US/Europe Sequoia entity alone has only $56.3B AUM (< $100B)",
@@ -40,8 +114,12 @@
       "breaks_proof": true
     }
   ],
-  "verdict": "PARTIALLY VERIFIED",
-  "verdict_reason": "SC1 (>$100B AUM) holds when counting all three post-split successor entities ($56.3B + $56B + $9B = $121.3B), but not when counting only the US/Europe entity. SC2 (>4x net average MOIC) cannot be verified \u2014 no public data exists. The claim is PARTIALLY VERIFIED: the AUM figure is supportable under a broad interpretation, but the fund multiple figure lacks public evidence.",
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "aum_us_europe_B": 56.3,
     "aum_combined_B": 121.3,
@@ -73,57 +151,5 @@
       "note": "No public data available \u2014 VC fund returns are not publicly disclosed"
     }
   },
-  "citations": {
-    "B1": {
-      "source_key": "B1",
-      "source_name": "Wikipedia: Sequoia Capital \u2014 AUM figure for US/Europe entity (2024)",
-      "url": "https://en.wikipedia.org/wiki/Sequoia_Capital",
-      "quote": "AUM US$ 56.3 billion (2024)",
-      "status": "verified",
-      "method": "unicode_normalized",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
-      }
-    },
-    "B2": {
-      "source_key": "B2",
-      "source_name": "Wikipedia: HongShan \u2014 formerly Sequoia China, now independent entity",
-      "url": "https://en.wikipedia.org/wiki/HongShan",
-      "quote": "Assets under management US$56 billion",
-      "status": "not_found",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
-      }
-    },
-    "B3": {
-      "source_key": "B3",
-      "source_name": "Wikipedia: Peak XV Partners \u2014 formerly Sequoia India/Southeast Asia",
-      "url": "https://en.wikipedia.org/wiki/Peak_XV_Partners",
-      "quote": "Assets under management US$9 billion",
-      "status": "fetch_failed",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
-      }
-    }
-  }
+  "verdict_reason": "SC1 (>$100B AUM) holds when counting all three post-split successor entities ($56.3B + $56B + $9B = $121.3B), but not when counting only the US/Europe entity. SC2 (>4x net average MOIC) cannot be verified \u2014 no public data exists. The claim is PARTIALLY VERIFIED: the AUM figure is supportable under a broad interpretation, but the fund multiple figure lacks public evidence."
 }

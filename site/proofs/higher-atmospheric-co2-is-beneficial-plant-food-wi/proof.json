@@ -1,41 +1,10 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "nasa_greening",
-      "label": "NASA Goddard: CO2 fertilization causes significant Earth greening (SC1)"
-    },
-    "B2": {
-      "key": "nasa_earth_obs",
-      "label": "NASA Earth Observatory: Extra CO2 stimulates plant growth in some ecosystems (SC1)"
-    },
-    "B3": {
-      "key": "noaa_acidification",
-      "label": "NOAA Ocean Service: Ocean acidification affecting all world's oceans (SC2 disproof)"
-    },
-    "B4": {
-      "key": "nasa_effects",
-      "label": "NASA Science: Sea ice loss, sea level rise, more intense heat waves occurring now (SC2 disproof)"
-    },
-    "B5": {
-      "key": "ipcc_sr15",
-      "label": "IPCC SR1.5 Ch.3: Ocean chemistry unprecedented in 65M years; 70-90% coral reef loss (SC2 disproof)"
-    },
-    "A1": {
-      "label": "SC1: Verified source count for CO2 plant fertilization effect",
-      "method": "count(verified/partial citations in sc1_facts)",
-      "result": "2 confirmed source(s) >= threshold 2 — SC1 holds"
-    },
-    "A2": {
-      "label": "SC2: Verified source count documenting major negative CO2 effects",
-      "method": "count(verified/partial citations in sc2_disproof_facts)",
-      "result": "3 confirmed source(s) >= threshold 3 — SC2 falsified: True"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Higher atmospheric CO2",
-    "property": "net beneficial effect — plant fertilization benefit AND absence of net negative effects",
+    "property": "net beneficial effect \u2014 plant fertilization benefit AND absence of net negative effects",
     "operator": "==",
-    "operator_note": "This is a compound claim requiring BOTH sub-claims to be true simultaneously: (SC1) Higher CO2 has a beneficial plant fertilization ('plant food') effect — interpreted as at least 2 independent authoritative sources confirming the CO2 fertilization / greening effect; AND (SC2) Higher CO2 has no net negative effects — interpreted as the absence of 3+ authoritative sources documenting major negative consequences. SC2 uses the disproof direction: SC2 FAILS (i.e., 'no net negative effects' is FALSE) if 3 or more independent authoritative sources confirm significant negative effects exist. The full compound claim is DISPROVED if SC2 fails, regardless of SC1.",
+    "operator_note": "This is a compound claim requiring BOTH sub-claims to be true simultaneously: (SC1) Higher CO2 has a beneficial plant fertilization ('plant food') effect \u2014 interpreted as at least 2 independent authoritative sources confirming the CO2 fertilization / greening effect; AND (SC2) Higher CO2 has no net negative effects \u2014 interpreted as the absence of 3+ authoritative sources documenting major negative consequences. SC2 uses the disproof direction: SC2 FAILS (i.e., 'no net negative effects' is FALSE) if 3 or more independent authoritative sources confirm significant negative effects exist. The full compound claim is DISPROVED if SC2 fails, regardless of SC1.",
     "threshold": true,
     "sub_claims": {
       "SC1": {
@@ -43,7 +12,7 @@
         "operator": ">=",
         "threshold": 2,
         "proof_direction": "affirm",
-        "operator_note": "Threshold of 2 sources — both from NASA (independent divisions); sufficient given the underlying study involved 32 scientists from 24 institutions."
+        "operator_note": "Threshold of 2 sources \u2014 both from NASA (independent divisions); sufficient given the underlying study involved 32 scientists from 24 institutions."
       },
       "SC2": {
         "description": "Higher CO2 has no net negative effects on environment/ecosystems",
@@ -55,118 +24,162 @@
     }
   },
   "claim_natural": "Higher atmospheric CO2 is beneficial \"plant food\" with no net negative effects.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "nasa_greening",
-      "source_name": "NASA Goddard Space Flight Center",
-      "url": "https://www.nasa.gov/centers-and-facilities/goddard/carbon-dioxide-fertilization-greening-earth-study-finds/",
-      "quote": "From a quarter to half of Earth's vegetated lands has shown significant greening over the last 35 years largely due to rising levels of atmospheric carbon dioxide.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nasa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NASA Goddard: CO2 fertilization causes significant Earth greening (SC1)",
+      "sub_claim": null,
+      "source": {
+        "name": "NASA Goddard Space Flight Center",
+        "url": "https://www.nasa.gov/centers-and-facilities/goddard/carbon-dioxide-fertilization-greening-earth-study-finds/",
+        "quote": "From a quarter to half of Earth's vegetated lands has shown significant greening over the last 35 years largely due to rising levels of atmospheric carbon dioxide."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nasa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "From a quarter to half of Earth's vegetated lands has shown significant greening"
       }
     },
     "B2": {
-      "source_key": "nasa_earth_obs",
-      "source_name": "NASA Earth Observatory: Global Warming",
-      "url": "https://science.nasa.gov/earth/earth-observatory/global-warming",
-      "quote": "On the other hand, extra carbon dioxide can stimulate plant growth in some ecosystems, allowing these plants to take additional carbon out of the atmosphere.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nasa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NASA Earth Observatory: Extra CO2 stimulates plant growth in some ecosystems (SC1)",
+      "sub_claim": null,
+      "source": {
+        "name": "NASA Earth Observatory: Global Warming",
+        "url": "https://science.nasa.gov/earth/earth-observatory/global-warming",
+        "quote": "On the other hand, extra carbon dioxide can stimulate plant growth in some ecosystems, allowing these plants to take additional carbon out of the atmosphere."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nasa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "On the other hand, extra carbon dioxide can stimulate plant growth in some ecosy"
       }
     },
     "B3": {
-      "source_key": "noaa_acidification",
-      "source_name": "NOAA Ocean Service — Ocean Acidification",
-      "url": "https://oceanservice.noaa.gov/facts/acidification.html",
-      "quote": "The ocean absorbs about 30 percent of the CO2 that is released in the atmosphere.",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 85.7,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "noaa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NOAA Ocean Service: Ocean acidification affecting all world's oceans (SC2 disproof)",
+      "sub_claim": null,
+      "source": {
+        "name": "NOAA Ocean Service \u2014 Ocean Acidification",
+        "url": "https://oceanservice.noaa.gov/facts/acidification.html",
+        "quote": "The ocean absorbs about 30 percent of the CO2 that is released in the atmosphere."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 85.7,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "noaa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "The ocean absorbs about 30 percent of the CO2 that is released in the atmosphere"
       }
     },
     "B4": {
-      "source_key": "nasa_effects",
-      "source_name": "NASA Science: Climate Change Effects",
-      "url": "https://science.nasa.gov/climate-change/effects",
-      "quote": "Effects that scientists had long predicted would result from global climate change are now occurring, such as sea ice loss, accelerated sea level rise, and longer, more intense heat waves.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nasa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NASA Science: Sea ice loss, sea level rise, more intense heat waves occurring now (SC2 disproof)",
+      "sub_claim": null,
+      "source": {
+        "name": "NASA Science: Climate Change Effects",
+        "url": "https://science.nasa.gov/climate-change/effects",
+        "quote": "Effects that scientists had long predicted would result from global climate change are now occurring, such as sea ice loss, accelerated sea level rise, and longer, more intense heat waves."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nasa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Effects that scientists had long predicted would result from global climate chan"
       }
     },
     "B5": {
-      "source_key": "ipcc_sr15",
-      "source_name": "IPCC Special Report on Global Warming of 1.5°C, Chapter 3",
-      "url": "https://www.ipcc.ch/sr15/chapter/chapter-3/",
-      "quote": "the majority (70-90%) of warm water (tropical) coral reefs that exist today will disappear even if global warming is constrained to 1.5 degrees C",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 82.6,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "ipcc.ch",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Known government/intergovernmental organization"
+      "type": "empirical",
+      "label": "IPCC SR1.5 Ch.3: Ocean chemistry unprecedented in 65M years; 70-90% coral reef loss (SC2 disproof)",
+      "sub_claim": null,
+      "source": {
+        "name": "IPCC Special Report on Global Warming of 1.5\u00b0C, Chapter 3",
+        "url": "https://www.ipcc.ch/sr15/chapter/chapter-3/",
+        "quote": "the majority (70-90%) of warm water (tropical) coral reefs that exist today will disappear even if global warming is constrained to 1.5 degrees C"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 82.6,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "ipcc.ch",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Known government/intergovernmental organization"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "the majority (70-90%) of warm water (tropical) coral reefs that exist today will"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "From a quarter to half of Earth's vegetated lands has shown significant greening"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "On the other hand, extra carbon dioxide can stimulate plant growth in some ecosy"
+    "A1": {
+      "type": "computed",
+      "label": "SC1: Verified source count for CO2 plant fertilization effect",
+      "sub_claim": "SC1",
+      "method": "count(verified/partial citations in sc1_facts)",
+      "result": "2 confirmed source(s) >= threshold 2 \u2014 SC1 holds",
+      "depends_on": []
     },
-    "B3": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "The ocean absorbs about 30 percent of the CO2 that is released in the atmosphere"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Effects that scientists had long predicted would result from global climate chan"
-    },
-    "B5": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "the majority (70-90%) of warm water (tropical) coral reefs that exist today will"
+    "A2": {
+      "type": "computed",
+      "label": "SC2: Verified source count documenting major negative CO2 effects",
+      "sub_claim": "SC2",
+      "method": "count(verified/partial citations in sc2_disproof_facts)",
+      "result": "3 confirmed source(s) >= threshold 3 \u2014 SC2 falsified: True",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -177,7 +190,8 @@
         "SC2 disproof confirmed sources: 3"
       ],
       "agreement": true,
-      "independence_note": "SC1 and SC2 sources are from different institutions and independent publications. Notably, the NASA Goddard greening study (SC1 source B1) itself independently corroborates the SC2 disproof: it explicitly states CO2 is 'the chief culprit of climate change' — a finding from the same paper confirming the plant benefit."
+      "independence_note": "SC1 and SC2 sources are from different institutions and independent publications. Notably, the NASA Goddard greening study (SC1 source B1) itself independently corroborates the SC2 disproof: it explicitly states CO2 is 'the chief culprit of climate change' \u2014 a finding from the same paper confirming the plant benefit.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -190,7 +204,7 @@
     {
       "question": "Is the NASA greening study frequently cited by climate skeptics as evidence of net benefit, and do the study authors endorse this interpretation?",
       "verification_performed": "The NASA Goddard press release explicitly states: 'While rising carbon dioxide concentrations in the air can be beneficial for plants, it is also the chief culprit of climate change.' The study further notes the fertilization effect 'diminishes over time' as plants acclimatize. The authors explicitly reject the 'net benefit, no harm' interpretation of their greening finding.",
-      "finding": "The authors of the primary SC1 source explicitly refute the claim's framing. The same CO2 driving greening is confirmed by its own discoverers to be causing major climate harms — this strengthens the SC2 disproof rather than undermining it.",
+      "finding": "The authors of the primary SC1 source explicitly refute the claim's framing. The same CO2 driving greening is confirmed by its own discoverers to be causing major climate harms \u2014 this strengthens the SC2 disproof rather than undermining it.",
       "breaks_proof": false
     },
     {
@@ -201,12 +215,17 @@
     },
     {
       "question": "Does elevated CO2 improve food security via increased crop yields, potentially qualifying as a net benefit to human welfare?",
-      "verification_performed": "Searched scientific literature on CO2, crop yields, and nutritional quality. Multiple peer-reviewed studies (Loladze 2014, Myers et al. 2014 in Nature) document that elevated CO2 reduces protein, zinc, and iron concentrations in C3 crops (wheat, rice, legumes) — the 'carbohydrate dilution effect.' Even where biomass increases, nutritional density per calorie declines. IPCC SR1.5 also projects net crop yield reductions in major food-producing regions at warming above 1.5°C.",
+      "verification_performed": "Searched scientific literature on CO2, crop yields, and nutritional quality. Multiple peer-reviewed studies (Loladze 2014, Myers et al. 2014 in Nature) document that elevated CO2 reduces protein, zinc, and iron concentrations in C3 crops (wheat, rice, legumes) \u2014 the 'carbohydrate dilution effect.' Even where biomass increases, nutritional density per calorie declines. IPCC SR1.5 also projects net crop yield reductions in major food-producing regions at warming above 1.5\u00b0C.",
       "finding": "Elevated CO2 reduces nutritional density of staple crops, partially offsetting any yield gains. Combined with regional yield losses from heat and drought, this does not support a 'no net negative effects on food security' claim.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_plant_food_benefit_confirmed": true,
     "sc1_confirmed_sources": 2,

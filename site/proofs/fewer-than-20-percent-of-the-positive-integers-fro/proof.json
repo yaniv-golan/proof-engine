@@ -1,21 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Prime count via Sieve of Eratosthenes",
-      "method": "Sieve of Eratosthenes",
-      "result": "168"
-    },
-    "A2": {
-      "label": "Prime count via trial division (independent cross-check)",
-      "method": "Trial division",
-      "result": "168"
-    },
-    "A3": {
-      "label": "Percentage of primes in [1, 1000]",
-      "method": "prime_count / 1000 * 100",
-      "result": "16.8%"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "positive integers from 1 to 1000",
     "property": "percentage that are prime",
@@ -24,6 +8,32 @@
     "threshold": 20
   },
   "claim_natural": "Fewer than 20 percent of the positive integers from 1 to 1000 are prime.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Prime count via Sieve of Eratosthenes",
+      "sub_claim": null,
+      "method": "Sieve of Eratosthenes",
+      "result": "168",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Prime count via trial division (independent cross-check)",
+      "sub_claim": null,
+      "method": "Trial division",
+      "result": "168",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Percentage of primes in [1, 1000]",
+      "sub_claim": null,
+      "method": "prime_count / 1000 * 100",
+      "result": "16.8%",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Sieve of Eratosthenes vs trial division prime count",
@@ -31,7 +41,8 @@
         "168",
         "168"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -48,7 +59,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "prime_count": 168,
     "total_integers": 1000,

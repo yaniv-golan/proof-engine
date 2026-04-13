@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_future_earth",
-      "label": "Wikipedia Future of Earth: Sun engulfs Earth in ~7.59 billion years"
-    },
-    "B2": {
-      "key": "source_ladbible",
-      "label": "LADbible: von Foerster model's exponential growth assumption falsified"
-    },
-    "B3": {
-      "key": "source_livescience",
-      "label": "Live Science: Earth habitable for another 1.75 billion years"
-    },
-    "A1": {
-      "label": "Verified disproof source count vs threshold",
-      "method": "count(verified disproof citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "The von Foerster et al. (1960) mathematical model (the only known candidate)",
     "property": "constitutes a scientifically credible proof that Earth / human civilization will effectively end on a specific day in 2026",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "A mathematical model proves the world will end on a specific day in 2026.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_future_earth",
-      "source_name": "Wikipedia: Future of Earth (synthesizing peer-reviewed astrophysics)",
-      "url": "https://en.wikipedia.org/wiki/Future_of_Earth",
-      "quote": "These effects will counterbalance the impact of mass loss by the Sun, and the Sun will likely engulf Earth in about 7.59 billion years from now.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia Future of Earth: Sun engulfs Earth in ~7.59 billion years",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Future of Earth (synthesizing peer-reviewed astrophysics)",
+        "url": "https://en.wikipedia.org/wiki/Future_of_Earth",
+        "quote": "These effects will counterbalance the impact of mass loss by the Sun, and the Sun will likely engulf Earth in about 7.59 billion years from now."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "These effects will counterbalance the impact of mass loss by the Sun, and the Su"
       }
     },
     "B2": {
-      "source_key": "source_ladbible",
-      "source_name": "LADbible: Chilling mathematical equation predicted world end date (Jan 2026)",
-      "url": "https://www.ladbible.com/news/science/when-will-world-end-date-408044-20260109",
-      "quote": "With the exponential growth of the population halted, largely because women are choosing to have fewer children in some of the world's largest countries, a 2026 apocalypse is less likely.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "ladbible.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "LADbible: von Foerster model's exponential growth assumption falsified",
+      "sub_claim": null,
+      "source": {
+        "name": "LADbible: Chilling mathematical equation predicted world end date (Jan 2026)",
+        "url": "https://www.ladbible.com/news/science/when-will-world-end-date-408044-20260109",
+        "quote": "With the exponential growth of the population halted, largely because women are choosing to have fewer children in some of the world's largest countries, a 2026 apocalypse is less likely."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "ladbible.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "With the exponential growth of the population halted, largely because women are "
       }
     },
     "B3": {
-      "source_key": "source_livescience",
-      "source_name": "Live Science: How Much Longer Can Earth Support Life?",
-      "url": "https://www.livescience.com/39775-how-long-can-earth-support-life.html",
-      "quote": "in another 1.75 billion years the planet will travel out of the solar system's habitable zone and into a hot zone that will scorch away its oceans",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "livescience.com",
-        "source_type": "major_news",
-        "tier": 3,
-        "flags": [],
-        "note": "Major news organization"
+      "type": "empirical",
+      "label": "Live Science: Earth habitable for another 1.75 billion years",
+      "sub_claim": null,
+      "source": {
+        "name": "Live Science: How Much Longer Can Earth Support Life?",
+        "url": "https://www.livescience.com/39775-how-long-can-earth-support-life.html",
+        "quote": "in another 1.75 billion years the planet will travel out of the solar system's habitable zone and into a hot zone that will scorch away its oceans"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "livescience.com",
+          "source_type": "major_news",
+          "tier": 3,
+          "flags": [],
+          "note": "Major news organization"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "in another 1.75 billion years the planet will travel out of the solar system's h"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "These effects will counterbalance the impact of mass loss by the Sun, and the Su"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "With the exponential growth of the population halted, largely because women are "
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "in another 1.75 billion years the planet will travel out of the solar system's h"
+    "A1": {
+      "type": "computed",
+      "label": "Verified disproof source count vs threshold",
+      "sub_claim": null,
+      "method": "count(verified disproof citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,7 +113,8 @@
         "source_ladbible": "verified",
         "source_livescience": "verified"
       },
-      "independence_note": "B1 (Wikipedia/astrophysics) and B3 (Live Science/habitability research) are independent measurements of Earth's projected lifespan from different research groups. B2 (LADbible) documents the demographic evidence separately. All three reach the same conclusion through different mechanisms."
+      "independence_note": "B1 (Wikipedia/astrophysics) and B3 (Live Science/habitability research) are independent measurements of Earth's projected lifespan from different research groups. B2 (LADbible) documents the demographic evidence separately. All three reach the same conclusion through different mechanisms.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -130,7 +137,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed_disproof_sources": 3,
     "threshold": 2,

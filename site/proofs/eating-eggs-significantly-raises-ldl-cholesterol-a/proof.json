@@ -1,95 +1,114 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_cvd_a",
-      "label": "BMJ 2020 meta-analysis: 28 prospective cohort studies, 1.72M participants — egg consumption and CVD risk"
-    },
-    "B2": {
-      "key": "source_cvd_b",
-      "label": "Eur J Nutr 2021 dose-response meta-analysis: 39 studies, ~2M participants — egg consumption and CVD risk"
-    },
-    "B3": {
-      "key": "source_ldl_a",
-      "label": "Nutrients 2020 RCT meta-analysis: 17 RCTs in healthy subjects — egg consumption and LDL-C"
-    },
-    "A1": {
-      "label": "SC2: count of independent prospective cohort meta-analyses finding no significant CVD risk increase",
-      "method": "count verified meta-analyses showing no significant CVD risk increase",
-      "result": "2 independent sources (threshold for disproof: ≥2)"
-    },
-    "A2": {
-      "label": "SC1: RCT-observed LDL increase vs clinical significance threshold (≥10 mg/dL)",
-      "method": "parse_number_from_quote(B3) and compare to clinical significance threshold",
-      "result": "8.14 mg/dL vs ≥10.0 mg/dL (does not meet threshold)"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "moderate egg consumption (up to ~1 egg/day) in healthy adults",
     "property": "compound AND: (SC1) significantly raises LDL-C AND (SC2) significantly raises cardiovascular disease (CVD) risk",
     "operator": "AND",
-    "operator_note": "Compound claim — both sub-claims must hold for the overall claim to be PROVED. SC1 ('significantly raises LDL'): 'significantly' is interpreted as clinically meaningful — operationalized as ≥10 mg/dL absolute increase per meta-analytic RCT evidence. This is a conservative threshold: statins produce 30–50 mg/dL reductions; a dietary effect below 10 mg/dL is not considered clinically actionable by standard lipid-management guidelines. SC2 ('significantly raises heart-disease risk'): interpreted as statistically significant increased CVD incidence observed in large prospective cohort studies. Disproof requires ≥2 independent prospective cohort meta-analyses showing no significant CVD risk increase. Evaluated at moderate consumption (~1 egg/day).",
+    "operator_note": "Compound claim \u2014 both sub-claims must hold for the overall claim to be PROVED. SC1 ('significantly raises LDL'): 'significantly' is interpreted as clinically meaningful \u2014 operationalized as \u226510 mg/dL absolute increase per meta-analytic RCT evidence. This is a conservative threshold: statins produce 30\u201350 mg/dL reductions; a dietary effect below 10 mg/dL is not considered clinically actionable by standard lipid-management guidelines. SC2 ('significantly raises heart-disease risk'): interpreted as statistically significant increased CVD incidence observed in large prospective cohort studies. Disproof requires \u22652 independent prospective cohort meta-analyses showing no significant CVD risk increase. Evaluated at moderate consumption (~1 egg/day).",
     "sc1_ldl_threshold_mg_dl": 10.0,
     "sc2_disproof_min_sources": 2
   },
   "claim_natural": "Eating eggs significantly raises LDL cholesterol and heart-disease risk.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_cvd_a",
-      "source_name": "Drouin-Chartier et al., BMJ 2020 (PMC7190072) — meta-analysis of 28 prospective cohort studies, 1,720,108 participants, 139,195 CVD events",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7190072/",
-      "quote": "moderate egg consumption (up to one egg per day) is not associated with cardiovascular disease risk overall",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "BMJ 2020 meta-analysis: 28 prospective cohort studies, 1.72M participants \u2014 egg consumption and CVD risk",
+      "sub_claim": null,
+      "source": {
+        "name": "Drouin-Chartier et al., BMJ 2020 (PMC7190072) \u2014 meta-analysis of 28 prospective cohort studies, 1,720,108 participants, 139,195 CVD events",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7190072/",
+        "quote": "moderate egg consumption (up to one egg per day) is not associated with cardiovascular disease risk overall"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
     },
     "B2": {
-      "source_key": "source_cvd_b",
-      "source_name": "Kazemi et al., Eur J Nutr 2021 (PMC8137614) — dose-response meta-analysis of 39 prospective cohort studies, ~2M participants",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8137614/",
-      "quote": "there may be no need to discourage egg consumption at the population level",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Eur J Nutr 2021 dose-response meta-analysis: 39 studies, ~2M participants \u2014 egg consumption and CVD risk",
+      "sub_claim": null,
+      "source": {
+        "name": "Kazemi et al., Eur J Nutr 2021 (PMC8137614) \u2014 dose-response meta-analysis of 39 prospective cohort studies, ~2M participants",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8137614/",
+        "quote": "there may be no need to discourage egg consumption at the population level"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
     },
     "B3": {
-      "source_key": "source_ldl_a",
-      "source_name": "Zhu et al., Nutrients 2020 (PMC7400894) — meta-analysis of 17 RCTs in healthy subjects",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7400894/",
-      "quote": "The MEC group also had higher LDL-c than the control group (MD = 8.14, p < 0.0001)",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 82.4,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Nutrients 2020 RCT meta-analysis: 17 RCTs in healthy subjects \u2014 egg consumption and LDL-C",
+      "sub_claim": null,
+      "source": {
+        "name": "Zhu et al., Nutrients 2020 (PMC7400894) \u2014 meta-analysis of 17 RCTs in healthy subjects",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7400894/",
+        "quote": "The MEC group also had higher LDL-c than the control group (MD = 8.14, p < 0.0001)"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 82.4,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "8.14",
+        "value_in_quote": true,
+        "quote_snippet": "The MEC group also had higher LDL-c than the control group (MD = 8.14, p < 0.0001)"
       }
-    }
-  },
-  "extractions": {
-    "B3_ldl_increase": {
-      "value": "8.14",
-      "value_in_quote": true,
-      "quote_snippet": "The MEC group also had higher LDL-c than the control group (MD = 8.14, p < 0.0001)"
+    },
+    "A1": {
+      "type": "computed",
+      "label": "SC2: count of independent prospective cohort meta-analyses finding no significant CVD risk increase",
+      "sub_claim": "SC2",
+      "method": "count verified meta-analyses showing no significant CVD risk increase",
+      "result": "2 independent sources (threshold for disproof: \u22652)",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "SC1: RCT-observed LDL increase vs clinical significance threshold (\u226510 mg/dL)",
+      "sub_claim": "SC1",
+      "method": "parse_number_from_quote(B3) and compare to clinical significance threshold",
+      "result": "8.14 mg/dL vs \u226510.0 mg/dL (does not meet threshold)",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -100,19 +119,20 @@
         "B2 (PMC8137614, 39 cohorts, ~2M participants): 'no need to discourage egg consumption at the population level'"
       ],
       "agreement": true,
-      "tolerance": "qualitative — both find null or inverse CVD association at moderate intake"
+      "tolerance": "qualitative \u2014 both find null or inverse CVD association at moderate intake",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Do any large meta-analyses show significantly increased CVD risk from egg consumption?",
       "verification_performed": "Searched PubMed/PMC for 'egg consumption cardiovascular disease risk increased meta-analysis'. Reviewed Zhong et al. JAMA 2019 (PMID 30874756), which found 17% higher CVD risk per 300 mg/day of dietary cholesterol. However, this result was for total dietary cholesterol, not eggs specifically, and has been criticized for not accounting for replacing nutrients. Multiple subsequent egg-specific meta-analyses (PMC7190072, PMC8137614) focused on eggs as a food and found no significant CVD risk.",
-      "finding": "Zhong et al. JAMA 2019 associates dietary cholesterol with CVD, but subsequent larger egg-specific meta-analyses (1.7–2M participants) do not confirm a significant risk for moderate egg consumption. The JAMA finding does not break the proof.",
+      "finding": "Zhong et al. JAMA 2019 associates dietary cholesterol with CVD, but subsequent larger egg-specific meta-analyses (1.7\u20132M participants) do not confirm a significant risk for moderate egg consumption. The JAMA finding does not break the proof.",
       "breaks_proof": false
     },
     {
       "question": "Could the ~8 mg/dL LDL increase be clinically significant under a stricter threshold?",
-      "verification_performed": "Reviewed AHA/ACC lipid management guidelines (2018 ACC/AHA Guideline on the Management of Blood Cholesterol). Clinical intervention thresholds are based on absolute LDL levels (e.g., >130 mg/dL with intermediate risk factors). The guidelines do not specify a dietary LDL change threshold; however, lifestyle modification targets are typically ≥10–15% LDL reduction (≈15–25 mg/dL on a 150 mg/dL baseline). Also searched for whether any clinical body explicitly considers <10 mg/dL LDL dietary changes as clinically significant.",
+      "verification_performed": "Reviewed AHA/ACC lipid management guidelines (2018 ACC/AHA Guideline on the Management of Blood Cholesterol). Clinical intervention thresholds are based on absolute LDL levels (e.g., >130 mg/dL with intermediate risk factors). The guidelines do not specify a dietary LDL change threshold; however, lifestyle modification targets are typically \u226510\u201315% LDL reduction (\u224815\u201325 mg/dL on a 150 mg/dL baseline). Also searched for whether any clinical body explicitly considers <10 mg/dL LDL dietary changes as clinically significant.",
       "finding": "No clinical guideline classifies an 8 mg/dL dietary-induced LDL increase as clinically significant in isolation. A 2025 RCT (PMID 40339906) also found no LDL increase when eggs were consumed within a low-saturated-fat diet, indicating the effect is confounded by dietary context, not eggs per se.",
       "breaks_proof": false
     },
@@ -125,11 +145,16 @@
     {
       "question": "Has scientific consensus historically supported the egg-cholesterol-heart-disease link?",
       "verification_performed": "Searched 'dietary cholesterol guidelines history eggs 300mg recommendation'. Prior to 2015, U.S. dietary guidelines warned against dietary cholesterol intake >300 mg/day. The 2015 Dietary Guidelines Advisory Committee removed this limit, stating they found 'no appreciable relationship between consumption of dietary cholesterol and serum cholesterol.' This reversal reflects the updated evidence base.",
-      "finding": "The claim reflects an older scientific consensus that was revised in 2015. The current evidence-based position — reflected in both the 2015 DGAC report and multiple recent meta-analyses — is that moderate egg consumption does not significantly raise LDL or CVD risk in the general population.",
+      "finding": "The claim reflects an older scientific consensus that was revised in 2015. The current evidence-based position \u2014 reflected in both the 2015 DGAC report and multiple recent meta-analyses \u2014 is that moderate egg consumption does not significantly raise LDL or CVD risk in the general population.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_ldl_increase_rct_mg_dl": 8.14,
     "sc1_clinical_threshold_mg_dl": 10.0,

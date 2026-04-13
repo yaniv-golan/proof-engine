@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "iea_gdp_co2_loosened",
-      "label": "IEA (2024): GDP has doubled in the US since 1990 while CO2 returned to 1990 levels; EU economy 66% larger while CO2 is 30% lower \u2014 absolute decoupling"
-    },
-    "B2": {
-      "key": "wri_21_countries",
-      "label": "WRI: 21 countries reduced CO2 by >1 billion metric tons annually while growing their economies, 2000\u20132014"
-    },
-    "B3": {
-      "key": "our_world_in_data_decoupling",
-      "label": "Our World in Data: Many countries have decoupled economic growth from CO2 emissions even accounting for offshored production"
-    },
-    "A1": {
-      "label": "Count of independently verified sources confirming absolute decoupling",
-      "method": "count(verified citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "economic growth on a finite planet",
     "property": "number of authoritative sources confirming that GDP has grown while physical resource use (CO2 emissions / energy) has simultaneously fallen \u2014 i.e., absolute decoupling \u2014 demonstrating the empirical feasibility of growth without proportional physical expansion",
@@ -27,74 +9,98 @@
     "proof_direction": "affirm"
   },
   "claim_natural": "Infinite economic growth is possible on a finite planet.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "iea_gdp_co2_loosened",
-      "source_name": "International Energy Agency (IEA) \u2014 2024 Commentary",
-      "url": "https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-has-loosened-it-needs-to-be-cut-completely",
-      "quote": "In the United States, GDP has doubled since 1990, but CO2 emissions have returned to the level of that year; in the European Union, the economy is 66% larger now, while CO2 emissions are 30% lower than in 1990.",
-      "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "iea.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "IEA (2024): GDP has doubled in the US since 1990 while CO2 returned to 1990 levels; EU economy 66% larger while CO2 is 30% lower \u2014 absolute decoupling",
+      "sub_claim": null,
+      "source": {
+        "name": "International Energy Agency (IEA) \u2014 2024 Commentary",
+        "url": "https://www.iea.org/commentaries/the-relationship-between-growth-in-gdp-and-co2-has-loosened-it-needs-to-be-cut-completely",
+        "quote": "In the United States, GDP has doubled since 1990, but CO2 emissions have returned to the level of that year; in the European Union, the economy is 66% larger now, while CO2 emissions are 30% lower than in 1990."
+      },
+      "verification": {
+        "status": "partial",
+        "method": "aggressive_normalization",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "iea.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "In the United States, GDP has doubled since 1990, but CO2 emissions have returne"
       }
     },
     "B2": {
-      "source_key": "wri_21_countries",
-      "source_name": "World Resources Institute (WRI)",
-      "url": "https://www.wri.org/insights/roads-decoupling-21-countries-are-reducing-carbon-emissions-while-growing-gdp",
-      "quote": "Between 2000 and 2014, 21 countries across four continents \u2014 including the United States, United Kingdom, and Germany \u2014 have collectively reduced their CO2 emissions by more than 1 billion metric tons annually while simultaneously growing their economies.",
-      "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wri.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "WRI: 21 countries reduced CO2 by >1 billion metric tons annually while growing their economies, 2000\u20132014",
+      "sub_claim": null,
+      "source": {
+        "name": "World Resources Institute (WRI)",
+        "url": "https://www.wri.org/insights/roads-decoupling-21-countries-are-reducing-carbon-emissions-while-growing-gdp",
+        "quote": "Between 2000 and 2014, 21 countries across four continents \u2014 including the United States, United Kingdom, and Germany \u2014 have collectively reduced their CO2 emissions by more than 1 billion metric tons annually while simultaneously growing their economies."
+      },
+      "verification": {
+        "status": "partial",
+        "method": "aggressive_normalization",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wri.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "Between 2000 and 2014, 21 countries across four continents \u2014 including the Unite"
       }
     },
     "B3": {
-      "source_key": "our_world_in_data_decoupling",
-      "source_name": "Our World in Data (Hannah Ritchie)",
-      "url": "https://ourworldindata.org/co2-gdp-decoupling",
-      "quote": "It would be wrong to assume that this reduction in emissions in rich countries was only achieved by offshoring production overseas \u2013 by transferring emissions to manufacturing economies such as China and India. In the chart we see that consumption-based emissions \u2013 which adjust for emissions from goods that are imported or exported \u2013 have also fallen.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "ourworldindata.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Our World in Data: Many countries have decoupled economic growth from CO2 emissions even accounting for offshored production",
+      "sub_claim": null,
+      "source": {
+        "name": "Our World in Data (Hannah Ritchie)",
+        "url": "https://ourworldindata.org/co2-gdp-decoupling",
+        "quote": "It would be wrong to assume that this reduction in emissions in rich countries was only achieved by offshoring production overseas \u2013 by transferring emissions to manufacturing economies such as China and India. In the chart we see that consumption-based emissions \u2013 which adjust for emissions from goods that are imported or exported \u2013 have also fallen."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "ourworldindata.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "It would be wrong to assume that this reduction in emissions in rich countries w"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "In the United States, GDP has doubled since 1990, but CO2 emissions have returne"
     },
-    "B2": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "Between 2000 and 2014, 21 countries across four continents \u2014 including the Unite"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "It would be wrong to assume that this reduction in emissions in rich countries w"
+    "A1": {
+      "type": "computed",
+      "label": "Count of independently verified sources confirming absolute decoupling",
+      "sub_claim": null,
+      "method": "count(verified citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,7 +113,8 @@
         "wri_21_countries": "partial",
         "our_world_in_data_decoupling": "verified"
       },
-      "independence_note": "Sources are from three different institutions: IEA (intergovernmental energy agency), WRI (independent research institute), and Our World in Data (Oxford-based data platform). They cover different geographies (global, 21-country study, multi-country consumption-corrected) and different time windows (1990\u2013present, 2000\u20132014, multi-period). All three trace to publicly verifiable datasets (IEA energy statistics, national GHG inventories, UN data)."
+      "independence_note": "Sources are from three different institutions: IEA (intergovernmental energy agency), WRI (independent research institute), and Our World in Data (Oxford-based data platform). They cover different geographies (global, 21-country study, multi-country consumption-corrected) and different time windows (1990\u2013present, 2000\u20132014, multi-period). All three trace to publicly verifiable datasets (IEA energy statistics, national GHG inventories, UN data).",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -130,7 +137,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED (with unverified citations)",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": true,
+    "qualifier": "unverified_citations",
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

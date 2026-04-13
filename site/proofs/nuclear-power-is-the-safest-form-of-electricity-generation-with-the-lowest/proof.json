@@ -1,104 +1,145 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "owid_safest",
-      "label": "OWID 'What are the safest and cleanest sources of energy?' — uncertainty caveat: comparing nuclear/solar/wind is 'misguided' because uncertainties are likely to overlap"
-    },
-    "B2": {
-      "key": "owid_data_table",
-      "label": "Our World in Data via Wikimedia Commons — death rates per TWh for all electricity sources (Markandya & Wilkinson 2007 + Sovacool et al. 2016)"
-    },
-    "A1": {
-      "label": "Nuclear rank by Sovacool 2016 death rate among all electricity sources (1 = lowest/safest)",
-      "method": "sort(all_sources by death_rate)[nuclear] → rank 2",
-      "result": "2"
-    },
-    "A2": {
-      "label": "Coal-to-nuclear death rate ratio (coal M&W 2007 / nuclear Sovacool 2016): shows nuclear is dramatically safer than fossil fuels even if it is not THE lowest",
-      "method": "coal / nuclear_sovacool",
-      "result": "2538.1x"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "nuclear power",
-    "property": "death rate per TWh (deaths from accidents and air pollution) — rank among all electricity generation sources (1 = lowest/safest)",
+    "property": "death rate per TWh (deaths from accidents and air pollution) \u2014 rank among all electricity generation sources (1 = lowest/safest)",
     "operator": "==",
-    "operator_note": "'Safest with the lowest death rate per TWh' is operationalized as nuclear holding rank 1 (minimum death rate) among all electricity generation sources — coal, oil, gas, nuclear, hydro, solar, wind, and biofuels. Data from Our World in Data (OWID) is used, combining Markandya & Wilkinson (2007) for fossil fuels and Sovacool et al. (2016) for low-carbon sources. Two independent nuclear death-rate estimates exist and differ by ~8x: 0.0097 deaths/TWh (Sovacool 2016, accidents only) and 0.074 deaths/TWh (Markandya & Wilkinson 2007, including some air-pollution effects). OWID explicitly cautions: 'the uncertainties around these values [nuclear/solar/wind] are likely to overlap' and calls comparing them 'misguided.' Per proof-engine rules for comparative/superlative claims with source-acknowledged overlapping uncertainty, uncertainty_override=True is set and the verdict is UNDETERMINED.",
+    "operator_note": "'Safest with the lowest death rate per TWh' is operationalized as nuclear holding rank 1 (minimum death rate) among all electricity generation sources \u2014 coal, oil, gas, nuclear, hydro, solar, wind, and biofuels. Data from Our World in Data (OWID) is used, combining Markandya & Wilkinson (2007) for fossil fuels and Sovacool et al. (2016) for low-carbon sources. Two independent nuclear death-rate estimates exist and differ by ~8x: 0.0097 deaths/TWh (Sovacool 2016, accidents only) and 0.074 deaths/TWh (Markandya & Wilkinson 2007, including some air-pollution effects). OWID explicitly cautions: 'the uncertainties around these values [nuclear/solar/wind] are likely to overlap' and calls comparing them 'misguided.' Per proof-engine rules for comparative/superlative claims with source-acknowledged overlapping uncertainty, uncertainty_override=True is set and the verdict is UNDETERMINED.",
     "threshold": 1
   },
   "claim_natural": "Nuclear power is the safest form of electricity generation with the lowest death rate per TWh produced.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "owid_safest",
-      "source_name": "Our World in Data — 'What are the safest and cleanest sources of energy?' (Hannah Ritchie, 2020; updated July 2022)",
-      "url": "https://ourworldindata.org/safest-sources-of-energy",
-      "quote": "People often focus on the marginal differences at the bottom of the chart — between nuclear, solar, and wind. This comparison is misguided: the uncertainties around these values are likely to overlap.",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 81.2,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "ourworldindata.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "OWID 'What are the safest and cleanest sources of energy?' \u2014 uncertainty caveat: comparing nuclear/solar/wind is 'misguided' because uncertainties are likely to overlap",
+      "sub_claim": null,
+      "source": {
+        "name": "Our World in Data \u2014 'What are the safest and cleanest sources of energy?' (Hannah Ritchie, 2020; updated July 2022)",
+        "url": "https://ourworldindata.org/safest-sources-of-energy",
+        "quote": "People often focus on the marginal differences at the bottom of the chart \u2014 between nuclear, solar, and wind. This comparison is misguided: the uncertainties around these values are likely to overlap."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 81.2,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "ourworldindata.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
     },
     "B2": {
-      "source_key": "owid_data_table",
-      "source_name": "Our World in Data via Wikimedia Commons — deaths per TWh all sources (Markandya & Wilkinson 2007 + Sovacool et al. 2016)",
-      "url": "https://commons.wikimedia.org/wiki/Data:Deaths_per_TWh_energy_production,_all_sources_(Markandya_and_Wilkinson;_Sovacool_et_al.)_(OWID_4888).tab",
-      "quote": "Death rates from energy production is measured as the number of deaths by energy source per terawatt-hour (TWh) of production.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikimedia.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Our World in Data via Wikimedia Commons \u2014 death rates per TWh for all electricity sources (Markandya & Wilkinson 2007 + Sovacool et al. 2016)",
+      "sub_claim": null,
+      "source": {
+        "name": "Our World in Data via Wikimedia Commons \u2014 deaths per TWh all sources (Markandya & Wilkinson 2007 + Sovacool et al. 2016)",
+        "url": "https://commons.wikimedia.org/wiki/Data:Deaths_per_TWh_energy_production,_all_sources_(Markandya_and_Wilkinson;_Sovacool_et_al.)_(OWID_4888).tab",
+        "quote": "Death rates from energy production is measured as the number of deaths by energy source per terawatt-hour (TWh) of production."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikimedia.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "0.0097",
+        "value_in_quote": true,
+        "quote_snippet": "data_values['nuclear_sovacool'] = '0.0097'"
       }
+    },
+    "A1": {
+      "type": "computed",
+      "label": "Nuclear rank by Sovacool 2016 death rate among all electricity sources (1 = lowest/safest)",
+      "sub_claim": null,
+      "method": "sort(all_sources by death_rate)[nuclear] \u2192 rank 2",
+      "result": "2",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Coal-to-nuclear death rate ratio (coal M&W 2007 / nuclear Sovacool 2016): shows nuclear is dramatically safer than fossil fuels even if it is not THE lowest",
+      "sub_claim": null,
+      "method": "coal / nuclear_sovacool",
+      "result": "2538.1x",
+      "depends_on": []
     }
   },
-  "extractions": {
-    "B2_nuclear_sovacool": {
-      "value": "0.0097",
-      "value_in_quote": true,
-      "quote_snippet": "data_values['nuclear_sovacool'] = '0.0097'"
-    },
-    "B2_nuclear_mw2007": {
-      "value": "0.074",
-      "value_in_quote": true,
-      "quote_snippet": "data_values['nuclear_mw2007'] = '0.074'"
-    },
-    "B2_biofuels": {
-      "value": "0.0048",
-      "value_in_quote": true,
-      "quote_snippet": "data_values['biofuels'] = '0.0048'"
-    },
-    "B2_solar": {
-      "value": "0.019",
-      "value_in_quote": true,
-      "quote_snippet": "data_values['solar'] = '0.019'"
-    },
-    "B2_wind": {
-      "value": "0.035",
-      "value_in_quote": true,
-      "quote_snippet": "data_values['wind'] = '0.035'"
-    },
-    "B2_coal": {
-      "value": "24.62",
-      "value_in_quote": true,
-      "quote_snippet": "data_values['coal'] = '24.62'"
-    },
-    "B2_gas": {
-      "value": "2.821",
-      "value_in_quote": true,
-      "quote_snippet": "data_values['gas'] = '2.821'"
+  "cross_checks": [
+    {
+      "description": "Two independent nuclear death-rate estimates (methodological cross-check)",
+      "values_compared": [
+        "0.0097",
+        "0.074"
+      ],
+      "agreement": false,
+      "tolerance": "N/A \u2014 these are independent methodological estimates, not independent measurements of the same quantity",
+      "note": "Sovacool 2016 (accidents only): 0.0097 deaths/TWh; M&W 2007 (accidents + some air pollution): 0.074 deaths/TWh. Ratio: 7.6x. Disagreement reflects genuine methodological controversy, not measurement error.",
+      "fact_ids": []
     }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "If biofuels are excluded from 'electricity generation' sources, does nuclear then have the lowest death rate?",
+      "verification_performed": "Reviewed OWID methodology and Sovacool et al. 2016: 'biofuels' in the dataset covers biogas and biomass power plants used for electricity generation. OWID's 'death rates from energy production' chart includes biofuels as an electricity generation source. Searched 'biofuels electricity generation death rate OWID Sovacool' to confirm scope.",
+      "finding": "Even if biofuels were excluded, the uncertainty_override=True verdict applies regardless: OWID explicitly warns that comparing nuclear, solar, and wind is 'misguided' because 'the uncertainties around these values are likely to overlap.' Nuclear (0.0097) < solar (0.019) and wind (0.035) by Sovacool 2016 point estimates, but OWID's caveat prevents a definitive superlative ranking.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the Markandya & Wilkinson (2007) nuclear estimate (0.074 deaths/TWh) contradict the claim that nuclear has the lowest death rate?",
+      "verification_performed": "Reviewed the OWID all-sources Wikimedia Commons dataset: it contains two entries for nuclear \u2014 0.074 (M&W 2007) and 0.0097 (Sovacool 2016). These differ by ~8x. M&W 2007 includes occupational deaths and some air-pollution effects; Sovacool 2016 focuses on accident deaths (Chernobyl, Fukushima, other accidents). Searched 'nuclear death rate Markandya Wilkinson 2007 vs Sovacool 2016 comparison' to confirm methodological basis of each estimate.",
+      "finding": "The M&W 2007 nuclear estimate (0.074 deaths/TWh) directly contradicts the claim: nuclear would be LESS safe than solar (0.019) and wind (0.035) by point estimates. The 8x discrepancy between estimates reflects a fundamental methodological disagreement about what death categories to include; no consensus exists on which is 'correct.' Under M&W 2007, nuclear is not only not the safest \u2014 it is less safe than two major renewable sources. This counter-evidence breaks the proof.",
+      "breaks_proof": true
+    },
+    {
+      "question": "Is there a consensus source that definitively establishes nuclear as having the single lowest death rate across all electricity generation sources?",
+      "verification_performed": "Searched 'nuclear lowest death rate electricity all sources 2024 definitive', 'safest energy source peer reviewed 2023', and 'nuclear solar wind death rate definitive ranking'. Reviewed Our World in Data, Sovacool et al. 2016, Markandya & Wilkinson 2007, and WHO energy data.",
+      "finding": "No authoritative source makes the unqualified claim that nuclear has the definitively lowest death rate per TWh across all electricity sources. OWID \u2014 the most widely cited source on this topic \u2014 explicitly cautions against making this comparison. Most sources describe nuclear as 'among the safest' or 'comparable to solar and wind,' not as definitively the lowest.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "UNDETERMINED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "nuclear_rank_sovacool_2016": 2,
+    "nuclear_rate_sovacool_2016": 0.0097,
+    "nuclear_rate_mw2007": 0.074,
+    "biofuels_rate_sovacool_2016": 0.0048,
+    "solar_rate_sovacool_2016": 0.019,
+    "wind_rate_sovacool_2016": 0.035,
+    "coal_rate_mw2007": 24.62,
+    "coal_to_nuclear_ratio": 2538.1,
+    "threshold": 1,
+    "claim_holds": false,
+    "uncertainty_override": true,
+    "breaks_proof_triggered": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.3.1",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-01"
   },
   "data_value_verification": {
     "B2": {
@@ -148,58 +189,5 @@
         "fetch_mode": "live"
       }
     }
-  },
-  "cross_checks": [
-    {
-      "description": "Two independent nuclear death-rate estimates (methodological cross-check)",
-      "values_compared": [
-        "0.0097",
-        "0.074"
-      ],
-      "agreement": false,
-      "tolerance": "N/A — these are independent methodological estimates, not independent measurements of the same quantity",
-      "note": "Sovacool 2016 (accidents only): 0.0097 deaths/TWh; M&W 2007 (accidents + some air pollution): 0.074 deaths/TWh. Ratio: 7.6x. Disagreement reflects genuine methodological controversy, not measurement error."
-    }
-  ],
-  "adversarial_checks": [
-    {
-      "question": "If biofuels are excluded from 'electricity generation' sources, does nuclear then have the lowest death rate?",
-      "verification_performed": "Reviewed OWID methodology and Sovacool et al. 2016: 'biofuels' in the dataset covers biogas and biomass power plants used for electricity generation. OWID's 'death rates from energy production' chart includes biofuels as an electricity generation source. Searched 'biofuels electricity generation death rate OWID Sovacool' to confirm scope.",
-      "finding": "Even if biofuels were excluded, the uncertainty_override=True verdict applies regardless: OWID explicitly warns that comparing nuclear, solar, and wind is 'misguided' because 'the uncertainties around these values are likely to overlap.' Nuclear (0.0097) < solar (0.019) and wind (0.035) by Sovacool 2016 point estimates, but OWID's caveat prevents a definitive superlative ranking.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Does the Markandya & Wilkinson (2007) nuclear estimate (0.074 deaths/TWh) contradict the claim that nuclear has the lowest death rate?",
-      "verification_performed": "Reviewed the OWID all-sources Wikimedia Commons dataset: it contains two entries for nuclear — 0.074 (M&W 2007) and 0.0097 (Sovacool 2016). These differ by ~8x. M&W 2007 includes occupational deaths and some air-pollution effects; Sovacool 2016 focuses on accident deaths (Chernobyl, Fukushima, other accidents). Searched 'nuclear death rate Markandya Wilkinson 2007 vs Sovacool 2016 comparison' to confirm methodological basis of each estimate.",
-      "finding": "The M&W 2007 nuclear estimate (0.074 deaths/TWh) directly contradicts the claim: nuclear would be LESS safe than solar (0.019) and wind (0.035) by point estimates. The 8x discrepancy between estimates reflects a fundamental methodological disagreement about what death categories to include; no consensus exists on which is 'correct.' Under M&W 2007, nuclear is not only not the safest — it is less safe than two major renewable sources. This counter-evidence breaks the proof.",
-      "breaks_proof": true
-    },
-    {
-      "question": "Is there a consensus source that definitively establishes nuclear as having the single lowest death rate across all electricity generation sources?",
-      "verification_performed": "Searched 'nuclear lowest death rate electricity all sources 2024 definitive', 'safest energy source peer reviewed 2023', and 'nuclear solar wind death rate definitive ranking'. Reviewed Our World in Data, Sovacool et al. 2016, Markandya & Wilkinson 2007, and WHO energy data.",
-      "finding": "No authoritative source makes the unqualified claim that nuclear has the definitively lowest death rate per TWh across all electricity sources. OWID — the most widely cited source on this topic — explicitly cautions against making this comparison. Most sources describe nuclear as 'among the safest' or 'comparable to solar and wind,' not as definitively the lowest.",
-      "breaks_proof": false
-    }
-  ],
-  "verdict": "UNDETERMINED",
-  "key_results": {
-    "nuclear_rank_sovacool_2016": 2,
-    "nuclear_rate_sovacool_2016": 0.0097,
-    "nuclear_rate_mw2007": 0.074,
-    "biofuels_rate_sovacool_2016": 0.0048,
-    "solar_rate_sovacool_2016": 0.019,
-    "wind_rate_sovacool_2016": 0.035,
-    "coal_rate_mw2007": 24.62,
-    "coal_to_nuclear_ratio": 2538.1,
-    "threshold": 1,
-    "claim_holds": false,
-    "uncertainty_override": true,
-    "breaks_proof_triggered": true
-  },
-  "generator": {
-    "name": "proof-engine",
-    "version": "1.3.1",
-    "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-04-01"
   }
 }

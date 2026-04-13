@@ -1,21 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Direct substitution: (1+\u221a5)/2 satisfies x\u00b2 - x - 1 = 0",
-      "method": "Direct substitution with exact integer arithmetic over Q(\u221a5)",
-      "result": "\u03c6\u00b2 - \u03c6 - 1 = 0 (exact)"
-    },
-    "A2": {
-      "label": "Quadratic formula yields (1+\u221a5)/2 as the positive root",
-      "method": "Quadratic formula: x = (-b \u00b1 \u221a(b\u00b2-4ac)) / 2a with a=1, b=-1, c=-1",
-      "result": "Positive root = (1+\u221a5)/2 = 1.618033988749895"
-    },
-    "A3": {
-      "label": "(1+\u221a5)/2 is positive",
-      "method": "Direct evaluation: (1+\u221a5)/2 > 0",
-      "result": "\u03c6 = 1.618033988749895 > 0"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "the equation x\u00b2 - x - 1 = 0",
     "property": "positive root equals (1 + \u221a5)/2",
@@ -24,6 +8,32 @@
     "threshold": true
   },
   "claim_natural": "The positive root of x\u00b2 - x - 1 = 0 is exactly (1 + \u221a5)/2",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Direct substitution: (1+\u221a5)/2 satisfies x\u00b2 - x - 1 = 0",
+      "sub_claim": null,
+      "method": "Direct substitution with exact integer arithmetic over Q(\u221a5)",
+      "result": "\u03c6\u00b2 - \u03c6 - 1 = 0 (exact)",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Quadratic formula yields (1+\u221a5)/2 as the positive root",
+      "sub_claim": null,
+      "method": "Quadratic formula: x = (-b \u00b1 \u221a(b\u00b2-4ac)) / 2a with a=1, b=-1, c=-1",
+      "result": "Positive root = (1+\u221a5)/2 = 1.618033988749895",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "(1+\u221a5)/2 is positive",
+      "sub_claim": null,
+      "method": "Direct evaluation: (1+\u221a5)/2 > 0",
+      "result": "\u03c6 = 1.618033988749895 > 0",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Direct substitution (A1) vs quadratic formula derivation (A2)",
@@ -31,7 +41,8 @@
         "substitution yields 0",
         "quadratic formula yields 1.618033988749895"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -54,7 +65,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "phi": 1.618033988749895,
     "substitution_exact_zero": true,

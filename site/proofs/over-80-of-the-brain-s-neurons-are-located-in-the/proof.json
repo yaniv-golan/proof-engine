@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_a_total",
-      "label": "Total human brain neuron count \u2014 Herculano-Houzel 2009 (PMC2776484)"
-    },
-    "B2": {
-      "key": "source_a_cerebellum",
-      "label": "Cerebellum neuron count \u2014 Herculano-Houzel 2009 (PMC2776484)"
-    },
-    "B3": {
-      "key": "source_b",
-      "label": "Independent statement: cerebellum ~80% of brain neurons \u2014 von Bartheld et al. 2016 review (PMC5063692)"
-    },
-    "B4": {
-      "key": "source_c",
-      "label": "Cross-species comparison: 80% in human \u2014 Herculano-Houzel et al. 2010 Frontiers Neuroanatomy"
-    },
-    "A1": {
-      "label": "Computed cerebellum neuron %: (69 billion / 86 billion) \u00d7 100",
-      "method": "cerebellum_neurons / total_neurons * 100",
-      "result": "80.2326"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "human cerebellum",
     "property": "percentage of total brain neurons located in the cerebellum",
@@ -30,96 +8,126 @@
     "threshold": 80.0
   },
   "claim_natural": "Over 80% of the brain's neurons are located in the cerebellum.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_a_total",
-      "source_name": "Herculano-Houzel S (2009) The human brain in numbers: a linearly scaled-up primate brain. Front Hum Neurosci 3:31. PMC2776484",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/",
-      "quote": "the adult male human brain, at an average of 1.5 kg, has 86 billion neurons and 85 billion non-neuronal cells",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Total human brain neuron count \u2014 Herculano-Houzel 2009 (PMC2776484)",
+      "sub_claim": null,
+      "source": {
+        "name": "Herculano-Houzel S (2009) The human brain in numbers: a linearly scaled-up primate brain. Front Hum Neurosci 3:31. PMC2776484",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/",
+        "quote": "the adult male human brain, at an average of 1.5 kg, has 86 billion neurons and 85 billion non-neuronal cells"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "86 billion (86,000,000,000)",
+        "value_in_quote": true,
+        "quote_snippet": "the adult male human brain, at an average of 1.5 kg, has 86 billion neurons and "
       }
     },
     "B2": {
-      "source_key": "source_a_cerebellum",
-      "source_name": "Herculano-Houzel S (2009) The human brain in numbers: a linearly scaled-up primate brain. Front Hum Neurosci 3:31. PMC2776484",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/",
-      "quote": "the human cerebellum, at 154 g and 69 billion neurons, matches or even slightly exceeds the expected",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Cerebellum neuron count \u2014 Herculano-Houzel 2009 (PMC2776484)",
+      "sub_claim": null,
+      "source": {
+        "name": "Herculano-Houzel S (2009) The human brain in numbers: a linearly scaled-up primate brain. Front Hum Neurosci 3:31. PMC2776484",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/",
+        "quote": "the human cerebellum, at 154 g and 69 billion neurons, matches or even slightly exceeds the expected"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "69 billion (69,000,000,000)",
+        "value_in_quote": true,
+        "quote_snippet": "the human cerebellum, at 154 g and 69 billion neurons, matches or even slightly "
       }
     },
     "B3": {
-      "source_key": "source_b",
-      "source_name": "von Bartheld CS, Bahney J, Herculano-Houzel S (2016) The search for true numbers of neurons and glial cells in the human brain. J Comp Neurol 524(18):3865-3895. PMC5063692",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5063692/",
-      "quote": "the cerebellum (which contains about 80% of all neurons in the human brain; Azevedo et al. (2009))",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Independent statement: cerebellum ~80% of brain neurons \u2014 von Bartheld et al. 2016 review (PMC5063692)",
+      "sub_claim": null,
+      "source": {
+        "name": "von Bartheld CS, Bahney J, Herculano-Houzel S (2016) The search for true numbers of neurons and glial cells in the human brain. J Comp Neurol 524(18):3865-3895. PMC5063692",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5063692/",
+        "quote": "the cerebellum (which contains about 80% of all neurons in the human brain; Azevedo et al. (2009))"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "80%",
+        "value_in_quote": true,
+        "quote_snippet": "the cerebellum (which contains about 80% of all neurons in the human brain; Azev"
       }
     },
     "B4": {
-      "source_key": "source_c",
-      "source_name": "Herculano-Houzel S, Catania K, Manger PR, Kaas JH (2010) Coordinated scaling of cortical and cerebellar numbers of neurons. Front Neuroanat 4:12",
-      "url": "https://www.frontiersin.org/journals/neuroanatomy/articles/10.3389/fnana.2010.00012/full",
-      "quote": "the cerebellum holds 60% of all brain neurons in the mouse, small shrews, and marmoset; 70% in the rat, guinea pig and macaque; and 80% in the agouti, galago, and human",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "frontiersin.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "Cross-species comparison: 80% in human \u2014 Herculano-Houzel et al. 2010 Frontiers Neuroanatomy",
+      "sub_claim": null,
+      "source": {
+        "name": "Herculano-Houzel S, Catania K, Manger PR, Kaas JH (2010) Coordinated scaling of cortical and cerebellar numbers of neurons. Front Neuroanat 4:12",
+        "url": "https://www.frontiersin.org/journals/neuroanatomy/articles/10.3389/fnana.2010.00012/full",
+        "quote": "the cerebellum holds 60% of all brain neurons in the mouse, small shrews, and marmoset; 70% in the rat, guinea pig and macaque; and 80% in the agouti, galago, and human"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "frontiersin.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "80%",
+        "value_in_quote": true,
+        "quote_snippet": "the cerebellum holds 60% of all brain neurons in the mouse, small shrews, and ma"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "86 billion (86,000,000,000)",
-      "value_in_quote": true,
-      "quote_snippet": "the adult male human brain, at an average of 1.5 kg, has 86 billion neurons and "
     },
-    "B2": {
-      "value": "69 billion (69,000,000,000)",
-      "value_in_quote": true,
-      "quote_snippet": "the human cerebellum, at 154 g and 69 billion neurons, matches or even slightly "
-    },
-    "B3": {
-      "value": "80%",
-      "value_in_quote": true,
-      "quote_snippet": "the cerebellum (which contains about 80% of all neurons in the human brain; Azev"
-    },
-    "B4": {
-      "value": "80%",
-      "value_in_quote": true,
-      "quote_snippet": "the cerebellum holds 60% of all brain neurons in the mouse, small shrews, and ma"
+    "A1": {
+      "type": "computed",
+      "label": "Computed cerebellum neuron %: (69 billion / 86 billion) \u00d7 100",
+      "sub_claim": null,
+      "method": "cerebellum_neurons / total_neurons * 100",
+      "result": "80.2326",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -131,7 +139,8 @@
       ],
       "tolerance": 2.0,
       "mode": "absolute",
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Computed 80.23% vs B4 stated 80% (Herculano-Houzel 2010)",
@@ -141,7 +150,8 @@
       ],
       "tolerance": 2.0,
       "mode": "absolute",
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -170,7 +180,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "cerebellum_neurons_billions": 69.0,
     "total_neurons_billions": 86.0,

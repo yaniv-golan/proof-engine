@@ -1,26 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Algebraic proof: if x = 0.999... then x = 1",
-      "method": "Algebraic: x = 0.999..., 10x - x = 9, x = 1 (verified via Fraction(9,9))",
-      "result": "1.0"
-    },
-    "A2": {
-      "label": "Geometric series proof: sum of 9/10^k for k=1..inf equals 1",
-      "method": "Geometric series: a/(1-r) = (9/10)/(9/10) = 1 (verified via Fraction arithmetic)",
-      "result": "1.0"
-    },
-    "A3": {
-      "label": "Fraction proof: 1/3 = 0.333..., so 3 * (1/3) = 0.999... = 1",
-      "method": "Fraction identity: 3 * (1/3) = 3/3 = 1 (verified via Fraction arithmetic)",
-      "result": "1.0"
-    },
-    "A4": {
-      "label": "Numerical convergence: partial sums approach 1 with zero gap",
-      "method": "Numerical convergence: partial sums 1 - 10^(-n) -> 1 as n -> inf",
-      "result": "True (converges to 1)"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "0.999... (the repeating decimal 0.9 recurring)",
     "property": "value compared to 1",
@@ -29,6 +8,40 @@
     "threshold": 1
   },
   "claim_natural": "0.999... (with 9s repeating forever) is strictly less than 1.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Algebraic proof: if x = 0.999... then x = 1",
+      "sub_claim": null,
+      "method": "Algebraic: x = 0.999..., 10x - x = 9, x = 1 (verified via Fraction(9,9))",
+      "result": "1.0",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Geometric series proof: sum of 9/10^k for k=1..inf equals 1",
+      "sub_claim": null,
+      "method": "Geometric series: a/(1-r) = (9/10)/(9/10) = 1 (verified via Fraction arithmetic)",
+      "result": "1.0",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Fraction proof: 1/3 = 0.333..., so 3 * (1/3) = 0.999... = 1",
+      "sub_claim": null,
+      "method": "Fraction identity: 3 * (1/3) = 3/3 = 1 (verified via Fraction arithmetic)",
+      "result": "1.0",
+      "depends_on": []
+    },
+    "A4": {
+      "type": "computed",
+      "label": "Numerical convergence: partial sums approach 1 with zero gap",
+      "sub_claim": null,
+      "method": "Numerical convergence: partial sums 1 - 10^(-n) -> 1 as n -> inf",
+      "result": "True (converges to 1)",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Algebraic (A1) vs geometric series (A2)",
@@ -36,7 +49,8 @@
         "1.0",
         "1.0"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Algebraic (A1) vs fraction identity (A3)",
@@ -44,7 +58,8 @@
         "1.0",
         "1.0"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Geometric series (A2) vs numerical convergence (A4)",
@@ -52,7 +67,8 @@
         "1.0",
         "1.0 (limit)"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -81,7 +97,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "value_of_repeating_decimal": 1.0,
     "threshold": 1,

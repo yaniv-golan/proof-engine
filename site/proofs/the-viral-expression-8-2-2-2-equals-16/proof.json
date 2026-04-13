@@ -1,21 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Left-to-right PEMDAS evaluation of 8 \u00f7 2(2+2): (8\u00f72)\u00d7(2+2)",
-      "method": "(8\u00f72)\u00d7(2+2) = 4\u00d74 \u2014 left-to-right PEMDAS",
-      "result": "16.0"
-    },
-    "A2": {
-      "label": "Algebraic rearrangement cross-check using commutativity: 8\u00d7(2+2)\u00f72",
-      "method": "8\u00d7(2+2)\u00f72 = 32\u00f72 \u2014 algebraic rearrangement via commutativity",
-      "result": "16.0"
-    },
-    "A3": {
-      "label": "Alternative convention (implicit multiplication higher precedence): 8\u00f7[2\u00d7(2+2)]",
-      "method": "8\u00f7[2\u00d7(2+2)] = 8\u00f78 \u2014 implicit multiplication convention",
-      "result": "1.0"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "8 \u00f7 2(2+2)",
     "property": "arithmetic value under standard PEMDAS/BODMAS order of operations",
@@ -24,6 +8,32 @@
     "threshold": 16
   },
   "claim_natural": "The viral expression \"8 \u00f7 2(2+2)\" equals 16",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Left-to-right PEMDAS evaluation of 8 \u00f7 2(2+2): (8\u00f72)\u00d7(2+2)",
+      "sub_claim": null,
+      "method": "(8\u00f72)\u00d7(2+2) = 4\u00d74 \u2014 left-to-right PEMDAS",
+      "result": "16.0",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Algebraic rearrangement cross-check using commutativity: 8\u00d7(2+2)\u00f72",
+      "sub_claim": null,
+      "method": "8\u00d7(2+2)\u00f72 = 32\u00f72 \u2014 algebraic rearrangement via commutativity",
+      "result": "16.0",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Alternative convention (implicit multiplication higher precedence): 8\u00f7[2\u00d7(2+2)]",
+      "sub_claim": null,
+      "method": "8\u00f7[2\u00d7(2+2)] = 8\u00f78 \u2014 implicit multiplication convention",
+      "result": "1.0",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Primary (left-to-right PEMDAS: (8\u00f72)\u00d74) vs. algebraic rearrangement (8\u00d74\u00f72): different computation order, same result",
@@ -31,7 +41,8 @@
         "16.0",
         "16.0"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Primary vs. Python built-in evaluation of '8 / 2 * (2 + 2)' (CPython left-to-right IEEE 754 semantics)",
@@ -39,7 +50,8 @@
         "16.0",
         "16.0"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -62,7 +74,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "primary_result": 16.0,
     "alternative_result_under_implicit_convention": 1.0,

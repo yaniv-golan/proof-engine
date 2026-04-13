@@ -1,36 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "iea_ai_datacenter",
-      "label": "IEA 2025: typical AI-focused data centre = 100,000 US-equivalent households"
-    },
-    "B2": {
-      "key": "eia_household",
-      "label": "EIA: US average household electricity = 10,500 kWh/year"
-    },
-    "B3": {
-      "key": "nauru_electricity",
-      "label": "WorldData.info: Nauru total electricity = 37.89 million kWh/year (= 37.89 GWh)"
-    },
-    "B4": {
-      "key": "iceland_electricity",
-      "label": "WorldData.info: Iceland total electricity = 19.58 billion kWh/year (= 19,580 GWh)"
-    },
-    "B5": {
-      "key": "sciencedaily_ai_iceland",
-      "label": "Harding & Moreno-Cruz 2025 (ERL): US AI electricity comparable to Iceland's energy"
-    },
-    "A1": {
-      "label": "Typical AI data centre annual electricity (GWh): 100,000 \u00d7 10,500 kWh \u00f7 1,000,000",
-      "method": "100,000 households (B1) \u00d7 10,500 kWh/household (B2) \u00f7 1,000,000 kWh/GWh",
-      "result": "1050.00 GWh"
-    },
-    "A2": {
-      "label": "Cross-check: Iceland electricity from B4 (GWh) \u2014 upper bound for US AI electricity per B5",
-      "method": "Iceland electricity (B4) used as proxy for US AI electricity per Harding & Moreno-Cruz 2025 (B5)",
-      "result": "19,580 GWh"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "typical AI-focused data centre (dedicated to training and running frontier AI models)",
     "property": "annual electricity consumption in GWh",
@@ -39,113 +8,162 @@
     "threshold": 37.89
   },
   "claim_natural": "Training and running today's frontier AI models consumes more electricity than entire small countries.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "iea_ai_datacenter",
-      "source_name": "International Energy Agency (IEA), Energy and AI 2025 report, Executive Summary",
-      "url": "https://www.iea.org/reports/energy-and-ai/executive-summary",
-      "quote": "A typical AI-focused data centre consumes as much electricity as 100 000 households, but the largest ones under construction today will consume 20 times as much.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "iea.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "IEA 2025: typical AI-focused data centre = 100,000 US-equivalent households",
+      "sub_claim": null,
+      "source": {
+        "name": "International Energy Agency (IEA), Energy and AI 2025 report, Executive Summary",
+        "url": "https://www.iea.org/reports/energy-and-ai/executive-summary",
+        "quote": "A typical AI-focused data centre consumes as much electricity as 100 000 households, but the largest ones under construction today will consume 20 times as much."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "iea.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "100000",
+        "value_in_quote": false,
+        "quote_snippet": "A typical AI-focused data centre consumes as much electricity as 100 000 househo"
       }
     },
     "B2": {
-      "source_key": "eia_household",
-      "source_name": "U.S. Energy Information Administration (EIA), Electricity Use in Homes",
-      "url": "https://www.eia.gov/energyexplained/use-of-energy/electricity-use-in-homes.php",
-      "quote": "The average U.S. household consumes about 10,500 kilowatthours (kWh) of electricity per year.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "eia.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "EIA: US average household electricity = 10,500 kWh/year",
+      "sub_claim": null,
+      "source": {
+        "name": "U.S. Energy Information Administration (EIA), Electricity Use in Homes",
+        "url": "https://www.eia.gov/energyexplained/use-of-energy/electricity-use-in-homes.php",
+        "quote": "The average U.S. household consumes about 10,500 kilowatthours (kWh) of electricity per year."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "eia.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "10500.0",
+        "value_in_quote": false,
+        "quote_snippet": "The average U.S. household consumes about 10,500 kilowatthours (kWh) of electric"
       }
     },
     "B3": {
-      "source_key": "nauru_electricity",
-      "source_name": "WorldData.info: Nauru Energy Consumption",
-      "url": "https://www.worlddata.info/oceania/nauru/energy-consumption.php",
-      "quote": "The most important figure in the energy balance of Nauru is the total consumption of 37.89 million kWh of electric energy per year.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "worlddata.info",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "WorldData.info: Nauru total electricity = 37.89 million kWh/year (= 37.89 GWh)",
+      "sub_claim": null,
+      "source": {
+        "name": "WorldData.info: Nauru Energy Consumption",
+        "url": "https://www.worlddata.info/oceania/nauru/energy-consumption.php",
+        "quote": "The most important figure in the energy balance of Nauru is the total consumption of 37.89 million kWh of electric energy per year."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "worlddata.info",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "37.89 GWh",
+        "value_in_quote": false,
+        "quote_snippet": "The most important figure in the energy balance of Nauru is the total consumptio"
       }
     },
     "B4": {
-      "source_key": "iceland_electricity",
-      "source_name": "WorldData.info: Iceland Energy Consumption",
-      "url": "https://www.worlddata.info/europe/iceland/energy-consumption.php",
-      "quote": "The most important figure in the energy balance of Iceland is the total consumption of 19.58 billion kWh of electric energy per year.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "worlddata.info",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "WorldData.info: Iceland total electricity = 19.58 billion kWh/year (= 19,580 GWh)",
+      "sub_claim": null,
+      "source": {
+        "name": "WorldData.info: Iceland Energy Consumption",
+        "url": "https://www.worlddata.info/europe/iceland/energy-consumption.php",
+        "quote": "The most important figure in the energy balance of Iceland is the total consumption of 19.58 billion kWh of electric energy per year."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "worlddata.info",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "19,580 GWh",
+        "value_in_quote": false,
+        "quote_snippet": "The most important figure in the energy balance of Iceland is the total consumpt"
       }
     },
     "B5": {
-      "source_key": "sciencedaily_ai_iceland",
-      "source_name": "ScienceDaily: Harding & Moreno-Cruz, 'Watts and bots: the energy implications of AI adoption', Environmental Research Letters Vol. 20 No. 11 (2025)",
-      "url": "https://www.sciencedaily.com/releases/2026/03/260318033103.htm",
-      "quote": "AI-related electricity use in the U.S. is comparable to the total energy consumption of Iceland.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "sciencedaily.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Harding & Moreno-Cruz 2025 (ERL): US AI electricity comparable to Iceland's energy",
+      "sub_claim": null,
+      "source": {
+        "name": "ScienceDaily: Harding & Moreno-Cruz, 'Watts and bots: the energy implications of AI adoption', Environmental Research Letters Vol. 20 No. 11 (2025)",
+        "url": "https://www.sciencedaily.com/releases/2026/03/260318033103.htm",
+        "quote": "AI-related electricity use in the U.S. is comparable to the total energy consumption of Iceland."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "sciencedaily.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "100000",
-      "description": "AI-focused data centre household equivalent",
-      "quote_snippet": "A typical AI-focused data centre consumes as much electricity as 100 000 househo"
     },
-    "B2": {
-      "value": "10500.0",
-      "description": "US average household electricity kWh/year",
-      "quote_snippet": "The average U.S. household consumes about 10,500 kilowatthours (kWh) of electric"
+    "A1": {
+      "type": "computed",
+      "label": "Typical AI data centre annual electricity (GWh): 100,000 \u00d7 10,500 kWh \u00f7 1,000,000",
+      "sub_claim": null,
+      "method": "100,000 households (B1) \u00d7 10,500 kWh/household (B2) \u00f7 1,000,000 kWh/GWh",
+      "result": "1050.00 GWh",
+      "depends_on": []
     },
-    "B3": {
-      "value": "37.89 GWh",
-      "description": "Nauru annual electricity in GWh",
-      "quote_snippet": "The most important figure in the energy balance of Nauru is the total consumptio"
-    },
-    "B4": {
-      "value": "19,580 GWh",
-      "description": "Iceland annual electricity in GWh",
-      "quote_snippet": "The most important figure in the energy balance of Iceland is the total consumpt"
+    "A2": {
+      "type": "computed",
+      "label": "Cross-check: Iceland electricity from B4 (GWh) \u2014 upper bound for US AI electricity per B5",
+      "sub_claim": null,
+      "method": "Iceland electricity (B4) used as proxy for US AI electricity per Harding & Moreno-Cruz 2025 (B5)",
+      "result": "19,580 GWh",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -157,7 +175,8 @@
         "37.89 GWh (Nauru)"
       ],
       "agreement": true,
-      "ratio": 27.7
+      "ratio": 27.7,
+      "fact_ids": []
     },
     {
       "description": "Path 2 (Harding & Moreno-Cruz 2025 + Iceland data): US AI electricity vs Nauru",
@@ -167,7 +186,8 @@
         "37.89 GWh (Nauru)"
       ],
       "agreement": true,
-      "ratio": 517.0
+      "ratio": 517.0,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -196,7 +216,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "ai_dc_gwh": 1050.0,
     "nauru_gwh": 37.89,

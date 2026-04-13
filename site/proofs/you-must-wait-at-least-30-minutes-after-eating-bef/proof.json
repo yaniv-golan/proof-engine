@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "duke_health",
-      "label": "Duke Health: myth that blood diversion causes dangerous cramps is unfounded"
-    },
-    "B2": {
-      "key": "uams_health",
-      "label": "UAMS Health: no medical evidence supports the myth"
-    },
-    "B3": {
-      "key": "britannica",
-      "label": "Britannica: science does not support the food-drowning link"
-    },
-    "B4": {
-      "key": "ilsf",
-      "label": "International Life Saving Federation: no evidence eating before swimming increases drowning risk"
-    },
-    "A1": {
-      "label": "Verified source count meeting disproof threshold",
-      "method": "count(verified citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "swimming after eating",
     "property": "whether swimming within 30 minutes of eating causes dangerous cramps",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "You must wait at least 30 minutes after eating before swimming or you will suffer dangerous cramps.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "duke_health",
-      "source_name": "Duke Health (Duke University Health System)",
-      "url": "https://www.dukehealth.org/blog/myth-or-fact-should-you-wait-swim-after-eating",
-      "quote": "the blood going to your digestive tract after eating steals the blood needed to keep your arms and legs pumping during swimming is unfounded",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "dukehealth.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Duke Health: myth that blood diversion causes dangerous cramps is unfounded",
+      "sub_claim": null,
+      "source": {
+        "name": "Duke Health (Duke University Health System)",
+        "url": "https://www.dukehealth.org/blog/myth-or-fact-should-you-wait-swim-after-eating",
+        "quote": "the blood going to your digestive tract after eating steals the blood needed to keep your arms and legs pumping during swimming is unfounded"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "dukehealth.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the blood going to your digestive tract after eating steals the blood needed to "
       }
     },
     "B2": {
-      "source_key": "uams_health",
-      "source_name": "UAMS Health (University of Arkansas for Medical Sciences)",
-      "url": "https://uamshealth.com/medical-myths/do-you-have-to-wait-30-minutes-after-eating-before-swimming/",
-      "quote": "there is no medical evidence to support the myth",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "uamshealth.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "UAMS Health: no medical evidence supports the myth",
+      "sub_claim": null,
+      "source": {
+        "name": "UAMS Health (University of Arkansas for Medical Sciences)",
+        "url": "https://uamshealth.com/medical-myths/do-you-have-to-wait-30-minutes-after-eating-before-swimming/",
+        "quote": "there is no medical evidence to support the myth"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "uamshealth.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "there is no medical evidence to support the myth"
       }
     },
     "B3": {
-      "source_key": "britannica",
-      "source_name": "Encyclopaedia Britannica",
-      "url": "https://www.britannica.com/story/is-it-really-dangerous-to-swim-after-eating",
-      "quote": "The chances of suffering a stomach cramp while swimming are remote, regardless of when the swimmer last ate",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "britannica.com",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Britannica: science does not support the food-drowning link",
+      "sub_claim": null,
+      "source": {
+        "name": "Encyclopaedia Britannica",
+        "url": "https://www.britannica.com/story/is-it-really-dangerous-to-swim-after-eating",
+        "quote": "The chances of suffering a stomach cramp while swimming are remote, regardless of when the swimmer last ate"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "britannica.com",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The chances of suffering a stomach cramp while swimming are remote, regardless o"
       }
     },
     "B4": {
-      "source_key": "ilsf",
-      "source_name": "International Life Saving Federation (ILSF)",
-      "url": "https://www.ilsf.org/wp-content/uploads/2018/11/MPS-18-2014-Eating-before-Swimming.pdf",
-      "quote": "eating before swimming does not increase the risk of drowning",
-      "status": "not_found",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "wayback",
-      "credibility": {
-        "domain": "ilsf.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "International Life Saving Federation: no evidence eating before swimming increases drowning risk",
+      "sub_claim": null,
+      "source": {
+        "name": "International Life Saving Federation (ILSF)",
+        "url": "https://www.ilsf.org/wp-content/uploads/2018/11/MPS-18-2014-Eating-before-Swimming.pdf",
+        "quote": "eating before swimming does not increase the risk of drowning"
+      },
+      "verification": {
+        "status": "not_found",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "wayback",
+        "credibility": {
+          "domain": "ilsf.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "not_found",
+        "value_in_quote": false,
+        "quote_snippet": "eating before swimming does not increase the risk of drowning"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the blood going to your digestive tract after eating steals the blood needed to "
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "there is no medical evidence to support the myth"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The chances of suffering a stomach cramp while swimming are remote, regardless o"
-    },
-    "B4": {
-      "value": "not_found",
-      "value_in_quote": false,
-      "quote_snippet": "eating before swimming does not increase the risk of drowning"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count meeting disproof threshold",
+      "sub_claim": null,
+      "method": "count(verified citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "britannica": "verified",
         "ilsf": "not_found"
       },
-      "independence_note": "Sources are from different institutions: Duke University Health System, University of Arkansas for Medical Sciences, Encyclopaedia Britannica, and the International Life Saving Federation. These represent independent medical, academic, and reference organizations."
+      "independence_note": "Sources are from different institutions: Duke University Health System, University of Arkansas for Medical Sciences, Encyclopaedia Britannica, and the International Life Saving Federation. These represent independent medical, academic, and reference organizations.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED (with unverified citations)",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": true,
+    "qualifier": "unverified_citations",
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

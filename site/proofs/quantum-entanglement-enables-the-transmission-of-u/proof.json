@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_a",
-      "label": "Wikipedia: No-communication theorem \u2014 theorem statement"
-    },
-    "B2": {
-      "key": "source_b",
-      "label": "Caltech Science Exchange \u2014 entanglement does not enable FTL communication"
-    },
-    "B3": {
-      "key": "source_c",
-      "label": "Wikipedia: Faster-than-light communication \u2014 scientific consensus"
-    },
-    "B4": {
-      "key": "source_d",
-      "label": "QSNP (EU Quantum Flagship) \u2014 debunking FTL entanglement myth"
-    },
-    "A1": {
-      "label": "Verified source count meeting disproof threshold",
-      "method": "count(verified citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "quantum entanglement with pre-agreed measurement basis",
     "property": "number of independent authoritative sources confirming this is impossible",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Quantum entanglement enables the transmission of usable information faster than the speed of light when the distant parties pre-agree on a measurement basis.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_a",
-      "source_name": "Wikipedia \u2014 No-communication theorem",
-      "url": "https://en.wikipedia.org/wiki/No-communication_theorem",
-      "quote": "It asserts that during the measurement of an entangled quantum state, it is impossible for one observer to transmit information to another observer, regardless of their spatial separation.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: No-communication theorem \u2014 theorem statement",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia \u2014 No-communication theorem",
+        "url": "https://en.wikipedia.org/wiki/No-communication_theorem",
+        "quote": "It asserts that during the measurement of an entangled quantum state, it is impossible for one observer to transmit information to another observer, regardless of their spatial separation."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "It asserts that during the measurement of an entangled quantum state, it is impo"
       }
     },
     "B2": {
-      "source_key": "source_b",
-      "source_name": "Caltech Science Exchange \u2014 Quantum Entanglement",
-      "url": "https://scienceexchange.caltech.edu/topics/quantum-science-explained/entanglement",
-      "quote": "Experiments have shown that this is not true, nor can quantum physics be used to send faster-than-light communications.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "caltech.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "Caltech Science Exchange \u2014 entanglement does not enable FTL communication",
+      "sub_claim": null,
+      "source": {
+        "name": "Caltech Science Exchange \u2014 Quantum Entanglement",
+        "url": "https://scienceexchange.caltech.edu/topics/quantum-science-explained/entanglement",
+        "quote": "Experiments have shown that this is not true, nor can quantum physics be used to send faster-than-light communications."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "caltech.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Experiments have shown that this is not true, nor can quantum physics be used to"
       }
     },
     "B3": {
-      "source_key": "source_c",
-      "source_name": "Wikipedia \u2014 Faster-than-light communication",
-      "url": "https://en.wikipedia.org/wiki/Faster-than-light_communication",
-      "quote": "The current scientific consensus is that faster-than-light communication is not possible, and to date it has not been achieved in any experiment.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Faster-than-light communication \u2014 scientific consensus",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia \u2014 Faster-than-light communication",
+        "url": "https://en.wikipedia.org/wiki/Faster-than-light_communication",
+        "quote": "The current scientific consensus is that faster-than-light communication is not possible, and to date it has not been achieved in any experiment."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The current scientific consensus is that faster-than-light communication is not "
       }
     },
     "B4": {
-      "source_key": "source_d",
-      "source_name": "QSNP (EU Quantum Flagship) \u2014 Debunking quantum myths",
-      "url": "https://qsnp.eu/debunking-quantum-myths-entanglement-allows-faster-than-light-communication/",
-      "quote": "The catch is that we are not actually sending any information.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "qsnp.eu",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "QSNP (EU Quantum Flagship) \u2014 debunking FTL entanglement myth",
+      "sub_claim": null,
+      "source": {
+        "name": "QSNP (EU Quantum Flagship) \u2014 Debunking quantum myths",
+        "url": "https://qsnp.eu/debunking-quantum-myths-entanglement-allows-faster-than-light-communication/",
+        "quote": "The catch is that we are not actually sending any information."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "qsnp.eu",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The catch is that we are not actually sending any information."
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "It asserts that during the measurement of an entangled quantum state, it is impo"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Experiments have shown that this is not true, nor can quantum physics be used to"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The current scientific consensus is that faster-than-light communication is not "
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The catch is that we are not actually sending any information."
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count meeting disproof threshold",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "source_c": "verified",
         "source_d": "verified"
       },
-      "independence_note": "Sources are from 4 different institutions/publications: Wikipedia (community encyclopedia citing physics literature), Caltech (university research institution), Wikipedia FTL article (separate article with distinct references), QSNP/EU Quantum Flagship (European research consortium). All trace to independent primary physics research and the mathematically proven no-communication theorem."
+      "independence_note": "Sources are from 4 different institutions/publications: Wikipedia (community encyclopedia citing physics literature), Caltech (university research institution), Wikipedia FTL article (separate article with distinct references), QSNP/EU Quantum Flagship (European research consortium). All trace to independent primary physics research and the mathematically proven no-communication theorem.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

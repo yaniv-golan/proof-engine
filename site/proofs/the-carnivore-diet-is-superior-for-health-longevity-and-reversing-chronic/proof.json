@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "pmcreview",
-      "label": "PMC/Nutrients Scoping Review (2025): carnivore diet evidence quality rated very limited; long-term adherence cannot be recommended"
-    },
-    "B2": {
-      "key": "bluezones",
-      "label": "Blue Zones / Adventist Health Study: plant-eating populations outlive meat-eating counterparts by up to eight years"
-    },
-    "B3": {
-      "key": "who",
-      "label": "WHO Healthy Diet Fact Sheet: recommends shift toward plant-based protein away from red meat for health benefits"
-    },
-    "B4": {
-      "key": "nutritionstudies",
-      "label": "T. Colin Campbell Center for Nutrition Studies: large-scale observational studies associate plant-predominant diets with lower chronic disease incidence"
-    },
-    "A1": {
-      "label": "Verified source count: authoritative sources contradicting carnivore superiority claim",
-      "method": "count(verified citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "carnivore diet",
     "property": "demonstrably superior to plant-inclusive diets for health, longevity, and chronic disease reversal, as established by the scientific evidence base",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "The carnivore diet is superior for health, longevity, and reversing chronic disease compared to plant-inclusive diets.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "pmcreview",
-      "source_name": "Nutrients (MDPI) / PMC — Carnivore Diet: A Scoping Review of the Current Evidence, Potential Benefits and Risks (2025)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12845189/",
-      "quote": "the quality of evidence is very limited due to small sample sizes, short study durations, and the absence of control groups",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PMC/Nutrients Scoping Review (2025): carnivore diet evidence quality rated very limited; long-term adherence cannot be recommended",
+      "sub_claim": null,
+      "source": {
+        "name": "Nutrients (MDPI) / PMC \u2014 Carnivore Diet: A Scoping Review of the Current Evidence, Potential Benefits and Risks (2025)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12845189/",
+        "quote": "the quality of evidence is very limited due to small sample sizes, short study durations, and the absence of control groups"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the quality of evidence is very limited due to small sample sizes, short study d"
       }
     },
     "B2": {
-      "source_key": "bluezones",
-      "source_name": "Blue Zones — Blue Zones Diet: Food Secrets of the World's Longest-Lived People (reporting on Adventist Health Study findings)",
-      "url": "https://www.bluezones.com/2020/07/blue-zones-diet-food-secrets-of-the-worlds-longest-lived-people/",
-      "quote": "Research suggests that 30-year-old vegetarian Adventists will likely outlive their meat-eating counterparts by as many as eight years.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "bluezones.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Blue Zones / Adventist Health Study: plant-eating populations outlive meat-eating counterparts by up to eight years",
+      "sub_claim": null,
+      "source": {
+        "name": "Blue Zones \u2014 Blue Zones Diet: Food Secrets of the World's Longest-Lived People (reporting on Adventist Health Study findings)",
+        "url": "https://www.bluezones.com/2020/07/blue-zones-diet-food-secrets-of-the-worlds-longest-lived-people/",
+        "quote": "Research suggests that 30-year-old vegetarian Adventists will likely outlive their meat-eating counterparts by as many as eight years."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "bluezones.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Research suggests that 30-year-old vegetarian Adventists will likely outlive the"
       }
     },
     "B3": {
-      "source_key": "who",
-      "source_name": "World Health Organization — Healthy Diet Fact Sheet",
-      "url": "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
-      "quote": "For many adults, a shift towards more plant-based sources of protein may bring health benefits, particularly when the shift is away from red meat.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "who.int",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Known government/intergovernmental organization"
+      "type": "empirical",
+      "label": "WHO Healthy Diet Fact Sheet: recommends shift toward plant-based protein away from red meat for health benefits",
+      "sub_claim": null,
+      "source": {
+        "name": "World Health Organization \u2014 Healthy Diet Fact Sheet",
+        "url": "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
+        "quote": "For many adults, a shift towards more plant-based sources of protein may bring health benefits, particularly when the shift is away from red meat."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "who.int",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Known government/intergovernmental organization"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "For many adults, a shift towards more plant-based sources of protein may bring h"
       }
     },
     "B4": {
-      "source_key": "nutritionstudies",
-      "source_name": "T. Colin Campbell Center for Nutrition Studies — The Carnivore Diet: What Does the Evidence Say?",
-      "url": "https://nutritionstudies.org/the-carnivore-diet-what-does-the-evidence-say/",
-      "quote": "countless large-scale observational studies consistently show that plant-predominant diets are associated with a lower incidence and mortality of numerous chronic diseases",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nutritionstudies.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "T. Colin Campbell Center for Nutrition Studies: large-scale observational studies associate plant-predominant diets with lower chronic disease incidence",
+      "sub_claim": null,
+      "source": {
+        "name": "T. Colin Campbell Center for Nutrition Studies \u2014 The Carnivore Diet: What Does the Evidence Say?",
+        "url": "https://nutritionstudies.org/the-carnivore-diet-what-does-the-evidence-say/",
+        "quote": "countless large-scale observational studies consistently show that plant-predominant diets are associated with a lower incidence and mortality of numerous chronic diseases"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nutritionstudies.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "countless large-scale observational studies consistently show that plant-predomi"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the quality of evidence is very limited due to small sample sizes, short study d"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Research suggests that 30-year-old vegetarian Adventists will likely outlive the"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "For many adults, a shift towards more plant-based sources of protein may bring h"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "countless large-scale observational studies consistently show that plant-predomi"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count: authoritative sources contradicting carnivore superiority claim",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "who": "verified",
         "nutritionstudies": "verified"
       },
-      "independence_note": "Sources span: peer-reviewed journal (PMC/Nutrients scoping review), population longevity research (Blue Zones / Adventist Health Study), international health authority (WHO), and nutrition research institution — representing distinct methodologies, institutions, and datasets."
+      "independence_note": "Sources span: peer-reviewed journal (PMC/Nutrients scoping review), population longevity research (Blue Zones / Adventist Health Study), international health authority (WHO), and nutrition research institution \u2014 representing distinct methodologies, institutions, and datasets.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

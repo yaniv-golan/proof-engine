@@ -1,32 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_source_a",
-      "label": "Azad et al. 2017 CMAJ — systematic review/meta-analysis finding observational association between NNS consumption and weight gain plus metabolic outcomes across 30 cohort studies (405,907 participants)"
-    },
-    "B2": {
-      "key": "sc1_source_b",
-      "label": "Steffen et al. 2023 Int J Obesity (CARDIA Study) — 25-year prospective cohort (N=3,088), aspartame and saccharin positively associated with adipose tissue volumes and incident obesity"
-    },
-    "B3": {
-      "key": "sc1_source_c",
-      "label": "Kuk & Brown 2016 APNM — NHANES III cross-sectional study (N=2,856), aspartame consumption associated with greater obesity-related glucose intolerance"
-    },
-    "B4": {
-      "key": "sc2_source_a",
-      "label": "Suez et al. 2014 Nature — proposed gut-microbiome mechanism for NAS-induced glucose intolerance (primarily mouse model, limited human data; insufficient for SC2 causal threshold)"
-    },
-    "A1": {
-      "label": "SC1 confirmed source count",
-      "method": "count(verified sc1 citations) = 3",
-      "result": "3"
-    },
-    "A2": {
-      "label": "SC2 confirmed source count",
-      "method": "count(verified sc2 citations) = 1",
-      "result": "1"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "artificial sweeteners, specifically aspartame and sucralose",
     "sub_claims": [
@@ -47,99 +20,137 @@
     ],
     "compound_operator": "AND",
     "proof_direction": "affirm",
-    "operator_note": "Both sub-claims must hold for the compound claim to be PROVED. SC1 (association) and SC2 (causation) are logically independent: an association can hold in observational data without establishing causation. The dominant confound in observational studies is reverse causality — people who are already overweight or at metabolic risk preferentially choose diet/low-calorie products, producing a spurious association without any causal mechanism operating from sweetener to disease. If only SC1 holds, the verdict is PARTIALLY VERIFIED with the notation that association is documented but causation is not established."
+    "operator_note": "Both sub-claims must hold for the compound claim to be PROVED. SC1 (association) and SC2 (causation) are logically independent: an association can hold in observational data without establishing causation. The dominant confound in observational studies is reverse causality \u2014 people who are already overweight or at metabolic risk preferentially choose diet/low-calorie products, producing a spurious association without any causal mechanism operating from sweetener to disease. If only SC1 holds, the verdict is PARTIALLY VERIFIED with the notation that association is documented but causation is not established."
   },
   "claim_natural": "Artificial sweeteners such as aspartame and sucralose promote weight gain and metabolic disease.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_source_a",
-      "source_name": "Azad et al. 2017, CMAJ — Nonnutritive sweeteners and cardiometabolic health (PMC)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5515645/",
-      "quote": "consumption of nonnutritive sweeteners was associated with increases in weight and waist circumference, and higher incidence of obesity, hypertension, metabolic syndrome, type 2 diabetes and cardiovascular events",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Azad et al. 2017 CMAJ \u2014 systematic review/meta-analysis finding observational association between NNS consumption and weight gain plus metabolic outcomes across 30 cohort studies (405,907 participants)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Azad et al. 2017, CMAJ \u2014 Nonnutritive sweeteners and cardiometabolic health (PMC)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5515645/",
+        "quote": "consumption of nonnutritive sweeteners was associated with increases in weight and waist circumference, and higher incidence of obesity, hypertension, metabolic syndrome, type 2 diabetes and cardiovascular events"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "consumption of nonnutritive sweeteners was associated with increases in weight a"
       }
     },
     "B2": {
-      "source_key": "sc1_source_b",
-      "source_name": "Steffen et al. 2023, International Journal of Obesity (CARDIA Study) — Long-term artificial sweetener intake and adiposity (PubMed)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/37443272/",
-      "quote": "ArtSw, including diet soda, was associated with greater risks of incident obesity",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Steffen et al. 2023 Int J Obesity (CARDIA Study) \u2014 25-year prospective cohort (N=3,088), aspartame and saccharin positively associated with adipose tissue volumes and incident obesity",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Steffen et al. 2023, International Journal of Obesity (CARDIA Study) \u2014 Long-term artificial sweetener intake and adiposity (PubMed)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37443272/",
+        "quote": "ArtSw, including diet soda, was associated with greater risks of incident obesity"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "ArtSw, including diet soda, was associated with greater risks of incident obesit"
       }
     },
     "B3": {
-      "source_key": "sc1_source_c",
-      "source_name": "Kuk & Brown 2016, Applied Physiology Nutrition and Metabolism — Aspartame intake and glucose tolerance in NHANES III (PubMed)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/27216413/",
-      "quote": "consumption of aspartame is associated with greater obesity-related impairments in glucose tolerance",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Kuk & Brown 2016 APNM \u2014 NHANES III cross-sectional study (N=2,856), aspartame consumption associated with greater obesity-related glucose intolerance",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Kuk & Brown 2016, Applied Physiology Nutrition and Metabolism \u2014 Aspartame intake and glucose tolerance in NHANES III (PubMed)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27216413/",
+        "quote": "consumption of aspartame is associated with greater obesity-related impairments in glucose tolerance"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "consumption of aspartame is associated with greater obesity-related impairments "
       }
     },
     "B4": {
-      "source_key": "sc2_source_a",
-      "source_name": "Suez et al. 2014, Nature — Artificial sweeteners induce glucose intolerance by altering the gut microbiota (PubMed)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/25231862/",
-      "quote": "consumption of commonly used NAS formulations drives the development of glucose intolerance through induction of compositional and functional alterations to the intestinal microbiota",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Suez et al. 2014 Nature \u2014 proposed gut-microbiome mechanism for NAS-induced glucose intolerance (primarily mouse model, limited human data; insufficient for SC2 causal threshold)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Suez et al. 2014, Nature \u2014 Artificial sweeteners induce glucose intolerance by altering the gut microbiota (PubMed)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25231862/",
+        "quote": "consumption of commonly used NAS formulations drives the development of glucose intolerance through induction of compositional and functional alterations to the intestinal microbiota"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "consumption of commonly used NAS formulations drives the development of glucose "
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "consumption of nonnutritive sweeteners was associated with increases in weight a"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "ArtSw, including diet soda, was associated with greater risks of incident obesit"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 confirmed source count",
+      "sub_claim": "SC1",
+      "method": "count(verified sc1 citations) = 3",
+      "result": "3",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "consumption of aspartame is associated with greater obesity-related impairments "
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "consumption of commonly used NAS formulations drives the development of glucose "
+    "A2": {
+      "type": "computed",
+      "label": "SC2 confirmed source count",
+      "sub_claim": "SC2",
+      "method": "count(verified sc2 citations) = 1",
+      "result": "1",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -152,7 +163,8 @@
         "sc1_source_b": "verified",
         "sc1_source_c": "verified"
       },
-      "independence_note": "Sources are from different research groups, institutions, and study designs: Azad 2017 (Canadian meta-analysis), Steffen 2023 (US CARDIA cohort), Kuk 2016 (US NHANES cross-sectional). Different populations, methods, and outcome measures."
+      "independence_note": "Sources are from different research groups, institutions, and study designs: Azad 2017 (Canadian meta-analysis), Steffen 2023 (US CARDIA cohort), Kuk 2016 (US NHANES cross-sectional). Different populations, methods, and outcome measures.",
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources consulted for causal evidence",
@@ -161,50 +173,42 @@
       "sources": {
         "sc2_source_a": "verified"
       },
-      "independence_note": "Only 1 SC2 source was identified (Suez 2014); it proposes a gut-microbiome mechanism but is primarily mouse-model data with a small human intervention (n=7). No RCTs, Mendelian randomization studies, or Bradford Hill analyses establishing causation in human populations were found. RCT meta-analyses (Miller 2014, McGlynn 2022, Qin 2025) actively contradict the causal claim."
-    }
-  ],
-  "sub_claim_results": [
-    {
-      "id": "SC1",
-      "n_confirming": 3,
-      "threshold": 3,
-      "holds": true
-    },
-    {
-      "id": "SC2",
-      "n_confirming": 1,
-      "threshold": 3,
-      "holds": false
+      "independence_note": "Only 1 SC2 source was identified (Suez 2014); it proposes a gut-microbiome mechanism but is primarily mouse-model data with a small human intervention (n=7). No RCTs, Mendelian randomization studies, or Bradford Hill analyses establishing causation in human populations were found. RCT meta-analyses (Miller 2014, McGlynn 2022, Qin 2025) actively contradict the causal claim.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Do RCTs show that artificial sweeteners CAUSE weight gain or metabolic disease?",
       "verification_performed": "Searched 'artificial sweeteners RCT weight gain randomized controlled trial meta-analysis'. Reviewed Miller & Perez 2014 (AJCN, 15 RCTs), McGlynn et al. 2022 (JAMA Network Open, network meta-analysis), Qin et al. 2025 (Frontiers in Nutrition, 9 RCTs, 1,457 participants), and Toews et al. 2019 (BMJ, pre-specified WHO systematic review).",
-      "finding": "Multiple meta-analyses of RCTs — the gold standard for causal inference — show no weight gain and no metabolic harm from artificial sweeteners: Miller & Perez 2014 found a modest weight DECREASE (−0.80 kg; 95% CI: −1.17, −0.43) from low-calorie sweetener use across 15 RCTs; McGlynn et al. 2022 found low/no-calorie sweetened beverages perform comparably to water when substituted for sugar-sweetened beverages; Qin et al. 2025 found no statistically significant differences in body weight, waist circumference, fasting blood glucose, HbA1c, insulin resistance, or blood pressure across 9 RCTs. This is strong counter-evidence against SC2 (causation) and is why SC2 fails to meet its threshold. SC1 (observational association) still holds independently.",
+      "finding": "Multiple meta-analyses of RCTs \u2014 the gold standard for causal inference \u2014 show no weight gain and no metabolic harm from artificial sweeteners: Miller & Perez 2014 found a modest weight DECREASE (\u22120.80 kg; 95% CI: \u22121.17, \u22120.43) from low-calorie sweetener use across 15 RCTs; McGlynn et al. 2022 found low/no-calorie sweetened beverages perform comparably to water when substituted for sugar-sweetened beverages; Qin et al. 2025 found no statistically significant differences in body weight, waist circumference, fasting blood glucose, HbA1c, insulin resistance, or blood pressure across 9 RCTs. This is strong counter-evidence against SC2 (causation) and is why SC2 fails to meet its threshold. SC1 (observational association) still holds independently.",
       "breaks_proof": false
     },
     {
       "question": "Is the observational association confounded by reverse causality (overweight/at-risk people choosing diet products)?",
       "verification_performed": "Searched 'artificial sweeteners reverse causality confounding observational studies'. Reviewed Azad et al. 2017 CMAJ limitations section, WHO 2023 guideline evidence grade, and Toews et al. 2019 BMJ on confounding.",
-      "finding": "Reverse causality is the dominant competing explanation for all observational associations. Azad et al. 2017 explicitly acknowledges: 'The cohort results may reflect confounding by indication, as people who are overweight or at risk of metabolic disease may choose nonnutritive sweeteners.' The WHO 2023 guideline classifies its recommendation as 'conditional' — the weakest WHO guidance tier — specifically because the evidence is predominantly observational and subject to this confound. This confirms why SC1 (association documented) does not imply SC2 (causation established), and is consistent with the PARTIALLY VERIFIED verdict.",
+      "finding": "Reverse causality is the dominant competing explanation for all observational associations. Azad et al. 2017 explicitly acknowledges: 'The cohort results may reflect confounding by indication, as people who are overweight or at risk of metabolic disease may choose nonnutritive sweeteners.' The WHO 2023 guideline classifies its recommendation as 'conditional' \u2014 the weakest WHO guidance tier \u2014 specifically because the evidence is predominantly observational and subject to this confound. This confirms why SC1 (association documented) does not imply SC2 (causation established), and is consistent with the PARTIALLY VERIFIED verdict.",
       "breaks_proof": false
     },
     {
       "question": "Does the evidence apply equally to both aspartame AND sucralose as named in the claim?",
       "verification_performed": "Searched 'sucralose weight gain adiposity evidence' and reviewed Steffen et al. 2023 (CARDIA) per-sweetener results for sucralose specifically.",
-      "finding": "The CARDIA 2023 study found that sucralose showed 'all ptrend > 0.05' — no significant association with adipose tissue volumes or incident obesity — while aspartame and saccharin showed significant positive associations. The observational association documented in SC1 is primarily driven by aspartame and saccharin, not sucralose. The claim names both aspartame and sucralose, but SC1 as verified is stronger for aspartame than sucralose. SC2 (causation) is not established for either compound. This weakens the claim's specificity for sucralose but does not break SC1 overall, which treats the class level association as confirmed by multiple independent studies.",
+      "finding": "The CARDIA 2023 study found that sucralose showed 'all ptrend > 0.05' \u2014 no significant association with adipose tissue volumes or incident obesity \u2014 while aspartame and saccharin showed significant positive associations. The observational association documented in SC1 is primarily driven by aspartame and saccharin, not sucralose. The claim names both aspartame and sucralose, but SC1 as verified is stronger for aspartame than sucralose. SC2 (causation) is not established for either compound. This weakens the claim's specificity for sucralose but does not break SC1 overall, which treats the class level association as confirmed by multiple independent studies.",
       "breaks_proof": false
     },
     {
       "question": "Does the WHO 2023 guideline establish that sweeteners CAUSE weight gain?",
       "verification_performed": "Reviewed the WHO May 2023 news release directly. Checked the evidence grade assigned. Also reviewed Harvard T.H. Chan School commentary (June 2023) on the WHO evidence review.",
-      "finding": "The WHO 2023 guideline recommends against NSS use for weight control but explicitly classifies this as a 'conditional' — not 'strong' — recommendation due to the predominantly observational evidence base. The WHO news page states: 'potential undesirable effects from long-term use of NSS, such as an increased risk of type 2 diabetes, cardiovascular diseases, and mortality in adults' — which is associational language, not causal. Harvard experts additionally noted that the WHO meta-analysis excluded large studies (>100,000 participants) showing beneficial substitution effects. The guideline does not establish causation and does not contradict the PARTIALLY VERIFIED verdict.",
+      "finding": "The WHO 2023 guideline recommends against NSS use for weight control but explicitly classifies this as a 'conditional' \u2014 not 'strong' \u2014 recommendation due to the predominantly observational evidence base. The WHO news page states: 'potential undesirable effects from long-term use of NSS, such as an increased risk of type 2 diabetes, cardiovascular diseases, and mortality in adults' \u2014 which is associational language, not causal. Harvard experts additionally noted that the WHO meta-analysis excluded large studies (>100,000 participants) showing beneficial substitution effects. The guideline does not establish causation and does not contradict the PARTIALLY VERIFIED verdict.",
       "breaks_proof": false
     }
   ],
-  "verdict": "PARTIALLY VERIFIED",
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_n_confirming": 3,
     "sc1_threshold": 3,
@@ -221,5 +225,19 @@
     "version": "1.3.1",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-01"
-  }
+  },
+  "sub_claim_results": [
+    {
+      "id": "SC1",
+      "n_confirming": 3,
+      "threshold": 3,
+      "holds": true
+    },
+    {
+      "id": "SC2",
+      "n_confirming": 1,
+      "threshold": 3,
+      "holds": false
+    }
+  ]
 }

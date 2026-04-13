@@ -27,6 +27,10 @@ def normalize_to_v3(proof_data: dict) -> dict:
     evidence = {}
 
     for fact_id, entry in fact_registry.items():
+        # Older proof format: fact_registry values may be plain strings (label only).
+        # Normalize to a dict so the rest of the logic is uniform.
+        if isinstance(entry, str):
+            entry = {"label": entry}
         if fact_id.startswith("S"):
             # Search fact (Type S)
             search_key = entry.get("key", "")

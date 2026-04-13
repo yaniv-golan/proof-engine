@@ -1,40 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_source_a",
-      "label": "SC1: Ludwig et al. 2018 (PLOS ONE / PMC) \u2014 Carbohydrate-Insulin Model: high-carb diet promotes hyperinsulinemia and fat cell deposition"
-    },
-    "B2": {
-      "key": "sc1_source_b",
-      "label": "SC1: Ludwig 2023 (Philosophical Transactions Royal Society B / PMC) \u2014 high glycemic carbs raise insulin-to-glucagon ratio, shift energy to adipose"
-    },
-    "B3": {
-      "key": "sc1_source_c",
-      "label": "SC1: Guyenet & Carlson 2015 (AJCN) \u2014 American Paradox: fat intake declined while obesity rose, indicating fat is not the main driver"
-    },
-    "B4": {
-      "key": "sc2_source_a",
-      "label": "SC2: Goldenberg et al. 2021 (BMJ systematic review / PMC) \u2014 low-carb diets achieve T2D remission at 6 months (NNT=3)"
-    },
-    "B5": {
-      "key": "sc2_source_b",
-      "label": "SC2: Feinman et al. 2015 (Nutrition) \u2014 carbohydrate restriction reliably reduces high blood glucose; evidence basis for first-approach in T2D"
-    },
-    "B6": {
-      "key": "sc2_source_c",
-      "label": "SC2: Moffa et al. 2021 (Nutrients / PMC) \u2014 high glycemic starch and sugar intake has harmful effects on glucose metabolism and T2D risk"
-    },
-    "A1": {
-      "label": "SC1: verified source count vs threshold",
-      "method": "count(verified SC1 citations) >= 3",
-      "result": "3 verified (threshold=3, holds=True)"
-    },
-    "A2": {
-      "label": "SC2: verified source count vs threshold",
-      "method": "count(verified SC2 citations) >= 3",
-      "result": "3 verified (threshold=3, holds=True)"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "dietary macronutrients",
     "sub_claims": [
@@ -57,140 +22,190 @@
     "operator_note": "Both SC1 and SC2 must hold for the compound claim to be verified. If SC1 holds but SC2 does not (or vice versa), the verdict is PARTIALLY VERIFIED. SC1 is the more contested sub-claim; SC2 has stronger mechanistic and clinical support."
   },
   "claim_natural": "Carbohydrates, not dietary fat, are the main driver of obesity and type-2 diabetes.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_source_a",
-      "source_name": "Ludwig DS et al. (2018). The Carbohydrate-Insulin Model of Obesity: Beyond 'Calories In, Calories Out'. JAMA Internal Medicine / PMC.",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6082688/",
-      "quote": "recent increases in the consumption of processed, high-glycemic load carbohydrates produce hormonal changes that promote calorie deposition in adipose tissue, exacerbate hunger and lower energy expenditure",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Ludwig et al. 2018 (PLOS ONE / PMC) \u2014 Carbohydrate-Insulin Model: high-carb diet promotes hyperinsulinemia and fat cell deposition",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Ludwig DS et al. (2018). The Carbohydrate-Insulin Model of Obesity: Beyond 'Calories In, Calories Out'. JAMA Internal Medicine / PMC.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6082688/",
+        "quote": "recent increases in the consumption of processed, high-glycemic load carbohydrates produce hormonal changes that promote calorie deposition in adipose tissue, exacerbate hunger and lower energy expenditure"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "recent increases in the consumption of processed, high-glycemic load carbohydrat"
       }
     },
     "B2": {
-      "source_key": "sc1_source_b",
-      "source_name": "Ludwig DS (2023). Carbohydrate-insulin model: does the conventional view of obesity reverse cause and effect? Philosophical Transactions of the Royal Society B / PMC.",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10475871/",
-      "quote": "A diet high in rapidly digestible carbohydrates raises the insulin-to-glucagon ratio, shifting energy partitioning towards storage in adipose",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Ludwig 2023 (Philosophical Transactions Royal Society B / PMC) \u2014 high glycemic carbs raise insulin-to-glucagon ratio, shift energy to adipose",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Ludwig DS (2023). Carbohydrate-insulin model: does the conventional view of obesity reverse cause and effect? Philosophical Transactions of the Royal Society B / PMC.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10475871/",
+        "quote": "A diet high in rapidly digestible carbohydrates raises the insulin-to-glucagon ratio, shifting energy partitioning towards storage in adipose"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "A diet high in rapidly digestible carbohydrates raises the insulin-to-glucagon r"
       }
     },
     "B3": {
-      "source_key": "sc1_source_c",
-      "source_name": "Heini AF & Weinsier RL (1997). Divergent trends in obesity and fat intake patterns: the American paradox. American Journal of Medicine.",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/9217594/",
-      "quote": "Reduced fat and calorie intake and frequent use of low-calorie food products have been associated with a paradoxical increase in the prevalence of obesity",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Guyenet & Carlson 2015 (AJCN) \u2014 American Paradox: fat intake declined while obesity rose, indicating fat is not the main driver",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Heini AF & Weinsier RL (1997). Divergent trends in obesity and fat intake patterns: the American paradox. American Journal of Medicine.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9217594/",
+        "quote": "Reduced fat and calorie intake and frequent use of low-calorie food products have been associated with a paradoxical increase in the prevalence of obesity"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Reduced fat and calorie intake and frequent use of low-calorie food products hav"
       }
     },
     "B4": {
-      "source_key": "sc2_source_a",
-      "source_name": "Goldenberg JZ et al. (2021). Efficacy and safety of low and very low carbohydrate diets for type 2 diabetes remission: systematic review and meta-analysis. BMJ / PMC.",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7804828/",
-      "quote": "On the basis of moderate to low certainty evidence, patients adhering to an LCD for six months may experience remission of diabetes without adverse consequences",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Goldenberg et al. 2021 (BMJ systematic review / PMC) \u2014 low-carb diets achieve T2D remission at 6 months (NNT=3)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Goldenberg JZ et al. (2021). Efficacy and safety of low and very low carbohydrate diets for type 2 diabetes remission: systematic review and meta-analysis. BMJ / PMC.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7804828/",
+        "quote": "On the basis of moderate to low certainty evidence, patients adhering to an LCD for six months may experience remission of diabetes without adverse consequences"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "On the basis of moderate to low certainty evidence, patients adhering to an LCD "
       }
     },
     "B5": {
-      "source_key": "sc2_source_b",
-      "source_name": "Feinman RD et al. (2015). Dietary carbohydrate restriction as the first approach in diabetes management: Critical review and evidence base. Nutrition 31(1):1-13. PubMed PMID 25287761.",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/25287761/",
-      "quote": "Dietary carbohydrate restriction reliably reduces high blood glucose, does not require weight loss (although is still best for weight loss), and leads to the reduction or elimination of medication",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Feinman et al. 2015 (Nutrition) \u2014 carbohydrate restriction reliably reduces high blood glucose; evidence basis for first-approach in T2D",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Feinman RD et al. (2015). Dietary carbohydrate restriction as the first approach in diabetes management: Critical review and evidence base. Nutrition 31(1):1-13. PubMed PMID 25287761.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25287761/",
+        "quote": "Dietary carbohydrate restriction reliably reduces high blood glucose, does not require weight loss (although is still best for weight loss), and leads to the reduction or elimination of medication"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Dietary carbohydrate restriction reliably reduces high blood glucose, does not r"
       }
     },
     "B6": {
-      "source_key": "sc2_source_c",
-      "source_name": "Moffa S et al. (2021). Type 2 Diabetes and Dietary Carbohydrate Intake of Adolescents and Young Adults: What Is the Impact of Different Choices? Nutrients / PMC.",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8537173/",
-      "quote": "high consumption of both glycemic starch and sugars may have a harmful effect on glucose metabolism",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Moffa et al. 2021 (Nutrients / PMC) \u2014 high glycemic starch and sugar intake has harmful effects on glucose metabolism and T2D risk",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Moffa S et al. (2021). Type 2 Diabetes and Dietary Carbohydrate Intake of Adolescents and Young Adults: What Is the Impact of Different Choices? Nutrients / PMC.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8537173/",
+        "quote": "high consumption of both glycemic starch and sugars may have a harmful effect on glucose metabolism"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "high consumption of both glycemic starch and sugars may have a harmful effect on"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "recent increases in the consumption of processed, high-glycemic load carbohydrat"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "A diet high in rapidly digestible carbohydrates raises the insulin-to-glucagon r"
+    "A1": {
+      "type": "computed",
+      "label": "SC1: verified source count vs threshold",
+      "sub_claim": "SC1",
+      "method": "count(verified SC1 citations) >= 3",
+      "result": "3 verified (threshold=3, holds=True)",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Reduced fat and calorie intake and frequent use of low-calorie food products hav"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "On the basis of moderate to low certainty evidence, patients adhering to an LCD "
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Dietary carbohydrate restriction reliably reduces high blood glucose, does not r"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "high consumption of both glycemic starch and sugars may have a harmful effect on"
+    "A2": {
+      "type": "computed",
+      "label": "SC2: verified source count vs threshold",
+      "sub_claim": "SC2",
+      "method": "count(verified SC2 citations) >= 3",
+      "result": "3 verified (threshold=3, holds=True)",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -203,7 +218,8 @@
         "sc1_source_b": "verified",
         "sc1_source_c": "verified"
       },
-      "independence_note": "Three independent publications: Ludwig et al. 2018 (JAMA Internal Medicine), Ludwig 2023 (Phil Trans Royal Society B), and Heini & Weinsier 1997 (AJCN). All are peer-reviewed; sources represent two distinct mechanistic arguments (CIM: carbs promote fat storage) and one epidemiological argument (fat reduction did not prevent obesity)."
+      "independence_note": "Three independent publications: Ludwig et al. 2018 (JAMA Internal Medicine), Ludwig 2023 (Phil Trans Royal Society B), and Heini & Weinsier 1997 (AJCN). All are peer-reviewed; sources represent two distinct mechanistic arguments (CIM: carbs promote fat storage) and one epidemiological argument (fat reduction did not prevent obesity).",
+      "fact_ids": []
     },
     {
       "description": "SC2 \u2014 Multiple independent sources consulted",
@@ -214,7 +230,8 @@
         "sc2_source_b": "verified",
         "sc2_source_c": "verified"
       },
-      "independence_note": "Three independent publications: Goldenberg et al. 2021 (BMJ systematic review/meta-analysis), Feinman et al. 2015 (Nutrition, clinical review), and Moffa et al. 2021 (Nutrients, observational/mechanistic). SC2 sources span systematic reviews, clinical evidence reviews, and mechanistic/epidemiological research \u2014 methodologically independent."
+      "independence_note": "Three independent publications: Goldenberg et al. 2021 (BMJ systematic review/meta-analysis), Feinman et al. 2015 (Nutrition, clinical review), and Moffa et al. 2021 (Nutrients, observational/mechanistic). SC2 sources span systematic reviews, clinical evidence reviews, and mechanistic/epidemiological research \u2014 methodologically independent.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -243,7 +260,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_n_confirmed": 3,
     "sc1_threshold": 3,

@@ -1,21 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Direct modular arithmetic: (2^32 + 1) mod 641",
-      "method": "Python exact integer arithmetic: (2**32 + 1) % 641",
-      "result": "0"
-    },
-    "A2": {
-      "label": "Integer division cross-check: 2^32 + 1 == 641 * quotient",
-      "method": "Integer division: divmod(2^32 + 1, 641) then verify 641 * quotient == 2^32 + 1",
-      "result": "quotient=6700417, remainder=0, 641*6700417=4294967297"
-    },
-    "A3": {
-      "label": "Algebraic decomposition via Euler's method",
-      "method": "Euler's algebraic decomposition: 641 = 5^4 + 2^4 = 5*2^7 + 1, therefore 5^4 \u2261 -2^4 and 5*2^7 \u2261 -1 (mod 641), combining gives 2^32 \u2261 -1 (mod 641)",
-      "result": "2^32 mod 641 = 640, so (2^32 + 1) mod 641 = 0"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "2^32 + 1 (the fifth Fermat number, F_5)",
     "property": "(2^32 + 1) mod 641",
@@ -24,6 +8,32 @@
     "threshold": 0
   },
   "claim_natural": "641 divides 2^{32} + 1 exactly.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Direct modular arithmetic: (2^32 + 1) mod 641",
+      "sub_claim": null,
+      "method": "Python exact integer arithmetic: (2**32 + 1) % 641",
+      "result": "0",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Integer division cross-check: 2^32 + 1 == 641 * quotient",
+      "sub_claim": null,
+      "method": "Integer division: divmod(2^32 + 1, 641) then verify 641 * quotient == 2^32 + 1",
+      "result": "quotient=6700417, remainder=0, 641*6700417=4294967297",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Algebraic decomposition via Euler's method",
+      "sub_claim": null,
+      "method": "Euler's algebraic decomposition: 641 = 5^4 + 2^4 = 5*2^7 + 1, therefore 5^4 \u2261 -2^4 and 5*2^7 \u2261 -1 (mod 641), combining gives 2^32 \u2261 -1 (mod 641)",
+      "result": "2^32 mod 641 = 640, so (2^32 + 1) mod 641 = 0",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Integer division: 641 * quotient reconstructs 2^32 + 1",
@@ -31,7 +41,8 @@
         "4294967297",
         "4294967297"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Euler's algebraic decomposition confirms 2^32 \u2261 -1 (mod 641)",
@@ -39,7 +50,8 @@
         "640",
         "640"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -62,7 +74,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "fermat_5": 4294967297,
     "remainder": 0,

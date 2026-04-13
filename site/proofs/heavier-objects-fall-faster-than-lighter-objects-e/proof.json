@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Newtonian derivation: acceleration = g, independent of mass",
-      "method": "Symbolic algebra (sympy): a = F/m = mg/m = g for any mass m",
-      "result": "a1 == a2 == g (acceleration independent of mass)"
-    },
-    "B1": {
-      "key": "source_a",
-      "label": "NASA Glenn: all objects free fall with same acceleration"
-    },
-    "B2": {
-      "key": "source_b",
-      "label": "NASA Science: Apollo 15 hammer-feather drop"
-    },
-    "B3": {
-      "key": "source_c",
-      "label": "Wikipedia: Weak Equivalence Principle"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Objects of different mass in a perfect vacuum (no air resistance)",
     "property": "Whether heavier objects have greater gravitational acceleration than lighter objects",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Heavier objects fall faster than lighter objects even in a perfect vacuum.",
-  "citations": {
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Newtonian derivation: acceleration = g, independent of mass",
+      "sub_claim": null,
+      "method": "Symbolic algebra (sympy): a = F/m = mg/m = g for any mass m",
+      "result": "a1 == a2 == g (acceleration independent of mass)",
+      "depends_on": []
+    },
     "B1": {
-      "source_key": "source_a",
-      "source_name": "NASA Glenn Research Center",
-      "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/free-fall-without-air-resistance/",
-      "quote": "So all objects, regardless of size or shape or weight, free fall with the same acceleration.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nasa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NASA Glenn: all objects free fall with same acceleration",
+      "sub_claim": null,
+      "source": {
+        "name": "NASA Glenn Research Center",
+        "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/free-fall-without-air-resistance/",
+        "quote": "So all objects, regardless of size or shape or weight, free fall with the same acceleration."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nasa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "So all objects, regardless of size or shape or weight, free fall with the same a"
       }
     },
     "B2": {
-      "source_key": "source_b",
-      "source_name": "NASA Science",
-      "url": "https://science.nasa.gov/resource/the-apollo-15-hammer-feather-drop/",
-      "quote": "Because they were essentially in a vacuum, there was no air resistance and the feather fell at the same rate as the hammer",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nasa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NASA Science: Apollo 15 hammer-feather drop",
+      "sub_claim": null,
+      "source": {
+        "name": "NASA Science",
+        "url": "https://science.nasa.gov/resource/the-apollo-15-hammer-feather-drop/",
+        "quote": "Because they were essentially in a vacuum, there was no air resistance and the feather fell at the same rate as the hammer"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nasa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Because they were essentially in a vacuum, there was no air resistance and the f"
       }
     },
     "B3": {
-      "source_key": "source_c",
-      "source_name": "Wikipedia: Equivalence Principle",
-      "url": "https://en.wikipedia.org/wiki/Equivalence_principle",
-      "quote": "in a gravitational field the acceleration of a test particle is independent of its properties, including its rest mass",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Weak Equivalence Principle",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Equivalence Principle",
+        "url": "https://en.wikipedia.org/wiki/Equivalence_principle",
+        "quote": "in a gravitational field the acceleration of a test particle is independent of its properties, including its rest mass"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "in a gravitational field the acceleration of a test particle is independent of i"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "So all objects, regardless of size or shape or weight, free fall with the same a"
-    },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Because they were essentially in a vacuum, there was no air resistance and the f"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "in a gravitational field the acceleration of a test particle is independent of i"
     }
   },
   "cross_checks": [
@@ -108,7 +114,8 @@
         "source_b": "verified",
         "source_c": "verified"
       },
-      "independence_note": "Type A derivation uses only Newton's laws (no external sources). Type B sources are from independent institutions: NASA Glenn Research Center, NASA Science (Apollo 15 mission data), and Wikipedia (summarizing Einstein's equivalence principle). The mathematical proof and empirical evidence are fully independent lines of reasoning."
+      "independence_note": "Type A derivation uses only Newton's laws (no external sources). Type B sources are from independent institutions: NASA Glenn Research Center, NASA Science (Apollo 15 mission data), and Wikipedia (summarizing Einstein's equivalence principle). The mathematical proof and empirical evidence are fully independent lines of reasoning.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -125,7 +132,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

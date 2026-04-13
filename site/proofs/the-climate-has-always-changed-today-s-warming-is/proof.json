@@ -1,40 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_nasa",
-      "label": "SC1: NASA \u2014 paleoclimate evidence of past changes"
-    },
-    "B2": {
-      "key": "sc1_noaa",
-      "label": "SC1: NOAA \u2014 historical temperature record"
-    },
-    "B3": {
-      "key": "sc2_nasa_rate",
-      "label": "SC2: NASA \u2014 10x faster than ice age recovery"
-    },
-    "B4": {
-      "key": "sc2_ipcc_ar6",
-      "label": "SC2: IPCC AR6 \u2014 unprecedented in 2000 years"
-    },
-    "B5": {
-      "key": "sc2_noaa_rate",
-      "label": "SC2: NOAA \u2014 0.20\u00b0C/decade since 1975"
-    },
-    "B6": {
-      "key": "sc2_arizona",
-      "label": "SC2: U of Arizona \u2014 unprecedented in 24,000 years"
-    },
-    "A1": {
-      "label": "SC1 verified source count",
-      "method": "count(verified citations for SC1) = 2",
-      "result": "2"
-    },
-    "A2": {
-      "label": "SC2 verified source count (disproof)",
-      "method": "count(verified citations for SC2 disproof) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Current global warming",
     "sub_claims": [
@@ -64,140 +29,190 @@
     "operator_note": "The original claim implies: because climate has always changed (SC1), today's warming is not unusual (SC2) or alarming (SC3). SC1's truth does not logically entail SC2 or SC3. The rhetorical structure conflates past natural change with current anthropogenic change. Each sub-claim is evaluated independently. The compound verdict reflects that SC1 is true, SC2 is disproved, and SC3 is undetermined \u2014 yielding PARTIALLY VERIFIED overall."
   },
   "claim_natural": "The climate has always changed \u2014 today's warming is not unusual or alarming.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_nasa",
-      "source_name": "NASA Science \u2014 Climate Change Evidence",
-      "url": "https://science.nasa.gov/climate-change/evidence/",
-      "quote": "Carbon dioxide from human activities is increasing about 250 times faster than it did from natural sources after the last Ice Age.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nasa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: NASA \u2014 paleoclimate evidence of past changes",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "NASA Science \u2014 Climate Change Evidence",
+        "url": "https://science.nasa.gov/climate-change/evidence/",
+        "quote": "Carbon dioxide from human activities is increasing about 250 times faster than it did from natural sources after the last Ice Age."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nasa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Carbon dioxide from human activities is increasing about 250 times faster than i"
       }
     },
     "B2": {
-      "source_key": "sc1_noaa",
-      "source_name": "NOAA Climate.gov \u2014 Climate Change: Global Temperature",
-      "url": "https://www.climate.gov/news-features/understanding-climate/climate-change-global-temperature",
-      "quote": "Earth's temperature has risen by an average of 0.11\u00b0 Fahrenheit (0.06\u00b0 Celsius) per decade since 1850, or about 2\u00b0 F in total.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "climate.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: NOAA \u2014 historical temperature record",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "NOAA Climate.gov \u2014 Climate Change: Global Temperature",
+        "url": "https://www.climate.gov/news-features/understanding-climate/climate-change-global-temperature",
+        "quote": "Earth's temperature has risen by an average of 0.11\u00b0 Fahrenheit (0.06\u00b0 Celsius) per decade since 1850, or about 2\u00b0 F in total."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "climate.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Earth's temperature has risen by an average of 0.11\u00b0 Fahrenheit (0.06\u00b0 Celsius) "
       }
     },
     "B3": {
-      "source_key": "sc2_nasa_rate",
-      "source_name": "NASA Science \u2014 Climate Change Evidence",
-      "url": "https://science.nasa.gov/climate-change/evidence/",
-      "quote": "Current warming is occurring roughly 10 times faster than the average rate of warming after an ice age.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nasa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: NASA \u2014 10x faster than ice age recovery",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "NASA Science \u2014 Climate Change Evidence",
+        "url": "https://science.nasa.gov/climate-change/evidence/",
+        "quote": "Current warming is occurring roughly 10 times faster than the average rate of warming after an ice age."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nasa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Current warming is occurring roughly 10 times faster than the average rate of wa"
       }
     },
     "B4": {
-      "source_key": "sc2_ipcc_ar6",
-      "source_name": "IPCC AR6 via Carbon Brief",
-      "url": "https://www.carbonbrief.org/in-depth-qa-the-ipccs-sixth-assessment-report-on-climate-science/",
-      "quote": "key indicators of the climate system are increasingly at levels unseen in centuries to millennia, and are changing at rates unprecedented in at least the last 2,000 years",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "carbonbrief.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC2: IPCC AR6 \u2014 unprecedented in 2000 years",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "IPCC AR6 via Carbon Brief",
+        "url": "https://www.carbonbrief.org/in-depth-qa-the-ipccs-sixth-assessment-report-on-climate-science/",
+        "quote": "key indicators of the climate system are increasingly at levels unseen in centuries to millennia, and are changing at rates unprecedented in at least the last 2,000 years"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "carbonbrief.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "key indicators of the climate system are increasingly at levels unseen in centur"
       }
     },
     "B5": {
-      "source_key": "sc2_noaa_rate",
-      "source_name": "NOAA Climate.gov \u2014 Climate Change: Global Temperature",
-      "url": "https://www.climate.gov/news-features/understanding-climate/climate-change-global-temperature",
-      "quote": "the combined land and ocean temperature has warmed at an average rate of 0.11 degrees Fahrenheit (0.06 degrees Celsius) per decade since 1850 and more than three times that rate (0.36 degrees Fahrenheit, or 0.20 degrees Celsius) per decade since 1975.",
-      "status": "not_found",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "climate.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: NOAA \u2014 0.20\u00b0C/decade since 1975",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "NOAA Climate.gov \u2014 Climate Change: Global Temperature",
+        "url": "https://www.climate.gov/news-features/understanding-climate/climate-change-global-temperature",
+        "quote": "the combined land and ocean temperature has warmed at an average rate of 0.11 degrees Fahrenheit (0.06 degrees Celsius) per decade since 1850 and more than three times that rate (0.36 degrees Fahrenheit, or 0.20 degrees Celsius) per decade since 1975."
+      },
+      "verification": {
+        "status": "not_found",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "climate.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "not_found",
+        "value_in_quote": false,
+        "quote_snippet": "the combined land and ocean temperature has warmed at an average rate of 0.11 de"
       }
     },
     "B6": {
-      "source_key": "sc2_arizona",
-      "source_name": "University of Arizona News \u2014 Kaufman et al. study",
-      "url": "https://news.arizona.edu/news/global-temperatures-over-last-24000-years-show-todays-warming-unprecedented",
-      "quote": "the speed of human-caused global warming is faster than anything we've seen in that same time",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "arizona.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "SC2: U of Arizona \u2014 unprecedented in 24,000 years",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "University of Arizona News \u2014 Kaufman et al. study",
+        "url": "https://news.arizona.edu/news/global-temperatures-over-last-24000-years-show-todays-warming-unprecedented",
+        "quote": "the speed of human-caused global warming is faster than anything we've seen in that same time"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "arizona.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the speed of human-caused global warming is faster than anything we've seen in t"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Carbon dioxide from human activities is increasing about 250 times faster than i"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Earth's temperature has risen by an average of 0.11\u00b0 Fahrenheit (0.06\u00b0 Celsius) "
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count",
+      "sub_claim": "SC1",
+      "method": "count(verified citations for SC1) = 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Current warming is occurring roughly 10 times faster than the average rate of wa"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "key indicators of the climate system are increasingly at levels unseen in centur"
-    },
-    "B5": {
-      "value": "not_found",
-      "value_in_quote": false,
-      "quote_snippet": "the combined land and ocean temperature has warmed at an average rate of 0.11 de"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the speed of human-caused global warming is faster than anything we've seen in t"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count (disproof)",
+      "sub_claim": "SC2",
+      "method": "count(verified citations for SC2 disproof) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -209,7 +224,8 @@
         "sc1_nasa": "verified",
         "sc1_noaa": "verified"
       },
-      "independence_note": "NASA and NOAA are independent U.S. federal agencies"
+      "independence_note": "NASA and NOAA are independent U.S. federal agencies",
+      "fact_ids": []
     },
     {
       "description": "SC2: Multiple independent sources confirm current rate is unprecedented",
@@ -221,7 +237,8 @@
         "sc2_noaa_rate": "not_found",
         "sc2_arizona": "verified"
       },
-      "independence_note": "Sources span NASA, IPCC (international body), NOAA, and University of Arizona (peer-reviewed paleoclimate reconstruction). These are independent organizations using different datasets and methodologies."
+      "independence_note": "Sources span NASA, IPCC (international body), NOAA, and University of Arizona (peer-reviewed paleoclimate reconstruction). These are independent organizations using different datasets and methodologies.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -244,7 +261,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PARTIALLY VERIFIED",
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_confirmed": 2,
     "sc1_threshold": 2,

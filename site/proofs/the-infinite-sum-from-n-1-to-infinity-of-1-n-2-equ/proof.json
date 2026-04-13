@@ -1,21 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Symbolic computation of sum_{n=1}^{inf} 1/n^2 via sympy",
-      "method": "Symbolic summation via sympy: summation(1/n^2, (n, 1, oo))",
-      "result": "pi**2/6 (exact symbolic match: True)"
-    },
-    "A2": {
-      "label": "High-precision numerical partial sum convergence (mpmath, 10^7 terms + Euler-Maclaurin)",
-      "method": "High-precision numerical computation via mpmath zeta(2) at 60 decimal places",
-      "result": "Agrees to 60 digits (threshold: 50)"
-    },
-    "A3": {
-      "label": "Independent verification via Parseval's theorem on f(x)=x Fourier series",
-      "method": "Parseval's theorem on Fourier series of f(x) = x on [-pi, pi]",
-      "result": "Derives sum = pi^2/6 independently (match: True)"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "sum_{n=1}^{infinity} 1/n^2",
     "property": "exact value as a closed-form expression",
@@ -24,6 +8,32 @@
     "threshold": "pi**2 / 6"
   },
   "claim_natural": "The infinite sum from n=1 to infinity of 1/n^2 equals exactly pi^2/6",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Symbolic computation of sum_{n=1}^{inf} 1/n^2 via sympy",
+      "sub_claim": null,
+      "method": "Symbolic summation via sympy: summation(1/n^2, (n, 1, oo))",
+      "result": "pi**2/6 (exact symbolic match: True)",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "High-precision numerical partial sum convergence (mpmath, 10^7 terms + Euler-Maclaurin)",
+      "sub_claim": null,
+      "method": "High-precision numerical computation via mpmath zeta(2) at 60 decimal places",
+      "result": "Agrees to 60 digits (threshold: 50)",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Independent verification via Parseval's theorem on f(x)=x Fourier series",
+      "sub_claim": null,
+      "method": "Parseval's theorem on Fourier series of f(x) = x on [-pi, pi]",
+      "result": "Derives sum = pi^2/6 independently (match: True)",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Symbolic (sympy) vs numerical (mpmath zeta) agreement",
@@ -31,7 +41,8 @@
         "pi**2/6",
         "1.6449340668482264365"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Symbolic (sympy) vs Parseval's theorem derivation",
@@ -39,7 +50,8 @@
         "pi**2/6",
         "pi**2/6"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Numerical (mpmath) vs Parseval's theorem derivation",
@@ -47,7 +59,8 @@
         "1.6449340668482264365",
         "pi**2/6"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -76,7 +89,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "symbolic_sum": "pi**2/6",
     "target": "pi**2/6",

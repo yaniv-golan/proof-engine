@@ -1,5 +1,5 @@
 {
-  "claim_natural": "The average exit multiple for SaaS venture-backed companies is 8.5x invested capital, higher than for consumer internet companies.",
+  "format_version": 3,
   "claim_formal": {
     "subject": "Average exit multiple for SaaS venture-backed companies",
     "property": "Multiple of invested capital (MOIC) at exit, compared to consumer internet",
@@ -8,10 +8,22 @@
     "threshold": 2,
     "compound_operator": "AND"
   },
-  "fact_registry": {
-    "SC1": "SaaS average exit MOIC = 8.5\u00d7 \u2014 no public source found; 8.5\u00d7 EV/Revenue found but is a different metric",
-    "SC2": "SaaS MOIC > consumer internet MOIC \u2014 no public comparable data found"
+  "claim_natural": "The average exit multiple for SaaS venture-backed companies is 8.5x invested capital, higher than for consumer internet companies.",
+  "evidence": {
+    "SC1": {
+      "type": "search",
+      "label": "SaaS average exit MOIC = 8.5\u00d7 \u2014 no public source found; 8.5\u00d7 EV/Revenue found but is a different metric",
+      "sub_claim": null,
+      "search": {}
+    },
+    "SC2": {
+      "type": "search",
+      "label": "SaaS MOIC > consumer internet MOIC \u2014 no public comparable data found",
+      "sub_claim": null,
+      "search": {}
+    }
   },
+  "cross_checks": [],
   "adversarial_checks": [
     {
       "description": "Is the 8.5x figure actually EV/Revenue rather than MOIC?",
@@ -29,8 +41,12 @@
       "breaks_proof": true
     }
   ],
-  "verdict": "UNDETERMINED",
-  "verdict_reason": "The specific metric in the claim (MOIC \u2014 multiple of invested capital) is not publicly available by sector. Public sources report EV/Revenue multiples for SaaS, which is a different metric. No public source provides average MOIC for SaaS or a SaaS vs consumer internet MOIC comparison.",
+  "verdict": {
+    "value": "UNDETERMINED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed_sc1": 0,
     "n_confirmed_sc2": 0,
@@ -56,5 +72,6 @@
       "threshold": 2,
       "holds": false
     }
-  }
+  },
+  "verdict_reason": "The specific metric in the claim (MOIC \u2014 multiple of invested capital) is not publicly available by sector. Public sources report EV/Revenue multiples for SaaS, which is a different metric. No public source provides average MOIC for SaaS or a SaaS vs consumer internet MOIC comparison."
 }

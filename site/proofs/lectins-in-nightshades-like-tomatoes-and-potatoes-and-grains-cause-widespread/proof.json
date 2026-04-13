@@ -1,36 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_banner_health",
-      "label": "SC1: Banner Health — lectins found in nightshades (tomatoes, potatoes) and grains"
-    },
-    "B2": {
-      "key": "sc1_harvard",
-      "label": "SC1: Harvard T.H. Chan Nutrition Source — lectins in grains and legumes"
-    },
-    "B3": {
-      "key": "sc2_md_anderson",
-      "label": "SC2: MD Anderson Cancer Center — no strong human evidence for lectin-induced inflammation"
-    },
-    "B4": {
-      "key": "sc2_harvard",
-      "label": "SC2: Harvard T.H. Chan Nutrition Source — very limited human research on dietary lectin health effects"
-    },
-    "B5": {
-      "key": "sc2_cornell",
-      "label": "SC2: Cornell Center for Nutrition Studies — lectin-hazard argument not supported"
-    },
-    "A1": {
-      "label": "SC1 verified source count (lectin presence)",
-      "method": "count(SC1 verified citations) >= 2",
-      "result": "2"
-    },
-    "A2": {
-      "label": "SC2 verified refuting source count (causation rejected)",
-      "method": "count(SC2 verified refuting citations) >= 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Dietary lectins from nightshades (tomatoes, potatoes) and grains",
     "sub_claims": [
@@ -40,7 +9,7 @@
         "proof_direction": "affirm",
         "operator": ">=",
         "threshold": 2,
-        "operator_note": "SC1 tests the premise: do nightshades and grains contain lectins? Affirm direction: 2+ authoritative sources confirm lectin presence. Threshold of 2 is appropriate because lectin presence in these foods is scientifically undisputed — a higher threshold would not add meaningful verification for an established biochemical fact."
+        "operator_note": "SC1 tests the premise: do nightshades and grains contain lectins? Affirm direction: 2+ authoritative sources confirm lectin presence. Threshold of 2 is appropriate because lectin presence in these foods is scientifically undisputed \u2014 a higher threshold would not add meaningful verification for an established biochemical fact."
       },
       {
         "id": "SC2",
@@ -55,118 +24,162 @@
     "operator_note": "The full claim asserts both that lectins exist in these foods (SC1) AND that they cause widespread inflammation and leaky gut (SC2). SC1 is affirmed if 2+ sources confirm lectin presence. SC2 is disproved if 3+ authoritative sources reject the causative claim. If SC1 holds but SC2 is disproved, the compound verdict is PARTIALLY VERIFIED: lectins are present (true) but the causal claim is contradicted by scientific evidence."
   },
   "claim_natural": "Lectins in nightshades like tomatoes and potatoes and grains cause widespread inflammation and leaky gut.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_banner_health",
-      "source_name": "Banner Health (major US health system)",
-      "url": "https://www.bannerhealth.com/healthcareblog/teach-me/are-lectins-in-your-diet-bad-for-your-gut",
-      "quote": "Vegetables: Nightshades like tomatoes, potatoes and eggplants",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "bannerhealth.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "SC1: Banner Health \u2014 lectins found in nightshades (tomatoes, potatoes) and grains",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Banner Health (major US health system)",
+        "url": "https://www.bannerhealth.com/healthcareblog/teach-me/are-lectins-in-your-diet-bad-for-your-gut",
+        "quote": "Vegetables: Nightshades like tomatoes, potatoes and eggplants"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "bannerhealth.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Vegetables: Nightshades like tomatoes, potatoes and eggplants"
       }
     },
     "B2": {
-      "source_key": "sc1_harvard",
-      "source_name": "Harvard T.H. Chan School of Public Health — The Nutrition Source",
-      "url": "https://nutritionsource.hsph.harvard.edu/anti-nutrients/lectins/",
-      "quote": "They are found in all plants, but raw legumes (beans, lentils, peas, soybeans, peanuts) and whole grains like wheat contain the highest amounts of lectins.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "harvard.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "SC1: Harvard T.H. Chan Nutrition Source \u2014 lectins in grains and legumes",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Harvard T.H. Chan School of Public Health \u2014 The Nutrition Source",
+        "url": "https://nutritionsource.hsph.harvard.edu/anti-nutrients/lectins/",
+        "quote": "They are found in all plants, but raw legumes (beans, lentils, peas, soybeans, peanuts) and whole grains like wheat contain the highest amounts of lectins."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "harvard.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "They are found in all plants, but raw legumes (beans, lentils, peas, soybeans, p"
       }
     },
     "B3": {
-      "source_key": "sc2_md_anderson",
-      "source_name": "MD Anderson Cancer Center",
-      "url": "https://www.mdanderson.org/cancerwise/should-you-eat-a-lectin-free-diet.h00-159695178.html",
-      "quote": "Aside from Celiac disease, which is specific to gluten, there is currently no strong evidence in human studies to support the claim that foods high in lectins consistently cause inflammation.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "mdanderson.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "SC2: MD Anderson Cancer Center \u2014 no strong human evidence for lectin-induced inflammation",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "MD Anderson Cancer Center",
+        "url": "https://www.mdanderson.org/cancerwise/should-you-eat-a-lectin-free-diet.h00-159695178.html",
+        "quote": "Aside from Celiac disease, which is specific to gluten, there is currently no strong evidence in human studies to support the claim that foods high in lectins consistently cause inflammation."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "mdanderson.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Aside from Celiac disease, which is specific to gluten, there is currently no st"
       }
     },
     "B4": {
-      "source_key": "sc2_harvard",
-      "source_name": "Harvard T.H. Chan School of Public Health — The Nutrition Source",
-      "url": "https://nutritionsource.hsph.harvard.edu/anti-nutrients/lectins/",
-      "quote": "There is very limited research in humans on the amount of active lectins consumed in the diet and their long-term health effects.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "harvard.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "SC2: Harvard T.H. Chan Nutrition Source \u2014 very limited human research on dietary lectin health effects",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Harvard T.H. Chan School of Public Health \u2014 The Nutrition Source",
+        "url": "https://nutritionsource.hsph.harvard.edu/anti-nutrients/lectins/",
+        "quote": "There is very limited research in humans on the amount of active lectins consumed in the diet and their long-term health effects."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "harvard.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "There is very limited research in humans on the amount of active lectins consume"
       }
     },
     "B5": {
-      "source_key": "sc2_cornell",
-      "source_name": "Cornell University Center for Nutrition Studies",
-      "url": "https://nutritionstudies.org/the-plant-paradox-by-steven-grundy-md-commentary/",
-      "quote": "Dr. Gundry has not made a convincing argument that lectins as a class are hazardous.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nutritionstudies.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "SC2: Cornell Center for Nutrition Studies \u2014 lectin-hazard argument not supported",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Cornell University Center for Nutrition Studies",
+        "url": "https://nutritionstudies.org/the-plant-paradox-by-steven-grundy-md-commentary/",
+        "quote": "Dr. Gundry has not made a convincing argument that lectins as a class are hazardous."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nutritionstudies.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Dr. Gundry has not made a convincing argument that lectins as a class are hazard"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Vegetables: Nightshades like tomatoes, potatoes and eggplants"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "They are found in all plants, but raw legumes (beans, lentils, peas, soybeans, p"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count (lectin presence)",
+      "sub_claim": "SC1",
+      "method": "count(SC1 verified citations) >= 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Aside from Celiac disease, which is specific to gluten, there is currently no st"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "There is very limited research in humans on the amount of active lectins consume"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Dr. Gundry has not made a convincing argument that lectins as a class are hazard"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified refuting source count (causation rejected)",
+      "sub_claim": "SC2",
+      "method": "count(SC2 verified refuting citations) >= 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -178,7 +191,8 @@
         "sc1_banner_health": "verified",
         "sc1_harvard": "verified"
       },
-      "independence_note": "Sources from different institutions: Banner Health (health system) and Harvard T.H. Chan School of Public Health (academic)"
+      "independence_note": "Sources from different institutions: Banner Health (health system) and Harvard T.H. Chan School of Public Health (academic)",
+      "fact_ids": []
     },
     {
       "description": "SC2: Multiple independent authoritative sources consulted for causation rejection",
@@ -189,7 +203,8 @@
         "sc2_harvard": "verified",
         "sc2_cornell": "verified"
       },
-      "independence_note": "Sources from independent institutions: MD Anderson Cancer Center, Harvard T.H. Chan School of Public Health, Cornell University Center for Nutrition Studies"
+      "independence_note": "Sources from independent institutions: MD Anderson Cancer Center, Harvard T.H. Chan School of Public Health, Cornell University Center for Nutrition Studies",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -207,18 +222,23 @@
     },
     {
       "question": "Do populations with high lectin intake (legumes, whole grains, nightshades) show worse inflammatory or health outcomes?",
-      "verification_performed": "Searched for 'Blue Zones legume consumption longevity inflammation' and 'whole grain health outcomes epidemiology anti-inflammatory'. Cornell Nutrition Studies notes Blue Zones populations — known for exceptional longevity — consistently consume legumes (high in lectins). Multiple epidemiological studies link legume and whole grain consumption to reduced inflammation markers and better cardiovascular/metabolic outcomes.",
+      "verification_performed": "Searched for 'Blue Zones legume consumption longevity inflammation' and 'whole grain health outcomes epidemiology anti-inflammatory'. Cornell Nutrition Studies notes Blue Zones populations \u2014 known for exceptional longevity \u2014 consistently consume legumes (high in lectins). Multiple epidemiological studies link legume and whole grain consumption to reduced inflammation markers and better cardiovascular/metabolic outcomes.",
       "finding": "Epidemiological evidence directly contradicts the 'widespread harm' claim: populations with the highest lectin-food intake show better, not worse, health and longevity outcomes. This is strong counter-evidence to the widespread inflammation claim.",
       "breaks_proof": false
     },
     {
       "question": "Can raw or improperly cooked lectins (e.g., raw kidney beans) cause acute illness, and does this validate the broader inflammation claim?",
-      "verification_performed": "Searched for 'raw kidney beans lectins toxicity phytohaemagglutinin food poisoning'. Well-established: raw kidney beans contain phytohaemagglutinin (PHA), which causes acute GI illness within hours. Cooking at boiling point for ≥10 minutes destroys PHA. This is distinct from the claim about chronic widespread inflammation from cooked foods.",
-      "finding": "Raw/undercooked high-lectin foods CAN cause acute GI illness — this is toxicological fact. However, this is an acute effect of improperly prepared food, not evidence for chronic widespread inflammation or leaky gut from normally cooked dietary lectins. The claim's framing ('nightshades like tomatoes') does not specify raw consumption, so this acute mechanism does not support the broad claim.",
+      "verification_performed": "Searched for 'raw kidney beans lectins toxicity phytohaemagglutinin food poisoning'. Well-established: raw kidney beans contain phytohaemagglutinin (PHA), which causes acute GI illness within hours. Cooking at boiling point for \u226510 minutes destroys PHA. This is distinct from the claim about chronic widespread inflammation from cooked foods.",
+      "finding": "Raw/undercooked high-lectin foods CAN cause acute GI illness \u2014 this is toxicological fact. However, this is an acute effect of improperly prepared food, not evidence for chronic widespread inflammation or leaky gut from normally cooked dietary lectins. The claim's framing ('nightshades like tomatoes') does not specify raw consumption, so this acute mechanism does not support the broad claim.",
       "breaks_proof": false
     }
   ],
-  "verdict": "PARTIALLY VERIFIED",
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_confirmed_sources": 2,
     "sc1_threshold": 2,

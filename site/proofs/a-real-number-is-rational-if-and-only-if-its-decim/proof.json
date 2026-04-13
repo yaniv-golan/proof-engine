@@ -1,21 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Direction 1: Long division of p/q produces eventually periodic digits (pigeonhole on remainders)",
-      "method": "Long division of p/q tracking remainders; pigeonhole principle guarantees remainder repetition within q steps, creating a periodic cycle. Tested on 35 rationals including terminating, purely repeating, and mixed cases.",
-      "result": "All 35 cases passed: expansion is eventually periodic and round-trips to original fraction"
-    },
-    "A2": {
-      "label": "Direction 2: Every eventually periodic decimal converts to a fraction p/q",
-      "method": "Algebraic conversion: for decimal 0.d\u2081...d\u2096(r\u2081...r\u209a), multiply by 10^(k+p) and 10^k, subtract to eliminate the repeating part, yielding a ratio of integers. Tested on 14 periodic decimals.",
-      "result": "All 14 cases converted to correct fractions and round-tripped"
-    },
-    "A3": {
-      "label": "Cross-check: Python Fraction confirms rational \u2194 periodic equivalence",
-      "method": "Exhaustive test of all p/q with 1 \u2264 q \u2264 200, 0 \u2264 p < q: long_division \u2192 periodic_decimal_to_fraction must return original Fraction(p,q). Uses Python's Fraction for exact arithmetic as independent ground truth.",
-      "result": "20100 rationals tested, 0 failures"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "real numbers and their decimal expansions",
     "property": "biconditional equivalence between rationality and eventual periodicity",
@@ -24,6 +8,32 @@
     "threshold": true
   },
   "claim_natural": "A real number is rational if and only if its decimal expansion is eventually periodic.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Direction 1: Long division of p/q produces eventually periodic digits (pigeonhole on remainders)",
+      "sub_claim": null,
+      "method": "Long division of p/q tracking remainders; pigeonhole principle guarantees remainder repetition within q steps, creating a periodic cycle. Tested on 35 rationals including terminating, purely repeating, and mixed cases.",
+      "result": "All 35 cases passed: expansion is eventually periodic and round-trips to original fraction",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Direction 2: Every eventually periodic decimal converts to a fraction p/q",
+      "sub_claim": null,
+      "method": "Algebraic conversion: for decimal 0.d\u2081...d\u2096(r\u2081...r\u209a), multiply by 10^(k+p) and 10^k, subtract to eliminate the repeating part, yielding a ratio of integers. Tested on 14 periodic decimals.",
+      "result": "All 14 cases converted to correct fractions and round-tripped",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Cross-check: Python Fraction confirms rational \u2194 periodic equivalence",
+      "sub_claim": null,
+      "method": "Exhaustive test of all p/q with 1 \u2264 q \u2264 200, 0 \u2264 p < q: long_division \u2192 periodic_decimal_to_fraction must return original Fraction(p,q). Uses Python's Fraction for exact arithmetic as independent ground truth.",
+      "result": "20100 rationals tested, 0 failures",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Exhaustive round-trip test for all rationals p/q with q \u2264 200",
@@ -31,7 +41,8 @@
         "20100 tested",
         "0 failures"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Direction 1 hand-picked cases vs Direction 2 reconstruction",
@@ -39,7 +50,8 @@
         "True",
         "True"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -68,7 +80,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "direction_1_passed": true,
     "direction_2_passed": true,

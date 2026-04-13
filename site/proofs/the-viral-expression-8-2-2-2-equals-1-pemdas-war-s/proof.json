@@ -1,25 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Value under strict PEMDAS (left-to-right, implicit = explicit mult)",
-      "method": "explain_calc(): step-by-step strict PEMDAS",
-      "result": "16.0"
-    },
-    "A2": {
-      "label": "Value under juxtaposition-priority convention",
-      "method": "explain_calc(): juxtaposition-priority",
-      "result": "1.0"
-    },
-    "A3": {
-      "label": "Python eval cross-check (implements strict PEMDAS)",
-      "method": "explain_calc(): Python 8/2*(2+2)",
-      "result": "16.0"
-    },
-    "B1": {
-      "key": "wikipedia_order_of_ops",
-      "label": "Wikipedia 'Order of operations' \u2014 both conventions documented"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "8 \u00f7 2(2+2)",
     "property": "numeric value under standard mathematical operator precedence",
@@ -28,30 +8,58 @@
     "threshold": 1
   },
   "claim_natural": "The viral expression \"8 \u00f7 2(2+2)\" equals 1",
-  "citations": {
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Value under strict PEMDAS (left-to-right, implicit = explicit mult)",
+      "sub_claim": null,
+      "method": "explain_calc(): step-by-step strict PEMDAS",
+      "result": "16.0",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Value under juxtaposition-priority convention",
+      "sub_claim": null,
+      "method": "explain_calc(): juxtaposition-priority",
+      "result": "1.0",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Python eval cross-check (implements strict PEMDAS)",
+      "sub_claim": null,
+      "method": "explain_calc(): Python 8/2*(2+2)",
+      "result": "16.0",
+      "depends_on": []
+    },
     "B1": {
-      "source_key": "wikipedia_order_of_ops",
-      "source_name": "Wikipedia \u2014 Order of operations",
-      "url": "https://en.wikipedia.org/wiki/Order_of_operations",
-      "quote": "Multiplication denoted by juxtaposition (also known as implied multiplication) creates a visual unit and is often given higher precedence than most other operations.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia 'Order of operations' \u2014 both conventions documented",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia \u2014 Order of operations",
+        "url": "https://en.wikipedia.org/wiki/Order_of_operations",
+        "quote": "Multiplication denoted by juxtaposition (also known as implied multiplication) creates a visual unit and is often given higher precedence than most other operations."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Multiplication denoted by juxtaposition (also known as implied multiplication) c"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Multiplication denoted by juxtaposition (also known as implied multiplication) c"
     }
   },
   "cross_checks": [
@@ -61,7 +69,8 @@
         "16.0",
         "16.0"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -84,7 +93,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "pemdas_result": 16.0,
     "juxtaposition_result": 1.0,

@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "nasa_great_wall",
-      "label": "NASA official statement: wall not visible without high-powered lenses"
-    },
-    "B2": {
-      "key": "sci_am_astronaut",
-      "label": "Scientific American: astronaut Jeffrey Hoffman confirms wall not visible"
-    },
-    "B3": {
-      "key": "britannica_wall",
-      "label": "Britannica: Great Wall not visible with naked eye from space"
-    },
-    "B4": {
-      "key": "wikipedia_structures",
-      "label": "Wikipedia: highways, dams, and cities visible from space without magnification"
-    },
-    "A1": {
-      "label": "Verified source count for disproof",
-      "method": "count(verified citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "The Great Wall of China",
     "property": "number of independent authoritative sources confirming the claim is false",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "The Great Wall of China is the only man-made object visible from space with the naked eye.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "nasa_great_wall",
-      "source_name": "NASA",
-      "url": "https://www.nasa.gov/image-article/great-wall/",
-      "quote": "Despite myths to the contrary, the wall isn't visible from the moon, and is difficult or impossible to see from Earth orbit without the high-powered lenses used for this photo.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nasa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NASA official statement: wall not visible without high-powered lenses",
+      "sub_claim": null,
+      "source": {
+        "name": "NASA",
+        "url": "https://www.nasa.gov/image-article/great-wall/",
+        "quote": "Despite myths to the contrary, the wall isn't visible from the moon, and is difficult or impossible to see from Earth orbit without the high-powered lenses used for this photo."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nasa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "Despite myths to the contrary, the wall isn't visible from the moon, and is diff"
       }
     },
     "B2": {
-      "source_key": "sci_am_astronaut",
-      "source_name": "Scientific American (quoting NASA astronaut Jeffrey Hoffman)",
-      "url": "https://www.scientificamerican.com/article/is-chinas-great-wall-visible-from-space/",
-      "quote": "I have spent a lot of time looking at the Earth from space, including numerous flights over China, and I never saw the wall",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "scientificamerican.com",
-        "source_type": "major_news",
-        "tier": 3,
-        "flags": [],
-        "note": "Major news organization"
+      "type": "empirical",
+      "label": "Scientific American: astronaut Jeffrey Hoffman confirms wall not visible",
+      "sub_claim": null,
+      "source": {
+        "name": "Scientific American (quoting NASA astronaut Jeffrey Hoffman)",
+        "url": "https://www.scientificamerican.com/article/is-chinas-great-wall-visible-from-space/",
+        "quote": "I have spent a lot of time looking at the Earth from space, including numerous flights over China, and I never saw the wall"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "scientificamerican.com",
+          "source_type": "major_news",
+          "tier": 3,
+          "flags": [],
+          "note": "Major news organization"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "I have spent a lot of time looking at the Earth from space, including numerous f"
       }
     },
     "B3": {
-      "source_key": "britannica_wall",
-      "source_name": "Encyclopaedia Britannica",
-      "url": "https://www.britannica.com/question/Can-you-see-the-Great-Wall-of-China-from-space",
-      "quote": "You typically can't see the Great Wall of China from space",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "britannica.com",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Britannica: Great Wall not visible with naked eye from space",
+      "sub_claim": null,
+      "source": {
+        "name": "Encyclopaedia Britannica",
+        "url": "https://www.britannica.com/question/Can-you-see-the-Great-Wall-of-China-from-space",
+        "quote": "You typically can't see the Great Wall of China from space"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "britannica.com",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "You typically can't see the Great Wall of China from space"
       }
     },
     "B4": {
-      "source_key": "wikipedia_structures",
-      "source_name": "Wikipedia: Artificial structures visible from space",
-      "url": "https://en.wikipedia.org/wiki/Artificial_structures_visible_from_space",
-      "quote": "Artificial structures visible from space without magnification include highways, dams, and cities",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: highways, dams, and cities visible from space without magnification",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Artificial structures visible from space",
+        "url": "https://en.wikipedia.org/wiki/Artificial_structures_visible_from_space",
+        "quote": "Artificial structures visible from space without magnification include highways, dams, and cities"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Artificial structures visible from space without magnification include highways,"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "Despite myths to the contrary, the wall isn't visible from the moon, and is diff"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "I have spent a lot of time looking at the Earth from space, including numerous f"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "You typically can't see the Great Wall of China from space"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Artificial structures visible from space without magnification include highways,"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count for disproof",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "britannica_wall": "verified",
         "wikipedia_structures": "verified"
       },
-      "independence_note": "Sources are from different institutions: NASA (government space agency), Scientific American (science journalism), Encyclopaedia Britannica (reference), and Wikipedia (encyclopedic summary of multiple sources). Each represents an independent editorial decision to publish the same conclusion."
+      "independence_note": "Sources are from different institutions: NASA (government space agency), Scientific American (science journalism), Encyclopaedia Britannica (reference), and Wikipedia (encyclopedic summary of multiple sources). Each represents an independent editorial decision to publish the same conclusion.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -151,20 +160,25 @@
       "breaks_proof": false
     },
     {
-      "question": "Does the definition of 'space' matter — could the claim be true at some altitude?",
+      "question": "Does the definition of 'space' matter \u2014 could the claim be true at some altitude?",
       "verification_performed": "Reviewed definitions of 'space' (Karman line at 100km, ISS at ~400km, Moon at ~384,000km). At no altitude is the Great Wall the only visible structure. At ISS altitude, many structures are visible. At lunar distance, NO man-made structures are visible at all, including the wall.",
       "finding": "At any reasonable definition of 'space', the claim fails. At low orbit: many structures are visible, the wall generally is not. At lunar distance: nothing man-made is visible.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,
     "operator": ">=",
     "claim_holds": true,
-    "sc1_status": "FALSE — Great Wall not visible from space with naked eye (NASA, astronauts)",
-    "sc2_status": "FALSE — many man-made structures visible from space (highways, cities, dams)"
+    "sc1_status": "FALSE \u2014 Great Wall not visible from space with naked eye (NASA, astronauts)",
+    "sc2_status": "FALSE \u2014 many man-made structures visible from space (highways, cities, dams)"
   },
   "generator": {
     "name": "proof-engine",
