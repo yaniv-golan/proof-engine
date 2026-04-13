@@ -622,6 +622,14 @@ def main():
         }
         write_file(proof_out / "proof.json", json.dumps(augmented, indent=2, default=str))
 
+        # PROV-JSON
+        from tools.lib.prov import generate_prov
+        prov_doc = generate_prov(
+            proof["proof_data"], proof["slug"], canonical_url,
+            doi=doi_data["doi"] if doi_data else None,
+        )
+        write_file(proof_out / "provenance.json", json.dumps(prov_doc, indent=2))
+
     # Tag pages
     tag_proofs = {}
     for p in proofs:
