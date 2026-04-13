@@ -405,26 +405,31 @@ class ProofValidator:
                 ))
 
     def check_coi_flags_presence(self):
-        """Warn if proof has empirical_facts but no coi_flags key in cross_checks.
+        """Warn if proof has empirical_facts but no COI assessment.
 
-        Checks that "coi_flags" appears as a dict key (quoted string followed
-        by colon) in non-comment code. This catches "COI not assessed" without
-        judging whether the flags are correct. The self-critique checklist
-        is the primary enforcement; this is a backstop.
+        Accepts two patterns:
+        - Dict-key syntax:  "coi_flags": [...]   (hand-built summary dict)
+        - Keyword-arg syntax: coi_flags=...      (ProofSummaryBuilder.add_cross_check)
+
+        This catches "COI not assessed" without judging whether the flags are correct.
+        The self-critique checklist is the primary enforcement; this is a backstop.
         """
         has_empirical = self._has_nonempty_empirical_facts()
         if not has_empirical:
             return  # Pure-math or search-only — exempt
 
-        # Check for "coi_flags" or 'coi_flags' as a dict key in non-comment lines.
-        # Pattern: quoted "coi_flags" followed by optional whitespace and colon.
-        # Matches both `"coi_flags": [...]` and `'coi_flags': coi_flags`.
+        # Accept either dict-key or keyword-arg form of coi_flags:
+        #   "coi_flags": [...]      — hand-built dict literal
+        #   coi_flags=coi_flags     — ProofSummaryBuilder.add_cross_check() kwarg
         code_lines = [
             line for line in self.lines
             if not line.strip().startswith("#")
         ]
         code_body = "\n".join(code_lines)
-        has_coi_key = bool(re.search(r'''["']coi_flags["']\s*:''', code_body))
+        has_coi_key = bool(
+            re.search(r'''["']coi_flags["']\s*:''', code_body)  # dict-key: "coi_flags": ...
+            or re.search(r'''\bcoi_flags\s*=''', code_body)      # kwarg or assignment: coi_flags=...
+        )
 
         if has_coi_key:
             self.passed.append("Rule 6: coi_flags key found in proof — COI assessment present")

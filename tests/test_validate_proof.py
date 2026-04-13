@@ -1169,6 +1169,25 @@ def test_no_empirical_no_coi_warning():
     assert not any("coi" in str(w).lower() for w in v.warnings)
 
 
+COI_AS_BUILDER_KWARG = '''
+empirical_facts = {
+    "source_a": {"quote": "...", "url": "...", "source_name": "A"},
+    "source_b": {"quote": "...", "url": "...", "source_name": "B"},
+}
+coi_flags = []
+builder.add_cross_check(
+    description="Multiple sources",
+    fact_ids=["B1", "B2"],
+    coi_flags=coi_flags,
+)
+'''
+
+def test_coi_as_builder_kwarg_passes():
+    """coi_flags=coi_flags keyword arg to add_cross_check must satisfy the COI check."""
+    v = _validate_coi(COI_AS_BUILDER_KWARG)
+    assert len(v.warnings) == 0, f"Unexpected warnings: {v.warnings}"
+
+
 # ------------------------------------------------------------------
 # Contested qualifier suppresses proof_direction warning
 # ------------------------------------------------------------------
