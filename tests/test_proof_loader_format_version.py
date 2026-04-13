@@ -60,6 +60,7 @@ def v1_proof_dir(tmp_path):
     (d / "proof_audit.md").write_text(
         "# Audit: Test\n\n"
         "## Claim Specification\n| Field | Value |\n|---|---|\n| Subject | test |\n\n"
+        "## Claim Interpretation\nTest interpretation (moved to audit for v3 compatibility).\n\n"
         "## Fact Registry\n| ID | Key |\n|---|---|\n| B1 | test |\n\n"
         "## Full Evidence Table\nTest\n\n"
         "## Citation Verification Details\nAll verified.\n\n"
@@ -86,13 +87,13 @@ def v1_proof_dir(tmp_path):
 
 
 def test_v1_proof_has_format_version_1(v1_proof_dir):
-    """V1 proof (no format_version in JSON) should get format_version=1."""
+    """V1 proof (no format_version in JSON) is normalised to v3 on load."""
     proof = load_proof(v1_proof_dir)
-    assert proof["format_version"] == 1
+    assert proof["format_version"] == 3
 
 
 def test_v1_proof_loads_without_error(v1_proof_dir):
-    """V1 proof with old section names should load cleanly."""
+    """V1 proof with old section names should load cleanly after normalisation."""
     proof = load_proof(v1_proof_dir)
     assert proof["verdict"]["raw"] == "PROVED"
     assert "Key Findings" in proof["sections_md"]
@@ -176,9 +177,9 @@ def v2_proof_dir(tmp_path):
 
 
 def test_v2_proof_has_format_version_2(v2_proof_dir):
-    """V2 proof should get format_version=2."""
+    """V2 proof is normalised to v3 on load."""
     proof = load_proof(v2_proof_dir)
-    assert proof["format_version"] == 2
+    assert proof["format_version"] == 3
 
 
 def test_v2_proof_loads_without_error(v2_proof_dir):
@@ -243,9 +244,10 @@ def v1_proof_dir_missing_claim_spec(tmp_path):
         "## Counter-Evidence Search\nNo counter-evidence found.\n"
     )
 
-    # proof_audit.md WITHOUT "Claim Specification" section
+    # proof_audit.md WITHOUT "Claim Specification" section (has Claim Interpretation)
     (d / "proof_audit.md").write_text(
         "# Audit: Test\n\n"
+        "## Claim Interpretation\nTest interpretation.\n\n"
         "## Fact Registry\n| ID | Key |\n|---|---|\n| B1 | test |\n\n"
         "## Full Evidence Table\nTest\n\n"
         "## Citation Verification Details\nAll verified.\n\n"
@@ -271,12 +273,10 @@ def v1_proof_dir_missing_claim_spec(tmp_path):
     return d
 
 
-def test_v1_missing_claim_spec_loads_with_warning(v1_proof_dir_missing_claim_spec, capsys):
-    """V1 proof without 'Claim Specification' in audit should load (optional), with warning."""
-    proof = load_proof(v1_proof_dir_missing_claim_spec)
-    assert proof["format_version"] == 1
-    captured = capsys.readouterr()
-    assert "Claim Specification" in captured.err
+def test_v1_missing_claim_spec_raises_after_normalisation(v1_proof_dir_missing_claim_spec):
+    """V1 proof without 'Claim Specification' raises after normalisation to v3 (v2 sections required)."""
+    with pytest.raises(ValueError, match="Claim Specification"):
+        load_proof(v1_proof_dir_missing_claim_spec)
 
 
 def test_v2_missing_claim_spec_raises(tmp_path):

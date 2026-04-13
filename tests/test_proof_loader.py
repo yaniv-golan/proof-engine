@@ -16,24 +16,25 @@ def mock_llm_tag():
 
 @pytest.fixture
 def proof_dir(tmp_path):
-    """Create a minimal valid proof directory."""
+    """Create a minimal valid proof directory (v2 format, normalises to v3)."""
     slug_dir = tmp_path / "test-claim"
     slug_dir.mkdir()
 
     (slug_dir / "proof.md").write_text(
-        "# Proof\n\n## Key Findings\n\n- Found it\n\n"
-        "## Claim Interpretation\n\nMeans X.\n\n"
-        "## Evidence Summary\n\n| ID | Fact |\n|---|---|\n| B1 | X |\n\n"
+        "# Proof\n\n"
+        "## Evidence Summary\n\n| ID | Fact |\n|---|---|\n| A1 | X |\n\n"
         "## Proof Logic\n\nBecause Y.\n\n"
         "## Conclusion\n\nThe claim is PROVED.\n"
     )
     (slug_dir / "proof_audit.md").write_text(
         "# Audit\n\n## Claim Specification\n\n| Field | Value |\n|---|---|\n| Subject | Test |\n\n"
+        "## Claim Interpretation\n\nMeans X.\n\n"
         "## Hardening Checklist\n\nAll pass.\n"
     )
     (slug_dir / "proof.py").write_text("# proof script\n")
     (slug_dir / "proof.json").write_text(json.dumps({
-        "fact_registry": {"B1": {"label": "test"}},
+        "format_version": 2,
+        "fact_registry": {"A1": {"label": "test", "method": "1 == 1", "result": "True"}},
         "claim_formal": {
             "subject": "Test",
             "property": "value",
@@ -149,6 +150,8 @@ def test_load_all_proofs(proof_dir):
 
 def test_load_proof_citation_count_empirical(proof_dir):
     data = json.loads((proof_dir / "test-claim" / "proof.json").read_text())
+    data["fact_registry"]["B1"] = {"label": "Source 1"}
+    data["fact_registry"]["B2"] = {"label": "Source 2"}
     data["citations"] = {"B1": {"status": "verified"}, "B2": {"status": "verified"}}
     (proof_dir / "test-claim" / "proof.json").write_text(json.dumps(data))
     proof = load_proof(proof_dir / "test-claim")
@@ -163,6 +166,8 @@ def test_load_proof_citation_count_pure_math(proof_dir):
 def test_load_proof_search_count(proof_dir):
     """Absence proof with search_registry should have search_count."""
     data = json.loads((proof_dir / "test-claim" / "proof.json").read_text())
+    data["fact_registry"]["S1"] = {"label": "PubMed search", "key": "search_a"}
+    data["fact_registry"]["S2"] = {"label": "Cochrane search", "key": "search_b"}
     data["search_registry"] = {
         "search_a": {"database": "PubMed", "verification": {"status": "accessible"}},
         "search_b": {"database": "Cochrane", "verification": {"status": "accessible"}},
@@ -350,3 +355,105 @@ def test_load_proof_tags_manual_preserves_tags(proof_dir):
     meta_path.write_text(yaml.dump({"tags": ["economics"], "tags_manual": True}))
     proof = load_proof(proof_dir / "test-claim")
     assert proof["tags"] == ["economics"]
+
+
+# ---- v3 native format tests ----
+
+def _create_v3_proof_dir(base_dir, n_empirical=1, slug="test-v3"):
+    """Create a minimal v3 proof directory with all required artifacts."""
+    proof_dir = base_dir / slug
+    proof_dir.mkdir()
+
+    # Build evidence entries
+    evidence = {}
+    for i in range(1, n_empirical + 1):
+        evidence[f"B{i}"] = {
+            "type": "empirical",
+            "label": f"Source {i}",
+            "sub_claim": None,
+            "source": {"name": f"Source {i}", "url": f"https://example.com/{i}", "quote": "Q"},
+            "verification": {"status": "verified", "method": "full_quote",
+                             "coverage_pct": 100.0, "fetch_mode": "live",
+                             "credibility": {"domain": "example.com", "tier": 3}},
+            "extraction": {"value": "v", "value_in_quote": True, "quote_snippet": "Q"},
+        }
+    evidence["A1"] = {
+        "type": "computed", "label": "Count", "sub_claim": None,
+        "method": f"count = {n_empirical}", "result": str(n_empirical),
+        "depends_on": [f"B{i}" for i in range(1, n_empirical + 1)],
+    }
+
+    proof_data = {
+        "format_version": 3,
+        "claim_natural": "Test claim",
+        "claim_formal": {"subject": "X", "property": "Y", "operator": "==", "threshold": 1},
+        "evidence": evidence,
+        "cross_checks": [{"description": "test", "fact_ids": ["A1"], "agreement": True}],
+        "adversarial_checks": [{"question": "Any?", "finding": "No", "breaks_proof": False}],
+        "verdict": {"value": "PROVED", "qualified": False, "qualifier": None, "reason": None},
+        "key_results": {"n": n_empirical},
+        "generator": {"name": "proof-engine", "version": "1.0.0",
+                       "repo": "https://github.com/yaniv-golan/proof-engine",
+                       "generated_at": "2026-04-13"},
+    }
+    (proof_dir / "proof.json").write_text(json.dumps(proof_data, indent=2))
+
+    # proof.md — required sections: Evidence Summary, Proof Logic, Conclusion
+    (proof_dir / "proof.md").write_text(
+        "# Proof\n\n"
+        "## Evidence Summary\n\nEvidence here.\n\n"
+        "## Proof Logic\n\nLogic here.\n\n"
+        "## Conclusion\n\n**PROVED.** Test conclusion.\n"
+    )
+
+    # proof_audit.md — required sections: Claim Specification, Claim Interpretation
+    (proof_dir / "proof_audit.md").write_text(
+        "# Audit\n\n"
+        "## Claim Specification\n\nSpec.\n\n"
+        "## Claim Interpretation\n\nInterpretation.\n"
+    )
+
+    # proof_narrative.md — required sections from REQUIRED_NARRATIVE_SECTIONS
+    (proof_dir / "proof_narrative.md").write_text(
+        "# Proof Narrative: Test claim\n\n"
+        "## Verdict\n\n**Verdict: PROVED**\n\n"
+        "This claim is fully verified through independent computation and empirical "
+        "evidence from multiple sources. The evidence consistently supports the claim.\n\n"
+        "## What Was Claimed?\n\n"
+        "The test claim asserts a specific property about the subject under investigation.\n\n"
+        "## What Did We Find?\n\n"
+        "Multiple lines of evidence confirmed the claim. Empirical sources agreed with "
+        "computed results, and no counter-evidence was found.\n\n"
+        "## What Should You Keep In Mind?\n\n"
+        "This proof is based on currently available data. Future data could change the "
+        "conclusion. The sources used are reputable but not exhaustive.\n\n"
+        "## How Was This Verified?\n\n"
+        "Verification combined Type A (computed) and Type B (empirical) evidence. "
+        "Citations were fetched and matched against source text. Cross-checks confirmed "
+        "agreement. See [proof.md](proof.md), [proof_audit.md](proof_audit.md), "
+        "and [proof.py](proof.py) for details.\n"
+    )
+
+    return proof_dir
+
+
+def test_load_v3_proof(tmp_path, monkeypatch):
+    """Proof loader handles v3 format natively."""
+    monkeypatch.setattr("tools.lib.tagger.llm_tag", lambda claim: ["test"])
+    from tools.lib.proof_loader import load_proof
+
+    proof_dir = _create_v3_proof_dir(tmp_path)
+    proof = load_proof(proof_dir)
+
+    assert proof["format_version"] == 3
+    assert proof["verdict"]["raw"]  # normalized verdict has 'raw' key
+
+
+def test_v3_citation_count_from_evidence(tmp_path, monkeypatch):
+    """Citation count derived from empirical evidence entries in v3."""
+    monkeypatch.setattr("tools.lib.tagger.llm_tag", lambda claim: ["test"])
+    from tools.lib.proof_loader import load_proof
+
+    proof_dir = _create_v3_proof_dir(tmp_path, n_empirical=3)
+    proof = load_proof(proof_dir)
+    assert proof["citation_count"] == 3

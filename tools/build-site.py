@@ -77,7 +77,7 @@ def compute_stats(proofs):
     total_sources_checked = 0
     for p in proofs:
         proof_data = p.get("proof_data", {})
-        citations = proof_data.get("citations", {})
+        citations = _citations_from_proof_data(proof_data)
         verified_names = {
             c.get("source_name") for c in citations.values()
             if c.get("status") in ("verified", "partial") and c.get("source_name")
@@ -147,9 +147,80 @@ def write_file(path, content):
     path.write_text(content)
 
 
+def _citations_from_proof_data(proof_data: dict) -> dict:
+    """Return a citations-compatible dict from proof_data.
+
+    After Task 8, proof_data is always v3 (evidence map).  This function
+    derives a flat citations dict keyed by fact_id that the template and
+    audit-table helpers can consume without modification.
+    """
+    evidence = proof_data.get("evidence", {})
+    if evidence:
+        result = {}
+        for fact_id, entry in evidence.items():
+            if entry.get("type") != "empirical":
+                continue
+            src = entry.get("source", {})
+            ver = entry.get("verification", {})
+            ext = entry.get("extraction", {})
+            result[fact_id] = {
+                "source_name": src.get("name", ""),
+                "url": src.get("url", ""),
+                "quote": src.get("quote", ""),
+                "status": ver.get("status", ""),
+                "method": ver.get("method", ""),
+                "coverage_pct": ver.get("coverage_pct"),
+                "fetch_mode": ver.get("fetch_mode", "live"),
+                "credibility": ver.get("credibility", {}),
+                "quote_snippet": ext.get("quote_snippet"),
+            }
+        return result
+    # Fallback: v1/v2 proof_data still has citations key (should not happen
+    # after normalisation, but kept as a safety net).
+    return proof_data.get("citations", {})
+
+
+def _extractions_from_proof_data(proof_data: dict) -> dict:
+    """Return an extractions-compatible dict from proof_data."""
+    evidence = proof_data.get("evidence", {})
+    if evidence:
+        result = {}
+        for fact_id, entry in evidence.items():
+            if entry.get("type") != "empirical":
+                continue
+            ext = entry.get("extraction", {})
+            if ext:
+                result[fact_id] = {
+                    "value": ext.get("value", ""),
+                    "value_in_quote": ext.get("value_in_quote", False),
+                    "quote_snippet": ext.get("quote_snippet"),
+                }
+        return result
+    return proof_data.get("extractions", {})
+
+
+def _fact_registry_from_proof_data(proof_data: dict) -> dict:
+    """Return a fact_registry-compatible dict from proof_data.
+
+    Used so the template's {% for fact_id, fact in fact_registry.items() %}
+    loop works with both v1/v2 (native fact_registry) and v3 (evidence map).
+    """
+    evidence = proof_data.get("evidence", {})
+    if evidence:
+        result = {}
+        for fact_id, entry in evidence.items():
+            result[fact_id] = {
+                "label": entry.get("label", ""),
+                "method": entry.get("method") if entry.get("type") == "computed" else None,
+                "result": entry.get("result"),
+            }
+        return result
+    return proof_data.get("fact_registry", {})
+
+
 def build_audit_tables(proof_data):
     """Build structured data for audit trail tables that need source linking."""
-    citations = proof_data.get("citations", {})
+    citations = _citations_from_proof_data(proof_data)
     if not citations:
         return {}
 
@@ -169,7 +240,7 @@ def build_audit_tables(proof_data):
     # Extraction Records — from proof.json.extractions + citations for URLs
     # Extraction keys may differ from citation keys (e.g., "B1_napoleon_height" vs "B1").
     extraction_rows = []
-    extractions = proof_data.get("extractions", {})
+    extractions = _extractions_from_proof_data(proof_data)
     for ext_id, ext in extractions.items():
         # Try exact match first, then prefix match (B1_foo -> B1)
         cit = citations.get(ext_id)
@@ -194,7 +265,7 @@ def build_audit_tables(proof_data):
 
 def build_citation_summary(proof_data):
     """Build summary stats and flagged citations for the audit trail."""
-    citations = proof_data.get("citations", {})
+    citations = _citations_from_proof_data(proof_data)
     if not citations:
         return None
 
@@ -335,11 +406,11 @@ def build_pipeline_example_data(
 ) -> dict | None:
     """Build pipeline example dict for the landing page accordion."""
     pd = proof["proof_data"]
-    citations = pd.get("citations", {})
+    citations = _citations_from_proof_data(pd)
     if not citations:
         return None
 
-    extractions = pd.get("extractions", {})
+    extractions = _extractions_from_proof_data(pd)
 
     seen_sources: set[str] = set()
     sources: list[dict] = []
@@ -525,9 +596,10 @@ def main():
             json_ld=json_ld,
             canonical_url=canonical_url,
             og_type="article",
-            citations=proof["proof_data"].get("citations", {}),
+            citations=_citations_from_proof_data(proof["proof_data"]),
             audit_tables=build_audit_tables(proof["proof_data"]),
             citation_summary=build_citation_summary(proof["proof_data"]),
+            fact_registry=_fact_registry_from_proof_data(proof["proof_data"]),
             has_custom_thumbnail=has_custom_thumbnail,
             citation=citation_ctx,
             citation_formats=citation_formats,
@@ -612,7 +684,7 @@ def main():
                 "proof_py_url": f"{base_url}proofs/{p['slug']}/proof.py",
                 "source_names": p.get("source_names", []),
                 "source_names_extra": p.get("source_names_extra", 0),
-                "has_citations": bool(p["proof_data"].get("citations")),
+                "has_citations": bool(p["citation_count"]),
                 "doi": proof_dois.get(p["slug"]),
             }
             for p in proofs

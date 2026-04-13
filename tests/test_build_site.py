@@ -31,14 +31,14 @@ def site_fixture(tmp_path):
     proof_dir.mkdir(parents=True)
 
     (proof_dir / "proof.md").write_text(
-        "# Proof\n\n## Key Findings\n\n- Found it\n\n"
-        "## Claim Interpretation\n\nMeans X.\n\n"
-        "## Evidence Summary\n\n| ID | Fact |\n|---|---|\n| B1 | X |\n\n"
+        "# Proof\n\n"
+        "## Evidence Summary\n\n| ID | Fact |\n|---|---|\n| A1 | X |\n\n"
         "## Proof Logic\n\nBecause Y.\n\n"
         "## Conclusion\n\nThe claim is PROVED.\n"
     )
     (proof_dir / "proof_audit.md").write_text(
         "# Audit\n\n## Claim Specification\n\n| Field | Value |\n|---|---|\n| Subject | Test |\n\n"
+        "## Claim Interpretation\n\nMeans X.\n\n"
         "## Hardening Checklist\n\nAll pass.\n"
     )
     (proof_dir / "proof_narrative.md").write_text(
@@ -75,7 +75,8 @@ def site_fixture(tmp_path):
     )
     (proof_dir / "proof.py").write_text("# proof script\n")
     (proof_dir / "proof.json").write_text(json.dumps({
-        "fact_registry": {"B1": {"label": "test"}},
+        "format_version": 2,
+        "fact_registry": {"A1": {"label": "test", "method": "1 == 1", "result": "True"}},
         "claim_formal": {
             "subject": "Test", "property": "value", "operator": ">",
             "operator_note": "Strictly greater", "threshold": 0,
@@ -299,18 +300,19 @@ def site_fixture_paginated(tmp_path):
         proof_dir = tmp_path / "site" / "proofs" / f"claim-{i:03d}"
         proof_dir.mkdir(parents=True)
         (proof_dir / "proof.md").write_text(
-            f"# Proof\n\n## Key Findings\n\n- Found it #{i}\n\n"
-            f"## Claim Interpretation\n\nMeans X.\n\n"
-            f"## Evidence Summary\n\n| ID | Fact |\n|---|---|\n| B1 | X |\n\n"
+            f"# Proof\n\n"
+            f"## Evidence Summary\n\n| ID | Fact |\n|---|---|\n| A1 | X |\n\n"
             f"## Proof Logic\n\nBecause Y.\n\n"
             f"## Conclusion\n\nThe claim is PROVED.\n"
         )
         (proof_dir / "proof_audit.md").write_text(
             "# Audit\n\n## Claim Specification\n\n| Field | Value |\n|---|---|\n| Subject | Test |\n\n"
+            "## Claim Interpretation\n\nMeans X.\n\n"
             "## Hardening Checklist\n\nAll pass.\n"
         )
         (proof_dir / "proof.py").write_text("# proof script\n")
         (proof_dir / "proof.json").write_text(json.dumps({
+            "format_version": 2,
             "fact_registry": {},
             "claim_formal": {
                 "subject": "Test", "property": "value", "operator": ">",
@@ -517,9 +519,11 @@ def test_stats_proved_disproved_counts():
 
 
 def test_index_json_has_source_names(site_fixture):
-    # Add citations to the test proof.json
+    # Add citations (and matching fact_registry entries) to the test proof.json
     proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
     data = json.loads(proof_json_path.read_text())
+    data["fact_registry"]["B1"] = {"label": "MIT source"}
+    data["fact_registry"]["B2"] = {"label": "Britannica source"}
     data["citations"] = {
         "B1": {
             "source_name": "MIT McGovern Institute",
@@ -550,6 +554,7 @@ def test_proof_page_evidence_table_with_citations(site_fixture):
     """Proof pages with citations render a structured evidence table with links."""
     proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
     data = json.loads(proof_json_path.read_text())
+    data["fact_registry"]["B1"] = {"label": "Test fact"}
     data["citations"] = {
         "B1": {
             "source_name": "Test Source",
@@ -594,6 +599,7 @@ def test_audit_extraction_links_with_suffixed_keys(site_fixture):
     """
     proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
     data = json.loads(proof_json_path.read_text())
+    data["fact_registry"]["B1"] = {"label": "Test fact"}
     data["citations"] = {
         "B1": {
             "source_name": "Test Source",

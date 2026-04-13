@@ -86,6 +86,67 @@ def normalize_to_v3(proof_data: dict) -> dict:
                 },
             }
 
+    # Include any search_registry entries that have no corresponding S-fact in fact_registry.
+    for search_key, search_data in search_registry.items():
+        # Find an S-fact that references this search_key
+        already_covered = any(
+            entry.get("search", {}) == dict(search_data)
+            for entry in evidence.values()
+            if entry.get("type") == "search"
+        )
+        if not already_covered:
+            # Generate a synthetic fact_id
+            existing_s = [k for k in evidence if k.startswith("S")]
+            next_n = len(existing_s) + 1
+            fact_id = f"S{next_n}"
+            while fact_id in evidence:
+                next_n += 1
+                fact_id = f"S{next_n}"
+            evidence[fact_id] = {
+                "type": "search",
+                "label": search_data.get("database", search_key),
+                "sub_claim": None,
+                "search": dict(search_data),
+            }
+
+    # Include any citations that have no corresponding fact_registry entry.
+    # This handles test data shortcuts and older proof formats where citations
+    # may exist without explicit fact_registry stubs.
+    for fact_id, citation in citations.items():
+        if fact_id in evidence:
+            continue  # already handled via fact_registry
+        extraction = extractions.get(fact_id)
+        if extraction is None:
+            for ext_key, ext_val in extractions.items():
+                base_id = ext_key.split("_")[0] if "_" in ext_key else ext_key
+                if base_id == fact_id:
+                    extraction = ext_val
+                    break
+        if extraction is None:
+            extraction = {}
+        evidence[fact_id] = {
+            "type": "empirical",
+            "label": citation.get("source_name", fact_id),
+            "sub_claim": None,
+            "source": {
+                "name": citation.get("source_name", ""),
+                "url": citation.get("url", ""),
+                "quote": citation.get("quote", ""),
+            },
+            "verification": {
+                "status": citation.get("status", ""),
+                "method": citation.get("method", ""),
+                "coverage_pct": citation.get("coverage_pct"),
+                "fetch_mode": citation.get("fetch_mode", "live"),
+                "credibility": citation.get("credibility") or {},
+            },
+            "extraction": {
+                "value": str(extraction.get("value", "")) if extraction else "",
+                "value_in_quote": extraction.get("value_in_quote", False) if extraction else False,
+                "quote_snippet": extraction.get("quote_snippet") if extraction else None,
+            },
+        }
+
     # Build v3 dict
     v3 = {
         "format_version": 3,
