@@ -23,7 +23,7 @@ PROOF_ENGINE_ROOT = "..."  # LLM fills this with the actual path at proof-writin
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
-from scripts.verify_citations import verify_all_citations, build_citation_detail
+from scripts.verify_citations import verify_all_citations
 from scripts.computations import compare, apply_verdict_qualifier
 from scripts.proof_summary import ProofSummaryBuilder
 
@@ -242,16 +242,33 @@ if __name__ == "__main__":
 
 ### Disproof variant
 
-To disprove a claim (e.g., "Humans only use 10% of their brain"):
+To disprove a claim (e.g., "Humans only use 10% of their brain"), use `proof_direction: "disprove"`. The counting logic is identical, but the semantic meaning of each collection **inverts**:
 
-1. Set `CLAIM_FORMAL["proof_direction"]` to `"disprove"` and `threshold` to `3`.
-2. In `empirical_facts`, include authoritative sources that **reject** the claim. Choose quotes that clearly express the rejection — the quote must be verifiable on the source page.
-3. `n_confirmed` counts sources whose quotes were verified on the live page.
-4. `compare(3, ">=", 3)` returns `True`, so `claim_holds = True`.
-5. The verdict block maps `claim_holds = True` → `DISPROVED` (via `proof_direction`).
-6. In `adversarial_checks`, search for sources that **support** the claim.
+```python
+CLAIM_FORMAL = {
+    "subject": "...",
+    "property": "...",
+    "operator": ">=",
+    "operator_note": "Claim is disproved when ≥ threshold authoritative sources reject it",
+    "threshold": 3,
+    "proof_direction": "disprove",   # "affirm" → "disprove"
+}
 
-No keyword selection is needed — the counting mechanism is citation verification, not keyword matching. The key requirement is that quotes are on-topic and verifiable.
+# empirical_facts: sources that REJECT the claim (confirm it is false)
+# e.g. for "humans use only 10% of their brain": include neuroscience sources
+# that state the brain is active throughout, not just 10%.
+empirical_facts = {
+    "source_a": {"quote": "...", "url": "...", "source_name": "..."},
+    "source_b": {"quote": "...", "url": "...", "source_name": "..."},
+    "source_c": {"quote": "...", "url": "...", "source_name": "..."},
+}
+```
+
+`n_confirmed` counts verified rejection sources. `compare(n_confirmed, ">=", 3)` returns `True` → `claim_holds = True` → verdict maps to **DISPROVED** (via `proof_direction`).
+
+**Adversarial direction inverts too:** In `adversarial_checks`, search for sources that **support** the claim (i.e., sources arguing it might be true). For an affirmative proof you search for evidence against; for a disproof you search for evidence *for*. The question to ask: "Is there credible support for the claim I'm disproving?"
+
+No keyword selection is needed — citation verification status is the counting mechanism.
 
 ### Adaptation notes
 
