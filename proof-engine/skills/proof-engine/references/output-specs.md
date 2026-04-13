@@ -55,12 +55,13 @@ Section "Claim Interpretation": Formal claim specification in prose. State the n
 
 Section "Claim Specification": Formal claim specification in readable table rows. Source: proof.py JSON summary `claim_formal`.
 
-Section "Fact Registry": FACT_REGISTRY showing ID-to-key mapping. Source: proof.py JSON summary `fact_registry`.
+Section "Fact Registry": FACT_REGISTRY showing ID-to-key mapping. Source: proof.py JSON summary `fact_registry`. For Type A (computed) entries that have no `key` field, write `—` in the Key column.
 
 Section "Full Evidence Table": Two sub-sections:
 
 - "Type A (Computed) Facts" — table with columns: ID, Fact, Method, Result. All fields from JSON summary `fact_registry` entries where `method` and `result` are present. Source: proof.py JSON summary.
 - "Type B (Empirical) Facts" — table with columns: ID, Fact, Source, URL, Quote, Status, Method, Credibility. One row per source. Source: proof.py JSON summary `citations` (which has normalized `status` and `method` fields — not free-form messages). The Credibility column shows the plain-language type only (e.g., Government, Academic, Major news, Advocacy organization, Unclassified) from `citations[fact_id].credibility`. For pure-math proofs, omit. Multi-source facts produce `{fact_id}_source_{N}` keys; render each as its own row.
+  For the `Quote` column: truncate to the first ~100 characters to keep the table readable, and replace any embedded double-quote characters (`"`) with single quotes or the HTML entities `&ldquo;`/`&rdquo;` (U+201C / U+201D) to avoid breaking Markdown table cell parsing.
 - "Type S (Search) Facts" — table with columns: ID, Database, Search URL, Query Terms, Date Range, Result Count, Status, Credibility. One row per search. Source: JSON summary `fact_registry` (S-type entries) cross-referenced with `search_registry`. For absence proofs only; omit for other proof types.
 
 Section "Citation Verification Details": For each Type B citation, four fields — all from structured JSON fields, not parsed from prose:
