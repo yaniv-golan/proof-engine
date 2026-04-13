@@ -76,3 +76,34 @@ def test_unknown_verdict_raises():
 
 def test_taxonomy_has_all_verdicts():
     assert len(VERDICT_TAXONOMY) == 8
+
+
+def test_normalize_verdict_accepts_dict():
+    from tools.lib.verdict import normalize_verdict
+    verdict_dict = {
+        "value": "PROVED",
+        "qualified": True,
+        "qualifier": "unverified_citations",
+        "reason": None,
+    }
+    result = normalize_verdict(verdict_dict)
+    assert result["raw"] == "PROVED (with unverified citations)"
+    assert result["category"] == "proved-qualified"
+    assert result["badge_color"] == "amber"
+    assert result["rating"] == 4
+
+
+def test_normalize_verdict_dict_unqualified():
+    from tools.lib.verdict import normalize_verdict
+    verdict_dict = {"value": "DISPROVED", "qualified": False, "qualifier": None, "reason": None}
+    result = normalize_verdict(verdict_dict)
+    assert result["raw"] == "DISPROVED"
+    assert result["category"] == "disproved"
+    assert result["rating"] == 1
+
+
+def test_normalize_verdict_still_accepts_string():
+    from tools.lib.verdict import normalize_verdict
+    result = normalize_verdict("PROVED")
+    assert result["raw"] == "PROVED"
+    assert result["rating"] == 5

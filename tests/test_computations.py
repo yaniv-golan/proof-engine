@@ -182,3 +182,47 @@ def test_known_summary_keys_matches_proof_data():
     """KNOWN_SUMMARY_KEYS must stay in sync with ProofData TypedDict."""
     expected = set(typing.get_type_hints(ProofData).keys())
     assert KNOWN_SUMMARY_KEYS == expected
+
+
+# ---------------------------------------------------------------------------
+# apply_verdict_qualifier — structured (as_string=False) tests
+# ---------------------------------------------------------------------------
+
+def test_apply_verdict_qualifier_default_returns_string():
+    """Default (as_string=True) preserves backward compat for existing proof.py files."""
+    from scripts.computations import apply_verdict_qualifier
+    result = apply_verdict_qualifier("PROVED", any_unverified=False)
+    assert isinstance(result, str)
+    assert result == "PROVED"
+
+
+def test_apply_verdict_qualifier_default_with_unverified():
+    from scripts.computations import apply_verdict_qualifier
+    result = apply_verdict_qualifier("PROVED", any_unverified=True)
+    assert result == "PROVED (with unverified citations)"
+
+
+def test_apply_verdict_qualifier_as_dict():
+    """as_string=False returns structured dict for v3 ProofSummaryBuilder."""
+    from scripts.computations import apply_verdict_qualifier
+    result = apply_verdict_qualifier("PROVED", any_unverified=False, as_string=False)
+    assert isinstance(result, dict)
+    assert result["value"] == "PROVED"
+    assert result["qualified"] is False
+    assert result["qualifier"] is None
+
+
+def test_apply_verdict_qualifier_dict_with_unverified():
+    from scripts.computations import apply_verdict_qualifier
+    result = apply_verdict_qualifier("PROVED", any_unverified=True, as_string=False)
+    assert result["value"] == "PROVED"
+    assert result["qualified"] is True
+    assert result["qualifier"] == "unverified_citations"
+
+
+def test_apply_verdict_qualifier_partial_no_suffix():
+    from scripts.computations import apply_verdict_qualifier
+    result = apply_verdict_qualifier("PARTIALLY VERIFIED", any_unverified=True, as_string=False)
+    assert result["value"] == "PARTIALLY VERIFIED"
+    assert result["qualified"] is False
+    assert result["qualifier"] is None
