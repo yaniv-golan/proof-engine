@@ -9,6 +9,9 @@ def generate_claim_review(
     canonical_url: str,
     doi: str | None = None,
     concept_doi: str | None = None,
+    proof_py_url: str | None = None,
+    proof_json_url: str | None = None,
+    provenance_url: str | None = None,
 ) -> str:
     verdict_info = normalize_verdict(proof_data["verdict"])
 
@@ -38,5 +41,29 @@ def generate_claim_review(
         if concept_doi and concept_doi != doi:
             same_as.append(f"https://doi.org/{concept_doi}")
         claim_review["sameAs"] = same_as
+
+    if proof_py_url:
+        claim_review["isBasedOn"] = {
+            "@type": "SoftwareSourceCode",
+            "url": proof_py_url,
+            "programmingLanguage": "Python",
+            "name": "proof.py",
+        }
+
+    if proof_json_url:
+        claim_review["mainEntity"] = {
+            "@type": "Dataset",
+            "url": proof_json_url,
+            "name": "proof.json",
+            "encodingFormat": "application/json",
+        }
+
+    if provenance_url:
+        claim_review["about"] = {
+            "@type": "CreativeWork",
+            "url": provenance_url,
+            "name": "provenance.json",
+            "encodingFormat": "application/json",
+        }
 
     return json.dumps(claim_review, indent=2)

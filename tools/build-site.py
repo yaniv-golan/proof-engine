@@ -555,6 +555,9 @@ def main():
             proof["proof_data"], canonical_url,
             doi=doi_data["doi"] if doi_data else None,
             concept_doi=doi_data.get("concept_doi") if doi_data else None,
+            proof_py_url=f"{site_url}{base_url}proofs/{proof['slug']}/proof.py",
+            proof_json_url=f"{site_url}{base_url}proofs/{proof['slug']}/proof.json",
+            provenance_url=f"{site_url}{base_url}proofs/{proof['slug']}/provenance.json",
         )
 
         # Build citation context and files

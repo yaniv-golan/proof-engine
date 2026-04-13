@@ -114,3 +114,45 @@ def test_json_ld_concept_doi_as_additional_same_as():
     assert result["identifier"] == "10.5281/zenodo.1234567"
     assert "https://doi.org/10.5281/zenodo.1234567" in result["sameAs"]
     assert "https://doi.org/10.5281/zenodo.1234560" in result["sameAs"]
+
+
+def test_json_ld_v3_structured_verdict():
+    from tools.lib.json_ld import generate_claim_review
+    import json
+    proof_data = {
+        "format_version": 3, "claim_natural": "Test claim",
+        "verdict": {"value": "PROVED", "qualified": False, "qualifier": None, "reason": None},
+        "generator": {"generated_at": "2026-04-13"},
+    }
+    result = json.loads(generate_claim_review(proof_data, "https://example.com/proofs/test/"))
+    assert result["reviewRating"]["alternateName"] == "PROVED"
+    assert result["reviewRating"]["ratingValue"] == 5
+
+
+def test_json_ld_includes_is_based_on():
+    from tools.lib.json_ld import generate_claim_review
+    import json
+    proof_data = {
+        "format_version": 3, "claim_natural": "Test",
+        "verdict": {"value": "PROVED", "qualified": False, "qualifier": None, "reason": None},
+        "generator": {"generated_at": "2026-04-13"},
+    }
+    result = json.loads(generate_claim_review(proof_data, "https://example.com/proofs/test/",
+        proof_py_url="https://example.com/proofs/test/proof.py"))
+    assert "isBasedOn" in result
+    assert result["isBasedOn"]["@type"] == "SoftwareSourceCode"
+    assert result["isBasedOn"]["url"] == "https://example.com/proofs/test/proof.py"
+
+
+def test_json_ld_includes_main_entity():
+    from tools.lib.json_ld import generate_claim_review
+    import json
+    proof_data = {
+        "format_version": 3, "claim_natural": "Test",
+        "verdict": {"value": "PROVED", "qualified": False, "qualifier": None, "reason": None},
+        "generator": {"generated_at": "2026-04-13"},
+    }
+    result = json.loads(generate_claim_review(proof_data, "https://example.com/proofs/test/",
+        proof_json_url="https://example.com/proofs/test/proof.json"))
+    assert "mainEntity" in result
+    assert result["mainEntity"]["@type"] == "Dataset"
