@@ -641,6 +641,17 @@ def main():
             notebook = generate_notebook(proof_py_text, proof["proof_data"], proof["slug"], canonical_url)
             write_file(proof_out / "proof.ipynb", json.dumps(notebook, indent=1))
 
+        # RO-Crate metadata (MUST be last — inventories all generated files)
+        from tools.lib.ro_crate import generate_ro_crate
+        available = [f.name for f in proof_out.iterdir() if f.is_file()]
+        ro_crate = generate_ro_crate(
+            proof["proof_data"], proof["slug"], canonical_url,
+            available_files=available,
+            doi=doi_data["doi"] if doi_data else None,
+            concept_doi=doi_data.get("concept_doi") if doi_data else None,
+        )
+        write_file(proof_out / "ro-crate-metadata.json", json.dumps(ro_crate, indent=2))
+
     # Tag pages
     tag_proofs = {}
     for p in proofs:
