@@ -32,7 +32,7 @@ Section "Conclusion": Restate verdict with the key numbers. Verdict-specific:
 - UNDETERMINED: State what specific evidence would be needed to resolve the claim.
 - SUPPORTED: State that the absence threshold was met (N databases searched, 0 results), list any non-accessible databases, and note that the result is reproducible via search URLs but not machine-verified. Emphasize that future research could change this verdict.
 - SUPPORTED (with unverified citations): Same as SUPPORTED, but also list unverified corroborating citations and their impact.
-- If any cited source has credibility tier ≤ 2 (unclassified or flagged), add a note: "Note: [N] citation(s) come from unclassified or low-credibility sources. See Source Credibility Assessment in the audit trail."
+- If any cited source has credibility tier ≤ 2 (unclassified or flagged), add a note immediately after the evidence table in the `Evidence Summary` section: "Note: [N] citation(s) come from unclassified or low-credibility sources. See Source Credibility Assessment in the audit trail." Do not place this note in the Conclusion section — it belongs adjacent to the table it annotates.
 Source: JSON summary `verdict`, `key_results`, `citations[].credibility`; impact analysis is author analysis.
 
 Section "Generator": Footer line at the end of the document:
@@ -94,7 +94,7 @@ Section "Quality Checks":
 - Rule 5: Adversarial checks searched for independent counter-evidence
 - Rule 6: Cross-checks used independently sourced inputs
 - Rule 7: Constants and formulas imported from computations.py, not hand-coded
-- validate_proof.py result: [PASS/FAIL with details]
+- validate_proof.py result: [PASS/FAIL with details — reflect the **final** state of proof.py at the time of audit writing, not intermediate iteration history. If the proof passed with 0 warnings on the last run, write "PASS — 18/18 checks, 0 warnings." If earlier runs had corrected issues, omit that history; the clean final run is the authoritative result.]
 
 For pure-math proofs, mark Rules 1, 2, and 6 as "N/A — pure computation, no empirical facts."
 
