@@ -1,31 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Per-company investment: $50M / 25 companies = $2M each",
-      "method": "fund_size_m / n_companies",
-      "result": "$2.0M"
-    },
-    "A2": {
-      "label": "Total return under claimed scenario: (1\u00d750 + 2\u00d710) \u00d7 $2M = $140M",
-      "method": "(n_50x \u00d7 multiple_50x + n_10x \u00d7 multiple_10x) \u00d7 per_company_m",
-      "result": "$140.0M"
-    },
-    "A3": {
-      "label": "Gross multiple achieved: $140M / $50M = 2.8x",
-      "method": "total_return_m / fund_size_m",
-      "result": "2.8000x"
-    },
-    "A4": {
-      "label": "Cross-check via direct portfolio sum: 1\u00d7$100M + 2\u00d7$20M + 22\u00d7$0M = $140M",
-      "method": "sum([50x\u00d7$2M, 10x\u00d7$2M, 10x\u00d7$2M, 0x\u00d7$2M \u00d7 22])",
-      "result": "$140.0M \u2192 2.8000x"
-    },
-    "A5": {
-      "label": "Claim evaluation: gross_multiple == 3.0",
-      "method": "compare(2.8000, '==', 3.0)",
-      "result": "False"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "A VC fund with $50M invested equally across 25 startups",
     "property": "whether 1\u00d750x + 2\u00d710x returns (others=0) achieves a 3x gross multiple",
@@ -35,6 +9,48 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "A venture capital fund investing $50 million in 25 startups at equal sizes requires at least one 50x return and two 10x returns to achieve a 3x gross multiple.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Per-company investment: $50M / 25 companies = $2M each",
+      "sub_claim": null,
+      "method": "fund_size_m / n_companies",
+      "result": "$2.0M",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Total return under claimed scenario: (1\u00d750 + 2\u00d710) \u00d7 $2M = $140M",
+      "sub_claim": null,
+      "method": "(n_50x \u00d7 multiple_50x + n_10x \u00d7 multiple_10x) \u00d7 per_company_m",
+      "result": "$140.0M",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Gross multiple achieved: $140M / $50M = 2.8x",
+      "sub_claim": null,
+      "method": "total_return_m / fund_size_m",
+      "result": "2.8000x",
+      "depends_on": []
+    },
+    "A4": {
+      "type": "computed",
+      "label": "Cross-check via direct portfolio sum: 1\u00d7$100M + 2\u00d7$20M + 22\u00d7$0M = $140M",
+      "sub_claim": null,
+      "method": "sum([50x\u00d7$2M, 10x\u00d7$2M, 10x\u00d7$2M, 0x\u00d7$2M \u00d7 22])",
+      "result": "$140.0M \u2192 2.8000x",
+      "depends_on": []
+    },
+    "A5": {
+      "type": "computed",
+      "label": "Claim evaluation: gross_multiple == 3.0",
+      "sub_claim": null,
+      "method": "compare(2.8000, '==', 3.0)",
+      "result": "False",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Independent computation: explicit per-company list sum vs. algebraic formula",
@@ -42,7 +58,8 @@
         "2.8000x",
         "2.8000x"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -65,7 +82,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "fund_size_m": 50.0,
     "n_companies": 25,

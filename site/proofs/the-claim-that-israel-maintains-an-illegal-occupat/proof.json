@@ -1,37 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "wiki_oslo_ii_areas",
-      "label": "Wikipedia: Oslo II Accord \u2014 Area C 'full Israeli civil and security control'"
-    },
-    "B2": {
-      "key": "area_c_wiki",
-      "label": "Wikipedia: Area C \u2014 Oslo II definition 'gradually transferred to Palestinian jurisdiction'"
-    },
-    "B3": {
-      "key": "wiki_area_a",
-      "label": "Wikipedia: Oslo II Accord \u2014 Area A 'full civil and security control by the Palestinian Authority'"
-    },
-    "B4": {
-      "key": "wiki_area_b",
-      "label": "Wikipedia: Oslo II Accord \u2014 Area B 'Palestinian civil control and joint Israeli-Palestinian security control'"
-    },
-    "A1": {
-      "label": "SC1 confirmed: n_sources_sc1 >= 2",
-      "method": "sum(sc1_confirmations) = 2",
-      "result": "2 / 2 sources confirm SC1 (Area C under Israeli control)"
-    },
-    "A2": {
-      "label": "SC2a confirmed: n_sources_sc2a >= 2",
-      "method": "sum(sc2a_confirmations) = 2",
-      "result": "2 / 2 sources confirm SC2a (Areas A, B under Palestinian civil control)"
-    },
-    "A3": {
-      "label": "SC2b fails: ICJ 2024 finds occupation unlawful regardless of Oslo",
-      "method": "adversarial_check: ICJ 2024 Advisory Opinion",
-      "result": "SC2b fails: ICJ found occupation unlawful; Oslo cannot detract from international law obligations"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Oslo Accords / Area C designation",
     "sub_claims": [
@@ -61,96 +29,142 @@
     "operator_note": "All three sub-claims must hold for the overall claim to be PROVED. SC1 and SC2a are verifiable and hold; SC2b fails. Result: PARTIALLY VERIFIED \u2014 the factual basis is correct (Area C designation exists and does differentiate from Areas A/B), but the 'illegal' dimension is not contradicted by Oslo, which is a bilateral administrative arrangement, not an international law adjudication."
   },
   "claim_natural": "The claim that Israel maintains an illegal occupation of the entire West Bank is contradicted by the Oslo Accords designating Area C as remaining under full Israeli civil and security administration pending final-status negotiations.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "wiki_oslo_ii_areas",
-      "source_name": "Wikipedia: West Bank areas in the Oslo II Accord",
-      "url": "https://en.wikipedia.org/wiki/West_Bank_areas_in_the_Oslo_II_Accord",
-      "quote": "Area C (full Israeli civil and security control): initially, circa 72\u201374% (first phase, 1995)",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Oslo II Accord \u2014 Area C 'full Israeli civil and security control'",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: West Bank areas in the Oslo II Accord",
+        "url": "https://en.wikipedia.org/wiki/West_Bank_areas_in_the_Oslo_II_Accord",
+        "quote": "Area C (full Israeli civil and security control): initially, circa 72\u201374% (first phase, 1995)"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "Israeli civil and security control confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "Area C (full Israeli civil and security control): initially, circa 72\u201374% (first"
       }
     },
     "B2": {
-      "source_key": "area_c_wiki",
-      "source_name": "Wikipedia: Area C (West Bank) \u2014 quoting Oslo II Accord definition",
-      "url": "https://en.wikipedia.org/wiki/Area_C_(West_Bank)",
-      "quote": "areas of the West Bank outside Areas A and B, which, except for the issues that will be negotiated in the permanent status negotiations, will be gradually transferred to Palestinian jurisdiction in accordance with this Agreement",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Area C \u2014 Oslo II definition 'gradually transferred to Palestinian jurisdiction'",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Area C (West Bank) \u2014 quoting Oslo II Accord definition",
+        "url": "https://en.wikipedia.org/wiki/Area_C_(West_Bank)",
+        "quote": "areas of the West Bank outside Areas A and B, which, except for the issues that will be negotiated in the permanent status negotiations, will be gradually transferred to Palestinian jurisdiction in accordance with this Agreement"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "permanent status negotiations confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "areas of the West Bank outside Areas A and B, which, except for the issues that "
       }
     },
     "B3": {
-      "source_key": "wiki_area_a",
-      "source_name": "Wikipedia: West Bank areas in the Oslo II Accord \u2014 Area A designation",
-      "url": "https://en.wikipedia.org/wiki/West_Bank_areas_in_the_Oslo_II_Accord",
-      "quote": "full civil and security control by the Palestinian Authority",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Oslo II Accord \u2014 Area A 'full civil and security control by the Palestinian Authority'",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: West Bank areas in the Oslo II Accord \u2014 Area A designation",
+        "url": "https://en.wikipedia.org/wiki/West_Bank_areas_in_the_Oslo_II_Accord",
+        "quote": "full civil and security control by the Palestinian Authority"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "Palestinian Authority civil control (Area A) confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "full civil and security control by the Palestinian Authority"
       }
     },
     "B4": {
-      "source_key": "wiki_area_b",
-      "source_name": "Wikipedia: West Bank areas in the Oslo II Accord \u2014 Area B designation",
-      "url": "https://en.wikipedia.org/wiki/West_Bank_areas_in_the_Oslo_II_Accord",
-      "quote": "Palestinian civil control and joint Israeli-Palestinian security control",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Oslo II Accord \u2014 Area B 'Palestinian civil control and joint Israeli-Palestinian security control'",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: West Bank areas in the Oslo II Accord \u2014 Area B designation",
+        "url": "https://en.wikipedia.org/wiki/West_Bank_areas_in_the_Oslo_II_Accord",
+        "quote": "Palestinian civil control and joint Israeli-Palestinian security control"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "Palestinian civil control (Area B) confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "Palestinian civil control and joint Israeli-Palestinian security control"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "Israeli civil and security control confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "Area C (full Israeli civil and security control): initially, circa 72\u201374% (first"
     },
-    "B2": {
-      "value": "permanent status negotiations confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "areas of the West Bank outside Areas A and B, which, except for the issues that "
+    "A1": {
+      "type": "computed",
+      "label": "SC1 confirmed: n_sources_sc1 >= 2",
+      "sub_claim": "SC1",
+      "method": "sum(sc1_confirmations) = 2",
+      "result": "2 / 2 sources confirm SC1 (Area C under Israeli control)",
+      "depends_on": []
     },
-    "B3": {
-      "value": "Palestinian Authority civil control (Area A) confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "full civil and security control by the Palestinian Authority"
+    "A2": {
+      "type": "computed",
+      "label": "SC2a confirmed: n_sources_sc2a >= 2",
+      "sub_claim": "SC2a",
+      "method": "sum(sc2a_confirmations) = 2",
+      "result": "2 / 2 sources confirm SC2a (Areas A, B under Palestinian civil control)",
+      "depends_on": []
     },
-    "B4": {
-      "value": "Palestinian civil control (Area B) confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "Palestinian civil control and joint Israeli-Palestinian security control"
+    "A3": {
+      "type": "computed",
+      "label": "SC2b fails: ICJ 2024 finds occupation unlawful regardless of Oslo",
+      "sub_claim": "SC2b",
+      "method": "adversarial_check: ICJ 2024 Advisory Opinion",
+      "result": "SC2b fails: ICJ found occupation unlawful; Oslo cannot detract from international law obligations",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -158,20 +172,23 @@
       "description": "SC1: Area C under Israeli control \u2014 two independent Wikipedia sections (same article, different claims)",
       "n_sources": 2,
       "n_confirming": 2,
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "SC2a: Areas A and B under Palestinian civil control \u2014 Area A and Area B descriptions independently confirm",
       "n_sources": 2,
       "n_confirming": 2,
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "SC2b: Oslo contradicts 'illegal' characterization \u2014 ICJ 2024 Advisory Opinion contradicts this sub-claim",
       "n_sources": 1,
       "n_confirming": 0,
       "agreement": false,
-      "note": "SC2b fails: ICJ 2024 explicitly found occupation unlawful and stated Oslo cannot detract from international law obligations"
+      "note": "SC2b fails: ICJ 2024 explicitly found occupation unlawful and stated Oslo cannot detract from international law obligations",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -200,7 +217,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PARTIALLY VERIFIED",
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_sc1_confirming": 2,
     "n_sc2a_confirming": 2,

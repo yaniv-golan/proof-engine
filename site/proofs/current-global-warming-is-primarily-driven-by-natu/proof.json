@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_noaa_humans",
-      "label": "NOAA Climate.gov: Are humans causing global warming? \u2014 scientific consensus statement"
-    },
-    "B2": {
-      "key": "source_noaa_evidence",
-      "label": "NOAA Climate.gov: What evidence exists that humans are the main cause? \u2014 ruling out natural factors"
-    },
-    "B3": {
-      "key": "source_nasa_sun",
-      "label": "NASA Science FAQ: Is the Sun causing global warming? \u2014 solar vs human attribution"
-    },
-    "A1": {
-      "label": "Count of verified sources rejecting natural-cycle-primacy claim",
-      "method": "count(verified citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Current global warming",
     "property": "primary driver is natural climate cycles (not human CO2 emissions)",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Current global warming is primarily driven by natural climate cycles rather than human CO2 emissions.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_noaa_humans",
-      "source_name": "NOAA Climate.gov \u2014 Are humans causing or contributing to global warming?",
-      "url": "https://www.climate.gov/news-features/climate-qa/are-humans-causing-or-contributing-global-warming",
-      "quote": "Virtually all climate scientists agree that this increase in heat-trapping gases is the main reason for the 1.8\u00b0F (1.0\u00b0C) rise in global average temperature since the late nineteenth century.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "climate.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NOAA Climate.gov: Are humans causing global warming? \u2014 scientific consensus statement",
+      "sub_claim": null,
+      "source": {
+        "name": "NOAA Climate.gov \u2014 Are humans causing or contributing to global warming?",
+        "url": "https://www.climate.gov/news-features/climate-qa/are-humans-causing-or-contributing-global-warming",
+        "quote": "Virtually all climate scientists agree that this increase in heat-trapping gases is the main reason for the 1.8\u00b0F (1.0\u00b0C) rise in global average temperature since the late nineteenth century."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "climate.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Virtually all climate scientists agree that this increase in heat-trapping gases"
       }
     },
     "B2": {
-      "source_key": "source_noaa_evidence",
-      "source_name": "NOAA Climate.gov \u2014 What evidence exists that Earth is warming and humans are the main cause?",
-      "url": "https://www.climate.gov/news-features/climate-qa/what-evidence-exists-earth-warming-and-humans-are-main-cause",
-      "quote": "no other known climate influences have changed enough to account for the observed warming trend",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "climate.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NOAA Climate.gov: What evidence exists that humans are the main cause? \u2014 ruling out natural factors",
+      "sub_claim": null,
+      "source": {
+        "name": "NOAA Climate.gov \u2014 What evidence exists that Earth is warming and humans are the main cause?",
+        "url": "https://www.climate.gov/news-features/climate-qa/what-evidence-exists-earth-warming-and-humans-are-main-cause",
+        "quote": "no other known climate influences have changed enough to account for the observed warming trend"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "climate.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "no other known climate influences have changed enough to account for the observe"
       }
     },
     "B3": {
-      "source_key": "source_nasa_sun",
-      "source_name": "NASA Science \u2014 Is the Sun causing global warming?",
-      "url": "https://science.nasa.gov/climate-change/faq/is-the-sun-causing-global-warming/",
-      "quote": "It is therefore extremely unlikely that the Sun has caused the observed global temperature warming trend over the past half-century.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nasa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NASA Science FAQ: Is the Sun causing global warming? \u2014 solar vs human attribution",
+      "sub_claim": null,
+      "source": {
+        "name": "NASA Science \u2014 Is the Sun causing global warming?",
+        "url": "https://science.nasa.gov/climate-change/faq/is-the-sun-causing-global-warming/",
+        "quote": "It is therefore extremely unlikely that the Sun has caused the observed global temperature warming trend over the past half-century."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nasa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "It is therefore extremely unlikely that the Sun has caused the observed global t"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Virtually all climate scientists agree that this increase in heat-trapping gases"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "no other known climate influences have changed enough to account for the observe"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "It is therefore extremely unlikely that the Sun has caused the observed global t"
+    "A1": {
+      "type": "computed",
+      "label": "Count of verified sources rejecting natural-cycle-primacy claim",
+      "sub_claim": null,
+      "method": "count(verified citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,7 +113,8 @@
         "source_noaa_evidence": "verified",
         "source_nasa_sun": "verified"
       },
-      "independence_note": "NOAA (National Oceanic and Atmospheric Administration) and NASA (National Aeronautics and Space Administration) are independent agencies with separate research budgets, staff, and measurement programs. Both positions are independently consistent with IPCC AR6 findings."
+      "independence_note": "NOAA (National Oceanic and Atmospheric Administration) and NASA (National Aeronautics and Space Administration) are independent agencies with separate research budgets, staff, and measurement programs. Both positions are independently consistent with IPCC AR6 findings.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -130,7 +137,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

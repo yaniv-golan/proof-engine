@@ -1,152 +1,162 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_aad",
-      "label": "American Academy of Dermatology: absorbed ingredients not proven harmful"
-    },
-    "B2": {
-      "key": "source_mdanderson",
-      "label": "MD Anderson Cancer Center: no medical evidence sunscreen causes cancer; UV does"
-    },
-    "B3": {
-      "key": "source_pmc_cmaj",
-      "label": "PMC/CMAJ 2020: high-quality evidence sunscreen reduces melanoma and nonmelanoma cancer"
-    },
-    "B4": {
-      "key": "source_pmc_vitd",
-      "label": "PMC 2022 expert panel: sunscreen does not limit vitamin D production in real-world use"
-    },
-    "B5": {
-      "key": "source_skincancer",
-      "label": "Skin Cancer Foundation: ~90% of nonmelanoma skin cancers associated with UV exposure"
-    },
-    "A1": {
-      "label": "Verified disproof source count",
-      "method": "count(verified disproof citations) = 5",
-      "result": "5"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Chemical sunscreen",
     "property": "comparative harm vs. moderate sun exposure",
     "operator": ">=",
-    "operator_note": "The claim asserts sunscreen is MORE dangerous than moderate sun exposure, citing two mechanisms: (1) systemic absorption of chemical UV filters and (2) reduction of vitamin D synthesis. Interpreted as: the combined harm of sunscreen use >= the harm of moderate unprotected sun exposure. We DISPROVE this by gathering authoritative sources showing: (a) chemical absorption is documented but no human harm has been demonstrated; (b) real-world vitamin D reduction from sunscreen is minimal — population studies show no significant difference in vitamin D levels between sunscreen users and non-users with equivalent outdoor exposure; (c) UV radiation is the dominant cause of skin cancer (~86-90% of cases); and (d) sunscreen use reduces melanoma risk by ~50% and squamous cell carcinoma by ~40%. Threshold: 3 or more independently verified authoritative sources must reject the claim's conclusion for a DISPROVED verdict.",
+    "operator_note": "The claim asserts sunscreen is MORE dangerous than moderate sun exposure, citing two mechanisms: (1) systemic absorption of chemical UV filters and (2) reduction of vitamin D synthesis. Interpreted as: the combined harm of sunscreen use >= the harm of moderate unprotected sun exposure. We DISPROVE this by gathering authoritative sources showing: (a) chemical absorption is documented but no human harm has been demonstrated; (b) real-world vitamin D reduction from sunscreen is minimal \u2014 population studies show no significant difference in vitamin D levels between sunscreen users and non-users with equivalent outdoor exposure; (c) UV radiation is the dominant cause of skin cancer (~86-90% of cases); and (d) sunscreen use reduces melanoma risk by ~50% and squamous cell carcinoma by ~40%. Threshold: 3 or more independently verified authoritative sources must reject the claim's conclusion for a DISPROVED verdict.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
   "claim_natural": "Sunscreen is more dangerous due to chemical absorption and vitamin D blocking than moderate sun exposure.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_aad",
-      "source_name": "American Academy of Dermatology — Sunscreen FAQs",
-      "url": "https://www.aad.org/media/stats-sunscreen",
-      "quote": "Just because an ingredient is absorbed into the bloodstream does not mean that it is harmful or unsafe.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "aad.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "American Academy of Dermatology: absorbed ingredients not proven harmful",
+      "sub_claim": null,
+      "source": {
+        "name": "American Academy of Dermatology \u2014 Sunscreen FAQs",
+        "url": "https://www.aad.org/media/stats-sunscreen",
+        "quote": "Just because an ingredient is absorbed into the bloodstream does not mean that it is harmful or unsafe."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "aad.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Just because an ingredient is absorbed into the bloodstream does not mean that i"
       }
     },
     "B2": {
-      "source_key": "source_mdanderson",
-      "source_name": "MD Anderson Cancer Center — Sunscreen Myths Debunked",
-      "url": "https://www.mdanderson.org/cancerwise/sunscreen-myths-debunked.h00-159697545.html",
-      "quote": "There is no medical evidence that sunscreen causes cancer. However, there is a lot of evidence that UV rays from the sun and tanning beds do.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "mdanderson.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "MD Anderson Cancer Center: no medical evidence sunscreen causes cancer; UV does",
+      "sub_claim": null,
+      "source": {
+        "name": "MD Anderson Cancer Center \u2014 Sunscreen Myths Debunked",
+        "url": "https://www.mdanderson.org/cancerwise/sunscreen-myths-debunked.h00-159697545.html",
+        "quote": "There is no medical evidence that sunscreen causes cancer. However, there is a lot of evidence that UV rays from the sun and tanning beds do."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "mdanderson.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "There is no medical evidence that sunscreen causes cancer. However, there is a l"
       }
     },
     "B3": {
-      "source_key": "source_pmc_cmaj",
-      "source_name": "PMC / CMAJ — Efficacy and Safety of Sunscreen (2020)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7759112/",
-      "quote": "High-quality evidence has shown that sunscreen reduces the risk of developing both melanoma and nonmelanoma skin cancer.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PMC/CMAJ 2020: high-quality evidence sunscreen reduces melanoma and nonmelanoma cancer",
+      "sub_claim": null,
+      "source": {
+        "name": "PMC / CMAJ \u2014 Efficacy and Safety of Sunscreen (2020)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7759112/",
+        "quote": "High-quality evidence has shown that sunscreen reduces the risk of developing both melanoma and nonmelanoma skin cancer."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "High-quality evidence has shown that sunscreen reduces the risk of developing bo"
       }
     },
     "B4": {
-      "source_key": "source_pmc_vitd",
-      "source_name": "PMC — Sunscreen and Vitamin D Expert Panel (2022)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9002342/",
-      "quote": "Sunscreens can be effective in preventing erythema from solar exposure without limiting the benefits with respect to vitamin D production.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PMC 2022 expert panel: sunscreen does not limit vitamin D production in real-world use",
+      "sub_claim": null,
+      "source": {
+        "name": "PMC \u2014 Sunscreen and Vitamin D Expert Panel (2022)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9002342/",
+        "quote": "Sunscreens can be effective in preventing erythema from solar exposure without limiting the benefits with respect to vitamin D production."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Sunscreens can be effective in preventing erythema from solar exposure without l"
       }
     },
     "B5": {
-      "source_key": "source_skincancer",
-      "source_name": "Skin Cancer Foundation — Skin Cancer Facts & Statistics",
-      "url": "https://www.skincancer.org/skin-cancer-information/skin-cancer-facts/",
-      "quote": "About 90 percent of nonmelanoma skin cancers are associated with exposure to ultraviolet (UV) radiation from the sun.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "skincancer.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Skin Cancer Foundation: ~90% of nonmelanoma skin cancers associated with UV exposure",
+      "sub_claim": null,
+      "source": {
+        "name": "Skin Cancer Foundation \u2014 Skin Cancer Facts & Statistics",
+        "url": "https://www.skincancer.org/skin-cancer-information/skin-cancer-facts/",
+        "quote": "About 90 percent of nonmelanoma skin cancers are associated with exposure to ultraviolet (UV) radiation from the sun."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "skincancer.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "About 90 percent of nonmelanoma skin cancers are associated with exposure to ult"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Just because an ingredient is absorbed into the bloodstream does not mean that i"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "There is no medical evidence that sunscreen causes cancer. However, there is a l"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "High-quality evidence has shown that sunscreen reduces the risk of developing bo"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Sunscreens can be effective in preventing erythema from solar exposure without l"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "About 90 percent of nonmelanoma skin cancers are associated with exposure to ult"
+    "A1": {
+      "type": "computed",
+      "label": "Verified disproof source count",
+      "sub_claim": null,
+      "method": "count(verified disproof citations) = 5",
+      "result": "5",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -161,7 +171,8 @@
         "source_pmc_vitd": "verified",
         "source_skincancer": "verified"
       },
-      "independence_note": "Sources span distinct institution types: professional medical association (AAD), major cancer research and treatment center (MD Anderson), peer-reviewed academic literature (PMC/CMAJ 2020), international expert consensus panel (PMC 2022), and an independent cancer prevention foundation (Skin Cancer Foundation). All five are institutionally independent with no shared authorship."
+      "independence_note": "Sources span distinct institution types: professional medical association (AAD), major cancer research and treatment center (MD Anderson), peer-reviewed academic literature (PMC/CMAJ 2020), international expert consensus panel (PMC 2022), and an independent cancer prevention foundation (Skin Cancer Foundation). All five are institutionally independent with no shared authorship.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -186,11 +197,16 @@
     {
       "question": "Are there peer-reviewed studies directly concluding that sunscreen is more dangerous than moderate unprotected sun exposure on a net-harm basis?",
       "verification_performed": "Searched for 'sunscreen more dangerous sun exposure net harm peer reviewed evidence'. Harvard Health explains that studies where sunscreen users appeared to have higher cancer rates reflect behavioral confounding: people who use more sunscreen tend to spend more time in the sun, reversing the causal arrow. MD Anderson, AAD, and the Skin Cancer Foundation all explicitly reject the conclusion that sunscreen causes net harm exceeding sun exposure. No peer-reviewed study was found concluding sunscreen use causes greater net harm than moderate unprotected sun exposure.",
-      "finding": "No peer-reviewed studies support this conclusion. The observed correlation is reversed causation: higher-sunscreen users get more sun, not cancer from sunscreen. All major medical institutions — AAD, MD Anderson, Skin Cancer Foundation, CDC — explicitly reject the claim.",
+      "finding": "No peer-reviewed studies support this conclusion. The observed correlation is reversed causation: higher-sunscreen users get more sun, not cancer from sunscreen. All major medical institutions \u2014 AAD, MD Anderson, Skin Cancer Foundation, CDC \u2014 explicitly reject the claim.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 5,
     "threshold": 3,

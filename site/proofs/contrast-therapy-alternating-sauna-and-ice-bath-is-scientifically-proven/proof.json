@@ -1,100 +1,106 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "cwt_plosone_2013",
-      "label": "PLOS One 2013 meta-analysis (18 RCTs): CWT for exercise-induced muscle damage — no superior intervention over other active methods"
-    },
-    "B2": {
-      "key": "cwt_team_sport_2017",
-      "label": "PubMed 2017 systematic review + meta-analysis: CWT vs CWI for team sport — CWI outperforms CWT for neuromuscular recovery"
-    },
-    "B3": {
-      "key": "contrast_scoping_2025",
-      "label": "PMC 2025 scoping review: contrast therapy for musculoskeletal pain — insufficient evidence quality to conclude superiority over other therapies"
-    },
-    "A1": {
-      "label": "Count of independent peer-reviewed reviews confirming CWT is NOT scientifically proven superior",
-      "method": "count(verified refuting sources) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Contrast therapy (alternating sauna and ice bath / cold water immersion)",
     "property": "scientifically proven superior for both athletic/exercise recovery and longevity compared to other modalities",
     "operator": ">=",
-    "operator_note": "Proof direction: DISPROVE. 'Scientifically proven superior' requires independent peer-reviewed meta-analyses or systematic reviews concluding contrast therapy outperforms all comparators. We count sources that REFUTE this: peer-reviewed reviews showing (a) CWT is not superior to other active recovery methods, or (b) evidence quality is insufficient to draw superiority conclusions. Threshold of 3 independent peer-reviewed sources is the minimum for 'consensus'. The claim is compound (recovery AND longevity): disproving either part disproves the whole. For recovery: CWT must be proven superior to cold water immersion (CWI) and other active modalities — existing meta-analyses contradict this. For longevity: no prospective RCTs or cohort studies specifically examining combined contrast therapy (sauna+cold) and lifespan/all-cause mortality exist. The sauna-longevity association (Laukkanen et al.) applies to sauna use alone, not contrast therapy.",
+    "operator_note": "Proof direction: DISPROVE. 'Scientifically proven superior' requires independent peer-reviewed meta-analyses or systematic reviews concluding contrast therapy outperforms all comparators. We count sources that REFUTE this: peer-reviewed reviews showing (a) CWT is not superior to other active recovery methods, or (b) evidence quality is insufficient to draw superiority conclusions. Threshold of 3 independent peer-reviewed sources is the minimum for 'consensus'. The claim is compound (recovery AND longevity): disproving either part disproves the whole. For recovery: CWT must be proven superior to cold water immersion (CWI) and other active modalities \u2014 existing meta-analyses contradict this. For longevity: no prospective RCTs or cohort studies specifically examining combined contrast therapy (sauna+cold) and lifespan/all-cause mortality exist. The sauna-longevity association (Laukkanen et al.) applies to sauna use alone, not contrast therapy.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
   "claim_natural": "Contrast therapy alternating sauna and ice bath is scientifically proven superior for recovery and longevity.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "cwt_plosone_2013",
-      "source_name": "PLOS One — Contrast Water Therapy and Exercise Induced Muscle Damage: A Systematic Review and Meta-Analysis (Higgins et al., 2013)",
-      "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0062356",
-      "quote": "there was little evidence for a superior treatment intervention",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "plos.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "PLOS One 2013 meta-analysis (18 RCTs): CWT for exercise-induced muscle damage \u2014 no superior intervention over other active methods",
+      "sub_claim": null,
+      "source": {
+        "name": "PLOS One \u2014 Contrast Water Therapy and Exercise Induced Muscle Damage: A Systematic Review and Meta-Analysis (Higgins et al., 2013)",
+        "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0062356",
+        "quote": "there was little evidence for a superior treatment intervention"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "plos.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "there was little evidence for a superior treatment intervention"
       }
     },
     "B2": {
-      "source_key": "cwt_team_sport_2017",
-      "source_name": "PubMed — Effects of Cold Water Immersion and Contrast Water Therapy for Recovery From Team Sport: A Systematic Review and Meta-analysis (Versey et al., 2017)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/27398915/",
-      "quote": "CWI was beneficial for neuromuscular recovery 24 hours following team sport, whereas CWT was not beneficial",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PubMed 2017 systematic review + meta-analysis: CWT vs CWI for team sport \u2014 CWI outperforms CWT for neuromuscular recovery",
+      "sub_claim": null,
+      "source": {
+        "name": "PubMed \u2014 Effects of Cold Water Immersion and Contrast Water Therapy for Recovery From Team Sport: A Systematic Review and Meta-analysis (Versey et al., 2017)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27398915/",
+        "quote": "CWI was beneficial for neuromuscular recovery 24 hours following team sport, whereas CWT was not beneficial"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "CWI was beneficial for neuromuscular recovery 24 hours following team sport, whe"
       }
     },
     "B3": {
-      "source_key": "contrast_scoping_2025",
-      "source_name": "PMC — Mechanisms and Efficacy of Contrast Therapy for Musculoskeletal Painful Disease: A Scoping Review (2025)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11900007/",
-      "quote": "the modest quality of the trials does not allow the authors to draw clear conclusions about the effectiveness of CT compared with other therapies",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PMC 2025 scoping review: contrast therapy for musculoskeletal pain \u2014 insufficient evidence quality to conclude superiority over other therapies",
+      "sub_claim": null,
+      "source": {
+        "name": "PMC \u2014 Mechanisms and Efficacy of Contrast Therapy for Musculoskeletal Painful Disease: A Scoping Review (2025)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11900007/",
+        "quote": "the modest quality of the trials does not allow the authors to draw clear conclusions about the effectiveness of CT compared with other therapies"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the modest quality of the trials does not allow the authors to draw clear conclu"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "there was little evidence for a superior treatment intervention"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "CWI was beneficial for neuromuscular recovery 24 hours following team sport, whe"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the modest quality of the trials does not allow the authors to draw clear conclu"
+    "A1": {
+      "type": "computed",
+      "label": "Count of independent peer-reviewed reviews confirming CWT is NOT scientifically proven superior",
+      "sub_claim": null,
+      "method": "count(verified refuting sources) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -105,30 +111,36 @@
         "J Strength Cond Res 2017 (Versey): 'CWI beneficial, CWT was not beneficial'",
         "PMC 2025 scoping: 'modest quality ... no clear conclusions about CT vs others'"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Does any RCT or prospective cohort study show that combined contrast therapy (alternating sauna + cold immersion specifically) improves human longevity or reduces all-cause mortality?",
       "verification_performed": "Searched PubMed and web for 'contrast therapy longevity lifespan mortality RCT cohort' and 'sauna ice bath alternating longevity evidence prospective study'.",
-      "finding": "No prospective cohort studies or RCTs found that examine combined contrast therapy (hot+cold) and longevity outcomes in humans. The landmark longevity data (Laukkanen et al. 2015, JAMA Intern Med) studies sauna use ALONE in 2,315 Finnish men over 20.7 years — no cold immersion component. Cold water immersion longevity claims rely primarily on animal models (mouse studies showing ~20% lifespan extension with mild hypothermia) with very limited human data. No studies combine these two modalities specifically for longevity outcomes.",
+      "finding": "No prospective cohort studies or RCTs found that examine combined contrast therapy (hot+cold) and longevity outcomes in humans. The landmark longevity data (Laukkanen et al. 2015, JAMA Intern Med) studies sauna use ALONE in 2,315 Finnish men over 20.7 years \u2014 no cold immersion component. Cold water immersion longevity claims rely primarily on animal models (mouse studies showing ~20% lifespan extension with mild hypothermia) with very limited human data. No studies combine these two modalities specifically for longevity outcomes.",
       "breaks_proof": false
     },
     {
       "question": "Is there any meta-analysis concluding that CWT is definitively superior to ALL other recovery modalities, including cold water immersion?",
-      "verification_performed": "Searched PubMed and web for 'contrast water therapy superior recovery meta-analysis'. Reviewed abstracts of systematic reviews from 2010–2025.",
+      "verification_performed": "Searched PubMed and web for 'contrast water therapy superior recovery meta-analysis'. Reviewed abstracts of systematic reviews from 2010\u20132025.",
       "finding": "No meta-analysis concludes CWT is superior to all comparators. The PLOS One 2013 meta-analysis explicitly finds 'little evidence for a superior treatment intervention' when comparing CWT to CWI, compression, active recovery, and stretching. The 2017 Versey meta-analysis found CWI more effective than CWT for neuromuscular recovery after team sport. A 2022 Sports Medicine systematic review (PMID 36527593) found CWI superior to contrast water therapy for muscle soreness recovery outcomes.",
       "breaks_proof": false
     },
     {
-      "question": "Could the claim be narrowly true — i.e., 'superior to passive rest' — satisfying 'proven superior' in a minimal sense?",
+      "question": "Could the claim be narrowly true \u2014 i.e., 'superior to passive rest' \u2014 satisfying 'proven superior' in a minimal sense?",
       "verification_performed": "Reviewed PLOS One 2013 findings specifically on CWT vs passive rest. Analyzed whether 'superior' in the claim implies a relative or absolute comparison.",
-      "finding": "CWT IS proven superior to passive rest for muscle soreness and strength recovery (PLOS One 2013). However, the claim asserts superiority without qualification — the natural reading is superiority over the field of recovery methods, not just doing nothing. The claim also asserts superiority for 'longevity', for which no comparative evidence for contrast therapy exists at all. On the narrowest possible reading, only recovery-vs-rest is weakly supported; recovery-vs-other-methods and the entire longevity component are not.",
+      "finding": "CWT IS proven superior to passive rest for muscle soreness and strength recovery (PLOS One 2013). However, the claim asserts superiority without qualification \u2014 the natural reading is superiority over the field of recovery methods, not just doing nothing. The claim also asserts superiority for 'longevity', for which no comparative evidence for contrast therapy exists at all. On the narrowest possible reading, only recovery-vs-rest is weakly supported; recovery-vs-other-methods and the entire longevity component are not.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed_refuting_sources": 3,
     "threshold": 3,

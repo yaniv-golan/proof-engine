@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "scientific_american",
-      "label": "Scientific American: spider-swallowing myth debunked"
-    },
-    "B2": {
-      "key": "burke_museum",
-      "label": "Burke Museum (arachnology dept): no formal record of spider ingestion"
-    },
-    "B3": {
-      "key": "britannica",
-      "label": "Britannica: we swallow no spiders at all"
-    },
-    "B4": {
-      "key": "sleep_foundation",
-      "label": "Sleep Foundation: no proof spiders crawl into mouths"
-    },
-    "A1": {
-      "label": "Verified source count meets disproof threshold",
-      "method": "count(verified citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "the average person",
     "property": "number of spiders swallowed per year while sleeping",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "The average person swallows eight spiders per year while sleeping.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "scientific_american",
-      "source_name": "Scientific American",
-      "url": "https://www.scientificamerican.com/article/fact-or-fiction-people-swallow-8-spiders-a-year-while-they-sleep1/",
-      "quote": "The myth flies in the face of both spider and human biology, which makes it highly unlikely that a spider would ever end up in your mouth.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "scientificamerican.com",
-        "source_type": "major_news",
-        "tier": 3,
-        "flags": [],
-        "note": "Major news organization"
+      "type": "empirical",
+      "label": "Scientific American: spider-swallowing myth debunked",
+      "sub_claim": null,
+      "source": {
+        "name": "Scientific American",
+        "url": "https://www.scientificamerican.com/article/fact-or-fiction-people-swallow-8-spiders-a-year-while-they-sleep1/",
+        "quote": "The myth flies in the face of both spider and human biology, which makes it highly unlikely that a spider would ever end up in your mouth."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "scientificamerican.com",
+          "source_type": "major_news",
+          "tier": 3,
+          "flags": [],
+          "note": "Major news organization"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The myth flies in the face of both spider and human biology, which makes it high"
       }
     },
     "B2": {
-      "source_key": "burke_museum",
-      "source_name": "Burke Museum \u2014 Arachnology & Entomology",
-      "url": "https://www.burkemuseum.org/collections-and-research/biology/arachnology-and-entomology/spider-myths/myth-you-swallow-spiders",
-      "quote": "For a sleeping person to swallow even one live spider would involve so many highly unlikely circumstances that for practical purposes we can rule out the possibility.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "burkemuseum.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Burke Museum (arachnology dept): no formal record of spider ingestion",
+      "sub_claim": null,
+      "source": {
+        "name": "Burke Museum \u2014 Arachnology & Entomology",
+        "url": "https://www.burkemuseum.org/collections-and-research/biology/arachnology-and-entomology/spider-myths/myth-you-swallow-spiders",
+        "quote": "For a sleeping person to swallow even one live spider would involve so many highly unlikely circumstances that for practical purposes we can rule out the possibility."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "burkemuseum.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "For a sleeping person to swallow even one live spider would involve so many high"
       }
     },
     "B3": {
-      "source_key": "britannica",
-      "source_name": "Encyclopaedia Britannica",
-      "url": "https://www.britannica.com/story/do-we-really-swallow-spiders-in-our-sleep",
-      "quote": "The reality, however, is quite different: we swallow no spiders at all.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "britannica.com",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Britannica: we swallow no spiders at all",
+      "sub_claim": null,
+      "source": {
+        "name": "Encyclopaedia Britannica",
+        "url": "https://www.britannica.com/story/do-we-really-swallow-spiders-in-our-sleep",
+        "quote": "The reality, however, is quite different: we swallow no spiders at all."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "britannica.com",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The reality, however, is quite different: we swallow no spiders at all."
       }
     },
     "B4": {
-      "source_key": "sleep_foundation",
-      "source_name": "Sleep Foundation",
-      "url": "https://www.sleepfoundation.org/sleep-faqs/how-many-spiders-do-you-eat-in-your-sleep",
-      "quote": "There is no proof that spiders crawl into people's mouths while they are sleeping.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "sleepfoundation.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Sleep Foundation: no proof spiders crawl into mouths",
+      "sub_claim": null,
+      "source": {
+        "name": "Sleep Foundation",
+        "url": "https://www.sleepfoundation.org/sleep-faqs/how-many-spiders-do-you-eat-in-your-sleep",
+        "quote": "There is no proof that spiders crawl into people's mouths while they are sleeping."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "sleepfoundation.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "There is no proof that spiders crawl into people's mouths while they are sleepin"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The myth flies in the face of both spider and human biology, which makes it high"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "For a sleeping person to swallow even one live spider would involve so many high"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The reality, however, is quite different: we swallow no spiders at all."
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "There is no proof that spiders crawl into people's mouths while they are sleepin"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count meets disproof threshold",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "britannica": "verified",
         "sleep_foundation": "verified"
       },
-      "independence_note": "Sources are from different institutions: Scientific American (science journalism), Burke Museum (academic museum / arachnology), Encyclopaedia Britannica (reference encyclopedia), and Sleep Foundation (health/sleep nonprofit). Each independently debunks the claim."
+      "independence_note": "Sources are from different institutions: Scientific American (science journalism), Burke Museum (academic museum / arachnology), Encyclopaedia Britannica (reference encyclopedia), and Sleep Foundation (health/sleep nonprofit). Each independently debunks the claim.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

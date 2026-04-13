@@ -1,21 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Floor-sqrt bound check: no integer squares to 2026",
-      "method": "math.isqrt() floor-sqrt bound check",
-      "result": "45\u00b2 = 2025 \u2260 2026, 46\u00b2 = 2116 \u2260 2026 \u2192 no integer square root"
-    },
-    "A2": {
-      "label": "Quadratic-residue mod-16 check: 2026 mod 16 is not a perfect-square residue",
-      "method": "Quadratic residues mod 16",
-      "result": "2026 mod 16 = 10; QR_16 = {0,1,4,9}; 10 \u2209 QR_16 \u2192 not a perfect square"
-    },
-    "A3": {
-      "label": "Context: 2025 = 45\u00b2 confirming the adjacent perfect square",
-      "method": "math.isqrt() perfect-square confirmation",
-      "result": "45\u00b2 = 2025 \u2192 2025 IS a perfect square (adjacent year)"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "2026",
     "property": "existence of an integer n such that n\u00b2 = 2026",
@@ -24,6 +8,32 @@
     "operator_note": "The claim is interpreted as: there is no integer n \u2265 0 satisfying n\u00b2 = 2026 (equivalently, 2026 is not a perfect square). In \u211d or \u2102, 2026 trivially has square roots (\u221a2026 \u2248 45.011\u2026), so the real/complex interpretation makes the claim false. The viral meme's mathematical punch-line \u2014 that 2025 = 45\u00b2 is a perfect square and 2026 is not \u2014 only makes sense under the integer interpretation, which is therefore the formal claim. Proof succeeds when both independent methods agree: no integer n satisfies n\u00b2 = 2026."
   },
   "claim_natural": "2026 has no square root",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Floor-sqrt bound check: no integer squares to 2026",
+      "sub_claim": null,
+      "method": "math.isqrt() floor-sqrt bound check",
+      "result": "45\u00b2 = 2025 \u2260 2026, 46\u00b2 = 2116 \u2260 2026 \u2192 no integer square root",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Quadratic-residue mod-16 check: 2026 mod 16 is not a perfect-square residue",
+      "sub_claim": null,
+      "method": "Quadratic residues mod 16",
+      "result": "2026 mod 16 = 10; QR_16 = {0,1,4,9}; 10 \u2209 QR_16 \u2192 not a perfect square",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Context: 2025 = 45\u00b2 confirming the adjacent perfect square",
+      "sub_claim": null,
+      "method": "math.isqrt() perfect-square confirmation",
+      "result": "45\u00b2 = 2025 \u2192 2025 IS a perfect square (adjacent year)",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Primary (floor-sqrt) vs cross-check (mod-16): both return is_perfect_square=False for 2026",
@@ -31,7 +41,8 @@
         "False",
         "False"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -60,7 +71,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n": 2026,
     "floor_sqrt": 45,

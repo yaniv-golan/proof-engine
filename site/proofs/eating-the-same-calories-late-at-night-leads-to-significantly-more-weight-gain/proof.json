@@ -1,45 +1,18 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_source_a",
-      "label": "SC1: Gu et al. 2020 RCT — late dinner reduces dietary fat oxidation by ~10 percentage points (P=.02)"
-    },
-    "B2": {
-      "key": "sc1_source_b",
-      "label": "SC1: McHill et al. 2017 — circadian food timing associated with body fat independent of calories and activity"
-    },
-    "B3": {
-      "key": "sc1_source_c",
-      "label": "SC1: Harvard Gazette 2022 — Vujovic et al. RCT: late eating shifts adipose gene expression toward fat accumulation"
-    },
-    "B4": {
-      "key": "sc2_source_a",
-      "label": "SC2: Liu et al. 2024 JAMA meta-analysis — 29 RCTs: earlier eating produces 1.75 kg more weight loss, but effect 'small and of uncertain clinical importance'"
-    },
-    "A1": {
-      "label": "SC1 verified source count (fat storage effects)",
-      "method": "count(verified sc1 citations) = 3",
-      "result": "3"
-    },
-    "A2": {
-      "label": "SC2 verified source count (clinically significant weight gain)",
-      "method": "count(verified sc2 citations) = 1",
-      "result": "1"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Late-night caloric intake (same total calories as daytime eating)",
     "sub_claims": [
       {
         "id": "SC1",
-        "property": "Late eating (same total calories) measurably increases fat storage and reduces fat oxidation compared to earlier eating — confirmed by independent RCTs and controlled studies",
+        "property": "Late eating (same total calories) measurably increases fat storage and reduces fat oxidation compared to earlier eating \u2014 confirmed by independent RCTs and controlled studies",
         "operator": ">=",
         "threshold": 3,
         "operator_note": "SC1 requires at least 3 independently verified sources confirming that same-calorie late eating causes measurable changes in fat metabolism (reduced fat oxidation or increased fat storage markers). Three sources needed to establish scientific consensus per engine rules."
       },
       {
         "id": "SC2",
-        "property": "Late eating (same total calories) causes significantly more overall weight gain over time — both statistically and clinically meaningful — compared to earlier eating",
+        "property": "Late eating (same total calories) causes significantly more overall weight gain over time \u2014 both statistically and clinically meaningful \u2014 compared to earlier eating",
         "operator": ">=",
         "threshold": 3,
         "operator_note": "'Significantly' in the original claim is interpreted as both statistically significant (p < 0.05) AND clinically meaningful. If the best available meta-analysis of 29 RCTs describes the weight difference as 'small and of uncertain clinical importance' and 'not clinically significant (<5%)', SC2 is not established even if the difference is statistically non-zero. SC2 requires 3 independent sources confirming clinically meaningful weight differences from same-calorie late eating."
@@ -47,99 +20,137 @@
     ],
     "compound_operator": "AND",
     "proof_direction": "affirm",
-    "operator_note": "The claim uses causal language ('leads to') requiring decomposition into SC-association/causation sub-claims per engine rules. SC1 covers fat storage and fat oxidation effects — established if 3+ RCTs and controlled studies confirm with same-calorie intake. SC2 covers the 'significantly more weight gain' component — established only if 3+ independent sources confirm clinically meaningful weight differences under controlled calorie conditions. Both must hold for PROVED. SC2's failure yields PARTIALLY VERIFIED (SC1 established, SC2 not established)."
+    "operator_note": "The claim uses causal language ('leads to') requiring decomposition into SC-association/causation sub-claims per engine rules. SC1 covers fat storage and fat oxidation effects \u2014 established if 3+ RCTs and controlled studies confirm with same-calorie intake. SC2 covers the 'significantly more weight gain' component \u2014 established only if 3+ independent sources confirm clinically meaningful weight differences under controlled calorie conditions. Both must hold for PROVED. SC2's failure yields PARTIALLY VERIFIED (SC1 established, SC2 not established)."
   },
   "claim_natural": "Eating the same calories late at night leads to significantly more weight gain and fat storage than earlier in the day.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_source_a",
-      "source_name": "Gu et al. (2020) J Clin Endocrinol Metab — 'Metabolic Effects of Late Dinner in Healthy Volunteers' (PMC/NIH)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7337187/",
-      "quote": "total palmitate oxidized was lower for LD (74.5% ± 5.7%) than RD (84.5% ± 5.2%, P = .02)",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Gu et al. 2020 RCT \u2014 late dinner reduces dietary fat oxidation by ~10 percentage points (P=.02)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Gu et al. (2020) J Clin Endocrinol Metab \u2014 'Metabolic Effects of Late Dinner in Healthy Volunteers' (PMC/NIH)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7337187/",
+        "quote": "total palmitate oxidized was lower for LD (74.5% \u00b1 5.7%) than RD (84.5% \u00b1 5.2%, P = .02)"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "total palmitate oxidized was lower for LD (74.5% \u00b1 5.7%) than RD (84.5% \u00b1 5.2%, "
       }
     },
     "B2": {
-      "source_key": "sc1_source_b",
-      "source_name": "McHill et al. (2017) Am J Clin Nutr — 'Later circadian timing of food intake is associated with increased body fat' (PMC/NIH)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5657289/",
-      "quote": "the consumption of food during the circadian evening and/or night, independent of more traditional risk factors such as amount or content of food intake and activity level, plays an important role in body composition",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: McHill et al. 2017 \u2014 circadian food timing associated with body fat independent of calories and activity",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "McHill et al. (2017) Am J Clin Nutr \u2014 'Later circadian timing of food intake is associated with increased body fat' (PMC/NIH)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5657289/",
+        "quote": "the consumption of food during the circadian evening and/or night, independent of more traditional risk factors such as amount or content of food intake and activity level, plays an important role in body composition"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the consumption of food during the circadian evening and/or night, independent o"
       }
     },
     "B3": {
-      "source_key": "sc1_source_c",
-      "source_name": "Harvard Gazette (2022) — reporting Vujovic et al. 2022 Cell Metabolism isocaloric crossover RCT",
-      "url": "https://news.harvard.edu/gazette/story/2022/10/study-looks-at-why-late-night-eating-increases-obesity-risk/",
-      "quote": "adipose tissue gene expression toward increased adipogenesis and decreased lipolysis, which promote fat growth",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "harvard.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "SC1: Harvard Gazette 2022 \u2014 Vujovic et al. RCT: late eating shifts adipose gene expression toward fat accumulation",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Harvard Gazette (2022) \u2014 reporting Vujovic et al. 2022 Cell Metabolism isocaloric crossover RCT",
+        "url": "https://news.harvard.edu/gazette/story/2022/10/study-looks-at-why-late-night-eating-increases-obesity-risk/",
+        "quote": "adipose tissue gene expression toward increased adipogenesis and decreased lipolysis, which promote fat growth"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "harvard.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "adipose tissue gene expression toward increased adipogenesis and decreased lipol"
       }
     },
     "B4": {
-      "source_key": "sc2_source_a",
-      "source_name": "Liu et al. (2024) JAMA Network Open — 'Meal Timing and Anthropometric and Metabolic Outcomes' systematic review and meta-analysis of 29 RCTs (PMC/NIH)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11530941/",
-      "quote": "consuming the majority of calories earlier in the day resulted in more weight loss compared with consuming them later in the day (MD, -1.75 kg; 95% CI, -2.37 to -1.13 kg)",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 80.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Liu et al. 2024 JAMA meta-analysis \u2014 29 RCTs: earlier eating produces 1.75 kg more weight loss, but effect 'small and of uncertain clinical importance'",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Liu et al. (2024) JAMA Network Open \u2014 'Meal Timing and Anthropometric and Metabolic Outcomes' systematic review and meta-analysis of 29 RCTs (PMC/NIH)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11530941/",
+        "quote": "consuming the majority of calories earlier in the day resulted in more weight loss compared with consuming them later in the day (MD, -1.75 kg; 95% CI, -2.37 to -1.13 kg)"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 80.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "consuming the majority of calories earlier in the day resulted in more weight lo"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "total palmitate oxidized was lower for LD (74.5% ± 5.7%) than RD (84.5% ± 5.2%, "
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the consumption of food during the circadian evening and/or night, independent o"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count (fat storage effects)",
+      "sub_claim": "SC1",
+      "method": "count(verified sc1 citations) = 3",
+      "result": "3",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "adipose tissue gene expression toward increased adipogenesis and decreased lipol"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "consuming the majority of calories earlier in the day resulted in more weight lo"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count (clinically significant weight gain)",
+      "sub_claim": "SC2",
+      "method": "count(verified sc2 citations) = 1",
+      "result": "1",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -152,7 +163,8 @@
         "sc1_source_b": "verified",
         "sc1_source_c": "verified"
       },
-      "independence_note": "Sources are from different independent research groups and publications: Gu et al. (J Clin Endocrinol Metab, 2020), McHill et al. (Am J Clin Nutr, 2017), and Vujovic et al. (Cell Metabolism, 2022, via Harvard Gazette). All three are peer-reviewed and measure fat storage/oxidation under controlled or calorie-adjusted conditions."
+      "independence_note": "Sources are from different independent research groups and publications: Gu et al. (J Clin Endocrinol Metab, 2020), McHill et al. (Am J Clin Nutr, 2017), and Vujovic et al. (Cell Metabolism, 2022, via Harvard Gazette). All three are peer-reviewed and measure fat storage/oxidation under controlled or calorie-adjusted conditions.",
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources consulted for significant weight gain",
@@ -161,9 +173,55 @@
       "sources": {
         "sc2_source_a": "verified"
       },
-      "independence_note": "Only 1 source found for SC2 (JAMA 2024 meta-analysis of 29 RCTs). This source confirms a statistically significant but clinically modest weight difference (1.75 kg), which the authors themselves describe as 'small and of uncertain clinical importance.' Multiple high-quality RCTs (Ruddick-Collins 2022, TREAT trial 2020) directly contradict SC2."
+      "independence_note": "Only 1 source found for SC2 (JAMA 2024 meta-analysis of 29 RCTs). This source confirms a statistically significant but clinically modest weight difference (1.75 kg), which the authors themselves describe as 'small and of uncertain clinical importance.' Multiple high-quality RCTs (Ruddick-Collins 2022, TREAT trial 2020) directly contradict SC2.",
+      "fact_ids": []
     }
   ],
+  "adversarial_checks": [
+    {
+      "question": "Do high-quality RCTs with gold-standard energy expenditure measurement show no metabolic difference between morning and evening calorie loading?",
+      "verification_performed": "Searched for 'meal timing energy expenditure RCT doubly labeled water' and 'calorie timing no effect metabolism controlled trial'. Found Ruddick-Collins et al. 2022 (Cell Metabolism, PMC9605877): 30-subject 4-week crossover RCT using doubly-labeled water (gold standard). Found no difference in TDEE between morning-loaded and evening-loaded groups (2,871 vs 2,846 kcal/day, p=0.184). Conclusion: 'calorie utilization does not vary with time of day'.",
+      "finding": "Ruddick-Collins et al. 2022 found no significant difference in total daily energy expenditure between morning and evening calorie-loading groups using doubly-labeled water (the gold standard for TDEE measurement). This directly contradicts the SC2 claim of 'significantly more weight gain.' This counter-evidence is already captured by SC2 failing to reach its source threshold: only 1 of 3 required sources supports SC2, and that source (JAMA 2024 meta-analysis) qualifies the weight difference as 'small and of uncertain clinical importance.' SC1's fat storage markers (fat oxidation, adipose gene expression) measure different endpoints than TDEE and are not undermined by this counter-evidence.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the TREAT randomized clinical trial show no significant between-group weight difference for time-restricted vs unrestricted eating?",
+      "verification_performed": "Searched for 'TREAT trial time restricted eating weight loss RCT'. Found Lowe et al. 2020 (JAMA Internal Medicine, PMID 32986097): 116 participants, 12-week RCT comparing 16:8 TRE (eating 12pm-8pm) vs unrestricted eating. Between-group weight difference: -0.26 kg (95% CI -1.30 to 0.78, P=0.63). Conclusion: 'Time-restricted eating, in the absence of other interventions, is not more effective in weight loss than eating throughout the day.'",
+      "finding": "The TREAT trial found no significant between-group weight difference (P=0.63) over 12 weeks, directly contradicting SC2's 'significantly more weight gain' claim. This is a well-powered trial (n=116) in overweight/obese adults. This counter-evidence is already reflected in SC2 failing to reach threshold \u2014 the TREAT trial is one of the studies contributing to the JAMA 2024 meta-analysis finding that effects are 'small and of uncertain clinical importance.' The TREAT trial does not address SC1's fat oxidation and adipose gene expression endpoints, which are established by separate RCTs.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the JAMA 2024 meta-analysis itself describe the weight difference as clinically unimportant, undermining the 'significantly' qualifier in SC2?",
+      "verification_performed": "Fetched PMC11530941 (Liu et al. 2024 JAMA Network Open, meta-analysis of 29 RCTs, 2,485 participants). Authors state: 'the effect sizes found were small and of uncertain clinical importance.' They further note 'weight loss was not clinically significant (<5%).' The 1.75 kg mean difference has a 95% CI not crossing zero (statistically significant) but the authors explicitly classify it as below clinical significance thresholds.",
+      "finding": "The best available synthesis of evidence (29 RCTs, 2,485 participants) finds a statistically significant but clinically small weight difference (~1.75 kg) favoring earlier eating. The study authors explicitly describe this as 'small and of uncertain clinical importance.' Under the proof's interpretation of 'significantly' as requiring both statistical and clinical meaningfulness, this meta-analysis does not support SC2. This is the primary reason SC2 fails to reach its source threshold \u2014 the evidence shows an effect exists but is not 'significant' in the clinically meaningful sense claimed.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Are the SC1 fat storage biomarker changes (fat oxidation, adipose gene expression) short-term surrogate endpoints that may not translate to actual long-term weight gain?",
+      "verification_performed": "Searched for 'fat oxidation surrogate endpoint weight gain clinical relevance' and 'circadian eating fat storage long-term outcomes'. The Gu et al. 2020 authors themselves note: 'If these changes occur on a chronic basis, they may contribute to the development of obesity' \u2014 hedged language. The Vujovic et al. 2022 study measured adipose gene expression changes over ~2 weeks, not actual weight gain. No RCT has demonstrated that the ~10 percentage-point fat oxidation reduction from a single late dinner directly produces clinically significant weight gain over months of identical caloric intake.",
+      "finding": "The SC1 fat storage biomarker changes are biologically plausible mechanistic intermediaries but have not been shown in controlled trials to produce clinically significant long-term weight gain. Study authors use hedged language ('may contribute'). This is consistent with the PARTIALLY VERIFIED verdict: SC1 (fat metabolism affected by meal timing) is established; SC2 (clinically significant weight gain) is not established because bridging RCTs with long-term weight outcomes under identical calorie conditions have not demonstrated this effect.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "n_holding": 1,
+    "n_total": 2,
+    "sc1_holds": true,
+    "sc2_holds": false,
+    "claim_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.3.1",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-01"
+  },
   "sub_claim_results": [
     {
       "id": "SC1",
@@ -179,45 +237,5 @@
       "holds": false,
       "description": "Clinically significant weight gain from same-calorie late eating"
     }
-  ],
-  "adversarial_checks": [
-    {
-      "question": "Do high-quality RCTs with gold-standard energy expenditure measurement show no metabolic difference between morning and evening calorie loading?",
-      "verification_performed": "Searched for 'meal timing energy expenditure RCT doubly labeled water' and 'calorie timing no effect metabolism controlled trial'. Found Ruddick-Collins et al. 2022 (Cell Metabolism, PMC9605877): 30-subject 4-week crossover RCT using doubly-labeled water (gold standard). Found no difference in TDEE between morning-loaded and evening-loaded groups (2,871 vs 2,846 kcal/day, p=0.184). Conclusion: 'calorie utilization does not vary with time of day'.",
-      "finding": "Ruddick-Collins et al. 2022 found no significant difference in total daily energy expenditure between morning and evening calorie-loading groups using doubly-labeled water (the gold standard for TDEE measurement). This directly contradicts the SC2 claim of 'significantly more weight gain.' This counter-evidence is already captured by SC2 failing to reach its source threshold: only 1 of 3 required sources supports SC2, and that source (JAMA 2024 meta-analysis) qualifies the weight difference as 'small and of uncertain clinical importance.' SC1's fat storage markers (fat oxidation, adipose gene expression) measure different endpoints than TDEE and are not undermined by this counter-evidence.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Does the TREAT randomized clinical trial show no significant between-group weight difference for time-restricted vs unrestricted eating?",
-      "verification_performed": "Searched for 'TREAT trial time restricted eating weight loss RCT'. Found Lowe et al. 2020 (JAMA Internal Medicine, PMID 32986097): 116 participants, 12-week RCT comparing 16:8 TRE (eating 12pm-8pm) vs unrestricted eating. Between-group weight difference: -0.26 kg (95% CI -1.30 to 0.78, P=0.63). Conclusion: 'Time-restricted eating, in the absence of other interventions, is not more effective in weight loss than eating throughout the day.'",
-      "finding": "The TREAT trial found no significant between-group weight difference (P=0.63) over 12 weeks, directly contradicting SC2's 'significantly more weight gain' claim. This is a well-powered trial (n=116) in overweight/obese adults. This counter-evidence is already reflected in SC2 failing to reach threshold — the TREAT trial is one of the studies contributing to the JAMA 2024 meta-analysis finding that effects are 'small and of uncertain clinical importance.' The TREAT trial does not address SC1's fat oxidation and adipose gene expression endpoints, which are established by separate RCTs.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Does the JAMA 2024 meta-analysis itself describe the weight difference as clinically unimportant, undermining the 'significantly' qualifier in SC2?",
-      "verification_performed": "Fetched PMC11530941 (Liu et al. 2024 JAMA Network Open, meta-analysis of 29 RCTs, 2,485 participants). Authors state: 'the effect sizes found were small and of uncertain clinical importance.' They further note 'weight loss was not clinically significant (<5%).' The 1.75 kg mean difference has a 95% CI not crossing zero (statistically significant) but the authors explicitly classify it as below clinical significance thresholds.",
-      "finding": "The best available synthesis of evidence (29 RCTs, 2,485 participants) finds a statistically significant but clinically small weight difference (~1.75 kg) favoring earlier eating. The study authors explicitly describe this as 'small and of uncertain clinical importance.' Under the proof's interpretation of 'significantly' as requiring both statistical and clinical meaningfulness, this meta-analysis does not support SC2. This is the primary reason SC2 fails to reach its source threshold — the evidence shows an effect exists but is not 'significant' in the clinically meaningful sense claimed.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Are the SC1 fat storage biomarker changes (fat oxidation, adipose gene expression) short-term surrogate endpoints that may not translate to actual long-term weight gain?",
-      "verification_performed": "Searched for 'fat oxidation surrogate endpoint weight gain clinical relevance' and 'circadian eating fat storage long-term outcomes'. The Gu et al. 2020 authors themselves note: 'If these changes occur on a chronic basis, they may contribute to the development of obesity' — hedged language. The Vujovic et al. 2022 study measured adipose gene expression changes over ~2 weeks, not actual weight gain. No RCT has demonstrated that the ~10 percentage-point fat oxidation reduction from a single late dinner directly produces clinically significant weight gain over months of identical caloric intake.",
-      "finding": "The SC1 fat storage biomarker changes are biologically plausible mechanistic intermediaries but have not been shown in controlled trials to produce clinically significant long-term weight gain. Study authors use hedged language ('may contribute'). This is consistent with the PARTIALLY VERIFIED verdict: SC1 (fat metabolism affected by meal timing) is established; SC2 (clinically significant weight gain) is not established because bridging RCTs with long-term weight outcomes under identical calorie conditions have not demonstrated this effect.",
-      "breaks_proof": false
-    }
-  ],
-  "verdict": "PARTIALLY VERIFIED",
-  "key_results": {
-    "n_holding": 1,
-    "n_total": 2,
-    "sc1_holds": true,
-    "sc2_holds": false,
-    "claim_holds": false
-  },
-  "generator": {
-    "name": "proof-engine",
-    "version": "1.3.1",
-    "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-04-01"
-  }
+  ]
 }

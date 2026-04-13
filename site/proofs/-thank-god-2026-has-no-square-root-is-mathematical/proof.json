@@ -1,26 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "isqrt(2026)\u00b2 \u2260 2026 (primary: no integer square root)",
-      "method": "math.isqrt(2026) = 45; verified 45\u00b2 = 2025 \u2260 2026 and 46\u00b2 = 2116 \u2260 2026",
-      "result": "True"
-    },
-    "A2": {
-      "label": "Prime factorisation of 2026 has no repeated factors (cross-check)",
-      "method": "Prime factorisation: 2026 = 2\u00b9 \u00d7 1013\u00b9; both exponents are odd \u2192 not a perfect square (cross-check)",
-      "result": "True"
-    },
-    "A3": {
-      "label": "45\u00b2 = 2025 (predecessor year is a perfect square \u2014 context)",
-      "method": "math.isqrt(2025) = 45; verified 45\u00b2 = 2025 (context: predecessor year is a perfect square)",
-      "result": "True"
-    },
-    "A4": {
-      "label": "\u221a2026 is irrational (consequence of A1/A2)",
-      "method": "Valuation argument: v\u2082(2026) = 1 (odd); if \u221a2026 = p/q then 2\u00b7v\u2082(p) = 1 + 2\u00b7v\u2082(q) \u2014 even = odd, contradiction",
-      "result": "True"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "2026",
     "property": "count of positive integers n such that n\u00b2 = 2026 (equivalently: is 2026 a perfect square?)",
@@ -29,6 +8,40 @@
     "operator_note": "The phrase 'has no square root' is a colloquial way of saying '2026 is not a perfect square' \u2014 i.e., no positive integer n satisfies n\u00b2 = 2026. The claim is 'mathematically meaningful' if and only if it makes a precise, true mathematical assertion. We formalise this as: the count of such n equals 0. The claim would be FALSE (and thus not supported) if any n \u2208 \u2124\u207a existed with n\u00b2=2026. Context: 2025 = 45\u00b2 is a perfect square, so the 'relief' that 2026 escapes this property is mathematically grounded. Note: every positive real has a real-valued square root (\u221a2026 \u2248 45.011...); the meaningful assertion concerns integer square roots only."
   },
   "claim_natural": "\"Thank God 2026 has no square root\" is mathematically meaningful",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "isqrt(2026)\u00b2 \u2260 2026 (primary: no integer square root)",
+      "sub_claim": null,
+      "method": "math.isqrt(2026) = 45; verified 45\u00b2 = 2025 \u2260 2026 and 46\u00b2 = 2116 \u2260 2026",
+      "result": "True",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Prime factorisation of 2026 has no repeated factors (cross-check)",
+      "sub_claim": null,
+      "method": "Prime factorisation: 2026 = 2\u00b9 \u00d7 1013\u00b9; both exponents are odd \u2192 not a perfect square (cross-check)",
+      "result": "True",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "45\u00b2 = 2025 (predecessor year is a perfect square \u2014 context)",
+      "sub_claim": null,
+      "method": "math.isqrt(2025) = 45; verified 45\u00b2 = 2025 (context: predecessor year is a perfect square)",
+      "result": "True",
+      "depends_on": []
+    },
+    "A4": {
+      "type": "computed",
+      "label": "\u221a2026 is irrational (consequence of A1/A2)",
+      "sub_claim": null,
+      "method": "Valuation argument: v\u2082(2026) = 1 (odd); if \u221a2026 = p/q then 2\u00b7v\u2082(p) = 1 + 2\u00b7v\u2082(q) \u2014 even = odd, contradiction",
+      "result": "True",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "A1 (isqrt floor/ceil method) vs A2 (prime factorisation method): both independently establish 2026 is not a perfect square",
@@ -36,7 +49,8 @@
         "True",
         "True"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -65,7 +79,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n": 2026,
     "isqrt_n": 45,

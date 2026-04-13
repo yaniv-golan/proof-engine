@@ -1,100 +1,106 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "valtin_2002",
-      "label": "Valtin (2002) — peer-reviewed review finds no scientific proof for 8x8 rule"
-    },
-    "B2": {
-      "key": "national_academies",
-      "label": "National Academies (IOM DRI) — thirst is an adequate guide for healthy adults"
-    },
-    "B3": {
-      "key": "tufts_medicine",
-      "label": "Tufts Medicine (2022) — '8 glasses/day' is not a universal requirement"
-    },
-    "A1": {
-      "label": "Verified disproof source count",
-      "method": "count(verified citations) = 3",
-      "result": "3 independent disproof sources confirmed"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "healthy adults",
     "property": "whether drinking at least 8 glasses (~2 L) of water per day is required for optimal health, with thirst signals irrelevant to that requirement",
     "operator": ">=",
-    "operator_note": "The claim makes two separable assertions: (SC1) a universal fixed minimum of 8 glasses/day is required for optimal health; (SC2) this requirement applies regardless of thirst — i.e., thirst is an unreliable guide. This proof DISPROVES both sub-claims by assembling at least 3 authoritative independent sources that contradict the claim as stated. threshold=3: three independently verified source rejections are required for disproof. proof_direction='disprove': claim_holds=True triggers verdict DISPROVED. Scope: healthy adults under ordinary (non-extreme) conditions. The claim includes no caveats; the proof interprets it as applying universally. Note on the 'glasses' unit: the conventional '8x8' rule means eight 8-oz (~240 mL) glasses = ~1.9 L of water; this is the interpretation used here.",
+    "operator_note": "The claim makes two separable assertions: (SC1) a universal fixed minimum of 8 glasses/day is required for optimal health; (SC2) this requirement applies regardless of thirst \u2014 i.e., thirst is an unreliable guide. This proof DISPROVES both sub-claims by assembling at least 3 authoritative independent sources that contradict the claim as stated. threshold=3: three independently verified source rejections are required for disproof. proof_direction='disprove': claim_holds=True triggers verdict DISPROVED. Scope: healthy adults under ordinary (non-extreme) conditions. The claim includes no caveats; the proof interprets it as applying universally. Note on the 'glasses' unit: the conventional '8x8' rule means eight 8-oz (~240 mL) glasses = ~1.9 L of water; this is the interpretation used here.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
   "claim_natural": "You need to drink at least 8 glasses of water daily for optimal health regardless of thirst.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "valtin_2002",
-      "source_name": "PubMed — Valtin H. (2002) 'Drink at least eight glasses of water a day.' Really? Am J Physiol Regul Integr Comp Physiol 283(5):R993–R1004",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/12376390/",
-      "quote": "Despite the seemingly ubiquitous admonition to 'drink at least eight 8-oz glasses of water a day' (with an accompanying reminder that beverages containing caffeine and alcohol do not count), rigorous proof for this counsel appears to be lacking.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Valtin (2002) \u2014 peer-reviewed review finds no scientific proof for 8x8 rule",
+      "sub_claim": null,
+      "source": {
+        "name": "PubMed \u2014 Valtin H. (2002) 'Drink at least eight glasses of water a day.' Really? Am J Physiol Regul Integr Comp Physiol 283(5):R993\u2013R1004",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12376390/",
+        "quote": "Despite the seemingly ubiquitous admonition to 'drink at least eight 8-oz glasses of water a day' (with an accompanying reminder that beverages containing caffeine and alcohol do not count), rigorous proof for this counsel appears to be lacking."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Despite the seemingly ubiquitous admonition to 'drink at least eight 8-oz glasse"
       }
     },
     "B2": {
-      "source_key": "national_academies",
-      "source_name": "National Academies of Sciences, Engineering, and Medicine — Dietary Reference Intakes for Water, Salt, and Potassium press release",
-      "url": "https://www.nationalacademies.org/news/report-sets-dietary-intake-levels-for-water-salt-and-potassium-to-maintain-health-and-reduce-chronic-disease-risk",
-      "quote": "The vast majority of healthy people adequately meet their daily hydration needs by letting thirst be their guide",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nationalacademies.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "National Academies (IOM DRI) \u2014 thirst is an adequate guide for healthy adults",
+      "sub_claim": null,
+      "source": {
+        "name": "National Academies of Sciences, Engineering, and Medicine \u2014 Dietary Reference Intakes for Water, Salt, and Potassium press release",
+        "url": "https://www.nationalacademies.org/news/report-sets-dietary-intake-levels-for-water-salt-and-potassium-to-maintain-health-and-reduce-chronic-disease-risk",
+        "quote": "The vast majority of healthy people adequately meet their daily hydration needs by letting thirst be their guide"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nationalacademies.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The vast majority of healthy people adequately meet their daily hydration needs "
       }
     },
     "B3": {
-      "source_key": "tufts_medicine",
-      "source_name": "Tufts Medicine — Medical Myths: Drink 8 Glasses of Water Each Day (2022)",
-      "url": "https://www.tuftsmedicine.org/about-us/news/medical-myths-drink-8-glasses-water-each-day",
-      "quote": "The short answer is 'no.' The more complicated answer, according to Registered Dietitian Caroline Fox, is that the actual recommended amount differs for everyone.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "wayback",
-      "credibility": {
-        "domain": "tuftsmedicine.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Tufts Medicine (2022) \u2014 '8 glasses/day' is not a universal requirement",
+      "sub_claim": null,
+      "source": {
+        "name": "Tufts Medicine \u2014 Medical Myths: Drink 8 Glasses of Water Each Day (2022)",
+        "url": "https://www.tuftsmedicine.org/about-us/news/medical-myths-drink-8-glasses-water-each-day",
+        "quote": "The short answer is 'no.' The more complicated answer, according to Registered Dietitian Caroline Fox, is that the actual recommended amount differs for everyone."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "wayback",
+        "credibility": {
+          "domain": "tuftsmedicine.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The short answer is 'no.' The more complicated answer, according to Registered D"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Despite the seemingly ubiquitous admonition to 'drink at least eight 8-oz glasse"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The vast majority of healthy people adequately meet their daily hydration needs "
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The short answer is 'no.' The more complicated answer, according to Registered D"
+    "A1": {
+      "type": "computed",
+      "label": "Verified disproof source count",
+      "sub_claim": null,
+      "method": "count(verified citations) = 3",
+      "result": "3 independent disproof sources confirmed",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,30 +113,36 @@
         "national_academies": "verified",
         "tufts_medicine": "verified"
       },
-      "independence_note": "Three distinct institutional sources are used: (1) a peer-reviewed journal review article (Valtin 2002, Am J Physiol), (2) the National Academies of Sciences, Engineering, and Medicine (IOM Dietary Reference Intakes — the authoritative US nutrition body), (3) Tufts Medical Center clinical dietitian expertise. These are independent in authorship, institutional affiliation, and methodology; all three converge on the same conclusion."
+      "independence_note": "Three distinct institutional sources are used: (1) a peer-reviewed journal review article (Valtin 2002, Am J Physiol), (2) the National Academies of Sciences, Engineering, and Medicine (IOM Dietary Reference Intakes \u2014 the authoritative US nutrition body), (3) Tufts Medical Center clinical dietitian expertise. These are independent in authorship, institutional affiliation, and methodology; all three converge on the same conclusion.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Does any major international health authority (WHO, CDC, NHS) endorse a universal '8 glasses a day regardless of thirst' rule?",
       "verification_performed": "Searched: 'WHO CDC NHS 8 glasses water day recommendation'; reviewed CDC water/healthful beverages page; WHO drinking-water guidelines; NHS 'How much water should I drink?' page.",
-      "finding": "No major international health authority endorses a universal 8-glasses/day minimum regardless of thirst. The CDC recommends water as a healthy beverage choice without specifying 8 glasses. The NHS advises approximately 6–8 cups of fluid per day but explicitly includes all fluids and ties it to thirst and activity. WHO sets no universal fixed daily amount for healthy adults.",
+      "finding": "No major international health authority endorses a universal 8-glasses/day minimum regardless of thirst. The CDC recommends water as a healthy beverage choice without specifying 8 glasses. The NHS advises approximately 6\u20138 cups of fluid per day but explicitly includes all fluids and ties it to thirst and activity. WHO sets no universal fixed daily amount for healthy adults.",
       "breaks_proof": false
     },
     {
       "question": "Are there healthy-adult sub-populations (athletes, hot-climate workers) for whom 8 glasses regardless of thirst is the recommended standard?",
       "verification_performed": "Searched: 'athletes hydration regardless of thirst recommendation'; reviewed ACSM (American College of Sports Medicine) hydration position statement; reviewed heat-exposure hydration protocols for occupational settings.",
-      "finding": "Athletes and individuals in extreme heat may require more than 8 glasses, but guidance is always individualized to sweat rate, exercise intensity, and ambient conditions — not a fixed 'regardless of thirst' rule. The ACSM recommends thirst-guided drinking as an acceptable strategy during exercise for most athletes. The claim as stated applies universally with no caveats; no authority supports that framing.",
+      "finding": "Athletes and individuals in extreme heat may require more than 8 glasses, but guidance is always individualized to sweat rate, exercise intensity, and ambient conditions \u2014 not a fixed 'regardless of thirst' rule. The ACSM recommends thirst-guided drinking as an acceptable strategy during exercise for most athletes. The claim as stated applies universally with no caveats; no authority supports that framing.",
       "breaks_proof": false
     },
     {
       "question": "Is there peer-reviewed evidence that thirst-guided drinking leads to clinically significant dehydration or health harm in healthy adults under normal everyday conditions?",
-      "verification_performed": "Searched: 'thirst unreliable dehydration healthy adults evidence'; reviewed Millard-Stafford et al. (2012) Nutr Rev 70(S2):S147–51 (PMID 23121351); reviewed Cotter et al. (2014) Extreme Physiol Med (PMC4212586).",
-      "finding": "Thirst reliability is more nuanced in older adults (>65) and during vigorous exercise, where the thirst response can lag behind actual fluid needs. However, neither paper — nor any study found — documents clinically significant harm from thirst-guided drinking in healthy non-elderly adults under normal everyday (non-extreme) conditions. The National Academies DRI explicitly names thirst as an adequate guide for healthy people. The Valtin (2002) review found no evidence that any amount above ad libitum (thirst-driven) intake improves health in healthy adults.",
+      "verification_performed": "Searched: 'thirst unreliable dehydration healthy adults evidence'; reviewed Millard-Stafford et al. (2012) Nutr Rev 70(S2):S147\u201351 (PMID 23121351); reviewed Cotter et al. (2014) Extreme Physiol Med (PMC4212586).",
+      "finding": "Thirst reliability is more nuanced in older adults (>65) and during vigorous exercise, where the thirst response can lag behind actual fluid needs. However, neither paper \u2014 nor any study found \u2014 documents clinically significant harm from thirst-guided drinking in healthy non-elderly adults under normal everyday (non-extreme) conditions. The National Academies DRI explicitly names thirst as an adequate guide for healthy people. The Valtin (2002) review found no evidence that any amount above ad libitum (thirst-driven) intake improves health in healthy adults.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

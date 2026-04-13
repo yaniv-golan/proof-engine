@@ -1,101 +1,106 @@
 {
-  "verdict": "PROVED",
-  "fact_registry": {
-    "B1": {
-      "key": "source_britannica_popper",
-      "label": "Britannica: Popper's falsifiability criterion — scientific theories must be falsifiable in principle"
-    },
-    "B2": {
-      "key": "source_sep_scientific_method",
-      "label": "Stanford Encyclopedia of Philosophy: scientific method requires reasoning beyond observation"
-    },
-    "B3": {
-      "key": "source_catalog_of_bias",
-      "label": "Catalog of Bias: presenting unplanned analyses as prespecified is a recognized methodological distortion"
-    },
-    "A1": {
-      "label": "Count of authoritative sources confirming HD method requirements that the practice omits",
-      "method": "count(verified citations) = 3",
-      "result": "3 sources confirmed (threshold: 3)"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Presenting empirical spreadsheet observations as universal theorems",
     "property": "violates the hypothetico-deductive method as defined by mainstream philosophy of science",
     "operator": ">=",
-    "operator_note": "The claim asserts a factual violation: the practice of presenting empirical spreadsheet observations as universal theorems omits steps that the hypothetico-deductive (HD) method requires. We count independent authoritative sources that define HD method requirements (falsifiability, reasoning beyond observation, pre-specified hypotheses) which this practice structurally omits. A threshold of 3 is used to require broad consensus across distinct philosophical and methodological traditions. Entailment note: the cited sources define general requirements of the scientific method / HD method. None specifically names 'spreadsheet observations presented as theorems.' The entailment bridge is: (1) the HD method requires steps X, Y, Z; (2) presenting observations as universal theorems without hypothesis formation, falsifiability testing, or pre-specified analysis omits X, Y, Z; therefore (3) the practice violates the HD method. This inference is logically valid but requires the author-reasoning bridge documented here. Formalization scope: 'universal theorem' is interpreted strictly — a claim of deductive necessity holding without exception, not a statistical regularity or empirical generalization. 'Violates' means the practice omits one or more requirements that the HD method mandates. The proof does not address whether the practice might be valid under non-HD frameworks (e.g., pure inductivism); adversarial check 1 addresses this limitation.",
+    "operator_note": "The claim asserts a factual violation: the practice of presenting empirical spreadsheet observations as universal theorems omits steps that the hypothetico-deductive (HD) method requires. We count independent authoritative sources that define HD method requirements (falsifiability, reasoning beyond observation, pre-specified hypotheses) which this practice structurally omits. A threshold of 3 is used to require broad consensus across distinct philosophical and methodological traditions. Entailment note: the cited sources define general requirements of the scientific method / HD method. None specifically names 'spreadsheet observations presented as theorems.' The entailment bridge is: (1) the HD method requires steps X, Y, Z; (2) presenting observations as universal theorems without hypothesis formation, falsifiability testing, or pre-specified analysis omits X, Y, Z; therefore (3) the practice violates the HD method. This inference is logically valid but requires the author-reasoning bridge documented here. Formalization scope: 'universal theorem' is interpreted strictly \u2014 a claim of deductive necessity holding without exception, not a statistical regularity or empirical generalization. 'Violates' means the practice omits one or more requirements that the HD method mandates. The proof does not address whether the practice might be valid under non-HD frameworks (e.g., pure inductivism); adversarial check 1 addresses this limitation.",
     "threshold": 3,
     "proof_direction": "prove"
   },
   "claim_natural": "Presenting empirical spreadsheet observations as universal theorems violates the hypothetico-deductive method as defined by mainstream philosophy of science.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_britannica_popper",
-      "source_name": "Encyclopaedia Britannica — criterion of falsifiability",
-      "url": "https://www.britannica.com/topic/criterion-of-falsifiability",
-      "quote": "a theory is genuinely scientific only if it is possible in principle to establish that it is false.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "britannica.com",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Britannica: Popper's falsifiability criterion \u2014 scientific theories must be falsifiable in principle",
+      "sub_claim": null,
+      "source": {
+        "name": "Encyclopaedia Britannica \u2014 criterion of falsifiability",
+        "url": "https://www.britannica.com/topic/criterion-of-falsifiability",
+        "quote": "a theory is genuinely scientific only if it is possible in principle to establish that it is false."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "britannica.com",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "a theory is genuinely scientific only if it is possible in principle to establis"
       }
     },
     "B2": {
-      "source_key": "source_sep_scientific_method",
-      "source_name": "Stanford Encyclopedia of Philosophy — scientific method",
-      "url": "https://plato.stanford.edu/entries/scientific-method/",
-      "quote": "In addition to careful observation, then, scientific method requires a logic as a system of reasoning for properly arranging, but also inferring beyond, what is known by observation.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "stanford.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "Stanford Encyclopedia of Philosophy: scientific method requires reasoning beyond observation",
+      "sub_claim": null,
+      "source": {
+        "name": "Stanford Encyclopedia of Philosophy \u2014 scientific method",
+        "url": "https://plato.stanford.edu/entries/scientific-method/",
+        "quote": "In addition to careful observation, then, scientific method requires a logic as a system of reasoning for properly arranging, but also inferring beyond, what is known by observation."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "stanford.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "In addition to careful observation, then, scientific method requires a logic as "
       }
     },
     "B3": {
-      "source_key": "source_catalog_of_bias",
-      "source_name": "Catalog of Bias — data-dredging bias",
-      "url": "https://catalogofbias.org/biases/data-dredging-bias/",
-      "quote": "A distortion that arises from presenting the results of unplanned statistical tests as if they were a fully prespecified course of analyses.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "catalogofbias.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Catalog of Bias: presenting unplanned analyses as prespecified is a recognized methodological distortion",
+      "sub_claim": null,
+      "source": {
+        "name": "Catalog of Bias \u2014 data-dredging bias",
+        "url": "https://catalogofbias.org/biases/data-dredging-bias/",
+        "quote": "A distortion that arises from presenting the results of unplanned statistical tests as if they were a fully prespecified course of analyses."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "catalogofbias.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "A distortion that arises from presenting the results of unplanned statistical te"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "a theory is genuinely scientific only if it is possible in principle to establis"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "In addition to careful observation, then, scientific method requires a logic as "
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "A distortion that arises from presenting the results of unplanned statistical te"
+    "A1": {
+      "type": "computed",
+      "label": "Count of authoritative sources confirming HD method requirements that the practice omits",
+      "sub_claim": null,
+      "method": "count(verified citations) = 3",
+      "result": "3 sources confirmed (threshold: 3)",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,14 +112,15 @@
         "verified"
       ],
       "agreement": true,
-      "coi_flags": []
+      "coi_flags": [],
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Is there a scientific tradition that validates presenting inductive generalizations from data as universal laws without further testing?",
       "verification_performed": "Searched 'defense inductive reasoning empirical observations sufficient universal scientific laws' and 'Bacon inductivism valid science pattern observation'. Found inductivism (Bacon's model) as a candidate defense.",
-      "finding": "Even Bacon's inductivism — the strongest defense of inductive science — requires systematic collection, replication, and elimination of observer bias before generalizing. Naive inductivism has been largely discredited in philosophy of science (Popper, 1934; Hempel, 1965). More importantly, no form of inductivism endorses presenting patterns as universal 'theorems' (a term implying deductive necessity) rather than empirical generalizations. This check does not break the proof but limits the verdict's scope: the proof establishes violation of the HD method specifically, not all possible philosophies of science.",
+      "finding": "Even Bacon's inductivism \u2014 the strongest defense of inductive science \u2014 requires systematic collection, replication, and elimination of observer bias before generalizing. Naive inductivism has been largely discredited in philosophy of science (Popper, 1934; Hempel, 1965). More importantly, no form of inductivism endorses presenting patterns as universal 'theorems' (a term implying deductive necessity) rather than empirical generalizations. This check does not break the proof but limits the verdict's scope: the proof establishes violation of the HD method specifically, not all possible philosophies of science.",
       "breaks_proof": false
     },
     {
@@ -130,6 +136,12 @@
       "breaks_proof": false
     }
   ],
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

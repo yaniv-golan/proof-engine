@@ -50,7 +50,26 @@ VERDICT_TAXONOMY = {
 }
 
 
-def normalize_verdict(verdict_string: str) -> dict:
+def normalize_verdict(verdict) -> dict:
+    """Normalize a verdict string or StructuredVerdict dict to a taxonomy entry.
+
+    Args:
+        verdict: Either a string (e.g. "PROVED (with unverified citations)")
+                 or a StructuredVerdict dict with keys: value, qualified, qualifier.
+
+    Returns:
+        dict with keys: raw, category, badge_color, filter_value, rating.
+    """
+    if isinstance(verdict, dict):
+        # v3 structured verdict — reconstruct the canonical string for lookup
+        base = verdict["value"]
+        if verdict.get("qualified") and verdict.get("qualifier") == "unverified_citations":
+            verdict_string = f"{base} (with unverified citations)"
+        else:
+            verdict_string = base
+    else:
+        verdict_string = verdict
+
     if verdict_string not in VERDICT_TAXONOMY:
         raise ValueError(f"Unknown verdict: {verdict_string!r}")
     entry = VERDICT_TAXONOMY[verdict_string]

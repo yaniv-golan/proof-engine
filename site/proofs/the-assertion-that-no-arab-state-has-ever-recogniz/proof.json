@@ -1,45 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "egypt_wiki",
-      "label": "Wikipedia: Egypt\u2013Israel peace treaty signed 26 March 1979"
-    },
-    "B2": {
-      "key": "egypt_state_dept",
-      "label": "US State Dept (history.state.gov): Egypt-Israel Peace Treaty signed March 26"
-    },
-    "B3": {
-      "key": "jordan_wiki",
-      "label": "Wikipedia: Israel\u2013Jordan peace treaty signed 26 October 1994"
-    },
-    "B4": {
-      "key": "jordan_accords_xref",
-      "label": "Wikipedia (Abraham Accords): UAE/Bahrain first Arab recognition since Jordan in 1994"
-    },
-    "B5": {
-      "key": "accords_britannica",
-      "label": "Britannica: Abraham Accords \u2014 UAE, Bahrain, Morocco bilateral agreements 2020"
-    },
-    "B6": {
-      "key": "accords_wiki_sudan",
-      "label": "Wikipedia (Abraham Accords): Sudan signed Declaration January 6, 2021"
-    },
-    "A1": {
-      "label": "SC1 \u2014 Egypt treaty confirming-source count",
-      "method": "sum([egypt_confirm_b1, egypt_confirm_b2]) = 2",
-      "result": "2"
-    },
-    "A2": {
-      "label": "SC2 \u2014 Jordan treaty confirming-source count",
-      "method": "sum([jordan_confirm_b3, jordan_confirm_b4]) = 2",
-      "result": "2"
-    },
-    "A3": {
-      "label": "SC3 \u2014 Abraham Accords state count by 2023",
-      "method": "sum([uae, bahrain, morocco, sudan confirmations]) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Assertion that no Arab state has ever recognized Israel",
     "sub_claims": [
@@ -69,150 +29,198 @@
     "operator_note": "The meta-claim \u2014 that 'no Arab state has ever recognized Israel' is false \u2014 is proved by demonstrating ANY one of SC1, SC2, SC3 holds. The original claim asserts all three simultaneously, so we verify all three (AND). Even SC1 alone (Egypt 1979) constitutes a decisive counterexample to the 'no Arab state' assertion."
   },
   "claim_natural": "The assertion that no Arab state has ever recognized Israel is false because Egypt signed a peace treaty in 1979, Jordan in 1994, and four additional states joined the Abraham Accords by 2023.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "egypt_wiki",
-      "source_name": "Wikipedia: Egypt\u2013Israel peace treaty",
-      "url": "https://en.wikipedia.org/wiki/Egypt%E2%80%93Israel_peace_treaty",
-      "quote": "The Egypt\u2013Israel peace treaty was signed in Washington, D.C., United States, on 26 March 1979, following the 1978 Camp David Accords.",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 81.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Egypt\u2013Israel peace treaty signed 26 March 1979",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Egypt\u2013Israel peace treaty",
+        "url": "https://en.wikipedia.org/wiki/Egypt%E2%80%93Israel_peace_treaty",
+        "quote": "The Egypt\u2013Israel peace treaty was signed in Washington, D.C., United States, on 26 March 1979, following the 1978 Camp David Accords."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 81.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "1979",
+        "value_in_quote": true,
+        "quote_snippet": "The Egypt\u2013Israel peace treaty was signed in Washington, D.C., United States, on "
       }
     },
     "B2": {
-      "source_key": "egypt_state_dept",
-      "source_name": "U.S. Department of State, Office of the Historian: Camp David Accords",
-      "url": "https://history.state.gov/milestones/1977-1980/camp-david",
-      "quote": "the Egyptian-Israeli Peace Treaty was formally signed on March 26.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "state.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "US State Dept (history.state.gov): Egypt-Israel Peace Treaty signed March 26",
+      "sub_claim": null,
+      "source": {
+        "name": "U.S. Department of State, Office of the Historian: Camp David Accords",
+        "url": "https://history.state.gov/milestones/1977-1980/camp-david",
+        "quote": "the Egyptian-Israeli Peace Treaty was formally signed on March 26."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "state.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "March 26",
+        "value_in_quote": true,
+        "quote_snippet": "the Egyptian-Israeli Peace Treaty was formally signed on March 26."
       }
     },
     "B3": {
-      "source_key": "jordan_wiki",
-      "source_name": "Wikipedia: Israel\u2013Jordan peace treaty",
-      "url": "https://en.wikipedia.org/wiki/Israel%E2%80%93Jordan_peace_treaty",
-      "quote": "The signing ceremony took place at the southern border crossing of Arabah on 26 October 1994. Jordan was the second Arab country, after Egypt, to sign a peace accord with Israel.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Israel\u2013Jordan peace treaty signed 26 October 1994",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Israel\u2013Jordan peace treaty",
+        "url": "https://en.wikipedia.org/wiki/Israel%E2%80%93Jordan_peace_treaty",
+        "quote": "The signing ceremony took place at the southern border crossing of Arabah on 26 October 1994. Jordan was the second Arab country, after Egypt, to sign a peace accord with Israel."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "1994",
+        "value_in_quote": true,
+        "quote_snippet": "The signing ceremony took place at the southern border crossing of Arabah on 26 "
       }
     },
     "B4": {
-      "source_key": "jordan_accords_xref",
-      "source_name": "Wikipedia: Abraham Accords (Jordan 1994 cross-reference)",
-      "url": "https://en.wikipedia.org/wiki/Abraham_Accords",
-      "quote": "The UAE and Bahrain became the first Arab countries to formally recognize Israel since Jordan in 1994.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia (Abraham Accords): UAE/Bahrain first Arab recognition since Jordan in 1994",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Abraham Accords (Jordan 1994 cross-reference)",
+        "url": "https://en.wikipedia.org/wiki/Abraham_Accords",
+        "quote": "The UAE and Bahrain became the first Arab countries to formally recognize Israel since Jordan in 1994."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "Jordan in 1994",
+        "value_in_quote": true,
+        "quote_snippet": "The UAE and Bahrain became the first Arab countries to formally recognize Israel"
       }
     },
     "B5": {
-      "source_key": "accords_britannica",
-      "source_name": "Encyclopaedia Britannica: Abraham Accords",
-      "url": "https://www.britannica.com/topic/Abraham-Accords",
-      "quote": "The accords, all of which were signed in the latter half of 2020, consist of a general declaration alongside individual bilateral agreements between Israel and each of the following countries: United Arab Emirates, Bahrain, Morocco.",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 80.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "britannica.com",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Britannica: Abraham Accords \u2014 UAE, Bahrain, Morocco bilateral agreements 2020",
+      "sub_claim": null,
+      "source": {
+        "name": "Encyclopaedia Britannica: Abraham Accords",
+        "url": "https://www.britannica.com/topic/Abraham-Accords",
+        "quote": "The accords, all of which were signed in the latter half of 2020, consist of a general declaration alongside individual bilateral agreements between Israel and each of the following countries: United Arab Emirates, Bahrain, Morocco."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 80.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "britannica.com",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "United Arab Emirates",
+        "value_in_quote": true,
+        "quote_snippet": "The accords, all of which were signed in the latter half of 2020, consist of a g"
       }
     },
     "B6": {
-      "source_key": "accords_wiki_sudan",
-      "source_name": "Wikipedia: Abraham Accords (Sudan signing)",
-      "url": "https://en.wikipedia.org/wiki/Abraham_Accords",
-      "quote": "On January 6, 2021, the government of Sudan signed the \"Abraham Accords Declaration\" in Khartoum.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia (Abraham Accords): Sudan signed Declaration January 6, 2021",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Abraham Accords (Sudan signing)",
+        "url": "https://en.wikipedia.org/wiki/Abraham_Accords",
+        "quote": "On January 6, 2021, the government of Sudan signed the \"Abraham Accords Declaration\" in Khartoum."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "Abraham Accords Declaration",
+        "value_in_quote": true,
+        "quote_snippet": "On January 6, 2021, the government of Sudan signed the \"Abraham Accords Declarat"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "1979",
-      "value_in_quote": true,
-      "quote_snippet": "The Egypt\u2013Israel peace treaty was signed in Washington, D.C., United States, on "
     },
-    "B2": {
-      "value": "March 26",
-      "value_in_quote": true,
-      "quote_snippet": "the Egyptian-Israeli Peace Treaty was formally signed on March 26."
+    "A1": {
+      "type": "computed",
+      "label": "SC1 \u2014 Egypt treaty confirming-source count",
+      "sub_claim": "SC1",
+      "method": "sum([egypt_confirm_b1, egypt_confirm_b2]) = 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B3": {
-      "value": "1994",
-      "value_in_quote": true,
-      "quote_snippet": "The signing ceremony took place at the southern border crossing of Arabah on 26 "
+    "A2": {
+      "type": "computed",
+      "label": "SC2 \u2014 Jordan treaty confirming-source count",
+      "sub_claim": "SC2",
+      "method": "sum([jordan_confirm_b3, jordan_confirm_b4]) = 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B4": {
-      "value": "Jordan in 1994",
-      "value_in_quote": true,
-      "quote_snippet": "The UAE and Bahrain became the first Arab countries to formally recognize Israel"
-    },
-    "B5_uae": {
-      "value": "United Arab Emirates",
-      "value_in_quote": true,
-      "quote_snippet": "The accords, all of which were signed in the latter half of 2020, consist of a g"
-    },
-    "B5_bah": {
-      "value": "Bahrain",
-      "value_in_quote": true,
-      "quote_snippet": "The accords, all of which were signed in the latter half of 2020, consist of a g"
-    },
-    "B5_mor": {
-      "value": "Morocco",
-      "value_in_quote": true,
-      "quote_snippet": "The accords, all of which were signed in the latter half of 2020, consist of a g"
-    },
-    "B6_sud": {
-      "value": "Abraham Accords Declaration",
-      "value_in_quote": true,
-      "quote_snippet": "On January 6, 2021, the government of Sudan signed the \"Abraham Accords Declarat"
+    "A3": {
+      "type": "computed",
+      "label": "SC3 \u2014 Abraham Accords state count by 2023",
+      "sub_claim": "SC3",
+      "method": "sum([uae, bahrain, morocco, sudan confirmations]) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -222,7 +230,8 @@
         "B1: 'signed ... on 26 March 1979'",
         "B2: 'Peace Treaty was formally signed on March 26'"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "SC2 Jordan 1994: Wikipedia treaty page (B3) vs Wikipedia Abraham Accords (B4) \u2014 different pages confirm Jordan 1994",
@@ -230,7 +239,8 @@
         "B3: 'signed ... on 26 October 1994'",
         "B4: 'formally recognize Israel since Jordan in 1994'"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "SC3 Abraham Accords states: Britannica (B5, three bilateral states) + Wikipedia (B6, Sudan Declaration) \u2014 independent sources",
@@ -238,7 +248,8 @@
         "B5 (Britannica): UAE=True, Bahrain=True, Morocco=True",
         "B6 (Wikipedia Sudan): Sudan Declaration=True"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -261,7 +272,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_egypt_1979": {
       "n_confirming": 2,
@@ -279,11 +295,11 @@
     "n_sub_claims_total": 3,
     "claim_holds": true
   },
-  "date_note": "Proof generated for 2026-03-27; running on 2026-04-06.",
   "generator": {
     "name": "proof-engine",
     "version": "0.10.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-06"
-  }
+  },
+  "date_note": "Proof generated for 2026-03-27; running on 2026-04-06."
 }

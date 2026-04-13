@@ -233,6 +233,95 @@ class ProofData(TypedDict, total=False):
 
 
 # ---------------------------------------------------------------------------
+# v3 format types (format_version: 3)
+# ---------------------------------------------------------------------------
+
+class SourceInfo(TypedDict, total=False):
+    name: str
+    url: str
+    quote: str
+
+
+class VerificationInfo(TypedDict, total=False):
+    status: str                 # "verified", "partial", "not_found", "fetch_failed"
+    method: str                 # "full_quote", "unicode_normalized", "fragment",
+                                # "aggressive_normalization"
+    coverage_pct: float | None
+    fetch_mode: str             # "live", "snapshot", "wayback", "github_raw", "oa_variant"
+    credibility: CredibilityAssessment
+
+
+class ExtractionInfo(TypedDict, total=False):
+    value: str
+    value_in_quote: bool
+    verified_via: str
+    data_values_verified: bool
+    quote_snippet: str
+
+
+class EvidenceEntry(TypedDict, total=False):
+    type: str                   # "empirical", "computed", "search"
+    label: str
+    sub_claim: str | None       # "SC1", "SC2", etc. or None
+    # Empirical (Type B):
+    source: SourceInfo
+    verification: VerificationInfo
+    extraction: ExtractionInfo
+    # Computed (Type A):
+    method: str | None
+    result: str | None
+    depends_on: list[str]       # fact IDs this computation depends on
+    # Search (Type S):
+    search: SearchRegistryEntry
+
+
+class StructuredVerdict(TypedDict, total=False):
+    value: str                  # "PROVED", "DISPROVED", etc. (base, no suffix)
+    qualified: bool
+    qualifier: str | None       # "unverified_citations" or None
+    reason: str | None
+
+
+class CrossCheckV3(TypedDict, total=False):
+    description: str
+    fact_ids: list[str]         # explicit references to evidence entries
+    # Numeric/date proofs:
+    values_compared: list
+    agreement: bool
+    tolerance: str
+    # Source-counting proofs:
+    n_sources_consulted: int
+    n_sources_verified: int
+    sources: dict[str, str]
+    independence_note: str
+    # Absence proofs:
+    n_databases_searched: int
+    n_null_verified: int
+    n_reviewed: int
+    databases: dict[str, dict]
+    # COI:
+    coi_flags: list[CoiFlag]
+
+
+class ProofDataV3(TypedDict, total=False):
+    format_version: int         # 3
+    claim_formal: ClaimFormal
+    claim_natural: str
+    evidence: dict[str, EvidenceEntry]
+    cross_checks: list[CrossCheckV3]
+    adversarial_checks: list[AdversarialCheck]
+    verdict: StructuredVerdict
+    key_results: dict[str, object]
+    generator: Generator
+    # Optional:
+    sub_claim_results: list[dict] | dict[str, dict]
+    date_note: str
+    verdict_note: str
+    verdict_reason: str
+    data_value_verification: dict[str, dict[str, DataValueVerificationEntry]]
+
+
+# ---------------------------------------------------------------------------
 # Normalized verdict (from tools/lib/verdict.py)
 # ---------------------------------------------------------------------------
 

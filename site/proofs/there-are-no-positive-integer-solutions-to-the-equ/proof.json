@@ -1,21 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Exhaustive search: no solutions with x,y,z in [1, 1000]",
-      "method": "Exhaustive search: iterated all (x, y) with 1 <= x <= y <= 1000, checked if x^4 + y^4 is a perfect fourth power using integer arithmetic",
-      "result": "0 solutions found"
-    },
-    "A2": {
-      "label": "Independent cross-check: subtraction method confirms no solutions in [1, 1000]",
-      "method": "Subtraction method: for each z in [2, 1000], for each x in [1, z-1], checked if z^4 - x^4 is a perfect fourth power",
-      "result": "0 solutions found"
-    },
-    "A3": {
-      "label": "Modular analysis: fourth-power residues mod 16 constrain solutions",
-      "method": "Computed fourth-power residues mod 16, checked which sum residues are themselves fourth-power residues",
-      "result": "Fourth-power residues mod 16: [0, 1]; both-odd case (residue 2) eliminated: True"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "the Diophantine equation x^4 + y^4 = z^4",
     "property": "number of positive integer solutions (x, y, z) with x, y, z >= 1",
@@ -24,6 +8,32 @@
     "operator_note": "The claim asserts zero positive integer solutions exist. A single counterexample (x, y, z) with x^4 + y^4 == z^4 would disprove it. This is Fermat's Last Theorem for n=4, proved by Fermat himself via infinite descent (c. 1637). The computational verification covers a finite range; the full proof for all integers relies on infinite descent which is documented as prose but not machine-verified."
   },
   "claim_natural": "There are no positive integer solutions to the equation x^4 + y^4 = z^4.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Exhaustive search: no solutions with x,y,z in [1, 1000]",
+      "sub_claim": null,
+      "method": "Exhaustive search: iterated all (x, y) with 1 <= x <= y <= 1000, checked if x^4 + y^4 is a perfect fourth power using integer arithmetic",
+      "result": "0 solutions found",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Independent cross-check: subtraction method confirms no solutions in [1, 1000]",
+      "sub_claim": null,
+      "method": "Subtraction method: for each z in [2, 1000], for each x in [1, z-1], checked if z^4 - x^4 is a perfect fourth power",
+      "result": "0 solutions found",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Modular analysis: fourth-power residues mod 16 constrain solutions",
+      "sub_claim": null,
+      "method": "Computed fourth-power residues mod 16, checked which sum residues are themselves fourth-power residues",
+      "result": "Fourth-power residues mod 16: [0, 1]; both-odd case (residue 2) eliminated: True",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Primary (addition-based exhaustive search) vs cross-check (subtraction-based search): both methods independently enumerate the solution space using different algorithms",
@@ -31,7 +41,8 @@
         "0",
         "0"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Modular analysis (mod 16 constraints) independently confirms structural limitations on solutions, consistent with zero solutions",
@@ -39,7 +50,8 @@
         "both_odd_eliminated=True",
         "consistent_with_zero_solutions=True"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -62,8 +74,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "UNDETERMINED",
-  "verdict_note": "Exhaustive search over [1, 1000] found zero solutions. Modular analysis confirms structural constraints. The classical infinite descent proof (Fermat, c. 1637) establishes this for all positive integers, but the logical argument is not machine-verified. Verdict is UNDETERMINED per proof-engine conventions.",
+  "verdict": {
+    "value": "UNDETERMINED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "search_bound": 1000,
     "solutions_found_primary": 0,
@@ -81,5 +97,6 @@
     "version": "0.10.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-03-28"
-  }
+  },
+  "verdict_note": "Exhaustive search over [1, 1000] found zero solutions. Modular analysis confirms structural constraints. The classical infinite descent proof (Fermat, c. 1637) establishes this for all positive integers, but the logical argument is not machine-verified. Verdict is UNDETERMINED per proof-engine conventions."
 }

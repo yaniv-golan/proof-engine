@@ -1,48 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_brenowitz_nacc",
-      "label": "SC1: Brenowitz et al. 2017 - NACC data, 38% of ADNC have LBD"
-    },
-    "B2": {
-      "key": "sc1_toledo_copathology",
-      "label": "SC1: Toledo et al. 2023 - LP most common co-pathology in DLB review"
-    },
-    "B3": {
-      "key": "sc1_lbda_most_common",
-      "label": "SC1: LBDA - LP most common co-existing pathology in AD up to 80 years"
-    },
-    "B4": {
-      "key": "sc1_chatterjee_coexistent",
-      "label": "SC1: Chatterjee et al. 2021 - AD and DLB frequently have coexistent pathology"
-    },
-    "B5": {
-      "key": "sc2_toledo_50pct",
-      "label": "SC2: Toledo et al. 2023 - AD co-pathology in more than 50% of DLB"
-    },
-    "B6": {
-      "key": "sc2_upenn_50pct",
-      "label": "SC2: UPenn Neuropathology Lab - ~50% of all LBD have sufficient ADNC"
-    },
-    "B7": {
-      "key": "sc2_springer_59pct",
-      "label": "SC2: Dickson et al. 2025 - Mayo Clinic brain bank 59% comorbid AD in LBD"
-    },
-    "B8": {
-      "key": "sc2_hansson_48pct",
-      "label": "SC2: Hansson et al. 2023 - 48% of LB-positive had AD pathology"
-    },
-    "A1": {
-      "label": "SC1 confirmed source count",
-      "method": "count(verified sc1 citations) = 4",
-      "result": "4"
-    },
-    "A2": {
-      "label": "SC2 confirmed source count",
-      "method": "count(verified sc2 citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Co-occurrence of Lewy pathology (LP) and Alzheimer's disease neuropathologic change (ADNC)",
     "sub_claims": [
@@ -65,184 +22,246 @@
     "operator_note": "Both sub-claims must hold for the compound claim to be PROVED. The claim asserts prevalence thresholds from the neuropathology literature. We operationalize each sub-claim as: \u22653 independent peer-reviewed sources or authoritative reviews report prevalence at or above the stated threshold. Formalization scope: The natural-language claim says 'common' and provides specific thresholds (\u226530%, \u226550%). We verify whether the thresholds are supported by the literature. Variability across study designs (clinic-based vs population-based) is documented but does not invalidate the threshold if the majority of large autopsy studies support it."
   },
   "claim_natural": "Co-occurrence of Lewy pathology and ADNC is common (\u226530% of AD cases have LP; \u226550% of DLB cases have ADNC)",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_brenowitz_nacc",
-      "source_name": "Brenowitz et al. 2017, Neurobiology of Aging (NACC n=2,742; ACT n=499)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5385292/",
-      "quote": "Co-occurrence of ADNC and LBD was slightly more common in NACC than ACT (38% vs. 20% of participants with ADNC)",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Brenowitz et al. 2017 - NACC data, 38% of ADNC have LBD",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Brenowitz et al. 2017, Neurobiology of Aging (NACC n=2,742; ACT n=499)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5385292/",
+        "quote": "Co-occurrence of ADNC and LBD was slightly more common in NACC than ACT (38% vs. 20% of participants with ADNC)"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Co-occurrence of ADNC and LBD was slightly more common in NACC than ACT (38% vs."
       }
     },
     "B2": {
-      "source_key": "sc1_toledo_copathology",
-      "source_name": "Toledo et al. 2023, Alzheimer's & Dementia",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9881193/",
-      "quote": "neuropathological studies have demonstrated the high prevalence of coexistent Alzheimer's disease, TDP-43, and cerebrovascular pathologic cases",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Toledo et al. 2023 - LP most common co-pathology in DLB review",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Toledo et al. 2023, Alzheimer's & Dementia",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9881193/",
+        "quote": "neuropathological studies have demonstrated the high prevalence of coexistent Alzheimer's disease, TDP-43, and cerebrovascular pathologic cases"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "neuropathological studies have demonstrated the high prevalence of coexistent Al"
       }
     },
     "B3": {
-      "source_key": "sc1_lbda_most_common",
-      "source_name": "Lewy Body Dementia Association (LBDA), citing NACC autopsy data",
-      "url": "https://lbda.org/alzheimers-and-lewy-bodies-when-two-pathologies-collide",
-      "quote": "Lewy body pathology was the most common co-existing pathology in people with Alzheimer's disease up to 80 years of age",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "lbda.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC1: LBDA - LP most common co-existing pathology in AD up to 80 years",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Lewy Body Dementia Association (LBDA), citing NACC autopsy data",
+        "url": "https://lbda.org/alzheimers-and-lewy-bodies-when-two-pathologies-collide",
+        "quote": "Lewy body pathology was the most common co-existing pathology in people with Alzheimer's disease up to 80 years of age"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "lbda.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Lewy body pathology was the most common co-existing pathology in people with Alz"
       }
     },
     "B4": {
-      "source_key": "sc1_chatterjee_coexistent",
-      "source_name": "Chatterjee et al. 2021, Alzheimer's & Dementia: DADM",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8129858/",
-      "quote": "Patients with Alzheimer\u2019s disease (AD) and dementia with Lewy bodies (DLB) frequently demonstrate coexistent AD neuropathological change (ADNC) and Lewy body pathology (LBP) at autopsy",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Chatterjee et al. 2021 - AD and DLB frequently have coexistent pathology",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Chatterjee et al. 2021, Alzheimer's & Dementia: DADM",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8129858/",
+        "quote": "Patients with Alzheimer\u2019s disease (AD) and dementia with Lewy bodies (DLB) frequently demonstrate coexistent AD neuropathological change (ADNC) and Lewy body pathology (LBP) at autopsy"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Patients with Alzheimer\u2019s disease (AD) and dementia with Lewy bodies (DLB) frequ"
       }
     },
     "B5": {
-      "source_key": "sc2_toledo_50pct",
-      "source_name": "Toledo et al. 2023, Alzheimer's & Dementia",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9881193/",
-      "quote": "is present in more than 50% of DLB individuals",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Toledo et al. 2023 - AD co-pathology in more than 50% of DLB",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Toledo et al. 2023, Alzheimer's & Dementia",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9881193/",
+        "quote": "is present in more than 50% of DLB individuals"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "is present in more than 50% of DLB individuals"
       }
     },
     "B6": {
-      "source_key": "sc2_upenn_50pct",
-      "source_name": "Penn Neuropathology Lab, University of Pennsylvania",
-      "url": "https://www.med.upenn.edu/digitalneuropathologylab/lbd.html",
-      "quote": "~50% of all LBD have sufficient AD neuropathologic change sufficient for a secondary neuropathological diagnosis of medium/high AD",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "upenn.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "SC2: UPenn Neuropathology Lab - ~50% of all LBD have sufficient ADNC",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Penn Neuropathology Lab, University of Pennsylvania",
+        "url": "https://www.med.upenn.edu/digitalneuropathologylab/lbd.html",
+        "quote": "~50% of all LBD have sufficient AD neuropathologic change sufficient for a secondary neuropathological diagnosis of medium/high AD"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "upenn.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "~50% of all LBD have sufficient AD neuropathologic change sufficient for a secon"
       }
     },
     "B7": {
-      "source_key": "sc2_springer_59pct",
-      "source_name": "Dickson et al. 2025, Molecular Neurodegeneration (Mayo Clinic brain bank)",
-      "url": "https://link.springer.com/article/10.1186/s13024-025-00900-6",
-      "quote": "comorbid AD pathology was observed in 215 patients out of 363 Lewy body dementia patients (59%)",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "springer.com",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "SC2: Dickson et al. 2025 - Mayo Clinic brain bank 59% comorbid AD in LBD",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Dickson et al. 2025, Molecular Neurodegeneration (Mayo Clinic brain bank)",
+        "url": "https://link.springer.com/article/10.1186/s13024-025-00900-6",
+        "quote": "comorbid AD pathology was observed in 215 patients out of 363 Lewy body dementia patients (59%)"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "springer.com",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "comorbid AD pathology was observed in 215 patients out of 363 Lewy body dementia"
       }
     },
     "B8": {
-      "source_key": "sc2_hansson_48pct",
-      "source_name": "Hansson et al. 2023, Nature Medicine (BioFINDER study)",
-      "url": "https://www.nature.com/articles/s41591-023-02449-7",
-      "quote": "Among these LB-positive patients, 48% had AD pathology",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nature.com",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "SC2: Hansson et al. 2023 - 48% of LB-positive had AD pathology",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Hansson et al. 2023, Nature Medicine (BioFINDER study)",
+        "url": "https://www.nature.com/articles/s41591-023-02449-7",
+        "quote": "Among these LB-positive patients, 48% had AD pathology"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nature.com",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Among these LB-positive patients, 48% had AD pathology"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Co-occurrence of ADNC and LBD was slightly more common in NACC than ACT (38% vs."
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "neuropathological studies have demonstrated the high prevalence of coexistent Al"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 confirmed source count",
+      "sub_claim": "SC1",
+      "method": "count(verified sc1 citations) = 4",
+      "result": "4",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Lewy body pathology was the most common co-existing pathology in people with Alz"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Patients with Alzheimer\u2019s disease (AD) and dementia with Lewy bodies (DLB) frequ"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "is present in more than 50% of DLB individuals"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "~50% of all LBD have sufficient AD neuropathologic change sufficient for a secon"
-    },
-    "B7": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "comorbid AD pathology was observed in 215 patients out of 363 Lewy body dementia"
-    },
-    "B8": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Among these LB-positive patients, 48% had AD pathology"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 confirmed source count",
+      "sub_claim": "SC2",
+      "method": "count(verified sc2 citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -265,7 +284,8 @@
           "direction": "favorable_to_subject",
           "severity": "low"
         }
-      ]
+      ],
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources on ADNC prevalence in DLB/LBD",
@@ -286,21 +306,8 @@
           "direction": "favorable_to_subject",
           "severity": "low"
         }
-      ]
-    }
-  ],
-  "sub_claim_results": [
-    {
-      "id": "SC1",
-      "n_confirming": 4,
-      "threshold": 3,
-      "holds": true
-    },
-    {
-      "id": "SC2",
-      "n_confirming": 4,
-      "threshold": 3,
-      "holds": true
+      ],
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -329,7 +336,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_holding": 2,
     "n_total": 2,
@@ -341,5 +353,18 @@
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-11"
   },
-  "format_version": 2
+  "sub_claim_results": [
+    {
+      "id": "SC1",
+      "n_confirming": 4,
+      "threshold": 3,
+      "holds": true
+    },
+    {
+      "id": "SC2",
+      "n_confirming": 4,
+      "threshold": 3,
+      "holds": true
+    }
+  ]
 }

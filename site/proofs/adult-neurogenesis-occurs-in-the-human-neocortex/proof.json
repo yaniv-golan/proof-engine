@@ -1,75 +1,78 @@
 {
-  "verdict": "DISPROVED",
-  "fact_registry": {
-    "B1": {
-      "key": "bhardwaj_2006",
-      "label": "Bhardwaj et al. 2006 (PNAS) — C14 bomb-pulse dating + BrdU study shows no adult neocortical neurogenesis in humans (direct human tissue study)"
-    },
-    "B2": {
-      "key": "spalding_2013",
-      "label": "Spalding et al. 2013 (Cell) — C14 bomb-pulse dating shows cortical neurons are not exchanged postnatally in humans (direct human tissue study)"
-    },
-    "A1": {
-      "label": "Count of independent peer-reviewed human studies rejecting adult neocortical neurogenesis",
-      "method": "sum(verify_extraction confirmations where citation verified)",
-      "result": "2"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "human neocortex",
-    "property": "presence of adult neurogenesis — generation of new neurons in the mature human brain's neocortical regions at a detectable level",
+    "property": "presence of adult neurogenesis \u2014 generation of new neurons in the mature human brain's neocortical regions at a detectable level",
     "operator": ">=",
-    "operator_note": "The claim asserts that new neurons ARE generated in the adult human neocortex. Proof direction is 'disprove': we count independent peer-reviewed sources that explicitly REJECT this claim using direct human tissue evidence. A threshold of 2 direct human neocortex studies is used because domain scarcity limits the available evidence: only two independent research groups have applied C14 radiocarbon bomb-pulse dating to human neocortical tissue (Bhardwaj/Frisén 2006 and Spalding/Frisén 2013, the latter measuring cortical neurons as a control for hippocampal analysis). No other method provides equivalent precision for dating neuronal birth in postmortem human tissue. A threshold of 3 would force inclusion of weaker evidence (cross-species extrapolation or hedged review language), which Rule 8 prohibits for DISPROVED verdicts. 'Neocortex' is interpreted as the layered cerebral cortex (prefrontal, temporal, parietal, occipital regions), explicitly excluding the hippocampal dentate gyrus and olfactory bulb, which are anatomically and functionally distinct structures where adult neurogenesis is a separate ongoing debate. Formalization scope: the proof addresses whether neurogenesis occurs at detectable levels using current methodology. It does not exclude the theoretical possibility of neurogenesis below the detection threshold of C14 dating.",
+    "operator_note": "The claim asserts that new neurons ARE generated in the adult human neocortex. Proof direction is 'disprove': we count independent peer-reviewed sources that explicitly REJECT this claim using direct human tissue evidence. A threshold of 2 direct human neocortex studies is used because domain scarcity limits the available evidence: only two independent research groups have applied C14 radiocarbon bomb-pulse dating to human neocortical tissue (Bhardwaj/Fris\u00e9n 2006 and Spalding/Fris\u00e9n 2013, the latter measuring cortical neurons as a control for hippocampal analysis). No other method provides equivalent precision for dating neuronal birth in postmortem human tissue. A threshold of 3 would force inclusion of weaker evidence (cross-species extrapolation or hedged review language), which Rule 8 prohibits for DISPROVED verdicts. 'Neocortex' is interpreted as the layered cerebral cortex (prefrontal, temporal, parietal, occipital regions), explicitly excluding the hippocampal dentate gyrus and olfactory bulb, which are anatomically and functionally distinct structures where adult neurogenesis is a separate ongoing debate. Formalization scope: the proof addresses whether neurogenesis occurs at detectable levels using current methodology. It does not exclude the theoretical possibility of neurogenesis below the detection threshold of C14 dating.",
     "threshold": 2,
     "proof_direction": "disprove"
   },
   "claim_natural": "Adult neurogenesis occurs in the human neocortex.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "bhardwaj_2006",
-      "source_name": "Bhardwaj et al. 2006 — Neocortical neurogenesis in humans is restricted to development. Proc Natl Acad Sci USA 103(33):12564-12568 (PubMed abstract)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/16901981/",
-      "quote": "neurons in the human cerebral neocortex are not generated in adulthood at detectable levels but are generated perinatally.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Bhardwaj et al. 2006 (PNAS) \u2014 C14 bomb-pulse dating + BrdU study shows no adult neocortical neurogenesis in humans (direct human tissue study)",
+      "sub_claim": null,
+      "source": {
+        "name": "Bhardwaj et al. 2006 \u2014 Neocortical neurogenesis in humans is restricted to development. Proc Natl Acad Sci USA 103(33):12564-12568 (PubMed abstract)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16901981/",
+        "quote": "neurons in the human cerebral neocortex are not generated in adulthood at detectable levels but are generated perinatally."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "not generated in adulthood",
+        "value_in_quote": true,
+        "quote_snippet": "neurons in the human cerebral neocortex are not generated in adulthood at detect"
       }
     },
     "B2": {
-      "source_key": "spalding_2013",
-      "source_name": "Spalding et al. 2013 — Dynamics of hippocampal neurogenesis in adult humans. Cell 153(6):1219-1227 (PMC full text)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4394608/",
-      "quote": "cortical and olfactory bulb neurons, which are not exchanged postnatally to a detectable degree in humans",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Spalding et al. 2013 (Cell) \u2014 C14 bomb-pulse dating shows cortical neurons are not exchanged postnatally in humans (direct human tissue study)",
+      "sub_claim": null,
+      "source": {
+        "name": "Spalding et al. 2013 \u2014 Dynamics of hippocampal neurogenesis in adult humans. Cell 153(6):1219-1227 (PMC full text)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4394608/",
+        "quote": "cortical and olfactory bulb neurons, which are not exchanged postnatally to a detectable degree in humans"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "not exchanged postnatally",
+        "value_in_quote": true,
+        "quote_snippet": "cortical and olfactory bulb neurons, which are not exchanged postnatally to a de"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "not generated in adulthood",
-      "value_in_quote": true,
-      "quote_snippet": "neurons in the human cerebral neocortex are not generated in adulthood at detect"
     },
-    "B2": {
-      "value": "not exchanged postnatally",
-      "value_in_quote": true,
-      "quote_snippet": "cortical and olfactory bulb neurons, which are not exchanged postnatally to a de"
+    "A1": {
+      "type": "computed",
+      "label": "Count of independent peer-reviewed human studies rejecting adult neocortical neurogenesis",
+      "sub_claim": null,
+      "method": "sum(verify_extraction confirmations where citation verified)",
+      "result": "2",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -80,14 +83,15 @@
         "not exchanged postnatally (human, C14, Spalding 2013)"
       ],
       "agreement": true,
-      "coi_flags": []
+      "coi_flags": [],
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Does Gould et al. 1999 (Science) provide credible unrebutted evidence of adult neocortical neurogenesis in primates?",
       "verification_performed": "Read Gould et al. 1999 (PMID 10521353) and subsequent replies. The paper used BrdU labeling in adult macaques and claimed new neurons in prefrontal, temporal, and parietal cortex. Searched PubMed for replications and critiques.",
-      "finding": "Gould et al. 1999 was immediately contested. Kornack & Rakic 2001 used the identical BrdU method in macaques and found zero new neurons in neocortex. Nowakowski & Hayes 2000 (Science 288:771) published a formal critique. Bhardwaj et al. 2006 (B1) used C14 bomb-pulse dating — a method immune to BrdU artifacts (BrdU can label DNA-repair in non-dividing cells) — and found no adult neocortical neurogenesis in human tissue. The Gould 1999 findings are now regarded as methodological artifacts by the field.",
+      "finding": "Gould et al. 1999 was immediately contested. Kornack & Rakic 2001 used the identical BrdU method in macaques and found zero new neurons in neocortex. Nowakowski & Hayes 2000 (Science 288:771) published a formal critique. Bhardwaj et al. 2006 (B1) used C14 bomb-pulse dating \u2014 a method immune to BrdU artifacts (BrdU can label DNA-repair in non-dividing cells) \u2014 and found no adult neocortical neurogenesis in human tissue. The Gould 1999 findings are now regarded as methodological artifacts by the field.",
       "breaks_proof": false
     },
     {
@@ -97,12 +101,18 @@
       "breaks_proof": false
     },
     {
-      "question": "Is the neocortex claim contaminated by the hippocampal adult neurogenesis controversy — i.e., does uncertainty about the hippocampus extend to the neocortex?",
+      "question": "Is the neocortex claim contaminated by the hippocampal adult neurogenesis controversy \u2014 i.e., does uncertainty about the hippocampus extend to the neocortex?",
       "verification_performed": "Read review articles distinguishing hippocampal from neocortical neurogenesis. Checked whether Sorrells et al. 2018 or Boldrini et al. 2018 addressed the neocortex.",
       "finding": "The 2018-2024 debate is confined to the hippocampus. All parties in that debate treat the neocortex as a settled negative. B1 covers both structures with the same C14 method and reaches the same negative conclusion for the neocortex independent of the hippocampal results. B2 separately confirms cortical neurons are not exchanged postnatally. The hippocampal controversy does not rescue the neocortical claim.",
       "breaks_proof": false
     }
   ],
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirming": 2,
     "n_required": 2,

@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "urmc",
-      "label": "URMC: detoxing through diet is a myth"
-    },
-    "B2": {
-      "key": "pubmed_review",
-      "label": "PubMed review: no compelling clinical evidence for detox diet toxin elimination"
-    },
-    "B3": {
-      "key": "harvard_health",
-      "label": "Harvard Health: cannot cleanse body through diet, per scientific reality"
-    },
-    "B4": {
-      "key": "cleveland_clinic",
-      "label": "Cleveland Clinic: no scientific research proving cleanses offer claimed health benefits"
-    },
-    "A1": {
-      "label": "Verified source count",
-      "method": "count(verified citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Detox diets and juice cleanses",
     "property": "actually remove toxins from the body beyond what normal organ function achieves",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Detox diets and juice cleanses actually remove toxins from the body.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "urmc",
-      "source_name": "University of Rochester Medical Center \u2014 Do Juice Cleanses Detox the Body?",
-      "url": "https://www.urmc.rochester.edu/news/publications/health-matters/do-juice-cleanses-detox-the-body",
-      "quote": "No. The concept of detoxing by eating or drinking certain diets is a myth.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "rochester.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "URMC: detoxing through diet is a myth",
+      "sub_claim": null,
+      "source": {
+        "name": "University of Rochester Medical Center \u2014 Do Juice Cleanses Detox the Body?",
+        "url": "https://www.urmc.rochester.edu/news/publications/health-matters/do-juice-cleanses-detox-the-body",
+        "quote": "No. The concept of detoxing by eating or drinking certain diets is a myth."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "rochester.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "No. The concept of detoxing by eating or drinking certain diets is a myth."
       }
     },
     "B2": {
-      "source_key": "pubmed_review",
-      "source_name": "PubMed \u2014 Detox diets for toxin elimination and weight management: a critical review of the evidence (2015)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/25522674/",
-      "quote": "there is very little clinical evidence to support the use of these diets",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PubMed review: no compelling clinical evidence for detox diet toxin elimination",
+      "sub_claim": null,
+      "source": {
+        "name": "PubMed \u2014 Detox diets for toxin elimination and weight management: a critical review of the evidence (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25522674/",
+        "quote": "there is very little clinical evidence to support the use of these diets"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "there is very little clinical evidence to support the use of these diets"
       }
     },
     "B3": {
-      "source_key": "harvard_health",
-      "source_name": "Harvard Health \u2014 Harvard Health Ad Watch: What's being cleansed in a detox cleanse?",
-      "url": "https://www.health.harvard.edu/blog/harvard-health-ad-watch-whats-being-cleansed-in-a-detox-cleanse-2020032519294",
-      "quote": "Searching the medical literature for \"detox diets\" or \"cleanse diets\" yields almost no relevant, high-quality medical evidence demonstrating health benefits.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "harvard.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "Harvard Health: cannot cleanse body through diet, per scientific reality",
+      "sub_claim": null,
+      "source": {
+        "name": "Harvard Health \u2014 Harvard Health Ad Watch: What's being cleansed in a detox cleanse?",
+        "url": "https://www.health.harvard.edu/blog/harvard-health-ad-watch-whats-being-cleansed-in-a-detox-cleanse-2020032519294",
+        "quote": "Searching the medical literature for \"detox diets\" or \"cleanse diets\" yields almost no relevant, high-quality medical evidence demonstrating health benefits."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "harvard.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Searching the medical literature for \"detox diets\" or \"cleanse diets\" yields alm"
       }
     },
     "B4": {
-      "source_key": "cleveland_clinic",
-      "source_name": "Cleveland Clinic \u2014 Detox or Cleanse? What To Know Before You Start",
-      "url": "https://health.clevelandclinic.org/detox-cleanse",
-      "quote": "Research doesn't support many health claims linked to detoxification programs",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "clevelandclinic.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Cleveland Clinic: no scientific research proving cleanses offer claimed health benefits",
+      "sub_claim": null,
+      "source": {
+        "name": "Cleveland Clinic \u2014 Detox or Cleanse? What To Know Before You Start",
+        "url": "https://health.clevelandclinic.org/detox-cleanse",
+        "quote": "Research doesn't support many health claims linked to detoxification programs"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "clevelandclinic.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Research doesn't support many health claims linked to detoxification programs"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "No. The concept of detoxing by eating or drinking certain diets is a myth."
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "there is very little clinical evidence to support the use of these diets"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Searching the medical literature for \"detox diets\" or \"cleanse diets\" yields alm"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Research doesn't support many health claims linked to detoxification programs"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "harvard_health": "verified",
         "cleveland_clinic": "verified"
       },
-      "independence_note": "Sources are from four different institutions: University of Rochester Medical Center, PubMed/academic peer review, Harvard Medical School, and Cleveland Clinic \u2014 all independently rejecting the claim."
+      "independence_note": "Sources are from four different institutions: University of Rochester Medical Center, PubMed/academic peer review, Harvard Medical School, and Cleveland Clinic \u2014 all independently rejecting the claim.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -151,7 +160,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

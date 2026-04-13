@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "wikipedia",
-      "label": "Wikipedia: no such law ever existed"
-    },
-    "B2": {
-      "key": "phrases_org",
-      "label": "Phrases.org.uk: no printed records associate phrase with domestic violence until 1970s"
-    },
-    "B3": {
-      "key": "uoregon",
-      "label": "U. Oregon legal scholar: no truth in the legend"
-    },
-    "B4": {
-      "key": "allthatsinteresting",
-      "label": "All That's Interesting: no evidence Buller said anything of the sort"
-    },
-    "A1": {
-      "label": "Verified source count rejecting the claim",
-      "method": "count(verified citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "The phrase \"rule of thumb\"",
     "property": "etymological origin linked to a specific English law permitting wife-beating",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "The phrase \"rule of thumb\" originated from an old English law that allowed a man to beat his wife with a stick no thicker than his thumb.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "wikipedia",
-      "source_name": "Wikipedia \u2014 Rule of thumb",
-      "url": "https://en.wikipedia.org/wiki/Rule_of_thumb",
-      "quote": "A modern folk etymology holds that the phrase is derived from the maximum width of a stick allowed for wife-beating under English common law, but no such law ever existed.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: no such law ever existed",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia \u2014 Rule of thumb",
+        "url": "https://en.wikipedia.org/wiki/Rule_of_thumb",
+        "quote": "A modern folk etymology holds that the phrase is derived from the maximum width of a stick allowed for wife-beating under English common law, but no such law ever existed."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "A modern folk etymology holds that the phrase is derived from the maximum width "
       }
     },
     "B2": {
-      "source_key": "phrases_org",
-      "source_name": "Phrases.org.uk \u2014 Rule of Thumb meaning and origin",
-      "url": "https://phrases.org.uk/meanings/rule-of-thumb.html",
-      "quote": "Despite the phrase being in common use since the 17th century and appearing many thousands of times in print, there are no printed records that associate it with domestic violence until the 1970s",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "org.uk",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Phrases.org.uk: no printed records associate phrase with domestic violence until 1970s",
+      "sub_claim": null,
+      "source": {
+        "name": "Phrases.org.uk \u2014 Rule of Thumb meaning and origin",
+        "url": "https://phrases.org.uk/meanings/rule-of-thumb.html",
+        "quote": "Despite the phrase being in common use since the 17th century and appearing many thousands of times in print, there are no printed records that associate it with domestic violence until the 1970s"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "org.uk",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Despite the phrase being in common use since the 17th century and appearing many"
       }
     },
     "B3": {
-      "source_key": "uoregon",
-      "source_name": "University of Oregon \u2014 Rule of Thumb essay (Prof. J.J. Freund)",
-      "url": "https://dynamic.uoregon.edu/jjf/essays/ruleofthumb.html",
-      "quote": "there is probably no truth whatever in the legend that he was permitted to beat her with a stick no thicker than his thumb",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "uoregon.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "U. Oregon legal scholar: no truth in the legend",
+      "sub_claim": null,
+      "source": {
+        "name": "University of Oregon \u2014 Rule of Thumb essay (Prof. J.J. Freund)",
+        "url": "https://dynamic.uoregon.edu/jjf/essays/ruleofthumb.html",
+        "quote": "there is probably no truth whatever in the legend that he was permitted to beat her with a stick no thicker than his thumb"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "uoregon.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "there is probably no truth whatever in the legend that he was permitted to beat "
       }
     },
     "B4": {
-      "source_key": "allthatsinteresting",
-      "source_name": "All That's Interesting \u2014 Rule of Thumb Origin",
-      "url": "https://allthatsinteresting.com/rule-of-thumb-origin",
-      "quote": "There is no evidence that Buller actually said anything of the sort, but he was mocked in the press.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "allthatsinteresting.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "All That's Interesting: no evidence Buller said anything of the sort",
+      "sub_claim": null,
+      "source": {
+        "name": "All That's Interesting \u2014 Rule of Thumb Origin",
+        "url": "https://allthatsinteresting.com/rule-of-thumb-origin",
+        "quote": "There is no evidence that Buller actually said anything of the sort, but he was mocked in the press."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "allthatsinteresting.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "There is no evidence that Buller actually said anything of the sort, but he was "
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "A modern folk etymology holds that the phrase is derived from the maximum width "
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Despite the phrase being in common use since the 17th century and appearing many"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "there is probably no truth whatever in the legend that he was permitted to beat "
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "There is no evidence that Buller actually said anything of the sort, but he was "
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count rejecting the claim",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "uoregon": "verified",
         "allthatsinteresting": "verified"
       },
-      "independence_note": "Sources are from different institutions: Wikimedia Foundation (Wikipedia), Gary Martin's Phrases.org.uk, University of Oregon academic essay. While they cite overlapping primary research, they are independently published and maintained."
+      "independence_note": "Sources are from different institutions: Wikimedia Foundation (Wikipedia), Gary Martin's Phrases.org.uk, University of Oregon academic essay. While they cite overlapping primary research, they are independently published and maintained.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

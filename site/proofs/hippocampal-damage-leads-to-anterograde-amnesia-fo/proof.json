@@ -1,46 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_a",
-      "label": "Squire LR (2009) The Legacy of Patient H.M. for Neuroscience, Neuron 61(1):6-9 (PMC2649674) \u2014 SC1"
-    },
-    "B2": {
-      "key": "source_b",
-      "label": "Wikipedia: Henry Molaison \u2014 anterograde amnesia and procedural memory \u2014 SC1, SC2"
-    },
-    "B3": {
-      "key": "source_c",
-      "label": "Simply Psychology: Patient H.M. Case Study \u2014 early life memories \u2014 SC3"
-    },
-    "B4": {
-      "key": "source_d",
-      "label": "BrainFacts.org: Patient Zero \u2014 What We Learned from H.M. \u2014 SC2"
-    },
-    "B5": {
-      "key": "source_e",
-      "label": "Wikipedia: Anterograde amnesia \u2014 H.M. childhood memories \u2014 SC3"
-    },
-    "A1": {
-      "label": "SC1 confirming source count (anterograde amnesia for new episodic memories)",
-      "method": "sum(confirmations_sc1) = 2",
-      "result": "2"
-    },
-    "A2": {
-      "label": "SC2 confirming source count (skill/procedural learning preserved)",
-      "method": "sum(confirmations_sc2) = 2",
-      "result": "2"
-    },
-    "A3": {
-      "label": "SC3 confirming source count (early-life retrograde memories intact)",
-      "method": "sum(confirmations_sc3) = 2",
-      "result": "2"
-    },
-    "A4": {
-      "label": "All three sub-claims meet threshold (compound claim holds)",
-      "method": "sc1_holds AND sc2_holds AND sc3_holds",
-      "result": "True"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Bilateral hippocampal damage (canonical case: patient H.M., Henry Molaison)",
     "property": "Three jointly required sub-claims: (SC1) causes anterograde amnesia for new episodic memories; (SC2) does not impair procedural/skill learning; (SC3) does not impair retrograde memories from early life",
@@ -50,123 +9,178 @@
     "proof_direction": "affirm"
   },
   "claim_natural": "Hippocampal damage leads to anterograde amnesia for new episodic memories and does not impair skill learning or retrograde memories from early life.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_a",
-      "source_name": "Squire LR (2009) The Legacy of Patient H.M. for Neuroscience, Neuron (PMC)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2649674/",
-      "quote": "He forgot daily events nearly as fast as they occurred, apparently in the absence of any general intellectual loss.",
-      "status": "not_found",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Squire LR (2009) The Legacy of Patient H.M. for Neuroscience, Neuron 61(1):6-9 (PMC2649674) \u2014 SC1",
+      "sub_claim": null,
+      "source": {
+        "name": "Squire LR (2009) The Legacy of Patient H.M. for Neuroscience, Neuron (PMC)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2649674/",
+        "quote": "He forgot daily events nearly as fast as they occurred, apparently in the absence of any general intellectual loss."
+      },
+      "verification": {
+        "status": "not_found",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "forgot daily events",
+        "value_in_quote": true,
+        "quote_snippet": "He forgot daily events nearly as fast as they occurred, apparently in the absenc"
       }
     },
     "B2": {
-      "source_key": "source_b",
-      "source_name": "Wikipedia: Henry Molaison",
-      "url": "https://en.wikipedia.org/wiki/Henry_Molaison",
-      "quote": "Molaison developed severe anterograde amnesia: although his working memory and procedural memory were intact",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Henry Molaison \u2014 anterograde amnesia and procedural memory \u2014 SC1, SC2",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Henry Molaison",
+        "url": "https://en.wikipedia.org/wiki/Henry_Molaison",
+        "quote": "Molaison developed severe anterograde amnesia: although his working memory and procedural memory were intact"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "anterograde amnesia",
+        "value_in_quote": true,
+        "quote_snippet": "Molaison developed severe anterograde amnesia: although his working memory and p"
       }
     },
     "B3": {
-      "source_key": "source_c",
-      "source_name": "Simply Psychology: Patient H.M. Case Study",
-      "url": "https://www.simplypsychology.org/henry-molaison-patient-hm.html",
-      "quote": "he could still recall childhood memories, but he had difficulty remembering events that happened during the years immediately preceding the surgery",
-      "status": "not_found",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "simplypsychology.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Simply Psychology: Patient H.M. Case Study \u2014 early life memories \u2014 SC3",
+      "sub_claim": null,
+      "source": {
+        "name": "Simply Psychology: Patient H.M. Case Study",
+        "url": "https://www.simplypsychology.org/henry-molaison-patient-hm.html",
+        "quote": "he could still recall childhood memories, but he had difficulty remembering events that happened during the years immediately preceding the surgery"
+      },
+      "verification": {
+        "status": "not_found",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "simplypsychology.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "childhood memories",
+        "value_in_quote": true,
+        "quote_snippet": "he could still recall childhood memories, but he had difficulty remembering even"
       }
     },
     "B4": {
-      "source_key": "source_d",
-      "source_name": "BrainFacts.org: Patient Zero \u2014 What We Learned from H.M.",
-      "url": "https://www.brainfacts.org/thinking-sensing-and-behaving/learning-and-memory/2013/patient-zero-what-we-learned-from-hm",
-      "quote": "he had retained the ability to form non-declarative memories, which took the form of improvement in motor skills.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "brainfacts.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "BrainFacts.org: Patient Zero \u2014 What We Learned from H.M. \u2014 SC2",
+      "sub_claim": null,
+      "source": {
+        "name": "BrainFacts.org: Patient Zero \u2014 What We Learned from H.M.",
+        "url": "https://www.brainfacts.org/thinking-sensing-and-behaving/learning-and-memory/2013/patient-zero-what-we-learned-from-hm",
+        "quote": "he had retained the ability to form non-declarative memories, which took the form of improvement in motor skills."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "brainfacts.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "motor skills",
+        "value_in_quote": true,
+        "quote_snippet": "he had retained the ability to form non-declarative memories, which took the for"
       }
     },
     "B5": {
-      "source_key": "source_e",
-      "source_name": "Wikipedia: Anterograde amnesia",
-      "url": "https://en.wikipedia.org/wiki/Anterograde_amnesia",
-      "quote": "He could remember anything from his childhood.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Anterograde amnesia \u2014 H.M. childhood memories \u2014 SC3",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Anterograde amnesia",
+        "url": "https://en.wikipedia.org/wiki/Anterograde_amnesia",
+        "quote": "He could remember anything from his childhood."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "childhood",
+        "value_in_quote": true,
+        "quote_snippet": "He could remember anything from his childhood."
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "forgot daily events",
-      "value_in_quote": true,
-      "quote_snippet": "He forgot daily events nearly as fast as they occurred, apparently in the absenc"
     },
-    "B2_sc1": {
-      "value": "anterograde amnesia",
-      "value_in_quote": true,
-      "quote_snippet": "Molaison developed severe anterograde amnesia: although his working memory and p"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 confirming source count (anterograde amnesia for new episodic memories)",
+      "sub_claim": "SC1",
+      "method": "sum(confirmations_sc1) = 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B2_sc2": {
-      "value": "procedural memory",
-      "value_in_quote": true,
-      "quote_snippet": "Molaison developed severe anterograde amnesia: although his working memory and p"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 confirming source count (skill/procedural learning preserved)",
+      "sub_claim": "SC2",
+      "method": "sum(confirmations_sc2) = 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B3": {
-      "value": "childhood memories",
-      "value_in_quote": true,
-      "quote_snippet": "he could still recall childhood memories, but he had difficulty remembering even"
+    "A3": {
+      "type": "computed",
+      "label": "SC3 confirming source count (early-life retrograde memories intact)",
+      "sub_claim": "SC3",
+      "method": "sum(confirmations_sc3) = 2",
+      "result": "2",
+      "depends_on": []
     },
-    "B4": {
-      "value": "motor skills",
-      "value_in_quote": true,
-      "quote_snippet": "he had retained the ability to form non-declarative memories, which took the for"
-    },
-    "B5": {
-      "value": "childhood",
-      "value_in_quote": true,
-      "quote_snippet": "He could remember anything from his childhood."
+    "A4": {
+      "type": "computed",
+      "label": "All three sub-claims meet threshold (compound claim holds)",
+      "sub_claim": null,
+      "method": "sc1_holds AND sc2_holds AND sc3_holds",
+      "result": "True",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -174,19 +188,22 @@
       "description": "SC1 independent sources (PMC Squire 2009 + Wikipedia HM)",
       "n_sources": 2,
       "n_confirming": 2,
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "SC2 independent sources (Wikipedia HM + BrainFacts)",
       "n_sources": 2,
       "n_confirming": 2,
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "SC3 independent sources (Simply Psychology + Wikipedia AA)",
       "n_sources": 2,
       "n_confirming": 2,
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -215,7 +232,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED (with unverified citations)",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": true,
+    "qualifier": "unverified_citations",
+    "reason": null
+  },
   "key_results": {
     "sc1_anterograde_amnesia_sources": 2,
     "sc2_skill_learning_preserved_sources": 2,

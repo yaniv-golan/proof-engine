@@ -1,42 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_a_cpi",
-      "label": "Source A CPI: 1913 annual avg = 9.883, 2024 annual avg = 313.689 (BLS via rateinflation.com)"
-    },
-    "B2": {
-      "key": "source_b_cpi",
-      "label": "Source B CPI: 1913 annual avg = 9.9, 2024 annual avg = 313.689 (BLS via inflationdata.com)"
-    },
-    "B3": {
-      "key": "source_a_fed_date",
-      "label": "Federal Reserve Act signed December 23, 1913 (Wikipedia)"
-    },
-    "B4": {
-      "key": "source_b_fed_date",
-      "label": "Federal Reserve Act signed December 23, 1913 (US Senate)"
-    },
-    "A1": {
-      "label": "Purchasing power decline computed from Source A CPI values",
-      "method": "(1 - CPI_1913_A / CPI_2024_A) * 100",
-      "result": "96.8494%"
-    },
-    "A2": {
-      "label": "Purchasing power decline computed from Source B CPI values",
-      "method": "(1 - CPI_1913_B / CPI_2024_B) * 100",
-      "result": "96.8440%"
-    },
-    "A3": {
-      "label": "Cross-check: Source A and B decline percentages agree within tolerance",
-      "method": "abs(decline_A - decline_B) < 0.1",
-      "result": "diff=0.0054%, within tolerance"
-    },
-    "A4": {
-      "label": "Claim evaluation: decline > 90%",
-      "method": "compare(96.8494, '>', 90.0)",
-      "result": "True"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Purchasing power of the US dollar",
     "property": "percentage decline since 1913",
@@ -45,98 +8,150 @@
     "threshold": 90.0
   },
   "claim_natural": "The purchasing power of the US dollar has declined by more than 90% since the Federal Reserve was established in 1913.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_a_cpi",
-      "source_name": "RateInflation.com (sourced from U.S. Bureau of Labor Statistics)",
-      "url": "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi/",
-      "quote": "The CPI for USA is calculated and issued by: U.S. Bureau of Labor Statistics. CPI data is calculated and issued monthly.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "rateinflation.com",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Source A CPI: 1913 annual avg = 9.883, 2024 annual avg = 313.689 (BLS via rateinflation.com)",
+      "sub_claim": null,
+      "source": {
+        "name": "RateInflation.com (sourced from U.S. Bureau of Labor Statistics)",
+        "url": "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi/",
+        "quote": "The CPI for USA is calculated and issued by: U.S. Bureau of Labor Statistics. CPI data is calculated and issued monthly."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "rateinflation.com",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "CPI_1913=9.883, CPI_2024=313.689",
+        "value_in_quote": false,
+        "quote_snippet": "The CPI for USA is calculated and issued by: U.S. Bureau of Labor Statistics. CP"
       }
     },
     "B2": {
-      "source_key": "source_b_cpi",
-      "source_name": "InflationData.com (sourced from U.S. Bureau of Labor Statistics)",
-      "url": "https://inflationdata.com/Inflation/Consumer_Price_Index/HistoricalCPI.aspx",
-      "quote": "A CPI of 195 indicates 95% inflation since 1982",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "inflationdata.com",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Source B CPI: 1913 annual avg = 9.9, 2024 annual avg = 313.689 (BLS via inflationdata.com)",
+      "sub_claim": null,
+      "source": {
+        "name": "InflationData.com (sourced from U.S. Bureau of Labor Statistics)",
+        "url": "https://inflationdata.com/Inflation/Consumer_Price_Index/HistoricalCPI.aspx",
+        "quote": "A CPI of 195 indicates 95% inflation since 1982"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "inflationdata.com",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "CPI_1913=9.9, CPI_2024=313.689",
+        "value_in_quote": false,
+        "quote_snippet": "A CPI of 195 indicates 95% inflation since 1982"
       }
     },
     "B3": {
-      "source_key": "source_a_fed_date",
-      "source_name": "Wikipedia: Federal Reserve Act",
-      "url": "https://en.wikipedia.org/wiki/Federal_Reserve_Act",
-      "quote": "Signed into law by President Woodrow Wilson on December 23, 1913",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Federal Reserve Act signed December 23, 1913 (Wikipedia)",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Federal Reserve Act",
+        "url": "https://en.wikipedia.org/wiki/Federal_Reserve_Act",
+        "quote": "Signed into law by President Woodrow Wilson on December 23, 1913"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "1913-12-23",
+        "value_in_quote": true,
+        "quote_snippet": "Signed into law by President Woodrow Wilson on December 23, 1913"
       }
     },
     "B4": {
-      "source_key": "source_b_fed_date",
-      "source_name": "United States Senate Historical Office",
-      "url": "https://www.senate.gov/artandhistory/history/minute/Senate_Passes_the_Federal_Reserve_Act.htm",
-      "quote": "On December 23, 1913, the Senate adopted the conference report by a vote of 43 to 25",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "wayback",
-      "credibility": {
-        "domain": "senate.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Federal Reserve Act signed December 23, 1913 (US Senate)",
+      "sub_claim": null,
+      "source": {
+        "name": "United States Senate Historical Office",
+        "url": "https://www.senate.gov/artandhistory/history/minute/Senate_Passes_the_Federal_Reserve_Act.htm",
+        "quote": "On December 23, 1913, the Senate adopted the conference report by a vote of 43 to 25"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "wayback",
+        "credibility": {
+          "domain": "senate.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "1913-12-23",
+        "value_in_quote": true,
+        "quote_snippet": "On December 23, 1913, the Senate adopted the conference report by a vote of 43 t"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "CPI_1913=9.883, CPI_2024=313.689",
-      "verified_via": "verify_data_values",
-      "data_values_verified": true,
-      "quote_snippet": "The CPI for USA is calculated and issued by: U.S. Bureau of Labor Statistics. CP"
     },
-    "B2": {
-      "value": "CPI_1913=9.9, CPI_2024=313.689",
-      "verified_via": "verify_data_values",
-      "data_values_verified": true,
-      "quote_snippet": "A CPI of 195 indicates 95% inflation since 1982"
+    "A1": {
+      "type": "computed",
+      "label": "Purchasing power decline computed from Source A CPI values",
+      "sub_claim": null,
+      "method": "(1 - CPI_1913_A / CPI_2024_A) * 100",
+      "result": "96.8494%",
+      "depends_on": []
     },
-    "B3": {
-      "value": "1913-12-23",
-      "value_in_quote": true,
-      "quote_snippet": "Signed into law by President Woodrow Wilson on December 23, 1913"
+    "A2": {
+      "type": "computed",
+      "label": "Purchasing power decline computed from Source B CPI values",
+      "sub_claim": null,
+      "method": "(1 - CPI_1913_B / CPI_2024_B) * 100",
+      "result": "96.8440%",
+      "depends_on": []
     },
-    "B4": {
-      "value": "1913-12-23",
-      "value_in_quote": true,
-      "quote_snippet": "On December 23, 1913, the Senate adopted the conference report by a vote of 43 t"
+    "A3": {
+      "type": "computed",
+      "label": "Cross-check: Source A and B decline percentages agree within tolerance",
+      "sub_claim": null,
+      "method": "abs(decline_A - decline_B) < 0.1",
+      "result": "diff=0.0054%, within tolerance",
+      "depends_on": []
+    },
+    "A4": {
+      "type": "computed",
+      "label": "Claim evaluation: decline > 90%",
+      "sub_claim": null,
+      "method": "compare(96.8494, '>', 90.0)",
+      "result": "True",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -146,7 +161,8 @@
         "1913-12-23",
         "1913-12-23"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "CPI 2024 annual average: independently sourced from rateinflation.com and inflationdata.com",
@@ -154,7 +170,8 @@
         "313.689",
         "313.689"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "CPI 1913 annual average: agree within rounding tolerance (9.883 vs 9.9)",
@@ -162,7 +179,8 @@
         "9.883",
         "9.9"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Computed decline percentages agree within 0.1%",
@@ -170,7 +188,8 @@
         "96.8494%",
         "96.8440%"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -199,7 +218,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "decline_source_a": 96.8494,
     "decline_source_b": 96.844,

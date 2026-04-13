@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "harvard_health",
-      "label": "Harvard Health: no arthritis risk from knuckle cracking"
-    },
-    "B2": {
-      "key": "jabfm_deweber_2011",
-      "label": "Deweber et al. 2011 (JABFM): no association between KC and hand OA"
-    },
-    "B3": {
-      "key": "castellanos_1990",
-      "label": "Castellanos & Axelrod 1990 (PMC): no increased arthritis in crackers"
-    },
-    "B4": {
-      "key": "hopkins_arthritis",
-      "label": "Johns Hopkins Arthritis Center: no evidence KC causes arthritis"
-    },
-    "A1": {
-      "label": "Verified source count",
-      "method": "count(verified citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "habitual knuckle cracking",
     "property": "causal relationship with arthritis (osteoarthritis of the hand)",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Cracking your knuckles regularly causes arthritis later in life.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "harvard_health",
-      "source_name": "Harvard Health Publishing",
-      "url": "https://www.health.harvard.edu/pain/does-cracking-knuckles-cause-arthritis",
-      "quote": "Cracking your knuckles may aggravate the people around you, but it probably won't raise your risk for arthritis.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "harvard.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "Harvard Health: no arthritis risk from knuckle cracking",
+      "sub_claim": null,
+      "source": {
+        "name": "Harvard Health Publishing",
+        "url": "https://www.health.harvard.edu/pain/does-cracking-knuckles-cause-arthritis",
+        "quote": "Cracking your knuckles may aggravate the people around you, but it probably won't raise your risk for arthritis."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "harvard.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Cracking your knuckles may aggravate the people around you, but it probably won'"
       }
     },
     "B2": {
-      "source_key": "jabfm_deweber_2011",
-      "source_name": "Journal of the American Board of Family Medicine (Deweber et al. 2011)",
-      "url": "https://www.jabfm.org/content/24/2/169",
-      "quote": "A history of habitual KC does not seem to be a risk factor for hand OA.",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 50.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "jabfm.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Deweber et al. 2011 (JABFM): no association between KC and hand OA",
+      "sub_claim": null,
+      "source": {
+        "name": "Journal of the American Board of Family Medicine (Deweber et al. 2011)",
+        "url": "https://www.jabfm.org/content/24/2/169",
+        "quote": "A history of habitual KC does not seem to be a risk factor for hand OA."
+      },
+      "verification": {
+        "status": "partial",
+        "method": "fragment",
+        "coverage_pct": 50.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "jabfm.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "A history of habitual KC does not seem to be a risk factor for hand OA."
       }
     },
     "B3": {
-      "source_key": "castellanos_1990",
-      "source_name": "Annals of the Rheumatic Diseases (Castellanos & Axelrod 1990)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1004074/",
-      "quote": "There was no increased preponderance of arthritis of the hand in either group",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Castellanos & Axelrod 1990 (PMC): no increased arthritis in crackers",
+      "sub_claim": null,
+      "source": {
+        "name": "Annals of the Rheumatic Diseases (Castellanos & Axelrod 1990)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1004074/",
+        "quote": "There was no increased preponderance of arthritis of the hand in either group"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "There was no increased preponderance of arthritis of the hand in either group"
       }
     },
     "B4": {
-      "source_key": "hopkins_arthritis",
-      "source_name": "Johns Hopkins Arthritis Center",
-      "url": "https://www.hopkinsarthritis.org/arthritis-news/knuckle-cracking-q-a-from/",
-      "quote": "There is no evidence that cracking knuckles causes any damage such as arthritis in the joints.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "hopkinsarthritis.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Johns Hopkins Arthritis Center: no evidence KC causes arthritis",
+      "sub_claim": null,
+      "source": {
+        "name": "Johns Hopkins Arthritis Center",
+        "url": "https://www.hopkinsarthritis.org/arthritis-news/knuckle-cracking-q-a-from/",
+        "quote": "There is no evidence that cracking knuckles causes any damage such as arthritis in the joints."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "hopkinsarthritis.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "There is no evidence that cracking knuckles causes any damage such as arthritis "
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Cracking your knuckles may aggravate the people around you, but it probably won'"
     },
-    "B2": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "A history of habitual KC does not seem to be a risk factor for hand OA."
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "There was no increased preponderance of arthritis of the hand in either group"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "There is no evidence that cracking knuckles causes any damage such as arthritis "
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "castellanos_1990": "verified",
         "hopkins_arthritis": "verified"
       },
-      "independence_note": "Sources are from different institutions: Harvard Medical School, Journal of the American Board of Family Medicine (peer-reviewed study), Annals of the Rheumatic Diseases (peer-reviewed study via PMC), and Johns Hopkins Arthritis Center. These represent independent research groups and editorial boards — not republications of the same study."
+      "independence_note": "Sources are from different institutions: Harvard Medical School, Journal of the American Board of Family Medicine (peer-reviewed study), Annals of the Rheumatic Diseases (peer-reviewed study via PMC), and Johns Hopkins Arthritis Center. These represent independent research groups and editorial boards \u2014 not republications of the same study.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED (with unverified citations)",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": true,
+    "qualifier": "unverified_citations",
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

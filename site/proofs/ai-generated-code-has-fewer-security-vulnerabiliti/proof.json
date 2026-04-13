@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_stanford",
-      "label": "Stanford CCS 2023: AI assistant users wrote significantly less secure code"
-    },
-    "B2": {
-      "key": "source_veracode",
-      "label": "Veracode 2025: 45% of AI code contains OWASP vulnerabilities"
-    },
-    "B3": {
-      "key": "source_coderabbit",
-      "label": "CodeRabbit Dec 2025: AI PRs have 1.7x more issues, security up to 2.74x higher"
-    },
-    "B4": {
-      "key": "source_register",
-      "label": "The Register/Georgia Tech 2026: 74 CVEs from AI-authored code tracked"
-    },
-    "A1": {
-      "label": "Verified source count rejecting the claim",
-      "method": "count(verified citations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "AI-generated code (from major LLMs such as GPT-4, Claude, Copilot, DeepSeek)",
     "property": "security vulnerability rate compared to human-written code",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "AI-generated code has fewer security vulnerabilities than typical human-written code",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_stanford",
-      "source_name": "Perry et al., ACM CCS 2023 (Stanford University)",
-      "url": "https://arxiv.org/html/2211.03622v3",
-      "quote": "Overall, we find that participants who had access to an AI assistant wrote significantly less secure code than those without access to an assistant.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "arxiv.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "Stanford CCS 2023: AI assistant users wrote significantly less secure code",
+      "sub_claim": null,
+      "source": {
+        "name": "Perry et al., ACM CCS 2023 (Stanford University)",
+        "url": "https://arxiv.org/html/2211.03622v3",
+        "quote": "Overall, we find that participants who had access to an AI assistant wrote significantly less secure code than those without access to an assistant."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "arxiv.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Overall, we find that participants who had access to an AI assistant wrote signi"
       }
     },
     "B2": {
-      "source_key": "source_veracode",
-      "source_name": "Help Net Security / Veracode 2025 GenAI Code Security Report",
-      "url": "https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/",
-      "quote": "in 45 percent of all test cases, LLMs produced code containing vulnerabilities aligned with the OWASP Top 10",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "helpnetsecurity.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Veracode 2025: 45% of AI code contains OWASP vulnerabilities",
+      "sub_claim": null,
+      "source": {
+        "name": "Help Net Security / Veracode 2025 GenAI Code Security Report",
+        "url": "https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/",
+        "quote": "in 45 percent of all test cases, LLMs produced code containing vulnerabilities aligned with the OWASP Top 10"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "helpnetsecurity.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "in 45 percent of all test cases, LLMs produced code containing vulnerabilities a"
       }
     },
     "B3": {
-      "source_key": "source_coderabbit",
-      "source_name": "CodeRabbit State of AI vs Human Code Generation Report (Dec 2025)",
-      "url": "https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report",
-      "quote": "Security issues were up to 2.74x higher",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "coderabbit.ai",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "CodeRabbit Dec 2025: AI PRs have 1.7x more issues, security up to 2.74x higher",
+      "sub_claim": null,
+      "source": {
+        "name": "CodeRabbit State of AI vs Human Code Generation Report (Dec 2025)",
+        "url": "https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report",
+        "quote": "Security issues were up to 2.74x higher"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "coderabbit.ai",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Security issues were up to 2.74x higher"
       }
     },
     "B4": {
-      "source_key": "source_register",
-      "source_name": "The Register / Georgia Tech SSLab (Mar 2026)",
-      "url": "https://www.theregister.com/2026/03/26/ai_coding_assistant_not_more_secure/",
-      "quote": "Claude Code alone now appears in more than 4 percent of public commits on GitHub. If AI were truly responsible for only 74 out of 50,000 public vulnerabilities, that would imply AI-generated code is orders of magnitude safer than human-written code. We do not think that is credible.",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 50.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "theregister.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "The Register/Georgia Tech 2026: 74 CVEs from AI-authored code tracked",
+      "sub_claim": null,
+      "source": {
+        "name": "The Register / Georgia Tech SSLab (Mar 2026)",
+        "url": "https://www.theregister.com/2026/03/26/ai_coding_assistant_not_more_secure/",
+        "quote": "Claude Code alone now appears in more than 4 percent of public commits on GitHub. If AI were truly responsible for only 74 out of 50,000 public vulnerabilities, that would imply AI-generated code is orders of magnitude safer than human-written code. We do not think that is credible."
+      },
+      "verification": {
+        "status": "partial",
+        "method": "fragment",
+        "coverage_pct": 50.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "theregister.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "Claude Code alone now appears in more than 4 percent of public commits on GitHub"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Overall, we find that participants who had access to an AI assistant wrote signi"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "in 45 percent of all test cases, LLMs produced code containing vulnerabilities a"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Security issues were up to 2.74x higher"
-    },
-    "B4": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "Claude Code alone now appears in more than 4 percent of public commits on GitHub"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count rejecting the claim",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "source_coderabbit": "verified",
         "source_register": "partial"
       },
-      "independence_note": "Sources are from independent institutions using different methodologies: (1) Stanford — controlled user study with 47 participants, (2) Veracode — automated testing of 100+ LLMs across 80 tasks, (3) CodeRabbit — analysis of 470 real-world GitHub PRs, (4) Georgia Tech — CVE tracking across open-source ecosystem. No two sources share methodology or data."
+      "independence_note": "Sources are from independent institutions using different methodologies: (1) Stanford \u2014 controlled user study with 47 participants, (2) Veracode \u2014 automated testing of 100+ LLMs across 80 tasks, (3) CodeRabbit \u2014 analysis of 470 real-world GitHub PRs, (4) Georgia Tech \u2014 CVE tracking across open-source ecosystem. No two sources share methodology or data.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED (with unverified citations)",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": true,
+    "qualifier": "unverified_citations",
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

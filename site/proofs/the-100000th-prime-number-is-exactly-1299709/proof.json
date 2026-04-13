@@ -1,26 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "100000th prime via Sieve of Eratosthenes",
-      "method": "Sieve of Eratosthenes up to upper bound, extract 100000th prime",
-      "result": "1299709"
-    },
-    "A2": {
-      "label": "Prime-counting function \u03c0(1299709) equals 100000",
-      "method": "Independent sieve counting all primes \u2264 1299709",
-      "result": "100000"
-    },
-    "A3": {
-      "label": "1299709 is prime (trial division)",
-      "method": "Trial division testing all factors up to \u221a1299709",
-      "result": "True"
-    },
-    "A4": {
-      "label": "\u03c0(1299708) equals 99999 (confirms no prime between)",
-      "method": "Independent sieve counting all primes \u2264 1299708",
-      "result": "99999"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "the 100000th prime number",
     "property": "value of the 100000th prime in the sequence of primes (2, 3, 5, 7, 11, ...)",
@@ -29,6 +8,40 @@
     "threshold": 1299709
   },
   "claim_natural": "The 100000th prime number is exactly 1299709.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "100000th prime via Sieve of Eratosthenes",
+      "sub_claim": null,
+      "method": "Sieve of Eratosthenes up to upper bound, extract 100000th prime",
+      "result": "1299709",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Prime-counting function \u03c0(1299709) equals 100000",
+      "sub_claim": null,
+      "method": "Independent sieve counting all primes \u2264 1299709",
+      "result": "100000",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "1299709 is prime (trial division)",
+      "sub_claim": null,
+      "method": "Trial division testing all factors up to \u221a1299709",
+      "result": "True",
+      "depends_on": []
+    },
+    "A4": {
+      "type": "computed",
+      "label": "\u03c0(1299708) equals 99999 (confirms no prime between)",
+      "sub_claim": null,
+      "method": "Independent sieve counting all primes \u2264 1299708",
+      "result": "99999",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Sieve nth-prime vs \u03c0(1299709) counting",
@@ -36,7 +49,8 @@
         "1299709",
         "\u03c0(1299709)=100000"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Trial division confirms 1299709 is prime",
@@ -44,7 +58,8 @@
         "is_prime(1299709)",
         "True"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "\u03c0(1299708)=99999 confirms 1299709 is the boundary",
@@ -52,7 +67,8 @@
         "\u03c0(1299708)=99999",
         "99999"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -75,7 +91,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "primary_result": 1299709,
     "threshold": 1299709,
@@ -90,6 +111,5 @@
     "version": "0.10.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-03-28"
-  },
-  "format_version": 2
+  }
 }

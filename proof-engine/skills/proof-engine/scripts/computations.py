@@ -26,9 +26,9 @@ import datetime
 import operator
 
 try:
-    from proof_types import ProofData
+    from proof_types import ProofData, ProofDataV3
 except ImportError:
-    from scripts.proof_types import ProofData
+    from scripts.proof_types import ProofData, ProofDataV3
 
 
 # ---------------------------------------------------------------------------
@@ -84,19 +84,29 @@ QUALIFIABLE_VERDICTS = {"PROVED", "DISPROVED", "SUPPORTED"}
 PARTIALLY VERIFIED and UNDETERMINED already signal incompleteness."""
 
 
-def apply_verdict_qualifier(base_verdict: str, any_unverified: bool) -> str:
-    """Apply '(with unverified citations)' only to verdicts that support it.
+def apply_verdict_qualifier(
+    base_verdict: str,
+    any_unverified: bool,
+    as_string: bool = True,
+) -> "dict | str":
+    """Apply '(with unverified citations)' qualifier to a verdict.
 
-    PARTIALLY VERIFIED and UNDETERMINED never get this suffix — those
-    verdicts already signal incompleteness. Validates the base verdict
-    string against the taxonomy before applying.
+    PARTIALLY VERIFIED and UNDETERMINED never get this qualifier — those
+    verdicts already signal incompleteness.
+
+    **Backward compatibility:** Default is as_string=True, which preserves the
+    original return type for the 6 published proof.py files that call this
+    function directly. New v3 proofs use ProofSummaryBuilder, which calls
+    this with as_string=False internally.
 
     Args:
         base_verdict: One of VALID_BASE_VERDICTS (without suffix).
         any_unverified: Whether any citation has status != "verified".
+        as_string: If True (default), return the legacy string format.
+                   If False, return structured StructuredVerdict dict.
 
     Returns:
-        The final verdict string (with or without suffix).
+        str (default) or dict with keys: value, qualified, qualifier, reason.
 
     Raises:
         ValueError: If base_verdict is not recognized.
@@ -112,17 +122,25 @@ def apply_verdict_qualifier(base_verdict: str, any_unverified: bool) -> str:
             f"Invalid base verdict: {base_verdict!r}. "
             f"Must be one of: {sorted(VALID_BASE_VERDICTS)}"
         )
-    if any_unverified and base_verdict in QUALIFIABLE_VERDICTS:
-        return f"{base_verdict} (with unverified citations)"
-    return base_verdict
+    is_qualified = any_unverified and base_verdict in QUALIFIABLE_VERDICTS
+    if as_string:
+        if is_qualified:
+            return f"{base_verdict} (with unverified citations)"
+        return base_verdict
+    return {
+        "value": base_verdict,
+        "qualified": is_qualified,
+        "qualifier": "unverified_citations" if is_qualified else None,
+        "reason": None,
+    }
 
 
 # ---------------------------------------------------------------------------
 # Proof summary emission
 # ---------------------------------------------------------------------------
 
-KNOWN_SUMMARY_KEYS = set(typing.get_type_hints(ProofData).keys())
-"""Allowed top-level keys in the proof JSON summary, derived from ProofData TypedDict."""
+KNOWN_SUMMARY_KEYS = set(typing.get_type_hints(ProofData).keys()) | set(typing.get_type_hints(ProofDataV3).keys())
+"""Allowed top-level keys in the proof JSON summary, derived from ProofData and ProofDataV3 TypedDicts."""
 
 
 def emit_proof_summary(summary: dict) -> None:

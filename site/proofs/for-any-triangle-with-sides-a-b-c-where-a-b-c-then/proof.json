@@ -1,26 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "SC1 (Forward): a^2 + b^2 = c^2 implies angle C = 90 degrees via Law of Cosines",
-      "method": "Algebraic: substitute a^2+b^2=c^2 into Law of Cosines, derive cos(C)=0, conclude C=90",
-      "result": "True"
-    },
-    "A2": {
-      "label": "SC2 (Converse): angle C = 90 degrees implies a^2 + b^2 = c^2 via Law of Cosines",
-      "method": "Algebraic: substitute cos(90)=0 into Law of Cosines, derive c^2=a^2+b^2",
-      "result": "True"
-    },
-    "A3": {
-      "label": "Cross-check: numerical verification with random triangles",
-      "method": "Numerical: 10000 random triangles tested in both directions",
-      "result": "SC1 failures: 0, SC2 failures: 0"
-    },
-    "A4": {
-      "label": "Cross-check: symbolic verification using sympy",
-      "method": "Symbolic: sympy simplification of Law of Cosines substitution",
-      "result": "SC1 symbolic: True, SC2 symbolic: True"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Any triangle with sides a, b, c",
     "property": "biconditional: (a^2 + b^2 = c^2) <=> (angle opposite c = 90 degrees)",
@@ -29,6 +8,40 @@
     "threshold": true
   },
   "claim_natural": "For any triangle with sides a, b, c where a^2 + b^2 = c^2, the angle opposite c is exactly 90 degrees, AND the converse also holds.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "SC1 (Forward): a^2 + b^2 = c^2 implies angle C = 90 degrees via Law of Cosines",
+      "sub_claim": "SC1",
+      "method": "Algebraic: substitute a^2+b^2=c^2 into Law of Cosines, derive cos(C)=0, conclude C=90",
+      "result": "True",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "SC2 (Converse): angle C = 90 degrees implies a^2 + b^2 = c^2 via Law of Cosines",
+      "sub_claim": "SC2",
+      "method": "Algebraic: substitute cos(90)=0 into Law of Cosines, derive c^2=a^2+b^2",
+      "result": "True",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Cross-check: numerical verification with random triangles",
+      "sub_claim": null,
+      "method": "Numerical: 10000 random triangles tested in both directions",
+      "result": "SC1 failures: 0, SC2 failures: 0",
+      "depends_on": []
+    },
+    "A4": {
+      "type": "computed",
+      "label": "Cross-check: symbolic verification using sympy",
+      "sub_claim": null,
+      "method": "Symbolic: sympy simplification of Law of Cosines substitution",
+      "result": "SC1 symbolic: True, SC2 symbolic: True",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Numerical: random triangle verification (10,000 trials each direction)",
@@ -36,7 +49,8 @@
         "SC1 failures: 0",
         "SC2 failures: 0"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Symbolic: sympy verification of both directions",
@@ -44,7 +58,8 @@
         "SC1 symbolic: True",
         "SC2 symbolic: True"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -73,7 +88,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_forward_holds": true,
     "sc2_converse_holds": true,

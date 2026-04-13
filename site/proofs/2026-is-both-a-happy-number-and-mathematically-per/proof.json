@@ -1,31 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "SC1: Is 2026 a happy number? (iterative digit-square-sum algorithm)",
-      "method": "is_happy_iterative(2026): Floyd cycle detection on digit-square-sum sequence",
-      "result": "True \u2014 sequence [2026, 44, 32, 13, 10, 1] terminates at 1"
-    },
-    "A2": {
-      "label": "SC1 cross-check: Happy-number verification via cycle membership (OEIS A007770 structure)",
-      "method": "is_happy_cycle_check(2026): halt on UNHAPPY_CYCLE membership",
-      "result": "True \u2014 agrees with A1"
-    },
-    "A3": {
-      "label": "SC2: Is 2026 a perfect number? (compute sum of proper divisors)",
-      "method": "sum_of_proper_divisors_direct(2026): O(sqrt(n)) enumeration",
-      "result": "1016 (need 2026 for perfect; deficit = 1010)"
-    },
-    "A4": {
-      "label": "SC2 cross-check: Perfect-number verification via multiplicative sigma formula",
-      "method": "sigma_multiplicative(2026): product formula \u03c3(n)=\u220f(p^(a+1)-1)/(p-1) minus n",
-      "result": "1016 \u2014 agrees with A3"
-    },
-    "A5": {
-      "label": "SC2 factorisation: prime factorisation of 2026",
-      "method": "prime_factorisation(2026): trial division",
-      "result": "{2: 1, 1013: 1}"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "2026",
     "sub_claims": {
@@ -52,6 +26,48 @@
     "operator_note": "The compound claim holds only if BOTH SC1 and SC2 are true. SC3 ('cosmically special') is not a mathematical claim and is excluded."
   },
   "claim_natural": "2026 is both a \"happy number\" and mathematically \"perfect,\" proving the year is cosmically special.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "SC1: Is 2026 a happy number? (iterative digit-square-sum algorithm)",
+      "sub_claim": "SC1",
+      "method": "is_happy_iterative(2026): Floyd cycle detection on digit-square-sum sequence",
+      "result": "True \u2014 sequence [2026, 44, 32, 13, 10, 1] terminates at 1",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "SC1 cross-check: Happy-number verification via cycle membership (OEIS A007770 structure)",
+      "sub_claim": "SC1",
+      "method": "is_happy_cycle_check(2026): halt on UNHAPPY_CYCLE membership",
+      "result": "True \u2014 agrees with A1",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "SC2: Is 2026 a perfect number? (compute sum of proper divisors)",
+      "sub_claim": "SC2",
+      "method": "sum_of_proper_divisors_direct(2026): O(sqrt(n)) enumeration",
+      "result": "1016 (need 2026 for perfect; deficit = 1010)",
+      "depends_on": []
+    },
+    "A4": {
+      "type": "computed",
+      "label": "SC2 cross-check: Perfect-number verification via multiplicative sigma formula",
+      "sub_claim": "SC2",
+      "method": "sigma_multiplicative(2026): product formula \u03c3(n)=\u220f(p^(a+1)-1)/(p-1) minus n",
+      "result": "1016 \u2014 agrees with A3",
+      "depends_on": []
+    },
+    "A5": {
+      "type": "computed",
+      "label": "SC2 factorisation: prime factorisation of 2026",
+      "sub_claim": "SC2",
+      "method": "prime_factorisation(2026): trial division",
+      "result": "{2: 1, 1013: 1}",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "SC1: Two independent happy-number algorithms agree",
@@ -61,7 +77,8 @@
       ],
       "agreement": true,
       "tolerance": "exact (boolean)",
-      "method_independence": "Primary uses Floyd cycle detection (stops when 'current' is seen before); cross-check stops on membership in the precomputed UNHAPPY_CYCLE set. Different stopping criteria \u2014 a bug in one would not affect the other."
+      "method_independence": "Primary uses Floyd cycle detection (stops when 'current' is seen before); cross-check stops on membership in the precomputed UNHAPPY_CYCLE set. Different stopping criteria \u2014 a bug in one would not affect the other.",
+      "fact_ids": []
     },
     {
       "description": "SC2: Two independent proper-divisor-sum algorithms agree",
@@ -71,7 +88,8 @@
       ],
       "agreement": true,
       "tolerance": "exact (integer)",
-      "method_independence": "Primary enumerates candidate divisors by iteration (arithmetic); cross-check uses the multiplicative sigma formula from number theory (algebraic identity). Different mathematical principles."
+      "method_independence": "Primary enumerates candidate divisors by iteration (arithmetic); cross-check uses the multiplicative sigma formula from number theory (algebraic identity). Different mathematical principles.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -100,7 +118,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PARTIALLY VERIFIED",
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_is_happy": true,
     "sc1_sequence": [

@@ -108,7 +108,7 @@
         <tr><th>Source</th><th>ID</th><th>Type</th><th>Verified</th></tr>
     </thead>
     <tbody>
-    {% for fact_id, fact in proof.proof_data.fact_registry.items() %}
+    {% for fact_id, fact in fact_registry.items() %}
         {% set cit = citations.get(fact_id) %}
         <tr>
             <td>{% if cit %}<a href="{{ cit.url }}">{{ cit.source_name }}</a>{% elif fact is mapping %}{{ fact.label | fact_tooltips(fact_tooltips) }}{% else %}{{ fact | fact_tooltips(fact_tooltips) }}{% endif %}</td>

@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_pmc",
-      "label": "BMJ 'Medical Myths' peer-reviewed article (PMC/NCBI)"
-    },
-    "B2": {
-      "key": "source_uams",
-      "label": "UAMS Health (University of Arkansas Medical Sciences)"
-    },
-    "B3": {
-      "key": "source_factmyth",
-      "label": "FactMyth.com science reference"
-    },
-    "A1": {
-      "label": "Verified source count meeting disproof threshold",
-      "method": "count(verified citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Human hair and fingernails",
     "property": "post-mortem biological growth",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Hair and fingernails continue to grow for days after a person dies.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_pmc",
-      "source_name": "BMJ Medical Myths (Vreeman & Carroll, 2007) via PMC/NCBI",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2151163/",
-      "quote": "Dehydration of the body after death and drying or desiccation may lead to retraction of the skin around the hair or nails. The actual growth of hair and nails, however, requires a complex hormonal regulation not sustained after death.",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 48.7,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "BMJ 'Medical Myths' peer-reviewed article (PMC/NCBI)",
+      "sub_claim": null,
+      "source": {
+        "name": "BMJ Medical Myths (Vreeman & Carroll, 2007) via PMC/NCBI",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2151163/",
+        "quote": "Dehydration of the body after death and drying or desiccation may lead to retraction of the skin around the hair or nails. The actual growth of hair and nails, however, requires a complex hormonal regulation not sustained after death."
+      },
+      "verification": {
+        "status": "partial",
+        "method": "fragment",
+        "coverage_pct": 48.7,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "Dehydration of the body after death and drying or desiccation may lead to retrac"
       }
     },
     "B2": {
-      "source_key": "source_uams",
-      "source_name": "University of Arkansas for Medical Sciences (UAMS Health)",
-      "url": "https://uamshealth.com/medical-myths/do-a-persons-hair-and-fingernails-continue-to-grow-after-death/",
-      "quote": "Hair and fingernails may appear longer after death, but not because they are still growing. After death, dehydration causes the skin and other soft tissues to shrink. This occurs while the hair and nails remain the same length. This change in the body creates the optical illusion of growth people observe.",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 51.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "uamshealth.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "UAMS Health (University of Arkansas Medical Sciences)",
+      "sub_claim": null,
+      "source": {
+        "name": "University of Arkansas for Medical Sciences (UAMS Health)",
+        "url": "https://uamshealth.com/medical-myths/do-a-persons-hair-and-fingernails-continue-to-grow-after-death/",
+        "quote": "Hair and fingernails may appear longer after death, but not because they are still growing. After death, dehydration causes the skin and other soft tissues to shrink. This occurs while the hair and nails remain the same length. This change in the body creates the optical illusion of growth people observe."
+      },
+      "verification": {
+        "status": "partial",
+        "method": "fragment",
+        "coverage_pct": 51.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "uamshealth.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "Hair and fingernails may appear longer after death, but not because they are sti"
       }
     },
     "B3": {
-      "source_key": "source_factmyth",
-      "source_name": "FactMyth.com",
-      "url": "https://factmyth.com/factoids/hair-and-nails-continue-to-grow-after-death/",
-      "quote": "Hair and nail growth requires active, living cells. When a person dies, their heart stops pumping blood, meaning the hair follicles no longer receive the necessary nutrients and oxygen for cell division.",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 50.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "factmyth.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "FactMyth.com science reference",
+      "sub_claim": null,
+      "source": {
+        "name": "FactMyth.com",
+        "url": "https://factmyth.com/factoids/hair-and-nails-continue-to-grow-after-death/",
+        "quote": "Hair and nail growth requires active, living cells. When a person dies, their heart stops pumping blood, meaning the hair follicles no longer receive the necessary nutrients and oxygen for cell division."
+      },
+      "verification": {
+        "status": "partial",
+        "method": "fragment",
+        "coverage_pct": 50.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "factmyth.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "Hair and nail growth requires active, living cells. When a person dies, their he"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "Dehydration of the body after death and drying or desiccation may lead to retrac"
     },
-    "B2": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "Hair and fingernails may appear longer after death, but not because they are sti"
-    },
-    "B3": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "Hair and nail growth requires active, living cells. When a person dies, their he"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count meeting disproof threshold",
+      "sub_claim": null,
+      "method": "count(verified citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,7 +113,8 @@
         "source_uams": "partial",
         "source_factmyth": "partial"
       },
-      "independence_note": "Sources are from independent institutions: BMJ (peer-reviewed journal via PMC), UAMS (university medical center), and FactMyth (science reference). Each independently explains the myth using the same underlying biology (dehydration/retraction), which strengthens the disproof — independent sources converge on the same explanation."
+      "independence_note": "Sources are from independent institutions: BMJ (peer-reviewed journal via PMC), UAMS (university medical center), and FactMyth (science reference). Each independently explains the myth using the same underlying biology (dehydration/retraction), which strengthens the disproof \u2014 independent sources converge on the same explanation.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -130,7 +137,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED (with unverified citations)",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": true,
+    "qualifier": "unverified_citations",
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

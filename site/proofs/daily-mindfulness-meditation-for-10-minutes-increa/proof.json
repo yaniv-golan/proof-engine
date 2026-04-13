@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "harvard_gazette",
-      "label": "Harvard Gazette: H\u00f6lzel 2011 minimum positive protocol \u2014 8 weeks, 27 min/day (exceeds claim's 30 days / 10 min/day by 1.87\u00d7 and 2.7\u00d7)"
-    },
-    "B2": {
-      "key": "psych_today_kral",
-      "label": "Psychology Today citing Kral et al. 2022 (Science Advances): largest RCT (n=218) finds NO neuroplastic structural changes from 8-week MBSR"
-    },
-    "B3": {
-      "key": "pubmed_holzel",
-      "label": "PubMed: H\u00f6lzel et al. 2011 abstract \u2014 corroborates 8-week MBSR design, confirms study measured structural (gray matter) changes under that protocol"
-    },
-    "A1": {
-      "label": "Source count: independent rejection sources confirming disproof",
-      "method": "sum(1 for c in confirmations if c)",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "daily 10-minute mindfulness meditation practiced over 30 days",
     "property": "produces \u22651% increase in hippocampal volume as measurable on MRI",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Daily mindfulness meditation for 10 minutes increases hippocampal volume by at least 1% within one month.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "harvard_gazette",
-      "source_name": "Harvard Gazette \u2014 'Eight weeks to a better brain' (reporting H\u00f6lzel et al. 2011, Psychiatry Research: Neuroimaging 191(1):36\u201343)",
-      "url": "https://news.harvard.edu/gazette/story/2011/01/eight-weeks-to-a-better-brain/",
-      "quote": "Sixteen participants underwent brain imaging before and after the eight-week program. They practiced mindfulness exercises averaging 27 minutes daily. A control group of non-meditators showed no comparable changes.",
-      "status": "not_found",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "harvard.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "Harvard Gazette: H\u00f6lzel 2011 minimum positive protocol \u2014 8 weeks, 27 min/day (exceeds claim's 30 days / 10 min/day by 1.87\u00d7 and 2.7\u00d7)",
+      "sub_claim": null,
+      "source": {
+        "name": "Harvard Gazette \u2014 'Eight weeks to a better brain' (reporting H\u00f6lzel et al. 2011, Psychiatry Research: Neuroimaging 191(1):36\u201343)",
+        "url": "https://news.harvard.edu/gazette/story/2011/01/eight-weeks-to-a-better-brain/",
+        "quote": "Sixteen participants underwent brain imaging before and after the eight-week program. They practiced mindfulness exercises averaging 27 minutes daily. A control group of non-meditators showed no comparable changes."
+      },
+      "verification": {
+        "status": "not_found",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "harvard.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "eight-week",
+        "value_in_quote": true,
+        "quote_snippet": "Sixteen participants underwent brain imaging before and after the eight-week pro"
       }
     },
     "B2": {
-      "source_key": "psych_today_kral",
-      "source_name": "Psychology Today \u2014 'Mindfulness Doesn't Change Our Brains in Ways Once Thought' (reporting Kral et al. 2022, Science Advances)",
-      "url": "https://www.psychologytoday.com/us/blog/the-athletes-way/202205/mindfulness-doesn-t-change-our-brains-in-ways-once-thought",
-      "quote": "In the largest and most rigorously controlled study to date, we failed to replicate prior findings and found no evidence that MBSR produced neuroplastic changes compared to either control group, at either the whole-brain level or in regions of interest drawn from prior MBSR studies",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "psychologytoday.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Psychology Today citing Kral et al. 2022 (Science Advances): largest RCT (n=218) finds NO neuroplastic structural changes from 8-week MBSR",
+      "sub_claim": null,
+      "source": {
+        "name": "Psychology Today \u2014 'Mindfulness Doesn't Change Our Brains in Ways Once Thought' (reporting Kral et al. 2022, Science Advances)",
+        "url": "https://www.psychologytoday.com/us/blog/the-athletes-way/202205/mindfulness-doesn-t-change-our-brains-in-ways-once-thought",
+        "quote": "In the largest and most rigorously controlled study to date, we failed to replicate prior findings and found no evidence that MBSR produced neuroplastic changes compared to either control group, at either the whole-brain level or in regions of interest drawn from prior MBSR studies"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "psychologytoday.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "no evidence",
+        "value_in_quote": true,
+        "quote_snippet": "In the largest and most rigorously controlled study to date, we failed to replic"
       }
     },
     "B3": {
-      "source_key": "pubmed_holzel",
-      "source_name": "PubMed \u2014 H\u00f6lzel et al. 2011, 'Mindfulness practice leads to increases in regional brain gray matter density,' Psychiatry Research: Neuroimaging 191(1):36\u201343",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/21071182/",
-      "quote": "participation in MBSR is associated with changes in gray matter concentration in brain regions involved in learning and memory processes, emotion regulation, self-referential processing, and perspective taking.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PubMed: H\u00f6lzel et al. 2011 abstract \u2014 corroborates 8-week MBSR design, confirms study measured structural (gray matter) changes under that protocol",
+      "sub_claim": null,
+      "source": {
+        "name": "PubMed \u2014 H\u00f6lzel et al. 2011, 'Mindfulness practice leads to increases in regional brain gray matter density,' Psychiatry Research: Neuroimaging 191(1):36\u201343",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21071182/",
+        "quote": "participation in MBSR is associated with changes in gray matter concentration in brain regions involved in learning and memory processes, emotion regulation, self-referential processing, and perspective taking."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "MBSR",
+        "value_in_quote": true,
+        "quote_snippet": "participation in MBSR is associated with changes in gray matter concentration in"
       }
-    }
-  },
-  "extractions": {
-    "B1_keyword": {
-      "value": "eight-week",
-      "value_in_quote": true,
-      "quote_snippet": "Sixteen participants underwent brain imaging before and after the eight-week pro"
     },
-    "B2_keyword": {
-      "value": "no evidence",
-      "value_in_quote": true,
-      "quote_snippet": "In the largest and most rigorously controlled study to date, we failed to replic"
-    },
-    "B3_keyword": {
-      "value": "MBSR",
-      "value_in_quote": true,
-      "quote_snippet": "participation in MBSR is associated with changes in gray matter concentration in"
+    "A1": {
+      "type": "computed",
+      "label": "Source count: independent rejection sources confirming disproof",
+      "sub_claim": null,
+      "method": "sum(1 for c in confirmations if c)",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -105,7 +111,8 @@
         "B2: no structural changes even from 8-week MBSR (Kral 2022, n=218)"
       ],
       "agreement": true,
-      "note": "Both sources converge: the claim's protocol (10 min/day, 30 days) is insufficient even relative to a protocol that itself failed rigorous replication."
+      "note": "Both sources converge: the claim's protocol (10 min/day, 30 days) is insufficient even relative to a protocol that itself failed rigorous replication.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -134,7 +141,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED (with unverified citations)",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": true,
+    "qualifier": "unverified_citations",
+    "reason": null
+  },
   "key_results": {
     "n_confirming": 3,
     "threshold": 2,

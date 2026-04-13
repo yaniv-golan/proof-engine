@@ -1,5 +1,5 @@
 {
-  "claim_natural": "The Goldbach conjecture holds for every even integer greater than 2.",
+  "format_version": 3,
   "claim_formal": {
     "subject": "Goldbach conjecture",
     "property": "counterexamples in range [4, 10^6]",
@@ -8,31 +8,33 @@
     "claim_type": "open_problem",
     "operator_note": "The Goldbach conjecture asserts that every even integer > 2 is the sum of two primes. This is an unresolved conjecture \u2014 no proof or disproof exists as of 2026. Computational verification up to a finite bound provides evidence but cannot prove the claim for all even integers. The literature records verification up to 4 x 10^18 (Oliveira e Silva, 2013). Our script verifies up to 10^6 with two independent methods. Verdict is always UNDETERMINED regardless of computational outcome."
   },
-  "fact_registry": {
+  "claim_natural": "The Goldbach conjecture holds for every even integer greater than 2.",
+  "evidence": {
     "A1": {
+      "type": "computed",
       "label": "Primary check: counterexamples in [4, 10^6] via trial division",
-      "type": "A",
-      "key": "primary_check",
+      "sub_claim": null,
       "method": "goldbach_trial_division() \u2014 isprime() per candidate",
-      "result": "0 counterexamples in [4, 1000000]"
+      "result": "0 counterexamples in [4, 1000000]",
+      "depends_on": []
     },
     "A2": {
+      "type": "computed",
       "label": "Cross-check: counterexamples in [4, 10^6] via prime-pair sieve",
-      "type": "A",
-      "key": "cross_check",
+      "sub_claim": null,
       "method": "goldbach_prime_sieve() \u2014 primerange sieve + set lookup",
-      "result": "0 counterexamples in [4, 1000000]"
+      "result": "0 counterexamples in [4, 1000000]",
+      "depends_on": []
     }
   },
-  "citations": {},
-  "extractions": {},
   "cross_checks": [
     {
       "description": "Trial division vs prime sieve methods",
       "value_a": 0,
       "value_b": 0,
       "agree": true,
-      "independence": "Mathematically independent: Method 1 uses per-number isprime() calls; Method 2 pre-generates a prime set via sieve and uses set membership. Different algorithms, different data structures."
+      "independence": "Mathematically independent: Method 1 uses per-number isprime() calls; Method 2 pre-generates a prime set via sieve and uses set membership. Different algorithms, different data structures.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -55,8 +57,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "UNDETERMINED",
-  "verdict_reason": "No counterexamples found up to 1000000 by two independent methods. However, this is a universal conjecture over infinitely many even integers. Computational verification of a finite range cannot constitute a proof. The Goldbach conjecture remains an open problem.",
+  "verdict": {
+    "value": "UNDETERMINED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "verified_up_to": 1000000,
     "counterexamples_found": 0,
@@ -68,5 +74,6 @@
     "version": "0.10.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-03-28"
-  }
+  },
+  "verdict_reason": "No counterexamples found up to 1000000 by two independent methods. However, this is a universal conjecture over infinitely many even integers. Computational verification of a finite range cannot constitute a proof. The Goldbach conjecture remains an open problem."
 }

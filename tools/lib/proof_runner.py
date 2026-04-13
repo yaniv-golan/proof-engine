@@ -12,9 +12,9 @@ from pathlib import Path
 _scripts = str(Path(__file__).resolve().parent.parent.parent / "proof-engine" / "skills" / "proof-engine" / "scripts")
 if _scripts not in sys.path:
     sys.path.insert(0, _scripts)
-from proof_types import ProofData
+from proof_types import ProofData, ProofDataV3
 
-_KNOWN_KEYS = set(typing.get_type_hints(ProofData).keys())
+_KNOWN_KEYS = set(typing.get_type_hints(ProofData).keys()) | set(typing.get_type_hints(ProofDataV3).keys())
 
 
 def run_proof_and_extract_json(proof_py_path):

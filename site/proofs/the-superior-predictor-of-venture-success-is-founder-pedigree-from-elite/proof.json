@@ -1,5 +1,5 @@
 {
-  "claim_natural": "The superior predictor of venture success is founder pedigree from elite universities rather than market size or product traction.",
+  "format_version": 3,
   "claim_formal": {
     "subject": "Founder pedigree from elite universities as a predictor of venture success",
     "property": "Whether founder pedigree has higher predictive validity than market size or product traction",
@@ -8,12 +8,98 @@
     "threshold": 3,
     "compound_operator": "N/A"
   },
-  "fact_registry": {
-    "B1": "arXiv/YC study \u2014 credentials explain <4% of funding variation (not confirmed as primary source; summarized from research search)",
-    "B2": "Beta Boom \u2014 pedigree predicts VC access, not unicorn outcomes (adversarial)",
-    "B3": "CB Insights \u2014 product-market fit failure is #1 startup cause (adversarial)",
-    "B4": "Gompers et al. (2010) \u2014 management team ranked #1 by VCs but pedigree not isolated"
+  "claim_natural": "The superior predictor of venture success is founder pedigree from elite universities rather than market size or product traction.",
+  "evidence": {
+    "B1": {
+      "type": "empirical",
+      "label": "arXiv/YC study \u2014 credentials explain <4% of funding variation (not confirmed as primary source; summarized from research search)",
+      "sub_claim": null,
+      "source": {
+        "name": "",
+        "url": "",
+        "quote": ""
+      },
+      "verification": {
+        "status": "",
+        "method": "",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {}
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
+    },
+    "B2": {
+      "type": "empirical",
+      "label": "Beta Boom \u2014 pedigree predicts VC access, not unicorn outcomes (adversarial)",
+      "sub_claim": null,
+      "source": {
+        "name": "",
+        "url": "",
+        "quote": ""
+      },
+      "verification": {
+        "status": "",
+        "method": "",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {}
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
+    },
+    "B3": {
+      "type": "empirical",
+      "label": "CB Insights \u2014 product-market fit failure is #1 startup cause (adversarial)",
+      "sub_claim": null,
+      "source": {
+        "name": "",
+        "url": "",
+        "quote": ""
+      },
+      "verification": {
+        "status": "",
+        "method": "",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {}
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
+    },
+    "B4": {
+      "type": "empirical",
+      "label": "Gompers et al. (2010) \u2014 management team ranked #1 by VCs but pedigree not isolated",
+      "sub_claim": null,
+      "source": {
+        "name": "",
+        "url": "",
+        "quote": ""
+      },
+      "verification": {
+        "status": "",
+        "method": "",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {}
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
+    }
   },
+  "cross_checks": [],
   "adversarial_checks": [
     {
       "description": "arXiv/YC study: credentials explain <4% of startup funding variation",
@@ -41,8 +127,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "UNDETERMINED",
-  "verdict_reason": "Research does not support founder pedigree as the 'superior' predictor compared to both market size and product traction. Multiple studies find pedigree explains little variance in outcomes, that it predicts VC access more than actual success, and that product-market fit (traction) and market size are the dominant factors in startup failure. No controlled study showing pedigree > traction + market size was found. The claim is UNDETERMINED due to absence of confirming evidence and presence of contradictory evidence.",
+  "verdict": {
+    "value": "UNDETERMINED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirming": 0,
     "threshold": 3,
@@ -54,5 +144,6 @@
     "version": "1.11.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-08"
-  }
+  },
+  "verdict_reason": "Research does not support founder pedigree as the 'superior' predictor compared to both market size and product traction. Multiple studies find pedigree explains little variance in outcomes, that it predicts VC access more than actual success, and that product-market fit (traction) and market size are the dominant factors in startup failure. No controlled study showing pedigree > traction + market size was found. The claim is UNDETERMINED due to absence of confirming evidence and presence of contradictory evidence."
 }

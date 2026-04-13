@@ -1,5 +1,5 @@
 {
-  "claim_natural": "US venture capital funding reached $332 billion in 2021 before declining by over 35% in 2022.",
+  "format_version": 3,
   "claim_formal": {
     "subject": "US venture capital deal value",
     "property": "2021 annual total and 2022 year-over-year decline percentage",
@@ -9,20 +9,94 @@
     "threshold_sc1_usd": 300000000000.0,
     "threshold_sc2_pct": 35.0
   },
-  "fact_registry": {
+  "claim_natural": "US venture capital funding reached $332 billion in 2021 before declining by over 35% in 2022.",
+  "evidence": {
     "B1": {
-      "key": "B1",
-      "label": "NVCA press release: 2021 US VC = $329.9B"
+      "type": "empirical",
+      "label": "NVCA press release: 2021 US VC = $329.9B",
+      "sub_claim": null,
+      "source": {
+        "name": "NVCA Press Release: U.S. VC Activity Soars to New Highs in 2021",
+        "url": "https://nvca.org/press_releases/u-s-venture-capital-soars-to-new-highs-in-2021/",
+        "quote": "a staggering $329.9 billion was invested across an estimated 17,054 deals, a record for deal count and roughly double 2020's previous deal value high"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "unicode_normalized",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nvca.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     },
     "B2": {
-      "key": "B2",
-      "label": "CB Insights: 2022 US VC = $198.4B (down 37% from 2021)"
+      "type": "empirical",
+      "label": "CB Insights: 2022 US VC = $198.4B (down 37% from 2021)",
+      "sub_claim": null,
+      "source": {
+        "name": "CB Insights: State of Venture 2022 Report",
+        "url": "https://www.cbinsights.com/research/report/venture-trends-2022/",
+        "quote": "US venture funding hit $198.4B in 2022 \u2014 down 37% from 2021, but up 31% when compared to 2020"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "cbinsights.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     },
     "B3": {
-      "key": "B3",
-      "label": "PitchBook-NVCA via Built In: 2022 US VC = $238.3B (down 30.8% from $344.7B)"
+      "type": "empirical",
+      "label": "PitchBook-NVCA via Built In: 2022 US VC = $238.3B (down 30.8% from $344.7B)",
+      "sub_claim": null,
+      "source": {
+        "name": "Built In: VC Funding Dropped in 2022 but Eclipsed Pre-2021 Totals (citing PitchBook-NVCA)",
+        "url": "https://builtin.com/articles/tech-funding-2022-pitchbook-report",
+        "quote": "About $238.3 billion was allocated in VC deals last year, according to PitchBook-NVCA Venture Monitor"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "unicode_normalized",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "builtin.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     }
   },
+  "cross_checks": [],
   "adversarial_checks": [
     {
       "description": "PitchBook-NVCA reports only 30.8% decline (< 35% threshold)",
@@ -40,7 +114,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PARTIALLY VERIFIED",
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "vc_2021_nvca_B": 329.9,
     "decline_cbi_pct": 37.0,
@@ -69,59 +148,6 @@
       "pb_decline_pct": 30.9,
       "cbi_confirms": true,
       "pb_confirms": false
-    }
-  },
-  "citations": {
-    "B1": {
-      "source_key": "B1",
-      "source_name": "NVCA Press Release: U.S. VC Activity Soars to New Highs in 2021",
-      "url": "https://nvca.org/press_releases/u-s-venture-capital-soars-to-new-highs-in-2021/",
-      "quote": "a staggering $329.9 billion was invested across an estimated 17,054 deals, a record for deal count and roughly double 2020's previous deal value high",
-      "status": "verified",
-      "method": "unicode_normalized",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nvca.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
-      }
-    },
-    "B2": {
-      "source_key": "B2",
-      "source_name": "CB Insights: State of Venture 2022 Report",
-      "url": "https://www.cbinsights.com/research/report/venture-trends-2022/",
-      "quote": "US venture funding hit $198.4B in 2022 \u2014 down 37% from 2021, but up 31% when compared to 2020",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "cbinsights.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
-      }
-    },
-    "B3": {
-      "source_key": "B3",
-      "source_name": "Built In: VC Funding Dropped in 2022 but Eclipsed Pre-2021 Totals (citing PitchBook-NVCA)",
-      "url": "https://builtin.com/articles/tech-funding-2022-pitchbook-report",
-      "quote": "About $238.3 billion was allocated in VC deals last year, according to PitchBook-NVCA Venture Monitor",
-      "status": "verified",
-      "method": "unicode_normalized",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "builtin.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
-      }
     }
   }
 }

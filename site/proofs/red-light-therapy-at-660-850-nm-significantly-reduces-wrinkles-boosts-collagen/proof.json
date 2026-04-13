@@ -1,287 +1,311 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_wunsch_2014",
-      "label": "SC1: Wunsch & Matuschka 2014 RCT (n=136) — significantly improved skin roughness (PMC3926176)"
-    },
-    "B2": {
-      "key": "sc1_mota_2023",
-      "label": "SC1: Mota & Duarte 2023 RCT (n=137) — 31.6% wrinkle volume reduction with 660nm PBM (PubMed 36780572)"
-    },
-    "B3": {
-      "key": "sc1_park_2025",
-      "label": "SC1: Park et al. 2025 double-blind RCT (n=60) — significant crow's feet CFGS improvement (PMC11835066)"
-    },
-    "B4": {
-      "key": "sc2_wunsch_2014",
-      "label": "SC2: Wunsch & Matuschka 2014 — intradermal collagen increase confirmed by ultrasonography (PMC3926176)"
-    },
-    "B5": {
-      "key": "sc2_mota_2023",
-      "label": "SC2: Mota & Duarte 2023 — red PBM improves collagen synthesis (in vitro evidence, PubMed 36780572)"
-    },
-    "B6": {
-      "key": "sc2_park_2025",
-      "label": "SC2: Park et al. 2025 — 630-850nm light stimulates dermal cells (PMC11835066)"
-    },
-    "B7": {
-      "key": "sc3_avci_2013",
-      "label": "SC3: Avci/Hamblin 2013 LLLT review — beneficial effects on wrinkles, scars, and healing (PMC4126803)"
-    },
-    "B8": {
-      "key": "sc3_jagdeo_2018",
-      "label": "SC3: Jagdeo et al. 2018 systematic review of LED RCTs — alters skin biology (PMC6099480)"
-    },
-    "B9": {
-      "key": "sc3_park_2025",
-      "label": "SC3: Park et al. 2025 — LED/IRED safe and effective treatment for skin rejuvenation (PMC11835066)"
-    },
-    "A1": {
-      "label": "SC1 verified source count (wrinkle reduction)",
-      "method": "count(verified SC1 citations) = 3",
-      "result": "3"
-    },
-    "A2": {
-      "label": "SC2 verified source count (collagen boost)",
-      "method": "count(verified SC2 citations) = 3",
-      "result": "3"
-    },
-    "A3": {
-      "label": "SC3 verified source count (skin health improvement)",
-      "method": "count(verified SC3 citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Red light therapy (photobiomodulation) at 660-850 nm wavelengths",
     "operator": "==",
     "sub_claims": [
       {
         "id": "SC1",
-        "property": "significantly reduces facial wrinkles — at least 3 independent peer-reviewed clinical trials showing statistically significant wrinkle reduction",
+        "property": "significantly reduces facial wrinkles \u2014 at least 3 independent peer-reviewed clinical trials showing statistically significant wrinkle reduction",
         "operator": ">=",
         "threshold": 3,
-        "operator_note": "'Significantly' is interpreted as statistically significant (p < 0.05) in randomized or controlled trials. SC1 requires ≥3 independently published RCTs confirming measurable wrinkle reduction. The 660-850nm range is the standard shorthand for the red-to-near-infrared photobiomodulation (PBM) window; studies using 611-660nm and/or 850nm are included as they target the same cytochrome c oxidase photoreceptor. Causal claim satisfied via RCT design: randomized controlled trials with sham or untreated control arms establish causation, not merely association."
+        "operator_note": "'Significantly' is interpreted as statistically significant (p < 0.05) in randomized or controlled trials. SC1 requires \u22653 independently published RCTs confirming measurable wrinkle reduction. The 660-850nm range is the standard shorthand for the red-to-near-infrared photobiomodulation (PBM) window; studies using 611-660nm and/or 850nm are included as they target the same cytochrome c oxidase photoreceptor. Causal claim satisfied via RCT design: randomized controlled trials with sham or untreated control arms establish causation, not merely association."
       },
       {
         "id": "SC2",
-        "property": "boosts collagen production or density — at least 3 independent sources confirming increased collagen synthesis, intradermal collagen density, or dermal cell stimulation associated with collagen production",
+        "property": "boosts collagen production or density \u2014 at least 3 independent sources confirming increased collagen synthesis, intradermal collagen density, or dermal cell stimulation associated with collagen production",
         "operator": ">=",
         "threshold": 3,
-        "operator_note": "'Boosts collagen' is interpreted as measurable increases in intradermal collagen density (by ultrasonography) or collagen synthesis (in vitro or in vivo). SC2 requires ≥3 independent sources. Two sources directly measure or confirm collagen; one provides mechanistic evidence of dermal cell stimulation (the primary pathway for collagen synthesis). Causal claim satisfied: in-vivo RCT measurement (ultrasonography in Wunsch 2014) and in-vitro controlled studies (Mota 2023 background) establish cause-effect relationship."
+        "operator_note": "'Boosts collagen' is interpreted as measurable increases in intradermal collagen density (by ultrasonography) or collagen synthesis (in vitro or in vivo). SC2 requires \u22653 independent sources. Two sources directly measure or confirm collagen; one provides mechanistic evidence of dermal cell stimulation (the primary pathway for collagen synthesis). Causal claim satisfied: in-vivo RCT measurement (ultrasonography in Wunsch 2014) and in-vitro controlled studies (Mota 2023 background) establish cause-effect relationship."
       },
       {
         "id": "SC3",
-        "property": "improves overall skin health — at least 3 independent clinical reviews or trials confirming broader dermatological benefits beyond wrinkle reduction alone",
+        "property": "improves overall skin health \u2014 at least 3 independent clinical reviews or trials confirming broader dermatological benefits beyond wrinkle reduction alone",
         "operator": ">=",
         "threshold": 3,
-        "operator_note": "'Improves skin health' is interpreted as evidence of broader dermatological benefit beyond wrinkle reduction alone — including wound healing, acne, scarring, skin complexion, or global aesthetic improvement. SC3 requires ≥3 independent peer-reviewed sources (systematic reviews or controlled trials). Causal claim satisfied: systematic reviews of RCTs establish therapeutic efficacy at the population level."
+        "operator_note": "'Improves skin health' is interpreted as evidence of broader dermatological benefit beyond wrinkle reduction alone \u2014 including wound healing, acne, scarring, skin complexion, or global aesthetic improvement. SC3 requires \u22653 independent peer-reviewed sources (systematic reviews or controlled trials). Causal claim satisfied: systematic reviews of RCTs establish therapeutic efficacy at the population level."
       }
     ],
     "compound_operator": "AND",
     "operator_note": "All three sub-claims must hold for the compound claim to be PROVED. Each sub-claim uses causal language ('reduces,' 'boosts,' 'improves'). Per proof-engine rules, causal claims require RCT or controlled experiment evidence. All cited studies are peer-reviewed randomized or controlled trials, or systematic reviews thereof, satisfying the causation threshold directly."
   },
   "claim_natural": "Red light therapy at 660-850 nm significantly reduces wrinkles, boosts collagen, and improves skin health.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_wunsch_2014",
-      "source_name": "Wunsch & Matuschka 2014, Photomedicine and Laser Surgery (PMC3926176)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3926176/",
-      "quote": "The treated subjects experienced significantly improved skin complexion and skin feeling, profilometrically assessed skin roughness, and ultrasonographically measured collagen density.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Wunsch & Matuschka 2014 RCT (n=136) \u2014 significantly improved skin roughness (PMC3926176)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Wunsch & Matuschka 2014, Photomedicine and Laser Surgery (PMC3926176)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3926176/",
+        "quote": "The treated subjects experienced significantly improved skin complexion and skin feeling, profilometrically assessed skin roughness, and ultrasonographically measured collagen density."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The treated subjects experienced significantly improved skin complexion and skin"
       }
     },
     "B2": {
-      "source_key": "sc1_mota_2023",
-      "source_name": "Mota & Duarte 2023, Photobiomodulation Photomedicine Laser Surgery (PubMed 36780572)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/36780572/",
-      "quote": "There was a significant reduction in wrinkle volume after red (31.6%) and amber (29.9%) PBM.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Mota & Duarte 2023 RCT (n=137) \u2014 31.6% wrinkle volume reduction with 660nm PBM (PubMed 36780572)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Mota & Duarte 2023, Photobiomodulation Photomedicine Laser Surgery (PubMed 36780572)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36780572/",
+        "quote": "There was a significant reduction in wrinkle volume after red (31.6%) and amber (29.9%) PBM."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "There was a significant reduction in wrinkle volume after red (31.6%) and amber "
       }
     },
     "B3": {
-      "source_key": "sc1_park_2025",
-      "source_name": "Park, Park & Jung 2025, Medicine Baltimore (PMC11835066)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11835066/",
-      "quote": "After using the LED mask for 16 weeks, the CFGS score of the independent raters and investigators showed significant differences at 8, 12, and 16 weeks.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Park et al. 2025 double-blind RCT (n=60) \u2014 significant crow's feet CFGS improvement (PMC11835066)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Park, Park & Jung 2025, Medicine Baltimore (PMC11835066)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11835066/",
+        "quote": "After using the LED mask for 16 weeks, the CFGS score of the independent raters and investigators showed significant differences at 8, 12, and 16 weeks."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "After using the LED mask for 16 weeks, the CFGS score of the independent raters "
       }
     },
     "B4": {
-      "source_key": "sc2_wunsch_2014",
-      "source_name": "Wunsch & Matuschka 2014, Photomedicine and Laser Surgery (PMC3926176)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3926176/",
-      "quote": "both novel light sources that have not been previously used for PBM have demonstrated efficacy and safety for skin rejuvenation and intradermal collagen increase when compared with controls.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Wunsch & Matuschka 2014 \u2014 intradermal collagen increase confirmed by ultrasonography (PMC3926176)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Wunsch & Matuschka 2014, Photomedicine and Laser Surgery (PMC3926176)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3926176/",
+        "quote": "both novel light sources that have not been previously used for PBM have demonstrated efficacy and safety for skin rejuvenation and intradermal collagen increase when compared with controls."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "both novel light sources that have not been previously used for PBM have demonst"
       }
     },
     "B5": {
-      "source_key": "sc2_mota_2023",
-      "source_name": "Mota & Duarte 2023, Photobiomodulation Photomedicine Laser Surgery (PubMed 36780572)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/36780572/",
-      "quote": "In vitro red and amber photobiomodulation (PBM) has been shown to improve collagen synthesis.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Mota & Duarte 2023 \u2014 red PBM improves collagen synthesis (in vitro evidence, PubMed 36780572)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Mota & Duarte 2023, Photobiomodulation Photomedicine Laser Surgery (PubMed 36780572)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36780572/",
+        "quote": "In vitro red and amber photobiomodulation (PBM) has been shown to improve collagen synthesis."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "In vitro red and amber photobiomodulation (PBM) has been shown to improve collag"
       }
     },
     "B6": {
-      "source_key": "sc2_park_2025",
-      "source_name": "Park, Park & Jung 2025, Medicine Baltimore (PMC11835066)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11835066/",
-      "quote": "irradiating the skin with light-emitting diode (LED)/infrared emitting diode (IRED) light at 600 to 660 nm/800 to 860 nm, stimulates the cells of the dermis and epidermal tissue and is effective in wrinkle improvement and antiaging",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Park et al. 2025 \u2014 630-850nm light stimulates dermal cells (PMC11835066)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Park, Park & Jung 2025, Medicine Baltimore (PMC11835066)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11835066/",
+        "quote": "irradiating the skin with light-emitting diode (LED)/infrared emitting diode (IRED) light at 600 to 660 nm/800 to 860 nm, stimulates the cells of the dermis and epidermal tissue and is effective in wrinkle improvement and antiaging"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "irradiating the skin with light-emitting diode (LED)/infrared emitting diode (IR"
       }
     },
     "B7": {
-      "source_key": "sc3_avci_2013",
-      "source_name": "Avci, Gupta, Hamblin et al. 2013, Seminars in Cutaneous Medicine and Surgery (PMC4126803)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4126803/",
-      "quote": "In dermatology, LLLT has beneficial effects on wrinkles, acne scars, hypertrophic scars, and healing of burns.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC3: Avci/Hamblin 2013 LLLT review \u2014 beneficial effects on wrinkles, scars, and healing (PMC4126803)",
+      "sub_claim": "SC3",
+      "source": {
+        "name": "Avci, Gupta, Hamblin et al. 2013, Seminars in Cutaneous Medicine and Surgery (PMC4126803)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4126803/",
+        "quote": "In dermatology, LLLT has beneficial effects on wrinkles, acne scars, hypertrophic scars, and healing of burns."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "In dermatology, LLLT has beneficial effects on wrinkles, acne scars, hypertrophi"
       }
     },
     "B8": {
-      "source_key": "sc3_jagdeo_2018",
-      "source_name": "Jagdeo et al. 2018, Photodermatology Photoimmunology Photomedicine (PMC6099480)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6099480/",
-      "quote": "LEDs represent an emerging modality to alter skin biology and change the paradigm of managing skin conditions.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC3: Jagdeo et al. 2018 systematic review of LED RCTs \u2014 alters skin biology (PMC6099480)",
+      "sub_claim": "SC3",
+      "source": {
+        "name": "Jagdeo et al. 2018, Photodermatology Photoimmunology Photomedicine (PMC6099480)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6099480/",
+        "quote": "LEDs represent an emerging modality to alter skin biology and change the paradigm of managing skin conditions."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "LEDs represent an emerging modality to alter skin biology and change the paradig"
       }
     },
     "B9": {
-      "source_key": "sc3_park_2025",
-      "source_name": "Park, Park & Jung 2025, Medicine Baltimore (PMC11835066)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11835066/",
-      "quote": "LED and IRED phototherapies at 630 nm and 850 nm, respectively, are effective, safe, well-tolerated, and painless treatment for skin rejuvenation.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC3: Park et al. 2025 \u2014 LED/IRED safe and effective treatment for skin rejuvenation (PMC11835066)",
+      "sub_claim": "SC3",
+      "source": {
+        "name": "Park, Park & Jung 2025, Medicine Baltimore (PMC11835066)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11835066/",
+        "quote": "LED and IRED phototherapies at 630 nm and 850 nm, respectively, are effective, safe, well-tolerated, and painless treatment for skin rejuvenation."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "LED and IRED phototherapies at 630 nm and 850 nm, respectively, are effective, s"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The treated subjects experienced significantly improved skin complexion and skin"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "There was a significant reduction in wrinkle volume after red (31.6%) and amber "
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count (wrinkle reduction)",
+      "sub_claim": "SC1",
+      "method": "count(verified SC1 citations) = 3",
+      "result": "3",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "After using the LED mask for 16 weeks, the CFGS score of the independent raters "
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count (collagen boost)",
+      "sub_claim": "SC2",
+      "method": "count(verified SC2 citations) = 3",
+      "result": "3",
+      "depends_on": []
     },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "both novel light sources that have not been previously used for PBM have demonst"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "In vitro red and amber photobiomodulation (PBM) has been shown to improve collag"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "irradiating the skin with light-emitting diode (LED)/infrared emitting diode (IR"
-    },
-    "B7": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "In dermatology, LLLT has beneficial effects on wrinkles, acne scars, hypertrophi"
-    },
-    "B8": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "LEDs represent an emerging modality to alter skin biology and change the paradig"
-    },
-    "B9": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "LED and IRED phototherapies at 630 nm and 850 nm, respectively, are effective, s"
+    "A3": {
+      "type": "computed",
+      "label": "SC3 verified source count (skin health improvement)",
+      "sub_claim": "SC3",
+      "method": "count(verified SC3 citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -294,7 +318,8 @@
         "sc1_mota_2023": "verified",
         "sc1_park_2025": "verified"
       },
-      "independence_note": "Sources from 3 different publications (2014, 2023, 2025) and independent research groups"
+      "independence_note": "Sources from 3 different publications (2014, 2023, 2025) and independent research groups",
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources consulted for collagen boost",
@@ -305,7 +330,8 @@
         "sc2_mota_2023": "verified",
         "sc2_park_2025": "verified"
       },
-      "independence_note": "Sources from 3 different publications — Wunsch 2014 measures collagen directly by ultrasonography; Mota 2023 provides in-vitro collagen synthesis evidence; Park 2025 provides mechanistic dermal cell stimulation evidence"
+      "independence_note": "Sources from 3 different publications \u2014 Wunsch 2014 measures collagen directly by ultrasonography; Mota 2023 provides in-vitro collagen synthesis evidence; Park 2025 provides mechanistic dermal cell stimulation evidence",
+      "fact_ids": []
     },
     {
       "description": "SC3: independent sources consulted for skin health improvement",
@@ -316,27 +342,8 @@
         "sc3_jagdeo_2018": "verified",
         "sc3_park_2025": "verified"
       },
-      "independence_note": "Sources include two systematic reviews of RCTs (Avci 2013, Jagdeo 2018) and one 2025 double-blind RCT from a different research group"
-    }
-  ],
-  "sub_claim_results": [
-    {
-      "id": "SC1",
-      "n_confirming": 3,
-      "threshold": 3,
-      "holds": true
-    },
-    {
-      "id": "SC2",
-      "n_confirming": 3,
-      "threshold": 3,
-      "holds": true
-    },
-    {
-      "id": "SC3",
-      "n_confirming": 3,
-      "threshold": 3,
-      "holds": true
+      "independence_note": "Sources include two systematic reviews of RCTs (Avci 2013, Jagdeo 2018) and one 2025 double-blind RCT from a different research group",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -365,7 +372,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_holding": 3,
     "n_total": 3,
@@ -379,5 +391,25 @@
     "version": "1.3.1",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-01"
-  }
+  },
+  "sub_claim_results": [
+    {
+      "id": "SC1",
+      "n_confirming": 3,
+      "threshold": 3,
+      "holds": true
+    },
+    {
+      "id": "SC2",
+      "n_confirming": 3,
+      "threshold": 3,
+      "holds": true
+    },
+    {
+      "id": "SC3",
+      "n_confirming": 3,
+      "threshold": 3,
+      "holds": true
+    }
+  ]
 }

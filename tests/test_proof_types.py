@@ -13,7 +13,7 @@ from pathlib import Path
 
 from scripts.proof_types import (
     SearchRegistryEntry, CitationEntry, CoiFlag, CrossCheck,
-    LoadedProof, ProofData, Generator, NormalizedVerdict,
+    LoadedProof, ProofData, ProofDataV3, Generator, NormalizedVerdict,
 )
 
 
@@ -92,6 +92,8 @@ def test_loaded_proof_matches_loader_return():
 def test_types_match_published_proofs():
     """Spot-check: ProofData fields cover all keys in published proof.json files."""
     pd_fields = set(typing.get_type_hints(ProofData).keys())
+    pd_v3_fields = set(typing.get_type_hints(ProofDataV3).keys())
+    all_fields = pd_fields | pd_v3_fields
     proofs_dir = Path(__file__).parent.parent / "site" / "proofs"
     if not proofs_dir.exists():
         return  # Skip if no published proofs
@@ -100,9 +102,9 @@ def test_types_match_published_proofs():
         if proof_json.exists():
             data = json.loads(proof_json.read_text())
             for key in data.keys():
-                assert key in pd_fields, (
+                assert key in all_fields, (
                     f"proof.json key '{key}' in {proof_dir.name} "
-                    f"not in ProofData TypedDict"
+                    f"not in ProofData or ProofDataV3 TypedDict"
                 )
 
 
@@ -173,6 +175,35 @@ def test_proof_types_has_not_required():
     assert ProofData is not None
     assert CitationEntry is not None
     assert VerificationResult is not None
+
+
+def test_structured_verdict_has_required_keys():
+    """StructuredVerdict TypedDict defines value, qualified, qualifier, reason."""
+    from scripts.proof_types import StructuredVerdict
+    import typing
+    hints = typing.get_type_hints(StructuredVerdict)
+    assert "value" in hints
+    assert "qualified" in hints
+    assert "qualifier" in hints
+    assert "reason" in hints
+
+
+def test_evidence_entry_has_type_and_label():
+    """EvidenceEntry TypedDict defines type and label."""
+    from scripts.proof_types import EvidenceEntry
+    import typing
+    hints = typing.get_type_hints(EvidenceEntry)
+    assert "type" in hints
+    assert "label" in hints
+
+
+def test_proof_data_v3_has_evidence_key():
+    """ProofDataV3 TypedDict includes the evidence dict."""
+    from scripts.proof_types import ProofDataV3
+    import typing
+    hints = typing.get_type_hints(ProofDataV3)
+    assert "evidence" in hints
+    assert "format_version" in hints
 
 
 def test_proof_types_fallback_import(monkeypatch):

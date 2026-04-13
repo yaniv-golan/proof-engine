@@ -1,48 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_gsm_symbolic_paper",
-      "label": "SC1: GSM-Symbolic/NoOp paper (Mirzadeh et al., ICLR 2025)"
-    },
-    "B2": {
-      "key": "sc1_emergentmind_summary",
-      "label": "SC1: Independent analysis of GSM-NoOp findings"
-    },
-    "B3": {
-      "key": "sc1_appleinsider_report",
-      "label": "SC1: Tech press coverage of GSM-NoOp results"
-    },
-    "B8": {
-      "key": "sc1_marcus_analysis",
-      "label": "SC1: Gary Marcus analysis of GSM-Symbolic findings"
-    },
-    "B4": {
-      "key": "sc2_pal_paper",
-      "label": "SC2: PAL \u2014 Program-aided Language Models (Gao et al., ICML 2023)"
-    },
-    "B5": {
-      "key": "sc2_code_reasoning_survey",
-      "label": "SC2: Survey on code-enhanced reasoning (2025)"
-    },
-    "B6": {
-      "key": "sc2_iipc_paper",
-      "label": "SC2: IIPC execution-driven reasoning augmentation (2025)"
-    },
-    "B7": {
-      "key": "sc2_proof_engine_meta",
-      "label": "SC2: Proof Engine as meta-evidence \u2014 this system itself"
-    },
-    "A1": {
-      "label": "SC1 verified source count",
-      "method": "count(verified sc1 citations) = 4",
-      "result": "4 independent sources confirmed SC1"
-    },
-    "A2": {
-      "label": "SC2 verified source count",
-      "method": "count(verified sc2 citations) = 4",
-      "result": "4 independent sources confirmed SC2"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "LLM mathematical reasoning under GSM-NoOp-style adversarial conditions",
     "sub_claims": [
@@ -65,184 +22,246 @@
     "operator_note": "Both sub-claims must hold. SC1 establishes the problem (pattern-matching limitations); SC2 establishes the solution (code execution). The claim uses 'practically surmountable' \u2014 interpreted as 'demonstrated methods exist that overcome the limitation in practice,' not 'all instances are always solved.' The formalization narrows the natural-language claim in one respect: direct GSM-NoOp evaluation with code-execution methods has not been published, so SC2 relies on mechanistic evidence (code execution structurally prevents the pattern-matching failure) rather than direct benchmark replication. This is documented as a formalization scope limitation."
   },
   "claim_natural": "The pattern-matching limitations identified in GSM-NoOp are practically surmountable when LLMs are allowed to offload formal reasoning steps to code execution.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_gsm_symbolic_paper",
-      "source_name": "Mirzadeh et al., GSM-Symbolic (ICLR 2025)",
-      "url": "https://arxiv.org/html/2410.05229v1",
-      "quote": "We add seemingly relevant but ultimately inconsequential statements to GSM-Symbolic templates. Since these statements carry no operational significance, we refer to them as No-Op",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 83.3,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "arxiv.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "SC1: GSM-Symbolic/NoOp paper (Mirzadeh et al., ICLR 2025)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Mirzadeh et al., GSM-Symbolic (ICLR 2025)",
+        "url": "https://arxiv.org/html/2410.05229v1",
+        "quote": "We add seemingly relevant but ultimately inconsequential statements to GSM-Symbolic templates. Since these statements carry no operational significance, we refer to them as No-Op"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 83.3,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "arxiv.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "We add seemingly relevant but ultimately inconsequential statements to GSM-Symbo"
       }
     },
     "B2": {
-      "source_key": "sc1_emergentmind_summary",
-      "source_name": "EmergentMind GSM-Symbolic Analysis",
-      "url": "https://www.emergentmind.com/topics/gsm-symbolic-benchmark",
-      "quote": "Observed behaviors suggest that LLMs do not engage in formal symbolic reasoning, but instead rely on sophisticated retrieval and pattern recombination learned from training traces",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "emergentmind.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC1: Independent analysis of GSM-NoOp findings",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "EmergentMind GSM-Symbolic Analysis",
+        "url": "https://www.emergentmind.com/topics/gsm-symbolic-benchmark",
+        "quote": "Observed behaviors suggest that LLMs do not engage in formal symbolic reasoning, but instead rely on sophisticated retrieval and pattern recombination learned from training traces"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "emergentmind.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Observed behaviors suggest that LLMs do not engage in formal symbolic reasoning,"
       }
     },
     "B3": {
-      "source_key": "sc1_appleinsider_report",
-      "source_name": "AppleInsider coverage of GSM-Symbolic research",
-      "url": "https://appleinsider.com/articles/24/10/12/apples-study-proves-that-llm-based-ai-models-are-flawed-because-they-cannot-reason",
-      "quote": "reasoning failures highlighted by Apple research on LLMs",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "appleinsider.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC1: Tech press coverage of GSM-NoOp results",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "AppleInsider coverage of GSM-Symbolic research",
+        "url": "https://appleinsider.com/articles/24/10/12/apples-study-proves-that-llm-based-ai-models-are-flawed-because-they-cannot-reason",
+        "quote": "reasoning failures highlighted by Apple research on LLMs"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "appleinsider.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "reasoning failures highlighted by Apple research on LLMs"
       }
     },
     "B8": {
-      "source_key": "sc1_marcus_analysis",
-      "source_name": "Gary Marcus, 'LLMs don't do formal reasoning' (2024)",
-      "url": "https://garymarcus.substack.com/p/llms-dont-do-formal-reasoning-and",
-      "quote": "we found no evidence of formal reasoning in language models",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "substack.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC1: Gary Marcus analysis of GSM-Symbolic findings",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Gary Marcus, 'LLMs don't do formal reasoning' (2024)",
+        "url": "https://garymarcus.substack.com/p/llms-dont-do-formal-reasoning-and",
+        "quote": "we found no evidence of formal reasoning in language models"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "substack.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "we found no evidence of formal reasoning in language models"
       }
     },
     "B4": {
-      "source_key": "sc2_pal_paper",
-      "source_name": "Gao et al., PAL: Program-aided Language Models (ICML 2023)",
-      "url": "https://ar5iv.labs.arxiv.org/html/2211.10435",
-      "quote": "PaL using Codex achieves state-of-the-art few-shot accuracy on the gsm8k benchmark of math word problems, surpassing PaLM-540b which uses chain-of-thought by absolute 15%",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "arxiv.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "SC2: PAL \u2014 Program-aided Language Models (Gao et al., ICML 2023)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Gao et al., PAL: Program-aided Language Models (ICML 2023)",
+        "url": "https://ar5iv.labs.arxiv.org/html/2211.10435",
+        "quote": "PaL using Codex achieves state-of-the-art few-shot accuracy on the gsm8k benchmark of math word problems, surpassing PaLM-540b which uses chain-of-thought by absolute 15%"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "arxiv.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "PaL using Codex achieves state-of-the-art few-shot accuracy on the gsm8k benchma"
       }
     },
     "B5": {
-      "source_key": "sc2_code_reasoning_survey",
-      "source_name": "Code to Think, Think to Code: Survey on Code-Enhanced Reasoning (2025)",
-      "url": "https://arxiv.org/html/2502.19411",
-      "quote": "these approaches express the entire reasoning process as a self-contained executable program, providing a deterministic path to solutions while minimizing calculation errors",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "arxiv.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "SC2: Survey on code-enhanced reasoning (2025)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Code to Think, Think to Code: Survey on Code-Enhanced Reasoning (2025)",
+        "url": "https://arxiv.org/html/2502.19411",
+        "quote": "these approaches express the entire reasoning process as a self-contained executable program, providing a deterministic path to solutions while minimizing calculation errors"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "arxiv.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "these approaches express the entire reasoning process as a self-contained execut"
       }
     },
     "B6": {
-      "source_key": "sc2_iipc_paper",
-      "source_name": "IIPC: Execution-Driven Reasoning Augmentation (2025)",
-      "url": "https://arxiv.org/html/2602.03950",
-      "quote": "manipulable representations of reasoning traces with context-stable reasoning, overcoming the limitations",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "arxiv.org",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "SC2: IIPC execution-driven reasoning augmentation (2025)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "IIPC: Execution-Driven Reasoning Augmentation (2025)",
+        "url": "https://arxiv.org/html/2602.03950",
+        "quote": "manipulable representations of reasoning traces with context-stable reasoning, overcoming the limitations"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "arxiv.org",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "manipulable representations of reasoning traces with context-stable reasoning, o"
       }
     },
     "B7": {
-      "source_key": "sc2_proof_engine_meta",
-      "source_name": "Proof Engine \u2014 meta-evidence (this system)",
-      "url": "https://github.com/yaniv-golan/proof-engine",
-      "quote": "LLMs have two weaknesses that make them unreliable for factual claims: they hallucinate facts and they make reasoning errors",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "github.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC2: Proof Engine as meta-evidence \u2014 this system itself",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Proof Engine \u2014 meta-evidence (this system)",
+        "url": "https://github.com/yaniv-golan/proof-engine",
+        "quote": "LLMs have two weaknesses that make them unreliable for factual claims: they hallucinate facts and they make reasoning errors"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "github.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "LLMs have two weaknesses that make them unreliable for factual claims: they hall"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "We add seemingly relevant but ultimately inconsequential statements to GSM-Symbo"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Observed behaviors suggest that LLMs do not engage in formal symbolic reasoning,"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count",
+      "sub_claim": "SC1",
+      "method": "count(verified sc1 citations) = 4",
+      "result": "4 independent sources confirmed SC1",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "reasoning failures highlighted by Apple research on LLMs"
-    },
-    "B8": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "we found no evidence of formal reasoning in language models"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "PaL using Codex achieves state-of-the-art few-shot accuracy on the gsm8k benchma"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "these approaches express the entire reasoning process as a self-contained execut"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "manipulable representations of reasoning traces with context-stable reasoning, o"
-    },
-    "B7": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "LLMs have two weaknesses that make them unreliable for factual claims: they hall"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count",
+      "sub_claim": "SC2",
+      "method": "count(verified sc2 citations) = 4",
+      "result": "4 independent sources confirmed SC2",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -257,7 +276,8 @@
         "sc1_marcus_analysis": "verified"
       },
       "independence_note": "Four sources: (1) original arxiv paper, (2) EmergentMind independent analysis platform, (3) AppleInsider tech press, (4) Gary Marcus Substack analysis. All cover the same underlying research but are editorially independent publications from different authors/orgs.",
-      "coi_flags": []
+      "coi_flags": [],
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources on code-execution surmounting limitations",
@@ -278,21 +298,8 @@
           "direction": "favorable_to_subject",
           "severity": "moderate"
         }
-      ]
-    }
-  ],
-  "sub_claim_results": [
-    {
-      "id": "SC1",
-      "n_confirming": 4,
-      "threshold": 3,
-      "holds": true
-    },
-    {
-      "id": "SC2",
-      "n_confirming": 4,
-      "threshold": 3,
-      "holds": true
+      ],
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -321,7 +328,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_holding": 2,
     "n_total": 2,
@@ -332,5 +344,19 @@
     "version": "1.10.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-08"
-  }
+  },
+  "sub_claim_results": [
+    {
+      "id": "SC1",
+      "n_confirming": 4,
+      "threshold": 3,
+      "holds": true
+    },
+    {
+      "id": "SC2",
+      "n_confirming": 4,
+      "threshold": 3,
+      "holds": true
+    }
+  ]
 }

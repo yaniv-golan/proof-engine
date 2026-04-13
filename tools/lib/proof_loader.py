@@ -9,6 +9,7 @@ from tools.lib.narrative_validator import extract_verdict_declaration, REQUIRED_
 from tools.lib.section_extractor import extract_sections, validate_required_sections
 from tools.lib.tagger import llm_tag, canonicalize_tag
 from tools.lib.verdict import normalize_verdict
+from tools.lib.normalize import normalize_to_v3
 
 # --- Format version 1 (existing proofs, no format_version in proof.json) ---
 REQUIRED_PROOF_MD_SECTIONS_V1 = [
@@ -52,17 +53,16 @@ REQUIRED_CLAIM_FORMAL_KEYS = []  # claim_formal structure varies by proof type
 
 
 def extract_source_names(proof_data, max_sources=3):
-    """Extract unique source names from citations, up to max_sources."""
-    citations = proof_data.get("citations")
-    if not citations:
-        return []
+    """Extract unique source names from v3 evidence map."""
+    evidence = proof_data.get("evidence", {})
     seen = set()
     names = []
-    for cit in citations.values():
-        name = cit.get("source_name", "")
-        if name and name not in seen:
-            seen.add(name)
-            names.append(name)
+    for entry in evidence.values():
+        if entry.get("type") == "empirical":
+            name = entry.get("source", {}).get("name", "")
+            if name and name not in seen:
+                seen.add(name)
+                names.append(name)
     return names[:max_sources]
 
 
@@ -100,10 +100,23 @@ def load_proof(proof_dir: Path) -> dict:
     proof_json_path = proof_dir / "proof.json"
     proof_data = json.loads(proof_json_path.read_text())
 
-    # Validate required keys
-    for key in REQUIRED_JSON_KEYS:
-        if key not in proof_data:
-            raise ValueError(f"{slug}: proof.json missing required key: {key}")
+    # Validate required keys and determine format version
+    format_version = proof_data.get("format_version", 1)
+    if format_version == 3:
+        v3_required = ["claim_formal", "claim_natural", "evidence",
+                       "verdict", "key_results", "generator"]
+        for key in v3_required:
+            if key not in proof_data:
+                raise ValueError(f"{slug}: proof.json missing required key: {key}")
+    else:
+        for key in REQUIRED_JSON_KEYS:
+            if key not in proof_data:
+                raise ValueError(f"{slug}: proof.json missing required key: {key}")
+
+        # Normalize v1/v2 to v3 in memory — single code path from here on.
+        # The on-disk proof.json is NOT modified (migration is Task 6).
+        proof_data = normalize_to_v3(proof_data)
+        format_version = 3
 
     generator = proof_data["generator"]
     for key in REQUIRED_GENERATOR_KEYS:
@@ -117,9 +130,6 @@ def load_proof(proof_dir: Path) -> dict:
 
     # Normalize verdict
     verdict = normalize_verdict(proof_data["verdict"])
-
-    # Determine format version
-    format_version = proof_data.get("format_version", 1)
 
     # Extract sections from proof.md
     proof_md = (proof_dir / "proof.md").read_text()
@@ -156,7 +166,8 @@ def load_proof(proof_dir: Path) -> dict:
               file=sys.stderr)
 
     # Absence proofs: check for Type S (Search) Facts section
-    if proof_data.get("search_registry") is not None:
+    has_search_evidence = any(e.get("type") == "search" for e in proof_data.get("evidence", {}).values())
+    if has_search_evidence:
         if "Type S (Search) Facts" not in sections_audit:
             print(f"WARNING: {slug}: proof_audit.md missing 'Type S (Search) Facts' section "
                   "(expected for absence proofs with search_registry)",
@@ -207,13 +218,12 @@ def load_proof(proof_dir: Path) -> dict:
         meta["tags"] = tags
         meta_path.write_text(yaml.dump(meta, default_flow_style=False))
 
-    # Citation count
-    citations = proof_data.get("citations")
-    citation_count = len(citations) if citations is not None else None
-
-    # Search count (absence proofs)
-    search_registry = proof_data.get("search_registry")
-    search_count = len(search_registry) if search_registry is not None else None
+    # Citation/search counts — always v3 after normalization
+    evidence = proof_data.get("evidence", {})
+    citation_count = sum(1 for e in evidence.values() if e.get("type") == "empirical")
+    search_count = sum(1 for e in evidence.values() if e.get("type") == "search")
+    citation_count = citation_count if citation_count > 0 else None
+    search_count = search_count if search_count > 0 else None
 
     return {
         "slug": slug,
@@ -230,7 +240,8 @@ def load_proof(proof_dir: Path) -> dict:
             sections_md, verdict["raw"]
         ),
         "source_names": extract_source_names(proof_data),
-        "source_names_extra": max(0, len({c.get("source_name") for c in proof_data.get("citations", {}).values() if c.get("source_name")}) - 3),
+        "source_names_extra": max(0, len({e.get("source", {}).get("name") for e in proof_data.get("evidence", {}).values()
+                                          if e.get("type") == "empirical" and e.get("source", {}).get("name")}) - 3),
         "date": generator["generated_at"],
         "proof_engine_version": generator["version"],
         "sections_narrative": sections_narrative,

@@ -1,49 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_source_a",
-      "label": "SC1: Ouellet et al. (JCI 2012) — cold activates BAT oxidative metabolism"
-    },
-    "B2": {
-      "key": "sc1_source_b",
-      "label": "SC1: van der Lans et al. (JCI 2013) — cold acclimation increases BAT activity"
-    },
-    "B3": {
-      "key": "sc1_source_c",
-      "label": "SC1: Scott & Fuller (IJMS 2023) — ICE consistently increases BAT activity"
-    },
-    "B4": {
-      "key": "sc2_source_a",
-      "label": "SC2: Scheele & Nielsen (Redox Biol 2017) — BAT activation increases resting metabolic rate"
-    },
-    "B5": {
-      "key": "sc2_source_b",
-      "label": "SC2: Scheele & Wolfrum (Endocrine Rev 2020) — BAT activation increases metabolic rate"
-    },
-    "B6": {
-      "key": "sc2_source_c",
-      "label": "SC2: Carpentier et al. (Front Endocrinol 2018) — cold doubles/triples BAT oxidative capacity"
-    },
-    "B7": {
-      "key": "sc3_source_a",
-      "label": "SC3: Esperland et al. (Int J Circumpolar Health 2022) — CWI may reduce adipose tissue (hedged)"
-    },
-    "A1": {
-      "label": "SC1 verified source count",
-      "method": "count(verified sc1 citations) = 3",
-      "result": "3"
-    },
-    "A2": {
-      "label": "SC2 verified source count",
-      "method": "count(verified sc2 citations) = 3",
-      "result": "3"
-    },
-    "A3": {
-      "label": "SC3 verified source count",
-      "method": "count(verified sc3 citations) = 1",
-      "result": "1"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Cold water immersion (cold plunges, ice baths)",
     "sub_claims": [
@@ -59,181 +15,245 @@
         "property": "BAT activation increases resting metabolic rate/energy expenditure",
         "operator": ">=",
         "threshold": 2,
-        "operator_note": "SC2 holds if at least 2 independent peer-reviewed sources confirm BAT activation measurably increases resting metabolic rate or total energy expenditure. 'Significantly boosts metabolism' in the original claim is interpreted as a peer-reviewed-documented, directionally confirmed increase. The word 'significantly' implies a meaningful increase — reviewers note the whole-body effect may be modest (Carpentier et al. 2018: 'lower end of clinically relevant'), but the directional finding is well-supported. Threshold 2 for the same reason as SC1."
+        "operator_note": "SC2 holds if at least 2 independent peer-reviewed sources confirm BAT activation measurably increases resting metabolic rate or total energy expenditure. 'Significantly boosts metabolism' in the original claim is interpreted as a peer-reviewed-documented, directionally confirmed increase. The word 'significantly' implies a meaningful increase \u2014 reviewers note the whole-body effect may be modest (Carpentier et al. 2018: 'lower end of clinically relevant'), but the directional finding is well-supported. Threshold 2 for the same reason as SC1."
       },
       {
         "id": "SC3",
         "property": "aids long-term fat loss (sustained fat mass reduction) in humans",
         "operator": ">=",
         "threshold": 2,
-        "operator_note": "SC3 holds if at least 2 independent peer-reviewed sources confirm cold water immersion produces long-term fat mass reduction in humans. 'Long-term' is interpreted as sustained reductions in fat mass or body weight over weeks to months in controlled human studies — not merely increased energy expenditure or acute fat mobilisation. Threshold 2 required; a single small study would be insufficient. This is the critical sub-claim most disputed in the literature. Counter-evidence: Scott & Fuller (IJMS 2023) state ICE 'does not consistently lower body weight or fat mass'; Marlatt & Ravussin (Curr Obes Rep 2017) state BAT contribution 'is unlikely to cause weight loss'; Scheele & Nielsen (Redox Biol 2017) state 'substantial reductions in body weight following BAT activation has not yet been shown in humans'."
+        "operator_note": "SC3 holds if at least 2 independent peer-reviewed sources confirm cold water immersion produces long-term fat mass reduction in humans. 'Long-term' is interpreted as sustained reductions in fat mass or body weight over weeks to months in controlled human studies \u2014 not merely increased energy expenditure or acute fat mobilisation. Threshold 2 required; a single small study would be insufficient. This is the critical sub-claim most disputed in the literature. Counter-evidence: Scott & Fuller (IJMS 2023) state ICE 'does not consistently lower body weight or fat mass'; Marlatt & Ravussin (Curr Obes Rep 2017) state BAT contribution 'is unlikely to cause weight loss'; Scheele & Nielsen (Redox Biol 2017) state 'substantial reductions in body weight following BAT activation has not yet been shown in humans'."
       }
     ],
     "compound_operator": "AND",
     "operator_note": "All three sub-claims must hold for the compound claim to be PROVED. The claim implies: cold plunges activate BAT (SC1) AND this boosts metabolism (SC2) AND this produces long-term fat loss (SC3). If any sub-claim fails, the verdict is PARTIALLY VERIFIED with explanation of which parts are supported and which are not."
   },
   "claim_natural": "Cold plunges and ice baths significantly boost metabolism via brown fat activation and aid long-term fat loss.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_source_a",
-      "source_name": "Ouellet et al., J Clin Invest 2012 (PubMed 22269323)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/22269323/",
-      "quote": "we demonstrated cold-induced activation of oxidative metabolism in BAT, but not in adjoining skeletal muscles and subcutaneous adipose tissue. This activation was associated with an increase in total energy expenditure.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Ouellet et al. (JCI 2012) \u2014 cold activates BAT oxidative metabolism",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Ouellet et al., J Clin Invest 2012 (PubMed 22269323)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22269323/",
+        "quote": "we demonstrated cold-induced activation of oxidative metabolism in BAT, but not in adjoining skeletal muscles and subcutaneous adipose tissue. This activation was associated with an increase in total energy expenditure."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "we demonstrated cold-induced activation of oxidative metabolism in BAT, but not "
       }
     },
     "B2": {
-      "source_key": "sc1_source_b",
-      "source_name": "van der Lans et al., J Clin Invest 2013 (PubMed 23867626)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/23867626/",
-      "quote": "we show that a 10-day cold acclimation protocol in humans increases BAT activity in parallel with an increase in nonshivering thermogenesis (NST).",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: van der Lans et al. (JCI 2013) \u2014 cold acclimation increases BAT activity",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "van der Lans et al., J Clin Invest 2013 (PubMed 23867626)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23867626/",
+        "quote": "we show that a 10-day cold acclimation protocol in humans increases BAT activity in parallel with an increase in nonshivering thermogenesis (NST)."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "we show that a 10-day cold acclimation protocol in humans increases BAT activity"
       }
     },
     "B3": {
-      "source_key": "sc1_source_c",
-      "source_name": "Scott & Fuller, Int J Mol Sci 2023 (PubMed 38203217)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/38203217/",
-      "quote": "ICE consistently increases the activity of brown adipose tissue (BAT) and transitions white adipose tissue to a phenotype more in line with BAT.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Scott & Fuller (IJMS 2023) \u2014 ICE consistently increases BAT activity",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Scott & Fuller, Int J Mol Sci 2023 (PubMed 38203217)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38203217/",
+        "quote": "ICE consistently increases the activity of brown adipose tissue (BAT) and transitions white adipose tissue to a phenotype more in line with BAT."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "ICE consistently increases the activity of brown adipose tissue (BAT) and transi"
       }
     },
     "B4": {
-      "source_key": "sc2_source_a",
-      "source_name": "Scheele & Nielsen, Redox Biol 2017 (PubMed 28431377)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/28431377/",
-      "quote": "Activation of brown adipose tissue (BAT) in adult humans increase glucose and fatty acid clearance as well as resting metabolic rate, whereas a prolonged elevation of BAT activity improves insulin sensitivity.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Scheele & Nielsen (Redox Biol 2017) \u2014 BAT activation increases resting metabolic rate",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Scheele & Nielsen, Redox Biol 2017 (PubMed 28431377)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28431377/",
+        "quote": "Activation of brown adipose tissue (BAT) in adult humans increase glucose and fatty acid clearance as well as resting metabolic rate, whereas a prolonged elevation of BAT activity improves insulin sensitivity."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Activation of brown adipose tissue (BAT) in adult humans increase glucose and fa"
       }
     },
     "B5": {
-      "source_key": "sc2_source_b",
-      "source_name": "Scheele & Wolfrum, Endocrine Rev 2020 (PubMed 31638161)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/31638161/",
-      "quote": "acute activation increases metabolic rate. Brown adipose tissue (BAT) recruitment occurs during cold acclimation and includes secretion of factors, known as batokines, which target several different cell types within BAT.",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 80.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Scheele & Wolfrum (Endocrine Rev 2020) \u2014 BAT activation increases metabolic rate",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Scheele & Wolfrum, Endocrine Rev 2020 (PubMed 31638161)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31638161/",
+        "quote": "acute activation increases metabolic rate. Brown adipose tissue (BAT) recruitment occurs during cold acclimation and includes secretion of factors, known as batokines, which target several different cell types within BAT."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 80.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "acute activation increases metabolic rate. Brown adipose tissue (BAT) recruitmen"
       }
     },
     "B6": {
-      "source_key": "sc2_source_c",
-      "source_name": "Carpentier et al., Front Endocrinol 2018 (PubMed 30131768)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/30131768/",
-      "quote": "BAT thermogenesis is efficiently recruited upon repeated cold exposure, doubling to tripling its total oxidative capacity, with reciprocal reduction of muscle thermogenesis.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: Carpentier et al. (Front Endocrinol 2018) \u2014 cold doubles/triples BAT oxidative capacity",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Carpentier et al., Front Endocrinol 2018 (PubMed 30131768)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30131768/",
+        "quote": "BAT thermogenesis is efficiently recruited upon repeated cold exposure, doubling to tripling its total oxidative capacity, with reciprocal reduction of muscle thermogenesis."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "BAT thermogenesis is efficiently recruited upon repeated cold exposure, doubling"
       }
     },
     "B7": {
-      "source_key": "sc3_source_a",
-      "source_name": "Esperland et al., Int J Circumpolar Health 2022 (PubMed 36137565)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/36137565/",
-      "quote": "CWI seems to reduce and/or transform body adipose tissue, as well as reduce insulin resistance and improve insulin sensitivity.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC3: Esperland et al. (Int J Circumpolar Health 2022) \u2014 CWI may reduce adipose tissue (hedged)",
+      "sub_claim": "SC3",
+      "source": {
+        "name": "Esperland et al., Int J Circumpolar Health 2022 (PubMed 36137565)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36137565/",
+        "quote": "CWI seems to reduce and/or transform body adipose tissue, as well as reduce insulin resistance and improve insulin sensitivity."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "CWI seems to reduce and/or transform body adipose tissue, as well as reduce insu"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "we demonstrated cold-induced activation of oxidative metabolism in BAT, but not "
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "we show that a 10-day cold acclimation protocol in humans increases BAT activity"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count",
+      "sub_claim": "SC1",
+      "method": "count(verified sc1 citations) = 3",
+      "result": "3",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "ICE consistently increases the activity of brown adipose tissue (BAT) and transi"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count",
+      "sub_claim": "SC2",
+      "method": "count(verified sc2 citations) = 3",
+      "result": "3",
+      "depends_on": []
     },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Activation of brown adipose tissue (BAT) in adult humans increase glucose and fa"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "acute activation increases metabolic rate. Brown adipose tissue (BAT) recruitmen"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "BAT thermogenesis is efficiently recruited upon repeated cold exposure, doubling"
-    },
-    "B7": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "CWI seems to reduce and/or transform body adipose tissue, as well as reduce insu"
+    "A3": {
+      "type": "computed",
+      "label": "SC3 verified source count",
+      "sub_claim": "SC3",
+      "method": "count(verified sc3 citations) = 1",
+      "result": "1",
+      "depends_on": []
     }
   },
   "cross_checks": [
     {
-      "description": "SC1: independent sources consulted for cold → BAT activation",
+      "description": "SC1: independent sources consulted for cold \u2192 BAT activation",
       "n_sources_consulted": 3,
       "n_sources_verified": 3,
       "sources": {
@@ -241,10 +261,11 @@
         "sc1_source_b": "verified",
         "sc1_source_c": "verified"
       },
-      "independence_note": "Sources from three different publications: J Clin Invest 2012, J Clin Invest 2013, Int J Mol Sci 2023 — independently measured using PET/CT imaging and review methodology."
+      "independence_note": "Sources from three different publications: J Clin Invest 2012, J Clin Invest 2013, Int J Mol Sci 2023 \u2014 independently measured using PET/CT imaging and review methodology.",
+      "fact_ids": []
     },
     {
-      "description": "SC2: independent sources consulted for BAT → metabolic rate",
+      "description": "SC2: independent sources consulted for BAT \u2192 metabolic rate",
       "n_sources_consulted": 3,
       "n_sources_verified": 3,
       "sources": {
@@ -252,18 +273,60 @@
         "sc2_source_b": "verified",
         "sc2_source_c": "verified"
       },
-      "independence_note": "Sources from three different publications: Redox Biol 2017, Endocrine Rev 2020, Front Endocrinol 2018 — independent review and experimental findings."
+      "independence_note": "Sources from three different publications: Redox Biol 2017, Endocrine Rev 2020, Front Endocrinol 2018 \u2014 independent review and experimental findings.",
+      "fact_ids": []
     },
     {
-      "description": "SC3: sources consulted for cold → long-term fat loss",
+      "description": "SC3: sources consulted for cold \u2192 long-term fat loss",
       "n_sources_consulted": 1,
       "n_sources_verified": 1,
       "sources": {
         "sc3_source_a": "verified"
       },
-      "independence_note": "Only one hedged supportive source found (Esperland 2022). Multiple independent reviews explicitly contradict SC3 — see adversarial_checks."
+      "independence_note": "Only one hedged supportive source found (Esperland 2022). Multiple independent reviews explicitly contradict SC3 \u2014 see adversarial_checks.",
+      "fact_ids": []
     }
   ],
+  "adversarial_checks": [
+    {
+      "question": "Do peer-reviewed reviews conclude that cold exposure causes meaningful weight or fat loss in humans?",
+      "verification_performed": "Searched PubMed and Google Scholar for 'cold water immersion fat loss humans', 'ice bath weight loss evidence', 'cold exposure fat mass reduction controlled trial'. Found Scott & Fuller (IJMS 2023): 'While ICE does not consistently lower body weight or fat mass, there does seem to be evidence for ICE as a positive modulator of the metabolic consequences of obesity.' Also found Marlatt & Ravussin (Curr Obes Rep 2017): 'BAT contributes a small amount to overall energy metabolism which is unlikely to cause weight loss. There is no convincing evidence yet to indicate that BAT may be a viable pharmaceutical target for body weight loss.' And Scheele & Nielsen (Redox Biol 2017): 'substantial reductions in body weight following BAT activation has not yet been shown in humans.'",
+      "finding": "Three independent peer-reviewed reviews explicitly state that cold-induced BAT activation does not consistently produce measurable fat or weight loss in humans. This directly contradicts SC3 and is the strongest counter-evidence found.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the whole-body metabolic boost from BAT activation 'significant' in clinical or practical terms?",
+      "verification_performed": "Searched for 'brown fat energy expenditure magnitude humans', 'BAT thermogenesis clinical relevance', 'brown adipose tissue weight loss humans'. Carpentier et al. (Front Endocrinol 2018) state BAT's contribution is 'at the lower end of what would be potentially clinically relevant if chronically sustained.' Marlatt & Ravussin (Curr Obes Rep 2017) state BAT is 'unlikely to cause weight loss.' No source found claiming the boost is large enough to drive fat loss on its own.",
+      "finding": "The metabolic increase from BAT activation is directionally confirmed (SC2 holds) but reviewers consistently characterize the magnitude as modest \u2014 at the lower end of clinical relevance. The 'significantly' qualifier in the original claim is therefore overstated: the boost is real but not large enough to drive fat loss. This does not break SC2 (directional increase is documented) but reinforces the failure of SC3.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there evidence that cold water immersion protocols used in practice (brief plunges) differ from the prolonged cold-room exposures studied in labs?",
+      "verification_performed": "Searched for 'cold plunge vs cold room BAT activation', 'ice bath brown fat activation protocol', 'cold water immersion duration BAT'. Scott & Fuller (IJMS 2023) note: 'The majority of the current literature on ICE is based on rodent models where animals are housed in cold rooms, which does not reflect protocols likely to be implemented in humans such as cold water immersion.' Most human BAT studies use sustained cold-air exposure (16-18\u00b0C for hours), not brief cold-water immersion (minutes in ~10-15\u00b0C water).",
+      "finding": "The research base for BAT activation (SC1) and metabolic boost (SC2) uses sustained cold-air protocols that differ from typical cold plunge/ice bath practice. Human cold-water immersion is shorter and involves different thermal dynamics. Whether brief cold plunges achieve comparable BAT activation is not well established. This is an important ecological validity concern but does not definitively refute SC1 or SC2 since Scott & Fuller (2023) does include CWI-adjacent ICE protocols.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "n_holding": 2,
+    "n_total": 3,
+    "claim_holds": false,
+    "sc1_holds": true,
+    "sc2_holds": true,
+    "sc3_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.3.1",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-01"
+  },
   "sub_claim_results": [
     {
       "id": "SC1",
@@ -283,40 +346,5 @@
       "threshold": 2,
       "holds": false
     }
-  ],
-  "adversarial_checks": [
-    {
-      "question": "Do peer-reviewed reviews conclude that cold exposure causes meaningful weight or fat loss in humans?",
-      "verification_performed": "Searched PubMed and Google Scholar for 'cold water immersion fat loss humans', 'ice bath weight loss evidence', 'cold exposure fat mass reduction controlled trial'. Found Scott & Fuller (IJMS 2023): 'While ICE does not consistently lower body weight or fat mass, there does seem to be evidence for ICE as a positive modulator of the metabolic consequences of obesity.' Also found Marlatt & Ravussin (Curr Obes Rep 2017): 'BAT contributes a small amount to overall energy metabolism which is unlikely to cause weight loss. There is no convincing evidence yet to indicate that BAT may be a viable pharmaceutical target for body weight loss.' And Scheele & Nielsen (Redox Biol 2017): 'substantial reductions in body weight following BAT activation has not yet been shown in humans.'",
-      "finding": "Three independent peer-reviewed reviews explicitly state that cold-induced BAT activation does not consistently produce measurable fat or weight loss in humans. This directly contradicts SC3 and is the strongest counter-evidence found.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Is the whole-body metabolic boost from BAT activation 'significant' in clinical or practical terms?",
-      "verification_performed": "Searched for 'brown fat energy expenditure magnitude humans', 'BAT thermogenesis clinical relevance', 'brown adipose tissue weight loss humans'. Carpentier et al. (Front Endocrinol 2018) state BAT's contribution is 'at the lower end of what would be potentially clinically relevant if chronically sustained.' Marlatt & Ravussin (Curr Obes Rep 2017) state BAT is 'unlikely to cause weight loss.' No source found claiming the boost is large enough to drive fat loss on its own.",
-      "finding": "The metabolic increase from BAT activation is directionally confirmed (SC2 holds) but reviewers consistently characterize the magnitude as modest — at the lower end of clinical relevance. The 'significantly' qualifier in the original claim is therefore overstated: the boost is real but not large enough to drive fat loss. This does not break SC2 (directional increase is documented) but reinforces the failure of SC3.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Is there evidence that cold water immersion protocols used in practice (brief plunges) differ from the prolonged cold-room exposures studied in labs?",
-      "verification_performed": "Searched for 'cold plunge vs cold room BAT activation', 'ice bath brown fat activation protocol', 'cold water immersion duration BAT'. Scott & Fuller (IJMS 2023) note: 'The majority of the current literature on ICE is based on rodent models where animals are housed in cold rooms, which does not reflect protocols likely to be implemented in humans such as cold water immersion.' Most human BAT studies use sustained cold-air exposure (16-18°C for hours), not brief cold-water immersion (minutes in ~10-15°C water).",
-      "finding": "The research base for BAT activation (SC1) and metabolic boost (SC2) uses sustained cold-air protocols that differ from typical cold plunge/ice bath practice. Human cold-water immersion is shorter and involves different thermal dynamics. Whether brief cold plunges achieve comparable BAT activation is not well established. This is an important ecological validity concern but does not definitively refute SC1 or SC2 since Scott & Fuller (2023) does include CWI-adjacent ICE protocols.",
-      "breaks_proof": false
-    }
-  ],
-  "verdict": "PARTIALLY VERIFIED",
-  "key_results": {
-    "n_holding": 2,
-    "n_total": 3,
-    "claim_holds": false,
-    "sc1_holds": true,
-    "sc2_holds": true,
-    "sc3_holds": false
-  },
-  "generator": {
-    "name": "proof-engine",
-    "version": "1.3.1",
-    "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-04-01"
-  }
+  ]
 }

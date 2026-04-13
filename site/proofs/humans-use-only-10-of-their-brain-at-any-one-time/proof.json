@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_mit",
-      "label": "MIT McGovern Institute for Brain Research: labels the 10% claim a myth"
-    },
-    "B2": {
-      "key": "source_britannica",
-      "label": "Encyclopaedia Britannica: states entire brain is in use at all times"
-    },
-    "B3": {
-      "key": "source_sciam",
-      "label": "Scientific American: characterizes the 10-percent claim as a myth"
-    },
-    "A1": {
-      "label": "Source count: independent authoritative sources rejecting the 10% claim",
-      "method": "sum(confirmations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "human brain usage",
     "property": "Whether scientific consensus holds that only 10% of the brain is active at any given moment",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Humans use only 10% of their brain at any one time.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_mit",
-      "source_name": "MIT McGovern Institute for Brain Research",
-      "url": "https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/",
-      "quote": "But the idea that we use 10 percent of our brain is 100 percent a myth.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "mit.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "MIT McGovern Institute for Brain Research: labels the 10% claim a myth",
+      "sub_claim": null,
+      "source": {
+        "name": "MIT McGovern Institute for Brain Research",
+        "url": "https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/",
+        "quote": "But the idea that we use 10 percent of our brain is 100 percent a myth."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "mit.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "keyword confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "But the idea that we use 10 percent of our brain is 100 percent a myth."
       }
     },
     "B2": {
-      "source_key": "source_britannica",
-      "source_name": "Encyclopaedia Britannica",
-      "url": "https://www.britannica.com/story/do-we-really-use-only-10-percent-of-our-brain",
-      "quote": "But the truth is that we use all of our brain all of the time.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "britannica.com",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Encyclopaedia Britannica: states entire brain is in use at all times",
+      "sub_claim": null,
+      "source": {
+        "name": "Encyclopaedia Britannica",
+        "url": "https://www.britannica.com/story/do-we-really-use-only-10-percent-of-our-brain",
+        "quote": "But the truth is that we use all of our brain all of the time."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "britannica.com",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "keyword confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "But the truth is that we use all of our brain all of the time."
       }
     },
     "B3": {
-      "source_key": "source_sciam",
-      "source_name": "Scientific American",
-      "url": "https://www.scientificamerican.com/article/do-we-really-use-only-10/",
-      "quote": "the 10-percent myth is one of those hopeful shibboleths that refuses to die",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "scientificamerican.com",
-        "source_type": "major_news",
-        "tier": 3,
-        "flags": [],
-        "note": "Major news organization"
+      "type": "empirical",
+      "label": "Scientific American: characterizes the 10-percent claim as a myth",
+      "sub_claim": null,
+      "source": {
+        "name": "Scientific American",
+        "url": "https://www.scientificamerican.com/article/do-we-really-use-only-10/",
+        "quote": "the 10-percent myth is one of those hopeful shibboleths that refuses to die"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "scientificamerican.com",
+          "source_type": "major_news",
+          "tier": 3,
+          "flags": [],
+          "note": "Major news organization"
+        }
+      },
+      "extraction": {
+        "value": "keyword confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "the 10-percent myth is one of those hopeful shibboleths that refuses to die"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "keyword confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "But the idea that we use 10 percent of our brain is 100 percent a myth."
     },
-    "B2": {
-      "value": "keyword confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "But the truth is that we use all of our brain all of the time."
-    },
-    "B3": {
-      "value": "keyword confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "the 10-percent myth is one of those hopeful shibboleths that refuses to die"
+    "A1": {
+      "type": "computed",
+      "label": "Source count: independent authoritative sources rejecting the 10% claim",
+      "sub_claim": null,
+      "method": "sum(confirmations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -102,7 +108,8 @@
       "description": "Independent source agreement on claim rejection",
       "n_sources": 3,
       "n_confirming": 3,
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -125,7 +132,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirming": 3,
     "threshold": 3,

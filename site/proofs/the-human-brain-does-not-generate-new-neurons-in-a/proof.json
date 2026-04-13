@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "moreno_jimenez_2019",
-      "label": "Moreno-Jim\u00e9nez et al. 2019, Nature Medicine \u2014 primary research article: identified thousands of immature neurons in the dentate gyrus of healthy humans up to the 9th decade"
-    },
-    "B2": {
-      "key": "kempermann_2018",
-      "label": "Kempermann et al. 2018, Cell Stem Cell \u2014 18-author consensus review: no reason to abandon the idea that adult-generated neurons contribute across the human life span"
-    },
-    "B3": {
-      "key": "llorens_martin_2021",
-      "label": "Llorens-Mart\u00edn et al. 2021, Journal of Neuroscience \u2014 primary research article: demonstrates AHN is a robust phenomenon in the human hippocampus during physiological and pathologic aging"
-    },
-    "A1": {
-      "label": "Count of independent sources confirming adult neurogenesis in humans (rejecting the claim)",
-      "method": "sum(confirmations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "The human brain",
     "property": "generates new neurons in adulthood (adult hippocampal neurogenesis, AHN)",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "The human brain does not generate new neurons in adulthood.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "moreno_jimenez_2019",
-      "source_name": "Moreno-Jim\u00e9nez et al. 2019, Nature Medicine (PubMed abstract)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/30911133/",
-      "quote": "we identified thousands of immature neurons in the DG of neurologically healthy human subjects up to the ninth decade of life",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Moreno-Jim\u00e9nez et al. 2019, Nature Medicine \u2014 primary research article: identified thousands of immature neurons in the dentate gyrus of healthy humans up to the 9th decade",
+      "sub_claim": null,
+      "source": {
+        "name": "Moreno-Jim\u00e9nez et al. 2019, Nature Medicine (PubMed abstract)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30911133/",
+        "quote": "we identified thousands of immature neurons in the DG of neurologically healthy human subjects up to the ninth decade of life"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "keyword confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "we identified thousands of immature neurons in the DG of neurologically healthy "
       }
     },
     "B2": {
-      "source_key": "kempermann_2018",
-      "source_name": "Kempermann et al. 2018, Cell Stem Cell (PMC)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6035081/",
-      "quote": "there is currently no reason to abandon the idea that adult-generated neurons make important functional contributions to neural plasticity and cognition across the human life span",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Kempermann et al. 2018, Cell Stem Cell \u2014 18-author consensus review: no reason to abandon the idea that adult-generated neurons contribute across the human life span",
+      "sub_claim": null,
+      "source": {
+        "name": "Kempermann et al. 2018, Cell Stem Cell (PMC)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6035081/",
+        "quote": "there is currently no reason to abandon the idea that adult-generated neurons make important functional contributions to neural plasticity and cognition across the human life span"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "keyword confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "there is currently no reason to abandon the idea that adult-generated neurons ma"
       }
     },
     "B3": {
-      "source_key": "llorens_martin_2021",
-      "source_name": "Llorens-Mart\u00edn et al. 2021, Journal of Neuroscience (PMC)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8018741/",
-      "quote": "adult neurogenesis is a robust phenomenon that occurs in the human hippocampus during physiological and pathologic aging",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Llorens-Mart\u00edn et al. 2021, Journal of Neuroscience \u2014 primary research article: demonstrates AHN is a robust phenomenon in the human hippocampus during physiological and pathologic aging",
+      "sub_claim": null,
+      "source": {
+        "name": "Llorens-Mart\u00edn et al. 2021, Journal of Neuroscience (PMC)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8018741/",
+        "quote": "adult neurogenesis is a robust phenomenon that occurs in the human hippocampus during physiological and pathologic aging"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "keyword confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "adult neurogenesis is a robust phenomenon that occurs in the human hippocampus d"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "keyword confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "we identified thousands of immature neurons in the DG of neurologically healthy "
     },
-    "B2": {
-      "value": "keyword confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "there is currently no reason to abandon the idea that adult-generated neurons ma"
-    },
-    "B3": {
-      "value": "keyword confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "adult neurogenesis is a robust phenomenon that occurs in the human hippocampus d"
+    "A1": {
+      "type": "computed",
+      "label": "Count of independent sources confirming adult neurogenesis in humans (rejecting the claim)",
+      "sub_claim": null,
+      "method": "sum(confirmations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -102,7 +108,8 @@
       "description": "Independent source agreement: all three sources confirm adult neurogenesis in humans",
       "n_sources": 3,
       "n_confirming": 3,
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -125,7 +132,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirming": 3,
     "threshold": 3,

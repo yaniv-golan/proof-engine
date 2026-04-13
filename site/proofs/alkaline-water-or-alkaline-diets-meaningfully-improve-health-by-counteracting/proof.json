@@ -1,40 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_source_a",
-      "label": "SC1: Harvard Health — alkaline water cannot durably change blood pH"
-    },
-    "B2": {
-      "key": "sc1_source_b",
-      "label": "SC1: MD Anderson Cancer Center — dietary changes don't affect blood pH"
-    },
-    "B3": {
-      "key": "sc1_source_c",
-      "label": "SC1: PMC/Schwalfenberg 2011 — body maintains steady blood pH via renal and respiratory mechanisms"
-    },
-    "B4": {
-      "key": "sc2_source_a",
-      "label": "SC2: De Gruyter systematic review 2023 — no additional health effects of alkaline water vs mineral water"
-    },
-    "B5": {
-      "key": "sc2_source_b",
-      "label": "SC2: British Journal of Nutrition / Fenton & Huang 2016 — alkaline promotion not justified for cancer"
-    },
-    "B6": {
-      "key": "sc2_source_c",
-      "label": "SC2: PMC/Schwalfenberg 2011 — no substantial evidence alkaline diet improves bone health"
-    },
-    "A1": {
-      "label": "SC1 verified disproof source count",
-      "method": "count(verified SC1 disproof citations) = 3",
-      "result": "3"
-    },
-    "A2": {
-      "label": "SC2 verified disproof source count",
-      "method": "count(verified SC2 disproof citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Alkaline water and alkaline diets",
     "sub_claims": [
@@ -58,140 +23,190 @@
     "operator_note": "The claim uses OR to name two interventions (alkaline water, alkaline diets), both claimed to work through the same mechanism ('counteracting body acidity'). Disproving an OR claim requires showing that NEITHER intervention achieves the stated mechanism (SC1) nor produces meaningful health improvements (SC2). The compound claim is DISPROVED when both sub-claims individually meet their disproof thresholds."
   },
   "claim_natural": "Alkaline water or alkaline diets meaningfully improve health by counteracting body acidity",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_source_a",
-      "source_name": "Harvard Health Publishing",
-      "url": "https://www.health.harvard.edu/staying-healthy/is-alkaline-water-better",
-      "quote": "Even if you drank enough alkaline water to slightly raise the pH of your blood, your kidneys would quickly go into action to rebalance your blood pH.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "harvard.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "SC1: Harvard Health \u2014 alkaline water cannot durably change blood pH",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Harvard Health Publishing",
+        "url": "https://www.health.harvard.edu/staying-healthy/is-alkaline-water-better",
+        "quote": "Even if you drank enough alkaline water to slightly raise the pH of your blood, your kidneys would quickly go into action to rebalance your blood pH."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "harvard.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Even if you drank enough alkaline water to slightly raise the pH of your blood, "
       }
     },
     "B2": {
-      "source_key": "sc1_source_b",
-      "source_name": "MD Anderson Cancer Center",
-      "url": "https://www.mdanderson.org/cancerwise/alkaline-diet--what-cancer-patients-should-know.h00-159223356.html",
-      "quote": "dietary changes will not impact the pH level of your blood",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "mdanderson.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "SC1: MD Anderson Cancer Center \u2014 dietary changes don't affect blood pH",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "MD Anderson Cancer Center",
+        "url": "https://www.mdanderson.org/cancerwise/alkaline-diet--what-cancer-patients-should-know.h00-159223356.html",
+        "quote": "dietary changes will not impact the pH level of your blood"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "mdanderson.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "dietary changes will not impact the pH level of your blood"
       }
     },
     "B3": {
-      "source_key": "sc1_source_c",
-      "source_name": "PMC — Schwalfenberg 2011, The Alkaline Diet, Journal of Environmental and Public Health",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3195546/",
-      "quote": "The human body has an amazing ability to maintain a steady pH in the blood with the main compensatory mechanisms being renal and respiratory.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: PMC/Schwalfenberg 2011 \u2014 body maintains steady blood pH via renal and respiratory mechanisms",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "PMC \u2014 Schwalfenberg 2011, The Alkaline Diet, Journal of Environmental and Public Health",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3195546/",
+        "quote": "The human body has an amazing ability to maintain a steady pH in the blood with the main compensatory mechanisms being renal and respiratory."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The human body has an amazing ability to maintain a steady pH in the blood with "
       }
     },
     "B4": {
-      "source_key": "sc2_source_a",
-      "source_name": "De Gruyter — systematic review, Reviews on Environmental Health 2023",
-      "url": "https://www.degruyterbrill.com/document/doi/10.1515/reveh-2022-0057/html?lang=en",
-      "quote": "Recent evidences do not prove any additional health effects of alkaline, oxygenated, or demineralized water compared to mineral water.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "degruyterbrill.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "SC2: De Gruyter systematic review 2023 \u2014 no additional health effects of alkaline water vs mineral water",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "De Gruyter \u2014 systematic review, Reviews on Environmental Health 2023",
+        "url": "https://www.degruyterbrill.com/document/doi/10.1515/reveh-2022-0057/html?lang=en",
+        "quote": "Recent evidences do not prove any additional health effects of alkaline, oxygenated, or demineralized water compared to mineral water."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "degruyterbrill.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Recent evidences do not prove any additional health effects of alkaline, oxygena"
       }
     },
     "B5": {
-      "source_key": "sc2_source_b",
-      "source_name": "PubMed — Fenton & Huang 2016, British Journal of Nutrition (systematic review)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/27297008/",
-      "quote": "Promotion of alkaline diet and alkaline water to the public for cancer prevention or treatment is not justified",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: British Journal of Nutrition / Fenton & Huang 2016 \u2014 alkaline promotion not justified for cancer",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "PubMed \u2014 Fenton & Huang 2016, British Journal of Nutrition (systematic review)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27297008/",
+        "quote": "Promotion of alkaline diet and alkaline water to the public for cancer prevention or treatment is not justified"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Promotion of alkaline diet and alkaline water to the public for cancer preventio"
       }
     },
     "B6": {
-      "source_key": "sc2_source_c",
-      "source_name": "PMC — Schwalfenberg 2011, The Alkaline Diet, Journal of Environmental and Public Health",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3195546/",
-      "quote": "There is no substantial evidence that this improves bone health or protects from osteoporosis.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2: PMC/Schwalfenberg 2011 \u2014 no substantial evidence alkaline diet improves bone health",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "PMC \u2014 Schwalfenberg 2011, The Alkaline Diet, Journal of Environmental and Public Health",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3195546/",
+        "quote": "There is no substantial evidence that this improves bone health or protects from osteoporosis."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "There is no substantial evidence that this improves bone health or protects from"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Even if you drank enough alkaline water to slightly raise the pH of your blood, "
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "dietary changes will not impact the pH level of your blood"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified disproof source count",
+      "sub_claim": "SC1",
+      "method": "count(verified SC1 disproof citations) = 3",
+      "result": "3",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The human body has an amazing ability to maintain a steady pH in the blood with "
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Recent evidences do not prove any additional health effects of alkaline, oxygena"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Promotion of alkaline diet and alkaline water to the public for cancer preventio"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "There is no substantial evidence that this improves bone health or protects from"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified disproof source count",
+      "sub_claim": "SC2",
+      "method": "count(verified SC2 disproof citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -204,7 +219,8 @@
         "sc1_source_b": "verified",
         "sc1_source_c": "verified"
       },
-      "independence_note": "Harvard Health Publishing, MD Anderson Cancer Center, and Schwalfenberg 2011 (PMC) are independently published by different institutions."
+      "independence_note": "Harvard Health Publishing, MD Anderson Cancer Center, and Schwalfenberg 2011 (PMC) are independently published by different institutions.",
+      "fact_ids": []
     },
     {
       "description": "SC2: independent disproof sources consulted",
@@ -215,9 +231,56 @@
         "sc2_source_b": "verified",
         "sc2_source_c": "verified"
       },
-      "independence_note": "De Gruyter systematic review (2023), Fenton & Huang 2016 (British Journal of Nutrition), and Schwalfenberg 2011 (PMC) are independently published. Note: Schwalfenberg 2011 appears in both SC1 and SC2 for different facts; each SC has two additional independent institutional sources."
+      "independence_note": "De Gruyter systematic review (2023), Fenton & Huang 2016 (British Journal of Nutrition), and Schwalfenberg 2011 (PMC) are independently published. Note: Schwalfenberg 2011 appears in both SC1 and SC2 for different facts; each SC has two additional independent institutional sources.",
+      "fact_ids": []
     }
   ],
+  "adversarial_checks": [
+    {
+      "question": "Do any randomized controlled trials demonstrate meaningful health benefits from alkaline water or alkaline diet?",
+      "verification_performed": "Searched PubMed and Google Scholar for 'alkaline water RCT health benefits', 'alkaline diet randomized controlled trial outcomes'. Found the De Gruyter 2023 systematic review explicitly concluding no RCT evidence of benefit. The IJAHS systematic review (2022) noted that the majority of studies are animal models, in vitro work, or small exploratory human trials \u2014 not large-scale RCTs.",
+      "finding": "No large-scale RCTs demonstrate meaningful health benefits. The 2023 De Gruyter systematic review, after reviewing available controlled studies, found no significant difference in blood parameters, gut microbiota, or fitness between alkaline water and mineral water groups. This finding is consistent with SC2 disproof.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does alkaline water show benefits for specific conditions like acid reflux (GERD)?",
+      "verification_performed": "Searched for 'alkaline water GERD acid reflux clinical evidence'. Found a 2012 in vitro study (Koufman & Johnston) showing alkaline water (pH 8.8) may inactivate pepsin, and a small 2016 observational study. Also found the American College of Gastroenterology does not list alkaline water in GERD treatment guidelines.",
+      "finding": "There is limited in vitro and small observational evidence suggesting alkaline water may reduce pepsin activity relevant to laryngopharyngeal reflux. However: (a) this is a specific condition, not 'meaningful health improvement' in general; (b) the evidence is not from large RCTs; (c) even this narrow claim does not involve 'counteracting body acidity' (blood pH) \u2014 it acts locally in the esophagus/stomach. This does not restore the mechanistic premise (SC1) or generalize to the broad health claim (SC2).",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does observational evidence show alkaline water consumers have better health outcomes?",
+      "verification_performed": "Searched for 'alkaline water observational study health outcomes'. Found the PLOS One 2022 cross-sectional study (PMC9621423) on postmenopausal women showing lower fasting blood glucose and triglycerides in alkaline water consumers.",
+      "finding": "The PLOS One 2022 cross-sectional study found lower fasting blood glucose and triglycerides in alkaline water drinkers among postmenopausal women. However: (a) cross-sectional studies cannot establish causation; (b) alkaline water consumers may differ systematically in lifestyle (healthier diet, more exercise) \u2014 confounding is not controlled; (c) this single observational study is outweighed by the systematic reviews finding no significant effects in controlled studies. This does not break SC2 disproof, which is based on systematic review consensus, not isolated observational data.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the alkaline diet have health benefits, even if not through pH change? Does this support the original claim?",
+      "verification_performed": "Searched for 'alkaline diet health benefits mechanism'. Found MD Anderson and the PMC 2011 Schwalfenberg review both acknowledging that alkaline diets (rich in fruits, vegetables, nuts, legumes) may have health benefits \u2014 but attributing these to antioxidants, phytochemicals, and the K/Na ratio, NOT to alkalizing the blood.",
+      "finding": "The alkaline diet may have health benefits, but these are attributed to increased fruit and vegetable intake and reduced processed food \u2014 not to any pH-changing effect. MD Anderson states: 'these benefits are not caused by alkalizing the body.' Since the original claim specifically asserts the mechanism 'by counteracting body acidity,' and the actual mechanism (SC1) is disproved, the existence of diet-quality benefits does not rescue the claim as stated.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "n_sc1_confirmed": 3,
+    "n_sc2_confirmed": 3,
+    "n_holding": 2,
+    "n_total": 2,
+    "claim_holds": true,
+    "is_disproof": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.3.1",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-01"
+  },
   "sub_claim_results": [
     {
       "id": "SC1",
@@ -233,46 +296,5 @@
       "holds": true,
       "description": "health benefit (no meaningful improvement shown in systematic reviews)"
     }
-  ],
-  "adversarial_checks": [
-    {
-      "question": "Do any randomized controlled trials demonstrate meaningful health benefits from alkaline water or alkaline diet?",
-      "verification_performed": "Searched PubMed and Google Scholar for 'alkaline water RCT health benefits', 'alkaline diet randomized controlled trial outcomes'. Found the De Gruyter 2023 systematic review explicitly concluding no RCT evidence of benefit. The IJAHS systematic review (2022) noted that the majority of studies are animal models, in vitro work, or small exploratory human trials — not large-scale RCTs.",
-      "finding": "No large-scale RCTs demonstrate meaningful health benefits. The 2023 De Gruyter systematic review, after reviewing available controlled studies, found no significant difference in blood parameters, gut microbiota, or fitness between alkaline water and mineral water groups. This finding is consistent with SC2 disproof.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Does alkaline water show benefits for specific conditions like acid reflux (GERD)?",
-      "verification_performed": "Searched for 'alkaline water GERD acid reflux clinical evidence'. Found a 2012 in vitro study (Koufman & Johnston) showing alkaline water (pH 8.8) may inactivate pepsin, and a small 2016 observational study. Also found the American College of Gastroenterology does not list alkaline water in GERD treatment guidelines.",
-      "finding": "There is limited in vitro and small observational evidence suggesting alkaline water may reduce pepsin activity relevant to laryngopharyngeal reflux. However: (a) this is a specific condition, not 'meaningful health improvement' in general; (b) the evidence is not from large RCTs; (c) even this narrow claim does not involve 'counteracting body acidity' (blood pH) — it acts locally in the esophagus/stomach. This does not restore the mechanistic premise (SC1) or generalize to the broad health claim (SC2).",
-      "breaks_proof": false
-    },
-    {
-      "question": "Does observational evidence show alkaline water consumers have better health outcomes?",
-      "verification_performed": "Searched for 'alkaline water observational study health outcomes'. Found the PLOS One 2022 cross-sectional study (PMC9621423) on postmenopausal women showing lower fasting blood glucose and triglycerides in alkaline water consumers.",
-      "finding": "The PLOS One 2022 cross-sectional study found lower fasting blood glucose and triglycerides in alkaline water drinkers among postmenopausal women. However: (a) cross-sectional studies cannot establish causation; (b) alkaline water consumers may differ systematically in lifestyle (healthier diet, more exercise) — confounding is not controlled; (c) this single observational study is outweighed by the systematic reviews finding no significant effects in controlled studies. This does not break SC2 disproof, which is based on systematic review consensus, not isolated observational data.",
-      "breaks_proof": false
-    },
-    {
-      "question": "Does the alkaline diet have health benefits, even if not through pH change? Does this support the original claim?",
-      "verification_performed": "Searched for 'alkaline diet health benefits mechanism'. Found MD Anderson and the PMC 2011 Schwalfenberg review both acknowledging that alkaline diets (rich in fruits, vegetables, nuts, legumes) may have health benefits — but attributing these to antioxidants, phytochemicals, and the K/Na ratio, NOT to alkalizing the blood.",
-      "finding": "The alkaline diet may have health benefits, but these are attributed to increased fruit and vegetable intake and reduced processed food — not to any pH-changing effect. MD Anderson states: 'these benefits are not caused by alkalizing the body.' Since the original claim specifically asserts the mechanism 'by counteracting body acidity,' and the actual mechanism (SC1) is disproved, the existence of diet-quality benefits does not rescue the claim as stated.",
-      "breaks_proof": false
-    }
-  ],
-  "verdict": "DISPROVED",
-  "key_results": {
-    "n_sc1_confirmed": 3,
-    "n_sc2_confirmed": 3,
-    "n_holding": 2,
-    "n_total": 2,
-    "claim_holds": true,
-    "is_disproof": true
-  },
-  "generator": {
-    "name": "proof-engine",
-    "version": "1.3.1",
-    "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-04-01"
-  }
+  ]
 }

@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_a",
-      "label": "Szuhany et al. 2014 meta-analysis \u2014 exercise and BDNF effect sizes (J Psychiatric Research)"
-    },
-    "B2": {
-      "key": "source_b",
-      "label": "Cardoso et al. 2024 systematic review \u2014 aerobic exercise and neuroplasticity (Int J Exercise Science)"
-    },
-    "B3": {
-      "key": "source_c",
-      "label": "Marzbani et al. 2016 comprehensive review \u2014 neurofeedback efficacy limitations (Basic Clin Neurosci)"
-    },
-    "B4": {
-      "key": "source_d",
-      "label": "Orndorff-Plunkett et al. 2017 \u2014 neurofeedback versus sham controls (Brain Sciences)"
-    },
-    "A1": {
-      "label": "Count of independent sources rejecting neurofeedback-as-superior claim",
-      "method": "sum(confirmations) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Neurofeedback training",
     "property": "scientific evidence quality for neuroplasticity enhancement in adults, compared to aerobic exercise and sleep optimization",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "The superior method for enhancing neuroplasticity in adults is neurofeedback training compared to exercise or sleep optimization.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_a",
-      "source_name": "Szuhany et al. 2014, Journal of Psychiatric Research (PMC4314337)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4314337/",
-      "quote": "Results demonstrated a moderate effect size for increases in BDNF following a single session of exercise",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Szuhany et al. 2014 meta-analysis \u2014 exercise and BDNF effect sizes (J Psychiatric Research)",
+      "sub_claim": null,
+      "source": {
+        "name": "Szuhany et al. 2014, Journal of Psychiatric Research (PMC4314337)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4314337/",
+        "quote": "Results demonstrated a moderate effect size for increases in BDNF following a single session of exercise"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "keyword confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "Results demonstrated a moderate effect size for increases in BDNF following a si"
       }
     },
     "B2": {
-      "source_key": "source_b",
-      "source_name": "Cardoso et al. 2024, International Journal of Exercise Science (PMC11385284)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11385284/",
-      "quote": "moderate to high intensity aerobic exercise (AE), increases the level of peripheral BDNF",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Cardoso et al. 2024 systematic review \u2014 aerobic exercise and neuroplasticity (Int J Exercise Science)",
+      "sub_claim": null,
+      "source": {
+        "name": "Cardoso et al. 2024, International Journal of Exercise Science (PMC11385284)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11385284/",
+        "quote": "moderate to high intensity aerobic exercise (AE), increases the level of peripheral BDNF"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "keyword confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "moderate to high intensity aerobic exercise (AE), increases the level of periphe"
       }
     },
     "B3": {
-      "source_key": "source_c",
-      "source_name": "Marzbani et al. 2016, Basic and Clinical Neuroscience (PMC4892319)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4892319/",
-      "quote": "current research does not support conclusive results about its efficacy",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Marzbani et al. 2016 comprehensive review \u2014 neurofeedback efficacy limitations (Basic Clin Neurosci)",
+      "sub_claim": null,
+      "source": {
+        "name": "Marzbani et al. 2016, Basic and Clinical Neuroscience (PMC4892319)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4892319/",
+        "quote": "current research does not support conclusive results about its efficacy"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "keyword confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "current research does not support conclusive results about its efficacy"
       }
     },
     "B4": {
-      "source_key": "source_d",
-      "source_name": "Orndorff-Plunkett et al. 2017, Brain Sciences (PMC5575615)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5575615/",
-      "quote": "recent accumulating evidence seems to refute the clinical superiority of feedback training over sham treatment",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Orndorff-Plunkett et al. 2017 \u2014 neurofeedback versus sham controls (Brain Sciences)",
+      "sub_claim": null,
+      "source": {
+        "name": "Orndorff-Plunkett et al. 2017, Brain Sciences (PMC5575615)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5575615/",
+        "quote": "recent accumulating evidence seems to refute the clinical superiority of feedback training over sham treatment"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "keyword confirmed",
+        "value_in_quote": true,
+        "quote_snippet": "recent accumulating evidence seems to refute the clinical superiority of feedbac"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "keyword confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "Results demonstrated a moderate effect size for increases in BDNF following a si"
     },
-    "B2": {
-      "value": "keyword confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "moderate to high intensity aerobic exercise (AE), increases the level of periphe"
-    },
-    "B3": {
-      "value": "keyword confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "current research does not support conclusive results about its efficacy"
-    },
-    "B4": {
-      "value": "keyword confirmed",
-      "value_in_quote": true,
-      "quote_snippet": "recent accumulating evidence seems to refute the clinical superiority of feedbac"
+    "A1": {
+      "type": "computed",
+      "label": "Count of independent sources rejecting neurofeedback-as-superior claim",
+      "sub_claim": null,
+      "method": "sum(confirmations) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -129,7 +137,8 @@
       "n_sources": 4,
       "n_confirming": 4,
       "agreement": true,
-      "note": "B1 (Szuhany 2014) and B2 (Cardoso 2024) are independent research groups using independent datasets. B3 (Marzbani 2016) and B4 (Orndorff-Plunkett 2017) are independent reviews of neurofeedback literature."
+      "note": "B1 (Szuhany 2014) and B2 (Cardoso 2024) are independent research groups using independent datasets. B3 (Marzbani 2016) and B4 (Orndorff-Plunkett 2017) are independent reviews of neurofeedback literature.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -152,7 +161,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirming": 4,
     "threshold": 3,

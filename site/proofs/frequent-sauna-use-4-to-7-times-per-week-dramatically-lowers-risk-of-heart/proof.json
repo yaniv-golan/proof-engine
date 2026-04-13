@@ -1,54 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_laukkanen2015",
-      "label": "SC1 Source 1: Laukkanen et al. 2015, JAMA Internal Medicine (SCD hazard ratio, KIHD cohort)"
-    },
-    "B2": {
-      "key": "sc1_laukkanen2018",
-      "label": "SC1 Source 2: Laukkanen et al. 2018, BMC Medicine (CVD mortality hazard ratio, OSTPRE cohort)"
-    },
-    "B3": {
-      "key": "sc1_mayo2018",
-      "label": "SC1 Source 3: Laukkanen JA et al. 2018, Mayo Clinic Proceedings (systematic review)"
-    },
-    "B4": {
-      "key": "sc2_laukkanen2017",
-      "label": "SC2 Source 1: Laukkanen et al. 2017, Age and Ageing (dementia HR, KIHD cohort)"
-    },
-    "B5": {
-      "key": "sc2_sciencedaily",
-      "label": "SC2 Source 2: ScienceDaily 2016 (dementia risk reduction, independent news report)"
-    },
-    "B6": {
-      "key": "sc3_laukkanen2015",
-      "label": "SC3 Source 1: Laukkanen et al. 2015, JAMA Internal Medicine (all-cause mortality conclusion)"
-    },
-    "B7": {
-      "key": "sc3_harvard",
-      "label": "SC3 Source 2: Harvard Health Publishing 2015 (all-cause mortality raw percentages)"
-    },
-    "A1": {
-      "label": "SC1 verified source count (heart disease association)",
-      "method": "count(sc1 citations with status in ('verified', 'partial'))",
-      "result": "3 of 3 sources verified"
-    },
-    "A2": {
-      "label": "SC2 verified source count (dementia association)",
-      "method": "count(sc2 citations with status in ('verified', 'partial'))",
-      "result": "2 of 2 sources verified"
-    },
-    "A3": {
-      "label": "SC3 verified source count (all-cause mortality association)",
-      "method": "count(sc3 citations with status in ('verified', 'partial'))",
-      "result": "2 of 2 sources verified"
-    },
-    "A4": {
-      "label": "SC4 verified source count (causal mechanism via RCT/causal inference)",
-      "method": "count(sc4 citations with status in ('verified', 'partial')) — expected 0 (no RCTs with mortality endpoints)",
-      "result": "0 of 0 sources verified"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "frequent sauna use (4-7 sessions per week)",
     "sub_claims": [
@@ -86,162 +37,234 @@
     "operator_note": "All four sub-claims must hold for PROVED verdict. SC1-SC3 are SC-association sub-claims; SC4 is SC-causation. Causal language in 'lowers risk' mandates this decomposition. If SC1-SC3 hold but SC4 does not: verdict is PARTIALLY VERIFIED."
   },
   "claim_natural": "Frequent sauna use 4 to 7 times per week dramatically lowers risk of heart disease, dementia, and all-cause mortality.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_laukkanen2015",
-      "source_name": "PubMed — Laukkanen T et al. 2015, JAMA Internal Medicine (KIHD cohort, n=2315, median follow-up 20.7 yr)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/25705824/",
-      "quote": "the hazard ratio of SCD was 0.78 (95% CI, 0.57-1.07) for 2 to 3 sauna bathing sessions per week and 0.37 (95% CI, 0.18-0.75) for 4 to 7 sauna bathing sessions per week",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1 Source 1: Laukkanen et al. 2015, JAMA Internal Medicine (SCD hazard ratio, KIHD cohort)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "PubMed \u2014 Laukkanen T et al. 2015, JAMA Internal Medicine (KIHD cohort, n=2315, median follow-up 20.7 yr)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25705824/",
+        "quote": "the hazard ratio of SCD was 0.78 (95% CI, 0.57-1.07) for 2 to 3 sauna bathing sessions per week and 0.37 (95% CI, 0.18-0.75) for 4 to 7 sauna bathing sessions per week"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the hazard ratio of SCD was 0.78 (95% CI, 0.57-1.07) for 2 to 3 sauna bathing se"
       }
     },
     "B2": {
-      "source_key": "sc1_laukkanen2018",
-      "source_name": "PMC — Laukkanen T et al. 2018, BMC Medicine (OSTPRE cohort, n=1688, median follow-up 15.0 yr)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6262976/",
-      "quote": "HRs (95% CIs) were 0.71 (0.52 to 0.98) and 0.30 (0.14 to 0.64) for participants with two to three and four to seven sauna sessions",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 81.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1 Source 2: Laukkanen et al. 2018, BMC Medicine (CVD mortality hazard ratio, OSTPRE cohort)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "PMC \u2014 Laukkanen T et al. 2018, BMC Medicine (OSTPRE cohort, n=1688, median follow-up 15.0 yr)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6262976/",
+        "quote": "HRs (95% CIs) were 0.71 (0.52 to 0.98) and 0.30 (0.14 to 0.64) for participants with two to three and four to seven sauna sessions"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 81.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "HRs (95% CIs) were 0.71 (0.52 to 0.98) and 0.30 (0.14 to 0.64) for participants "
       }
     },
     "B3": {
-      "source_key": "sc1_mayo2018",
-      "source_name": "PubMed — Laukkanen JA et al. 2018, Mayo Clinic Proceedings (systematic review)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/30077204/",
-      "quote": "sauna bathing may be linked to several health benefits, which include reduction in the risk of vascular diseases such as high blood pressure, cardiovascular disease, and neurocognitive diseases",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1 Source 3: Laukkanen JA et al. 2018, Mayo Clinic Proceedings (systematic review)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "PubMed \u2014 Laukkanen JA et al. 2018, Mayo Clinic Proceedings (systematic review)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30077204/",
+        "quote": "sauna bathing may be linked to several health benefits, which include reduction in the risk of vascular diseases such as high blood pressure, cardiovascular disease, and neurocognitive diseases"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "sauna bathing may be linked to several health benefits, which include reduction "
       }
     },
     "B4": {
-      "source_key": "sc2_laukkanen2017",
-      "source_name": "PubMed — Laukkanen T et al. 2017, Age and Ageing (KIHD cohort, n=2315, median follow-up 20.7 yr)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/27932366/",
-      "quote": "the HR for dementia was 0.78 (95% CI: 0.57-1.06) for 2-3 sauna bathing sessions per week and 0.34 (95% CI: 0.16-0.71) for 4-7 sauna bathing sessions per week",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC2 Source 1: Laukkanen et al. 2017, Age and Ageing (dementia HR, KIHD cohort)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "PubMed \u2014 Laukkanen T et al. 2017, Age and Ageing (KIHD cohort, n=2315, median follow-up 20.7 yr)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27932366/",
+        "quote": "the HR for dementia was 0.78 (95% CI: 0.57-1.06) for 2-3 sauna bathing sessions per week and 0.34 (95% CI: 0.16-0.71) for 4-7 sauna bathing sessions per week"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the HR for dementia was 0.78 (95% CI: 0.57-1.06) for 2-3 sauna bathing sessions "
       }
     },
     "B5": {
-      "source_key": "sc2_sciencedaily",
-      "source_name": "ScienceDaily — Frequent sauna bathing may protect men against dementia, Finnish study suggests (December 2016)",
-      "url": "https://www.sciencedaily.com/releases/2016/12/161216114143.htm",
-      "quote": "men taking a sauna 4-7 times a week were 66% less likely to be diagnosed with dementia than those taking a sauna once a week",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "sciencedaily.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "SC2 Source 2: ScienceDaily 2016 (dementia risk reduction, independent news report)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "ScienceDaily \u2014 Frequent sauna bathing may protect men against dementia, Finnish study suggests (December 2016)",
+        "url": "https://www.sciencedaily.com/releases/2016/12/161216114143.htm",
+        "quote": "men taking a sauna 4-7 times a week were 66% less likely to be diagnosed with dementia than those taking a sauna once a week"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "sciencedaily.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "men taking a sauna 4-7 times a week were 66% less likely to be diagnosed with de"
       }
     },
     "B6": {
-      "source_key": "sc3_laukkanen2015",
-      "source_name": "PubMed — Laukkanen T et al. 2015, JAMA Internal Medicine",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/25705824/",
-      "quote": "Increased frequency of sauna bathing is associated with a reduced risk of SCD, CHD, CVD, and all-cause mortality.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC3 Source 1: Laukkanen et al. 2015, JAMA Internal Medicine (all-cause mortality conclusion)",
+      "sub_claim": "SC3",
+      "source": {
+        "name": "PubMed \u2014 Laukkanen T et al. 2015, JAMA Internal Medicine",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25705824/",
+        "quote": "Increased frequency of sauna bathing is associated with a reduced risk of SCD, CHD, CVD, and all-cause mortality."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Increased frequency of sauna bathing is associated with a reduced risk of SCD, C"
       }
     },
     "B7": {
-      "source_key": "sc3_harvard",
-      "source_name": "Harvard Health Publishing — Sauna use linked to longer life, fewer fatal heart problems (February 2015)",
-      "url": "https://www.health.harvard.edu/blog/sauna-use-linked-longer-life-fewer-fatal-heart-problems-201502257755",
-      "quote": "49% of men who went to a sauna once a week died, compared with 38% of those who went two to three times a week and just 31% of those who went four to seven times a week.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "harvard.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "SC3 Source 2: Harvard Health Publishing 2015 (all-cause mortality raw percentages)",
+      "sub_claim": "SC3",
+      "source": {
+        "name": "Harvard Health Publishing \u2014 Sauna use linked to longer life, fewer fatal heart problems (February 2015)",
+        "url": "https://www.health.harvard.edu/blog/sauna-use-linked-longer-life-fewer-fatal-heart-problems-201502257755",
+        "quote": "49% of men who went to a sauna once a week died, compared with 38% of those who went two to three times a week and just 31% of those who went four to seven times a week."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "harvard.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "49% of men who went to a sauna once a week died, compared with 38% of those who "
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the hazard ratio of SCD was 0.78 (95% CI, 0.57-1.07) for 2 to 3 sauna bathing se"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "HRs (95% CIs) were 0.71 (0.52 to 0.98) and 0.30 (0.14 to 0.64) for participants "
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count (heart disease association)",
+      "sub_claim": "SC1",
+      "method": "count(sc1 citations with status in ('verified', 'partial'))",
+      "result": "3 of 3 sources verified",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "sauna bathing may be linked to several health benefits, which include reduction "
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count (dementia association)",
+      "sub_claim": "SC2",
+      "method": "count(sc2 citations with status in ('verified', 'partial'))",
+      "result": "2 of 2 sources verified",
+      "depends_on": []
     },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the HR for dementia was 0.78 (95% CI: 0.57-1.06) for 2-3 sauna bathing sessions "
+    "A3": {
+      "type": "computed",
+      "label": "SC3 verified source count (all-cause mortality association)",
+      "sub_claim": "SC3",
+      "method": "count(sc3 citations with status in ('verified', 'partial'))",
+      "result": "2 of 2 sources verified",
+      "depends_on": []
     },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "men taking a sauna 4-7 times a week were 66% less likely to be diagnosed with de"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Increased frequency of sauna bathing is associated with a reduced risk of SCD, C"
-    },
-    "B7": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "49% of men who went to a sauna once a week died, compared with 38% of those who "
+    "A4": {
+      "type": "computed",
+      "label": "SC4 verified source count (causal mechanism via RCT/causal inference)",
+      "sub_claim": "SC4",
+      "method": "count(sc4 citations with status in ('verified', 'partial')) \u2014 expected 0 (no RCTs with mortality endpoints)",
+      "result": "0 of 0 sources verified",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -254,7 +277,8 @@
         "sc1_laukkanen2018": "verified",
         "sc1_mayo2018": "verified"
       },
-      "independence_note": "B1 (KIHD cohort, men only, 1984-1989) and B2 (OSTPRE cohort, men and women, 1998-2001) are independent prospective cohorts. B3 is an independent systematic review. All three are published in separate peer-reviewed journals."
+      "independence_note": "B1 (KIHD cohort, men only, 1984-1989) and B2 (OSTPRE cohort, men and women, 1998-2001) are independent prospective cohorts. B3 is an independent systematic review. All three are published in separate peer-reviewed journals.",
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources consulted for dementia association",
@@ -264,7 +288,8 @@
         "sc2_laukkanen2017": "verified",
         "sc2_sciencedaily": "verified"
       },
-      "independence_note": "B4 is the primary prospective cohort study (KIHD/Laukkanen 2017, Age and Ageing). B5 (ScienceDaily) is an independent scientific news service that reported on the same study -- not a separate primary cohort. Domain scarcity (single primary cohort) is documented in SC2 operator_note; threshold reduced to 2 accordingly."
+      "independence_note": "B4 is the primary prospective cohort study (KIHD/Laukkanen 2017, Age and Ageing). B5 (ScienceDaily) is an independent scientific news service that reported on the same study -- not a separate primary cohort. Domain scarcity (single primary cohort) is documented in SC2 operator_note; threshold reduced to 2 accordingly.",
+      "fact_ids": []
     },
     {
       "description": "SC3: independent sources consulted for all-cause mortality",
@@ -274,40 +299,16 @@
         "sc3_laukkanen2015": "verified",
         "sc3_harvard": "verified"
       },
-      "independence_note": "B6 (Laukkanen 2015 JAMA IM, same URL as B1 but quoting the conclusion sentence about all-cause mortality) and B7 (Harvard Health) are separate publications. Note: B6 and B1 derive from the same primary paper; this is documented here. B7 independently cites the raw percentage data from that paper."
+      "independence_note": "B6 (Laukkanen 2015 JAMA IM, same URL as B1 but quoting the conclusion sentence about all-cause mortality) and B7 (Harvard Health) are separate publications. Note: B6 and B1 derive from the same primary paper; this is documented here. B7 independently cites the raw percentage data from that paper.",
+      "fact_ids": []
     },
     {
       "description": "SC4: sources for causal mechanism confirmation",
       "n_sources_consulted": 0,
       "n_sources_verified": 0,
       "sources": {},
-      "independence_note": "No empirical facts provided for SC4 because no qualifying causal-inference sources exist. The adversarial checks document RCT evidence that contradicts the proposed mechanistic pathway."
-    }
-  ],
-  "sub_claim_results": [
-    {
-      "id": "SC1",
-      "n_confirming": 3,
-      "threshold": 3,
-      "holds": true
-    },
-    {
-      "id": "SC2",
-      "n_confirming": 2,
-      "threshold": 2,
-      "holds": true
-    },
-    {
-      "id": "SC3",
-      "n_confirming": 2,
-      "threshold": 2,
-      "holds": true
-    },
-    {
-      "id": "SC4",
-      "n_confirming": 0,
-      "threshold": 3,
-      "holds": false
+      "independence_note": "No empirical facts provided for SC4 because no qualifying causal-inference sources exist. The adversarial checks document RCT evidence that contradicts the proposed mechanistic pathway.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -336,7 +337,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PARTIALLY VERIFIED",
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_holding": 3,
     "n_total": 4,
@@ -355,5 +361,31 @@
     "version": "1.3.1",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-01"
-  }
+  },
+  "sub_claim_results": [
+    {
+      "id": "SC1",
+      "n_confirming": 3,
+      "threshold": 3,
+      "holds": true
+    },
+    {
+      "id": "SC2",
+      "n_confirming": 2,
+      "threshold": 2,
+      "holds": true
+    },
+    {
+      "id": "SC3",
+      "n_confirming": 2,
+      "threshold": 2,
+      "holds": true
+    },
+    {
+      "id": "SC4",
+      "n_confirming": 0,
+      "threshold": 3,
+      "holds": false
+    }
+  ]
 }

@@ -1,40 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_nhs",
-      "label": "SC1: NHS \u2014 explicitly names UPFs acceptable in a healthy diet"
-    },
-    "B2": {
-      "key": "sc1_harvard",
-      "label": "SC1: Harvard T.H. Chan Nutrition Source \u2014 some UPFs may be useful"
-    },
-    "B3": {
-      "key": "sc1_gibney",
-      "label": "SC1: Gibney 2019 (Curr Dev Nutr) \u2014 no good/bad foods, only diets"
-    },
-    "B4": {
-      "key": "sc2_nhs",
-      "label": "SC2: NHS \u2014 recommends 'eating less' not complete avoidance"
-    },
-    "B5": {
-      "key": "sc2_who",
-      "label": "SC2: WHO Healthy Diet fact sheet \u2014 'limit' not 'avoid completely'"
-    },
-    "B6": {
-      "key": "sc2_harvard",
-      "label": "SC2: Harvard \u2014 UPF use is consumer choice, pros and cons"
-    },
-    "A1": {
-      "label": "SC1 verified disproof source count",
-      "method": "count(SC1 verified disproof citations >= 3)",
-      "result": "3"
-    },
-    "A2": {
-      "label": "SC2 verified disproof source count",
-      "method": "count(SC2 verified disproof citations >= 3)",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Ultra-processed foods (NOVA Group 4 classification)",
     "proof_direction": "disprove",
@@ -60,140 +25,190 @@
     "operator_note": "The original claim is compound: (SC1 AND SC2). Both must hold for the claim to be true. To disprove the compound AND claim, disproving either SC1 or SC2 is logically sufficient. This proof disproves both sub-claims independently."
   },
   "claim_natural": "All ultra-processed foods are inherently unhealthy and should be avoided completely.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_nhs",
-      "source_name": "NHS (UK National Health Service) \u2014 What are processed foods?",
-      "url": "https://www.nhs.uk/live-well/eat-well/how-to-eat-a-balanced-diet/what-are-processed-foods/",
-      "quote": "Some ultra-processed foods can be included in a healthy diet \u2013 such as wholemeal sliced bread, wholegrain or higher fibre breakfast cereals or baked beans.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nhs.uk",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC1: NHS \u2014 explicitly names UPFs acceptable in a healthy diet",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "NHS (UK National Health Service) \u2014 What are processed foods?",
+        "url": "https://www.nhs.uk/live-well/eat-well/how-to-eat-a-balanced-diet/what-are-processed-foods/",
+        "quote": "Some ultra-processed foods can be included in a healthy diet \u2013 such as wholemeal sliced bread, wholegrain or higher fibre breakfast cereals or baked beans."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nhs.uk",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Some ultra-processed foods can be included in a healthy diet \u2013 such as wholemeal"
       }
     },
     "B2": {
-      "source_key": "sc1_harvard",
-      "source_name": "Harvard T.H. Chan School of Public Health \u2014 The Nutrition Source: Processed Foods",
-      "url": "https://nutritionsource.hsph.harvard.edu/processed-foods/",
-      "quote": "some products may be a useful addition to a healthful diet",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "harvard.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "SC1: Harvard T.H. Chan Nutrition Source \u2014 some UPFs may be useful",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Harvard T.H. Chan School of Public Health \u2014 The Nutrition Source: Processed Foods",
+        "url": "https://nutritionsource.hsph.harvard.edu/processed-foods/",
+        "quote": "some products may be a useful addition to a healthful diet"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "harvard.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "some products may be a useful addition to a healthful diet"
       }
     },
     "B3": {
-      "source_key": "sc1_gibney",
-      "source_name": "Gibney MJ (2019), Ultra-Processed Foods: Definitions and Policy Issues, Current Developments in Nutrition, PMC6389637",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6389637/",
-      "quote": "there are good and bad diets, not good and bad foods",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "SC1: Gibney 2019 (Curr Dev Nutr) \u2014 no good/bad foods, only diets",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Gibney MJ (2019), Ultra-Processed Foods: Definitions and Policy Issues, Current Developments in Nutrition, PMC6389637",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6389637/",
+        "quote": "there are good and bad diets, not good and bad foods"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "there are good and bad diets, not good and bad foods"
       }
     },
     "B4": {
-      "source_key": "sc2_nhs",
-      "source_name": "NHS (UK National Health Service) \u2014 What are processed foods?",
-      "url": "https://www.nhs.uk/live-well/eat-well/how-to-eat-a-balanced-diet/what-are-processed-foods/",
-      "quote": "Most people would probably benefit from eating less ultra-processed foods that are high in saturated fat, salt or sugar.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nhs.uk",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "SC2: NHS \u2014 recommends 'eating less' not complete avoidance",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "NHS (UK National Health Service) \u2014 What are processed foods?",
+        "url": "https://www.nhs.uk/live-well/eat-well/how-to-eat-a-balanced-diet/what-are-processed-foods/",
+        "quote": "Most people would probably benefit from eating less ultra-processed foods that are high in saturated fat, salt or sugar."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nhs.uk",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Most people would probably benefit from eating less ultra-processed foods that a"
       }
     },
     "B5": {
-      "source_key": "sc2_who",
-      "source_name": "World Health Organization \u2014 Healthy Diet Fact Sheet",
-      "url": "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
-      "quote": "Foods high in unhealthy fats, free sugars and sodium should be limited.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "who.int",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Known government/intergovernmental organization"
+      "type": "empirical",
+      "label": "SC2: WHO Healthy Diet fact sheet \u2014 'limit' not 'avoid completely'",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "World Health Organization \u2014 Healthy Diet Fact Sheet",
+        "url": "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
+        "quote": "Foods high in unhealthy fats, free sugars and sodium should be limited."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "who.int",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Known government/intergovernmental organization"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Foods high in unhealthy fats, free sugars and sodium should be limited."
       }
     },
     "B6": {
-      "source_key": "sc2_harvard",
-      "source_name": "Harvard T.H. Chan School of Public Health \u2014 The Nutrition Source: Processed Foods",
-      "url": "https://nutritionsource.hsph.harvard.edu/processed-foods/",
-      "quote": "the use of processed and even ultra-processed foods is the choice of the consumer, and there are pros and cons that come with each type",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "harvard.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
+      "type": "empirical",
+      "label": "SC2: Harvard \u2014 UPF use is consumer choice, pros and cons",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Harvard T.H. Chan School of Public Health \u2014 The Nutrition Source: Processed Foods",
+        "url": "https://nutritionsource.hsph.harvard.edu/processed-foods/",
+        "quote": "the use of processed and even ultra-processed foods is the choice of the consumer, and there are pros and cons that come with each type"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "harvard.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the use of processed and even ultra-processed foods is the choice of the consume"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Some ultra-processed foods can be included in a healthy diet \u2013 such as wholemeal"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "some products may be a useful addition to a healthful diet"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified disproof source count",
+      "sub_claim": "SC1",
+      "method": "count(SC1 verified disproof citations >= 3)",
+      "result": "3",
+      "depends_on": []
     },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "there are good and bad diets, not good and bad foods"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Most people would probably benefit from eating less ultra-processed foods that a"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Foods high in unhealthy fats, free sugars and sodium should be limited."
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the use of processed and even ultra-processed foods is the choice of the consume"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified disproof source count",
+      "sub_claim": "SC2",
+      "method": "count(SC2 verified disproof citations >= 3)",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -206,7 +221,8 @@
         "sc1_harvard": "verified",
         "sc1_gibney": "verified"
       },
-      "independence_note": "NHS (UK government health body), Harvard T.H. Chan (US academic), Gibney 2019 in peer-reviewed journal (Current Developments in Nutrition) \u2014 independent institutions across different countries and sectors."
+      "independence_note": "NHS (UK government health body), Harvard T.H. Chan (US academic), Gibney 2019 in peer-reviewed journal (Current Developments in Nutrition) \u2014 independent institutions across different countries and sectors.",
+      "fact_ids": []
     },
     {
       "description": "SC2 disproof: multiple independent authoritative sources consulted",
@@ -217,7 +233,8 @@
         "sc2_who": "verified",
         "sc2_harvard": "verified"
       },
-      "independence_note": "NHS (UK), WHO (international UN agency), Harvard T.H. Chan (US academic) \u2014 three independent institutions across jurisdictions and sectors."
+      "independence_note": "NHS (UK), WHO (international UN agency), Harvard T.H. Chan (US academic) \u2014 three independent institutions across jurisdictions and sectors.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -246,7 +263,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "sc1_n_confirmed": 3,
     "sc1_threshold": 3,

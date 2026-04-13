@@ -14,7 +14,16 @@ def build_citation_context(
     year = date[:4] if date else ""
     claim = proof_data["claim_natural"]
     verdict = proof_data.get("verdict", "")
-    verdict_display = verdict.capitalize() if verdict else ""
+    # v3 structured verdict — extract string value for display
+    if isinstance(verdict, dict):
+        base = verdict.get("value", "")
+        if verdict.get("qualified") and verdict.get("qualifier") == "unverified_citations":
+            verdict_str = f"{base} (with unverified citations)"
+        else:
+            verdict_str = base
+    else:
+        verdict_str = verdict
+    verdict_display = verdict_str.capitalize() if verdict_str else ""
     title = f'Claim Verification: \u201c{claim}\u201d \u2014 {verdict_display}'
     slug_sanitized = slug.replace("-", "_")
 
@@ -33,7 +42,7 @@ def build_citation_context(
         "doi": doi,
         "concept_doi": concept_doi,
         "version": generator.get("version", ""),
-        "verdict": proof_data.get("verdict", ""),
+        "verdict": verdict_str,
         "slug_sanitized": slug_sanitized,
         "repository": "https://github.com/yaniv-golan/proof-engine",
     }

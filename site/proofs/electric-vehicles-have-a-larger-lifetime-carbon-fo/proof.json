@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "epa",
-      "label": "U.S. EPA: EV lifetime emissions lower even accounting for manufacturing"
-    },
-    "B2": {
-      "key": "factcheck_icct",
-      "label": "FactCheck.org (citing ICCT): EV lifetime emissions 60-69% lower than gasoline"
-    },
-    "B3": {
-      "key": "recurrent",
-      "label": "Recurrent Auto: Gasoline car 76 tonnes CO2 lifetime vs EV 37 tonnes"
-    },
-    "B4": {
-      "key": "eurekalert_study",
-      "label": "2025 peer-reviewed study: EVs outperform gasoline cars in lifetime impact"
-    },
-    "A1": {
-      "label": "Verified source count meeting disproof threshold",
-      "method": "count(verified citations) = 4",
-      "result": "4 sources confirmed EVs have lower lifetime emissions"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Electric vehicles (battery electric vehicles, BEVs)",
     "property": "Whether authoritative lifecycle analyses find BEVs have HIGHER total lifetime GHG emissions than comparable gasoline ICE vehicles, including manufacturing, use-phase, and end-of-life (battery disposal/recycling)",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Electric vehicles have a larger lifetime carbon footprint than gasoline cars when manufacturing and battery disposal are included.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "epa",
-      "source_name": "U.S. Environmental Protection Agency",
-      "url": "https://www.epa.gov/greenvehicles/electric-vehicle-myths",
-      "quote": "The greenhouse gas emissions associated with an electric vehicle over its lifetime are typically lower than those from an average gasoline-powered vehicle, even when accounting for manufacturing.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "epa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "U.S. EPA: EV lifetime emissions lower even accounting for manufacturing",
+      "sub_claim": null,
+      "source": {
+        "name": "U.S. Environmental Protection Agency",
+        "url": "https://www.epa.gov/greenvehicles/electric-vehicle-myths",
+        "quote": "The greenhouse gas emissions associated with an electric vehicle over its lifetime are typically lower than those from an average gasoline-powered vehicle, even when accounting for manufacturing."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "epa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The greenhouse gas emissions associated with an electric vehicle over its lifeti"
       }
     },
     "B2": {
-      "source_key": "factcheck_icct",
-      "source_name": "FactCheck.org (citing ICCT global lifecycle analysis)",
-      "url": "https://www.factcheck.org/2024/02/electric-vehicles-contribute-fewer-emissions-than-gasoline-powered-cars-over-their-lifetimes/",
-      "quote": "the lifetime emissions of an average medium-size electric car were lower compared with a gasoline-powered car by 66%-69% in Europe, 60%-68% in the United States, 37%-45% in China, and 19%-34% in India.",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 50.0,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "factcheck.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "FactCheck.org (citing ICCT): EV lifetime emissions 60-69% lower than gasoline",
+      "sub_claim": null,
+      "source": {
+        "name": "FactCheck.org (citing ICCT global lifecycle analysis)",
+        "url": "https://www.factcheck.org/2024/02/electric-vehicles-contribute-fewer-emissions-than-gasoline-powered-cars-over-their-lifetimes/",
+        "quote": "the lifetime emissions of an average medium-size electric car were lower compared with a gasoline-powered car by 66%-69% in Europe, 60%-68% in the United States, 37%-45% in China, and 19%-34% in India."
+      },
+      "verification": {
+        "status": "partial",
+        "method": "fragment",
+        "coverage_pct": 50.0,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "factcheck.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "the lifetime emissions of an average medium-size electric car were lower compare"
       }
     },
     "B3": {
-      "source_key": "recurrent",
-      "source_name": "Recurrent Auto (EV research and analytics)",
-      "url": "https://www.recurrentauto.com/research/just-how-dirty-is-your-ev",
-      "quote": "Over the course of its life, a new gasoline car will produce an average of 410 grams of carbon dioxide per mile. A new electric car will produce only 110 grams.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "recurrentauto.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Recurrent Auto: Gasoline car 76 tonnes CO2 lifetime vs EV 37 tonnes",
+      "sub_claim": null,
+      "source": {
+        "name": "Recurrent Auto (EV research and analytics)",
+        "url": "https://www.recurrentauto.com/research/just-how-dirty-is-your-ev",
+        "quote": "Over the course of its life, a new gasoline car will produce an average of 410 grams of carbon dioxide per mile. A new electric car will produce only 110 grams."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "recurrentauto.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Over the course of its life, a new gasoline car will produce an average of 410 g"
       }
     },
     "B4": {
-      "source_key": "eurekalert_study",
-      "source_name": "EurekAlert / AAAS (2025 peer-reviewed study)",
-      "url": "https://www.eurekalert.org/news-releases/1102315",
-      "quote": "Electric vehicles outperform gasoline cars in lifetime environmental impact",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "eurekalert.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "2025 peer-reviewed study: EVs outperform gasoline cars in lifetime impact",
+      "sub_claim": null,
+      "source": {
+        "name": "EurekAlert / AAAS (2025 peer-reviewed study)",
+        "url": "https://www.eurekalert.org/news-releases/1102315",
+        "quote": "Electric vehicles outperform gasoline cars in lifetime environmental impact"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "eurekalert.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Electric vehicles outperform gasoline cars in lifetime environmental impact"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The greenhouse gas emissions associated with an electric vehicle over its lifeti"
     },
-    "B2": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "the lifetime emissions of an average medium-size electric car were lower compare"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Over the course of its life, a new gasoline car will produce an average of 410 g"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Electric vehicles outperform gasoline cars in lifetime environmental impact"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count meeting disproof threshold",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4 sources confirmed EVs have lower lifetime emissions",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "recurrent": "verified",
         "eurekalert_study": "verified"
       },
-      "independence_note": "Sources span U.S. government (EPA), international research (ICCT via FactCheck.org), industry analytics (Recurrent Auto), and peer-reviewed academic research (EurekAlert/AAAS). Each represents an independent institution with its own methodology."
+      "independence_note": "Sources span U.S. government (EPA), international research (ICCT via FactCheck.org), industry analytics (Recurrent Auto), and peer-reviewed academic research (EurekAlert/AAAS). Each represents an independent institution with its own methodology.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED (with unverified citations)",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": true,
+    "qualifier": "unverified_citations",
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

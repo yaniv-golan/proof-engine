@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_and",
-      "label": "Academy of Nutrition and Dietetics 2016 Position Paper on Vegetarian Diets (PubMed PMID 27886704)"
-    },
-    "B2": {
-      "key": "source_pmc_review",
-      "label": "Peer-reviewed review: Dietary Protein and Amino Acids in Vegetarian Diets (PMC6893534, Nutrients 2019)"
-    },
-    "B3": {
-      "key": "source_cleveland",
-      "label": "Cleveland Clinic: Do I Need to Worry About Eating Complete Proteins?"
-    },
-    "A1": {
-      "label": "Count of authoritative sources confirmed by citation verification",
-      "method": "count(citation_results[key]['status'] in ('verified', 'partial'))",
-      "result": "3 of 3 sources confirmed"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Animal protein",
     "property": "necessity for meeting daily protein needs",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "You must eat animal protein to meet daily protein needs effectively.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_and",
-      "source_name": "Journal of the Academy of Nutrition and Dietetics, Melina et al. 2016 (PMID 27886704)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/27886704/",
-      "quote": "It is the position of the Academy of Nutrition and Dietetics that appropriately planned vegetarian, including vegan, diets are healthful, nutritionally adequate, and may provide health benefits for the prevention and treatment of certain diseases. These diets are appropriate for all stages of the life cycle, including pregnancy, lactation, infancy, childhood, adolescence, older adulthood, and for athletes.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Academy of Nutrition and Dietetics 2016 Position Paper on Vegetarian Diets (PubMed PMID 27886704)",
+      "sub_claim": null,
+      "source": {
+        "name": "Journal of the Academy of Nutrition and Dietetics, Melina et al. 2016 (PMID 27886704)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27886704/",
+        "quote": "It is the position of the Academy of Nutrition and Dietetics that appropriately planned vegetarian, including vegan, diets are healthful, nutritionally adequate, and may provide health benefits for the prevention and treatment of certain diseases. These diets are appropriate for all stages of the life cycle, including pregnancy, lactation, infancy, childhood, adolescence, older adulthood, and for athletes."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "It is the position of the Academy of Nutrition and Dietetics that appropriately "
       }
     },
     "B2": {
-      "source_key": "source_pmc_review",
-      "source_name": "Nutrients 2019: Dietary Protein and Amino Acids in Vegetarian Diets \u2014 A Review (PMC6893534)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6893534/",
-      "quote": "there is no evidence of protein deficiency in vegetarian populations in western countries",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Peer-reviewed review: Dietary Protein and Amino Acids in Vegetarian Diets (PMC6893534, Nutrients 2019)",
+      "sub_claim": null,
+      "source": {
+        "name": "Nutrients 2019: Dietary Protein and Amino Acids in Vegetarian Diets \u2014 A Review (PMC6893534)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6893534/",
+        "quote": "there is no evidence of protein deficiency in vegetarian populations in western countries"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "there is no evidence of protein deficiency in vegetarian populations in western "
       }
     },
     "B3": {
-      "source_key": "source_cleveland",
-      "source_name": "Cleveland Clinic Health Essentials: Complete Proteins",
-      "url": "https://health.clevelandclinic.org/do-i-need-to-worry-about-eating-complete-proteins",
-      "quote": "mixing and matching those protein sources can get you all the amino acids your body needs",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "clevelandclinic.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Cleveland Clinic: Do I Need to Worry About Eating Complete Proteins?",
+      "sub_claim": null,
+      "source": {
+        "name": "Cleveland Clinic Health Essentials: Complete Proteins",
+        "url": "https://health.clevelandclinic.org/do-i-need-to-worry-about-eating-complete-proteins",
+        "quote": "mixing and matching those protein sources can get you all the amino acids your body needs"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "clevelandclinic.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "mixing and matching those protein sources can get you all the amino acids your b"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "It is the position of the Academy of Nutrition and Dietetics that appropriately "
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "there is no evidence of protein deficiency in vegetarian populations in western "
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "mixing and matching those protein sources can get you all the amino acids your b"
+    "A1": {
+      "type": "computed",
+      "label": "Count of authoritative sources confirmed by citation verification",
+      "sub_claim": null,
+      "method": "count(citation_results[key]['status'] in ('verified', 'partial'))",
+      "result": "3 of 3 sources confirmed",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,7 +113,8 @@
         "source_pmc_review": "verified",
         "source_cleveland": "verified"
       },
-      "independence_note": "Sources are from three independent institutions: (1) Academy of Nutrition and Dietetics (professional dietetics body), (2) an independent peer-reviewed journal review (Nutrients/PMC), (3) Cleveland Clinic (major academic medical center). These sources represent independent research and expert consensus, not a single institution cited multiple times."
+      "independence_note": "Sources are from three independent institutions: (1) Academy of Nutrition and Dietetics (professional dietetics body), (2) an independent peer-reviewed journal review (Nutrients/PMC), (3) Cleveland Clinic (major academic medical center). These sources represent independent research and expert consensus, not a single institution cited multiple times.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -130,7 +137,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

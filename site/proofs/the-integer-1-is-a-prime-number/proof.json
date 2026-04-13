@@ -1,31 +1,5 @@
 {
-  "fact_registry": {
-    "A1": {
-      "label": "Positive divisors of 1 (exhaustive enumeration)",
-      "method": "Exhaustive enumeration of divisors d in [1, n] where n % d == 0",
-      "result": "[1]"
-    },
-    "A2": {
-      "label": "Count of positive divisors of 1",
-      "method": "len(divisors_of_1)",
-      "result": "1"
-    },
-    "A3": {
-      "label": "Whether 1 > 1 (greater-than-1 criterion)",
-      "method": "compare(1, '>', 1)",
-      "result": "False"
-    },
-    "A4": {
-      "label": "Cross-check: trial division primality test",
-      "method": "Trial division primality test (independent algorithm)",
-      "result": "False"
-    },
-    "A5": {
-      "label": "Cross-check: sympy.isprime(1)",
-      "method": "sympy.isprime(1)",
-      "result": "False"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "the integer 1",
     "property": "whether 1 satisfies the definition of a prime number",
@@ -34,6 +8,48 @@
     "threshold": true
   },
   "claim_natural": "The integer 1 is a prime number.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Positive divisors of 1 (exhaustive enumeration)",
+      "sub_claim": null,
+      "method": "Exhaustive enumeration of divisors d in [1, n] where n % d == 0",
+      "result": "[1]",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Count of positive divisors of 1",
+      "sub_claim": null,
+      "method": "len(divisors_of_1)",
+      "result": "1",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Whether 1 > 1 (greater-than-1 criterion)",
+      "sub_claim": null,
+      "method": "compare(1, '>', 1)",
+      "result": "False",
+      "depends_on": []
+    },
+    "A4": {
+      "type": "computed",
+      "label": "Cross-check: trial division primality test",
+      "sub_claim": null,
+      "method": "Trial division primality test (independent algorithm)",
+      "result": "False",
+      "depends_on": []
+    },
+    "A5": {
+      "type": "computed",
+      "label": "Cross-check: sympy.isprime(1)",
+      "sub_claim": null,
+      "method": "sympy.isprime(1)",
+      "result": "False",
+      "depends_on": []
+    }
+  },
   "cross_checks": [
     {
       "description": "Definitional check vs trial division",
@@ -41,7 +57,8 @@
         "False",
         "False"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     },
     {
       "description": "Definitional check vs sympy.isprime",
@@ -49,7 +66,8 @@
         "False",
         "False"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -72,7 +90,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n": 1,
     "divisors": [

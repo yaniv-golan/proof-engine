@@ -1,44 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "sc1_rodriguez_colombo_2025",
-      "label": "Rodriguez & Colombo 2025 \u2014 hedge property disappeared post-COVID"
-    },
-    "B2": {
-      "key": "sc1_conlon_mcgee_2021",
-      "label": "Conlon & McGee 2021 (PMC) \u2014 not a safe haven, declines in uncertainty"
-    },
-    "B3": {
-      "key": "sc1_btc_2022_drawdown",
-      "label": "Bitcoin 2022 drawdown data \u2014 fell 77% during peak 9.1% CPI"
-    },
-    "B4": {
-      "key": "sc1_smales_2024",
-      "label": "Smales 2024 \u2014 hedge only below 2% inflation, negative CPI response"
-    },
-    "B5": {
-      "key": "sc2_argentina_stablecoins",
-      "label": "Argentina \u2014 61.8% of crypto transactions are stablecoins, not BTC"
-    },
-    "B6": {
-      "key": "sc2_venezuela_stablecoins",
-      "label": "Venezuela \u2014 citizens use USDT/USDC, not BTC, for financial security"
-    },
-    "B7": {
-      "key": "sc2_coingecko_stablecoins",
-      "label": "CoinGecko \u2014 stablecoins critical in hyperinflation countries, not BTC"
-    },
-    "A1": {
-      "label": "SC1 verified source count",
-      "method": "count(verified sc1 citations) = 3",
-      "result": "3"
-    },
-    "A2": {
-      "label": "SC2 verified source count",
-      "method": "count(verified sc2 citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Bitcoin",
     "sub_claims": [
@@ -62,162 +23,218 @@
     "operator_note": "The claim asserts Bitcoin is a PROVEN hedge against BOTH inflation AND fiat currency collapse. 'Proven' means consistently demonstrated, not occasional or context-dependent. If either sub-claim is disproved, the compound claim fails. We disprove by finding authoritative sources that reject each sub-claim."
   },
   "claim_natural": "Bitcoin is a proven hedge against inflation and fiat currency collapse.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "sc1_rodriguez_colombo_2025",
-      "source_name": "Rodriguez & Colombo 2025, Journal of Economics and Business",
-      "url": "https://ideas.repec.org/a/eee/jebusi/v133y2025ics0148619524000602.html",
-      "quote": "the inflation hedge property of bitcoin has disappeared from the COVID-19 outbreak onwards",
-      "status": "partial",
-      "method": "fragment",
-      "coverage_pct": 46.2,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "repec.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Rodriguez & Colombo 2025 \u2014 hedge property disappeared post-COVID",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Rodriguez & Colombo 2025, Journal of Economics and Business",
+        "url": "https://ideas.repec.org/a/eee/jebusi/v133y2025ics0148619524000602.html",
+        "quote": "the inflation hedge property of bitcoin has disappeared from the COVID-19 outbreak onwards"
+      },
+      "verification": {
+        "status": "partial",
+        "method": "fragment",
+        "coverage_pct": 46.2,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "repec.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "the inflation hedge property of bitcoin has disappeared from the COVID-19 outbre"
       }
     },
     "B2": {
-      "source_key": "sc1_conlon_mcgee_2021",
-      "source_name": "Conlon & McGee 2021, Finance Research Letters (PMC)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8995501/",
-      "quote": "Unlike gold, Bitcoin prices decline in response to financial uncertainty shocks, rejecting the safe-haven quality",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Conlon & McGee 2021 (PMC) \u2014 not a safe haven, declines in uncertainty",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Conlon & McGee 2021, Finance Research Letters (PMC)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8995501/",
+        "quote": "Unlike gold, Bitcoin prices decline in response to financial uncertainty shocks, rejecting the safe-haven quality"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Unlike gold, Bitcoin prices decline in response to financial uncertainty shocks,"
       }
     },
     "B3": {
-      "source_key": "sc1_btc_2022_drawdown",
-      "source_name": "Cash2Bitcoin 2025 \u2014 Bitcoin Historical Drawdowns",
-      "url": "https://cash2bitcoin.com/blog/bitcoin-hedge-against-inflation/",
-      "quote": "2022 Return: -64%",
-      "status": "not_found",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "cash2bitcoin.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Bitcoin 2022 drawdown data \u2014 fell 77% during peak 9.1% CPI",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Cash2Bitcoin 2025 \u2014 Bitcoin Historical Drawdowns",
+        "url": "https://cash2bitcoin.com/blog/bitcoin-hedge-against-inflation/",
+        "quote": "2022 Return: -64%"
+      },
+      "verification": {
+        "status": "not_found",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "cash2bitcoin.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "not_found",
+        "value_in_quote": false,
+        "quote_snippet": "2022 Return: -64%"
       }
     },
     "B4": {
-      "source_key": "sc1_smales_2024",
-      "source_name": "Smales 2024, Accounting & Finance (Wiley)",
-      "url": "https://onlinelibrary.wiley.com/doi/10.1111/acfi.13193",
-      "quote": "cryptocurrency returns are positively related to changes in US inflation expectations only for a limited set of circumstances",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "wayback",
-      "credibility": {
-        "domain": "wiley.com",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "Smales 2024 \u2014 hedge only below 2% inflation, negative CPI response",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Smales 2024, Accounting & Finance (Wiley)",
+        "url": "https://onlinelibrary.wiley.com/doi/10.1111/acfi.13193",
+        "quote": "cryptocurrency returns are positively related to changes in US inflation expectations only for a limited set of circumstances"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "wayback",
+        "credibility": {
+          "domain": "wiley.com",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "cryptocurrency returns are positively related to changes in US inflation expecta"
       }
     },
     "B5": {
-      "source_key": "sc2_argentina_stablecoins",
-      "source_name": "CoinGecko \u2014 How Cryptocurrencies Combat Hyperinflation",
-      "url": "https://www.coingecko.com/learn/how-do-cryptocurrencies-combat-hyperinflation",
-      "quote": "In Argentina, 61.8% of all crypto-asset transactions are stablecoins",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "coingecko.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Argentina \u2014 61.8% of crypto transactions are stablecoins, not BTC",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "CoinGecko \u2014 How Cryptocurrencies Combat Hyperinflation",
+        "url": "https://www.coingecko.com/learn/how-do-cryptocurrencies-combat-hyperinflation",
+        "quote": "In Argentina, 61.8% of all crypto-asset transactions are stablecoins"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "coingecko.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "In Argentina, 61.8% of all crypto-asset transactions are stablecoins"
       }
     },
     "B6": {
-      "source_key": "sc2_venezuela_stablecoins",
-      "source_name": "CoinGecko \u2014 How Cryptocurrencies Combat Hyperinflation",
-      "url": "https://www.coingecko.com/learn/how-do-cryptocurrencies-combat-hyperinflation",
-      "quote": "Stablecoins such as Tether USDT and USDC have become critical in countries like Argentina and Venezuela for holding the lines of financial security",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "coingecko.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Venezuela \u2014 citizens use USDT/USDC, not BTC, for financial security",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "CoinGecko \u2014 How Cryptocurrencies Combat Hyperinflation",
+        "url": "https://www.coingecko.com/learn/how-do-cryptocurrencies-combat-hyperinflation",
+        "quote": "Stablecoins such as Tether USDT and USDC have become critical in countries like Argentina and Venezuela for holding the lines of financial security"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "coingecko.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Stablecoins such as Tether USDT and USDC have become critical in countries like "
       }
     },
     "B7": {
-      "source_key": "sc2_coingecko_stablecoins",
-      "source_name": "CoinGecko \u2014 How Cryptocurrencies Combat Hyperinflation",
-      "url": "https://www.coingecko.com/learn/how-do-cryptocurrencies-combat-hyperinflation",
-      "quote": "Argentine citizens increasingly use stablecoins, more precisely USDT and USDC, to safeguard their wealth",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "coingecko.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "CoinGecko \u2014 stablecoins critical in hyperinflation countries, not BTC",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "CoinGecko \u2014 How Cryptocurrencies Combat Hyperinflation",
+        "url": "https://www.coingecko.com/learn/how-do-cryptocurrencies-combat-hyperinflation",
+        "quote": "Argentine citizens increasingly use stablecoins, more precisely USDT and USDC, to safeguard their wealth"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "coingecko.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Argentine citizens increasingly use stablecoins, more precisely USDT and USDC, t"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "the inflation hedge property of bitcoin has disappeared from the COVID-19 outbre"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Unlike gold, Bitcoin prices decline in response to financial uncertainty shocks,"
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count",
+      "sub_claim": "SC1",
+      "method": "count(verified sc1 citations) = 3",
+      "result": "3",
+      "depends_on": []
     },
-    "B3": {
-      "value": "not_found",
-      "value_in_quote": false,
-      "quote_snippet": "2022 Return: -64%"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "cryptocurrency returns are positively related to changes in US inflation expecta"
-    },
-    "B5": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "In Argentina, 61.8% of all crypto-asset transactions are stablecoins"
-    },
-    "B6": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Stablecoins such as Tether USDT and USDC have become critical in countries like "
-    },
-    "B7": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Argentine citizens increasingly use stablecoins, more precisely USDT and USDC, t"
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count",
+      "sub_claim": "SC2",
+      "method": "count(verified sc2 citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -231,7 +248,8 @@
         "sc1_btc_2022_drawdown": "not_found",
         "sc1_smales_2024": "verified"
       },
-      "independence_note": "Sources are from different research teams and journals: Rodriguez & Colombo (J. of Economics and Business), Conlon & McGee (Finance Research Letters), Cash2Bitcoin (historical price data), Smales (Accounting & Finance). Each uses independent data and methodology."
+      "independence_note": "Sources are from different research teams and journals: Rodriguez & Colombo (J. of Economics and Business), Conlon & McGee (Finance Research Letters), Cash2Bitcoin (historical price data), Smales (Accounting & Finance). Each uses independent data and methodology.",
+      "fact_ids": []
     },
     {
       "description": "SC2: independent sources showing stablecoins preferred over BTC in fiat crises",
@@ -242,7 +260,8 @@
         "sc2_venezuela_stablecoins": "verified",
         "sc2_coingecko_stablecoins": "verified"
       },
-      "independence_note": "SC2 sources are from the same CoinGecko article but report independent data points: Argentina's 61.8% stablecoin share, Venezuela's USDT/USDC adoption, and the general trend of stablecoin preference. The underlying data comes from on-chain analytics and Chainalysis reports. This is a weaker independence claim than SC1 \u2014 noted as a limitation."
+      "independence_note": "SC2 sources are from the same CoinGecko article but report independent data points: Argentina's 61.8% stablecoin share, Venezuela's USDT/USDC adoption, and the general trend of stablecoin preference. The underlying data comes from on-chain analytics and Chainalysis reports. This is a weaker independence claim than SC1 \u2014 noted as a limitation.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -265,7 +284,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED (with unverified citations)",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": true,
+    "qualifier": "unverified_citations",
+    "reason": null
+  },
   "key_results": {
     "n_sc1_confirmed": 3,
     "n_sc2_confirmed": 3,

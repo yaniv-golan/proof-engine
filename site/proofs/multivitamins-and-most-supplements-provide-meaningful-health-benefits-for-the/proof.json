@@ -1,126 +1,134 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_uspstf_rec",
-      "label": "USPSTF 2022 Recommendation: Grade D (recommend against) for beta-carotene and vitamin E supplements in healthy adults"
-    },
-    "B2": {
-      "key": "source_ncbi_review",
-      "label": "NCBI Bookshelf — USPSTF Systematic Evidence Review 2022: vitamin/mineral supplementation provides little to no benefit in preventing cancer, CVD, and death"
-    },
-    "B3": {
-      "key": "source_nih_ods",
-      "label": "NIH Office of Dietary Supplements Fact Sheet: MVMs do not reliably reduce risk of chronic diseases"
-    },
-    "B4": {
-      "key": "source_annals_2019",
-      "label": "Annals of Internal Medicine 2019 umbrella meta-analysis: dietary supplements not associated with mortality benefits in U.S. adults"
-    },
-    "A1": {
-      "label": "Verified source count — independent sources confirming the claim is false",
-      "method": "count(verified citations) = 4",
-      "result": "4 independent sources confirm the claim is false (threshold: 3)"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "multivitamins and most dietary supplements",
     "property": "provide meaningful (clinically significant) health benefits to the general healthy adult population",
     "operator": ">=",
-    "operator_note": "This proof uses a disproof strategy: we gather authoritative sources that REJECT the claim and require at least 3 independently verified sources to establish disproof. 'Meaningful health benefits' is interpreted as clinically significant improvements in primary outcomes — all-cause mortality, cardiovascular disease, or cancer incidence — for community-dwelling adults without nutritional deficiencies or known medical conditions. This conservative scope excludes populations with known deficiencies, pregnant persons, elderly with specific risks, or those under medical supervision. Threshold = 3: the claim is disproved if at least 3 independent authoritative sources confirm the claim is false. All 4 sources here confirm the same direction.",
+    "operator_note": "This proof uses a disproof strategy: we gather authoritative sources that REJECT the claim and require at least 3 independently verified sources to establish disproof. 'Meaningful health benefits' is interpreted as clinically significant improvements in primary outcomes \u2014 all-cause mortality, cardiovascular disease, or cancer incidence \u2014 for community-dwelling adults without nutritional deficiencies or known medical conditions. This conservative scope excludes populations with known deficiencies, pregnant persons, elderly with specific risks, or those under medical supervision. Threshold = 3: the claim is disproved if at least 3 independent authoritative sources confirm the claim is false. All 4 sources here confirm the same direction.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
   "claim_natural": "Multivitamins and most supplements provide meaningful health benefits for the general healthy population.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_uspstf_rec",
-      "source_name": "U.S. Preventive Services Task Force (USPSTF) — 2022 Recommendation Statement on Vitamin Supplementation",
-      "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/vitamin-supplementation-to-prevent-cvd-and-cancer-preventive-medication",
-      "quote": "The USPSTF recommends against the use of beta carotene or vitamin E supplements for the prevention of cardiovascular disease or cancer.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "uspreventiveservicestaskforce.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "USPSTF 2022 Recommendation: Grade D (recommend against) for beta-carotene and vitamin E supplements in healthy adults",
+      "sub_claim": null,
+      "source": {
+        "name": "U.S. Preventive Services Task Force (USPSTF) \u2014 2022 Recommendation Statement on Vitamin Supplementation",
+        "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/vitamin-supplementation-to-prevent-cvd-and-cancer-preventive-medication",
+        "quote": "The USPSTF recommends against the use of beta carotene or vitamin E supplements for the prevention of cardiovascular disease or cancer."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "uspreventiveservicestaskforce.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The USPSTF recommends against the use of beta carotene or vitamin E supplements "
       }
     },
     "B2": {
-      "source_key": "source_ncbi_review",
-      "source_name": "NCBI Bookshelf — USPSTF Systematic Evidence Review 2022 (Lam et al., commissioned by Agency for Healthcare Research and Quality)",
-      "url": "https://www.ncbi.nlm.nih.gov/books/NBK581642/",
-      "quote": "Vitamin and mineral supplementation provides little to no benefit in preventing cancer, CVD, and death, with the exception of a possible small benefit for cancer incidence with multivitamin use",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NCBI Bookshelf \u2014 USPSTF Systematic Evidence Review 2022: vitamin/mineral supplementation provides little to no benefit in preventing cancer, CVD, and death",
+      "sub_claim": null,
+      "source": {
+        "name": "NCBI Bookshelf \u2014 USPSTF Systematic Evidence Review 2022 (Lam et al., commissioned by Agency for Healthcare Research and Quality)",
+        "url": "https://www.ncbi.nlm.nih.gov/books/NBK581642/",
+        "quote": "Vitamin and mineral supplementation provides little to no benefit in preventing cancer, CVD, and death, with the exception of a possible small benefit for cancer incidence with multivitamin use"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Vitamin and mineral supplementation provides little to no benefit in preventing "
       }
     },
     "B3": {
-      "source_key": "source_nih_ods",
-      "source_name": "NIH Office of Dietary Supplements — Multivitamin/Mineral Supplements: Health Professional Fact Sheet",
-      "url": "https://ods.od.nih.gov/factsheets/MVMS-HealthProfessional/",
-      "quote": "Overall, MVMs do not appear to reliably reduce the risk of chronic diseases when people choose to take these products for up to a decade (or more).",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 81.5,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NIH Office of Dietary Supplements Fact Sheet: MVMs do not reliably reduce risk of chronic diseases",
+      "sub_claim": null,
+      "source": {
+        "name": "NIH Office of Dietary Supplements \u2014 Multivitamin/Mineral Supplements: Health Professional Fact Sheet",
+        "url": "https://ods.od.nih.gov/factsheets/MVMS-HealthProfessional/",
+        "quote": "Overall, MVMs do not appear to reliably reduce the risk of chronic diseases when people choose to take these products for up to a decade (or more)."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 81.5,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Overall, MVMs do not appear to reliably reduce the risk of chronic diseases when"
       }
     },
     "B4": {
-      "source_key": "source_annals_2019",
-      "source_name": "Annals of Internal Medicine 2019 — Umbrella meta-analysis of supplement use and mortality/CVD outcomes (Jenkins et al., PMID 30959527)",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/30959527/",
-      "quote": "Use of dietary supplements is not associated with mortality benefits among U.S. adults.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "Annals of Internal Medicine 2019 umbrella meta-analysis: dietary supplements not associated with mortality benefits in U.S. adults",
+      "sub_claim": null,
+      "source": {
+        "name": "Annals of Internal Medicine 2019 \u2014 Umbrella meta-analysis of supplement use and mortality/CVD outcomes (Jenkins et al., PMID 30959527)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30959527/",
+        "quote": "Use of dietary supplements is not associated with mortality benefits among U.S. adults."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Use of dietary supplements is not associated with mortality benefits among U.S. "
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The USPSTF recommends against the use of beta carotene or vitamin E supplements "
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Vitamin and mineral supplementation provides little to no benefit in preventing "
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Overall, MVMs do not appear to reliably reduce the risk of chronic diseases when"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Use of dietary supplements is not associated with mortality benefits among U.S. "
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count \u2014 independent sources confirming the claim is false",
+      "sub_claim": null,
+      "method": "count(verified citations) = 4",
+      "result": "4 independent sources confirm the claim is false (threshold: 3)",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "source_nih_ods": "verified",
         "source_annals_2019": "verified"
       },
-      "independence_note": "Sources are from distinct institutions: (1) USPSTF — independent federal advisory body, (2) NCBI Bookshelf — AHRQ-commissioned systematic evidence review, (3) NIH ODS — NIH synthesis of clinical trial evidence, (4) Annals of Internal Medicine umbrella meta-analysis — peer-reviewed independent academic synthesis. Each independently reviews different underlying RCTs and observational datasets."
+      "independence_note": "Sources are from distinct institutions: (1) USPSTF \u2014 independent federal advisory body, (2) NCBI Bookshelf \u2014 AHRQ-commissioned systematic evidence review, (3) NIH ODS \u2014 NIH synthesis of clinical trial evidence, (4) Annals of Internal Medicine umbrella meta-analysis \u2014 peer-reviewed independent academic synthesis. Each independently reviews different underlying RCTs and observational datasets.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -147,17 +156,22 @@
     {
       "question": "Is there any positive cancer-incidence signal for multivitamins that would support 'meaningful benefits'?",
       "verification_performed": "Searched for 'multivitamin cancer prevention RCT meta-analysis benefit 2020 2021 2022'. The NCBI Bookshelf evidence review notes 'a possible small benefit for cancer incidence with multivitamin use' from one trial, but characterizes it as having 'important limitations, including only three adequately powered trials.' USPSTF issued Grade I (insufficient evidence), not a positive recommendation.",
-      "finding": "One meta-analysis suggested a marginal cancer-incidence signal for multivitamins. This was reviewed by USPSTF, which issued Grade I (insufficient evidence), meaning harms and benefits could not be balanced. Any marginal benefit is offset by evidence of harm from specific supplements (beta-carotene, vitamin E — both Grade D). Does not constitute 'meaningful benefit' for most supplements and does not break disproof.",
+      "finding": "One meta-analysis suggested a marginal cancer-incidence signal for multivitamins. This was reviewed by USPSTF, which issued Grade I (insufficient evidence), meaning harms and benefits could not be balanced. Any marginal benefit is offset by evidence of harm from specific supplements (beta-carotene, vitamin E \u2014 both Grade D). Does not constitute 'meaningful benefit' for most supplements and does not break disproof.",
       "breaks_proof": false
     },
     {
       "question": "Does omega-3 or fish oil supplementation provide meaningful cardiovascular benefits for healthy adults, suggesting 'most supplements' do provide benefit?",
-      "verification_performed": "Searched for 'omega-3 fish oil supplements healthy adults cardiovascular benefit VITAL 2019'. The VITAL trial (Manson et al., NEJM 2019) — 25,871 healthy adults, no prior heart disease — found that omega-3 fatty acid supplements did not significantly reduce major cardiovascular events versus placebo (HR 0.92, 95% CI 0.80-1.05). AHA updated guidance in 2017 moved omega-3 supplements from a Class I to Class IIb recommendation.",
-      "finding": "The largest high-quality RCT (VITAL) found omega-3 did not significantly reduce CVD events in the general healthy population without prior heart disease. This reinforces that even omega-3 — one of the most popular supplements — does not meet the bar for 'meaningful benefits' in the general healthy population. Does not break disproof.",
+      "verification_performed": "Searched for 'omega-3 fish oil supplements healthy adults cardiovascular benefit VITAL 2019'. The VITAL trial (Manson et al., NEJM 2019) \u2014 25,871 healthy adults, no prior heart disease \u2014 found that omega-3 fatty acid supplements did not significantly reduce major cardiovascular events versus placebo (HR 0.92, 95% CI 0.80-1.05). AHA updated guidance in 2017 moved omega-3 supplements from a Class I to Class IIb recommendation.",
+      "finding": "The largest high-quality RCT (VITAL) found omega-3 did not significantly reduce CVD events in the general healthy population without prior heart disease. This reinforces that even omega-3 \u2014 one of the most popular supplements \u2014 does not meet the bar for 'meaningful benefits' in the general healthy population. Does not break disproof.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

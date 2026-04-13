@@ -1,83 +1,106 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_wikipedia_rh",
-      "label": "Wikipedia: Riemann Hypothesis — 2026 survey confirms no proof is known"
-    },
-    "B2": {
-      "key": "source_wikipedia_mpp",
-      "label": "Wikipedia: Millennium Prize Problems — RH listed among six remaining unsolved problems"
-    },
-    "B3": {
-      "key": "source_clay",
-      "label": "Clay Mathematics Institute — official problem status: Unsolved"
-    },
-    "A1": {
-      "label": "Logical conclusion: if RH is unsolved per authoritative sources, no TikTok claim can constitute a valid solution",
-      "method": "compare(n_sources_confirming_unsolved, '<', 2) => rh_is_solved; compare(rh_is_solved, '==', True)",
-      "result": "False — 3 of 3 sources confirm RH unsolved, so rh_is_solved=False. Claim requires True."
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
-    "subject": "Riemann Hypothesis — solved status",
+    "subject": "Riemann Hypothesis \u2014 solved status",
     "property": "whether a valid proof has been accepted by the mathematical community",
     "operator": "==",
     "threshold": true,
     "claim_type": "compound_empirical",
-    "operator_note": "The claim asserts the Riemann Hypothesis has been 'solved'. For this to be true, a correct proof must exist and have been accepted by the mathematical community. The Clay Mathematics Institute (CMI) administers a $1 million Millennium Prize for a correct solution; non-award of this prize is treated as authoritative evidence the hypothesis remains unsolved. The claim has three sub-claims: (SC1) the solver is a man on TikTok; (SC2) the work took ~1 week; (SC3) the solution is mathematically valid. SC3 is decisive — if SC3 is false, the whole claim is false regardless of SC1/SC2. This proof focuses on disproving SC3 via authoritative independent sources. Formalization scope: 'solved' is operationalized as 'accepted by the mathematical community,' which does not logically exclude the bare possibility of a valid proof that has not yet been recognized. However, the claim's public framing ('a man on TikTok') implies public knowledge and community awareness, making this operationalization appropriate for the claim as stated."
+    "operator_note": "The claim asserts the Riemann Hypothesis has been 'solved'. For this to be true, a correct proof must exist and have been accepted by the mathematical community. The Clay Mathematics Institute (CMI) administers a $1 million Millennium Prize for a correct solution; non-award of this prize is treated as authoritative evidence the hypothesis remains unsolved. The claim has three sub-claims: (SC1) the solver is a man on TikTok; (SC2) the work took ~1 week; (SC3) the solution is mathematically valid. SC3 is decisive \u2014 if SC3 is false, the whole claim is false regardless of SC1/SC2. This proof focuses on disproving SC3 via authoritative independent sources. Formalization scope: 'solved' is operationalized as 'accepted by the mathematical community,' which does not logically exclude the bare possibility of a valid proof that has not yet been recognized. However, the claim's public framing ('a man on TikTok') implies public knowledge and community awareness, making this operationalization appropriate for the claim as stated."
   },
   "claim_natural": "A man on TikTok has solved the Riemann Hypothesis after one week of work.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_wikipedia_rh",
-      "source_name": "Wikipedia: Riemann Hypothesis",
-      "url": "https://en.wikipedia.org/wiki/Riemann_hypothesis",
-      "quote": "According to a 2026 survey, there is overwhelming numerical evidence for the hypothesis, but no proof is known.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Riemann Hypothesis \u2014 2026 survey confirms no proof is known",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Riemann Hypothesis",
+        "url": "https://en.wikipedia.org/wiki/Riemann_hypothesis",
+        "quote": "According to a 2026 survey, there is overwhelming numerical evidence for the hypothesis, but no proof is known."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
     },
     "B2": {
-      "source_key": "source_wikipedia_mpp",
-      "source_name": "Wikipedia: Millennium Prize Problems",
-      "url": "https://en.wikipedia.org/wiki/Millennium_Prize_Problems",
-      "quote": "The other six Millennium Prize Problems remain unsolved, despite a large number of unsatisfactory proofs by both amateur and professional mathematicians.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "wikipedia.org",
-        "source_type": "reference",
-        "tier": 3,
-        "flags": [],
-        "note": "Established reference source"
+      "type": "empirical",
+      "label": "Wikipedia: Millennium Prize Problems \u2014 RH listed among six remaining unsolved problems",
+      "sub_claim": null,
+      "source": {
+        "name": "Wikipedia: Millennium Prize Problems",
+        "url": "https://en.wikipedia.org/wiki/Millennium_Prize_Problems",
+        "quote": "The other six Millennium Prize Problems remain unsolved, despite a large number of unsatisfactory proofs by both amateur and professional mathematicians."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "wikipedia.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
     },
     "B3": {
-      "source_key": "source_clay",
-      "source_name": "Clay Mathematics Institute: Riemann Hypothesis (Millennium Prize)",
-      "url": "https://www.claymath.org/millennium/riemann-hypothesis/",
-      "quote": "Unsolved",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "claymath.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Clay Mathematics Institute \u2014 official problem status: Unsolved",
+      "sub_claim": null,
+      "source": {
+        "name": "Clay Mathematics Institute: Riemann Hypothesis (Millennium Prize)",
+        "url": "https://www.claymath.org/millennium/riemann-hypothesis/",
+        "quote": "Unsolved"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "claymath.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
       }
+    },
+    "A1": {
+      "type": "computed",
+      "label": "Logical conclusion: if RH is unsolved per authoritative sources, no TikTok claim can constitute a valid solution",
+      "sub_claim": null,
+      "method": "compare(n_sources_confirming_unsolved, '<', 2) => rh_is_solved; compare(rh_is_solved, '==', True)",
+      "result": "False \u2014 3 of 3 sources confirm RH unsolved, so rh_is_solved=False. Claim requires True.",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -88,7 +111,8 @@
         "verified",
         "verified"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -106,12 +130,17 @@
     },
     {
       "question": "Has any Millennium Prize Problem ever been solved through social media or by an amateur working alone for one week?",
-      "verification_performed": "Reviewed history of solved Millennium Prize Problems. The only solved problem, the Poincare conjecture, was proved by Grigori Perelman over several years through peer-reviewed academic papers — not social media.",
+      "verification_performed": "Reviewed history of solved Millennium Prize Problems. The only solved problem, the Poincare conjecture, was proved by Grigori Perelman over several years through peer-reviewed academic papers \u2014 not social media.",
       "finding": "No Millennium Prize Problem has ever been solved through social media or by informal one-week effort.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "rh_is_solved": false,
     "n_sources_confirming_unsolved": 3,

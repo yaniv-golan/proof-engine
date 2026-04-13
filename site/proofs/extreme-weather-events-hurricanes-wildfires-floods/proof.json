@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_gfdl",
-      "label": "NOAA GFDL: Atlantic hurricane frequency partly driven by aerosol changes, not solely greenhouse gases"
-    },
-    "B2": {
-      "key": "source_usgs",
-      "label": "USGS: urbanization independently increases the size and frequency of floods"
-    },
-    "B3": {
-      "key": "source_pnasnexus",
-      "label": "PNAS Nexus: wildfire risk is a confluence of climate change AND development (WUI expansion)"
-    },
-    "B4": {
-      "key": "source_ipcc",
-      "label": "IPCC AR6 Ch.11: attribution cites greenhouse gases, aerosol emissions, AND land-use changes as separate human influences"
-    },
-    "A1": {
-      "label": "Count of independent sources confirming non-climate drivers of extreme weather",
-      "method": "count(citations with status in ('verified', 'partial')) = 4",
-      "result": "4"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Extreme weather events (hurricanes, wildfires, floods)",
     "property": "causal attribution of increased frequency and intensity",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "Extreme weather events (hurricanes, wildfires, floods) have become dramatically more frequent and intense solely because of climate change.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_gfdl",
-      "source_name": "NOAA Geophysical Fluid Dynamics Laboratory (GFDL) \u2014 Global Warming and Hurricanes",
-      "url": "https://www.gfdl.noaa.gov/global-warming-and-hurricanes/",
-      "quote": "the increase in tropical storm frequency in the Atlantic basin since the 1970s has been at least partly driven by decreases in aerosols from human activity and volcanic forcing.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "noaa.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "NOAA GFDL: Atlantic hurricane frequency partly driven by aerosol changes, not solely greenhouse gases",
+      "sub_claim": null,
+      "source": {
+        "name": "NOAA Geophysical Fluid Dynamics Laboratory (GFDL) \u2014 Global Warming and Hurricanes",
+        "url": "https://www.gfdl.noaa.gov/global-warming-and-hurricanes/",
+        "quote": "the increase in tropical storm frequency in the Atlantic basin since the 1970s has been at least partly driven by decreases in aerosols from human activity and volcanic forcing."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "noaa.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the increase in tropical storm frequency in the Atlantic basin since the 1970s h"
       }
     },
     "B2": {
-      "source_key": "source_usgs",
-      "source_name": "U.S. Geological Survey (USGS) Fact Sheet FS-076-03 \u2014 Effects of Urban Development on Floods",
-      "url": "https://pubs.usgs.gov/fs/fs07603/",
-      "quote": "Urbanization generally increases the size and frequency of floods and may expose communities to increasing flood hazards.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "usgs.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "USGS: urbanization independently increases the size and frequency of floods",
+      "sub_claim": null,
+      "source": {
+        "name": "U.S. Geological Survey (USGS) Fact Sheet FS-076-03 \u2014 Effects of Urban Development on Floods",
+        "url": "https://pubs.usgs.gov/fs/fs07603/",
+        "quote": "Urbanization generally increases the size and frequency of floods and may expose communities to increasing flood hazards."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "usgs.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Urbanization generally increases the size and frequency of floods and may expose"
       }
     },
     "B3": {
-      "source_key": "source_pnasnexus",
-      "source_name": "PNAS Nexus \u2014 Wildfire risk management in the era of climate change (2024)",
-      "url": "https://academic.oup.com/pnasnexus/article/3/5/pgae151/7665998",
-      "quote": "Wildfire risk lies in the confluence of climate change and development in the WUI",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "wayback",
-      "credibility": {
-        "domain": "oup.com",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Known academic/scholarly publisher"
+      "type": "empirical",
+      "label": "PNAS Nexus: wildfire risk is a confluence of climate change AND development (WUI expansion)",
+      "sub_claim": null,
+      "source": {
+        "name": "PNAS Nexus \u2014 Wildfire risk management in the era of climate change (2024)",
+        "url": "https://academic.oup.com/pnasnexus/article/3/5/pgae151/7665998",
+        "quote": "Wildfire risk lies in the confluence of climate change and development in the WUI"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "wayback",
+        "credibility": {
+          "domain": "oup.com",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Wildfire risk lies in the confluence of climate change and development in the WU"
       }
     },
     "B4": {
-      "source_key": "source_ipcc",
-      "source_name": "IPCC Sixth Assessment Report (AR6) Working Group I \u2014 Chapter 11: Weather and Climate Extreme Events",
-      "url": "https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-11/",
-      "quote": "Evidence of observed changes in extremes and their attribution to human influence (including greenhouse gas and aerosol emissions and land-use changes) has strengthened since AR5",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "ipcc.ch",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Known government/intergovernmental organization"
+      "type": "empirical",
+      "label": "IPCC AR6 Ch.11: attribution cites greenhouse gases, aerosol emissions, AND land-use changes as separate human influences",
+      "sub_claim": null,
+      "source": {
+        "name": "IPCC Sixth Assessment Report (AR6) Working Group I \u2014 Chapter 11: Weather and Climate Extreme Events",
+        "url": "https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-11/",
+        "quote": "Evidence of observed changes in extremes and their attribution to human influence (including greenhouse gas and aerosol emissions and land-use changes) has strengthened since AR5"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "ipcc.ch",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Known government/intergovernmental organization"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Evidence of observed changes in extremes and their attribution to human influenc"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the increase in tropical storm frequency in the Atlantic basin since the 1970s h"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Urbanization generally increases the size and frequency of floods and may expose"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Wildfire risk lies in the confluence of climate change and development in the WU"
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Evidence of observed changes in extremes and their attribution to human influenc"
+    "A1": {
+      "type": "computed",
+      "label": "Count of independent sources confirming non-climate drivers of extreme weather",
+      "sub_claim": null,
+      "method": "count(citations with status in ('verified', 'partial')) = 4",
+      "result": "4",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "source_pnasnexus": "verified",
         "source_ipcc": "verified"
       },
-      "independence_note": "Sources are from four distinct institutions: NOAA (federal agency), USGS (federal agency), PNAS Nexus (peer-reviewed journal), and IPCC (intergovernmental scientific body). Each addresses a different event type (hurricanes, floods, wildfires, general attribution), confirming the finding is not institution-specific."
+      "independence_note": "Sources are from four distinct institutions: NOAA (federal agency), USGS (federal agency), PNAS Nexus (peer-reviewed journal), and IPCC (intergovernmental scientific body). Each addresses a different event type (hurricanes, floods, wildfires, general attribution), confirming the finding is not institution-specific.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -163,7 +172,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed_non_climate_sources": 4,
     "threshold": 3,

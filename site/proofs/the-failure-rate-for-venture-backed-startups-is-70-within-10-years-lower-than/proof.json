@@ -1,5 +1,5 @@
 {
-  "claim_natural": "The failure rate for venture-backed startups is 70% within 10 years, lower than the commonly cited 90% for all startups.",
+  "format_version": 3,
   "claim_formal": {
     "subject": "Failure rate of venture-backed startups within 10 years",
     "property": "Percentage that fail, compared to the commonly-cited 90% general startup failure rate",
@@ -8,20 +8,94 @@
     "operator_note": "SC1: The failure rate for VC-backed startups is approximately 70% within 10 years. SC2: The 90% figure for all startups is 'commonly cited' (not asserted as accurate). SC3: The VC-backed rate is lower than the all-startup rate. Definitions matter: 'failure' can mean (a) business closure/cessation, (b) never returning invested capital to investors, or (c) falling below investors' return expectations. BLS data uses definition (a) \u2014 business survival. Ghosh/Harvard research uses definition (b) \u2014 returning capital to investors. Note: The '90% of startups fail' figure is widely cited but disputed as a myth; BLS data shows ~50% of businesses survive 5 years and ~35% survive 10 years, implying a 65% failure rate at 10 years for all businesses, not 90%. The VC-backed failure rate under definition (a) is not well-established in public research at exactly 70%; Ghosh finds 75% under definition (b).",
     "threshold": 2
   },
-  "fact_registry": {
+  "claim_natural": "The failure rate for venture-backed startups is 70% within 10 years, lower than the commonly cited 90% for all startups.",
+  "evidence": {
     "B1": {
-      "key": "B1",
-      "label": "Ghosh/HBS: 75% of VC-backed startups never return cash to investors"
+      "type": "empirical",
+      "label": "Ghosh/HBS: 75% of VC-backed startups never return cash to investors",
+      "sub_claim": null,
+      "source": {
+        "name": "Harvard Business School News: The Venture Capital Secret (Shikhar Ghosh)",
+        "url": "https://www.hbs.edu/news/Pages/item.aspx?num=487",
+        "quote": "as many as 75 percent of venture-backed companies never return cash to investors"
+      },
+      "verification": {
+        "status": "fetch_failed",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "hbs.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     },
     "B2": {
-      "key": "B2",
-      "label": "Inc Magazine: confirms Ghosh 75% VC-backed failure figure"
+      "type": "empirical",
+      "label": "Inc Magazine: confirms Ghosh 75% VC-backed failure figure",
+      "sub_claim": null,
+      "source": {
+        "name": "Inc. Magazine: Report \u2014 3 Out of 4 Venture-Backed Start-Ups Fail",
+        "url": "https://www.inc.com/john-mcdermott/report-3-out-of-4-venture-backed-start-ups-fail.html",
+        "quote": "as many as 75 percent of venture-backed U.S. companies never return cash to investors"
+      },
+      "verification": {
+        "status": "fetch_failed",
+        "method": null,
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "inc.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     },
     "B3": {
-      "key": "B3",
-      "label": "LLC.org/BLS: 70% of all businesses fail within 10 years"
+      "type": "empirical",
+      "label": "LLC.org/BLS: 70% of all businesses fail within 10 years",
+      "sub_claim": null,
+      "source": {
+        "name": "LLC.org: Startup Failure Rate Statistics (citing BLS data)",
+        "url": "https://www.llc.org/startup-failure-rate-statistics/",
+        "quote": "Small businesses have a 70 percent failure rate within 10 years of opening"
+      },
+      "verification": {
+        "status": "partial",
+        "method": "aggressive_normalization",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "llc.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "",
+        "value_in_quote": false,
+        "quote_snippet": null
+      }
     }
   },
+  "cross_checks": [],
   "adversarial_checks": [
     {
       "description": "The 70% VC-backed figure is for ALL businesses (BLS), not specifically VC-backed",
@@ -39,7 +113,12 @@
       "breaks_proof": true
     }
   ],
-  "verdict": "PARTIALLY VERIFIED",
+  "verdict": {
+    "value": "PARTIALLY VERIFIED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "vc_failure_ghosh_pct": 75.0,
     "general_failure_bls_pct": 70.0,
@@ -65,59 +144,6 @@
       "n_confirmed": 1,
       "note": "Commonly cited but disputed; BLS shows ~65% at 10 years",
       "holds": true
-    }
-  },
-  "citations": {
-    "B1": {
-      "source_key": "B1",
-      "source_name": "Harvard Business School News: The Venture Capital Secret (Shikhar Ghosh)",
-      "url": "https://www.hbs.edu/news/Pages/item.aspx?num=487",
-      "quote": "as many as 75 percent of venture-backed companies never return cash to investors",
-      "status": "fetch_failed",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "hbs.edu",
-        "source_type": "academic",
-        "tier": 4,
-        "flags": [],
-        "note": "Academic domain (.edu)"
-      }
-    },
-    "B2": {
-      "source_key": "B2",
-      "source_name": "Inc. Magazine: Report \u2014 3 Out of 4 Venture-Backed Start-Ups Fail",
-      "url": "https://www.inc.com/john-mcdermott/report-3-out-of-4-venture-backed-start-ups-fail.html",
-      "quote": "as many as 75 percent of venture-backed U.S. companies never return cash to investors",
-      "status": "fetch_failed",
-      "method": null,
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "inc.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
-      }
-    },
-    "B3": {
-      "source_key": "B3",
-      "source_name": "LLC.org: Startup Failure Rate Statistics (citing BLS data)",
-      "url": "https://www.llc.org/startup-failure-rate-statistics/",
-      "quote": "Small businesses have a 70 percent failure rate within 10 years of opening",
-      "status": "partial",
-      "method": "aggressive_normalization",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "llc.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
-      }
     }
   }
 }

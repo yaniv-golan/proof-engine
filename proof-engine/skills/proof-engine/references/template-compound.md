@@ -21,7 +21,8 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
 from scripts.verify_citations import verify_all_citations, build_citation_detail
-from scripts.computations import compare, apply_verdict_qualifier, emit_proof_summary
+from scripts.computations import compare, apply_verdict_qualifier
+from scripts.proof_summary import ProofSummaryBuilder
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -187,66 +188,105 @@ if __name__ == "__main__":
         base_verdict = "UNDETERMINED"  # defensive fallback
     verdict = apply_verdict_qualifier(base_verdict, any_unverified)
 
-    FACT_REGISTRY["A1"]["method"] = f"count(verified sc1 citations) = {n_sc1}"
-    FACT_REGISTRY["A1"]["result"] = str(n_sc1)
-    FACT_REGISTRY["A2"]["method"] = f"count(verified sc2 citations) = {n_sc2}"
-    FACT_REGISTRY["A2"]["result"] = str(n_sc2)
+    builder = ProofSummaryBuilder(CLAIM_NATURAL, CLAIM_FORMAL)
 
-    citation_detail = build_citation_detail(FACT_REGISTRY, citation_results, empirical_facts)
-
-    # Extractions: each B-type fact records citation status
-    extractions = {}
     for fid, info in FACT_REGISTRY.items():
         if not fid.startswith("B"):
             continue
         ef_key = info["key"]
+        ef = empirical_facts[ef_key]
         cr = citation_results.get(ef_key, {})
-        extractions[fid] = {
-            "value": cr.get("status", "unknown"),
-            "value_in_quote": cr.get("status") in COUNTABLE_STATUSES,
-            "quote_snippet": empirical_facts[ef_key]["quote"][:80],
-        }
+        sub_claim = "SC1" if ef_key in sc1_keys else "SC2"
+        builder.add_empirical_fact(
+            fid,
+            label=info["label"],
+            source_name=ef["source_name"],
+            source_url=ef["url"],
+            source_quote=ef["quote"],
+            sub_claim=sub_claim,
+        )
+        builder.set_verification(
+            fid,
+            status=cr.get("status", "unknown"),
+            method=cr.get("method", "full_quote"),
+            coverage_pct=cr.get("coverage_pct"),
+            fetch_mode=cr.get("fetch_mode", "live"),
+            credibility=cr.get("credibility", {}),
+        )
+        builder.set_extraction(
+            fid,
+            value=cr.get("status", "unknown"),
+            value_in_quote=cr.get("status") in COUNTABLE_STATUSES,
+            quote_snippet=ef["quote"][:80],
+        )
 
-    summary = {
-        "fact_registry": {fid: dict(info) for fid, info in FACT_REGISTRY.items()},
-        "claim_formal": CLAIM_FORMAL,
-        "claim_natural": CLAIM_NATURAL,
-        "citations": citation_detail,
-        "extractions": extractions,
-        "cross_checks": [
-            {"description": "SC1: independent sources consulted",
-             "n_sources_consulted": len(sc1_keys), "n_sources_verified": n_sc1,
-             "sources": {k: citation_results[k]["status"] for k in sc1_keys},
-             "independence_note": "Sources from different publications",
-             "coi_flags": sc1_coi_flags},
-            {"description": "SC2: independent sources consulted",
-             "n_sources_consulted": len(sc2_keys), "n_sources_verified": n_sc2,
-             "sources": {k: citation_results[k]["status"] for k in sc2_keys},
-             "independence_note": "Sources from different publications",
-             "coi_flags": sc2_coi_flags},
-        ],
-        "sub_claim_results": [
-            {"id": "SC1", "n_confirming": n_sc1,
-             "threshold": CLAIM_FORMAL["sub_claims"][0]["threshold"], "holds": sc1_holds},
-            {"id": "SC2", "n_confirming": n_sc2,
-             "threshold": CLAIM_FORMAL["sub_claims"][1]["threshold"], "holds": sc2_holds},
-        ],
-        "adversarial_checks": adversarial_checks,
-        "verdict": verdict,
-        "key_results": {
-            "n_holding": n_holding,
-            "n_total": n_total,
-            "claim_holds": claim_holds,
-        },
-        "generator": {
-            "name": "proof-engine",
-            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
-            "repo": "https://github.com/yaniv-golan/proof-engine",
-            "generated_at": date.today().isoformat(),
-        },
-    }
+    sc1_fact_ids = [fid for fid, info in FACT_REGISTRY.items()
+                    if fid.startswith("B") and info["key"] in sc1_keys]
+    sc2_fact_ids = [fid for fid, info in FACT_REGISTRY.items()
+                    if fid.startswith("B") and info["key"] in sc2_keys]
 
-    emit_proof_summary(summary)
+    builder.add_computed_fact(
+        "A1",
+        label="SC1 source count",
+        method=f"count(verified sc1 citations) = {n_sc1}",
+        result=n_sc1,
+        depends_on=sc1_fact_ids,
+        sub_claim="SC1",
+    )
+    builder.add_computed_fact(
+        "A2",
+        label="SC2 source count",
+        method=f"count(verified sc2 citations) = {n_sc2}",
+        result=n_sc2,
+        depends_on=sc2_fact_ids,
+        sub_claim="SC2",
+    )
+
+    builder.add_cross_check(
+        description="SC1: independent sources consulted",
+        fact_ids=sc1_fact_ids,
+        n_sources_consulted=len(sc1_keys),
+        n_sources_verified=n_sc1,
+        sources={k: citation_results[k]["status"] for k in sc1_keys},
+        independence_note="Sources from different publications",
+        coi_flags=sc1_coi_flags,
+        agreement=sc1_holds,
+    )
+    builder.add_cross_check(
+        description="SC2: independent sources consulted",
+        fact_ids=sc2_fact_ids,
+        n_sources_consulted=len(sc2_keys),
+        n_sources_verified=n_sc2,
+        sources={k: citation_results[k]["status"] for k in sc2_keys},
+        independence_note="Sources from different publications",
+        coi_flags=sc2_coi_flags,
+        agreement=sc2_holds,
+    )
+
+    builder.add_sub_claim_result(
+        id="SC1", n_confirming=n_sc1,
+        threshold=CLAIM_FORMAL["sub_claims"][0]["threshold"], holds=sc1_holds,
+    )
+    builder.add_sub_claim_result(
+        id="SC2", n_confirming=n_sc2,
+        threshold=CLAIM_FORMAL["sub_claims"][1]["threshold"], holds=sc2_holds,
+    )
+
+    for ac in adversarial_checks:
+        builder.add_adversarial_check(
+            question=ac["question"],
+            verification_performed=ac["verification_performed"],
+            finding=ac["finding"],
+            breaks_proof=ac["breaks_proof"],
+        )
+
+    builder.set_verdict(base_verdict, any_unverified=any_unverified)
+    builder.set_key_results(
+        n_holding=n_holding,
+        n_total=n_total,
+        claim_holds=claim_holds,
+    )
+    builder.emit()
 ```
 
 **Key design points:**

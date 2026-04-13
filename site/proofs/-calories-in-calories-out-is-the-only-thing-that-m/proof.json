@@ -1,27 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_sleep",
-      "label": "PMC8591680: Sleep restriction shifts body composition at identical caloric deficits (more muscle lost, less fat lost)"
-    },
-    "B2": {
-      "key": "source_thermogenesis",
-      "label": "PMC3673773: Adaptive thermogenesis reduces energy expenditure 10-15% beyond predictions, persisting 6 months to 7 years after weight loss"
-    },
-    "B3": {
-      "key": "source_microbiome",
-      "label": "PMC3127503: Gut microbiome composition changes effective caloric extraction by ~150 kcal/day from identical food intake"
-    },
-    "B4": {
-      "key": "source_metabolic",
-      "label": "PMC11676201: Caloric restriction invokes hormonal/metabolic adaptations (thermogenesis, appetite hormones, metabolic profiles) that independently alter weight outcomes"
-    },
-    "A1": {
-      "label": "Count of independently verified peer-reviewed sources rejecting CICO sufficiency",
-      "method": "count(citations with status in ('verified', 'partial'))",
-      "result": "4 verified counter-sources (threshold: 3)"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "Energy balance (caloric intake minus expenditure)",
     "property": "sole sufficient determinant of sustainable weight loss",
@@ -31,96 +9,126 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "\"Calories in, calories out\" is the ONLY thing that matters for sustainable weight loss.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_sleep",
-      "source_name": "Influence of Sleep Restriction on Weight Loss Outcomes Associated with Caloric Restriction \u2014 PMC (Sleep, 2022)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8591680/",
-      "quote": "less loss of total mass as fat when sleep was shorter",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PMC8591680: Sleep restriction shifts body composition at identical caloric deficits (more muscle lost, less fat lost)",
+      "sub_claim": null,
+      "source": {
+        "name": "Influence of Sleep Restriction on Weight Loss Outcomes Associated with Caloric Restriction \u2014 PMC (Sleep, 2022)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8591680/",
+        "quote": "less loss of total mass as fat when sleep was shorter"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "less loss of total mass as fat when sleep was shorter"
       }
     },
     "B2": {
-      "source_key": "source_thermogenesis",
-      "source_name": "Adaptive thermogenesis in humans \u2014 PMC (International Journal of Obesity, 2013)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3673773/",
-      "quote": "the reduction in twenty four hour energy expenditure (TEE) persists in subjects who have sustained weight loss for extended periods of time (6 months \u2013 7 years)",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PMC3673773: Adaptive thermogenesis reduces energy expenditure 10-15% beyond predictions, persisting 6 months to 7 years after weight loss",
+      "sub_claim": null,
+      "source": {
+        "name": "Adaptive thermogenesis in humans \u2014 PMC (International Journal of Obesity, 2013)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3673773/",
+        "quote": "the reduction in twenty four hour energy expenditure (TEE) persists in subjects who have sustained weight loss for extended periods of time (6 months \u2013 7 years)"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the reduction in twenty four hour energy expenditure (TEE) persists in subjects "
       }
     },
     "B3": {
-      "source_key": "source_microbiome",
-      "source_name": "Energy-balance studies reveal associations between gut microbes, caloric load, and nutrient absorption in humans \u2014 PMC (American Journal of Clinical Nutrition, 2011)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3127503/",
-      "quote": "a 20% increase in Firmicutes and a corresponding decrease in Bacteroidetes were associated with an increased energy harvest of",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PMC3127503: Gut microbiome composition changes effective caloric extraction by ~150 kcal/day from identical food intake",
+      "sub_claim": null,
+      "source": {
+        "name": "Energy-balance studies reveal associations between gut microbes, caloric load, and nutrient absorption in humans \u2014 PMC (American Journal of Clinical Nutrition, 2011)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3127503/",
+        "quote": "a 20% increase in Firmicutes and a corresponding decrease in Bacteroidetes were associated with an increased energy harvest of"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "a 20% increase in Firmicutes and a corresponding decrease in Bacteroidetes were "
       }
     },
     "B4": {
-      "source_key": "source_metabolic",
-      "source_name": "Beyond Calories: Individual Metabolic and Hormonal Adaptations Driving Variability in Weight Management \u2014 PMC (Nutrients, 2024)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11676201/",
-      "quote": "Caloric restriction invokes a suite of adaptive mechanisms involving adaptive thermogenesis, changes in appetite, alterations in hormonal and metabolic profiles, and changes in body composition.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "PMC11676201: Caloric restriction invokes hormonal/metabolic adaptations (thermogenesis, appetite hormones, metabolic profiles) that independently alter weight outcomes",
+      "sub_claim": null,
+      "source": {
+        "name": "Beyond Calories: Individual Metabolic and Hormonal Adaptations Driving Variability in Weight Management \u2014 PMC (Nutrients, 2024)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11676201/",
+        "quote": "Caloric restriction invokes a suite of adaptive mechanisms involving adaptive thermogenesis, changes in appetite, alterations in hormonal and metabolic profiles, and changes in body composition."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Caloric restriction invokes a suite of adaptive mechanisms involving adaptive th"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "less loss of total mass as fat when sleep was shorter"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "the reduction in twenty four hour energy expenditure (TEE) persists in subjects "
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "a 20% increase in Firmicutes and a corresponding decrease in Bacteroidetes were "
-    },
-    "B4": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Caloric restriction invokes a suite of adaptive mechanisms involving adaptive th"
+    "A1": {
+      "type": "computed",
+      "label": "Count of independently verified peer-reviewed sources rejecting CICO sufficiency",
+      "sub_claim": null,
+      "method": "count(citations with status in ('verified', 'partial'))",
+      "result": "4 verified counter-sources (threshold: 3)",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -134,7 +142,8 @@
         "source_microbiome": "verified",
         "source_metabolic": "verified"
       },
-      "independence_note": "Each source addresses a mechanistically distinct pathway by which factors beyond caloric arithmetic affect weight loss: (B1) sleep \u2192 body composition at fixed deficit; (B2) metabolic adaptation \u2192 reduced energy expenditure; (B3) gut microbiome \u2192 variable caloric extraction from identical food; (B4) hormonal cascade \u2192 multi-mechanism adaptive response. None of the four sources relies on the same underlying study or research group."
+      "independence_note": "Each source addresses a mechanistically distinct pathway by which factors beyond caloric arithmetic affect weight loss: (B1) sleep \u2192 body composition at fixed deficit; (B2) metabolic adaptation \u2192 reduced energy expenditure; (B3) gut microbiome \u2192 variable caloric extraction from identical food; (B4) hormonal cascade \u2192 multi-mechanism adaptive response. None of the four sources relies on the same underlying study or research group.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -157,7 +166,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 4,
     "threshold": 3,

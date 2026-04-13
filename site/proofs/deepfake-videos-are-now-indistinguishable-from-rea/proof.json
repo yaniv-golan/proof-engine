@@ -1,100 +1,106 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "content_warnings_study",
-      "label": "UK study on deepfake video detection (PMC, N=1093)"
-    },
-    "B2": {
-      "key": "uf_pmc_study",
-      "label": "UF study on human vs machine deepfake detection (PMC, N=1901)"
-    },
-    "B3": {
-      "key": "fortune_lyu",
-      "label": "Expert assessment distinguishing video from voice deepfakes (Fortune)"
-    },
-    "A1": {
-      "label": "Verified source count confirming above-chance video detection",
-      "method": "count(verified citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "deepfake video detection by average humans",
     "property": "number of independent authoritative sources confirming humans detect deepfake videos above chance level",
     "operator": ">=",
-    "operator_note": "'Indistinguishable' means detection accuracy at or near chance level (50% in a two-alternative forced choice). If average humans detect deepfake videos significantly above 50%, the videos are distinguishable — disproving the claim. We seek >= 3 independent sources showing above-chance detection to disprove. This is the conservative threshold: even a single well-powered study showing above-chance performance would challenge the claim, but we require 3 for robustness.",
+    "operator_note": "'Indistinguishable' means detection accuracy at or near chance level (50% in a two-alternative forced choice). If average humans detect deepfake videos significantly above 50%, the videos are distinguishable \u2014 disproving the claim. We seek >= 3 independent sources showing above-chance detection to disprove. This is the conservative threshold: even a single well-powered study showing above-chance performance would challenge the claim, but we require 3 for robustness.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
   "claim_natural": "Deepfake videos are now indistinguishable from real footage to the average human eye.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "content_warnings_study",
-      "source_name": "iScience (Deepfake detection with and without content warnings, N=1093)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10679876/",
-      "quote": "people are better than random at determining whether an individual video is genuine or fake",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "UK study on deepfake video detection (PMC, N=1093)",
+      "sub_claim": null,
+      "source": {
+        "name": "iScience (Deepfake detection with and without content warnings, N=1093)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10679876/",
+        "quote": "people are better than random at determining whether an individual video is genuine or fake"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "people are better than random at determining whether an individual video is genu"
       }
     },
     "B2": {
-      "source_key": "uf_pmc_study",
-      "source_name": "Cognitive Research: Principles and Implications (UF study, N=1901)",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12779810/",
-      "quote": "The ability to discriminate between deepfake and real videos was fairly good in humans",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "nih.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "UF study on human vs machine deepfake detection (PMC, N=1901)",
+      "sub_claim": null,
+      "source": {
+        "name": "Cognitive Research: Principles and Implications (UF study, N=1901)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12779810/",
+        "quote": "The ability to discriminate between deepfake and real videos was fairly good in humans"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The ability to discriminate between deepfake and real videos was fairly good in "
       }
     },
     "B3": {
-      "source_key": "fortune_lyu",
-      "source_name": "Fortune (Prof. Siwei Lyu, UB Media Forensic Lab)",
-      "url": "https://fortune.com/2025/12/27/2026-deepfakes-outlook-forecast/",
-      "quote": "voice cloning has crossed what I would call the 'indistinguishable threshold'",
-      "status": "verified",
-      "method": "fragment",
-      "coverage_pct": 81.8,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "fortune.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain — verify source authority manually"
+      "type": "empirical",
+      "label": "Expert assessment distinguishing video from voice deepfakes (Fortune)",
+      "sub_claim": null,
+      "source": {
+        "name": "Fortune (Prof. Siwei Lyu, UB Media Forensic Lab)",
+        "url": "https://fortune.com/2025/12/27/2026-deepfakes-outlook-forecast/",
+        "quote": "voice cloning has crossed what I would call the 'indistinguishable threshold'"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "fragment",
+        "coverage_pct": 81.8,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "fortune.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "partial",
+        "value_in_quote": true,
+        "quote_snippet": "voice cloning has crossed what I would call the 'indistinguishable threshold'"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "people are better than random at determining whether an individual video is genu"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The ability to discriminate between deepfake and real videos was fairly good in "
-    },
-    "B3": {
-      "value": "partial",
-      "value_in_quote": true,
-      "quote_snippet": "voice cloning has crossed what I would call the 'indistinguishable threshold'"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count confirming above-chance video detection",
+      "sub_claim": null,
+      "method": "count(verified citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,13 +113,14 @@
         "uf_pmc_study": "verified",
         "fortune_lyu": "partial"
       },
-      "independence_note": "Sources are from different institutions: (1) UK-based study (N=1093) published in iScience via PMC, (2) University of Florida study (N=1901) published in Cognitive Research via PMC, (3) expert commentary from Prof. Lyu at University at Buffalo (Fortune). These represent independent research groups and publication venues with no overlapping authors."
+      "independence_note": "Sources are from different institutions: (1) UK-based study (N=1093) published in iScience via PMC, (2) University of Florida study (N=1901) published in Cognitive Research via PMC, (3) expert commentary from Prof. Lyu at University at Buffalo (Fortune). These represent independent research groups and publication venues with no overlapping authors.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
     {
       "question": "Are there studies showing humans perform AT chance level for deepfake videos specifically?",
-      "verification_performed": "Searched for 'deepfake video detection human chance level indistinguishable study'. The meta-analysis (B1) reports video accuracy 57.31% with 95% CI [47.80, 66.57] — the CI crosses 50%, meaning the meta-analytic estimate is not statistically significantly above chance. However, the point estimate (57.31%) is above 50%, and individual large studies (B2, N=1901) show clearly above-chance performance (AUC 0.67).",
+      "verification_performed": "Searched for 'deepfake video detection human chance level indistinguishable study'. The meta-analysis (B1) reports video accuracy 57.31% with 95% CI [47.80, 66.57] \u2014 the CI crosses 50%, meaning the meta-analytic estimate is not statistically significantly above chance. However, the point estimate (57.31%) is above 50%, and individual large studies (B2, N=1901) show clearly above-chance performance (AUC 0.67).",
       "finding": "The meta-analysis CI crossing 50% reflects heterogeneity across studies (varying deepfake quality, methodology), not that humans truly perform at chance. The largest individual study (N=1901) found AUC=0.67 for video, clearly above chance. The CI width reflects study-to-study variation, not individual inability.",
       "breaks_proof": false
     },
@@ -125,12 +132,17 @@
     },
     {
       "question": "Has any expert specifically stated video deepfakes have crossed the indistinguishable threshold?",
-      "verification_performed": "Searched for 'deepfake video indistinguishable threshold 2025 2026 expert'. Prof. Siwei Lyu (UB Media Forensic Lab) explicitly stated that VOICE cloning has crossed the indistinguishable threshold, but characterized video deepfakes differently: 'realism is now high enough to reliably fool nonexpert viewers' — a weaker claim than indistinguishable. The distinction is deliberate.",
+      "verification_performed": "Searched for 'deepfake video indistinguishable threshold 2025 2026 expert'. Prof. Siwei Lyu (UB Media Forensic Lab) explicitly stated that VOICE cloning has crossed the indistinguishable threshold, but characterized video deepfakes differently: 'realism is now high enough to reliably fool nonexpert viewers' \u2014 a weaker claim than indistinguishable. The distinction is deliberate.",
       "finding": "Leading deepfake researchers distinguish between voice (indistinguishable) and video (improving but not yet indistinguishable). No expert source found claiming video deepfakes have crossed the indistinguishable threshold as of March 2026.",
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

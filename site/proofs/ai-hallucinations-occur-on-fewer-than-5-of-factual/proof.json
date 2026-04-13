@@ -1,23 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "source_ieee",
-      "label": "IEEE ComSoc: OpenAI o3 hallucinated 33% on PersonQA"
-    },
-    "B2": {
-      "key": "source_allaboutai",
-      "label": "AllAboutAI: ChatGPT hallucinates in ~19.5% of responses"
-    },
-    "B3": {
-      "key": "source_aa",
-      "label": "Artificial Analysis: best model 22% hallucination on AA-Omniscience"
-    },
-    "A1": {
-      "label": "Verified source count meets disproof threshold",
-      "method": "count(verified citations) = 3",
-      "result": "3"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "AI language models (as a general class)",
     "property": "hallucination rate on factual question benchmarks",
@@ -27,74 +9,98 @@
     "proof_direction": "disprove"
   },
   "claim_natural": "AI hallucinations occur on fewer than 5% of factual questions",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "source_ieee",
-      "source_name": "IEEE Communications Society Technology Blog",
-      "url": "https://techblog.comsoc.org/2025/05/10/nyt-ai-is-getting-smarter-but-hallucinations-are-getting-worse/",
-      "quote": "The company found that o3 \u2014 its most powerful system \u2014 hallucinated 33% of the time when running its PersonQA benchmark test",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "comsoc.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "IEEE ComSoc: OpenAI o3 hallucinated 33% on PersonQA",
+      "sub_claim": null,
+      "source": {
+        "name": "IEEE Communications Society Technology Blog",
+        "url": "https://techblog.comsoc.org/2025/05/10/nyt-ai-is-getting-smarter-but-hallucinations-are-getting-worse/",
+        "quote": "The company found that o3 \u2014 its most powerful system \u2014 hallucinated 33% of the time when running its PersonQA benchmark test"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "comsoc.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The company found that o3 \u2014 its most powerful system \u2014 hallucinated 33% of the t"
       }
     },
     "B2": {
-      "source_key": "source_allaboutai",
-      "source_name": "AllAboutAI LLM Hallucination Test",
-      "url": "https://www.allaboutai.com/resources/llm-hallucination/",
-      "quote": "ChatGPT generates hallucinated content in approximately 19.5% of its responses",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "allaboutai.com",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "AllAboutAI: ChatGPT hallucinates in ~19.5% of responses",
+      "sub_claim": null,
+      "source": {
+        "name": "AllAboutAI LLM Hallucination Test",
+        "url": "https://www.allaboutai.com/resources/llm-hallucination/",
+        "quote": "ChatGPT generates hallucinated content in approximately 19.5% of its responses"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "allaboutai.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "ChatGPT generates hallucinated content in approximately 19.5% of its responses"
       }
     },
     "B3": {
-      "source_key": "source_aa",
-      "source_name": "Artificial Analysis AA-Omniscience Benchmark",
-      "url": "https://artificialanalysis.ai/evaluations/omniscience",
-      "quote": "Grok 4.20 Beta 0309 (Reasoning)",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "artificialanalysis.ai",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Artificial Analysis: best model 22% hallucination on AA-Omniscience",
+      "sub_claim": null,
+      "source": {
+        "name": "Artificial Analysis AA-Omniscience Benchmark",
+        "url": "https://artificialanalysis.ai/evaluations/omniscience",
+        "quote": "Grok 4.20 Beta 0309 (Reasoning)"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "artificialanalysis.ai",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Grok 4.20 Beta 0309 (Reasoning)"
       }
-    }
-  },
-  "extractions": {
-    "B1": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "The company found that o3 \u2014 its most powerful system \u2014 hallucinated 33% of the t"
     },
-    "B2": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "ChatGPT generates hallucinated content in approximately 19.5% of its responses"
-    },
-    "B3": {
-      "value": "verified",
-      "value_in_quote": true,
-      "quote_snippet": "Grok 4.20 Beta 0309 (Reasoning)"
+    "A1": {
+      "type": "computed",
+      "label": "Verified source count meets disproof threshold",
+      "sub_claim": null,
+      "method": "count(verified citations) = 3",
+      "result": "3",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -107,7 +113,8 @@
         "source_allaboutai": "verified",
         "source_aa": "verified"
       },
-      "independence_note": "Sources are from different publications (IEEE ComSoc, AllAboutAI, Artificial Analysis) reporting on different benchmarks and models (PersonQA, ChatGPT testing, AA-Omniscience). Each measures hallucination rates independently."
+      "independence_note": "Sources are from different publications (IEEE ComSoc, AllAboutAI, Artificial Analysis) reporting on different benchmarks and models (PersonQA, ChatGPT testing, AA-Omniscience). Each measures hallucination rates independently.",
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -130,7 +137,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "n_confirmed": 3,
     "threshold": 3,

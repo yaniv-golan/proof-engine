@@ -1,29 +1,5 @@
 {
-  "fact_registry": {
-    "B1": {
-      "key": "doe_source",
-      "label": "U.S. DOE: beam lifetime 887.7 +/- 2.2 s, bottle lifetime 878.5 +/- 0.8 s"
-    },
-    "B2": {
-      "key": "quanta_source",
-      "label": "Quanta Magazine: beam ~14 min 48 s, bottle ~14 min 39 s, gap ~9 s"
-    },
-    "A1": {
-      "label": "Computed difference (beam - bottle) from DOE values",
-      "method": "explain_calc('beam_lifetime - bottle_lifetime')",
-      "result": "9.200000000000045 s"
-    },
-    "A2": {
-      "label": "Computed difference (beam - bottle) from Quanta values",
-      "method": "Quanta Magazine reported gap",
-      "result": "9.0 s (beam > bottle)"
-    },
-    "A3": {
-      "label": "Claim evaluation: is (beam - bottle) < -1.0?",
-      "method": "compare(difference, '<', -1.0)",
-      "result": "False"
-    }
-  },
+  "format_version": 3,
   "claim_formal": {
     "subject": "neutron lifetime discrepancy between beam and bottle experiments",
     "property": "difference defined as (beam lifetime) minus (bottle lifetime)",
@@ -33,57 +9,86 @@
     "unit": "seconds"
   },
   "claim_natural": "The mean neutron lifetime measured in beam experiments is more than 1 second shorter than the lifetime obtained from ultracold-neutron bottle experiments.",
-  "citations": {
+  "evidence": {
     "B1": {
-      "source_key": "doe_source",
-      "source_name": "U.S. Department of Energy, Office of Science",
-      "url": "https://www.energy.gov/science/articles/mystery-neutron-lifetime",
-      "quote": "One method measures it as 887.7 seconds, plus or minus 2.2 seconds.",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "energy.gov",
-        "source_type": "government",
-        "tier": 5,
-        "flags": [],
-        "note": "Government domain (.gov)"
+      "type": "empirical",
+      "label": "U.S. DOE: beam lifetime 887.7 +/- 2.2 s, bottle lifetime 878.5 +/- 0.8 s",
+      "sub_claim": null,
+      "source": {
+        "name": "U.S. Department of Energy, Office of Science",
+        "url": "https://www.energy.gov/science/articles/mystery-neutron-lifetime",
+        "quote": "One method measures it as 887.7 seconds, plus or minus 2.2 seconds."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "energy.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "887.7",
+        "value_in_quote": true,
+        "quote_snippet": "One method measures it as 887.7 seconds, plus or minus 2.2 seconds."
       }
     },
     "B2": {
-      "source_key": "quanta_source",
-      "source_name": "Quanta Magazine",
-      "url": "https://www.quantamagazine.org/neutron-lifetime-puzzle-deepens-but-no-dark-matter-seen-20180213/",
-      "quote": "The gap between the world-average bottle and beam measurements has only grown slightly \u2014 to nine seconds",
-      "status": "verified",
-      "method": "full_quote",
-      "coverage_pct": null,
-      "fetch_mode": "live",
-      "credibility": {
-        "domain": "quantamagazine.org",
-        "source_type": "unknown",
-        "tier": 2,
-        "flags": [],
-        "note": "Unclassified domain \u2014 verify source authority manually"
+      "type": "empirical",
+      "label": "Quanta Magazine: beam ~14 min 48 s, bottle ~14 min 39 s, gap ~9 s",
+      "sub_claim": null,
+      "source": {
+        "name": "Quanta Magazine",
+        "url": "https://www.quantamagazine.org/neutron-lifetime-puzzle-deepens-but-no-dark-matter-seen-20180213/",
+        "quote": "The gap between the world-average bottle and beam measurements has only grown slightly \u2014 to nine seconds"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "quantamagazine.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "9.0",
+        "value_in_quote": true,
+        "quote_snippet": "The gap between the world-average bottle and beam measurements has only grown sl"
       }
-    }
-  },
-  "extractions": {
-    "B1_beam": {
-      "value": "887.7",
-      "value_in_quote": true,
-      "quote_snippet": "One method measures it as 887.7 seconds, plus or minus 2.2 seconds."
     },
-    "B1_bottle": {
-      "value": "878.5",
-      "value_in_quote": true,
-      "quote_snippet": "Another method measures it as 878.5 seconds, plus or minus 0.8 second."
+    "A1": {
+      "type": "computed",
+      "label": "Computed difference (beam - bottle) from DOE values",
+      "sub_claim": null,
+      "method": "explain_calc('beam_lifetime - bottle_lifetime')",
+      "result": "9.200000000000045 s",
+      "depends_on": []
     },
-    "B2_gap": {
-      "value": "9.0",
-      "value_in_quote": true,
-      "quote_snippet": "The gap between the world-average bottle and beam measurements has only grown sl"
+    "A2": {
+      "type": "computed",
+      "label": "Computed difference (beam - bottle) from Quanta values",
+      "sub_claim": null,
+      "method": "Quanta Magazine reported gap",
+      "result": "9.0 s (beam > bottle)",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Claim evaluation: is (beam - bottle) < -1.0?",
+      "sub_claim": null,
+      "method": "compare(difference, '<', -1.0)",
+      "result": "False",
+      "depends_on": []
     }
   },
   "cross_checks": [
@@ -93,7 +98,8 @@
         "9.200000000000045",
         "9.0"
       ],
-      "agreement": true
+      "agreement": true,
+      "fact_ids": []
     }
   ],
   "adversarial_checks": [
@@ -116,7 +122,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "DISPROVED",
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "beam_lifetime_s": 887.7,
     "bottle_lifetime_s": 878.5,
