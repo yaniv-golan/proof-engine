@@ -553,6 +553,38 @@ a:hover { text-decoration: underline; }
 .downloads-section summary { cursor: pointer; font-size: 13px; font-family: var(--font-mono); color: var(--link); padding: 8px 0; }
 .downloads-section summary:hover { text-decoration: underline; }
 
+/* Fact ID tooltips */
+abbr.fact-ref {
+    position: relative;
+    text-decoration: underline dotted var(--text-muted);
+    text-underline-offset: 2px;
+    cursor: help;
+}
+abbr.fact-ref::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: var(--font-sans);
+    line-height: 1.4;
+    white-space: normal;
+    width: max-content;
+    max-width: 280px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+abbr.fact-ref:hover::after { opacity: 1; }
+
 /* Generator footer */
 .generator-footer { font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); margin-top: 16px; }
 .generator-footer a { color: var(--link); }

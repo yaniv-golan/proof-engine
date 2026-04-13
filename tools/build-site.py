@@ -103,9 +103,86 @@ def strip_generator_footer(html: str) -> str:
     return _GENERATOR_FOOTER_RE.sub('', html).rstrip()
 
 
-def render_proof_sections(sections):
-    return {name: strip_generator_footer(render_markdown(content))
-            for name, content in sections.items()}
+def build_fact_tooltips(proof_data):
+    """Build a mapping of fact/sub-claim IDs to human-readable tooltip labels."""
+    tooltips = {}
+    # Fact registry: B1 -> "Brenowitz et al. 2017 — NACC data, 38%...", A1 -> "100000th prime via Sieve..."
+    # Entry format varies: dict with "label" key, or plain string
+    for fact_id, entry in proof_data.get("fact_registry", {}).items():
+        if isinstance(entry, dict):
+            label = entry.get("label", "")
+        elif isinstance(entry, str):
+            label = entry
+        else:
+            continue
+        # Strip leading "SC1: " or "SC2: " prefix from label since the fact ID itself is the key
+        label = re.sub(r'^SC\d+:\s*', '', label)
+        if label:
+            tooltips[fact_id] = label
+
+    # Sub-claims: SC1 -> "≥30% of autopsy-confirmed AD cases have Lewy pathology"
+    # Formats vary: list of dicts, dict keyed by ID, or dict with string values
+    claim_formal = proof_data.get("claim_formal", {})
+    sub_claims = claim_formal.get("sub_claims")
+    if isinstance(sub_claims, list):
+        for sc in sub_claims:
+            if isinstance(sc, dict):
+                sc_id = sc.get("id", "")
+                prop = sc.get("property") or sc.get("description", "")
+                if sc_id and prop:
+                    tooltips[sc_id] = prop
+    elif isinstance(sub_claims, dict):
+        for sc_id, sc_val in sub_claims.items():
+            if isinstance(sc_val, dict):
+                prop = sc_val.get("property") or sc_val.get("description", "")
+            elif isinstance(sc_val, str):
+                prop = sc_val
+            else:
+                continue
+            if sc_id and prop:
+                tooltips[sc_id] = prop
+
+    return tooltips
+
+
+# Match standalone fact/sub-claim IDs in rendered HTML text (not inside HTML tags).
+# Matches: (B1), (B2, B3), B1, SC1 — but not inside <tag ...> attributes.
+_FACT_ID_RE = re.compile(r'(?<![<\w/])(?P<id>(?:B|A|S)\d+|SC\d+)(?!["\w>])')
+
+
+def add_fact_tooltips(html, tooltips):
+    """Wrap standalone fact/sub-claim IDs with <abbr> tooltip tags."""
+    if not tooltips:
+        return html
+
+    def _replace_in_text(text):
+        """Replace fact IDs in a text fragment (not inside HTML tags)."""
+        def _sub(m):
+            fid = m.group("id")
+            if fid in tooltips:
+                escaped = xml_escape(tooltips[fid])
+                return f'<abbr class="fact-ref" data-tip="{escaped}">{fid}</abbr>'
+            return m.group(0)
+        return _FACT_ID_RE.sub(_sub, text)
+
+    # Split HTML into tags and text, only process text segments
+    parts = re.split(r'(<[^>]+>)', html)
+    result = []
+    for part in parts:
+        if part.startswith('<'):
+            result.append(part)
+        else:
+            result.append(_replace_in_text(part))
+    return ''.join(result)
+
+
+def render_proof_sections(sections, tooltips=None):
+    rendered = {name: strip_generator_footer(render_markdown(content))
+                for name, content in sections.items()}
+    if tooltips:
+        rendered = {name: add_fact_tooltips(html, tooltips)
+                    for name, html in rendered.items()}
+    return rendered
 
 
 def _extract_preamble(markdown):
@@ -425,6 +502,8 @@ def main():
         loader=FileSystemLoader(str(site_dir / "templates")),
         autoescape=select_autoescape(["html"]),
     )
+    from markupsafe import Markup
+    env.filters["fact_tooltips"] = lambda html, tips: Markup(add_fact_tooltips(str(html), tips))
 
     common = {"base_url": base_url, "site_url": site_url}
     stats = compute_stats(proofs)
@@ -467,10 +546,13 @@ def main():
     tpl = env.get_template("proof.html")
     proof_dois = {}  # slug -> doi string or None
     for proof in proofs:
-        rendered_md = render_proof_sections(proof["sections_md"])
-        rendered_audit = render_proof_sections(proof["sections_audit"])
-        rendered_narrative = render_proof_sections(proof["sections_narrative"])
-        rendered_verdict_hook = render_markdown(proof["verdict_hook"])
+        tooltips = build_fact_tooltips(proof["proof_data"])
+        rendered_md = render_proof_sections(proof["sections_md"], tooltips)
+        rendered_audit = render_proof_sections(proof["sections_audit"], tooltips)
+        rendered_narrative = render_proof_sections(proof["sections_narrative"], tooltips)
+        rendered_verdict_hook = add_fact_tooltips(
+            render_markdown(proof["verdict_hook"]), tooltips
+        )
         canonical_url = f"{site_url}{base_url}proofs/{proof['slug']}/"
 
         # Read doi.json sidecar if present
@@ -532,6 +614,7 @@ def main():
             citation=citation_ctx,
             citation_formats=citation_formats,
             source_type_labels=_SOURCE_TYPE_DISPLAY_LABELS,
+            fact_tooltips=tooltips,
         ))
         shutil.copy2(src_dir / "proof.py", proof_out / "proof.py")
         shutil.copy2(src_dir / "proof_audit.md", proof_out / "proof_audit.md")

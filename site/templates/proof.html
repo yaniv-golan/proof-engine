@@ -111,8 +111,8 @@
     {% for fact_id, fact in proof.proof_data.fact_registry.items() %}
         {% set cit = citations.get(fact_id) %}
         <tr>
-            <td>{% if cit %}<a href="{{ cit.url }}">{{ cit.source_name }}</a>{% else %}{{ fact.label }}{% endif %}</td>
-            <td>{{ fact_id }}</td>
+            <td>{% if cit %}<a href="{{ cit.url }}">{{ cit.source_name }}</a>{% elif fact is mapping %}{{ fact.label | fact_tooltips(fact_tooltips) }}{% else %}{{ fact | fact_tooltips(fact_tooltips) }}{% endif %}</td>
+            <td>{{ fact_id | fact_tooltips(fact_tooltips) }}</td>
             <td>{% if cit and cit.credibility is defined %}{{ source_type_labels.get(cit.credibility.source_type | default("unknown"), "Unclassified") }}{% elif fact.method is defined %}—{% else %}—{% endif %}</td>
             <td>{% if cit %}{% set st = cit.status %}<span class="{% if st == 'verified' %}evidence-verified{% elif st == 'partial' %}evidence-computed{% elif st in ('failed', 'not_found', 'fetch_failed') %}evidence-failed{% else %}evidence-unknown{% endif %}">{% if st == "verified" %}Yes{% elif st == "partial" %}Partial{% elif st == "not_found" %}Not Found{% elif st in ("failed", "fetch_failed") %}Fetch Failed{% else %}{{ st | capitalize }}{% endif %}</span>{% elif fact.method is defined %}<span class="evidence-computed">Computed</span>{% endif %}</td>
         </tr>
