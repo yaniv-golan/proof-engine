@@ -22,7 +22,8 @@ from datetime import date
 # --- STRUCTURAL IMPORTS (always needed) ---
 from scripts.smart_extract import normalize_unicode, verify_extraction
 from scripts.verify_citations import verify_all_citations, build_citation_detail, verify_data_values
-from scripts.computations import compare, explain_calc, apply_verdict_qualifier, emit_proof_summary
+from scripts.computations import compare, explain_calc, apply_verdict_qualifier
+from scripts.proof_summary import ProofSummaryBuilder
 
 # --- CLAIM-SPECIFIC IMPORTS (adapt to your proof) ---
 from scripts.extract_values import parse_date_from_quote
@@ -109,51 +110,83 @@ if __name__ == "__main__":
         base_verdict = "DISPROVED"
     verdict = apply_verdict_qualifier(base_verdict, any_unverified)
 
-    FACT_REGISTRY["A1"]["method"] = "compute_age()"
-    FACT_REGISTRY["A1"]["result"] = str(age)
+    builder = ProofSummaryBuilder(CLAIM_NATURAL, CLAIM_FORMAL)
 
-    citation_detail = build_citation_detail(FACT_REGISTRY, citation_results, empirical_facts)
+    builder.add_empirical_fact(
+        "B1",
+        label=FACT_REGISTRY["B1"]["label"],
+        source_name=empirical_facts["source_a"]["source_name"],
+        source_url=empirical_facts["source_a"]["url"],
+        source_quote=empirical_facts["source_a"]["quote"],
+    )
+    cr_a = citation_results["source_a"]
+    builder.set_verification(
+        "B1",
+        status=cr_a["status"],
+        method=cr_a.get("method", "full_quote"),
+        coverage_pct=cr_a.get("coverage_pct"),
+        fetch_mode=cr_a.get("fetch_mode", "live"),
+        credibility=cr_a.get("credibility", {}),
+    )
+    builder.set_extraction(
+        "B1",
+        value=str(val_a),
+        value_in_quote=val_a_in_quote,
+        quote_snippet=empirical_facts["source_a"]["quote"][:80],
+    )
 
-    extractions = {
-        "B1": {
-            "value": str(val_a),
-            "value_in_quote": val_a_in_quote,
-            "quote_snippet": empirical_facts["source_a"]["quote"][:80],
-        },
-        "B2": {
-            "value": str(val_b),
-            "value_in_quote": val_b_in_quote,
-            "quote_snippet": empirical_facts["source_b"]["quote"][:80],
-        },
-    }
+    builder.add_empirical_fact(
+        "B2",
+        label=FACT_REGISTRY["B2"]["label"],
+        source_name=empirical_facts["source_b"]["source_name"],
+        source_url=empirical_facts["source_b"]["url"],
+        source_quote=empirical_facts["source_b"]["quote"],
+    )
+    cr_b = citation_results["source_b"]
+    builder.set_verification(
+        "B2",
+        status=cr_b["status"],
+        method=cr_b.get("method", "full_quote"),
+        coverage_pct=cr_b.get("coverage_pct"),
+        fetch_mode=cr_b.get("fetch_mode", "live"),
+        credibility=cr_b.get("credibility", {}),
+    )
+    builder.set_extraction(
+        "B2",
+        value=str(val_b),
+        value_in_quote=val_b_in_quote,
+        quote_snippet=empirical_facts["source_b"]["quote"][:80],
+    )
 
-    summary = {
-        "fact_registry": {
-            fid: {k: v for k, v in info.items()}
-            for fid, info in FACT_REGISTRY.items()
-        },
-        "claim_formal": CLAIM_FORMAL,
-        "claim_natural": CLAIM_NATURAL,
-        "citations": citation_detail,
-        "extractions": extractions,
-        "cross_checks": [
-            {"description": "...", "values_compared": [str(val_a), str(val_b)], "agreement": val_a == val_b}
-        ],
-        "adversarial_checks": adversarial_checks,
-        "verdict": verdict,
-        "key_results": {
-            "age": age,
-            "threshold": CLAIM_FORMAL["threshold"],
-            "operator": CLAIM_FORMAL["operator"],
-            "claim_holds": claim_holds,
-        },
-        "generator": {
-            "name": "proof-engine",
-            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
-            "repo": "https://github.com/yaniv-golan/proof-engine",
-            "generated_at": date.today().isoformat(),
-        },
-    }
+    builder.add_computed_fact(
+        "A1",
+        label=FACT_REGISTRY["A1"]["label"],
+        method="compute_age()",
+        result=age,
+        depends_on=["B1"],
+    )
 
-    emit_proof_summary(summary)
+    builder.add_cross_check(
+        description="...",
+        fact_ids=["B1", "B2"],
+        values_compared=[str(val_a), str(val_b)],
+        agreement=val_a == val_b,
+    )
+
+    for ac in adversarial_checks:
+        builder.add_adversarial_check(
+            question=ac["question"],
+            verification_performed=ac["verification_performed"],
+            finding=ac["finding"],
+            breaks_proof=ac["breaks_proof"],
+        )
+
+    builder.set_verdict(base_verdict, any_unverified=any_unverified)
+    builder.set_key_results(
+        age=age,
+        threshold=CLAIM_FORMAL["threshold"],
+        operator=CLAIM_FORMAL["operator"],
+        claim_holds=claim_holds,
+    )
+    builder.emit()
 ```

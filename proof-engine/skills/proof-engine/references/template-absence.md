@@ -31,7 +31,8 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
 from scripts.verify_citations import verify_search_registry, verify_all_citations, build_citation_detail
-from scripts.computations import compare, apply_verdict_qualifier, emit_proof_summary
+from scripts.computations import compare, apply_verdict_qualifier
+from scripts.proof_summary import ProofSummaryBuilder
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -207,87 +208,102 @@ if __name__ == "__main__":
         base_verdict = "UNDETERMINED"  # defensive fallback
     verdict = apply_verdict_qualifier(base_verdict, any_unverified)
 
-    FACT_REGISTRY["A1"]["method"] = f"unique accessible databases with null results = {n_null_verified}"
-    FACT_REGISTRY["A1"]["result"] = str(n_null_verified)
+    builder = ProofSummaryBuilder(CLAIM_NATURAL, CLAIM_FORMAL)
 
-    # Build search_registry metadata for JSON summary
-    search_registry_summary = {}
-    for key, entry in search_registry.items():
-        search_registry_summary[key] = {
-            **entry,
-            "verification": search_results[key],
-        }
-
-    # Extractions: S-type facts record search accessibility status
-    extractions = {}
     for fid, info in FACT_REGISTRY.items():
         if fid.startswith("S"):
             sr_key = info["key"]
+            entry = search_registry[sr_key]
             sr = search_results.get(sr_key, {})
-            extractions[fid] = {
-                "value": sr.get("status", "unknown"),
-                "value_in_quote": sr.get("status") == "accessible",
-                "result_count": search_registry[sr_key]["result_count"],
-            }
+            builder.add_search_fact(
+                fid,
+                label=info["label"],
+                database=entry["database"],
+                url=entry["url"],
+                search_url=entry["search_url"],
+                query_terms=", ".join(entry["query_terms"]),
+                date_range=entry["date_range"],
+                result_count=entry["result_count"],
+                source_name=entry["source_name"],
+            )
+            builder.set_extraction(
+                fid,
+                value=sr.get("status", "unknown"),
+                value_in_quote=sr.get("status") == "accessible",
+                quote_snippet=f"result_count={entry['result_count']}",
+            )
         elif fid.startswith("B") and empirical_facts:
             ef_key = info["key"]
+            ef = empirical_facts[ef_key]
             cr = citation_results.get(ef_key, {})
-            extractions[fid] = {
-                "value": cr.get("status", "unknown"),
-                "value_in_quote": cr.get("status") in COUNTABLE_STATUSES,
-                "quote_snippet": empirical_facts[ef_key]["quote"][:80],
+            builder.add_empirical_fact(
+                fid,
+                label=info["label"],
+                source_name=ef["source_name"],
+                source_url=ef["url"],
+                source_quote=ef["quote"],
+            )
+            builder.set_verification(
+                fid,
+                status=cr.get("status", "unknown"),
+                method=cr.get("method", "full_quote"),
+                coverage_pct=cr.get("coverage_pct"),
+                fetch_mode=cr.get("fetch_mode", "live"),
+                credibility=cr.get("credibility", {}),
+            )
+            builder.set_extraction(
+                fid,
+                value=cr.get("status", "unknown"),
+                value_in_quote=cr.get("status") in COUNTABLE_STATUSES,
+                quote_snippet=ef["quote"][:80],
+            )
+
+    builder.add_computed_fact(
+        "A1",
+        label="Unique accessible databases with null results",
+        method=f"unique accessible databases with null results = {n_null_verified}",
+        result=n_null_verified,
+        depends_on=[fid for fid in FACT_REGISTRY if fid.startswith("S")],
+    )
+
+    builder.add_cross_check(
+        description="Systematic database searches for published evidence",
+        fact_ids=[fid for fid in FACT_REGISTRY if fid.startswith("S")],
+        n_databases_searched=len(search_registry),
+        n_null_verified=n_null_verified,
+        n_reviewed=n_reviewed,
+        databases={
+            key: {
+                "database": entry["database"],
+                "result_count": entry["result_count"],
+                "status": search_results[key]["status"],
             }
-
-    citation_detail = build_citation_detail(FACT_REGISTRY, citation_results, empirical_facts) if empirical_facts else {}
-
-    summary = {
-        "fact_registry": {
-            fid: {k: v for k, v in info.items()}
-            for fid, info in FACT_REGISTRY.items()
+            for key, entry in search_registry.items()
         },
-        "claim_formal": CLAIM_FORMAL,
-        "claim_natural": CLAIM_NATURAL,
-        "search_registry": search_registry_summary,
-        "citations": citation_detail,
-        "extractions": extractions,
-        "cross_checks": [
-            {
-                "description": "Systematic database searches for published evidence",
-                "n_databases_searched": len(search_registry),
-                "n_null_verified": n_null_verified,
-                "n_reviewed": n_reviewed,
-                "databases": {
-                    key: {
-                        "database": entry["database"],
-                        "result_count": entry["result_count"],
-                        "status": search_results[key]["status"],
-                    }
-                    for key, entry in search_registry.items()
-                },
-                "independence_note": "Searches span distinct databases with independent indexing",
-            }
-        ],
-        "adversarial_checks": adversarial_checks,
-        "verdict": verdict,
-        "key_results": {
-            "n_null_verified": n_null_verified,
-            "n_reviewed": n_reviewed,
-            "n_corroborating": n_corroborating,
-            "search_threshold": CLAIM_FORMAL["search_threshold"],
-            "corroboration_threshold": CLAIM_FORMAL["corroboration_threshold"],
-            "searches_met": searches_met,
-            "corroboration_met": corroboration_met,
-            "claim_holds": claim_holds,
-        },
-        "generator": {
-            "name": "proof-engine",
-            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
-            "repo": "https://github.com/yaniv-golan/proof-engine",
-            "generated_at": date.today().isoformat(),
-        },
-    }
+        independence_note="Searches span distinct databases with independent indexing",
+        agreement=claim_holds,
+    )
 
-    emit_proof_summary(summary)
+    for ac in adversarial_checks:
+        builder.add_adversarial_check(
+            question=ac["question"],
+            verification_performed=ac["verification_performed"],
+            finding=ac["finding"],
+            breaks_proof=ac["breaks_proof"],
+        )
+
+    builder.set_verdict(base_verdict, any_unverified=any_unverified)
+    builder.set_key_results(
+        n_null_verified=n_null_verified,
+        n_reviewed=n_reviewed,
+        n_corroborating=n_corroborating,
+        search_threshold=CLAIM_FORMAL["search_threshold"],
+        corroboration_threshold=CLAIM_FORMAL["corroboration_threshold"],
+        searches_met=searches_met,
+        corroboration_met=corroboration_met,
+        claim_holds=claim_holds,
+    )
+    builder.emit()
 ```
 
 ### Adaptation notes

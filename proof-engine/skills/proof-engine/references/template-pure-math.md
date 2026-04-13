@@ -16,7 +16,8 @@ PROOF_ENGINE_ROOT = "..."
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
-from scripts.computations import compare, explain_calc, emit_proof_summary
+from scripts.computations import compare, explain_calc
+from scripts.proof_summary import ProofSummaryBuilder
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -63,42 +64,34 @@ if __name__ == "__main__":
     else:
         verdict = "PROVED" if claim_holds else "DISPROVED"
 
-    FACT_REGISTRY["A1"]["method"] = "..."
-    FACT_REGISTRY["A1"]["result"] = str(primary_result)
-    FACT_REGISTRY["A2"]["method"] = "..."
-    FACT_REGISTRY["A2"]["result"] = str(crosscheck_result)
+    builder = ProofSummaryBuilder(CLAIM_NATURAL, CLAIM_FORMAL)
 
-    summary = {
-        "fact_registry": {
-            fid: {k: v for k, v in info.items()}
-            for fid, info in FACT_REGISTRY.items()
-        },
-        "claim_formal": CLAIM_FORMAL,
-        "claim_natural": CLAIM_NATURAL,
-        "cross_checks": [
-            {
-                "description": "...",
-                "values_compared": [str(primary_result), str(crosscheck_result)],
-                "agreement": primary_result == crosscheck_result,
-            },
-        ],
-        "adversarial_checks": adversarial_checks,
-        "verdict": verdict,
-        "key_results": {
-            "primary_result": primary_result,
-            "threshold": CLAIM_FORMAL["threshold"],
-            "operator": CLAIM_FORMAL["operator"],
-            "claim_holds": claim_holds,
-        },
-        "generator": {
-            "name": "proof-engine",
-            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
-            "repo": "https://github.com/yaniv-golan/proof-engine",
-            "generated_at": date.today().isoformat(),
-        },
-    }
+    builder.add_computed_fact("A1", label="...", method="...", result=primary_result)
+    builder.add_computed_fact("A2", label="...", method="...", result=crosscheck_result)
 
-    emit_proof_summary(summary)
+    builder.add_cross_check(
+        description="...",
+        fact_ids=["A1", "A2"],
+        values_compared=[str(primary_result), str(crosscheck_result)],
+        agreement=primary_result == crosscheck_result,
+    )
+
+    for ac in adversarial_checks:
+        builder.add_adversarial_check(
+            question=ac["question"],
+            verification_performed=ac["verification_performed"],
+            finding=ac["finding"],
+            breaks_proof=ac["breaks_proof"],
+        )
+
+    builder.set_verdict(verdict)
+    builder.set_key_results(
+        primary_result=primary_result,
+        threshold=CLAIM_FORMAL["threshold"],
+        operator=CLAIM_FORMAL["operator"],
+        claim_holds=claim_holds,
+    )
+    builder.emit()
 ```
 
 Key differences from the empirical template:

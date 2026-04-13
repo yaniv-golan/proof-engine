@@ -24,7 +24,8 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
 from scripts.verify_citations import verify_all_citations, build_citation_detail
-from scripts.computations import compare, apply_verdict_qualifier, emit_proof_summary
+from scripts.computations import compare, apply_verdict_qualifier
+from scripts.proof_summary import ProofSummaryBuilder
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -170,62 +171,73 @@ if __name__ == "__main__":
         base_verdict = "UNDETERMINED"
     verdict = apply_verdict_qualifier(base_verdict, any_unverified)
 
-    FACT_REGISTRY["A1"]["method"] = f"count(verified citations) = {n_confirmed}"
-    FACT_REGISTRY["A1"]["result"] = str(n_confirmed)
+    builder = ProofSummaryBuilder(CLAIM_NATURAL, CLAIM_FORMAL)
 
-    citation_detail = build_citation_detail(FACT_REGISTRY, citation_results, empirical_facts)
-
-    # Extractions: for qualitative proofs, each B-type fact records citation status
-    extractions = {}
     for fid, info in FACT_REGISTRY.items():
         if not fid.startswith("B"):
             continue
         ef_key = info["key"]
+        ef = empirical_facts[ef_key]
         cr = citation_results.get(ef_key, {})
-        extractions[fid] = {
-            "value": cr.get("status", "unknown"),
-            "value_in_quote": cr.get("status") in COUNTABLE_STATUSES,
-            "quote_snippet": empirical_facts[ef_key]["quote"][:80],
-        }
+        builder.add_empirical_fact(
+            fid,
+            label=info["label"],
+            source_name=ef["source_name"],
+            source_url=ef["url"],
+            source_quote=ef["quote"],
+        )
+        builder.set_verification(
+            fid,
+            status=cr.get("status", "unknown"),
+            method=cr.get("method", "full_quote"),
+            coverage_pct=cr.get("coverage_pct"),
+            fetch_mode=cr.get("fetch_mode", "live"),
+            credibility=cr.get("credibility", {}),
+        )
+        builder.set_extraction(
+            fid,
+            value=cr.get("status", "unknown"),
+            value_in_quote=cr.get("status") in COUNTABLE_STATUSES,
+            quote_snippet=ef["quote"][:80],
+        )
 
-    summary = {
-        "fact_registry": {
-            fid: {k: v for k, v in info.items()}
-            for fid, info in FACT_REGISTRY.items()
-        },
-        "claim_formal": CLAIM_FORMAL,
-        "claim_natural": CLAIM_NATURAL,
-        "citations": citation_detail,
-        "extractions": extractions,
-        # For qualitative proofs, cross_checks documents that multiple independent
-        # sources were consulted and how many were successfully verified.
-        "cross_checks": [
-            {
-                "description": "Multiple independent sources consulted",
-                "n_sources_consulted": len(empirical_facts),
-                "n_sources_verified": n_confirmed,
-                "sources": {k: citation_results[k]["status"] for k in empirical_facts},
-                "independence_note": "Sources are from different publications/institutions",
-                "coi_flags": coi_flags,
-            }
-        ],
-        "adversarial_checks": adversarial_checks,
-        "verdict": verdict,
-        "key_results": {
-            "n_confirmed": n_confirmed,
-            "threshold": CLAIM_FORMAL["threshold"],
-            "operator": CLAIM_FORMAL["operator"],
-            "claim_holds": claim_holds,
-        },
-        "generator": {
-            "name": "proof-engine",
-            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
-            "repo": "https://github.com/yaniv-golan/proof-engine",
-            "generated_at": date.today().isoformat(),
-        },
-    }
+    builder.add_computed_fact(
+        "A1",
+        label="Verified source count",
+        method=f"count(verified citations) = {n_confirmed}",
+        result=n_confirmed,
+        depends_on=[fid for fid in FACT_REGISTRY if fid.startswith("B")],
+    )
 
-    emit_proof_summary(summary)
+    # For qualitative proofs, cross_checks documents that multiple independent
+    # sources were consulted and how many were successfully verified.
+    builder.add_cross_check(
+        description="Multiple independent sources consulted",
+        fact_ids=[fid for fid in FACT_REGISTRY if fid.startswith("B")],
+        n_sources_consulted=len(empirical_facts),
+        n_sources_verified=n_confirmed,
+        sources={k: citation_results[k]["status"] for k in empirical_facts},
+        independence_note="Sources are from different publications/institutions",
+        coi_flags=coi_flags,
+        agreement=claim_holds,
+    )
+
+    for ac in adversarial_checks:
+        builder.add_adversarial_check(
+            question=ac["question"],
+            verification_performed=ac["verification_performed"],
+            finding=ac["finding"],
+            breaks_proof=ac["breaks_proof"],
+        )
+
+    builder.set_verdict(base_verdict, any_unverified=any_unverified)
+    builder.set_key_results(
+        n_confirmed=n_confirmed,
+        threshold=CLAIM_FORMAL["threshold"],
+        operator=CLAIM_FORMAL["operator"],
+        claim_holds=claim_holds,
+    )
+    builder.emit()
 ```
 
 ### Disproof variant

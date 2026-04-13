@@ -37,7 +37,8 @@ from datetime import date
 from scripts.smart_extract import normalize_unicode
 from scripts.verify_citations import verify_all_citations, build_citation_detail, verify_data_values
 from scripts.extract_values import parse_number_from_quote
-from scripts.computations import compare, explain_calc, cross_check, compute_percentage_change, apply_verdict_qualifier, emit_proof_summary
+from scripts.computations import compare, explain_calc, cross_check, compute_percentage_change, apply_verdict_qualifier
+from scripts.proof_summary import ProofSummaryBuilder
 
 # 1. CLAIM INTERPRETATION (Rule 4)
 CLAIM_NATURAL = "..."
@@ -139,59 +140,99 @@ if __name__ == "__main__":
         base_verdict = "DISPROVED"
     verdict = apply_verdict_qualifier(base_verdict, any_unverified)
 
-    FACT_REGISTRY["A1"]["method"] = "compute_percentage_change(mode='decline')"
-    FACT_REGISTRY["A1"]["result"] = f"{decline_a:.4f}%"
-    FACT_REGISTRY["A2"]["method"] = "compute_percentage_change(mode='decline') [cross-check]"
-    FACT_REGISTRY["A2"]["result"] = f"{decline_b:.4f}%"
+    builder = ProofSummaryBuilder(CLAIM_NATURAL, CLAIM_FORMAL)
 
-    citation_detail = build_citation_detail(FACT_REGISTRY, citation_results, empirical_facts)
+    builder.add_empirical_fact(
+        "B1",
+        label=FACT_REGISTRY["B1"]["label"],
+        source_name=empirical_facts["source_a"]["source_name"],
+        source_url=empirical_facts["source_a"]["url"],
+        source_quote=empirical_facts["source_a"]["quote"],
+    )
+    cr_a = citation_results["source_a"]
+    builder.set_verification(
+        "B1",
+        status=cr_a["status"],
+        method=cr_a.get("method", "full_quote"),
+        coverage_pct=cr_a.get("coverage_pct"),
+        fetch_mode=cr_a.get("fetch_mode", "live"),
+        credibility=cr_a.get("credibility", {}),
+    )
+    builder.set_extraction(
+        "B1",
+        value=f"val_1913={val_1913_a}, val_2024={val_2024_a}",
+        value_in_quote=True,
+        data_values_verified=all(v.get("found") for v in dv_results_a.values()),
+    )
 
-    # For data_values proofs, extractions use sub-IDs and note the data source
-    extractions = {
-        "B1_val_1913": {"value": str(val_1913_a), "value_in_quote": True, "quote_snippet": "data_values['val_1913']"},
-        "B1_val_2024": {"value": str(val_2024_a), "value_in_quote": True, "quote_snippet": "data_values['val_2024']"},
-        "B2_val_1913": {"value": str(val_1913_b), "value_in_quote": True, "quote_snippet": "data_values['val_1913']"},
-        "B2_val_2024": {"value": str(val_2024_b), "value_in_quote": True, "quote_snippet": "data_values['val_2024']"},
-    }
+    builder.add_empirical_fact(
+        "B2",
+        label=FACT_REGISTRY["B2"]["label"],
+        source_name=empirical_facts["source_b"]["source_name"],
+        source_url=empirical_facts["source_b"]["url"],
+        source_quote=empirical_facts["source_b"]["quote"],
+    )
+    cr_b = citation_results["source_b"]
+    builder.set_verification(
+        "B2",
+        status=cr_b["status"],
+        method=cr_b.get("method", "full_quote"),
+        coverage_pct=cr_b.get("coverage_pct"),
+        fetch_mode=cr_b.get("fetch_mode", "live"),
+        credibility=cr_b.get("credibility", {}),
+    )
+    builder.set_extraction(
+        "B2",
+        value=f"val_1913={val_1913_b}, val_2024={val_2024_b}",
+        value_in_quote=True,
+        data_values_verified=all(v.get("found") for v in dv_results_b.values()),
+    )
 
-    # Include data value verification results
-    data_value_verification = {
-        "B1": {k: v for k, v in dv_results_a.items()},
-        "B2": {k: v for k, v in dv_results_b.items()},
-    }
+    builder.add_computed_fact(
+        "A1",
+        label=FACT_REGISTRY["A1"]["label"],
+        method="compute_percentage_change(mode='decline')",
+        result=f"{decline_a:.4f}%",
+        depends_on=["B1"],
+    )
+    builder.add_computed_fact(
+        "A2",
+        label=FACT_REGISTRY["A2"]["label"],
+        method="compute_percentage_change(mode='decline') [cross-check]",
+        result=f"{decline_b:.4f}%",
+        depends_on=["B2"],
+    )
 
-    summary = {
-        "fact_registry": {
-            fid: {k: v for k, v in info.items()}
-            for fid, info in FACT_REGISTRY.items()
-        },
-        "claim_formal": CLAIM_FORMAL,
-        "claim_natural": CLAIM_NATURAL,
-        "citations": citation_detail,
-        "extractions": extractions,
-        "data_value_verification": data_value_verification,
-        "cross_checks": [
-            {"description": "1913 values", "values_compared": [str(val_1913_a), str(val_1913_b)],
-             "agreement": True, "tolerance": "2% relative"},
-            {"description": "2024 values", "values_compared": [str(val_2024_a), str(val_2024_b)],
-             "agreement": True, "tolerance": "0.1% relative"},
-        ],
-        "adversarial_checks": adversarial_checks,
-        "verdict": verdict,
-        "key_results": {
-            "decline_source_a": decline_a,
-            "decline_source_b": decline_b,
-            "threshold": CLAIM_FORMAL["threshold"],
-            "operator": CLAIM_FORMAL["operator"],
-            "claim_holds": claim_holds,
-        },
-        "generator": {
-            "name": "proof-engine",
-            "version": open(os.path.join(PROOF_ENGINE_ROOT, "VERSION")).read().strip(),
-            "repo": "https://github.com/yaniv-golan/proof-engine",
-            "generated_at": date.today().isoformat(),
-        },
-    }
+    builder.add_cross_check(
+        description="1913 values",
+        fact_ids=["B1", "B2"],
+        values_compared=[str(val_1913_a), str(val_1913_b)],
+        agreement=True,
+        tolerance="2% relative",
+    )
+    builder.add_cross_check(
+        description="2024 values",
+        fact_ids=["B1", "B2"],
+        values_compared=[str(val_2024_a), str(val_2024_b)],
+        agreement=True,
+        tolerance="0.1% relative",
+    )
 
-    emit_proof_summary(summary)
+    for ac in adversarial_checks:
+        builder.add_adversarial_check(
+            question=ac["question"],
+            verification_performed=ac["verification_performed"],
+            finding=ac["finding"],
+            breaks_proof=ac["breaks_proof"],
+        )
+
+    builder.set_verdict(base_verdict, any_unverified=any_unverified)
+    builder.set_key_results(
+        decline_source_a=decline_a,
+        decline_source_b=decline_b,
+        threshold=CLAIM_FORMAL["threshold"],
+        operator=CLAIM_FORMAL["operator"],
+        claim_holds=claim_holds,
+    )
+    builder.emit()
 ```
