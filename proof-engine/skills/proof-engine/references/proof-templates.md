@@ -16,13 +16,14 @@ Read this at **Step 3** when writing proof code. Choose the template that matche
 ## Decision Flowchart
 
 1. Is the claim purely mathematical (no empirical sources)? → **Pure math**
-2. Does the claim assert absence of evidence? → **Absence**
+2. Does the claim assert absence of evidence **and** no authoritative sources actively reject the claim? → **Absence**
+   > Absence means the claim's *primary* answer is "no evidence exists." If authoritative sources actively debunk or reject the claim (i.e., positive rejection sources exist), skip to step 8 — those claims are better served by qualitative-disproof, which produces a DISPROVED verdict rather than the weaker SUPPORTED.
 3. Does the claim have multiple sub-claims (X AND Y, X BECAUSE Y)? → **Compound**
 4. Does the claim use an epistemic qualifier ("verified," "confirmed," "proven")? → **Compound** (contested qualifier pattern)
 5. Does the claim use causal language ("causes," "leads to")? → **Compound** (causal decomposition)
 6. Is the primary evidence numeric data from tables? → **Numeric/table**
 7. Is the claim about a date or age? → **Date/age**
-8. Does the claim depend on expert/source agreement? → **Qualitative consensus**
+8. Does the claim depend on expert/source agreement or rejection? → **Qualitative consensus**
 
 ## Key Structural Elements (All Templates)
 
