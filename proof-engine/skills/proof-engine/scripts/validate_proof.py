@@ -1140,11 +1140,8 @@ class ProofValidator:
     # Run all checks
     # ------------------------------------------------------------------
 
-    def validate(self) -> bool:
-        """Run all rule checks and print results.
-
-        Returns True if no issues (warnings are OK).
-        """
+    def run_checks(self):
+        """Run all rule checks, populating self.issues, self.warnings, self.passed."""
         self.check_rule1_no_handtyped_values()
         self.check_rule2_citation_verification()
         self.check_rule3_system_time()
@@ -1171,7 +1168,8 @@ class ProofValidator:
         self.check_claim_natural_key()
         self.check_emit_proof_summary()
 
-        # Print report
+    def print_report(self) -> bool:
+        """Print validation results and return True if no issues (warnings are OK)."""
         print(f"Validating: {self.filename}")
         print("=" * 60)
 
@@ -1209,20 +1207,79 @@ class ProofValidator:
             print("STATUS: PASS")
             return True
 
+    def validate(self) -> bool:
+        """Run all rule checks and print results.
+
+        Returns True if no issues (warnings are OK).
+        Backward-compatible wrapper around run_checks() + print_report().
+        """
+        self.run_checks()
+        return self.print_report()
+
 
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python scripts/validate_proof.py proof_file.py")
+    # Parse --format flag before positional args
+    sarif_mode = False
+    argv = sys.argv[1:]
+    if "--format" in argv:
+        fmt_idx = argv.index("--format")
+        if fmt_idx + 1 < len(argv) and argv[fmt_idx + 1] == "sarif":
+            sarif_mode = True
+        argv = [a for i, a in enumerate(argv)
+                if i != fmt_idx and i != fmt_idx + 1]
+
+    if len(argv) != 1:
+        print("Usage: validate_proof.py [--format sarif] <proof.py>", file=sys.stderr)
         sys.exit(1)
 
-    filepath = sys.argv[1]
+    filepath = argv[0]
     if not os.path.isfile(filepath):
-        print(f"ERROR: File not found: {filepath}")
+        print(f"ERROR: File not found: {filepath}", file=sys.stderr)
         sys.exit(1)
 
     validator = ProofValidator(filepath)
-    ok = validator.validate()
-    sys.exit(0 if ok else 1)
+    validator.run_checks()
+
+    if sarif_mode:
+        from tools.lib.sarif import generate_sarif
+        import re as _re
+
+        _RULE_MAP = {
+            "Rule 1": "PE001",
+            "Rule 2": "PE002",
+            "Rule 3": "PE003",
+            "Rule 4": "PE004",
+            "Rule 5": "PE005",
+            "Rule 6": "PE006",
+            "Rule 7": "PE007",
+            "FACT_REGISTRY": "PE008",
+            "Contract": "PE009",
+            "Verdict": "PE010",
+        }
+
+        def _infer_rule(msg: str) -> str:
+            for prefix, rule_id in _RULE_MAP.items():
+                if prefix in msg:
+                    return rule_id
+            return "PE000"
+
+        sarif_issues = []
+        for msg, details in validator.issues:
+            rule = _infer_rule(msg)
+            sarif_issues.append({"message": msg, "line": None, "rule": rule})
+            for detail in details:
+                line_match = _re.match(r"\s*Line (\d+):", detail)
+                line_num = int(line_match.group(1)) if line_match else None
+                sarif_issues.append({"message": detail.strip(), "line": line_num, "rule": rule})
+        sarif_warnings = []
+        for msg, details in validator.warnings:
+            sarif_warnings.append({"message": msg, "line": None, "rule": _infer_rule(msg)})
+        print(generate_sarif(sarif_issues, sarif_warnings, validator.passed,
+                             filepath, tool_version="1.15.0"))
+        sys.exit(1 if validator.issues else 0)
+    else:
+        ok = validator.print_report()
+        sys.exit(0 if ok else 1)
