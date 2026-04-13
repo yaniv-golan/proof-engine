@@ -1157,6 +1157,70 @@ class ProofValidator:
         else:
             self.passed.append('Contract: JSON summary uses "claim_natural" (not bare "claim")')
 
+    def check_disproof_quote_quality(self):
+        """For disproof proofs, warn when empirical_facts quotes lack explicit rejection language.
+
+        A quote that merely describes or restates the myth (e.g., "Many people believe X")
+        provides near-zero disproof value.  Good rejection quotes contain words like
+        "not true", "myth", "no evidence", "debunked", "refuted", "false", etc.
+        """
+        # Only applies to disproof proofs
+        if not re.search(
+            r"""["']proof_direction["']\s*:\s*["']disprove["']""",
+            self.source,
+        ):
+            return
+
+        REJECTION_MARKERS = re.compile(
+            r"""(?ix)
+            \bnot\s+true\b
+            | \bmyth\b
+            | \bdebunk
+            | \brefut
+            | \bfabricat
+            | \buntrue\b
+            | \bno\s+(?:scientific\s+)?evidence\b
+            | \bhas\s+never\b
+            | \bhoax\b
+            | \bincorrect\b
+            | \binaccurat
+            | \bdiscredited\b
+            | \bhas\s+no\s+(?:basis|foundation|support)\b
+            | \bnot\s+(?:real|a\s+thing|supported|documented)\b
+            | \bfalse\b
+            | \bfiction\b
+            | \bdemonstrated\s+(?:to\s+be\s+)?false\b
+            | \bcontradicts?\b
+            | \bdisprove[sd]?\b
+            | \bno\s+(?:basis|credible\s+support|scientific\s+backing)\b
+            """
+        )
+
+        quotes = self._extract_quote_values()
+        weak = []
+        for q in quotes:
+            if not REJECTION_MARKERS.search(q):
+                snippet = q[:120].replace("\n", " ")
+                weak.append(f'  Quote lacks rejection language: "{snippet}…"')
+
+        if weak:
+            self.warnings.append((
+                "Disproof proof contains empirical_facts quote(s) with no explicit "
+                "rejection language (e.g., 'not true', 'myth', 'no evidence', 'debunked'). "
+                "These quotes describe or restate the claim rather than rejecting it — "
+                "they add near-zero evidentiary weight to the disproof. "
+                "Replace with quotes that explicitly state the claim is false or unsupported.",
+                weak,
+            ))
+        elif quotes:
+            # Only record a pass when at least one quote was actually inspected.
+            # If _extract_quote_values() returned nothing (empty empirical_facts,
+            # unparseable source, f-string quotes), emitting a vacuous "all quotes
+            # pass" message is misleading — other checks cover missing empirical facts.
+            self.passed.append(
+                "Disproof: all empirical_facts quotes contain explicit rejection language"
+            )
+
     # ------------------------------------------------------------------
     # Run all checks
     # ------------------------------------------------------------------
@@ -1187,6 +1251,7 @@ class ProofValidator:
         self.check_verdict_validity()
         self.check_fact_registry_format()
         self.check_claim_natural_key()
+        self.check_disproof_quote_quality()   # <-- add this line
         self.check_emit_proof_summary()
 
     def print_report(self) -> bool:

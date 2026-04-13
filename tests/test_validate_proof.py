@@ -1715,3 +1715,77 @@ def test_json_summary_emit_proof_summary_passes():
     v = _validate_json_summary(USES_EMIT_PROOF_SUMMARY_FOR_JSON_CHECK)
     assert len(v.issues) == 0
     assert any("emit_proof_summary" in msg for msg in v.passed)
+
+
+# ---------------------------------------------------------------------------
+# Disproof quote quality (check_disproof_quote_quality)
+# ---------------------------------------------------------------------------
+
+def _validate_disproof_quote_quality(source_code: str) -> ProofValidator:
+    """Write source to temp file, run disproof quote quality check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_disproof_quote_quality()
+    os.unlink(f.name)
+    return v
+
+
+DISPROOF_STRONG_REJECTION = '''
+CLAIM_FORMAL = {
+    "proof_direction": "disprove",
+}
+empirical_facts = {
+    "source_a": {
+        "quote": "The claim that humans eat spiders in their sleep is not true — there is no credible scientific evidence to support it.",
+        "url": "https://example.com/spiders",
+        "source_name": "Example"
+    },
+}
+'''
+
+DISPROOF_MYTH_DESCRIPTION = '''
+CLAIM_FORMAL = {
+    "proof_direction": "disprove",
+}
+empirical_facts = {
+    "source_b": {
+        "quote": "Urban legend has led many to believe that we eat spiders in our sleep, up to as many as eight a year.",
+        "url": "https://example.com/spiders2",
+        "source_name": "Example"
+    },
+}
+'''
+
+AFFIRM_MYTH_DESCRIPTION = '''
+CLAIM_FORMAL = {
+    "proof_direction": "affirm",
+}
+empirical_facts = {
+    "source_b": {
+        "quote": "Urban legend has led many to believe that we eat spiders in our sleep, up to as many as eight a year.",
+        "url": "https://example.com/spiders2",
+        "source_name": "Example"
+    },
+}
+'''
+
+
+def test_disproof_strong_rejection_no_warning():
+    v = _validate_disproof_quote_quality(DISPROOF_STRONG_REJECTION)
+    assert len(v.warnings) == 0
+
+
+def test_disproof_myth_description_warns():
+    v = _validate_disproof_quote_quality(DISPROOF_MYTH_DESCRIPTION)
+    assert len(v.warnings) >= 1
+    assert any(
+        "rejection" in w[0].lower() or "disproof" in w[0].lower()
+        for w in v.warnings
+    )
+
+
+def test_affirm_proof_skips_disproof_check():
+    v = _validate_disproof_quote_quality(AFFIRM_MYTH_DESCRIPTION)
+    assert len(v.warnings) == 0
