@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yaniv-golan.github.io/proof-engine/proof-schema.json",
+  "title": "Proof Engine v3 Proof Format",
+  "description": "Machine-readable proof output from proof-engine. Format version 3.",
+  "type": "object",
+  "required": [
+    "format_version", "claim_natural", "claim_formal",
+    "evidence", "verdict", "key_results", "generator"
+  ],
+  "properties": {
+    "format_version": {
+      "type": "integer",
+      "const": 3
+    },
+    "claim_natural": {
+      "type": "string",
+      "description": "The claim in natural language."
+    },
+    "claim_formal": {
+      "type": "object",
+      "description": "Formal claim specification.",
+      "properties": {
+        "subject": { "type": "string" },
+        "property": { "type": "string" },
+        "operator": { "type": "string" },
+        "threshold": {},
+        "operator_note": { "type": "string" },
+        "sub_claims": {},
+        "compound_operator": { "type": "string" },
+        "proof_direction": { "type": "string" },
+        "claim_type": { "type": "string" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "description": "Unified evidence map. Keys are fact IDs (A1, B1, S1, etc.).",
+      "additionalProperties": {
+        "$ref": "#/$defs/evidence_entry"
+      }
+    },
+    "cross_checks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/cross_check" }
+    },
+    "adversarial_checks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/adversarial_check" }
+    },
+    "verdict": { "$ref": "#/$defs/structured_verdict" },
+    "key_results": {
+      "type": "object",
+      "description": "Key numeric/boolean results from the proof."
+    },
+    "generator": { "$ref": "#/$defs/generator" },
+    "sub_claim_results": {},
+    "date_note": { "type": "string" },
+    "verdict_note": { "type": "string" },
+    "verdict_reason": { "type": "string" },
+    "data_value_verification": { "type": "object" }
+  },
+  "additionalProperties": false,
+  "$comment": "This schema describes the canonical source format (what ProofSummaryBuilder emits and what lives in site/proofs/). The build pipeline augments copies in _site/ with extra keys (proof_py_url, citation) — those augmented copies are not subject to this schema.",
+  "$defs": {
+    "evidence_entry": {
+      "type": "object",
+      "required": ["type", "label"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["empirical", "computed", "search"]
+        },
+        "label": { "type": "string" },
+        "sub_claim": { "type": ["string", "null"] },
+        "source": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "url": { "type": "string", "format": "uri" },
+            "quote": { "type": "string" }
+          }
+        },
+        "verification": {
+          "type": "object",
+          "properties": {
+            "status": { "type": "string", "enum": ["verified", "partial", "not_found", "fetch_failed", ""] },
+            "method": { "type": "string" },
+            "coverage_pct": { "type": ["number", "null"] },
+            "fetch_mode": { "type": "string" },
+            "credibility": { "type": "object" }
+          }
+        },
+        "extraction": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "value_in_quote": { "type": "boolean" },
+            "quote_snippet": { "type": ["string", "null"] },
+            "verified_via": { "type": "string" },
+            "data_values_verified": { "type": "boolean" }
+          }
+        },
+        "method": { "type": ["string", "null"] },
+        "result": { "type": ["string", "null"] },
+        "depends_on": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "search": {
+          "type": "object",
+          "properties": {
+            "database": { "type": "string" },
+            "url": { "type": "string" },
+            "search_url": { "type": "string" },
+            "query_terms": { "type": "string" },
+            "date_range": { "type": "string" },
+            "result_count": { "type": "integer" },
+            "source_name": { "type": "string" }
+          }
+        }
+      }
+    },
+    "structured_verdict": {
+      "type": "object",
+      "required": ["value", "qualified"],
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": ["PROVED", "DISPROVED", "PARTIALLY VERIFIED", "SUPPORTED", "UNDETERMINED"]
+        },
+        "qualified": { "type": "boolean" },
+        "qualifier": { "type": ["string", "null"] },
+        "reason": { "type": ["string", "null"] }
+      }
+    },
+    "cross_check": {
+      "type": "object",
+      "required": ["description", "fact_ids"],
+      "properties": {
+        "description": { "type": "string" },
+        "fact_ids": { "type": "array", "items": { "type": "string" } },
+        "values_compared": { "type": "array" },
+        "agreement": { "type": "boolean" },
+        "tolerance": { "type": "string" },
+        "n_sources_consulted": { "type": "integer" },
+        "n_sources_verified": { "type": "integer" },
+        "sources": { "type": "object" },
+        "independence_note": { "type": "string" },
+        "n_databases_searched": { "type": "integer" },
+        "n_null_verified": { "type": "integer" },
+        "coi_flags": { "type": "array" }
+      },
+      "additionalProperties": true
+    },
+    "adversarial_check": {
+      "type": "object",
+      "required": ["question", "finding", "breaks_proof"],
+      "properties": {
+        "question": { "type": "string" },
+        "search_performed": { "type": "string" },
+        "verification_performed": { "type": "string" },
+        "finding": { "type": "string" },
+        "breaks_proof": { "type": "boolean" }
+      }
+    },
+    "generator": {
+      "type": "object",
+      "required": ["name", "version", "repo", "generated_at"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "repo": { "type": "string" },
+        "generated_at": { "type": "string" }
+      }
+    }
+  }
+}
