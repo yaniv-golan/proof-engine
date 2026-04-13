@@ -26,9 +26,9 @@ import datetime
 import operator
 
 try:
-    from proof_types import ProofData
+    from proof_types import ProofData, ProofDataV3
 except ImportError:
-    from scripts.proof_types import ProofData
+    from scripts.proof_types import ProofData, ProofDataV3
 
 
 # ---------------------------------------------------------------------------
@@ -139,8 +139,8 @@ def apply_verdict_qualifier(
 # Proof summary emission
 # ---------------------------------------------------------------------------
 
-KNOWN_SUMMARY_KEYS = set(typing.get_type_hints(ProofData).keys())
-"""Allowed top-level keys in the proof JSON summary, derived from ProofData TypedDict."""
+KNOWN_SUMMARY_KEYS = set(typing.get_type_hints(ProofData).keys()) | set(typing.get_type_hints(ProofDataV3).keys())
+"""Allowed top-level keys in the proof JSON summary, derived from ProofData and ProofDataV3 TypedDicts."""
 
 
 def emit_proof_summary(summary: dict) -> None:

@@ -440,7 +440,13 @@ def cmd_mint_doi(args) -> int:
     base_url = "/proof-engine/"
     proof_url = f"{site_url}{base_url}proofs/{slug}/"
 
-    verdict = proof_data.get("verdict", "")
+    verdict_raw = proof_data.get("verdict", "")
+    if isinstance(verdict_raw, dict):
+        verdict = verdict_raw.get("value", "")
+        if verdict_raw.get("qualified") and verdict_raw.get("qualifier") == "unverified_citations":
+            verdict = f"{verdict} (with unverified citations)"
+    else:
+        verdict = verdict_raw
     verdict_display = verdict.capitalize() if verdict else ""
     title = f'Claim Verification: \u201c{claim}\u201d \u2014 {verdict_display}'
     version = proof_data.get("generator", {}).get("version", "")

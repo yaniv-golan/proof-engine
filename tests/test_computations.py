@@ -6,7 +6,7 @@ from scripts.computations import (
     apply_verdict_qualifier, VALID_BASE_VERDICTS, QUALIFIABLE_VERDICTS,
     emit_proof_summary, KNOWN_SUMMARY_KEYS,
 )
-from scripts.proof_types import ProofData
+from scripts.proof_types import ProofData, ProofDataV3
 
 
 def test_cross_check_exact_match_zero_tolerance_absolute():
@@ -179,8 +179,8 @@ def test_emit_proof_summary_all_optional_keys_accepted(capsys):
 
 
 def test_known_summary_keys_matches_proof_data():
-    """KNOWN_SUMMARY_KEYS must stay in sync with ProofData TypedDict."""
-    expected = set(typing.get_type_hints(ProofData).keys())
+    """KNOWN_SUMMARY_KEYS must cover both ProofData (v1/v2) and ProofDataV3 TypedDicts."""
+    expected = set(typing.get_type_hints(ProofData).keys()) | set(typing.get_type_hints(ProofDataV3).keys())
     assert KNOWN_SUMMARY_KEYS == expected
 
 

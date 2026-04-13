@@ -483,43 +483,60 @@ class ProofValidator:
             self.passed.append("Rule 7: No hard-coded constants or inline formulas detected")
 
     def check_fact_registry(self):
-        """Check that proof defines a FACT_REGISTRY dict."""
+        """Check that proof defines a FACT_REGISTRY or uses ProofSummaryBuilder."""
         has_registry = bool(re.search(r'FACT_REGISTRY\s*=\s*\{', self.source))
-        if has_registry:
-            self.passed.append("Contract: FACT_REGISTRY dict found")
+        has_builder = bool(re.search(r'\bProofSummaryBuilder\s*\(', self.source))
+        if has_registry or has_builder:
+            self.passed.append("Contract: FACT_REGISTRY dict or ProofSummaryBuilder found")
         else:
-            self.issues.append(("Contract: No FACT_REGISTRY dict — required for report generation", []))
+            self.issues.append(("Contract: No FACT_REGISTRY dict or ProofSummaryBuilder — required for report generation", []))
 
     def check_emit_proof_summary(self):
-        """Check that proof uses emit_proof_summary() instead of raw json.dumps for the summary.
+        """Check that proof uses emit_proof_summary() or ProofSummaryBuilder instead of raw json.dumps.
 
         Only emits warnings (not passed/issues). The passed message for JSON summary
         is owned by check_json_summary() to avoid duplicate passed entries.
         """
         has_emit = bool(re.search(r'\bemit_proof_summary\s*\(', self.source))
+        has_builder = bool(re.search(r'\bProofSummaryBuilder\s*\(', self.source))
+        has_builder_emit = bool(re.search(r'\.emit\s*\(', self.source))
         has_summary_marker = bool(re.search(r'PROOF SUMMARY.*JSON', self.source))
         has_raw_dumps = bool(re.search(r'json\.dumps\s*\(', self.source))
 
         if has_emit:
             return  # check_json_summary() handles the passed message
+        elif has_builder and has_builder_emit:
+            return  # builder instantiated AND .emit() called
+        elif has_builder and not has_builder_emit:
+            self.warnings.append((
+                "Contract: ProofSummaryBuilder is instantiated but .emit() is never "
+                "called — the proof won't produce the required JSON summary block.",
+                [],
+            ))
         elif has_summary_marker and has_raw_dumps:
             self.warnings.append((
                 "Contract: proof uses raw json.dumps() for summary output. "
                 "Import and use emit_proof_summary(summary) from scripts.computations "
-                "instead — it validates keys against ProofData schema.",
+                "or ProofSummaryBuilder from scripts.proof_summary instead — "
+                "they validate keys against ProofData schema.",
                 [],
             ))
-        # If neither emit nor summary marker: check_json_summary() handles it
 
     def check_json_summary(self):
         """Check that proof emits a JSON summary block in __main__."""
         has_emit = bool(re.search(r'\bemit_proof_summary\s*\(', self.source))
+        has_builder = bool(re.search(r'\bProofSummaryBuilder\s*\(', self.source))
+        has_builder_emit = bool(re.search(r'\.emit\s*\(', self.source))
         has_json_import = bool(re.search(r'import json', self.source))
         has_summary_print = bool(re.search(r'PROOF SUMMARY.*JSON', self.source))
         has_json_dumps = bool(re.search(r'json\.dumps\s*\(', self.source))
 
         if has_emit:
             self.passed.append("Contract: JSON summary via emit_proof_summary() (schema-validated)")
+        elif has_builder and has_builder_emit:
+            self.passed.append("Contract: JSON summary via ProofSummaryBuilder.emit() (v3, schema-validated)")
+        elif has_builder and not has_builder_emit:
+            pass  # check_emit_proof_summary() already warned about missing .emit()
         elif has_json_import and has_summary_print and has_json_dumps:
             self.passed.append("Contract: JSON summary block found (import json + PROOF SUMMARY header + json.dumps)")
         elif has_summary_print or has_json_dumps:

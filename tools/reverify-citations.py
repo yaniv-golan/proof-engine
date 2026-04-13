@@ -53,22 +53,33 @@ def main():
         with open(pj_path) as f:
             data = json.load(f)
 
-        citations = data.get("citations", {})
-        if not isinstance(citations, dict):
+        # Extract empirical evidence entries (equivalent to old citations)
+        evidence = data.get("evidence", {})
+        empirical = {fid: e for fid, e in evidence.items() if e.get("type") == "empirical"}
+        # Fall back to legacy citations field for v1/v2 proofs not yet normalized
+        if not empirical:
+            citations_legacy = data.get("citations", {})
+            if isinstance(citations_legacy, dict):
+                empirical = citations_legacy
+        if not isinstance(empirical, dict):
             continue
 
         modified = False
-        for fid, cit in citations.items():
-            old_method = cit.get("method") or ""
-            old_status = cit.get("status", "")
+        for fid, cit in empirical.items():
+            # v3 evidence: verification fields nested under .verification; v1/v2: top-level
+            verif = cit.get("verification", cit)
+            old_method = verif.get("method") or ""
+            old_status = verif.get("status", "")
 
             # Skip citations that don't need re-verification
             if not args.all_methods:
                 if "fragment" not in old_method and old_method != "aggressive_normalization":
                     continue
 
-            url = cit.get("url")
-            quote = cit.get("quote")
+            # v3 evidence: url and quote are nested under source.*
+            src = cit.get("source", {})
+            url = src.get("url") if src else cit.get("url")
+            quote = src.get("quote") if src else cit.get("quote")
             if not url or not quote:
                 continue
 
@@ -100,12 +111,13 @@ def main():
                 changes.append(f"  {slug}/{fid}: {label}")
 
                 if not args.dry_run:
-                    cit["status"] = new_status
-                    cit["method"] = new_method
-                    cit["coverage_pct"] = new_coverage
-                    cit["fetch_mode"] = result.get("fetch_mode", "live")
+                    # Write back to the same sub-object we read from
+                    verif["status"] = new_status
+                    verif["method"] = new_method
+                    verif["coverage_pct"] = new_coverage
+                    verif["fetch_mode"] = result.get("fetch_mode", "live")
                     if "credibility" in result:
-                        cit["credibility"] = result["credibility"]
+                        verif["credibility"] = result["credibility"]
                     modified = True
             else:
                 total_unchanged += 1

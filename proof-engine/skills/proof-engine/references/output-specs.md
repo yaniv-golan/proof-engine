@@ -103,14 +103,54 @@ Section "Generator": Same footer as proof.md.
 
 The machine-readable summary produced by proof.py. All four markdown documents derive their data from this file.
 
+### v2 format (format_version: 2)
+
 Required top-level fields:
 - `format_version`: integer, must be `2` for proofs generated under this spec
 - `fact_registry`: dict of fact ID to FactRegistryEntry
 - `claim_formal`: ClaimFormal dict
 - `claim_natural`: string
-- `verdict`: one of the VERDICT_TAXONOMY keys
+- `verdict`: one of the VERDICT_TAXONOMY keys (string)
 - `key_results`: dict of result key to value
 - `generator`: Generator block with `name`, `version`, `repo`, `generated_at`
+
+Optional top-level fields (v2):
+- `citations`: dict of fact ID to CitationResult (verification status, method, url, quote, credibility)
+- `extractions`: dict of fact ID to ExtractionInfo (extracted values and quote snippets)
+
+### v3 format (format_version: 3)
+
+v3 replaces the separate `fact_registry`, `citations`, and `extractions` maps with a single unified `evidence` map, and replaces the string `verdict` with a structured dict.
+
+Required top-level fields:
+- `format_version`: integer, must be `3`
+- `evidence`: dict of fact ID to EvidenceEntry (replaces `fact_registry` + `citations` + `extractions`)
+- `claim_formal`: ClaimFormal dict
+- `claim_natural`: string
+- `verdict`: structured dict `{value, qualified, qualifier, reason}` (replaces string verdict)
+  - `value`: base verdict string, one of the VERDICT_TAXONOMY keys
+  - `qualified`: boolean, true if a qualifier applies
+  - `qualifier`: string or null — currently only `"unverified_citations"`
+  - `reason`: optional string with additional explanation
+- `key_results`: dict of result key to value
+- `generator`: Generator block with `name`, `version`, `repo`, `generated_at`
+
+EvidenceEntry structure (keyed by fact ID, e.g. `"B1"`, `"A1"`, `"S1"`):
+- `type`: `"empirical"`, `"computed"`, or `"search"`
+- `label`: human-readable description of the fact
+- `sub_claim`: optional sub-claim tag (e.g. `"SC1"`)
+- For `type: "empirical"`:
+  - `source`: `{name, url, quote}` — the cited source and verbatim quote
+  - `verification`: `{status, method, coverage_pct, fetch_mode, credibility}` — citation verification result
+  - `extraction`: `{value, value_in_quote, quote_snippet}` — extracted value info
+- For `type: "computed"`:
+  - `method`: computation method description
+  - `result`: human-readable result string
+  - `depends_on`: list of fact IDs this computation depends on
+- For `type: "search"`:
+  - `search`: SearchRegistryEntry with query, url, result_count, verification
+
+After loader normalization (tools/lib/loader.py), `proof_data` is always v3-shaped regardless of the source format version. Consumers should read from `evidence` and the structured `verdict` dict.
 
 ## proof_narrative.md structure
 
