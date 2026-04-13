@@ -633,6 +633,14 @@ def main():
         )
         write_file(proof_out / "provenance.json", json.dumps(prov_doc, indent=2))
 
+        # Jupyter Notebook
+        from tools.lib.notebook import generate_notebook
+        proof_py_path = src_dir / "proof.py"
+        if proof_py_path.exists():
+            proof_py_text = proof_py_path.read_text()
+            notebook = generate_notebook(proof_py_text, proof["proof_data"], proof["slug"], canonical_url)
+            write_file(proof_out / "proof.ipynb", json.dumps(notebook, indent=1))
+
     # Tag pages
     tag_proofs = {}
     for p in proofs:
