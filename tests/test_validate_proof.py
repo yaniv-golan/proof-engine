@@ -162,6 +162,20 @@ def test_claim_holds_via_variable_warns():
     v = _validate_claim_holds(CLAIM_HOLDS_VIA_VARIABLE)
     assert len(v.warnings) > 0
 
+CLAIM_HOLDS_KWARG_NO_WARN = '''
+claim_holds = compare(n, ">=", 3)
+builder.set_key_results(
+    n_confirmed=n,
+    threshold=3,
+    claim_holds=claim_holds,
+)
+'''
+
+def test_claim_holds_kwarg_does_not_warn():
+    """Keyword argument `claim_holds=...` in a function call must not trigger a warning."""
+    v = _validate_claim_holds(CLAIM_HOLDS_KWARG_NO_WARN)
+    assert len(v.warnings) == 0, f"Unexpected warnings: {v.warnings}"
+
 def test_claim_holds_via_bool_expr_warns():
     v = _validate_claim_holds(CLAIM_HOLDS_VIA_BOOL_EXPR)
     assert len(v.warnings) > 0

@@ -719,7 +719,7 @@ class ProofValidator:
         """
         # Match claim_holds and variants: overall_claim_holds, sc1_claim_holds,
         # subclaim_a_holds, subclaim_b_holds, etc.
-        pattern = re.compile(r'\s*(\w*(?:claim_holds|_holds)\w*)\s*=\s*(.+)')
+        pattern = re.compile(r'\s*(\w*(?:claim_holds|_holds)\w*)\s+=\s+(.+)')
         found_any = False
 
         for i, line in enumerate(self.lines, 1):
