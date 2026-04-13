@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.lib.verdict import VERDICT_TAXONOMY
 from tools.lib.narrative_validator import validate_narrative
 from tools.lib.proof_runner import run_proof_and_extract_json
+from tools.lib.normalize import normalize_to_v3
 
 # Import ProofData to get the known keys for unknown-key detection
 sys.path.insert(0, str(Path(__file__).parent.parent / "proof-engine" / "skills" / "proof-engine" / "scripts"))
@@ -26,6 +27,13 @@ REQUIRED_GENERATOR_KEYS = ["name", "version", "repo", "generated_at"]
 REQUIRED_CLAIM_FORMAL_KEYS = []  # claim_formal structure varies by proof type
 INVARIANT_FIELDS = ["verdict", "claim_formal", "claim_natural", "fact_registry", "key_results"]
 
+KNOWN_JSON_KEYS_V3 = {
+    "format_version", "claim_formal", "claim_natural", "evidence",
+    "cross_checks", "adversarial_checks", "verdict", "key_results",
+    "generator", "sub_claim_results", "date_note", "verdict_note",
+    "verdict_reason", "data_value_verification",
+}
+
 # Keys within search_registry entries that are authored (should not drift)
 SEARCH_REGISTRY_AUTHORED_KEYS = [
     "database", "url", "search_url", "query_terms",
@@ -36,16 +44,22 @@ SEARCH_REGISTRY_AUTHORED_KEYS = [
 def validate_json_structure(proof_data):
     errors = []
     warnings = []
+    is_v3 = proof_data.get("format_version") == 3
 
-    # Check for unknown keys not in ProofData TypedDict
-    unknown_keys = set(proof_data.keys()) - KNOWN_JSON_KEYS
+    if is_v3:
+        known_keys = KNOWN_JSON_KEYS_V3
+        required_keys = ["format_version", "claim_formal", "claim_natural",
+                         "evidence", "verdict", "key_results", "generator"]
+    else:
+        known_keys = KNOWN_JSON_KEYS
+        required_keys = REQUIRED_JSON_KEYS
+
+    # Unknown key check
+    unknown_keys = set(proof_data.keys()) - known_keys
     for key in sorted(unknown_keys):
-        warnings.append(
-            f"proof.json contains unknown key '{key}' — "
-            f"add it to ProofData in proof_types.py to silence this warning"
-        )
+        warnings.append(f"proof.json contains unknown key '{key}'")
 
-    # Reject deprecated keys that have been migrated to site-level config
+    # Rejected keys
     REJECTED_KEYS = ["featured"]
     for key in REJECTED_KEYS:
         if key in proof_data:
@@ -55,32 +69,69 @@ def validate_json_structure(proof_data):
                 f"not per-proof. Remove this key."
             )
 
-    for key in REQUIRED_JSON_KEYS:
+    # Required keys
+    for key in required_keys:
         if key not in proof_data:
             errors.append(f"proof.json missing required key: {key}")
 
+    # Generator validation
     if "generator" in proof_data:
         for key in REQUIRED_GENERATOR_KEYS:
             if key not in proof_data["generator"]:
                 errors.append(f"generator missing key: {key}")
 
-    if "claim_formal" in proof_data:
-        for key in REQUIRED_CLAIM_FORMAL_KEYS:
-            if key not in proof_data["claim_formal"]:
-                errors.append(f"claim_formal missing key: {key}")
+    if not is_v3:
+        if "claim_formal" in proof_data:
+            for key in REQUIRED_CLAIM_FORMAL_KEYS:
+                if key not in proof_data["claim_formal"]:
+                    errors.append(f"claim_formal missing key: {key}")
 
+    # Verdict validation
     if "verdict" in proof_data:
-        if proof_data["verdict"] not in VERDICT_TAXONOMY:
-            errors.append(f"Unknown verdict: {proof_data['verdict']}")
+        verdict = proof_data["verdict"]
+        if is_v3:
+            if not isinstance(verdict, dict):
+                errors.append("v3 verdict must be a dict with 'value' key")
+            elif "value" not in verdict:
+                errors.append("v3 verdict dict missing 'value' key")
+            else:
+                v_str = verdict["value"]
+                if verdict.get("qualified") and verdict.get("qualifier") == "unverified_citations":
+                    v_str = f"{v_str} (with unverified citations)"
+                if v_str not in VERDICT_TAXONOMY:
+                    errors.append(f"Unknown verdict value: {v_str}")
+        else:
+            if verdict not in VERDICT_TAXONOMY:
+                errors.append(f"Unknown verdict: {verdict}")
 
-    # Conditional: absence proofs require search_registry
+    # Absence proof: search evidence check
     claim_formal = proof_data.get("claim_formal", {})
     if claim_formal.get("proof_direction") == "absence":
-        if "search_registry" not in proof_data:
-            errors.append("Absence proof (proof_direction=absence) missing required search_registry")
+        if is_v3:
+            search_entries = {
+                fid: e for fid, e in proof_data.get("evidence", {}).items()
+                if e.get("type") == "search"
+            }
+            if not search_entries:
+                errors.append("Absence proof missing search-type evidence entries")
+            else:
+                REQUIRED_SEARCH_FIELDS = [
+                    "database", "url", "search_url", "query_terms",
+                    "date_range", "result_count", "source_name",
+                ]
+                for fid, entry in search_entries.items():
+                    search = entry.get("search", {})
+                    for field in REQUIRED_SEARCH_FIELDS:
+                        if field not in search:
+                            errors.append(
+                                f"evidence[{fid}].search missing authored field: {field}"
+                            )
+        else:
+            if "search_registry" not in proof_data:
+                errors.append("Absence proof (proof_direction=absence) missing required search_registry")
 
-    # For absence proofs, validate authored search metadata hasn't drifted
-    if "search_registry" in proof_data:
+    # For v1/v2 absence proofs, validate authored search metadata hasn't drifted
+    if not is_v3 and "search_registry" in proof_data:
         for key, entry in proof_data["search_registry"].items():
             for field in SEARCH_REGISTRY_AUTHORED_KEYS:
                 if field not in entry:
@@ -91,14 +142,62 @@ def validate_json_structure(proof_data):
 
 def compare_invariant_fields(checked_in, regenerated):
     diffs = []
-    for field in INVARIANT_FIELDS:
-        val_a = checked_in.get(field)
-        val_b = regenerated.get(field)
-        if val_a != val_b:
-            # Allow verdict and key_results degradation when snapshot_file citations can't be verified
-            if field in ("verdict", "key_results") and _is_snapshot_file_degradation(checked_in, regenerated):
-                continue
-            diffs.append(f"Field '{field}' diverges between checked-in and regenerated proof.json")
+
+    # If checked-in is v3 but regenerated is v1/v2 (old proof.py), normalize
+    if checked_in.get("format_version") == 3 and regenerated.get("format_version") != 3:
+        regenerated = normalize_to_v3(regenerated)
+
+    if checked_in.get("format_version") == 3:
+        # Compare core fields
+        for field in ["claim_formal", "claim_natural", "key_results"]:
+            if checked_in.get(field) != regenerated.get(field):
+                if field == "key_results" and _is_snapshot_file_degradation(checked_in, regenerated):
+                    continue
+                diffs.append(f"Field '{field}' diverges")
+
+        # Verdict: compare base value only
+        ci_v = checked_in.get("verdict", {})
+        rg_v = regenerated.get("verdict", {})
+        if isinstance(ci_v, dict) and isinstance(rg_v, dict):
+            if ci_v.get("value") != rg_v.get("value"):
+                if not _is_snapshot_file_degradation(checked_in, regenerated):
+                    diffs.append("Verdict base value diverges")
+
+        # Evidence: compare authored content per entry
+        ci_evidence = checked_in.get("evidence", {})
+        rg_evidence = regenerated.get("evidence", {})
+        if set(ci_evidence.keys()) != set(rg_evidence.keys()):
+            diffs.append("Evidence fact IDs diverge")
+        else:
+            for fid in ci_evidence:
+                ci_e = ci_evidence[fid]
+                rg_e = rg_evidence[fid]
+                if ci_e.get("type") != rg_e.get("type"):
+                    diffs.append(f"Evidence '{fid}' type diverges")
+                if ci_e.get("label") != rg_e.get("label"):
+                    diffs.append(f"Evidence '{fid}' label diverges")
+                if ci_e.get("type") == "empirical":
+                    ci_src = ci_e.get("source", {})
+                    rg_src = rg_e.get("source", {})
+                    if ci_src.get("url") != rg_src.get("url"):
+                        diffs.append(f"Evidence '{fid}' source URL diverges")
+                    if ci_src.get("quote") != rg_src.get("quote"):
+                        diffs.append(f"Evidence '{fid}' source quote diverges")
+                elif ci_e.get("type") == "computed":
+                    if ci_e.get("method") != rg_e.get("method"):
+                        diffs.append(f"Evidence '{fid}' computation method diverges")
+                    if ci_e.get("result") != rg_e.get("result"):
+                        if not _is_snapshot_file_degradation(checked_in, regenerated):
+                            diffs.append(f"Evidence '{fid}' computation result diverges")
+    else:
+        for field in INVARIANT_FIELDS:
+            val_a = checked_in.get(field)
+            val_b = regenerated.get(field)
+            if val_a != val_b:
+                if field in ("verdict", "key_results") and _is_snapshot_file_degradation(checked_in, regenerated):
+                    continue
+                diffs.append(f"Field '{field}' diverges between checked-in and regenerated proof.json")
+
     return diffs
 
 
@@ -111,7 +210,17 @@ def _is_snapshot_file_degradation(checked_in, regenerated):
     """
     original_verdict = checked_in.get("verdict", "")
     new_verdict = regenerated.get("verdict", "")
-    # Degradation pattern: "PROVED" -> "PROVED with unverified citations"
+
+    # v3 dict verdicts: check qualifier field
+    if isinstance(new_verdict, dict):
+        new_qualified = new_verdict.get("qualified", False) and \
+                        new_verdict.get("qualifier") == "unverified_citations"
+        orig_qualified = isinstance(original_verdict, dict) and \
+                         original_verdict.get("qualified", False) and \
+                         original_verdict.get("qualifier") == "unverified_citations"
+        return new_qualified and not orig_qualified
+
+    # v1/v2 string verdicts: substring check
     if "unverified citations" in new_verdict and "unverified citations" not in original_verdict:
         return True
     return False
@@ -184,10 +293,18 @@ def main():
     proof_md_path = proof_dir / "proof.md"
     if proof_md_path.exists() and "verdict" in proof_data:
         md_verdict = extract_verdict_from_conclusion(proof_md_path)
-        if md_verdict and md_verdict != proof_data["verdict"]:
+        json_verdict = proof_data["verdict"]
+        if isinstance(json_verdict, dict):
+            json_verdict_str = json_verdict.get("value", "")
+            if json_verdict.get("qualified") and json_verdict.get("qualifier") == "unverified_citations":
+                json_verdict_str = f"{json_verdict_str} (with unverified citations)"
+        else:
+            json_verdict_str = json_verdict
+
+        if md_verdict and md_verdict != json_verdict_str:
             errors.append(
                 f"Verdict mismatch: proof.md says '{md_verdict}', "
-                f"proof.json says '{proof_data['verdict']}'"
+                f"proof.json says '{json_verdict_str}'"
             )
         elif not md_verdict:
             known = ", ".join(sorted(VERDICT_TAXONOMY.keys(), key=len))
@@ -200,9 +317,16 @@ def main():
     # 4. Narrative validation
     narrative_path = proof_dir / "proof_narrative.md"
     if narrative_path.exists():
+        verdict_for_narrative = proof_data.get("verdict", "")
+        if isinstance(verdict_for_narrative, dict):
+            verdict_for_narrative = verdict_for_narrative.get("value", "")
+            if proof_data["verdict"].get("qualified") and \
+               proof_data["verdict"].get("qualifier") == "unverified_citations":
+                verdict_for_narrative = f"{verdict_for_narrative} (with unverified citations)"
+
         narrative_errors, narrative_warnings = validate_narrative(
             narrative_path.read_text(),
-            verdict=proof_data.get("verdict", ""),
+            verdict=verdict_for_narrative,
             claim_natural=proof_data.get("claim_natural", ""),
         )
         errors.extend(narrative_errors)

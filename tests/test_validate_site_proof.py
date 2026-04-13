@@ -172,6 +172,25 @@ def test_validate_site_proof_missing_narrative(tmp_path):
     assert "proof_narrative.md" in result.stdout or "proof_narrative.md" in result.stderr
 
 
+def test_v3_proof_passes_validation(tmp_path):
+    """A valid v3 proof passes structural validation."""
+    v3 = {
+        "format_version": 3,
+        "claim_natural": "Test",
+        "claim_formal": {"subject": "X", "property": "Y"},
+        "evidence": {
+            "A1": {"type": "computed", "label": "Test", "method": "1+1", "result": "2"},
+        },
+        "verdict": {"value": "PROVED", "qualified": False, "qualifier": None, "reason": None},
+        "key_results": {"x": 1},
+        "generator": {"name": "proof-engine", "version": "1.0.0", "repo": "x", "generated_at": "2026-01-01"},
+        "cross_checks": [],
+        "adversarial_checks": [],
+    }
+    errors, warnings = validate_json_structure(v3)
+    assert errors == [], f"Unexpected errors: {errors}"
+
+
 def test_validate_site_proof_narrative_verdict_mismatch(tmp_path):
     """validate-site-proof.py --structural-only should error on verdict mismatch in narrative."""
     proof_dir = tmp_path / "test-claim"
