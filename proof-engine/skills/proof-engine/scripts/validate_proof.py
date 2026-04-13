@@ -1122,6 +1122,22 @@ class ProofValidator:
         if not found_issues:
             self.passed.append("Contract: FACT_REGISTRY entries are dicts (not strings)")
 
+        # Cross-check: B-type entry "key" values must exist in empirical_facts.
+        ef_keys = set(self._extract_empirical_facts_keys())
+        if ef_keys:  # skip if empirical_facts is absent or unparseable
+            key_re = re.compile(
+                r'''["\']B\d+["\']\s*:\s*\{[^}]*["\']key["\']\s*:\s*["\'](\w+)["\']'''
+            )
+            for m in key_re.finditer(registry_block):
+                ref_key = m.group(1)
+                if ref_key not in ef_keys:
+                    self.issues.append((
+                        f"FACT_REGISTRY entry references key '{ref_key}' "
+                        f"which is not in empirical_facts. "
+                        f"Available keys: {sorted(ef_keys)}",
+                        [],
+                    ))
+
     def check_claim_natural_key(self):
         """Check that JSON summary uses 'claim_natural', not bare 'claim'."""
         # Scope to after the PROOF SUMMARY marker

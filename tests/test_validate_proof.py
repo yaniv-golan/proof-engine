@@ -1555,6 +1555,38 @@ def test_fact_registry_string_sc_entry_fails():
     assert "label" in v.issues[0][0]
 
 
+FACT_REGISTRY_KEY_MISMATCH = '''
+empirical_facts = {
+    "source_a": {"quote": "...", "url": "...", "source_name": "A"},
+}
+FACT_REGISTRY = {
+    "B1": {"key": "source_typo", "label": "Source A"},
+}
+'''
+
+FACT_REGISTRY_KEY_MATCH = '''
+empirical_facts = {
+    "source_a": {"quote": "...", "url": "...", "source_name": "A"},
+}
+FACT_REGISTRY = {
+    "B1": {"key": "source_a", "label": "Source A"},
+}
+'''
+
+
+def test_fact_registry_key_mismatch_fails():
+    """B-type FACT_REGISTRY entry whose 'key' is absent from empirical_facts must raise issue."""
+    v = _validate_fact_registry_format(FACT_REGISTRY_KEY_MISMATCH)
+    assert len(v.issues) > 0
+    assert "source_typo" in v.issues[0][0]
+
+
+def test_fact_registry_key_match_passes():
+    """B-type FACT_REGISTRY entry whose 'key' matches an empirical_facts key must pass."""
+    v = _validate_fact_registry_format(FACT_REGISTRY_KEY_MATCH)
+    assert len(v.issues) == 0
+
+
 # ---------------------------------------------------------------------------
 # Part D: check_claim_natural_key()
 # ---------------------------------------------------------------------------
