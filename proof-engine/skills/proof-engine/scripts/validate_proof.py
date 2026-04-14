@@ -1193,6 +1193,16 @@ class ProofValidator:
             | \bcontradicts?\b
             | \bdisprove[sd]?\b
             | \bno\s+(?:basis|credible\s+support|scientific\s+backing)\b
+            | \bno\s+proof\b
+            | \bnot\s+been\s+(?:observed|found|documented|demonstrated|recorded)\b
+            | \bcannot\s+(?:occur|happen)\b
+            | \bhighly\s+unlikely\b
+            | \bno\s+evidence\s+(?:of|that|to\s+support)\b
+            | \bno\s+(?:spiders?|insects?|bugs?)\b
+            | \bno\s+\w+\s+at\s+all\b
+            | \bunlikely\b
+            | \bnot\s+possible\b
+            | \bimpossible\b
             """
         )
 
@@ -1251,7 +1261,7 @@ class ProofValidator:
         self.check_verdict_validity()
         self.check_fact_registry_format()
         self.check_claim_natural_key()
-        self.check_disproof_quote_quality()   # <-- add this line
+        self.check_disproof_quote_quality()
         self.check_emit_proof_summary()
 
     def print_report(self) -> bool:
