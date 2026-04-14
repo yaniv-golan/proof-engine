@@ -94,7 +94,7 @@ Section "Quality Checks":
 - Rule 5: Adversarial checks searched for independent counter-evidence
 - Rule 6: Cross-checks used independently sourced inputs
 - Rule 7: Constants and formulas imported from computations.py, not hand-coded
-- validate_proof.py result: [PASS/FAIL with details — reflect the **final** state of proof.py at the time of audit writing, not intermediate iteration history. If the proof passed with 0 warnings on the last run, write "PASS — 18/18 checks, 0 warnings." If earlier runs had corrected issues, omit that history; the clean final run is the authoritative result.]
+- validate_proof.py result: [PASS/FAIL with details — reflect the **final** state of proof.py at the time of audit writing, not intermediate iteration history. Copy the validator's actual summary line verbatim as printed (e.g., "PASS — N/N checks, 0 warnings" — use whatever the script printed, not a hardcoded number). If earlier runs had corrected issues, omit that history; the clean final run is the authoritative result.]
 
 For pure-math proofs, mark Rules 1, 2, and 6 as "N/A — pure computation, no empirical facts."
 
