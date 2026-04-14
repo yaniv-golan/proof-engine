@@ -31,6 +31,7 @@ validator behavior — the "Auto-pass when" column describes the heuristic.
 | 5    | Checked  | Checked       | Checked     | Checked   | Checked   | Never auto-passes |
 | 6    | Checked  | Checked       | Checked     | Checked*  | Auto-pass | No `empirical_facts` or `search_registry` keys |
 | 7    | Checked  | Checked       | Auto-pass   | Auto-pass | Checked   | No `365.2*`/`eval()`/inline-age patterns |
+| 8    | Auto-pass | Auto-pass  | Checked (disproof) | Auto-pass | Auto-pass | No `proof_direction: "disprove"` found, or no empirical_facts quotes found |
 
 *For absence proofs, Rule 2 checks `verify_search_registry` import (plus
  `verify_all_citations` if corroborating `empirical_facts` are present);

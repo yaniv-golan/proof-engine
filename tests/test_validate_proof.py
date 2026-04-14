@@ -1789,3 +1789,21 @@ def test_disproof_myth_description_warns():
 def test_affirm_proof_skips_disproof_check():
     v = _validate_disproof_quote_quality(AFFIRM_MYTH_DESCRIPTION)
     assert len(v.warnings) == 0
+
+
+DISPROOF_NO_QUOTES = '''
+CLAIM_FORMAL = {
+    "proof_direction": "disprove",
+}
+empirical_facts = {}
+'''
+
+
+def test_disproof_no_quotes_no_warning_no_pass():
+    """When disproof has no extractable quotes, emit neither warning nor passed message."""
+    v = _validate_disproof_quote_quality(DISPROOF_NO_QUOTES)
+    assert len(v.warnings) == 0
+    assert not any(
+        "rejection language" in p.lower()
+        for p in v.passed
+    )
