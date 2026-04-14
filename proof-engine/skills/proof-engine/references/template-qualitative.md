@@ -269,6 +269,10 @@ empirical_facts = {
 
 No keyword selection is needed — citation verification status is the counting mechanism.
 
+**Quote selection for disproof:** Every quote in `empirical_facts` must contain an *explicit rejection* of the claim — words like "not true," "myth," "no evidence," "debunked," "refuted," or "false." A quote that merely *describes* the myth (e.g., "Many people believe X") provides near-zero evidentiary weight even if it is verified. If the best available quote from a source only restates the belief, find a different quote from the same page that directly negates it. `validate_proof.py` warns on quotes that lack rejection language.
+
+**Threshold and COI rules apply identically to disproof:** All threshold rules (never set `threshold: 1`; reducing to `threshold: 2` is permitted only when only 2 independent sources exist) and all COI majority checks from the affirmative variant apply equally to disproof proofs. The proof direction does not relax these requirements.
+
 ### Adaptation notes
 
 **Compound claims (X AND Y):** See the compound CLAIM_FORMAL variant below.
