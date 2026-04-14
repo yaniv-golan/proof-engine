@@ -23,7 +23,7 @@ Proof Engine breaks the circle by routing every claim through a gate the LLM can
 
 - **Computations are Python** — Python doesn't hallucinate. If the LLM sets up the wrong calculation, the result is wrong in a visible, re-runnable way.
 - **Citations are fetched and matched** — the script hits the URL and searches for the quoted text on the live page. A fabricated citation fails the match; a partial match downgrades the verdict so the gap is visible.
-- **7 hardening rules** close the remaining escape routes — don't hand-type values (parse them from quotes), don't trust the LLM's sense of today's date (use `date.today()`), don't hard-code constants (use reviewed libraries).
+- **8 hardening rules** close the remaining escape routes — don't hand-type values (parse them from quotes), don't trust the LLM's sense of today's date (use `date.today()`), don't hard-code constants (use reviewed libraries).
 
 The LLM is useful: it finds sources, writes code, formalizes claims. But it is never trusted to *be* the verification. When it hallucinates, the pipeline breaks visibly instead of hiding the error.
 
@@ -235,7 +235,7 @@ The repo includes a [`CITATION.cff`](CITATION.cff) file for GitHub's "Cite this 
 
 Proof scripts run in your existing agent environment (Claude Code, ChatGPT, etc.). The engine never uses `eval()` — computations use AST walking instead. `validate_proof.py` performs static analysis before execution, flagging rule violations. Code execution inherits whatever sandboxing your agent platform provides.
 
-## The 7 Hardening Rules
+## The 8 Hardening Rules
 
 | Rule | Closes Failure Mode |
 |------|-------------------|
@@ -246,6 +246,7 @@ Proof scripts run in your existing agent environment (Claude Code, ChatGPT, etc.
 | 5. Independent adversarial check | Confirmation bias |
 | 6. Independent cross-checks | Shared-variable bugs |
 | 7. Never hard-code constants | LLM misremembers formulas |
+| 8. Evidence relevance for rejections | Weak rejection sources pass threshold |
 
 ## Design
 

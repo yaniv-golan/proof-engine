@@ -1,6 +1,6 @@
 # Hardening Rules Reference
 
-These seven rules close specific failure modes where LLM-generated proof code looks correct but is silently wrong. Each rule creates a verifiable link between the proof's internal representation and an external ground truth — so that when the LLM hallucinates, the error breaks visibly rather than hiding.
+These eight rules close specific failure modes where LLM-generated proof code looks correct but is silently wrong. Each rule creates a verifiable link between the proof's internal representation and an external ground truth — so that when the LLM hallucinates, the error breaks visibly rather than hiding.
 
 For proof templates, see [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md).
 
@@ -12,6 +12,7 @@ For proof templates, see [proof-templates.md](${CLAUDE_SKILL_DIR}/references/pro
 5. [Rule 5: Structurally Independent Adversarial Check](#rule-5-structurally-independent-adversarial-check)
 6. [Rule 6: Cross-Checks Must Be Truly Independent](#rule-6-cross-checks-must-be-truly-independent)
 7. [Rule 7: Never Hard-Code Constants or Formulas](#rule-7-never-hard-code-constants-or-formulas)
+8. [Rule 8: Evidence Relevance for Rejection Verdicts](#rule-8-evidence-relevance-for-rejection-verdicts)
 
 ---
 
