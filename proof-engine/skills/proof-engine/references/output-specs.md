@@ -69,6 +69,7 @@ Section "Citation Verification Details": For each Type B citation, four fields �
 - Method (only if verified or partial): full_quote / unicode_normalized / fragment / aggressive_normalization. Source: JSON summary `citations[fact_id].method` and `.coverage_pct`. Note: `coverage_pct` is null for full_quote and unicode_normalized methods — only populated for fragment matches. Partial (fragment match) is a degraded result — present it distinctly from full verification.
 - Fetch mode: live / snapshot / wayback. Source: JSON summary `citations[fact_id].fetch_mode`. Indicates how the page was obtained.
 For multi-source facts, citation detail entries are keyed `{fact_id}_source_{N}` instead of `{fact_id}`. The same fields apply to each sub-entry.
+- Rejection statement (disproof proofs only): The `rejection_statement` value from `proof.py` for this citation. Source: proof.py `empirical_facts[key].rejection_statement`. If absent, note that `validate_proof.py` warns.
 - Impact (only if NOT verified): Which conclusions in proof.md depend on this citation, and whether they have independent support. Source: author analysis (label as such).
 For pure-math proofs, omit this section.
 
