@@ -1014,6 +1014,58 @@ class ProofValidator:
                         quotes.append(value.value)
         return quotes
 
+    def _extract_empirical_facts_entries(self) -> list:
+        """Extract (entry_key, fields) pairs from the empirical_facts dict.
+
+        Returns a list of (str, dict) tuples where:
+          - str  is the entry key (e.g. "source_a")
+          - dict maps field names to their string values
+                 (e.g. {"quote": "...", "rejection_statement": "...", "url": "..."})
+
+        Only string literal values are included; f-strings and other expressions
+        are skipped (can't be statically evaluated).
+        Returns [] on SyntaxError or if empirical_facts is not found / not a plain
+        dict literal.
+        """
+        import ast
+        entries = []
+        try:
+            tree = ast.parse(self.source)
+        except SyntaxError:
+            return entries
+
+        for node in ast.walk(tree):
+            # Look for:  empirical_facts = { ... }
+            if not isinstance(node, ast.Assign):
+                continue
+            if len(node.targets) != 1:
+                continue
+            target = node.targets[0]
+            if not (isinstance(target, ast.Name) and target.id == "empirical_facts"):
+                continue
+            if not isinstance(node.value, ast.Dict):
+                continue
+            # Iterate outer dict entries — each value should be an inner dict
+            for outer_key, outer_val in zip(node.value.keys, node.value.values):
+                if not isinstance(outer_key, ast.Constant):
+                    continue
+                if not isinstance(outer_val, ast.Dict):
+                    continue
+                entry_key = outer_key.value
+                fields: dict = {}
+                for inner_key, inner_val in zip(outer_val.keys, outer_val.values):
+                    if not isinstance(inner_key, ast.Constant):
+                        continue
+                    if not isinstance(inner_val, ast.Constant):
+                        continue  # skip f-strings (JoinedStr) and other expressions
+                    if not (isinstance(inner_key.value, str) and
+                            isinstance(inner_val.value, str)):
+                        continue
+                    fields[inner_key.value] = inner_val.value
+                entries.append((entry_key, fields))
+            break  # Only process the first empirical_facts assignment
+        return entries
+
     def check_quote_accuracy(self):
         """Warn about quote patterns that suggest non-verbatim quoting.
 
@@ -1158,76 +1210,53 @@ class ProofValidator:
             self.passed.append('Contract: JSON summary uses "claim_natural" (not bare "claim")')
 
     def check_disproof_quote_quality(self):
-        """For disproof proofs, warn when empirical_facts quotes lack explicit rejection language.
+        """For disproof proofs, verify each empirical_facts entry has a rejection_statement.
 
-        A quote that merely describes or restates the myth (e.g., "Many people believe X")
-        provides near-zero disproof value.  Good rejection quotes contain words like
-        "not true", "myth", "no evidence", "debunked", "refuted", "false", etc.
+        The rejection_statement must be:
+          1. Present and non-empty — missing → warning (the author must add it)
+          2. A verbatim substring of the entry's "quote" — mismatch → issue
+             (the field was fabricated rather than extracted from the source)
+
+        This design follows the proof-engine trust boundary: the LLM does the
+        semantic work at generation time (identifying the rejecting phrase); the
+        validator does the mechanical work at verification time (containment check).
+        No keyword heuristics required.
         """
-        # Only applies to disproof proofs
         if not re.search(
             r"""["']proof_direction["']\s*:\s*["']disprove["']""",
             self.source,
         ):
             return
 
-        REJECTION_MARKERS = re.compile(
-            r"""(?ix)
-            \bnot\s+true\b
-            | \bmyth\b
-            | \bdebunk
-            | \brefut
-            | \bfabricat
-            | \buntrue\b
-            | \bno\s+(?:scientific\s+)?evidence\b
-            | \bhas\s+never\b
-            | \bhoax\b
-            | \bincorrect\b
-            | \binaccurat
-            | \bdiscredited\b
-            | \bhas\s+no\s+(?:basis|foundation|support)\b
-            | \bnot\s+(?:real|a\s+thing|supported|documented)\b
-            | \bfalse\b
-            | \bfiction\b
-            | \bdemonstrated\s+(?:to\s+be\s+)?false\b
-            | \bcontradicts?\b
-            | \bdisprove[sd]?\b
-            | \bno\s+(?:basis|credible\s+support|scientific\s+backing)\b
-            | \bno\s+proof\b
-            | \bnot\s+been\s+(?:observed|found|documented|demonstrated|recorded)\b
-            | \bcannot\s+(?:occur|happen)\b
-            | \bhighly\s+unlikely\b
-            | \bno\s+evidence\s+(?:of|that|to\s+support)\b
-            | \bno\s+\w+\s+at\s+all\b
-            | \bnot\s+possible\b
-            | \bimpossible\b
-            """
-        )
+        entries = self._extract_empirical_facts_entries()
+        if not entries:
+            return  # Empty or unparseable — other checks handle missing empirical_facts
 
-        quotes = self._extract_quote_values()
-        weak = []
-        for q in quotes:
-            if not REJECTION_MARKERS.search(q):
-                snippet = q[:120].replace("\n", " ")
-                weak.append(f'  Quote lacks rejection language: "{snippet}…"')
+        for entry_key, fields in entries:
+            quote = fields.get("quote", "")
+            rejection = fields.get("rejection_statement", "")
 
-        if weak:
-            self.warnings.append((
-                "Disproof proof contains empirical_facts quote(s) with no explicit "
-                "rejection language (e.g., 'not true', 'myth', 'no evidence', 'debunked'). "
-                "These quotes describe or restate the claim rather than rejecting it — "
-                "they add near-zero evidentiary weight to the disproof. "
-                "Replace with quotes that explicitly state the claim is false or unsupported.",
-                weak,
-            ))
-        elif quotes:
-            # Only record a pass when at least one quote was actually inspected.
-            # If _extract_quote_values() returned nothing (empty empirical_facts,
-            # unparseable source, f-string quotes), emitting a vacuous "all quotes
-            # pass" message is misleading — other checks cover missing empirical facts.
-            self.passed.append(
-                "Disproof: all empirical_facts quotes contain explicit rejection language"
-            )
+            if not rejection:
+                self.warnings.append((
+                    f"Disproof source '{entry_key}' is missing 'rejection_statement'. "
+                    "Add the verbatim phrase from the quote that explicitly rejects "
+                    "the claim, e.g.: "
+                    "rejection_statement=\"no scientific evidence exists for this claim\".",
+                    [],
+                ))
+            elif rejection not in quote:
+                self.issues.append((
+                    f"Disproof source '{entry_key}': 'rejection_statement' is not a "
+                    "verbatim substring of 'quote'. "
+                    "Copy the phrase character-for-character from the quote — "
+                    "do not paraphrase.",
+                    [f"  rejection_statement: {rejection[:100]}"],
+                ))
+            else:
+                self.passed.append(
+                    f"Disproof '{entry_key}': rejection_statement present and "
+                    "contained in quote"
+                )
 
     # ------------------------------------------------------------------
     # Run all checks

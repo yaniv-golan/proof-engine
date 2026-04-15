@@ -1732,78 +1732,84 @@ def _validate_disproof_quote_quality(source_code: str) -> ProofValidator:
     return v
 
 
-DISPROOF_STRONG_REJECTION = '''
-CLAIM_FORMAL = {
-    "proof_direction": "disprove",
-}
+DISPROOF_VALID_REJECTION_STATEMENT = '''
+CLAIM_FORMAL = {"proof_direction": "disprove"}
 empirical_facts = {
     "source_a": {
-        "quote": "The claim that humans eat spiders in their sleep is not true — there is no credible scientific evidence to support it.",
-        "url": "https://example.com/spiders",
-        "source_name": "Example"
+        "quote": "There is no scientific evidence that humans eat spiders while sleeping.",
+        "rejection_statement": "no scientific evidence",
+        "url": "https://example.com",
+        "source_name": "Example",
     },
 }
 '''
 
-DISPROOF_MYTH_DESCRIPTION = '''
-CLAIM_FORMAL = {
-    "proof_direction": "disprove",
-}
+DISPROOF_MISSING_REJECTION_STATEMENT = '''
+CLAIM_FORMAL = {"proof_direction": "disprove"}
 empirical_facts = {
     "source_b": {
-        "quote": "Urban legend has led many to believe that we eat spiders in our sleep, up to as many as eight a year.",
-        "url": "https://example.com/spiders2",
-        "source_name": "Example"
+        "quote": "Urban legend has led many to believe that we eat spiders in our sleep.",
+        "url": "https://example.com",
+        "source_name": "Example",
     },
 }
 '''
 
-AFFIRM_MYTH_DESCRIPTION = '''
-CLAIM_FORMAL = {
-    "proof_direction": "affirm",
-}
+DISPROOF_REJECTION_NOT_IN_QUOTE = '''
+CLAIM_FORMAL = {"proof_direction": "disprove"}
 empirical_facts = {
-    "source_b": {
-        "quote": "Urban legend has led many to believe that we eat spiders in our sleep, up to as many as eight a year.",
-        "url": "https://example.com/spiders2",
-        "source_name": "Example"
+    "source_c": {
+        "quote": "Urban legend has led many to believe that we eat spiders in our sleep.",
+        "rejection_statement": "completely false and unsupported by evidence",
+        "url": "https://example.com",
+        "source_name": "Example",
     },
 }
 '''
 
-
-def test_disproof_strong_rejection_no_warning():
-    v = _validate_disproof_quote_quality(DISPROOF_STRONG_REJECTION)
-    assert len(v.warnings) == 0
-
-
-def test_disproof_myth_description_warns():
-    v = _validate_disproof_quote_quality(DISPROOF_MYTH_DESCRIPTION)
-    assert len(v.warnings) >= 1
-    assert any(
-        "rejection" in w[0].lower() or "disproof" in w[0].lower()
-        for w in v.warnings
-    )
-
-
-def test_affirm_proof_skips_disproof_check():
-    v = _validate_disproof_quote_quality(AFFIRM_MYTH_DESCRIPTION)
-    assert len(v.warnings) == 0
-
-
-DISPROOF_NO_QUOTES = '''
-CLAIM_FORMAL = {
-    "proof_direction": "disprove",
+AFFIRM_WITHOUT_REJECTION_STATEMENT = '''
+CLAIM_FORMAL = {"proof_direction": "affirm"}
+empirical_facts = {
+    "source_d": {
+        "quote": "Some affirmative quote with no rejection statement.",
+        "url": "https://example.com",
+        "source_name": "Example",
+    },
 }
+'''
+
+DISPROOF_EMPTY_FACTS = '''
+CLAIM_FORMAL = {"proof_direction": "disprove"}
 empirical_facts = {}
 '''
 
 
-def test_disproof_no_quotes_no_warning_no_pass():
-    """When disproof has no extractable quotes, emit neither warning nor passed message."""
-    v = _validate_disproof_quote_quality(DISPROOF_NO_QUOTES)
+def test_disproof_valid_rejection_statement_passes():
+    v = _validate_disproof_quote_quality(DISPROOF_VALID_REJECTION_STATEMENT)
     assert len(v.warnings) == 0
-    assert not any(
-        "rejection language" in p.lower()
-        for p in v.passed
-    )
+    assert len(v.issues) == 0
+    assert any("rejection_statement" in p for p in v.passed)
+
+
+def test_disproof_missing_rejection_statement_warns():
+    v = _validate_disproof_quote_quality(DISPROOF_MISSING_REJECTION_STATEMENT)
+    assert len(v.warnings) >= 1
+    assert any("rejection_statement" in w[0] for w in v.warnings)
+
+
+def test_disproof_rejection_not_in_quote_is_issue():
+    v = _validate_disproof_quote_quality(DISPROOF_REJECTION_NOT_IN_QUOTE)
+    assert len(v.issues) >= 1
+    assert any("verbatim" in i[0] or "substring" in i[0] for i in v.issues)
+
+
+def test_affirm_proof_skips_disproof_check():
+    v = _validate_disproof_quote_quality(AFFIRM_WITHOUT_REJECTION_STATEMENT)
+    assert len(v.warnings) == 0
+    assert len(v.issues) == 0
+
+
+def test_disproof_empty_facts_no_warning_no_issue():
+    v = _validate_disproof_quote_quality(DISPROOF_EMPTY_FACTS)
+    assert len(v.warnings) == 0
+    assert len(v.issues) == 0
