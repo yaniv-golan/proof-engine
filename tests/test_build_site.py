@@ -688,6 +688,51 @@ def test_proof_page_friendly_download_labels(site_fixture):
     assert "raw data (JSON)" in html
 
 
+def test_proof_page_standards_download_links(site_fixture):
+    """Downloads section exposes machine-readable format links with correct hrefs."""
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+
+    # Locate the downloads section and assert within it only —
+    # prevents false passes from hrefs that appear in JSON-LD or elsewhere.
+    section_start = html.find('class="downloads-section"')
+    assert section_start != -1, "downloads-section not found"
+    section_end = html.find("</details>", section_start)
+    assert section_end != -1
+    section_html = html[section_start:section_end]
+
+    # Exact hrefs (base_url=/proof-engine/, slug=test-claim)
+    ipynb_href = 'href="/proof-engine/proofs/test-claim/proof.ipynb"'
+    prov_href = 'href="/proof-engine/proofs/test-claim/provenance.json"'
+    crate_href = 'href="/proof-engine/proofs/test-claim/ro-crate-metadata.json"'
+    assert ipynb_href in section_html
+    assert prov_href in section_html
+    assert crate_href in section_html
+
+    # Human-readable labels
+    assert "interactive notebook (.ipynb)" in section_html
+    assert "provenance trace (W3C PROV)" in section_html
+    assert "research package (RO-Crate 1.1)" in section_html
+
+    # Group label div must carry the correct CSS class (flex-row break depends on it)
+    assert 'class="downloads-group-label"' in section_html
+
+    # Group label must appear BEFORE all three hrefs — proves correct ordering,
+    # not just co-presence in the same <details> block.
+    label_pos = section_html.find("machine-readable formats")
+    assert label_pos != -1, "group label text not found"
+    assert label_pos < section_html.find(ipynb_href), "label must precede notebook href"
+    assert label_pos < section_html.find(prov_href), "label must precede provenance href"
+    assert label_pos < section_html.find(crate_href), "label must precede RO-Crate href"
+
+    # Backing files must be emitted into _site — prevents 404s on the new links
+    proof_out = site_fixture / "_site" / "proofs" / "test-claim"
+    assert (proof_out / "proof.ipynb").exists(), "proof.ipynb not generated"
+    assert (proof_out / "provenance.json").exists(), "provenance.json not generated"
+    assert (proof_out / "ro-crate-metadata.json").exists(), "ro-crate-metadata.json not generated"
+
+
 def test_proof_page_evidence_table_source_first(site_fixture):
     """Evidence table should have Source as first column, ID as second."""
     proof_json_path = site_fixture / "site" / "proofs" / "test-claim" / "proof.json"
