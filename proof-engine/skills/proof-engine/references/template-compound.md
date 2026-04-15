@@ -34,6 +34,10 @@ CLAIM_FORMAL = {
     ],
     "compound_operator": "AND",  # only AND is supported; OR claims should be decomposed into separate proofs
     "operator_note": "All sub-claims must hold for the compound claim to be PROVED",
+    # "subclaim_to_sources": {     # optional: add when using descriptive empirical_facts key names
+    #     "SC1": ["source_key_a", "source_key_b"],  # list the empirical_facts keys for each sub-claim
+    #     "SC2": ["source_key_c", "source_key_d"],
+    # },
 }
 
 # 2. FACT REGISTRY

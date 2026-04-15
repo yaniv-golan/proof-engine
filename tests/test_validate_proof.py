@@ -895,6 +895,88 @@ def test_no_subclaims_skips():
     assert len(v.issues) == 0
 
 
+# --- Explicit subclaim_to_sources map ---
+
+COMPOUND_EXPLICIT_MAP_BALANCED = '''
+CLAIM_FORMAL = {
+    "sub_claims": [
+        {"id": "SC1", "property": "...", "operator": ">=", "threshold": 2},
+        {"id": "SC2", "property": "...", "operator": ">=", "threshold": 2},
+    ],
+    "compound_operator": "AND",
+    "subclaim_to_sources": {
+        "SC1": ["oslo_ii_document", "un_resolution"],
+        "SC2": ["world_bank_report", "imf_analysis"],
+    },
+}
+empirical_facts = {
+    "oslo_ii_document": {"quote": "...", "url": "...", "source_name": "Oslo II"},
+    "un_resolution": {"quote": "...", "url": "...", "source_name": "UN"},
+    "world_bank_report": {"quote": "...", "url": "...", "source_name": "World Bank"},
+    "imf_analysis": {"quote": "...", "url": "...", "source_name": "IMF"},
+}
+'''
+
+COMPOUND_EXPLICIT_MAP_UNBALANCED = '''
+CLAIM_FORMAL = {
+    "sub_claims": [
+        {"id": "SC1", "property": "...", "operator": ">=", "threshold": 2},
+        {"id": "SC2", "property": "...", "operator": ">=", "threshold": 2},
+    ],
+    "compound_operator": "AND",
+    "subclaim_to_sources": {
+        "SC1": ["oslo_ii_document", "un_resolution"],
+        "SC2": ["world_bank_report"],
+    },
+}
+empirical_facts = {
+    "oslo_ii_document": {"quote": "...", "url": "...", "source_name": "Oslo II"},
+    "un_resolution": {"quote": "...", "url": "...", "source_name": "UN"},
+    "world_bank_report": {"quote": "...", "url": "...", "source_name": "World Bank"},
+}
+'''
+
+COMPOUND_UNBALANCED_DESCRIPTIVE_KEYS_WITH_MAP = '''
+CLAIM_FORMAL = {
+    "sub_claims": [
+        {"id": "SC1", "property": "...", "operator": ">=", "threshold": 2},
+        {"id": "SC2", "property": "...", "operator": ">=", "threshold": 2},
+    ],
+    "compound_operator": "AND",
+    "subclaim_to_sources": {
+        "SC1": ["oslo_ii_document", "un_resolution"],
+        "SC2": ["world_bank_report"],
+    },
+}
+empirical_facts = {
+    "oslo_ii_document": {"quote": "...", "url": "...", "source_name": "Oslo II"},
+    "un_resolution": {"quote": "...", "url": "...", "source_name": "UN"},
+    "world_bank_report": {"quote": "...", "url": "...", "source_name": "World Bank"},
+}
+'''
+
+
+def test_compound_explicit_map_balanced_passes():
+    """Explicit subclaim_to_sources with 2+ keys per SC → no warnings."""
+    v = _validate_rule6_subclaim(COMPOUND_EXPLICIT_MAP_BALANCED)
+    assert len(v.warnings) == 0
+    assert len(v.issues) == 0
+
+
+def test_compound_explicit_map_unbalanced_warns():
+    """Explicit subclaim_to_sources with only 1 key for SC2 → warning."""
+    v = _validate_rule6_subclaim(COMPOUND_EXPLICIT_MAP_UNBALANCED)
+    assert len(v.warnings) >= 1
+    assert any("SC2" in str(w) for w in v.warnings)
+
+
+def test_compound_unbalanced_descriptive_keys_with_map_warns():
+    """Explicit map catches imbalance for descriptive-key proof — Path 2 would silently skip this."""
+    v = _validate_rule6_subclaim(COMPOUND_UNBALANCED_DESCRIPTIVE_KEYS_WITH_MAP)
+    assert len(v.warnings) >= 1
+    assert any("SC2" in str(w) for w in v.warnings)
+
+
 # ---------------------------------------------------------------------------
 # Unused imports: critical functions should be ISSUE not WARNING
 # ---------------------------------------------------------------------------

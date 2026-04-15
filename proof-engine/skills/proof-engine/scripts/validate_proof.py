@@ -443,18 +443,89 @@ class ProofValidator:
             else:
                 self.passed.append("Rule 6: Pure computation — independent sources not required")
 
+    def _extract_subclaim_to_sources(self) -> dict | None:
+        """Extract the optional subclaim_to_sources map from CLAIM_FORMAL.
+
+        Returns dict mapping SC ID string → list of empirical_facts key strings,
+        or None if the key is not present in CLAIM_FORMAL, CLAIM_FORMAL is not
+        a plain dict literal, or the source has a SyntaxError.
+
+        Example CLAIM_FORMAL shape this handles:
+            CLAIM_FORMAL = {
+                "subclaim_to_sources": {
+                    "SC1": ["source_a", "source_b"],
+                    "SC2": ["source_c", "source_d"],
+                },
+            }
+        """
+        import ast
+        try:
+            tree = ast.parse(self.source)
+        except SyntaxError:
+            return None
+
+        for node in tree.body:
+            if not isinstance(node, ast.Assign):
+                continue
+            if len(node.targets) != 1:
+                continue
+            target = node.targets[0]
+            if not (isinstance(target, ast.Name) and target.id == "CLAIM_FORMAL"):
+                continue
+            if not isinstance(node.value, ast.Dict):
+                break  # CLAIM_FORMAL found but not a plain dict
+
+            for cf_key, cf_val in zip(node.value.keys, node.value.values):
+                if not (isinstance(cf_key, ast.Constant) and
+                        cf_key.value == "subclaim_to_sources"):
+                    continue
+                if not isinstance(cf_val, ast.Dict):
+                    return None  # Key present but value is not a plain dict
+
+                result = {}
+                for sc_key, sc_val in zip(cf_val.keys, cf_val.values):
+                    if not (isinstance(sc_key, ast.Constant) and
+                            isinstance(sc_key.value, str)):
+                        continue
+                    if not isinstance(sc_val, ast.List):
+                        continue
+                    source_keys = [
+                        elt.value for elt in sc_val.elts
+                        if isinstance(elt, ast.Constant) and isinstance(elt.value, str)
+                    ]
+                    result[sc_key.value] = source_keys
+                return result
+            break  # CLAIM_FORMAL found, no subclaim_to_sources key
+        return None
+
     def check_rule6_per_subclaim(self):
         """Check that each sub-claim in a compound proof has >=2 sources.
 
-        For compound proofs, extracts SC IDs from CLAIM_FORMAL (supports both
-        list-of-dicts and dict forms). Groups empirical_facts keys by lowercase
-        SC prefix (sc1_, sc2a_, etc.). Only warns if prefixed keys exist but
-        are unbalanced — skips silently when keys are descriptive (no prefix
-        match), since source-to-subclaim mapping can't be reliably inferred.
+        Two paths:
+        1. Explicit: CLAIM_FORMAL has subclaim_to_sources dict → use it directly.
+           This allows descriptive-key proofs to be checked.
+        2. Inference: fall back to lowercase SC prefix matching (sc1_, sc2_, etc.).
+           Only warns when ALL sub-claims have prefix-matched keys; skips silently
+           when keys are descriptive (no prefix match).
         """
         if "sub_claims" not in self.source:
             return
 
+        # --- Path 1: Explicit subclaim_to_sources map ---
+        explicit_map = self._extract_subclaim_to_sources()
+        if explicit_map:
+            for sc_id, keys in explicit_map.items():
+                if len(keys) < 2:
+                    self.warnings.append((
+                        f"Rule 6: Sub-claim {sc_id} has only {len(keys)} "
+                        f"source(s) in subclaim_to_sources "
+                        f"({keys if keys else 'empty'}) — "
+                        "cross-check may not be truly independent for this sub-claim",
+                        [],
+                    ))
+            return
+
+        # --- Path 2: Prefix inference (existing behavior, unchanged) ---
         # Extract SC IDs from both forms:
         #   list form: {"id": "SC1", ...}
         #   dict form: "SC1": { or "SC1": "
