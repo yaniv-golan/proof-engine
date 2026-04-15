@@ -9,7 +9,7 @@ description: >
   questions with no verifiable answer.
 metadata:
   author: Yaniv Golan
-  version: "1.15.0"
+  version: "1.16.0"
   license: MIT
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
@@ -213,6 +213,8 @@ If the status is `not_found` or `partial`, check `closest_passage` in the result
 
 Do not proceed to Step 3 with fixable `not_found` or `partial` results — these usually mean the quote was paraphrased and can be corrected. However, `fetch_failed` from known-unfetchable sources (403, JS-rendered, paywalled) is expected — document these and proceed. The "with unverified citations" verdict exists for exactly this case.
 
+**If a quote must be paraphrased** (e.g., the verbatim text is unwieldy or the source is paywalled and a snapshot is unavailable), declare `"verbatim": False` on the `empirical_facts` entry. The validator will warn and the proof report will note the reduced evidentiary weight. Do not omit this field silently — an undeclared paraphrase is harder to audit than a declared one.
+
 ### Step 3: Write the Proof Code
 Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 8 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) to identify which template matches your claim type. Then read the specific template file it directs you to (e.g., `template-qualitative.md`, `template-compound.md`). Do not skip the second read — the index contains only the decision table, not the template code. **If the claim uses an epistemic qualifier** ("verified," "confirmed," "proven," "established"), **use the compound claim template** (`template-compound.md`) with the contested qualifier pattern: SC1 (provenance — do the numbers come from a credible source?) + SC2 (epistemic warrant — has the qualifier been independently confirmed?). **If the claim uses causal language** ("causes," "leads to," "promotes," "damages," "prevents"), **use the compound claim template** (`template-compound.md`) with SC-association + SC-causation sub-claims — see "Causal vs. associational claims" in the Verdicts section. For claims where the *primary* answer is absence of supporting evidence (and no authoritative sources actively debunk the claim), use `template-absence.md`. If authoritative sources actively reject the claim — even if absence language also appears — use `template-qualitative.md` with `proof_direction: "disprove"`; this produces a DISPROVED verdict rather than the weaker SUPPORTED. The proof script must be self-contained: `python proof.py` produces the full output.
 
@@ -280,6 +282,29 @@ Do not skip this step. The difference between `PROVED` and `PROVED (with unverif
 
 ### Step 6: Self-Critique
 Before presenting results, run through the checklist in [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md).
+
+## Publishing
+
+After a proof passes validation, it can be published to the site and archived as a citable research object.
+
+**Publish to the site:**
+```bash
+python tools/proof-site.py publish <proof-dir> --site-dir site
+```
+
+**Mint a Zenodo DOI** (archives the proof as a citable research object; requires `ZENODO_TOKEN`):
+```bash
+# Build the site first so machine-readable artifacts are generated
+python tools/build-site.py --site-dir site --output-dir _site --base-url /proof-engine/ --site-url https://yaniv-golan.github.io --design-md docs/DESIGN.md --hardening-rules-md proof-engine/skills/proof-engine/references/hardening-rules.md
+
+# Mint DOI — pass --output-dir to include provenance.json, proof.ipynb, ro-crate-metadata.json
+source .env
+python tools/proof-site.py mint-doi <slug> --site-dir site --output-dir _site
+```
+
+The deposit includes all five proof artifacts plus, when `--output-dir` is supplied: the W3C PROV-JSON provenance chain, the Jupyter Notebook (interactive re-verification), and the RO-Crate 1.1 manifest — making the deposit a standards-compliant research object discoverable by Linked Data clients and research registries.
+
+When the notebook is included, `doi.json` gains a `binder_url` field (`https://mybinder.org/v2/zenodo/{zenodo_id}/?filepath=proof.ipynb`) that lets anyone re-run the proof in a browser with one click. The Binder URL is printed to the console after minting.
 
 ## Verdicts
 

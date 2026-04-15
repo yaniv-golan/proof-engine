@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.16.0] - 2026-04-15
+
+### Added
+
+- **`rejection_statement` field for disproof proofs** — each `empirical_facts` entry in a disproof must include a `rejection_statement` field: the verbatim phrase from the quote that explicitly rejects the claim. `validate_proof.py` warns when the field is absent and raises an issue when it is present but not a substring of the associated `quote`. Replaces the 25-pattern `REJECTION_MARKERS` vocabulary scan.
+- **`is_time_sensitive` field in `CLAIM_FORMAL`** — proofs that depend on the current date declare `"is_time_sensitive": True` in `CLAIM_FORMAL`. `validate_proof.py` uses AST to read this field and enforces four behavioral branches (declared+today → pass; declared+no today → issue; today without declaration → warning; hardcoded date without today → issue). Replaces comment-strip + regex keyword scan.
+- **`verbatim` field per `empirical_facts` entry** — authors can declare `"verbatim": False` when a quote is paraphrased. `validate_proof.py` checks this field structurally: warns on `verbatim: False`, raises an issue on `verbatim: True` with an ellipsis (contradiction), and nudges on ellipsis without any declaration. Replaces ellipsis-only heuristic.
+- **`subclaim_to_sources` map in `CLAIM_FORMAL`** — compound proofs can declare an explicit `subclaim_to_sources` dict mapping each sub-claim ID to its list of `empirical_facts` keys. `validate_proof.py` Path 1 uses this map directly; Path 2 falls back to key-prefix inference for proofs that don't provide it.
+- **AST-based Rule 5 check** — `adversarial_checks` is verified via AST list-element count, not vocabulary scanning. Empty list → issue; `count ≥ 1` → pass with count; non-list or missing → regex fallback.
+- **W3C PROV-JSON export** — `tools/lib/prov.py` generates `provenance.json` per proof: a W3C PROV-JSON provenance chain mapping each evidence entity, citation-verification activity, and cross-check derivation back to the Proof Engine agent. Included in RO-Crate packages.
+- **SARIF 2.1.0 export** — `tools/lib/sarif.py` converts `validate_proof.py` results to SARIF 2.1.0. Each hardening rule maps to a stable rule ID (`PE001`–`PE010`); issues are `error` level, warnings are `warning`. Enables integration with GitHub Code Scanning and other SARIF-aware tooling.
+- **RO-Crate 1.1 packaging** — `tools/lib/ro_crate.py` generates `ro-crate-metadata.json` per proof: a standards-compliant research object manifest listing all proof artifacts (`proof.py`, `proof.json`, `proof.md`, `proof_audit.md`, `proof_narrative.md`, `provenance.json`, `proof.ipynb`) with typed schema.org roles and DOI links.
+- **Jupyter Notebook export** — `tools/build-site.py` generates `proof.ipynb` per proof: a two-cell Jupyter Notebook that installs dependencies and re-runs `proof.py` in an interactive environment. Included in the RO-Crate manifest as a `ComputationalNotebook`.
+- **Enhanced Schema.org JSON-LD** — proof pages now include `isBasedOn` (links to each cited source URL), `mainEntity` (the `ClaimReview` block), and `sameAs` provenance links. Improves search engine and Linked Data discoverability.
+
+### Changed
+
+- **`validate_proof.py` design principle** — all new checks read structured fields declared by the LLM at generation time; validator does mechanical verification only (substring containment, list length, field presence). No semantic inference from free text.
+- **Hardening rules documentation** — updated validator notes for Rule 3 (is_time_sensitive behavioral branches), Rule 5 (AST non-empty list check), and Rule 8 (rejection_statement enforcement).
+- **`output-specs.md`** — added `rejection_statement`, `Verbatim status`, and `Time sensitivity` to Citation Verification Details.
+- **`template-qualitative.md`** — added `is_time_sensitive` comment to `CLAIM_FORMAL`, `verbatim` comment to `empirical_facts`, and expanded disproof variant to show `rejection_statement` field explicitly.
+- **`template-date-age.md`** — `is_time_sensitive: True` now included in `CLAIM_FORMAL`.
+- **`template-compound.md`** — commented `subclaim_to_sources` block added to `CLAIM_FORMAL`.
+
 ## [1.15.0] - 2026-04-11
 
 ### Added
