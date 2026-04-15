@@ -70,6 +70,8 @@ Section "Citation Verification Details": For each Type B citation, four fields â
 - Fetch mode: live / snapshot / wayback. Source: JSON summary `citations[fact_id].fetch_mode`. Indicates how the page was obtained.
 For multi-source facts, citation detail entries are keyed `{fact_id}_source_{N}` instead of `{fact_id}`. The same fields apply to each sub-entry.
 - Rejection statement (disproof proofs only): The `rejection_statement` value from `proof.py` for this citation. Source: proof.py `empirical_facts[key].rejection_statement`. If absent, note that `validate_proof.py` warns.
+- Verbatim status: Whether the quote is verbatim (`verbatim` field from `proof.py`, default: true). Source: proof.py `empirical_facts[key].verbatim`. If `verbatim: False`, note that evidentiary weight is reduced. If absent, quote is assumed verbatim.
+- Time sensitivity (time-dependent proofs only): Whether the proof declared `is_time_sensitive: True` in `CLAIM_FORMAL` and whether `date.today()` is present. Source: proof.py `CLAIM_FORMAL.is_time_sensitive` + `date.today()` call site.
 - Impact (only if NOT verified): Which conclusions in proof.md depend on this citation, and whether they have independent support. Source: author analysis (label as such).
 For pure-math proofs, omit this section.
 

@@ -220,7 +220,7 @@ else:
 
 If run on the generation date, this confirms the LLM was right. If run later, the system clock takes over. If the LLM got the date wrong, the mismatch is visible.
 
-**How validate_proof.py catches it**: Looks for `date.today()` in the code. If only hardcoded `date()` is found in a time-dependent proof, flags it.
+**How validate_proof.py catches it**: Checks `CLAIM_FORMAL["is_time_sensitive"]` declaration against actual `date.today()` usage. Declaring `is_time_sensitive: True` without `date.today()` is an issue; using `date.today()` without the declaration is a warning. When neither condition applies, a hard-coded `date(YYYY, ...)` without `date.today()` is flagged as an issue (e.g. the common `PROOF_GENERATION_DATE = date(YYYY, M, D)` pattern used alongside `date.today()` is fine).
 
 ---
 
@@ -323,7 +323,7 @@ These are structurally independent: they don't re-derive the founding date or re
 - **Red flag**: If the `finding` text contains "no significant difference," "does not confirm," "contradicts," "insufficient evidence," or "RCTs show no effect" — and `breaks_proof` is False — the rebuttal must explain why this specific contradiction does not apply. If you cannot write a specific rebuttal, set `breaks_proof: True`.
 - **Red flag**: If a `finding` says a number "appears to be fabricated" or "does not appear in any source" — verify whether the number is *inconsistent* with sources or merely *more precise* than sources. Rounding differences are not fabrication.
 
-**How validate_proof.py catches it**: Looks for "adversarial", "disproof", "counter-evidence" etc. in the code.
+**How validate_proof.py catches it**: Uses AST to verify `adversarial_checks` is defined as a non-empty list. An empty `adversarial_checks = []` is an issue (vocabulary match alone is not sufficient). The absence of any `adversarial_checks` variable is also an issue. Non-list forms (e.g. `adversarial_checks = build_checks()`) cannot be AST-counted and are passed with a note that entry count could not be verified.
 
 ---
 
