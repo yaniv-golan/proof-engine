@@ -169,6 +169,12 @@ def emit_proof_summary(summary: dict) -> None:
             f"If a new key is genuinely needed, add it to ProofData in "
             f"proof_types.py first."
         )
+    # Ensure format_version is always present in output.
+    # Default to 2 (not 3) because emit_proof_summary callers produce
+    # legacy-shape JSON (fact_registry/citations) — the loader's
+    # normalize_to_v3() must still run (it skips when format_version == 3).
+    # ProofSummaryBuilder is the primary path and sets format_version: 3.
+    summary.setdefault("format_version", 2)
     print("\n=== PROOF SUMMARY (JSON) ===")
     print(json.dumps(summary, indent=2, default=str))
 
