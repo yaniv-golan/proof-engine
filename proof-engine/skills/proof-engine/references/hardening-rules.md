@@ -464,3 +464,5 @@ The three-column output (symbolic → substituted → result) makes every step a
 4. If any threshold source uses hedged language and no replacement is available, downgrade to SUPPORTED (against)
 
 Document the subject-match and language classification in the `adversarial_checks` finding field.
+
+**Structural enforcement via `rejection_statement`:** Add a `rejection_statement` field to each `empirical_facts` entry in disproof proofs, containing the verbatim phrase from the quote that constitutes the rejection. This makes the evidentiary link between source and claim explicit and auditable without semantic analysis. `validate_proof.py` warns when the field is absent and raises an issue when it is present but not a verbatim substring of the quote.
