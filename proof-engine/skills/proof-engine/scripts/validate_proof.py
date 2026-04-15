@@ -268,6 +268,51 @@ class ProofValidator:
             else:
                 self.passed.append("Rule 2: No empirical facts — citation verification not needed")
 
+    def _extract_claim_formal_field(self, key: str):
+        """Extract a single top-level field value from the CLAIM_FORMAL dict literal.
+
+        Returns the Python constant value (str, bool, int, float) or None if:
+          - CLAIM_FORMAL is not found or is not a plain dict literal
+          - the key is not present in CLAIM_FORMAL
+          - the value is not a simple AST constant (e.g. it is a list or nested dict)
+          - SyntaxError in source
+
+        String-encoded booleans ("True"/"False") are coerced to actual Python bools,
+        consistent with _extract_empirical_facts_entries.
+
+        Uses tree.body (module-level iteration) so comments and string literals
+        elsewhere in the file cannot produce false matches.
+        """
+        import ast
+        try:
+            tree = ast.parse(self.source)
+        except SyntaxError:
+            return None
+
+        for node in tree.body:
+            if not isinstance(node, ast.Assign):
+                continue
+            if len(node.targets) != 1:
+                continue
+            target = node.targets[0]
+            if not (isinstance(target, ast.Name) and target.id == "CLAIM_FORMAL"):
+                continue
+            if not isinstance(node.value, ast.Dict):
+                break  # CLAIM_FORMAL found but not a plain dict literal
+
+            for cf_key, cf_val in zip(node.value.keys, node.value.values):
+                if not (isinstance(cf_key, ast.Constant) and cf_key.value == key):
+                    continue
+                if not isinstance(cf_val, ast.Constant):
+                    return None  # Key present but value is not a simple constant
+                val = cf_val.value
+                # Coerce string-encoded booleans (e.g. "True" → True)
+                if isinstance(val, str) and val.lower() in ("true", "false"):
+                    val = val.lower() == "true"
+                return val
+            break  # CLAIM_FORMAL found, key not present
+        return None
+
     def check_rule3_system_time(self):
         """Rule 3: Anchored to system time via date.today().
 
@@ -284,15 +329,7 @@ class ProofValidator:
         """
         has_today = "date.today()" in self.source
         has_hardcoded = bool(re.search(r'\bdate\(\s*\d{4}\s*,', self.source))
-        # Strip comment lines before checking structural declarations
-        # (prevents commented-out template hints from matching)
-        source_for_declaration_check = '\n'.join(
-            line for line in self.source.splitlines()
-            if not line.lstrip().startswith('#')
-        )
-        is_sensitive_declared = bool(re.search(
-            r'''["']is_time_sensitive["']\s*:\s*True''', source_for_declaration_check
-        ))
+        is_sensitive_declared = self._extract_claim_formal_field("is_time_sensitive") is True
 
         if is_sensitive_declared and has_today:
             self.passed.append(

@@ -2059,6 +2059,26 @@ def test_rule3_commented_hint_is_not_a_declaration():
     assert any("is_time_sensitive" in w[0] for w in v.warnings)
 
 
+RULE3_STRING_LITERAL_WITH_IS_TIME_SENSITIVE_TEXT = """
+from datetime import date
+CLAIM_FORMAL = {
+    "subject": "Age of example",
+}
+# A string elsewhere in the file containing the text — must NOT match
+explanation = "Set 'is_time_sensitive': True in CLAIM_FORMAL for time-dependent proofs"
+today = date.today()
+age = today.year - 1948
+"""
+
+
+def test_rule3_is_time_sensitive_text_in_string_literal_does_not_declare():
+    """Text matching the old regex inside a string literal must not count as a declaration."""
+    v = _validate_rule3(RULE3_STRING_LITERAL_WITH_IS_TIME_SENSITIVE_TEXT)
+    assert len(v.issues) == 0
+    assert len(v.warnings) >= 1  # date.today() without declaration → warning
+    assert any("is_time_sensitive" in w[0] for w in v.warnings)
+
+
 def test_rule3_declared_but_no_today_is_issue():
     v = _validate_rule3(RULE3_DECLARED_NO_TODAY)
     assert len(v.issues) >= 1
