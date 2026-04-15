@@ -57,7 +57,7 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **`compute_percentage_change(mode="decline")` is for purchasing-power decline only**: It computes `(1 - old/new) * 100` — the denominator is the new value. For standard year-over-year decline, use the default `mode="increase"` with `(old_value, new_value)` — the result will be negative when new < old.
 - **`parse_percentage_from_quote(quote, fact_id)` has no `pattern` kwarg**: For pattern-based extraction, use `parse_number_from_quote(quote, pattern, fact_id)` instead. The two functions have different signatures — check the Bundled Scripts table.
 - **JSON summary key is `claim_natural`, not `claim`**: The publish toolchain reads `proof_data.get("claim_natural")`. Using `"claim"` as the key silently drops the claim text from the published proof.
-- **Use `emit_proof_summary(summary)` for the JSON summary, not raw `json.dumps`**: The helper validates all top-level keys against the `ProofData` schema. Unknown keys (like `computed_values`) are rejected immediately with a message listing allowed keys. If you need a new key, add it to `ProofData` in `proof_types.py` first — don't bypass the validation.
+- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: 3`, validates against the JSON schema, and emits the `=== PROOF SUMMARY (JSON) ===` marker. See any template file for usage. The older `emit_proof_summary()` in `computations.py` is a legacy fallback that produces v2-shape JSON — do not use it for new proofs.
 
 ## Reference Files
 
@@ -84,6 +84,7 @@ Import these instead of re-implementing verification logic.
 | `scripts/computations.py` | Verified constants, formulas, self-documenting output (Rule 7) | `compute_age()`, `compare()`, `explain_calc()`, `cross_check()`, `compute_percentage_change()` |
 | `scripts/source_credibility.py` | Domain credibility from URL (offline). Called automatically by `verify_all_citations()`. | `assess_credibility(url)` |
 | `scripts/validate_proof.py` | Static analysis for rule compliance | `ProofValidator(filepath).validate()` |
+| `scripts/proof_summary.py` | Build v3 proof.json summary (primary path) | `ProofSummaryBuilder` |
 
 **Key function signatures:**
 
@@ -102,9 +103,19 @@ compare(value, op_str, threshold, label=None) -> bool
 apply_verdict_qualifier(base_verdict, any_unverified) -> str
 #   Validates base_verdict, applies "(with unverified citations)" only to
 #   PROVED, DISPROVED, SUPPORTED. PARTIALLY VERIFIED and UNDETERMINED pass through.
-emit_proof_summary(summary) -> None
-#   Validates summary keys against ProofData schema, then prints
-#   "=== PROOF SUMMARY (JSON) ===" + json.dumps(). Rejects unknown keys.
+
+# proof_summary.py
+ProofSummaryBuilder(claim_natural, claim_formal, generator=None)
+#   Primary path for building proof.json. Produces format_version: 3.
+#   builder.add_empirical_fact(fact_id, label=, source_name=, source_url=, source_quote=)
+#   builder.set_verification(fact_id, status=, method=, ...)
+#   builder.set_extraction(fact_id, value=, value_in_quote=, ...)
+#   builder.add_computed_fact(fact_id, label=, method=, result=, depends_on=[])
+#   builder.add_cross_check(description=, fact_ids=, agreement=)
+#   builder.add_adversarial_check(question=, verification_performed=, finding=, breaks_proof=)
+#   builder.set_verdict(base_verdict, any_unverified=False, reason=None)
+#   builder.set_key_results(**kwargs)
+#   builder.emit()  # validates and prints JSON
 
 # verify_citations.py
 build_citation_detail(fact_registry, citation_results, empirical_facts) -> dict
@@ -247,10 +258,10 @@ The fourth and final output file. Written AFTER proof.py, proof.md, proof_audit.
 
 1. Title line: `# Proof Narrative: <claim_natural>`
 2. Section `Verdict` — contains `**Verdict: <exact verdict from proof.json>**` followed by 1-2 sentence hook with verdict-adapted tone
-3. Section `What was claimed?` — plain-language restatement, why someone might care, do NOT copy CLAIM_FORMAL
-4. Section `What did we find?` — 3-6 paragraphs walking through evidence as a story, not a table. Verdict-adapted: PROVED/DISPROVED = linear strongest-first; SUPPORTED = evidence then gaps; PARTIALLY VERIFIED = what held then what didn't; UNDETERMINED = what was tried and why insufficient
-5. Section `What should you keep in mind?` — mandatory caveats, edge cases, what evidence doesn't address, what surprised, limitations
-6. Section `How was this verified?` — 2-3 sentences naming the process, with these links: `[the structured proof report](proof.md)`, `[the full verification audit](proof_audit.md)`, `[re-run the proof yourself](proof.py)`
+3. Section `What Was Claimed?` — plain-language restatement, why someone might care, do NOT copy CLAIM_FORMAL
+4. Section `What Did We Find?` — 3-6 paragraphs walking through evidence as a story, not a table. Verdict-adapted: PROVED/DISPROVED = linear strongest-first; SUPPORTED = evidence then gaps; PARTIALLY VERIFIED = what held then what didn't; UNDETERMINED = what was tried and why insufficient
+5. Section `What Should You Keep In Mind?` — mandatory caveats, edge cases, what evidence doesn't address, what surprised, limitations
+6. Section `How Was This Verified?` — 2-3 sentences naming the process, with these links: `[the structured proof report](proof.md)`, `[the full verification audit](proof_audit.md)`, `[re-run the proof yourself](proof.py)`
 
 **Constraints:**
 - 200-800 words total

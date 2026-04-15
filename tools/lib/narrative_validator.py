@@ -4,16 +4,20 @@
 Shared by tools/validate-site-proof.py and CI validation.
 """
 
+import json
 import re
+from pathlib import Path
 from tools.lib.section_extractor import extract_sections, validate_required_sections
 
-REQUIRED_NARRATIVE_SECTIONS = [
-    "Verdict",
-    "What Was Claimed?",
-    "What Did We Find?",
-    "What Should You Keep In Mind?",
-    "How Was This Verified?",
-]
+
+def _load_narrative_sections():
+    schema_path = Path(__file__).resolve().parent.parent.parent / \
+        "proof-engine" / "skills" / "proof-engine" / "proof_format_schema.json"
+    schema = json.loads(schema_path.read_text())
+    return schema["proof_narrative_md"]["required"]
+
+
+REQUIRED_NARRATIVE_SECTIONS = _load_narrative_sections()
 
 _FACT_ID_PATTERN = re.compile(r"\b[ABS]\d+(?:_source_\d+)?\b")
 # Context words that precede legitimate non-fact-ID uses (e.g., "vitamin B12")

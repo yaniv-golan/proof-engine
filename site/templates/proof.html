@@ -277,12 +277,8 @@
 </div>
 {% endif %}
 
-{# 3. Claim Interpretation (v1: from rendered_sections_md, v2: from rendered_sections_audit) #}
-{% if proof.format_version >= 2 %}
-    {% set claim_interp = rendered_sections_audit.get("Claim Interpretation") %}
-{% else %}
-    {% set claim_interp = rendered_sections_md.get("Claim Interpretation") %}
-{% endif %}
+{# 3. Claim Interpretation (prefer audit, fall back to proof.md for v1 proofs) #}
+{% set claim_interp = rendered_sections_audit.get("Claim Interpretation") or rendered_sections_md.get("Claim Interpretation") %}
 {% if claim_interp %}
 <div class="audit-section">
     <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
@@ -351,12 +347,8 @@
 </div>
 {% endif %}
 
-{# 8. Quality Checks (v1: "Hardening Checklist", v2: "Quality Checks") — always display as "Quality Checks" #}
-{% if proof.format_version >= 2 %}
-    {% set quality_content = rendered_sections_audit.get("Quality Checks") %}
-{% else %}
-    {% set quality_content = rendered_sections_audit.get("Hardening Checklist") %}
-{% endif %}
+{# 8. Quality Checks (v2: "Quality Checks", v1: "Hardening Checklist") — always display as "Quality Checks" #}
+{% set quality_content = rendered_sections_audit.get("Quality Checks") or rendered_sections_audit.get("Hardening Checklist") %}
 {% if quality_content %}
 <div class="audit-section">
     <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">
@@ -367,12 +359,8 @@
 </div>
 {% endif %}
 
-{# 9. Source Data (v1: "Extraction Records", v2: "Source Data") — always display as "Source Data", no sub-table #}
-{% if proof.format_version >= 2 %}
-    {% set source_data_content = rendered_sections_audit.get("Source Data") %}
-{% else %}
-    {% set source_data_content = rendered_sections_audit.get("Extraction Records") %}
-{% endif %}
+{# 9. Source Data (v2: "Source Data", v1: "Extraction Records") — always display as "Source Data" #}
+{% set source_data_content = rendered_sections_audit.get("Source Data") or rendered_sections_audit.get("Extraction Records") %}
 {% if source_data_content %}
 <div class="audit-section">
     <div class="audit-header" onclick="this.nextElementSibling.classList.toggle('open'); this.querySelector('.toggle').textContent = this.nextElementSibling.classList.contains('open') ? '▾' : '▸'">

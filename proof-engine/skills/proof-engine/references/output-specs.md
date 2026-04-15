@@ -4,6 +4,10 @@ Read this at **Step 5** when writing proof.md and proof_audit.md.
 
 ## proof.md structure
 
+Section requirements are defined in `proof_format_schema.json` (single source of truth).
+The skill produces format_version: 3 proofs via ProofSummaryBuilder. The section headings
+below correspond to the v2 profile in the schema.
+
 The reader-facing report. A reader who never opens proof_audit.md should fully understand the verdict and its justification.
 
 Title line: `# Proof: [claim text]`
@@ -110,7 +114,7 @@ The machine-readable summary produced by proof.py. All four markdown documents d
 ### v2 format (format_version: 2)
 
 Required top-level fields:
-- `format_version`: integer, must be `2` for proofs generated under this spec
+- `format_version`: integer — set automatically by `ProofSummaryBuilder` (value: 3)
 - `fact_registry`: dict of fact ID to FactRegistryEntry
 - `claim_formal`: ClaimFormal dict
 - `claim_natural`: string
@@ -171,21 +175,21 @@ The plain-language narrative. Written AFTER proof.py, proof.md, proof_audit.md, 
 
 <1-2 sentence hook — verdict-adapted tone>
 
-## What was claimed?
+## What Was Claimed?
 
 <Plain-language restatement. Why someone might care. Do NOT copy CLAIM_FORMAL.>
 
-## What did we find?
+## What Did We Find?
 
 <3-6 paragraphs. Walk through evidence as a story, not a table.>
 <Verdict-adapted: PROVED/DISPROVED = linear strongest-first; SUPPORTED = evidence then gaps;
 PARTIALLY VERIFIED = what held then what didn't; UNDETERMINED = what was tried and why insufficient.>
 
-## What should you keep in mind?
+## What Should You Keep In Mind?
 
 <Mandatory caveats. Edge cases, what evidence doesn't address, what surprised, limitations.>
 
-## How was this verified?
+## How Was This Verified?
 
 <2-3 sentences. Name the process. Include these links:>
 [the structured proof report](proof.md)
