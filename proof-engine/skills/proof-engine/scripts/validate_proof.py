@@ -298,18 +298,74 @@ class ProofValidator:
         else:
             self.issues.append(("Rule 4: No CLAIM_FORMAL dict — claim interpretation not explicit", []))
 
-    def check_rule5_adversarial(self):
-        """Rule 5: Structurally independent adversarial check."""
-        adversarial_patterns = [
-            r'adversarial', r'disproof', r'counter.?evidence',
-            r'counter.?example', r'contradict', r'disprove',
-        ]
-        found = any(re.search(p, self.source, re.IGNORECASE) for p in adversarial_patterns)
+    def _extract_adversarial_checks_count(self) -> int | None:
+        """Return the number of entries in the adversarial_checks list literal.
 
-        if found:
-            self.passed.append("Rule 5: Adversarial check section found")
+        Returns:
+          - int >= 0: count of list elements in `adversarial_checks = [...]`
+          - None: variable not found, not a plain list literal, or SyntaxError
+
+        Only processes the first module-level `adversarial_checks =` assignment found.
+        """
+        import ast
+        try:
+            tree = ast.parse(self.source)
+        except SyntaxError:
+            return None
+        for node in tree.body:
+            if not isinstance(node, ast.Assign):
+                continue
+            if len(node.targets) != 1:
+                continue
+            target = node.targets[0]
+            if not (isinstance(target, ast.Name) and target.id == "adversarial_checks"):
+                continue
+            if isinstance(node.value, ast.List):
+                return len(node.value.elts)
+            return None  # Variable found but not a plain list literal
+        return None  # Variable not found
+
+    def check_rule5_adversarial(self):
+        """Rule 5: Structurally independent adversarial check.
+
+        Verifies that adversarial_checks is defined as a non-empty list — the LLM
+        must document at least one counter-evidence investigation.
+
+        Uses AST to count list entries rather than scanning for vocabulary patterns.
+        An empty list passes the vocabulary check (the variable name itself contains
+        "adversarial") but represents no adversarial work having been done.
+
+        Falls back to checking variable presence when AST parsing fails.
+        """
+        count = self._extract_adversarial_checks_count()
+
+        if count is None:
+            # AST parse failed or variable is not a plain list literal.
+            # Fall back to checking whether the variable name appears at all.
+            if re.search(r'adversarial_checks\s*=', self.source):
+                self.passed.append(
+                    "Rule 5: adversarial_checks variable found "
+                    "(non-list form — could not count entries)"
+                )
+            else:
+                self.issues.append((
+                    "Rule 5: No adversarial_checks variable found — "
+                    "add a non-empty adversarial_checks list documenting "
+                    "what counter-evidence was searched for",
+                    [],
+                ))
+        elif count == 0:
+            self.issues.append((
+                "Rule 5: adversarial_checks is an empty list — "
+                "add at least one entry documenting what counter-evidence "
+                "was investigated and whether it breaks the proof",
+                [],
+            ))
         else:
-            self.issues.append(("Rule 5: No adversarial check found — proof may have confirmation bias", []))
+            self.passed.append(
+                f"Rule 5: adversarial_checks has {count} "
+                f"entr{'y' if count == 1 else 'ies'}"
+            )
 
     def check_rule6_independent_crosscheck(self):
         """Rule 6: Cross-checks use truly independent sources.

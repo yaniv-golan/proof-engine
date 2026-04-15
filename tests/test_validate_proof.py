@@ -1813,3 +1813,74 @@ def test_disproof_empty_facts_no_warning_no_issue():
     v = _validate_disproof_quote_quality(DISPROOF_EMPTY_FACTS)
     assert len(v.warnings) == 0
     assert len(v.issues) == 0
+
+
+# ---------------------------------------------------------------------------
+# Rule 5: adversarial check (check_rule5_adversarial)
+# ---------------------------------------------------------------------------
+
+def _validate_rule5(source_code: str) -> ProofValidator:
+    """Write source to temp file, run Rule 5 check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_rule5_adversarial()
+    os.unlink(f.name)
+    return v
+
+
+RULE5_NONEMPTY_LIST = '''
+adversarial_checks = [
+    {
+        "question": "Is there counter-evidence?",
+        "verification_performed": "searched PubMed",
+        "finding": "None found.",
+        "breaks_proof": False,
+    },
+]
+'''
+
+RULE5_EMPTY_LIST = '''
+adversarial_checks = []
+'''
+
+RULE5_NO_VARIABLE = '''
+CLAIM_FORMAL = {"subject": "test"}
+empirical_facts = {}
+'''
+
+RULE5_NONVOCAB_QUESTION = '''
+adversarial_checks = [
+    {
+        "question": "Could a different measurement approach yield a different result?",
+        "verification_performed": "reviewed methodology sections",
+        "finding": "All sources use identical methodology.",
+        "breaks_proof": False,
+    },
+]
+'''
+
+
+def test_rule5_nonempty_list_passes():
+    v = _validate_rule5(RULE5_NONEMPTY_LIST)
+    assert len(v.issues) == 0
+    assert any("adversarial_checks" in p or "entr" in p for p in v.passed)
+
+
+def test_rule5_empty_list_is_issue():
+    v = _validate_rule5(RULE5_EMPTY_LIST)
+    assert len(v.issues) >= 1
+    assert any("empty" in i[0].lower() for i in v.issues)
+
+
+def test_rule5_no_variable_is_issue():
+    v = _validate_rule5(RULE5_NO_VARIABLE)
+    assert len(v.issues) >= 1
+    assert any("adversarial_checks" in i[0] for i in v.issues)
+
+
+def test_rule5_nonvocab_question_passes():
+    """Adversarial check without any 'adversarial' vocabulary in the question text — must still pass."""
+    v = _validate_rule5(RULE5_NONVOCAB_QUESTION)
+    assert len(v.issues) == 0
