@@ -4,32 +4,32 @@
 
 **Verdict: DISPROVED**
 
-This one is about as settled as neuroscience gets. The claim isn't just wrong — it's one of the most thoroughly debunked myths in popular science.
+The claim that humans use only 10% of their brain is one of the most persistent myths in popular science — and it is flatly contradicted by decades of neuroscience research.
 
 ## What was claimed?
 
-The idea is familiar: that humans only use a small fraction of their brain, implying a vast untapped reservoir of mental potential. It's an appealing notion — it suggests we could be smarter, more capable, if only we could unlock the rest. You'll find it in self-help books, motivational speeches, and movies. But is there any truth to it?
+The idea sounds appealing: if we're only using a tenth of our mental capacity, imagine what we could accomplish if we unlocked the rest. It's a premise that has launched countless self-help books and Hollywood movies. But does it hold up to scientific scrutiny?
 
 ## What did we find?
 
-Three independent authoritative sources were checked, and all three said the same thing: it's a myth.
+We consulted three independent, authoritative neuroscience sources, and all three explicitly reject the claim.
 
-MIT's McGovern Institute for Brain Research, one of the world's leading neuroscience centers, put it bluntly: "the idea that we use 10 percent of our brain is 100 percent a myth." Encyclopaedia Britannica was equally direct: "we use all of our brain all of the time." Scientific American, which has been covering science for nearly two centuries, called it "one of those hopeful shibboleths that refuses to die."
+A Johns Hopkins neurologist, Barry Gordon, told Scientific American that the "10 percent myth" is "so wrong it is almost laughable." He explained that we use virtually every part of the brain, and that most of the brain is active almost all the time. The brain represents only about 2-3% of the body's weight but consumes roughly 20% of its energy — a staggering metabolic cost that would make no evolutionary sense if 90% of the organ sat idle.
 
-No peer-reviewed neuroscience study supports the 10% figure. Brain imaging technologies like fMRI and PET scans consistently show far more than 10% of brain regions active at any given moment — even during simple tasks.
+MIT's McGovern Institute for Brain Research was equally direct, stating that "the idea that we use 10 percent of our brain is 100 percent a myth." Their researchers noted that even during sleep, the entire brain remains intensely active — regulating body functions, consolidating memories, and cycling through complex neural patterns.
 
-One attempted rescue for the claim involves a real neuroscience concept called sparse coding: not all neurons fire simultaneously. But this doesn't support the 10% idea. Sparse neuron firing means individual neurons are selective in when they activate — it doesn't mean 90% of brain regions are sitting idle. The distinction matters.
+The University of Washington's Neuroscience For Kids resource, maintained by neuroscientist Eric Chudler, states plainly: "There is no scientific evidence to suggest that we use only 10% of our brains." The page notes that functional brain imaging studies show all parts of the brain function, and that from an evolutionary standpoint, larger brains would not have developed unless the additional tissue provided an advantage.
 
-The temporal framing of the claim — "at any one time" — was also examined carefully. Even if you interpret this as referring to a single millisecond of brain activity, it still doesn't hold. The brain consumes roughly 20% of the body's entire energy supply despite comprising only about 2% of body mass. That metabolic demand requires continuous, widespread activity across brain regions at all times, including during sleep. There is no moment when 90% of the brain simply goes dark.
+We also searched specifically for any credible scientific evidence supporting the claim and found none. No peer-reviewed neuroscience study has ever demonstrated that only 10% of the brain is active at any given time.
 
 ## What should you keep in mind?
 
-This verdict is unusually confident because the scientific consensus is so uniform. There are no dissenting peer-reviewed studies, no competing interpretations among researchers, no genuine controversy in the field.
+The myth likely traces back to a misreading of psychologist William James, who wrote in 1907 that humans use "only a small part of our possible mental and physical resources." He was speaking about untapped human potential — a motivational observation, not a neuroscientific measurement. He never said 10%, and his work predates brain imaging technology by many decades.
 
-It's worth noting that the underlying intuition behind the myth — that we have untapped cognitive potential — isn't necessarily wrong. Humans can learn, improve skills, and change their brains through practice. But that's neuroplasticity, not dormant brain regions waiting to be switched on.
+One sometimes hears that only about 10% of brain cells are neurons (with the rest being glial cells), which may have reinforced the myth. But glial cells are functionally active too, and the claim is about brain regions being "used," not about cell-type ratios.
 
-One source (Scientific American) received a lower automated credibility score due to a gap in the domain classification system, not any actual concern about the publication's reliability. Scientific American is widely regarded as authoritative, and the core conclusion is fully supported by the MIT and Britannica sources independently.
+It's worth noting that while the entire brain is active, not every region fires at maximum intensity simultaneously. Different tasks activate different patterns. But "different regions have different activity levels" is a far cry from "90% of the brain is unused."
 
 ## How was this verified?
 
-This claim was evaluated by searching for sources that explicitly characterize it as a myth, requiring at least three independent authoritative sources — the standard threshold for established scientific consensus in this framework. All quotes were verified against live page content. You can read [the structured proof report](proof.md), review [the full verification audit](proof_audit.md), or [re-run the proof yourself](proof.py).
+This proof was generated by an automated verification engine that fetches cited sources, confirms quotes appear on the page, and counts how many independent authorities reject the claim. For the full structured breakdown, see [the structured proof report](proof.md). For verification details including citation checks and adversarial analysis, see [the full verification audit](proof_audit.md). To independently verify these results, [re-run the proof yourself](proof.py).

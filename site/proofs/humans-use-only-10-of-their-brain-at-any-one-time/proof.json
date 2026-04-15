@@ -1,79 +1,23 @@
 {
   "format_version": 3,
+  "claim_natural": "Humans use only 10% of their brain at any one time.",
   "claim_formal": {
-    "subject": "human brain usage",
-    "property": "Whether scientific consensus holds that only 10% of the brain is active at any given moment",
+    "subject": "Human brain",
+    "property": "proportion of brain actively used at any given time",
     "operator": ">=",
-    "operator_note": "This proof proceeds by disproof: the claim is adjudicated FALSE if 3 or more independent authoritative sources explicitly characterize it as a myth, misconception, or scientifically unsupported belief. The threshold of 3 sources reflects the standard for established scientific consensus in the qualitative consensus template. If the threshold is not met, the verdict is UNDETERMINED (not PROVED), because failing to find enough rejection sources does not validate the claim.",
+    "operator_note": "The claim asserts that only 10% of the brain is in use at any one time. This is disproved when >= 3 authoritative neuroscience sources reject the claim, providing evidence that substantially more than 10% of the brain is active at any given time. 'Use' is interpreted as neuronal activity detectable by functional brain imaging (fMRI, PET scans) or inferred from lesion studies.",
     "threshold": 3,
     "proof_direction": "disprove"
   },
-  "claim_natural": "Humans use only 10% of their brain at any one time.",
   "evidence": {
     "B1": {
       "type": "empirical",
-      "label": "MIT McGovern Institute for Brain Research: labels the 10% claim a myth",
+      "label": "Scientific American \u2014 neurologist Barry Gordon rejects the 10% myth",
       "sub_claim": null,
       "source": {
-        "name": "MIT McGovern Institute for Brain Research",
-        "url": "https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/",
-        "quote": "But the idea that we use 10 percent of our brain is 100 percent a myth."
-      },
-      "verification": {
-        "status": "verified",
-        "method": "full_quote",
-        "coverage_pct": null,
-        "fetch_mode": "live",
-        "credibility": {
-          "domain": "mit.edu",
-          "source_type": "academic",
-          "tier": 4,
-          "flags": [],
-          "note": "Academic domain (.edu)"
-        }
-      },
-      "extraction": {
-        "value": "keyword confirmed",
-        "value_in_quote": true,
-        "quote_snippet": "But the idea that we use 10 percent of our brain is 100 percent a myth."
-      }
-    },
-    "B2": {
-      "type": "empirical",
-      "label": "Encyclopaedia Britannica: states entire brain is in use at all times",
-      "sub_claim": null,
-      "source": {
-        "name": "Encyclopaedia Britannica",
-        "url": "https://www.britannica.com/story/do-we-really-use-only-10-percent-of-our-brain",
-        "quote": "But the truth is that we use all of our brain all of the time."
-      },
-      "verification": {
-        "status": "verified",
-        "method": "full_quote",
-        "coverage_pct": null,
-        "fetch_mode": "live",
-        "credibility": {
-          "domain": "britannica.com",
-          "source_type": "reference",
-          "tier": 3,
-          "flags": [],
-          "note": "Established reference source"
-        }
-      },
-      "extraction": {
-        "value": "keyword confirmed",
-        "value_in_quote": true,
-        "quote_snippet": "But the truth is that we use all of our brain all of the time."
-      }
-    },
-    "B3": {
-      "type": "empirical",
-      "label": "Scientific American: characterizes the 10-percent claim as a myth",
-      "sub_claim": null,
-      "source": {
-        "name": "Scientific American",
-        "url": "https://www.scientificamerican.com/article/do-we-really-use-only-10/",
-        "quote": "the 10-percent myth is one of those hopeful shibboleths that refuses to die"
+        "name": "Scientific American (Barry Gordon, Johns Hopkins)",
+        "url": "https://www.scientificamerican.com/article/do-people-only-use-10-percent-of-their-brains/",
+        "quote": "the \"10 percent myth\" is so wrong it is almost laughable, says neurologist Barry Gordon at Johns Hopkins School of Medicine in Baltimore"
       },
       "verification": {
         "status": "verified",
@@ -89,46 +33,117 @@
         }
       },
       "extraction": {
-        "value": "keyword confirmed",
+        "value": "verified",
         "value_in_quote": true,
-        "quote_snippet": "the 10-percent myth is one of those hopeful shibboleths that refuses to die"
+        "quote_snippet": "the \"10 percent myth\" is so wrong it is almost laughable, says neurologist Barry"
+      }
+    },
+    "B2": {
+      "type": "empirical",
+      "label": "MIT McGovern Institute \u2014 the 10% claim is '100 percent a myth'",
+      "sub_claim": null,
+      "source": {
+        "name": "MIT McGovern Institute for Brain Research",
+        "url": "https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/",
+        "quote": "the idea that we use 10 percent of our brain is 100 percent a myth"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "mit.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the idea that we use 10 percent of our brain is 100 percent a myth"
+      }
+    },
+    "B3": {
+      "type": "empirical",
+      "label": "University of Washington Neuroscience \u2014 no scientific evidence for 10% claim",
+      "sub_claim": null,
+      "source": {
+        "name": "Neuroscience For Kids, University of Washington (Eric Chudler)",
+        "url": "http://faculty.washington.edu/chudler/tenper.html",
+        "quote": "There is no scientific evidence to suggest that we use only 10% of our brains"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "washington.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "There is no scientific evidence to suggest that we use only 10% of our brains"
       }
     },
     "A1": {
       "type": "computed",
-      "label": "Source count: independent authoritative sources rejecting the 10% claim",
+      "label": "Verified rejection source count",
       "sub_claim": null,
-      "method": "sum(confirmations) = 3",
+      "method": "count(verified rejection citations) = 3",
       "result": "3",
-      "depends_on": []
+      "depends_on": [
+        "B1",
+        "B2",
+        "B3"
+      ]
     }
   },
   "cross_checks": [
     {
-      "description": "Independent source agreement on claim rejection",
-      "n_sources": 3,
-      "n_confirming": 3,
+      "description": "Multiple independent sources consulted",
+      "fact_ids": [
+        "B1",
+        "B2",
+        "B3"
+      ],
       "agreement": true,
-      "fact_ids": []
+      "n_sources_consulted": 3,
+      "n_sources_verified": 3,
+      "sources": {
+        "scientific_american": "verified",
+        "mit_mcgovern": "verified",
+        "uw_neuroscience": "verified"
+      },
+      "independence_note": "Sources are from different institutions: Scientific American (quoting Johns Hopkins neurologist), MIT McGovern Institute, and University of Washington. No organizational, funding, or ideological overlap.",
+      "coi_flags": []
     }
   ],
   "adversarial_checks": [
     {
-      "question": "Does any peer-reviewed neuroscience study support that only 10% of the brain is active at any given moment?",
-      "verification_performed": "Searched: 'scientific evidence supporting 10 percent brain usage theory peer reviewed'. All results were debunking articles or consensus statements. No peer-reviewed study was found that supports the 10% claim.",
-      "finding": "No peer-reviewed neuroscience study supports the 10% claim. fMRI and PET imaging studies consistently show substantially more than 10% of brain regions active at any given time. The claim has no empirical basis.",
+      "question": "Is there any peer-reviewed neuroscience study that supports the claim that only 10% of the brain is active at any given time?",
+      "verification_performed": "Searched for: '10 percent brain myth credible support evidence true', '10% brain use scientific evidence peer-reviewed'. Reviewed results from Scientific American, Psychology Today, Wikipedia, Association for Psychological Science, MIT McGovern Institute, Medical News Today, and University of Washington.",
+      "finding": "No peer-reviewed neuroscience study was found supporting the 10% claim. Every neuroscience source consulted explicitly labels it a myth. Brain imaging studies (fMRI, PET) consistently show activity throughout the entire brain, even during sleep.",
       "breaks_proof": false
     },
     {
-      "question": "Could 'sparse coding' \u2014 the fact that not all neurons fire simultaneously \u2014 give the 10% claim any scientific grounding?",
-      "verification_performed": "Searched: 'neuroscience sparse coding 10 percent neurons firing simultaneously'. Reviewed neuroscience discussions on neural efficiency and sparse representation.",
-      "finding": "Sparse coding means individual neurons fire selectively, not that only 10% of brain REGIONS are active. fMRI BOLD signal shows that even simple tasks engage many distributed brain regions simultaneously. Sparse neuron firing is fundamentally different from 10% brain usage and does not rescue the claim.",
+      "question": "Could the 10% figure refer to the ratio of neurons to glial cells, making the claim technically true under a different interpretation?",
+      "verification_performed": "Searched for: 'neurons 10 percent brain cells glial ratio'. Reviewed neuroscience sources on neuron-to-glia ratios.",
+      "finding": "While roughly 10% of brain cells are neurons (the rest being glial cells), the claim says 'use only 10% of their brain,' which refers to brain regions being active, not cell-type ratios. Furthermore, glial cells are also functionally active \u2014 they support neuronal function, maintain homeostasis, and participate in signaling. The neuron/glia ratio does not support the claim as stated.",
       "breaks_proof": false
     },
     {
-      "question": "Could the qualifier 'at any one time' narrow the claim to something defensible \u2014 e.g., only a fraction of the brain fires in any single millisecond?",
-      "verification_performed": "Reviewed neuroscience literature on neural synchrony, BOLD signal interpretation, and metabolic baseline activity. Considered whether any temporal interpretation makes the claim valid.",
-      "finding": "Even under the most favorable temporal interpretation the claim fails. The brain's metabolic baseline \u2014 consuming 20% of the body's energy despite being 2% of body mass \u2014 requires continuous activity across many regions at all times, including during sleep. There is no timescale at which only 10% of brain regions are active while the rest are truly idle.",
+      "question": "Could William James's original 1907 statement be interpreted as literal neuroscience supporting the 10% claim?",
+      "verification_performed": "Searched for: 'William James 1907 energies of men 10 percent origin'. Reviewed MIT McGovern and Wikipedia articles on the myth's origins.",
+      "finding": "William James wrote in 'The Energies of Men' (1907) that 'we are making use of only a small part of our possible mental and physical resources.' He was speaking metaphorically about human potential, not making a neuroscientific claim about brain activity percentages. He never stated 10%, and his work predates functional brain imaging by decades.",
       "breaks_proof": false
     }
   ],
@@ -139,15 +154,15 @@
     "reason": null
   },
   "key_results": {
-    "n_confirming": 3,
+    "n_confirmed": 3,
     "threshold": 3,
     "operator": ">=",
     "claim_holds": true
   },
   "generator": {
     "name": "proof-engine",
-    "version": "0.10.0",
+    "version": "1.16.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
-    "generated_at": "2026-03-28"
+    "generated_at": "2026-04-16"
   }
 }

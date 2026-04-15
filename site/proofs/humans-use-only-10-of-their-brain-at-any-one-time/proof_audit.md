@@ -1,38 +1,42 @@
-# Audit: Humans use only 10% of their brain at any one time.
+# Audit: Humans use only 10% of their brain at any one time
 
-- **Generated:** 2026-03-27
+- **Generated:** 2026-04-15
 - **Reader summary:** [proof.md](proof.md)
 - **Proof script:** [proof.py](proof.py)
 
----
+## Claim Interpretation
+
+The natural-language claim asserts that humans use only 10% of their brain at any one time. This is interpreted as a neuroscientific claim about the proportion of brain tissue that is functionally active at any given moment.
+
+"Use" is operationalized as neuronal activity detectable by functional brain imaging (functional magnetic resonance imaging, positron emission tomography) or inferred from lesion studies. The claim is disproved when three or more authoritative, independent neuroscience sources reject it with evidence that substantially more than 10% of the brain is active at any given time.
+
+**Formalization scope:** The natural-language claim maps directly to the formal interpretation. The only narrowing is the operationalization of "use" as detectable neuronal activity, which is the standard neuroscientific interpretation of brain usage. The formal spec does not address metaphorical readings (e.g., "untapped potential"), which are noted in the adversarial checks.
+
+*Source: proof.py JSON summary*
 
 ## Claim Specification
 
 | Field | Value |
 |-------|-------|
-| subject | human brain usage |
-| property | Whether scientific consensus holds that only 10% of the brain is active at any given moment |
-| operator | >= |
-| operator_note | This proof proceeds by disproof: the claim is adjudicated FALSE if 3 or more independent authoritative sources explicitly characterize it as a myth, misconception, or scientifically unsupported belief. If the threshold is not met, the verdict is UNDETERMINED — failing to find enough rejection sources does not validate the claim. |
-| threshold | 3 |
-| proof_direction | disprove |
+| Subject | Human brain |
+| Property | proportion of brain actively used at any given time |
+| Operator | >= |
+| Threshold | 3 (rejection sources needed) |
+| Proof direction | disprove |
+| Operator note | The claim asserts that only 10% of the brain is in use at any one time. This is disproved when >= 3 authoritative neuroscience sources reject the claim, providing evidence that substantially more than 10% of the brain is active at any given time. 'Use' is interpreted as neuronal activity detectable by functional brain imaging (fMRI, PET scans) or inferred from lesion studies. |
 
 *Source: proof.py JSON summary*
-
----
 
 ## Fact Registry
 
 | ID | Key | Label |
 |----|-----|-------|
-| B1 | source_mit | MIT McGovern Institute for Brain Research: labels the 10% claim a myth |
-| B2 | source_britannica | Encyclopaedia Britannica: states entire brain is in use at all times |
-| B3 | source_sciam | Scientific American: characterizes the 10-percent claim as a myth |
-| A1 | — | Source count: independent authoritative sources rejecting the 10% claim |
+| B1 | scientific_american | Scientific American — neurologist Barry Gordon rejects the 10% myth |
+| B2 | mit_mcgovern | MIT McGovern Institute — the 10% claim is '100 percent a myth' |
+| B3 | uw_neuroscience | University of Washington Neuroscience — no scientific evidence for 10% claim |
+| A1 | — | Verified rejection source count |
 
 *Source: proof.py JSON summary*
-
----
 
 ## Full Evidence Table
 
@@ -40,7 +44,7 @@
 
 | ID | Fact | Method | Result |
 |----|------|--------|--------|
-| A1 | Source count: independent authoritative sources rejecting the 10% claim | sum(confirmations) = 3 | 3 |
+| A1 | Verified rejection source count | count(verified rejection citations) = 3 | 3 |
 
 *Source: proof.py JSON summary*
 
@@ -48,133 +52,124 @@
 
 | ID | Fact | Source | URL | Quote | Status | Method | Credibility |
 |----|------|--------|-----|-------|--------|--------|-------------|
-| B1 | MIT McGovern Institute: labels claim a myth | MIT McGovern Institute for Brain Research | https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/ | "But the idea that we use 10 percent of our brain is 100 percent a myth." | verified | full_quote | Tier 4 (academic) |
-| B2 | Britannica: entire brain in use | Encyclopaedia Britannica | https://www.britannica.com/story/do-we-really-use-only-10-percent-of-our-brain | "But the truth is that we use all of our brain all of the time." | verified | full_quote | Tier 3 (reference) |
-| B3 | Scientific American: characterizes as myth | Scientific American | https://www.scientificamerican.com/article/do-we-really-use-only-10/ | "the 10-percent myth is one of those hopeful shibboleths that refuses to die" | verified | full_quote | Tier 2 (unknown) |
+| B1 | Scientific American — neurologist Barry Gordon rejects the 10% myth | Scientific American (Barry Gordon, Johns Hopkins) | [link](https://www.scientificamerican.com/article/do-people-only-use-10-percent-of-their-brains/) | the &ldquo;10 percent myth&rdquo; is so wrong it is almost laughable, says neurologist Barry Go... | verified | full_quote | Major news |
+| B2 | MIT McGovern Institute — the 10% claim is '100 percent a myth' | MIT McGovern Institute for Brain Research | [link](https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/) | the idea that we use 10 percent of our brain is 100 percent a myth | verified | full_quote | Academic |
+| B3 | University of Washington Neuroscience — no scientific evidence for 10% claim | Neuroscience For Kids, University of Washington (Eric Chudler) | [link](http://faculty.washington.edu/chudler/tenper.html) | There is no scientific evidence to suggest that we use only 10% of our brains | verified | full_quote | Academic |
 
 *Source: proof.py JSON summary*
-
----
 
 ## Citation Verification Details
 
-**B1 — MIT McGovern Institute**
-- Status: verified
-- Method: full_quote
-- Fetch mode: live
-- Coverage: N/A (full quote match)
+### B1 — Scientific American
 
-**B2 — Encyclopaedia Britannica**
-- Status: verified
-- Method: full_quote
-- Fetch mode: live
-- Coverage: N/A (full quote match)
+- **Status:** verified
+- **Method:** full_quote
+- **Fetch mode:** live
+- **Rejection statement:** the "10 percent myth" is so wrong it is almost laughable
+- **Verbatim status:** verbatim (default)
 
-**B3 — Scientific American**
-- Status: verified
-- Method: full_quote
-- Fetch mode: live
-- Coverage: N/A (full quote match)
+### B2 — MIT McGovern Institute
 
-No citations were unverified; impact analysis is not required.
+- **Status:** verified
+- **Method:** full_quote
+- **Fetch mode:** live
+- **Rejection statement:** the idea that we use 10 percent of our brain is 100 percent a myth
+- **Verbatim status:** verbatim (default)
+
+### B3 — University of Washington Neuroscience
+
+- **Status:** verified
+- **Method:** full_quote
+- **Fetch mode:** live
+- **Rejection statement:** no scientific evidence to suggest that we use only 10%
+- **Verbatim status:** verbatim (default)
 
 *Source: proof.py JSON summary*
 
----
-
 ## Computation Traces
 
-Reproduced verbatim from proof.py execution:
-
 ```
-  [✓] source_mit: Full quote verified for source_mit (source: tier 4/academic)
-  [✓] source_britannica: Full quote verified for source_britannica (source: tier 3/reference)
-  [✓] source_sciam: Full quote verified for source_sciam (source: tier 2/unknown)
-  [✓] B1: extracted myth from quote
-  [✓] B2: extracted all of our brain from quote
-  [✓] B3: extracted myth from quote
-  compare: 3 >= 3 = True
+  verified rejection source count vs threshold: 3 >= 3 = True
 ```
 
 *Source: proof.py inline output (execution trace)*
 
----
-
 ## Independent Source Agreement (Rule 6)
 
-| Description | n_sources | n_confirming | Agreement |
-|-------------|-----------|--------------|-----------|
-| Independent source agreement on claim rejection | 3 | 3 | True |
+Three independent sources were consulted, and all three were successfully verified:
 
-All 3 sources independently reject the 10% claim using rejection language verified against live page content. Each source is independently published (different organizations: MIT, Britannica, Scientific American), providing independent corroboration.
+| Source key | Verification status |
+|------------|-------------------|
+| scientific_american | verified |
+| mit_mcgovern | verified |
+| uw_neuroscience | verified |
+
+**Independence note:** Sources are from different institutions: Scientific American (quoting Johns Hopkins neurologist), MIT McGovern Institute, and University of Washington. No organizational, funding, or ideological overlap.
+
+**COI assessment:** No conflicts of interest identified. All three sources are independent academic or science journalism institutions with no stake in the outcome of this claim.
 
 *Source: proof.py JSON summary*
-
----
 
 ## Adversarial Checks (Rule 5)
 
-**Check 1**
-- Question: Does any peer-reviewed neuroscience study support that only 10% of the brain is active at any given moment?
-- Verification performed: Searched: 'scientific evidence supporting 10 percent brain usage theory peer reviewed'. All results were debunking articles or consensus statements. No peer-reviewed study was found that supports the 10% claim.
-- Finding: No peer-reviewed neuroscience study supports the 10% claim. fMRI and PET imaging studies consistently show substantially more than 10% of brain regions active at any given time. The claim has no empirical basis.
-- Breaks proof: No
+### Check 1: Any peer-reviewed support for the 10% claim?
 
-**Check 2**
-- Question: Could 'sparse coding' — the fact that not all neurons fire simultaneously — give the 10% claim any scientific grounding?
-- Verification performed: Searched: 'neuroscience sparse coding 10 percent neurons firing simultaneously'. Reviewed neuroscience discussions on neural efficiency and sparse representation.
-- Finding: Sparse coding means individual neurons fire selectively, not that only 10% of brain REGIONS are active. fMRI BOLD signal shows that even simple tasks engage many distributed brain regions simultaneously. Sparse neuron firing is fundamentally different from 10% brain usage and does not rescue the claim.
-- Breaks proof: No
+- **Question:** Is there any peer-reviewed neuroscience study that supports the claim that only 10% of the brain is active at any given time?
+- **Verification performed:** Searched for: '10 percent brain myth credible support evidence true', '10% brain use scientific evidence peer-reviewed'. Reviewed results from Scientific American, Psychology Today, Wikipedia, Association for Psychological Science, MIT McGovern Institute, Medical News Today, and University of Washington.
+- **Finding:** No peer-reviewed neuroscience study was found supporting the 10% claim. Every neuroscience source consulted explicitly labels it a myth. Brain imaging studies (fMRI, PET) consistently show activity throughout the entire brain, even during sleep.
+- **Breaks proof:** No
 
-**Check 3**
-- Question: Could the qualifier 'at any one time' narrow the claim to something defensible — e.g., only a fraction of the brain fires in any single millisecond?
-- Verification performed: Reviewed neuroscience literature on neural synchrony, BOLD signal interpretation, and metabolic baseline activity. Considered whether any temporal interpretation makes the claim valid.
-- Finding: Even under the most favorable temporal interpretation the claim fails. The brain's metabolic baseline — consuming 20% of the body's energy despite being 2% of body mass — requires continuous activity across many regions at all times, including during sleep. There is no timescale at which only 10% of brain regions are active while the rest are truly idle.
-- Breaks proof: No
+### Check 2: Neuron-to-glia ratio interpretation
+
+- **Question:** Could the 10% figure refer to the ratio of neurons to glial cells, making the claim technically true under a different interpretation?
+- **Verification performed:** Searched for: 'neurons 10 percent brain cells glial ratio'. Reviewed neuroscience sources on neuron-to-glia ratios.
+- **Finding:** While roughly 10% of brain cells are neurons (the rest being glial cells), the claim says 'use only 10% of their brain,' which refers to brain regions being active, not cell-type ratios. Furthermore, glial cells are also functionally active — they support neuronal function, maintain homeostasis, and participate in signaling. The neuron/glia ratio does not support the claim as stated.
+- **Breaks proof:** No
+
+### Check 3: William James's 1907 statement
+
+- **Question:** Could William James's original 1907 statement be interpreted as literal neuroscience supporting the 10% claim?
+- **Verification performed:** Searched for: 'William James 1907 energies of men 10 percent origin'. Reviewed MIT McGovern and Wikipedia articles on the myth's origins.
+- **Finding:** William James wrote in 'The Energies of Men' (1907) that 'we are making use of only a small part of our possible mental and physical resources.' He was speaking metaphorically about human potential, not making a neuroscientific claim about brain activity percentages. He never stated 10%, and his work predates functional brain imaging by decades.
+- **Breaks proof:** No
 
 *Source: proof.py JSON summary*
-
----
 
 ## Source Credibility Assessment
 
-| Fact ID | Domain | Type | Tier | Note |
-|---------|--------|------|------|------|
-| B1 | mit.edu | academic | 4 | Academic domain (.edu) |
-| B2 | britannica.com | reference | 3 | Established reference source |
-| B3 | scientificamerican.com | unknown | 2 | Unclassified domain — verify source authority manually |
-
-Tier scale: 5=government/intergovernmental, 4=academic/peer-reviewed, 3=major news or established reference, 2=unclassified, 1=flagged unreliable.
-
-Note on B3: Scientific American (founded 1845) is a major science publication and is widely considered authoritative. Its tier-2 classification reflects the automated scorer's lack of a domain rule for scientificamerican.com, not any concern about the source's reliability. The disproof conclusion (B1, B2) is independently supported by tier-3 and tier-4 sources and does not depend solely on B3.
+| Fact ID | Domain | Type | Note |
+|---------|--------|------|------|
+| B1 | scientificamerican.com | Major news | Major news organization |
+| B2 | mit.edu | Academic | Academic domain (.edu) |
+| B3 | washington.edu | Academic | Academic domain (.edu) |
 
 *Source: proof.py JSON summary*
 
+## Source Data
+
+For this qualitative consensus/disproof proof, the `extractions` field records citation verification status per source rather than numeric extracted values.
+
+| Fact ID | Value | Value in quote | Quote snippet |
+|---------|-------|----------------|---------------|
+| B1 | verified | Yes | the "10 percent myth" is so wrong it is almost laughable, says neurologist Barry |
+| B2 | verified | Yes | the idea that we use 10 percent of our brain is 100 percent a myth |
+| B3 | verified | Yes | There is no scientific evidence to suggest that we use only 10% of our brains |
+
+*Source: proof.py JSON summary*
+
+## Quality Checks
+
+- **Rule 1:** N/A — qualitative proof, no numeric value extraction needed
+- **Rule 2:** All 3 citation URLs fetched; all quotes verified (full_quote match, live fetch)
+- **Rule 3:** N/A — proof is not time-sensitive
+- **Rule 4:** CLAIM_FORMAL includes operator_note explaining interpretation of "use" and disproof threshold
+- **Rule 5:** 3 adversarial checks performed — searched for peer-reviewed support, alternative interpretations (neuron/glia ratio), and historical origin (William James). None broke the proof.
+- **Rule 6:** 3 independent sources from different institutions (Scientific American/Johns Hopkins, MIT, University of Washington). No COI identified.
+- **Rule 7:** N/A — qualitative proof, no constants or formulas
+- **validate_proof.py result:** PASS — 21/21 checks passed, 0 issues, 0 warnings
+
+*Source: author analysis*
+
 ---
 
-## Extraction Records
-
-| ID | Keyword Extracted | Found in Quote | Quote Snippet |
-|----|-------------------|----------------|---------------|
-| B1 | myth | True | "But the idea that we use 10 percent of our brain is 100 percent a myth." |
-| B2 | all of our brain | True | "But the truth is that we use all of our brain all of the time." |
-| B3 | myth | True | "the 10-percent myth is one of those hopeful shibboleths that refuses to die" |
-
-Extraction method: `verify_extraction(keyword, quote, fact_id)` from `scripts/smart_extract.py`. Each keyword was verified to appear in the corresponding quote string. For disproof proofs, the keyword confirms the source is expressing rejection of the claim (not mere mention). All keywords ("myth", "all of our brain", "myth") are present only in quotes that treat the 10% claim as false.
-
-*Source: proof.py JSON summary (extractions); extraction method is author analysis*
-
----
-
-## Hardening Checklist
-
-| Rule | Status | Notes |
-|------|--------|-------|
-| Rule 1: Every empirical value parsed from quote text, not hand-typed | PASS | `verify_extraction()` used for all 3 fact keywords |
-| Rule 2: Every citation URL fetched and quote checked | PASS | `verify_all_citations()` with `wayback_fallback=True`; all 3 verified live |
-| Rule 3: System time used for date-dependent logic | N/A | No date computations in this proof |
-| Rule 4: Claim interpretation explicit with operator rationale | PASS | `CLAIM_FORMAL` with full `operator_note` including proof_direction rationale |
-| Rule 5: Adversarial checks searched for independent counter-evidence | PASS | 3 adversarial checks; none found counter-evidence; `breaks_proof=False` for all |
-| Rule 6: Cross-checks used independently sourced inputs | PASS | 3 independently published sources (MIT, Britannica, SciAm) with unanimous agreement |
-| Rule 7: Constants and formulas imported from computations.py, not hand-coded | PASS | `compare()` used for claim evaluation; no hand-coded thresholds |
-| validate_proof.py result | PASS (14/14 checks, 0 issues, 0 warnings) | Run: `python scripts/validate_proof.py proof.py` |
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.16.0 on 2026-04-15.
