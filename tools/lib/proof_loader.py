@@ -5,45 +5,20 @@ from pathlib import Path
 import yaml
 
 from tools.lib.featured import load_featured_slugs
-from tools.lib.narrative_validator import extract_verdict_declaration, REQUIRED_NARRATIVE_SECTIONS
+from tools.lib.narrative_validator import extract_verdict_declaration
 from tools.lib.section_extractor import extract_sections, validate_required_sections
 from tools.lib.tagger import llm_tag, canonicalize_tag
 from tools.lib.verdict import normalize_verdict
 from tools.lib.normalize import normalize_to_v3
 
-# --- Format version 1 (existing proofs, no format_version in proof.json) ---
-REQUIRED_PROOF_MD_SECTIONS_V1 = [
-    "Key Findings",
-    "Claim Interpretation",
-    "Evidence Summary",
-    "Proof Logic",
-    "Conclusion",
-]
-OPTIONAL_MD_SECTIONS_V1 = ["Counter-Evidence Search"]
-REQUIRED_AUDIT_SECTIONS_V1 = []
-OPTIONAL_AUDIT_SECTIONS_V1 = [
-    "Claim Specification",
-    "Citation Verification Details", "Computation Traces",
-    "Independent Source Agreement", "Adversarial Checks",
-    "Hardening Checklist", "Source Credibility Assessment",
-    "Extraction Records",
-]
+# --- Section requirements loaded from shared schema ---
+def _load_format_schema():
+    schema_path = Path(__file__).resolve().parent.parent.parent / \
+        "proof-engine" / "skills" / "proof-engine" / "proof_format_schema.json"
+    return json.loads(schema_path.read_text())
 
-# --- Format version 2 (new proofs with format_version: 2) ---
-REQUIRED_PROOF_MD_SECTIONS_V2 = [
-    "Evidence Summary",
-    "Proof Logic",
-    "Conclusion",
-]
-OPTIONAL_MD_SECTIONS_V2 = ["What Could Challenge This Verdict?"]
-REQUIRED_AUDIT_SECTIONS_V2 = []
-OPTIONAL_AUDIT_SECTIONS_V2 = [
-    "Claim Specification", "Claim Interpretation",
-    "Citation Verification Details", "Computation Traces",
-    "Independent Source Agreement", "Adversarial Checks",
-    "Quality Checks", "Source Credibility Assessment",
-    "Source Data",
-]
+_FORMAT_SCHEMA = _load_format_schema()
+REQUIRED_NARRATIVE_SECTIONS = _FORMAT_SCHEMA["proof_narrative_md"]["required"]
 
 REQUIRED_JSON_KEYS = ["fact_registry", "claim_formal", "claim_natural",
                       "verdict", "key_results", "generator"]
@@ -139,16 +114,11 @@ def load_proof(proof_dir: Path) -> dict:
 
     # Use the original format version (not the normalized one) for section validation,
     # since v1 proofs don't have the same required sections as v2+.
-    if original_format_version >= 2:
-        required_md = REQUIRED_PROOF_MD_SECTIONS_V2
-        optional_md = OPTIONAL_MD_SECTIONS_V2
-        optional_audit = OPTIONAL_AUDIT_SECTIONS_V2
-        required_audit = REQUIRED_AUDIT_SECTIONS_V2
-    else:
-        required_md = REQUIRED_PROOF_MD_SECTIONS_V1
-        optional_md = OPTIONAL_MD_SECTIONS_V1
-        optional_audit = OPTIONAL_AUDIT_SECTIONS_V1
-        required_audit = REQUIRED_AUDIT_SECTIONS_V1
+    profile = "v2" if original_format_version >= 2 else "v1"
+    required_md = _FORMAT_SCHEMA["proof_md"][profile]["required"]
+    optional_md = _FORMAT_SCHEMA["proof_md"][profile].get("optional", [])
+    required_audit = _FORMAT_SCHEMA["proof_audit_md"][profile]["required"]
+    optional_audit = _FORMAT_SCHEMA["proof_audit_md"][profile].get("optional", [])
 
     missing = validate_required_sections(sections_md, required_md)
     if missing:
@@ -169,13 +139,21 @@ def load_proof(proof_dir: Path) -> dict:
         print(f"WARNING: {slug}: proof_audit.md missing optional sections: {missing_audit}. Found: {sorted(sections_audit.keys())}",
               file=sys.stderr)
 
-    # Absence proofs: check for Type S (Search) Facts section
-    has_search_evidence = any(e.get("type") == "search" for e in proof_data.get("evidence", {}).values())
-    if has_search_evidence:
-        if "Type S (Search) Facts" not in sections_audit:
-            print(f"WARNING: {slug}: proof_audit.md missing 'Type S (Search) Facts' section "
-                  "(expected for absence proofs with search_registry)",
-                  file=sys.stderr)
+    # Conditional audit sections from schema
+    for cond in _FORMAT_SCHEMA["proof_audit_md"].get("conditional", []):
+        section_name = cond["section"]
+        if profile in cond.get("applies_to", []):
+            if section_name == "Type S (Search) Facts":
+                has_search = any(
+                    e.get("type") == "search"
+                    for e in proof_data.get("evidence", {}).values()
+                )
+                if has_search and section_name not in sections_audit:
+                    print(
+                        f"WARNING: {slug}: proof_audit.md missing '{section_name}' section "
+                        f"(expected for absence proofs with search_registry)",
+                        file=sys.stderr,
+                    )
 
     missing_md_opt = validate_required_sections(sections_md, optional_md)
     if missing_md_opt:
