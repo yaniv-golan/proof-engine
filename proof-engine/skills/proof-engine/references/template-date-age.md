@@ -37,6 +37,7 @@ CLAIM_FORMAL = {
     "operator": ">",
     "operator_note": "...",
     "threshold": ...,
+    "is_time_sensitive": True,   # age proofs always depend on the current date
 }
 
 # 2. FACT REGISTRY

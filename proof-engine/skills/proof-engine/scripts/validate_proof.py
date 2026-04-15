@@ -269,22 +269,55 @@ class ProofValidator:
                 self.passed.append("Rule 2: No empirical facts — citation verification not needed")
 
     def check_rule3_system_time(self):
-        """Rule 3: Anchored to system time via date.today()."""
+        """Rule 3: Anchored to system time via date.today().
+
+        Checks CLAIM_FORMAL["is_time_sensitive"] declaration rather than
+        keyword-scanning proof content. The LLM declares time-sensitivity at
+        generation time; the validator checks consistency.
+
+        Behaviors:
+          is_time_sensitive: True  + date.today() present    → PASS
+          is_time_sensitive: True  + date.today() absent     → ISSUE
+          date.today() present     + no declaration          → WARNING (nudge)
+          hardcoded date(YYYY,...) + no date.today()         → ISSUE
+          no date operations at all                          → PASS
+        """
         has_today = "date.today()" in self.source
         has_hardcoded = bool(re.search(r'\bdate\(\s*\d{4}\s*,', self.source))
+        # Strip comment lines before checking structural declarations
+        # (prevents commented-out template hints from matching)
+        source_for_declaration_check = '\n'.join(
+            line for line in self.source.splitlines()
+            if not line.lstrip().startswith('#')
+        )
+        is_sensitive_declared = bool(re.search(
+            r'''["']is_time_sensitive["']\s*:\s*True''', source_for_declaration_check
+        ))
 
-        # Check if the proof is time-dependent
-        time_keywords = ["today", "current", "age", "years old", "elapsed", "since", "duration"]
-        is_time_dependent = any(kw in self.source.lower() for kw in time_keywords)
-
-        if has_today:
-            self.passed.append("Rule 3: date.today() found — anchored to system time")
-        elif not is_time_dependent:
-            self.passed.append("Rule 3: Proof does not appear time-dependent — no date anchoring needed")
-        elif has_hardcoded:
-            self.issues.append(("Rule 3: Found hardcoded date() but no date.today() in time-dependent proof", []))
+        if is_sensitive_declared and has_today:
+            self.passed.append(
+                "Rule 3: is_time_sensitive: True declared and date.today() present"
+            )
+        elif is_sensitive_declared and not has_today:
+            self.issues.append((
+                "Rule 3: CLAIM_FORMAL declares is_time_sensitive: True "
+                "but date.today() not found — anchor the proof to system time",
+                [],
+            ))
+        elif has_today and not is_sensitive_declared:
+            self.warnings.append((
+                "Rule 3: date.today() used but CLAIM_FORMAL missing "
+                "'is_time_sensitive': True — declare time-sensitivity explicitly",
+                [],
+            ))
+        elif has_hardcoded and not has_today:
+            self.issues.append((
+                "Rule 3: hardcoded date() literal found without date.today() — "
+                "set 'is_time_sensitive': True in CLAIM_FORMAL and use date.today()",
+                [],
+            ))
         else:
-            self.passed.append("Rule 3: No date operations found")
+            self.passed.append("Rule 3: No time-sensitive operations detected")
 
     def check_rule4_claim_interpretation(self):
         """Rule 4: Explicit claim interpretation via CLAIM_FORMAL dict."""

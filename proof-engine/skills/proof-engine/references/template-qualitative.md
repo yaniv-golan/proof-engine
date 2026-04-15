@@ -35,6 +35,7 @@ CLAIM_FORMAL = {
     "operator_note": "...",
     "threshold": 3,            # min verified sources needed (see threshold guidance below)
     "proof_direction": "affirm",  # "affirm" or "disprove"
+    # "is_time_sensitive": True,  # add when verdict depends on current date (uses date.today())
 }
 
 # 2. FACT REGISTRY

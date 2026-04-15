@@ -1884,3 +1884,126 @@ def test_rule5_nonvocab_question_passes():
     """Adversarial check without any 'adversarial' vocabulary in the question text — must still pass."""
     v = _validate_rule5(RULE5_NONVOCAB_QUESTION)
     assert len(v.issues) == 0
+
+
+# ---------------------------------------------------------------------------
+# Rule 3: system time (check_rule3_system_time)
+# ---------------------------------------------------------------------------
+
+def _validate_rule3(source_code: str) -> ProofValidator:
+    """Write source to temp file, run Rule 3 check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_rule3_system_time()
+    os.unlink(f.name)
+    return v
+
+
+RULE3_DECLARED_AND_TODAY = '''
+from datetime import date
+CLAIM_FORMAL = {
+    "subject": "Age of example",
+    "is_time_sensitive": True,
+}
+today = date.today()
+age = today.year - 1948
+'''
+
+RULE3_DECLARED_NO_TODAY = '''
+CLAIM_FORMAL = {
+    "subject": "Age of example",
+    "is_time_sensitive": True,
+}
+age = 2026 - 1948
+'''
+
+RULE3_TODAY_NO_DECLARATION = '''
+from datetime import date
+CLAIM_FORMAL = {
+    "subject": "Age of example",
+}
+today = date.today()
+age = today.year - 1948
+'''
+
+RULE3_HARDCODED_DATE_ONLY = '''
+from datetime import date
+CLAIM_FORMAL = {"subject": "test"}
+today = date(2026, 1, 1)
+age = today.year - 1948
+'''
+
+RULE3_DECLARED_TODAY_AND_HARDCODED = '''
+from datetime import date
+CLAIM_FORMAL = {
+    "subject": "Age of example",
+    "is_time_sensitive": True,
+}
+PROOF_GENERATION_DATE = date(2026, 4, 15)
+today = date.today()
+age = today.year - 1948
+'''
+
+RULE3_NO_DATES = '''
+CLAIM_FORMAL = {"subject": "test", "threshold": 3}
+n_sources = 4
+'''
+
+RULE3_COMMENTED_HINT_NO_ACTUAL_DECLARATION = '''
+from datetime import date
+CLAIM_FORMAL = {
+    "subject": "Age of example",
+    # "is_time_sensitive": True,  # add when verdict depends on current date (uses date.today())
+}
+today = date.today()
+age = today.year - 1948
+'''
+
+
+def test_rule3_declared_and_today_passes():
+    v = _validate_rule3(RULE3_DECLARED_AND_TODAY)
+    assert len(v.issues) == 0
+    assert len(v.warnings) == 0
+    assert any("is_time_sensitive" in p or "date.today" in p for p in v.passed)
+
+
+def test_rule3_commented_hint_is_not_a_declaration():
+    """Commented-out is_time_sensitive hint should NOT count as a declaration — must produce warning not pass."""
+    v = _validate_rule3(RULE3_COMMENTED_HINT_NO_ACTUAL_DECLARATION)
+    assert len(v.issues) == 0
+    assert len(v.warnings) >= 1  # today used without declaration → warning
+    assert any("is_time_sensitive" in w[0] for w in v.warnings)
+
+
+def test_rule3_declared_but_no_today_is_issue():
+    v = _validate_rule3(RULE3_DECLARED_NO_TODAY)
+    assert len(v.issues) >= 1
+    assert any("date.today" in i[0] for i in v.issues)
+
+
+def test_rule3_today_without_declaration_warns():
+    v = _validate_rule3(RULE3_TODAY_NO_DECLARATION)
+    assert len(v.issues) == 0
+    assert len(v.warnings) >= 1
+    assert any("is_time_sensitive" in w[0] for w in v.warnings)
+
+
+def test_rule3_hardcoded_date_no_today_is_issue():
+    v = _validate_rule3(RULE3_HARDCODED_DATE_ONLY)
+    assert len(v.issues) >= 1
+
+
+def test_rule3_declared_today_and_hardcoded_passes():
+    """is_time_sensitive: True + date.today() + hardcoded date — common PROOF_GENERATION_DATE pattern."""
+    v = _validate_rule3(RULE3_DECLARED_TODAY_AND_HARDCODED)
+    assert len(v.issues) == 0
+    assert len(v.warnings) == 0
+    assert any("is_time_sensitive" in p or "date.today" in p for p in v.passed)
+
+
+def test_rule3_no_dates_passes():
+    v = _validate_rule3(RULE3_NO_DATES)
+    assert len(v.issues) == 0
+    assert len(v.warnings) == 0
