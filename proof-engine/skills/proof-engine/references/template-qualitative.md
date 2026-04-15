@@ -257,9 +257,24 @@ CLAIM_FORMAL = {
 # e.g. for "humans use only 10% of their brain": include neuroscience sources
 # that state the brain is active throughout, not just 10%.
 empirical_facts = {
-    "source_a": {"quote": "...", "url": "...", "source_name": "..."},
-    "source_b": {"quote": "...", "url": "...", "source_name": "..."},
-    "source_c": {"quote": "...", "url": "...", "source_name": "..."},
+    "source_a": {
+        "quote": "...",
+        "rejection_statement": "...",  # verbatim phrase from quote that rejects the claim
+        "url": "...",
+        "source_name": "...",
+    },
+    "source_b": {
+        "quote": "...",
+        "rejection_statement": "...",
+        "url": "...",
+        "source_name": "...",
+    },
+    "source_c": {
+        "quote": "...",
+        "rejection_statement": "...",
+        "url": "...",
+        "source_name": "...",
+    },
 }
 ```
 
@@ -269,7 +284,7 @@ empirical_facts = {
 
 No keyword selection is needed — citation verification status is the counting mechanism.
 
-**Quote selection for disproof:** Every quote in `empirical_facts` must contain an *explicit rejection* of the claim — words like "not true," "myth," "no evidence," "debunked," "refuted," or "false." A quote that merely *describes* the myth (e.g., "Many people believe X") provides near-zero evidentiary weight even if it is verified. If the best available quote from a source only restates the belief, find a different quote from the same page that directly negates it. `validate_proof.py` warns on quotes that lack rejection language.
+**`rejection_statement` (required for disproof):** For each entry in `empirical_facts`, add a `rejection_statement` field containing the verbatim phrase from the quote that explicitly rejects the claim. Copy it character-for-character — do not paraphrase. Example: if the quote is *"There is no scientific evidence that humans eat spiders while sleeping,"* set `rejection_statement: "no scientific evidence"`. `validate_proof.py` warns when `rejection_statement` is absent and raises an issue when it is present but does not appear verbatim in the quote. If no phrase in the quote explicitly rejects the claim, the quote itself is too weak — find a different quote from the same page.
 
 **Threshold and COI rules apply identically to disproof:** All threshold rules (including the `threshold: 1` prohibition and the conditions for reducing to `threshold: 2`) and all COI majority checks from the affirmative variant apply equally to disproof proofs. The proof direction does not relax these requirements — see the threshold and COI guidance in the affirmative variant section above.
 
