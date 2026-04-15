@@ -718,6 +718,11 @@ def test_proof_page_standards_download_links(site_fixture):
     # Group label div must carry the correct CSS class (flex-row break depends on it)
     assert 'class="downloads-group-label"' in section_html
 
+    # download attribute must be present on all three links
+    assert 'href="/proof-engine/proofs/test-claim/proof.ipynb" class="download-link" download' in section_html
+    assert 'href="/proof-engine/proofs/test-claim/provenance.json" class="download-link" download' in section_html
+    assert 'href="/proof-engine/proofs/test-claim/ro-crate-metadata.json" class="download-link" download' in section_html
+
     # Group label must appear BEFORE all three hrefs — proves correct ordering,
     # not just co-presence in the same <details> block.
     label_pos = section_html.find("machine-readable formats")
