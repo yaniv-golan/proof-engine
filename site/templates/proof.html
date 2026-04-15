@@ -79,6 +79,7 @@
     {%- if counter_ev %} · <a href="#caveats">caveats</a>{%- endif %}
     {%- if citations %} · <a href="#sources">sources</a>{%- endif %}
     · <a href="#audit-trail">audit trail</a>
+    · <a href="#formats">formats</a>
 </div>
 
 {# --- Narrative (primary content) --- #}
@@ -422,6 +423,25 @@
         </div>
     </div>
 </details>
+
+<h2 class="section-heading" id="formats">machine-readable formats</h2>
+<div class="formats-row">
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.ipynb" class="format-card" download onclick="gtag('event','download',{file_type:'notebook',proof_slug:'{{ proof.slug }}'})">
+        <span class="format-icon">⬡</span>
+        <span class="format-name">Jupyter Notebook</span>
+        <span class="format-desc">interactive re-verification</span>
+    </a>
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/provenance.json" class="format-card" download onclick="gtag('event','download',{file_type:'prov_json',proof_slug:'{{ proof.slug }}'})">
+        <span class="format-icon">⟳</span>
+        <span class="format-name">W3C PROV-JSON</span>
+        <span class="format-desc">provenance trace</span>
+    </a>
+    <a href="{{ base_url }}proofs/{{ proof.slug }}/ro-crate-metadata.json" class="format-card" download onclick="gtag('event','download',{file_type:'ro_crate',proof_slug:'{{ proof.slug }}'})">
+        <span class="format-icon">⧉</span>
+        <span class="format-name">RO-Crate 1.1</span>
+        <span class="format-desc">research object package</span>
+    </a>
+</div>
 
 <details class="downloads-section">
     <summary>Downloads & raw data</summary>

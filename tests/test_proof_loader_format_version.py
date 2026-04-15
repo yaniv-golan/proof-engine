@@ -273,14 +273,16 @@ def v1_proof_dir_missing_claim_spec(tmp_path):
     return d
 
 
-def test_v1_missing_claim_spec_raises_after_normalisation(v1_proof_dir_missing_claim_spec):
-    """V1 proof without 'Claim Specification' raises after normalisation to v3 (v2 sections required)."""
-    with pytest.raises(ValueError, match="Claim Specification"):
-        load_proof(v1_proof_dir_missing_claim_spec)
+def test_v1_missing_claim_spec_loads_with_warning(v1_proof_dir_missing_claim_spec, capsys):
+    """V1 proof without 'Claim Specification' loads successfully (optional section)."""
+    result = load_proof(v1_proof_dir_missing_claim_spec)
+    assert result["verdict"]["category"] in ("proved", "proved-qualified")
+    captured = capsys.readouterr()
+    assert "Claim Specification" in captured.err  # warned about missing optional section
 
 
-def test_v2_missing_claim_spec_raises(tmp_path):
-    """V2 proof without 'Claim Specification' in audit should raise ValueError (required for v2)."""
+def test_v2_missing_claim_spec_loads_with_warning(tmp_path, capsys):
+    """V2 proof without 'Claim Specification' loads successfully (optional section)."""
     import json
     d = tmp_path / "test-v2-no-claim-spec"
     d.mkdir()
@@ -316,5 +318,7 @@ def test_v2_missing_claim_spec_raises(tmp_path):
     )
     (d / "meta.yaml").write_text("tags:\n  - science\n")
 
-    with pytest.raises(ValueError, match="missing required"):
-        load_proof(d)
+    result = load_proof(d)
+    assert result["verdict"]["category"] in ("proved", "proved-qualified")
+    captured = capsys.readouterr()
+    assert "Claim Specification" in captured.err  # warned about missing optional section

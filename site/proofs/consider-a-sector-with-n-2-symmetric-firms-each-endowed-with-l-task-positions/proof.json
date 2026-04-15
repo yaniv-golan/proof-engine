@@ -1,0 +1,88 @@
+{
+  "format_version": 2,
+  "fact_registry": {
+    "A1": {
+      "label": "Nash equilibrium rate alpha^NE = (s - ell/N)/k via FOC",
+      "method": "SymPy symbolic differentiation of pi_i w.r.t. alpha_i; solve FOC; verify result equals (w-c-lambda(1-eta)w/N)/k",
+      "result": "Confirmed: residual = 0"
+    },
+    "A2": {
+      "label": "Cooperative optimum alpha^CO = (s - ell)/k via joint FOC",
+      "method": "SymPy symbolic differentiation of total profit Pi w.r.t. alpha at symmetric profile; solve FOC; verify result equals (w-c-lambda(1-eta)w)/k",
+      "result": "Confirmed: residual = 0"
+    },
+    "A3": {
+      "label": "Gap alpha^NE - alpha^CO = ell*(1 - 1/N)/k > 0",
+      "method": "SymPy symbolic subtraction alpha^NE - alpha^CO; verify equals lambda(1-eta)w(1-1/N)/k; positivity from parameter assumptions",
+      "result": "Confirmed: gap formula correct, strictly positive for N >= 2"
+    }
+  },
+  "claim_formal": {
+    "subject": "Symmetric N-firm automation game with demand externality",
+    "property": "All three equilibrium results hold",
+    "operator": "==",
+    "operator_note": "The claim asserts three algebraic identities derived from first-order conditions of the given model: (1) the symmetric Nash equilibrium rate alpha^NE = (s - ell/N)/k, (2) the cooperative (joint) optimum alpha^CO = (s - ell)/k, and (3) the gap alpha^NE - alpha^CO = ell*(1 - 1/N)/k > 0. These are interior solutions from unconstrained FOCs; the claim implicitly assumes parameters place the optima in (0,1). Strict positivity of the gap follows from ell > 0 and N >= 2.",
+    "threshold": true,
+    "is_time_sensitive": false
+  },
+  "claim_natural": "Consider a sector with N >= 2 symmetric firms, each endowed with L task-positions. Each firm i chooses an automation rate alpha_i in [0,1], paying wage w per human-staffed task and cost c per automated task, with integration friction cost (k/2)*L*alpha_i^2 where k > 0. Aggregate sectoral demand is D = A + lambda*w*L*[N - (1-eta)*sum_j alpha_j], where A > 0 is exogenous demand, lambda in (0,1] is workers' marginal propensity to consume from wages, and eta in [0,1) is the fraction of displaced wage income recovered through reemployment. Each firm's revenue is D/N (equal market shares). Define s = w - c > 0 and ell = lambda*(1-eta)*w > 0. Each firm i maximizes pi_i = D/N - w*L*(1-alpha_i) - c*L*alpha_i - (k/2)*L*alpha_i^2. The Nash equilibrium automation rate is alpha^NE = (s - ell/N)/k. The cooperative optimum is alpha^CO = (s - ell)/k. The difference alpha^NE - alpha^CO = ell*(1 - 1/N)/k is strictly positive.",
+  "cross_checks": [
+    {
+      "description": "Numerical spot-check at N=5, w=1, c=0.5, k=1, lambda=0.5, eta=0.4 (s=0.5, ell=0.3)",
+      "values_compared": [
+        "NE FOC residual = 0.00e+00",
+        "CO FOC residual = 0.00e+00",
+        "Gap direct = 0.24, gap formula = 0.24"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Second-order conditions verified symbolically (strict concavity of individual and joint profit)",
+      "values_compared": [
+        "d^2 pi_i/dalpha_i^2 = -kL: True",
+        "d^2 Pi/dalpha^2 = -NkL: True"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does the FOC yield a maximum (not minimum or saddle)?",
+      "verification_performed": "Computed second-order conditions symbolically with SymPy. d^2 pi_i / d alpha_i^2 = -kL < 0 (k > 0, L > 0): strict concavity. d^2 Pi / d alpha^2 = -NkL < 0: joint problem also strictly concave. Both SOCs confirmed computationally.",
+      "finding": "SOC confirmed: both individual and joint profit are strictly concave, so FOC solutions are global maxima.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the symmetric Nash equilibrium unique?",
+      "verification_performed": "Examined the best-response function. The FOC solution alpha_i* = (s - ell/N)/k does not depend on rivals' strategies, making it a dominant strategy. Strict concavity ensures uniqueness of each firm's best response.",
+      "finding": "The NE is unique: alpha_i* is a dominant strategy, independent of rivals' choices. No asymmetric equilibria exist.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the interior solutions lie outside [0,1]?",
+      "verification_performed": "Checked parameter conditions for interiority. alpha^NE in (0,1) requires ell/N < s < k + ell/N. alpha^CO in (0,1) requires ell < s < k + ell. The claim derives unconstrained FOC solutions; interiority is a parameter assumption noted in operator_note.",
+      "finding": "Formulas are correct as interior FOC solutions. Whether they fall in [0,1] depends on parameter magnitudes, which is an implicit assumption of the claim.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Can aggregate demand D become negative?",
+      "verification_performed": "At maximum automation (all alpha_j = 1): D = A + lambda*w*L*N*eta >= A > 0. D is linear and decreasing in each alpha_j, so it is minimized at full automation. Since D > 0 even there, D > 0 always.",
+      "finding": "D >= A > 0 for all feasible profiles. Model is well-specified.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": "PROVED",
+  "key_results": {
+    "A1_NE_verified": true,
+    "A2_CO_verified": true,
+    "A3_gap_verified": true,
+    "numerical_crosscheck_passed": true,
+    "SOC_verified": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.16.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-15"
+  }
+}

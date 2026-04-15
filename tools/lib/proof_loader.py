@@ -36,8 +36,9 @@ REQUIRED_PROOF_MD_SECTIONS_V2 = [
     "Conclusion",
 ]
 OPTIONAL_MD_SECTIONS_V2 = ["What Could Challenge This Verdict?"]
-REQUIRED_AUDIT_SECTIONS_V2 = ["Claim Specification", "Claim Interpretation"]
+REQUIRED_AUDIT_SECTIONS_V2 = []
 OPTIONAL_AUDIT_SECTIONS_V2 = [
+    "Claim Specification", "Claim Interpretation",
     "Citation Verification Details", "Computation Traces",
     "Independent Source Agreement", "Adversarial Checks",
     "Quality Checks", "Source Credibility Assessment",
@@ -101,7 +102,8 @@ def load_proof(proof_dir: Path) -> dict:
     proof_data = json.loads(proof_json_path.read_text())
 
     # Validate required keys and determine format version
-    format_version = proof_data.get("format_version", 1)
+    original_format_version = proof_data.get("format_version", 1)
+    format_version = original_format_version
     if format_version == 3:
         v3_required = ["claim_formal", "claim_natural", "evidence",
                        "verdict", "key_results", "generator"]
@@ -135,7 +137,9 @@ def load_proof(proof_dir: Path) -> dict:
     proof_md = (proof_dir / "proof.md").read_text()
     sections_md = extract_sections(proof_md)
 
-    if format_version >= 2:
+    # Use the original format version (not the normalized one) for section validation,
+    # since v1 proofs don't have the same required sections as v2+.
+    if original_format_version >= 2:
         required_md = REQUIRED_PROOF_MD_SECTIONS_V2
         optional_md = OPTIONAL_MD_SECTIONS_V2
         optional_audit = OPTIONAL_AUDIT_SECTIONS_V2

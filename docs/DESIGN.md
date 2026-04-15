@@ -165,9 +165,13 @@ Every proof is designed to be re-runnable. Computation proofs are pure Python wi
 
 The four output files (proof.py, proof.md, proof_audit.md, proof_narrative.md) form a complete record of the proof. When snapshots are embedded, the proof can verify against them without network access. When they aren't, the proof depends on the source URLs remaining available (or archived). The fallback chain — live → snapshot → Wayback — is tracked in the audit trail so you can see how each citation was resolved.
 
+For machine consumption, each published proof also includes three additional formats generated at build time: a **Jupyter Notebook** (`proof.ipynb`) for interactive re-verification in any notebook environment, a **W3C PROV-JSON** document (`provenance.json`) encoding the full provenance chain in the W3C Provenance standard, and an **RO-Crate 1.1** metadata file (`ro-crate-metadata.json`) packaging all proof artifacts as a self-describing research object for archival and interoperability. These are derived from the four core files — they don't add new information, but they make the same information accessible to notebook environments, provenance-aware pipelines, and research data management systems.
+
 ## Separation of concerns
 
 The proof has four output files because it serves four audiences. `proof.py` is for anyone who wants to re-run the verification. `proof.md` is the structured proof report with verdict and key numbers. `proof_audit.md` is for a reviewer who wants the citation-by-citation evidence trail and hardening-rule checklist. `proof_narrative.md` is a plain-language narrative summary for general readers. Combining them into one artifact would force every reader through material meant for someone else.
+
+The site build pipeline adds three machine-readable formats on top of these four: a Jupyter Notebook for interactive re-verification, a W3C PROV-JSON provenance trace for automated pipelines, and an RO-Crate 1.1 research object package for archival. These are generated, not authored — the source of truth remains the four committed files. The separation means the core proof artifacts stay portable (they work without the site), while the machine-readable formats add interoperability for systems that consume structured metadata.
 
 A similar separation applies to the skill instructions: a short main file with gotchas and a reference index, and detailed rules/templates/checklists in separate files loaded on-demand at specific workflow steps.
 
