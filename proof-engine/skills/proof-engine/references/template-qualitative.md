@@ -53,6 +53,7 @@ FACT_REGISTRY = {
 empirical_facts = {
     "source_a": {
         "quote": "...", "url": "...", "source_name": "...",
+        # "verbatim": False,  # optional: add when quote is non-verbatim (paraphrased or edited)
     },
     "source_b": {
         "quote": "...", "url": "...", "source_name": "...",

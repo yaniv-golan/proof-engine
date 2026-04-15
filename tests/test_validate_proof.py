@@ -2007,3 +2007,71 @@ def test_rule3_no_dates_passes():
     v = _validate_rule3(RULE3_NO_DATES)
     assert len(v.issues) == 0
     assert len(v.warnings) == 0
+
+
+# ---------------------------------------------------------------------------
+# Quote accuracy: verbatim field (check_quote_accuracy — structural path)
+# ---------------------------------------------------------------------------
+
+def _validate_quote_accuracy(source_code: str) -> ProofValidator:
+    """Write source to temp file, run quote accuracy check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_quote_accuracy()
+    os.unlink(f.name)
+    return v
+
+
+VERBATIM_FALSE_WARNS = '''
+empirical_facts = {
+    "source_a": {
+        "quote": "The researchers found that results were broadly consistent with earlier work.",
+        "verbatim": False,
+        "url": "https://example.com",
+        "source_name": "Example",
+    },
+}
+'''
+
+VERBATIM_TRUE_WITH_ELLIPSIS_IS_ISSUE = '''
+empirical_facts = {
+    "source_a": {
+        "quote": "The study found significant results... across all conditions.",
+        "verbatim": True,
+        "url": "https://example.com",
+        "source_name": "Example",
+    },
+}
+'''
+
+CLEAN_QUOTE_NO_VERBATIM_FIELD = '''
+empirical_facts = {
+    "source_a": {
+        "quote": "The study found significant results across all conditions tested.",
+        "url": "https://example.com",
+        "source_name": "Example",
+    },
+}
+'''
+
+
+def test_verbatim_false_warns():
+    v = _validate_quote_accuracy(VERBATIM_FALSE_WARNS)
+    assert len(v.warnings) >= 1
+    assert any("verbatim" in w[0].lower() or "non-verbatim" in w[0].lower() for w in v.warnings)
+    assert len(v.issues) == 0
+
+
+def test_verbatim_true_with_ellipsis_is_issue():
+    v = _validate_quote_accuracy(VERBATIM_TRUE_WITH_ELLIPSIS_IS_ISSUE)
+    assert len(v.issues) >= 1
+    assert any("verbatim" in i[0].lower() and "ellipsis" in i[0].lower() for i in v.issues)
+    assert len(v.warnings) == 0  # should be an issue, not a warning
+
+
+def test_clean_quote_no_verbatim_field_passes():
+    v = _validate_quote_accuracy(CLEAN_QUOTE_NO_VERBATIM_FIELD)
+    assert len(v.warnings) == 0
+    assert len(v.issues) == 0

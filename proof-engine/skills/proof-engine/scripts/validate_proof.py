@@ -1108,7 +1108,7 @@ class ProofValidator:
 
         Returns a list of (str, dict) tuples where:
           - str  is the entry key (e.g. "source_a")
-          - dict maps field names to their string values
+          - dict maps field names to their str or bool values
                  (e.g. {"quote": "...", "rejection_statement": "...", "url": "..."})
 
         Only string literal values are included; f-strings and other expressions
@@ -1147,39 +1147,81 @@ class ProofValidator:
                         continue
                     if not isinstance(inner_val, ast.Constant):
                         continue  # skip f-strings (JoinedStr) and other expressions
-                    if not (isinstance(inner_key.value, str) and
-                            isinstance(inner_val.value, str)):
+                    if not isinstance(inner_key.value, str):
                         continue
-                    fields[inner_key.value] = inner_val.value
+                    # Accept str and bool (isinstance(True, bool) is True;
+                    # isinstance(1, bool) is False — distinguishes booleans from ints)
+                    if not isinstance(inner_val.value, (str, bool)):
+                        continue
+                    val = inner_val.value
+                    # Coerce string-encoded booleans written by mistake
+                    # (e.g. "verbatim": "False" instead of "verbatim": False)
+                    if isinstance(val, str) and val.lower() in ("true", "false"):
+                        val = val.lower() == "true"
+                    fields[inner_key.value] = val
                 entries.append((entry_key, fields))
             break  # Only process the first empirical_facts assignment
         return entries
 
     def check_quote_accuracy(self):
-        """Warn about quote patterns that suggest non-verbatim quoting.
+        """Check for non-verbatim quoting patterns.
 
-        Heuristic (warning, not error):
-        - Quotes containing ellipsis ('...' or '\u2026') suggesting omitted/spliced text.
-          This is a strong signal — verbatim quotes should be contiguous substrings.
+        Two detection paths:
 
-        Handles common quote styles in this repo:
-        - "quote": "single line"
-        - "quote": \"\"\"triple quoted\"\"\"
-        - "quote": (
-              "parenthesized "
-              "adjacent strings"
-          ),
+        Structural (preferred): checks the optional verbatim field per entry:
+          - verbatim: False declared                         → warning
+          - verbatim: True declared + ellipsis in quote     → issue (contradiction)
+          - verbatim absent + ellipsis in quote              → warning (nudge to declare)
+          - verbatim absent + no ellipsis                    → no warning
+
+        Fallback (when empirical_facts can't be parsed with _extract_empirical_facts_entries,
+        e.g. the source uses EMPIRICAL_FACTS uppercase or has a non-standard assignment):
+          - any quote with ellipsis                          → warning
+
+        This design follows the trust boundary: the LLM declares non-verbatim quoting
+        explicitly at generation time; the validator checks consistency.
         """
-        quotes = self._extract_quote_values()
+        entries = self._extract_empirical_facts_entries()
 
-        for quote in quotes:
-            if '...' in quote or '\u2026' in quote:
-                self.warnings.append((
-                    f"Quote accuracy: quote contains ellipsis — may indicate "
-                    f"omitted text. verify_all_citations() requires the quote "
-                    f"to be a contiguous substring of the page.",
-                    [f"  '{quote[:60]}...'"],
-                ))
+        if entries:
+            for entry_key, fields in entries:
+                quote = fields.get("quote", "")
+                has_ellipsis = "..." in quote or "\u2026" in quote
+                verbatim_value = fields.get("verbatim", None)  # None = not declared
+
+                if verbatim_value is False:
+                    self.warnings.append((
+                        f"Quote accuracy: '{entry_key}' has verbatim: False — "
+                        "non-verbatim quotes reduce evidentiary weight; "
+                        "prefer a contiguous verbatim substring when possible.",
+                        [f"  '{quote[:80]}{'...' if len(quote) > 80 else ''}'"] if quote else [],
+                    ))
+                elif verbatim_value is True and has_ellipsis:
+                    self.issues.append((
+                        f"Quote accuracy: '{entry_key}' declares verbatim: True "
+                        "but quote contains ellipsis — contradiction. "
+                        "Either remove the ellipsis or change verbatim to False.",
+                        [f"  '{quote[:80]}...'"],
+                    ))
+                elif has_ellipsis:
+                    # No verbatim field — heuristic warning
+                    self.warnings.append((
+                        f"Quote accuracy: '{entry_key}' quote contains ellipsis — "
+                        "may indicate omitted text. "
+                        "verify_all_citations() requires a contiguous substring. "
+                        "If intentional, declare verbatim: False.",
+                        [f"  '{quote[:80]}...'"],
+                    ))
+        else:
+            # Fallback: unparseable source or non-standard empirical_facts variable name
+            for quote in self._extract_quote_values():
+                if "..." in quote or "\u2026" in quote:
+                    self.warnings.append((
+                        "Quote accuracy: quote contains ellipsis — may indicate "
+                        "omitted text. verify_all_citations() requires the quote "
+                        "to be a contiguous substring of the page.",
+                        [f"  '{quote[:60]}...'"],
+                    ))
 
     def check_verdict_validity(self):
         """Check that all verdict string literals are valid taxonomy entries.
