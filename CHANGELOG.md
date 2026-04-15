@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.17.0] - 2026-04-16
+
+### Added
+
+- **`proof_format_schema.json`** — single source of truth for proof markdown section requirements, shared between the proof-engine skill (producer) and site builder (consumer). Defines v1/v2 profiles for `proof.md`, `proof_audit.md`, and `proof_narrative.md`, plus conditional sections and template fallback mappings.
+
+### Changed
+
+- **`proof_loader.py`** — section requirements now read from `proof_format_schema.json` instead of hardcoded constants. Profile selection uses `original_format_version` to choose v1 or v2 validation rules.
+- **`narrative_validator.py`** — required narrative sections now sourced from schema instead of a hardcoded list.
+- **`proof.html`** — replaced `format_version` branching with fallback chains (`Quality Checks` or `Hardening Checklist`, `Source Data` or `Extraction Records`, audit or proof.md `Claim Interpretation`).
+- **`output-specs.md`** — added schema reference, documented `ProofSummaryBuilder` as primary emission path, fixed narrative heading casing to title-case.
+- **`SKILL.md`** — documented `ProofSummaryBuilder` in Bundled Scripts table and Key function signatures, updated `emit_proof_summary` gotcha, fixed narrative heading casing.
+
+### Fixed
+
+- **Legacy `emit_proof_summary()` now defaults `format_version` to 2** — proofs generated via the legacy path no longer land with missing `format_version`, which caused the loader to apply v1 section requirements to v2-style proofs.
+
 ## [1.16.0] - 2026-04-15
 
 ### Added

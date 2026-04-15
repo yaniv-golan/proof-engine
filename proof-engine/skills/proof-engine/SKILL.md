@@ -9,7 +9,7 @@ description: >
   questions with no verifiable answer.
 metadata:
   author: Yaniv Golan
-  version: "1.16.0"
+  version: "1.17.0"
   license: MIT
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
@@ -57,7 +57,7 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **`compute_percentage_change(mode="decline")` is for purchasing-power decline only**: It computes `(1 - old/new) * 100` — the denominator is the new value. For standard year-over-year decline, use the default `mode="increase"` with `(old_value, new_value)` — the result will be negative when new < old.
 - **`parse_percentage_from_quote(quote, fact_id)` has no `pattern` kwarg**: For pattern-based extraction, use `parse_number_from_quote(quote, pattern, fact_id)` instead. The two functions have different signatures — check the Bundled Scripts table.
 - **JSON summary key is `claim_natural`, not `claim`**: The publish toolchain reads `proof_data.get("claim_natural")`. Using `"claim"` as the key silently drops the claim text from the published proof.
-- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: 3`, validates against the JSON schema, and emits the `=== PROOF SUMMARY (JSON) ===` marker. See any template file for usage. The older `emit_proof_summary()` in `computations.py` is a legacy fallback that produces v2-shape JSON — do not use it for new proofs.
+- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: "1.17.0"
 
 ## Reference Files
 
@@ -106,7 +106,7 @@ apply_verdict_qualifier(base_verdict, any_unverified) -> str
 
 # proof_summary.py
 ProofSummaryBuilder(claim_natural, claim_formal, generator=None)
-#   Primary path for building proof.json. Produces format_version: 3.
+#   Primary path for building proof.json. Produces format_version: "1.17.0"
 #   builder.add_empirical_fact(fact_id, label=, source_name=, source_url=, source_quote=)
 #   builder.set_verification(fact_id, status=, method=, ...)
 #   builder.set_extraction(fact_id, value=, value_in_quote=, ...)
