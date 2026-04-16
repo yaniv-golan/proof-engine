@@ -7,7 +7,7 @@
     "operator_note": "'Divides exactly' means 641 is a factor of 2^32 + 1, i.e., (2^32 + 1) mod 641 == 0. This is equivalent to showing 2^32 + 1 = 641 * k for some positive integer k.",
     "threshold": 0
   },
-  "claim_natural": "641 divides 2^{32} + 1 exactly.",
+  "claim_natural": "641 divides \\(2^{32} + 1\\) exactly.",
   "evidence": {
     "A1": {
       "type": "computed",

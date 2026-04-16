@@ -23,10 +23,21 @@ ALLOWED_ATTRIBUTES = {
     "code": ["class"],
 }
 
+_ARITHMATEX_CONFIG = {
+    "pymdownx.arithmatex": {
+        "generic": True,
+        "inline_syntax": ["round"],   # \(...\) only — no $...$ (currency collision)
+        "block_syntax": ["square"],   # \[...\] only — no $$...$$ or \begin
+    },
+}
+
 
 def render_markdown(text: str) -> str:
     """Render markdown to sanitized HTML."""
-    md = markdown.Markdown(extensions=["tables", "fenced_code", "toc"])
+    md = markdown.Markdown(
+        extensions=["tables", "fenced_code", "toc", "pymdownx.arithmatex"],
+        extension_configs=_ARITHMATEX_CONFIG,
+    )
     raw_html = md.convert(text)
     clean_html = bleach.clean(
         raw_html,

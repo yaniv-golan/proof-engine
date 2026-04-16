@@ -7,7 +7,7 @@
     "threshold": 1e+120,
     "operator_note": "The claim states the theoretical value exceeds the observed value by 'more than 10^120 orders of magnitude.' In standard mathematical usage, 'N orders of magnitude' means a ratio of 10^N. So 'more than 10^120 orders of magnitude' means the ratio exceeds 10^(10^120). The well-known cosmological constant problem involves a discrepancy of ~120 orders of magnitude (a ratio of ~10^120), NOT 10^120 orders of magnitude. The claim as written likely conflates '10^120' (the ratio) with '10^120 orders of magnitude' (which would be a ratio of 10^(10^120)). We evaluate the claim as literally stated: does the number of orders of magnitude in the ratio exceed 10^120?"
   },
-  "claim_natural": "The theoretical vacuum energy density from quantum field theory exceeds the observed cosmological-constant value inferred from Type Ia supernovae by more than 10^120 orders of magnitude.",
+  "claim_natural": "The theoretical vacuum energy density from quantum field theory exceeds the observed cosmological-constant value inferred from Type Ia supernovae by more than \\(10^{120}\\) orders of magnitude.",
   "evidence": {
     "B1": {
       "type": "empirical",

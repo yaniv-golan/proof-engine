@@ -53,3 +53,41 @@ def test_heading_ids_for_toc():
     md = "## My Heading"
     html = render_markdown(md)
     assert "id=" in html
+
+
+def test_arithmatex_inline_preserved():
+    """Inline math \\(...\\) should survive markdown+bleach in an arithmatex wrapper."""
+    html = render_markdown(r"The rate \(\alpha_i\) is positive")
+    assert "arithmatex" in html
+    assert r"\alpha_i" in html
+
+
+def test_arithmatex_display_preserved():
+    """Display math \\[...\\] should survive markdown+bleach."""
+    html = render_markdown(r"\[x^2 + y^2 = r^2\]")
+    assert "arithmatex" in html
+    assert r"x^2 + y^2 = r^2" in html
+
+
+def test_arithmatex_underscore_not_emphasis():
+    """Underscores inside math delimiters must not become <em> tags."""
+    html = render_markdown(r"word \(\alpha_i\) word")
+    assert "<em>" not in html
+    assert r"\alpha_i" in html
+
+
+def test_plain_markdown_unchanged_with_arithmatex():
+    """Adding arithmatex must not break plain markdown rendering."""
+    html = render_markdown("**bold** and *italic*")
+    assert "<strong>bold</strong>" in html
+    assert "<em>italic</em>" in html
+
+
+def test_currency_dollar_not_mangled():
+    """Literal $ signs (currency) must not be interpreted as math.
+
+    Dollar-sign math is disabled via inline_syntax/block_syntax config.
+    """
+    html = render_markdown("costs $5 million and $25 million")
+    assert "$5 million" in html
+    assert "arithmatex" not in html

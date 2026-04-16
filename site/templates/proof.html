@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}{{ proof.proof_data.claim_natural | truncate(50) }} — Proof Engine{% endblock %}
+{% block title %}{{ proof.proof_data.claim_natural | strip_latex | truncate(50) }} — Proof Engine{% endblock %}
 
-{% block meta_description %}{{ proof.verdict.raw }}: {{ proof.verdict_hook | replace('**', '') | replace('*', '') | replace('[', '') | replace(']', '') | replace('\n', ' ') | truncate(140) | e }} — Proof Engine{% endblock %}
+{% block meta_description %}{{ proof.verdict.raw }}: {{ proof.verdict_hook | replace('**', '') | replace('*', '') | replace('[', '') | replace(']', '') | replace('\n', ' ') | strip_latex | truncate(140) | e }} — Proof Engine{% endblock %}
 
-{% block og_title %}{{ proof.verdict.raw }}: {{ proof.proof_data.claim_natural }}{% endblock %}
+{% block og_title %}{{ proof.verdict.raw }}: {{ proof.proof_data.claim_natural | strip_latex }}{% endblock %}
 
 {% block og_image %}<meta property="og:image" content="{{ site_url }}{{ base_url }}proofs/{{ proof.slug }}/og-image.png">
     <meta name="twitter:image" content="{{ site_url }}{{ base_url }}proofs/{{ proof.slug }}/og-image.png">{% endblock %}
@@ -125,8 +125,8 @@
 {# --- Share bar (after narrative + counter-evidence + sources) --- #}
 <div class="share-bar"
      data-verdict="{{ proof.verdict.raw | e }}"
-     data-claim="{{ proof.proof_data.claim_natural | e }}"
-     data-hook="{{ proof.verdict_hook | replace('**', '') | replace('*', '') | replace('[', '') | replace(']', '') | replace('\n', ' ') | truncate(120) | e }}"
+     data-claim="{{ proof.proof_data.claim_natural | strip_latex | e }}"
+     data-hook="{{ proof.verdict_hook | replace('**', '') | replace('*', '') | replace('[', '') | replace(']', '') | replace('\n', ' ') | strip_latex | truncate(120) | e }}"
      data-url="{{ canonical_url | e }}"
      data-has-citations="{{ 'true' if citations else 'false' }}">
     <span class="share-bar-label">share</span>

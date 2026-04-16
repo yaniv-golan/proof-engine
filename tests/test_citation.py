@@ -136,3 +136,49 @@ def test_bibtex_escapes_special_chars():
     ctx = build_citation_context(data, SAMPLE_URL, SAMPLE_SLUG, doi_data=None)
     bib = generate_bibtex(ctx)
     assert "CO2 levels" in bib
+
+
+# --- Math-claim citation tests ---
+
+MATH_PROOF_DATA = {
+    "claim_natural": r"The Nash equilibrium rate \(\alpha^{NE}\) exceeds \(\alpha^{CO}\)",
+    "verdict": "PROVED",
+    "generator": {
+        "name": "proof-engine",
+        "version": "1.16.0",
+        "repo": "https://github.com/yaniv-golan/proof-engine",
+        "generated_at": "2026-04-16",
+    },
+}
+
+MATH_URL = "https://yaniv-golan.github.io/proof-engine/proofs/nash-equilibrium/"
+MATH_SLUG = "nash-equilibrium"
+
+
+def test_citation_title_strips_latex():
+    """Citation title must use strip_latex — no raw \\( in APA/Chicago."""
+    ctx = build_citation_context(MATH_PROOF_DATA, MATH_URL, MATH_SLUG, doi_data=None)
+    assert r"\(" not in ctx["title"]
+    assert "\u03B1" in ctx["title"]  # alpha converted to Unicode
+
+
+def test_bibtex_title_strips_latex():
+    """BibTeX title field must not contain raw LaTeX delimiters."""
+    ctx = build_citation_context(MATH_PROOF_DATA, MATH_URL, MATH_SLUG, doi_data=None)
+    bib = generate_bibtex(ctx)
+    assert r"\(" not in bib, f"BibTeX contains raw \\( delimiter:\n{bib}"
+
+
+def test_ris_title_strips_latex():
+    """RIS TI field must not contain raw LaTeX delimiters."""
+    ctx = build_citation_context(MATH_PROOF_DATA, MATH_URL, MATH_SLUG, doi_data=None)
+    ris = generate_ris(ctx)
+    assert r"\(" not in ris
+
+
+def test_apa_strips_latex():
+    """APA citation must use Unicode, not raw LaTeX."""
+    ctx = build_citation_context(MATH_PROOF_DATA, MATH_URL, MATH_SLUG, doi_data=None)
+    txt = generate_cite_txt(ctx)
+    assert r"\(" not in txt
+    assert "\u03B1" in txt  # alpha present as Unicode

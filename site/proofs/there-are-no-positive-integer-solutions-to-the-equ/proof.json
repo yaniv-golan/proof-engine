@@ -7,7 +7,7 @@
     "threshold": 0,
     "operator_note": "The claim asserts zero positive integer solutions exist. A single counterexample (x, y, z) with x^4 + y^4 == z^4 would disprove it. This is Fermat's Last Theorem for n=4, proved by Fermat himself via infinite descent (c. 1637). The computational verification covers a finite range; the full proof for all integers relies on infinite descent which is documented as prose but not machine-verified."
   },
-  "claim_natural": "There are no positive integer solutions to the equation x^4 + y^4 = z^4.",
+  "claim_natural": "There are no positive integer solutions to the equation \\(x^4 + y^4 = z^4\\).",
   "evidence": {
     "A1": {
       "type": "computed",

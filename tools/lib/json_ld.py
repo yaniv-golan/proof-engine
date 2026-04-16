@@ -1,5 +1,6 @@
 import json
 from tools.lib.verdict import normalize_verdict
+from tools.lib.latex_utils import strip_latex
 
 REPO_URL = "https://github.com/yaniv-golan/proof-engine"
 
@@ -18,7 +19,7 @@ def generate_claim_review(
     claim_review = {
         "@context": "https://schema.org",
         "@type": "ClaimReview",
-        "claimReviewed": proof_data["claim_natural"],
+        "claimReviewed": strip_latex(proof_data["claim_natural"]),
         "reviewRating": {
             "@type": "Rating",
             "ratingValue": verdict_info["rating"],

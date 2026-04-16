@@ -57,6 +57,7 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **`compute_percentage_change(mode="decline")` is for purchasing-power decline only**: It computes `(1 - old/new) * 100` — the denominator is the new value. For standard year-over-year decline, use the default `mode="increase"` with `(old_value, new_value)` — the result will be negative when new < old.
 - **`parse_percentage_from_quote(quote, fact_id)` has no `pattern` kwarg**: For pattern-based extraction, use `parse_number_from_quote(quote, pattern, fact_id)` instead. The two functions have different signatures — check the Bundled Scripts table.
 - **JSON summary key is `claim_natural`, not `claim`**: The publish toolchain reads `proof_data.get("claim_natural")`. Using `"claim"` as the key silently drops the claim text from the published proof.
+- **Use LaTeX delimiters for math in `claim_natural` and markdown sections**: When the claim contains mathematical notation, use `\(...\)` for inline math and `\[...\]` for display math. Write `\(\alpha_i\)` not `alpha_i`, `\(\pi^2/6\)` not `pi^2/6`. Do NOT use `$...$` delimiters — they collide with currency dollar signs in claims. Non-math claims need no delimiters. The same convention applies to proof.md, proof_audit.md, and proof_narrative.md.
 - **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: "1.17.0"
 
 ## Reference Files

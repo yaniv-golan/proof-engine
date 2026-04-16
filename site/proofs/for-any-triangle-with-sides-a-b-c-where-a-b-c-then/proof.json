@@ -7,7 +7,7 @@
     "operator_note": "This is a biconditional (if and only if) claim with two sub-claims: SC1 (Forward): a^2 + b^2 = c^2 implies angle C = 90 degrees. SC2 (Converse): angle C = 90 degrees implies a^2 + b^2 = c^2. Both directions are proved via the Law of Cosines: c^2 = a^2 + b^2 - 2ab*cos(C). The Law of Cosines is taken as an established theorem of Euclidean geometry. The proof is algebraic: substitution and simplification.",
     "threshold": true
   },
-  "claim_natural": "For any triangle with sides a, b, c where a^2 + b^2 = c^2, the angle opposite c is exactly 90 degrees, AND the converse also holds.",
+  "claim_natural": "For any triangle with sides a, b, c where \\(a^2 + b^2 = c^2\\), the angle opposite c is exactly 90 degrees, AND the converse also holds.",
   "evidence": {
     "A1": {
       "type": "computed",

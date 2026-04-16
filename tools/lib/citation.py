@@ -1,6 +1,8 @@
 # tools/lib/citation.py
 """Generate citation metadata and export formats for proofs."""
 
+from tools.lib.latex_utils import strip_latex
+
 
 def build_citation_context(
     proof_data: dict,
@@ -12,7 +14,7 @@ def build_citation_context(
     generator = proof_data["generator"]
     date = generator["generated_at"]
     year = date[:4] if date else ""
-    claim = proof_data["claim_natural"]
+    claim = strip_latex(proof_data["claim_natural"])
     verdict = proof_data.get("verdict", "")
     # v3 structured verdict — extract string value for display
     if isinstance(verdict, dict):
