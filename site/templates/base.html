@@ -26,6 +26,7 @@
     <link rel="icon" href="{{ base_url }}static/favicon-192.png" type="image/png" sizes="192x192">
     <link rel="apple-touch-icon" href="{{ base_url }}static/apple-touch-icon.png">
     <link rel="stylesheet" href="{{ base_url }}static/style.css">
+    <link rel="stylesheet" href="{{ base_url }}static/vendor/katex/katex.min.css">
     {% block head_extra %}{% endblock %}
 </head>
 <body>
@@ -50,6 +51,9 @@
             <p>built with <a href="https://github.com/yaniv-golan/proof-engine" rel="nofollow">⟨proof-engine⟩</a> — open-source verifiable proofs</p>
         </div>
     </footer>
+    <script defer src="{{ base_url }}static/vendor/katex/katex.min.js"></script>
+    <script defer src="{{ base_url }}static/vendor/katex/contrib/auto-render.min.js"></script>
+    <script>document.addEventListener("DOMContentLoaded",function(){if(typeof renderMathInElement==="function"){renderMathInElement(document.body,{delimiters:[{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}],throwOnError:false})}});</script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
