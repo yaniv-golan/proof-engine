@@ -1,0 +1,150 @@
+{
+  "format_version": 3,
+  "claim_natural": "The binary operator eml is defined by the expression \\(\\text{eml}(a, b) = \\exp(a) - \\ln(b)\\). There exists a finite binary tree consisting solely of eml operations, whose 9 leaves are drawn from \\(\\{1, x, y\\}\\), such that the tree evaluates exactly to \\(x \\times y\\). The tree has K = 17 tokens (8 eml operations and 9 leaves), and the identity holds for all complex \\(x\\) and \\(y\\) (in the algebraic setting where \\(\\ln \\circ \\exp\\) is the identity).",
+  "claim_formal": {
+    "subject": "Binary operator eml(a, b) = exp(a) - ln(b)",
+    "property": "eml(eml(1, eml(eml(eml(1, eml(eml(1, eml(1, x)), 1)), y), 1)), 1) = x * y for all complex x, y (x != 0, y != 0, x != e^e)",
+    "operator": "==",
+    "operator_note": "The claim asserts that a specific K=17 binary tree of eml operations evaluates to x * y. K denotes the total number of tree nodes (8 internal eml nodes + 9 leaves = 17). The claim text says 'depth 17'; following the convention in arXiv:2603.21852, this denotes the RPN code length (total tree nodes), not the tree height. The actual tree height is 8. Working inside out through 8 layers: (1) M1 = eml(1, x) = e - ln(x). (2) M2 = eml(1, M1) = e - ln(e - ln(x)). (3) M3 = eml(M2, 1) = exp(e)/(e - ln(x)). (4) M4 = eml(1, M3) = ln(e - ln(x)). Steps 1-4 apply the triple-nesting identity to (e - ln(x)), yielding ln(e - ln(x)). The key observation is that eml(1, x) = e - ln(x) directly provides the 'e minus logarithm' form, saving one step compared to the K=19 addition tree where two steps were needed (eml(x,1) then eml(1,_)) to get e - x. (5) M5 = eml(M4, y) = exp(ln(e - ln(x))) - ln(y) = (e - ln(x)) - ln(y) = e - ln(x) - ln(y) = e - ln(xy). This uses a variant of the subtraction identity: eml(ln(a), y) = a - ln(y) where y is used as a bare leaf, not wrapped in exp(). This saves another step compared to the addition tree. (6) M6 = eml(M5, 1) = exp(e - ln(xy)) = exp(e)/(xy). (7) M7 = eml(1, M6) = e - ln(exp(e)/(xy)) = e - (e - ln(xy)) = ln(xy). (8) M8 = eml(M7, 1) = exp(ln(xy)) = xy. The expression is undefined at x = 0 (ln(0) in M1), y = 0 (ln(0) in M5), and x = e^e (where e - ln(x) = 0 causes ln(0) in M2). The singularity at x = e^e is removable: the limit from both sides equals e^e * y, verified by SymPy. For complex x, y: the identity holds as a formal algebraic identity where ln(exp(z)) = z (i.e., on the Riemann surface of log). On the principal branch, it holds for all x, y with x != 0, y != 0.",
+    "threshold": true,
+    "is_time_sensitive": false
+  },
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Token count K = 17 (8 eml operations + 9 leaves)",
+      "sub_claim": null,
+      "method": "Programmatic parsing of the expression string to count eml operation nodes and leaf nodes (1, x, y)",
+      "result": "Confirmed: 8 eml + 9 leaves = K = 17",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Step-by-step symbolic evaluation: M8 = x * y",
+      "sub_claim": null,
+      "method": "SymPy symbolic evaluation through 8 layers: build each sub-expression M1..M8 with simplification at each step, verify residuals at 5 critical algebraic cancellation points (M1=e-ln(x), M3=exp(e)/(e-ln(x)), M5=e-ln(xy), M7=ln(xy), M8=x*y) all equal zero",
+      "result": "Confirmed: all 5 critical residuals = 0, M8 = x * y",
+      "depends_on": [
+        "A1"
+      ]
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Full expression minus x * y = 0",
+      "sub_claim": null,
+      "method": "SymPy simplify(M8 - x*y) for positive real symbols x, y; verify residual equals 0",
+      "result": "Confirmed: residual = 0",
+      "depends_on": [
+        "A2"
+      ]
+    },
+    "A4": {
+      "type": "computed",
+      "label": "Removable singularity at x = e^e: limit equals e^e * y",
+      "sub_claim": null,
+      "method": "SymPy limit(M8, x, exp(e)) from left, right, and both sides; verify all three equal exp(e) * y",
+      "result": "Confirmed: limit from left = y*exp(E), from right = y*exp(E), both = e^e * y",
+      "depends_on": [
+        "A2"
+      ]
+    },
+    "A5": {
+      "type": "computed",
+      "label": "Numerical spot-check at 12 real-valued (x, y) pairs",
+      "sub_claim": null,
+      "method": "Numerical evaluation of the full 8-layer chain at 12 real-valued (x, y) pairs including positive, negative, near-zero, near-singularity (x near e^e within 1e-12); verify |result - x*y| < 1e-6",
+      "result": "Confirmed: max |diff| = 9.38e-15",
+      "depends_on": []
+    },
+    "A6": {
+      "type": "computed",
+      "label": "Numerical spot-check at 6 complex-valued (x, y) pairs",
+      "sub_claim": null,
+      "method": "Numerical evaluation of the full 8-layer chain at 6 complex-valued (x, y) pairs including purely imaginary and negative real inputs; verify |result - x*y| < 1e-10",
+      "result": "Confirmed: max |diff| = 6.47e-15",
+      "depends_on": []
+    },
+    "A7": {
+      "type": "computed",
+      "label": "Exhaustive search: no K <= 15 eml tree computes x * y",
+      "sub_claim": null,
+      "method": "Embedded exhaustive bottom-up search: enumerate all distinct eml binary trees with leaves {1, x, y} at each odd K from 1 to 15 using numerical fingerprinting at a generic complex test point; check if x*y appears",
+      "result": "Confirmed: 1,980,526 distinct values at K=15, x*y not found at any K <= 15",
+      "depends_on": []
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Symbolic (A2, A3) vs numerical (A5, A6): symbolic algebra proves identity exactly for positive real x, y; numerical evaluation independently confirms at 18 test points (12 real including negatives + 6 complex)",
+      "fact_ids": [
+        "A3",
+        "A5",
+        "A6"
+      ],
+      "agreement": true
+    },
+    {
+      "description": "Exhaustive search (A7) as independent method: bottom-up enumeration of all eml trees through K=15 finds no tree computing x*y, confirming K=17 is not achievable at lower K",
+      "fact_ids": [
+        "A3",
+        "A7"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does the identity hold for negative real x and y?",
+      "verification_performed": "For negative real x (e.g., x = -2), ln(x) = ln|x| + pi*i. Then M1 = e - ln|x| - pi*i (complex intermediate). Tracing through the chain: the imaginary components from ln(negative) at steps M1 and M5 interact through exp and log operations. The +-pi*i terms cancel exactly across the chain, returning a real result. Numerical tests confirm: (-2)*3 gives |diff| < 5e-15, (-3)*(-5) gives |diff| < 8e-15.",
+      "finding": "The identity holds for all real nonzero x and y, including negatives. Intermediate complex values with +-pi*i cancel exactly.",
+      "breaks_proof": false
+    },
+    {
+      "question": "What singularities does the expression have, and are they removable?",
+      "verification_performed": "Three singularity classes: (1) x = 0: M1 = eml(1, 0) = e - ln(0) is undefined. The limit as x -> 0 diverges (M1 -> +infinity), so this is NOT removable. However, x*y = 0 at x = 0, and multiplication by zero is well-defined, so this is a genuine limitation of the eml expression. (2) y = 0: M5 = eml(M4, 0) = exp(M4) - ln(0) is undefined. Same analysis: not removable. (3) x = e^e (approx 15.154): M1 = e - ln(e^e) = 0, and M2 = eml(1, 0) involves ln(0). SymPy limit confirms: lim_{x->e^e} M8 = e^e * y from both sides. This IS a removable singularity, analogous to x = e in the K=19 addition tree. Numerical tests within 1e-12 of e^e confirm convergence.",
+      "finding": "x = 0 and y = 0 are genuine singularities (not removable). x = e^e is a removable singularity. The identity holds for all real x not in {0, e^e} and y != 0.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the identity hold for arbitrary complex x, y on the principal branch of log?",
+      "verification_performed": "The critical cancellation is M7 = e - ln(exp(e - ln(xy))). On the principal branch, ln(exp(z)) = z when |Im(z)| < pi. Here z = e - ln(xy) = (e - ln|xy|) - i*arg(xy). Since arg(xy) is in (-pi, pi], we have |Im(z)| <= pi, and the cancellation holds for all nonzero x, y. The earlier cancellation exp(ln(e-ln(x))) at M5 requires e-ln(x) != 0, which fails only at x = e^e. Numerical tests at 6 complex points (including (-1)*(-1)=1, purely imaginary inputs) all agree within 1e-15. In the formal algebraic framework, ln(exp(z)) = z is an axiom and the identity holds for all nonzero complex x, y.",
+      "finding": "On the principal branch: holds for all nonzero x, y (except x = e^e). As a formal algebraic identity: holds for all nonzero complex x, y.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is K = 17 the minimum code length for multiplication?",
+      "verification_performed": "An embedded exhaustive search (A7) enumerated all distinct eml trees through K=15 and found no expression evaluating to x*y. The search space at K=15 contains approximately 2 million distinct values. No expression at K <= 15 computes x*y. Note: the search covers K=1 through K=15 (all odd K); K=17 is the next possible level. Whether K=17 is strictly minimal (i.e., no other K=17 tree also computes x*y) is not determined, but the search confirms no shorter tree exists.",
+      "finding": "Exhaustive search through K=15 found no eml tree computing x*y. K=17 is the shortest known code length for multiplication.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could numerical overflow cause false agreement?",
+      "verification_performed": "The largest intermediate value is M6 = exp(e - ln(xy)). For |xy| << 1 (e.g., x=0.001, y=0.001), M6 = exp(e+6.9) which is large but finite (~15000). For |xy| >> 1, M6 = exp(e - ln(xy)) becomes small. The symbolic proof does not depend on floating-point. The log-exp cancellation at M7 (= ln(xy)) bounds intermediate values. Numerical tests at extremes (x=100/y=0.01, x=-100/y=0.5) confirm |diff| < 1e-14.",
+      "finding": "No overflow risk for representable floats. The proof rests on exact symbolic algebra.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "token_count_K": 17,
+    "symbolic_steps_verified": true,
+    "full_residual_zero": true,
+    "singularity_limit_verified": true,
+    "real_numerical_max_diff": 9.379823692409745e-15,
+    "complex_numerical_max_diff": 6.466036496704424e-15,
+    "exhaustive_search_max_k": 15,
+    "exhaustive_search_found": null,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.18.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-16"
+  }
+}
