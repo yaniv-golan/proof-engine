@@ -1,22 +1,6 @@
 {
-  "format_version": 2,
-  "fact_registry": {
-    "A1": {
-      "label": "Nash equilibrium rate alpha^NE = (s - ell/N)/k via FOC",
-      "method": "SymPy symbolic differentiation of pi_i w.r.t. alpha_i; solve FOC; verify result equals (w-c-lambda(1-eta)w/N)/k",
-      "result": "Confirmed: residual = 0"
-    },
-    "A2": {
-      "label": "Cooperative optimum alpha^CO = (s - ell)/k via joint FOC",
-      "method": "SymPy symbolic differentiation of total profit Pi w.r.t. alpha at symmetric profile; solve FOC; verify result equals (w-c-lambda(1-eta)w)/k",
-      "result": "Confirmed: residual = 0"
-    },
-    "A3": {
-      "label": "Gap alpha^NE - alpha^CO = ell*(1 - 1/N)/k > 0",
-      "method": "SymPy symbolic subtraction alpha^NE - alpha^CO; verify equals lambda(1-eta)w(1-1/N)/k; positivity from parameter assumptions",
-      "result": "Confirmed: gap formula correct, strictly positive for N >= 2"
-    }
-  },
+  "format_version": 3,
+  "claim_natural": "Consider a sector with \\(N \\geq 2\\) symmetric firms, each endowed with L task-positions. Each firm i chooses an automation rate \\(\\alpha_i\\) in [0,1], paying wage w per human-staffed task and cost c per automated task, with integration friction cost \\((k/2) \\cdot L \\cdot \\alpha_i^2\\) where \\(k > 0\\). Aggregate sectoral demand is \\(D = A + \\lambda \\cdot w \\cdot L \\cdot [N - (1-\\eta) \\sum_j \\alpha_j]\\), where \\(A > 0\\) is exogenous demand, \\(\\lambda \\in (0,1]\\) is workers' marginal propensity to consume from wages, and \\(\\eta \\in [0,1)\\) is the fraction of displaced wage income recovered through reemployment. Each firm's revenue is \\(D/N\\) (equal market shares). Define \\(s = w - c > 0\\) and \\(\\ell = \\lambda(1-\\eta)w > 0\\). Each firm i maximizes \\(\\pi_i = D/N - wL(1-\\alpha_i) - cL\\alpha_i - (k/2)L\\alpha_i^2\\). The Nash equilibrium automation rate is \\(\\alpha^{NE} = (s - \\ell/N)/k\\). The cooperative optimum is \\(\\alpha^{CO} = (s - \\ell)/k\\). The difference \\(\\alpha^{NE} - \\alpha^{CO} = \\ell \\cdot (1 - 1/N)/k\\) is strictly positive.",
   "claim_formal": {
     "subject": "Symmetric N-firm automation game with demand externality",
     "property": "All three equilibrium results hold",
@@ -25,24 +9,61 @@
     "threshold": true,
     "is_time_sensitive": false
   },
-  "claim_natural": "Consider a sector with \\(N \\geq 2\\) symmetric firms, each endowed with L task-positions. Each firm i chooses an automation rate \\(\\alpha_i\\) in [0,1], paying wage w per human-staffed task and cost c per automated task, with integration friction cost \\((k/2) \\cdot L \\cdot \\alpha_i^2\\) where \\(k > 0\\). Aggregate sectoral demand is \\(D = A + \\lambda \\cdot w \\cdot L \\cdot [N - (1-\\eta) \\sum_j \\alpha_j]\\), where \\(A > 0\\) is exogenous demand, \\(\\lambda \\in (0,1]\\) is workers' marginal propensity to consume from wages, and \\(\\eta \\in [0,1)\\) is the fraction of displaced wage income recovered through reemployment. Each firm's revenue is \\(D/N\\) (equal market shares). Define \\(s = w - c > 0\\) and \\(\\ell = \\lambda(1-\\eta)w > 0\\). Each firm i maximizes \\(\\pi_i = D/N - wL(1-\\alpha_i) - cL\\alpha_i - (k/2)L\\alpha_i^2\\). The Nash equilibrium automation rate is \\(\\alpha^{NE} = (s - \\ell/N)/k\\). The cooperative optimum is \\(\\alpha^{CO} = (s - \\ell)/k\\). The difference \\(\\alpha^{NE} - \\alpha^{CO} = \\ell \\cdot (1 - 1/N)/k\\) is strictly positive.",
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Nash equilibrium rate alpha^NE = (s - ell/N)/k via FOC",
+      "sub_claim": null,
+      "method": "SymPy symbolic differentiation of pi_i w.r.t. alpha_i; solve FOC; verify result equals (w-c-lambda(1-eta)w/N)/k",
+      "result": "Confirmed: residual = 0",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Cooperative optimum alpha^CO = (s - ell)/k via joint FOC",
+      "sub_claim": null,
+      "method": "SymPy symbolic differentiation of total profit Pi w.r.t. alpha at symmetric profile; solve FOC; verify result equals (w-c-lambda(1-eta)w)/k",
+      "result": "Confirmed: residual = 0",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Gap alpha^NE - alpha^CO = ell*(1 - 1/N)/k > 0",
+      "sub_claim": null,
+      "method": "SymPy symbolic subtraction alpha^NE - alpha^CO; verify equals lambda(1-eta)w(1-1/N)/k; positivity from parameter assumptions",
+      "result": "Confirmed: gap formula correct, strictly positive for N >= 2",
+      "depends_on": [
+        "A1",
+        "A2"
+      ]
+    }
+  },
   "cross_checks": [
     {
       "description": "Numerical spot-check at N=5, w=1, c=0.5, k=1, lambda=0.5, eta=0.4 (s=0.5, ell=0.3)",
+      "fact_ids": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "agreement": true,
       "values_compared": [
         "NE FOC residual = 0.00e+00",
         "CO FOC residual = 0.00e+00",
         "Gap direct = 0.24, gap formula = 0.24"
-      ],
-      "agreement": true
+      ]
     },
     {
       "description": "Second-order conditions verified symbolically (strict concavity of individual and joint profit)",
+      "fact_ids": [
+        "A1",
+        "A2"
+      ],
+      "agreement": true,
       "values_compared": [
         "d^2 pi_i/dalpha_i^2 = -kL: True",
         "d^2 Pi/dalpha^2 = -NkL: True"
-      ],
-      "agreement": true
+      ]
     }
   ],
   "adversarial_checks": [
@@ -71,7 +92,12 @@
       "breaks_proof": false
     }
   ],
-  "verdict": "PROVED",
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
   "key_results": {
     "A1_NE_verified": true,
     "A2_CO_verified": true,
@@ -81,7 +107,7 @@
   },
   "generator": {
     "name": "proof-engine",
-    "version": "1.16.0",
+    "version": "1.18.0",
     "repo": "https://github.com/yaniv-golan/proof-engine",
     "generated_at": "2026-04-16"
   }

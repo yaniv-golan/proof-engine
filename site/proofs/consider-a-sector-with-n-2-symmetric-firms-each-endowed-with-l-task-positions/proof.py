@@ -11,7 +11,8 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 from sympy import Symbol, Rational, diff, solve, simplify
 
-from scripts.computations import compare, explain_calc, emit_proof_summary
+from scripts.computations import compare, explain_calc
+from scripts.proof_summary import ProofSummaryBuilder
 
 # ============================================================================
 # 1. CLAIM INTERPRETATION (Rule 4)
@@ -347,75 +348,79 @@ if __name__ == "__main__":
 
     print(f"\nVERDICT: {verdict}")
 
-    FACT_REGISTRY["A1"]["method"] = (
-        "SymPy symbolic differentiation of pi_i w.r.t. alpha_i; "
-        "solve FOC; verify result equals (w-c-lambda(1-eta)w/N)/k"
+    builder = ProofSummaryBuilder(CLAIM_NATURAL, CLAIM_FORMAL)
+
+    builder.add_computed_fact(
+        "A1",
+        label=FACT_REGISTRY["A1"]["label"],
+        method=(
+            "SymPy symbolic differentiation of pi_i w.r.t. alpha_i; "
+            "solve FOC; verify result equals (w-c-lambda(1-eta)w/N)/k"
+        ),
+        result="Confirmed: residual = 0",
     )
-    FACT_REGISTRY["A1"]["result"] = "Confirmed: residual = 0"
-    FACT_REGISTRY["A2"]["method"] = (
-        "SymPy symbolic differentiation of total profit Pi w.r.t. alpha "
-        "at symmetric profile; solve FOC; verify result equals "
-        "(w-c-lambda(1-eta)w)/k"
+    builder.add_computed_fact(
+        "A2",
+        label=FACT_REGISTRY["A2"]["label"],
+        method=(
+            "SymPy symbolic differentiation of total profit Pi w.r.t. alpha "
+            "at symmetric profile; solve FOC; verify result equals "
+            "(w-c-lambda(1-eta)w)/k"
+        ),
+        result="Confirmed: residual = 0",
     )
-    FACT_REGISTRY["A2"]["result"] = "Confirmed: residual = 0"
-    FACT_REGISTRY["A3"]["method"] = (
-        "SymPy symbolic subtraction alpha^NE - alpha^CO; verify equals "
-        "lambda(1-eta)w(1-1/N)/k; positivity from parameter assumptions"
-    )
-    FACT_REGISTRY["A3"]["result"] = (
-        "Confirmed: gap formula correct, strictly positive for N >= 2"
+    builder.add_computed_fact(
+        "A3",
+        label=FACT_REGISTRY["A3"]["label"],
+        method=(
+            "SymPy symbolic subtraction alpha^NE - alpha^CO; verify equals "
+            "lambda(1-eta)w(1-1/N)/k; positivity from parameter assumptions"
+        ),
+        result="Confirmed: gap formula correct, strictly positive for N >= 2",
+        depends_on=["A1", "A2"],
     )
 
-    summary = {
-        "format_version": 2,
-        "fact_registry": {
-            fid: {fkey: fval for fkey, fval in info.items()}
-            for fid, info in FACT_REGISTRY.items()
-        },
-        "claim_formal": CLAIM_FORMAL,
-        "claim_natural": CLAIM_NATURAL,
-        "cross_checks": [
-            {
-                "description": (
-                    "Numerical spot-check at N=5, w=1, c=0.5, k=1, "
-                    "lambda=0.5, eta=0.4 (s=0.5, ell=0.3)"
-                ),
-                "values_compared": [
-                    f"NE FOC residual = {foc_at_NE:.2e}",
-                    f"CO FOC residual = {foc_at_CO:.2e}",
-                    f"Gap direct = {gap_direct}, gap formula = {gap_num}",
-                ],
-                "agreement": all_numerical,
-            },
-            {
-                "description": (
-                    "Second-order conditions verified symbolically "
-                    "(strict concavity of individual and joint profit)"
-                ),
-                "values_compared": [
-                    f"d^2 pi_i/dalpha_i^2 = -kL: {soc_ind_ok}",
-                    f"d^2 Pi/dalpha^2 = -NkL: {soc_co_ok}",
-                ],
-                "agreement": soc_ind_ok and soc_co_ok,
-            },
+    builder.add_cross_check(
+        description=(
+            "Numerical spot-check at N=5, w=1, c=0.5, k=1, "
+            "lambda=0.5, eta=0.4 (s=0.5, ell=0.3)"
+        ),
+        fact_ids=["A1", "A2", "A3"],
+        agreement=all_numerical,
+        values_compared=[
+            f"NE FOC residual = {foc_at_NE:.2e}",
+            f"CO FOC residual = {foc_at_CO:.2e}",
+            f"Gap direct = {gap_direct}, gap formula = {gap_num}",
         ],
-        "adversarial_checks": adversarial_checks,
-        "verdict": verdict,
-        "key_results": {
-            "A1_NE_verified": A1_verified,
-            "A2_CO_verified": A2_verified,
-            "A3_gap_verified": A3_verified,
-            "numerical_crosscheck_passed": all_numerical,
-            "SOC_verified": soc_ind_ok and soc_co_ok,
-        },
-        "generator": {
-            "name": "proof-engine",
-            "version": open(
-                os.path.join(PROOF_ENGINE_ROOT, "VERSION")
-            ).read().strip(),
-            "repo": "https://github.com/yaniv-golan/proof-engine",
-            "generated_at": date.today().isoformat(),
-        },
-    }
+    )
+    builder.add_cross_check(
+        description=(
+            "Second-order conditions verified symbolically "
+            "(strict concavity of individual and joint profit)"
+        ),
+        fact_ids=["A1", "A2"],
+        agreement=soc_ind_ok and soc_co_ok,
+        values_compared=[
+            f"d^2 pi_i/dalpha_i^2 = -kL: {soc_ind_ok}",
+            f"d^2 Pi/dalpha^2 = -NkL: {soc_co_ok}",
+        ],
+    )
 
-    emit_proof_summary(summary)
+    for ac in adversarial_checks:
+        builder.add_adversarial_check(
+            question=ac["question"],
+            verification_performed=ac["verification_performed"],
+            finding=ac["finding"],
+            breaks_proof=ac["breaks_proof"],
+        )
+
+    builder.set_verdict(verdict)
+    builder.set_key_results(
+        A1_NE_verified=A1_verified,
+        A2_CO_verified=A2_verified,
+        A3_gap_verified=A3_verified,
+        numerical_crosscheck_passed=all_numerical,
+        SOC_verified=soc_ind_ok and soc_co_ok,
+    )
+
+    builder.emit()
