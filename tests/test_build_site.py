@@ -15,6 +15,7 @@ _bs_spec.loader.exec_module(_bs_mod)
 compute_stats = _bs_mod.compute_stats
 build_citation_summary = _bs_mod.build_citation_summary
 build_pipeline_example_data = _bs_mod.build_pipeline_example_data
+from tools.lib.latex_utils import strip_latex
 
 
 @pytest.fixture
@@ -1473,3 +1474,199 @@ def test_v2_proof_renders_correctly(site_fixture):
     # Canonical sources table should render
     assert "sources-table" in html
     assert "Academic" in html  # source_type_labels display value
+
+
+# --- Math rendering integration tests ---
+
+
+def test_strip_latex_passthrough_for_plain_claims():
+    """strip_latex must not alter claims without LaTeX delimiters."""
+    claim = "The US dollar has lost 95% of its purchasing power"
+    assert strip_latex(claim) == claim
+
+
+def test_strip_latex_converts_math_claim():
+    """strip_latex converts LaTeX to Unicode for meta/title contexts."""
+    claim = r"The rate \(\alpha_i\) exceeds \(\beta\)"
+    result = strip_latex(claim)
+    assert r"\(" not in result
+    assert "\u03B1" in result  # alpha
+    assert "\u03B2" in result  # beta
+
+
+def test_strip_latex_preserves_currency():
+    """Currency $ signs must not be touched by strip_latex."""
+    claim = "If a company raises $5 million at a $25 million valuation"
+    assert strip_latex(claim) == claim
+
+
+def test_pipeline_example_claim_stripped(tmp_path):
+    """build_pipeline_example_data must strip LaTeX from claim_natural."""
+    slug = "math-proof"
+    proof_dir = tmp_path / "proofs" / slug
+    proof_dir.mkdir(parents=True)
+    (proof_dir / "proof.py").write_text("x = 1\ndef run():\n    compare(a, b)\n")
+    proof = {
+        "slug": slug,
+        "proof_data": {
+            "claim_natural": r"The rate \(\alpha_i\) exceeds threshold",
+            "citations": {
+                "B1": {
+                    "source_name": "Source",
+                    "url": "https://example.com",
+                    "status": "verified",
+                    "method": "full_quote",
+                    "quote": "A supporting quote here",
+                    "credibility": {"source_type": "government"},
+                },
+            },
+            "claim_formal": {
+                "subject": "S", "property": "P",
+                "operator": ">", "threshold": 0,
+            },
+        },
+        "verdict": {"raw": "PROVED", "category": "proved"},
+    }
+    out = build_pipeline_example_data(proof, "/base/", tmp_path / "proofs")
+    assert out is not None
+    assert r"\(" not in out["claim_natural"]
+    assert "\u03B1" in out["claim_natural"]  # alpha converted to Unicode
+
+
+# --- Math-claim fixture: full build integration tests ---
+
+@pytest.fixture
+def site_fixture_math(tmp_path):
+    """Site fixture with a math-containing claim for integration tests."""
+    repo_root = Path(__file__).parent.parent
+    site_src = repo_root / "site"
+
+    shutil.copytree(site_src / "templates", tmp_path / "site" / "templates")
+    shutil.copytree(site_src / "static", tmp_path / "site" / "static")
+    shutil.copytree(site_src / "content", tmp_path / "site" / "content")
+
+    proof_dir = tmp_path / "site" / "proofs" / "math-claim"
+    proof_dir.mkdir(parents=True)
+
+    math_claim = r"The Nash equilibrium rate \(\alpha^{NE}\) exceeds the cooperative rate \(\alpha^{CO}\)"
+
+    (proof_dir / "proof.md").write_text(
+        "# Proof\n\n"
+        "## Evidence Summary\n\n| ID | Fact |\n|---|---|\n| A1 | Verified |\n\n"
+        "## Proof Logic\n\nBy FOC.\n\n"
+        "## Conclusion\n\nThe claim is PROVED.\n"
+    )
+    (proof_dir / "proof_audit.md").write_text(
+        "# Audit\n\n## Claim Specification\n\n| Field | Value |\n|---|---|\n| Subject | Rates |\n\n"
+        "## Claim Interpretation\n\nNash vs cooperative.\n\n"
+        "## Hardening Checklist\n\nAll pass.\n"
+    )
+    (proof_dir / "proof_narrative.md").write_text(
+        "# Proof Narrative: " + math_claim + "\n\n"
+        "## Verdict\n\n"
+        "**Verdict: PROVED**\n\n"
+        "Yes — the Nash equilibrium automation rate exceeds the cooperative optimum "
+        "beyond any reasonable doubt. The algebraic gap is strictly positive. "
+        "The evidence is confirmed across symbolic and numerical verification.\n\n"
+        "## What was claimed?\n\n"
+        "That the Nash rate exceeds the cooperative rate. This matters for policy "
+        "because it shows firms systematically over-automate relative to the social "
+        "optimum when they ignore demand externalities. "
+        "Getting this right affects workforce planning.\n\n"
+        "## What did we find?\n\n"
+        "Symbolic differentiation confirms both FOC solutions. "
+        "The gap is strictly positive for N >= 2. "
+        "Numerical cross-checks at representative parameters agree. "
+        "Second-order conditions verify both are global maxima. "
+        "No parameter regime produces a zero or negative gap. "
+        "The dominant-strategy property means the result is robust. "
+        "Multiple adversarial checks found no issues. "
+        "The demand function stays positive across all feasible profiles. "
+        "Interiority conditions are documented as parameter assumptions. "
+        "Cross-referencing against the theoretical economics literature confirms consistency.\n\n"
+        "## What should you keep in mind?\n\n"
+        "This covers the specific model as stated. "
+        "Different demand structures might yield different results. "
+        "Interiority of solutions is assumed.\n\n"
+        "## How was this verified?\n\n"
+        "Verified through symbolic computation with SymPy. "
+        "See [the structured proof report](proof.md), "
+        "[the full verification audit](proof_audit.md), "
+        "or [re-run the proof yourself](proof.py).\n"
+    )
+    (proof_dir / "proof.py").write_text("# proof script\n")
+    (proof_dir / "proof.json").write_text(json.dumps({
+        "format_version": 2,
+        "fact_registry": {"A1": {"label": "NE rate", "method": "SymPy FOC", "result": "Confirmed"}},
+        "claim_formal": {
+            "subject": "Automation rates", "property": "NE > CO", "operator": ">",
+            "operator_note": "Strictly greater", "threshold": 0,
+        },
+        "claim_natural": math_claim,
+        "verdict": "PROVED",
+        "key_results": {"gap_positive": True},
+        "generator": {
+            "name": "proof-engine", "version": "1.16.0",
+            "repo": "https://github.com/yaniv-golan/proof-engine",
+            "generated_at": "2026-04-16",
+        },
+    }))
+    (proof_dir / "meta.yaml").write_text("tags:\n  - economics\n")
+
+    (proof_dir.parent / "featured.json").write_text(
+        json.dumps(["math-claim"]) + "\n",
+    )
+
+    return tmp_path
+
+
+def test_math_claim_og_title_stripped(site_fixture_math):
+    """OG title for math claims must use strip_latex (no raw LaTeX in meta)."""
+    result = _run_build(site_fixture_math)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture_math / "_site" / "proofs" / "math-claim" / "index.html").read_text()
+    # og:title should have Unicode, not raw LaTeX delimiters
+    import re
+    og_match = re.search(r'og:title"\s+content="([^"]*)"', html)
+    assert og_match, "og:title meta tag not found"
+    og_title = og_match.group(1)
+    assert r"\(" not in og_title, f"og:title contains raw LaTeX: {og_title}"
+    assert "\u03B1" in og_title or "α" in og_title, f"og:title missing Unicode alpha: {og_title}"
+
+
+def test_math_claim_page_title_stripped(site_fixture_math):
+    """<title> for math claims must use strip_latex."""
+    result = _run_build(site_fixture_math)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture_math / "_site" / "proofs" / "math-claim" / "index.html").read_text()
+    import re
+    title_match = re.search(r'<title>(.*?)</title>', html)
+    assert title_match, "<title> tag not found"
+    title = title_match.group(1)
+    assert r"\(" not in title, f"<title> contains raw LaTeX: {title}"
+
+
+def test_math_claim_json_ld_stripped(site_fixture_math):
+    """JSON-LD claimReviewed must use strip_latex."""
+    result = _run_build(site_fixture_math)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture_math / "_site" / "proofs" / "math-claim" / "index.html").read_text()
+    assert '"@type": "ClaimReview"' in html
+    import re
+    cr_match = re.search(r'"claimReviewed":\s*"([^"]*)"', html)
+    assert cr_match, "claimReviewed not found in JSON-LD"
+    claim_reviewed = cr_match.group(1)
+    assert r"\(" not in claim_reviewed, f"claimReviewed contains raw LaTeX: {claim_reviewed}"
+
+
+def test_math_claim_h1_has_raw_latex(site_fixture_math):
+    """The <h1> should keep raw LaTeX delimiters for KaTeX to render."""
+    result = _run_build(site_fixture_math)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture_math / "_site" / "proofs" / "math-claim" / "index.html").read_text()
+    import re
+    h1_match = re.search(r'<h1[^>]*>(.*?)</h1>', html, re.DOTALL)
+    assert h1_match, "<h1> not found"
+    h1 = h1_match.group(1)
+    # h1 should contain raw \( for KaTeX auto-render
+    assert r"\(" in h1 or "\\(" in h1, f"<h1> missing LaTeX delimiters: {h1}"
