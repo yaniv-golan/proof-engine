@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.18.0] - 2026-04-16
+
+### Added
+
+- **KaTeX math rendering** — mathematical notation in proof claims and narratives now renders as typeset math across all site surfaces. Three rendering paths: KaTeX client-side for headings and narrative markdown, `pymdownx.arithmatex` for markdown pipeline protection, and `strip_latex()` Unicode conversion for plain-text surfaces (OG tags, JSON-LD, citations, page titles).
+- **`tools/lib/latex_utils.py`** — `strip_latex()` function converts `\(...\)` LaTeX delimiters to Unicode equivalents (Greek letters, sub/superscripts, operators) for contexts where client-side rendering is unavailable.
+- **`tools/add-latex-to-claims.py`** — interactive script for retroactive conversion of math-heavy proof claims to use LaTeX delimiters. Supports dry-run mode, manual editing, and preserves proof.json/proof.py provenance parity. Skips DOI-backed proofs.
+- **KaTeX v0.16.45 vendored** — self-hosted CSS, JS, auto-render plugin, and 60 font files at `site/static/vendor/katex/`.
+- **`pymdownx.arithmatex`** — integrated into the markdown sanitizer to protect `\(...\)` and `\[...\]` delimiters from markdown processing. Configured with `inline_syntax: ["round"]` and `block_syntax: ["square"]` to avoid `$...$` currency collisions.
+- **Math rendering in catalog** — `renderMathInElement` called after card rendering in both `catalog.js` and `catalog-enhance.js`.
+
+### Changed
+
+- **`tools/build-site.py`** — registers `strip_latex` as a Jinja2 filter; pre-strips `claim_natural` in pipeline example data.
+- **`tools/lib/json_ld.py`** — applies `strip_latex()` to `claimReviewed` field.
+- **`tools/lib/citation.py`** — applies `strip_latex()` to citation claim text.
+- **`site/templates/proof.html`** — `strip_latex` filter on title, OG tags, meta description, and share bar; `<h1>` left raw for KaTeX client-side rendering.
+- **`site/templates/landing.html`** — `strip_latex` filter on myth-card claims and featured proofs data.
+- **CI workflows** — `pymdown-extensions` added to pip install in `validate.yml` (both jobs) and `deploy-site.yml`.
+- **SKILL.md** — added LaTeX delimiter guidance for proof authors.
+
 ## [1.17.0] - 2026-04-16
 
 ### Added
