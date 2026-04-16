@@ -57,6 +57,15 @@
         if (filtered.length === 0) {
             list.innerHTML = '<p class="empty-state">No proofs match your filters.</p>';
         }
+        if (typeof renderMathInElement === "function") {
+            renderMathInElement(list, {
+                delimiters: [
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "\\[", right: "\\]", display: true}
+                ],
+                throwOnError: false
+            });
+        }
     }
 
     function populateTagFilter(allProofs) {

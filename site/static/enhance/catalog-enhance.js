@@ -204,6 +204,16 @@
                 // Render all cards
                 buildCards();
 
+                if (typeof renderMathInElement === "function") {
+                    renderMathInElement(enhancedList, {
+                        delimiters: [
+                            {left: "\\(", right: "\\)", display: false},
+                            {left: "\\[", right: "\\]", display: true}
+                        ],
+                        throwOnError: false
+                    });
+                }
+
                 // Wire filter handlers
                 var search = document.getElementById('search');
                 var verdictFilter = document.getElementById('verdict-filter');
