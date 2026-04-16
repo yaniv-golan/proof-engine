@@ -1,0 +1,88 @@
+{
+  "format_version": 3,
+  "claim_natural": "The binary operator defined by \\(\\text{eml}(a, b) = \\exp(a) - \\ln(b)\\) satisfies \\(\\text{eml}(x, 1) = \\exp(x)\\) for every complex number x.",
+  "claim_formal": {
+    "subject": "Binary operator eml(a, b) = exp(a) - ln(b)",
+    "property": "eml(x, 1) = exp(x) for all complex x",
+    "operator": "==",
+    "operator_note": "The claim follows from ln(1) = 0, which holds in the principal branch of the complex logarithm. Substituting b = 1: eml(x, 1) = exp(x) - ln(1) = exp(x) - 0 = exp(x). This is an algebraic identity, not a limit or approximation. The proof verifies symbolically that exp(x) - ln(1) - exp(x) simplifies to 0 for symbolic x.",
+    "threshold": true,
+    "is_time_sensitive": false
+  },
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "ln(1) = 0 (symbolic verification)",
+      "sub_claim": null,
+      "method": "SymPy symbolic evaluation of ln(1); verify equals 0",
+      "result": "Confirmed: ln(1) = 0",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "eml(x, 1) - exp(x) = 0 (symbolic simplification)",
+      "sub_claim": null,
+      "method": "SymPy symbolic simplification of exp(x) - ln(1) - exp(x); verify result is identically 0 for symbolic x",
+      "result": "Confirmed: residual = 0",
+      "depends_on": [
+        "A1"
+      ]
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Numerical spot-check at 5 complex points",
+      "sub_claim": null,
+      "method": "Numerical evaluation of |eml(x,1) - exp(x)| at x = 0, 1, -3, i*pi, 2+3i using Python cmath; verify all < 1e-15",
+      "result": "Confirmed: max residual = 0.00e+00",
+      "depends_on": []
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Symbolic (A2) vs numerical (A3): symbolic proves identity exactly; numerical confirms at 5 representative complex points",
+      "fact_ids": [
+        "A2",
+        "A3"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does ln(1) = 0 hold for the complex logarithm?",
+      "verification_performed": "The principal branch of the complex logarithm is defined as Log(z) = ln|z| + i*Arg(z) where Arg is the principal argument in (-pi, pi]. For z = 1: |1| = 1, Arg(1) = 0, so Log(1) = ln(1) + i*0 = 0. This holds regardless of branch cut conventions since z = 1 is on the positive real axis.",
+      "finding": "ln(1) = 0 holds universally for the principal branch of the complex logarithm. No branch ambiguity at z = 1.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the operator well-defined for all complex x?",
+      "verification_performed": "eml(x, 1) = exp(x) - ln(1). The exponential function exp(x) is entire (defined for all complex x). ln(1) = 0 is a constant. The subtraction of a constant from an entire function is entire. The only concern would be if b = 0 (since ln(0) is undefined), but the claim fixes b = 1.",
+      "finding": "eml(x, 1) is well-defined for every complex x. The operator eml(a, b) has a singularity at b = 0, but the claim only evaluates at b = 1.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could numerical precision mask a nonzero residual?",
+      "verification_performed": "The symbolic computation uses SymPy's exact symbolic engine, not floating-point arithmetic. simplify(exp(x) - ln(1) - exp(x)) returns exactly 0, not an approximation. The numerical cross-check is supplementary \u2014 the proof rests on the symbolic result.",
+      "finding": "The symbolic residual is exactly 0 \u2014 no numerical precision issue can affect it. Numerical cross-checks confirm agreement to machine epsilon.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "ln_1_equals_zero": true,
+    "symbolic_residual_zero": true,
+    "numerical_crosscheck_passed": true,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.18.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-16"
+  }
+}

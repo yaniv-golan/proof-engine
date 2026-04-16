@@ -1,0 +1,89 @@
+{
+  "format_version": 3,
+  "claim_natural": "The binary operator eml is defined by the expression \\(\\text{eml}(a, b) = \\exp(a) - \\ln(b)\\) (where exp is the exponential function and ln is the principal branch of the natural logarithm). The expression \\(\\text{eml}(1, 1)\\) equals the base of the natural logarithm \\(e\\).",
+  "claim_formal": {
+    "subject": "Binary operator eml(a, b) = exp(a) - ln(b)",
+    "property": "eml(1, 1) = e",
+    "operator": "==",
+    "operator_note": "Substituting a = 1, b = 1: eml(1, 1) = exp(1) - ln(1). exp(1) = e by definition of the exponential function. ln(1) = 0 (principal branch of the complex logarithm: Log(1) = ln|1| + i*Arg(1) = 0 + 0 = 0). Therefore eml(1, 1) = e - 0 = e. This is an exact algebraic identity, not a numerical approximation.",
+    "threshold": true,
+    "is_time_sensitive": false
+  },
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "exp(1) = e (symbolic verification)",
+      "sub_claim": null,
+      "method": "SymPy symbolic evaluation: simplify(exp(1) - E); verify equals 0",
+      "result": "Confirmed: exp(1) = e",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "ln(1) = 0 (symbolic verification)",
+      "sub_claim": null,
+      "method": "SymPy symbolic evaluation of ln(1); verify equals 0",
+      "result": "Confirmed: ln(1) = 0",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "eml(1, 1) - e = 0 (symbolic simplification)",
+      "sub_claim": null,
+      "method": "SymPy symbolic simplification of exp(1) - ln(1) - E; verify result is 0",
+      "result": "Confirmed: residual = 0",
+      "depends_on": [
+        "A1",
+        "A2"
+      ]
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Symbolic (A3) vs numerical: symbolic proves identity exactly; numerical confirms via Python math.e and cmath.exp/cmath.log",
+      "fact_ids": [
+        "A3"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Is exp(1) exactly e, or just an approximation?",
+      "verification_performed": "The exponential function exp is defined such that exp(1) = e by definition. In SymPy, exp(1) returns the symbolic constant E (Euler's number), not a floating-point approximation. The identity exp(1) = e is definitional, not computed.",
+      "finding": "exp(1) = e is exact and definitional. No approximation is involved.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does ln(1) = 0 hold for the complex logarithm?",
+      "verification_performed": "The principal branch of the complex logarithm is defined as Log(z) = ln|z| + i*Arg(z) where Arg is the principal argument in (-pi, pi]. For z = 1: |1| = 1, Arg(1) = 0, so Log(1) = ln(1) + i*0 = 0. This holds regardless of branch cut conventions since z = 1 is on the positive real axis.",
+      "finding": "ln(1) = 0 holds universally for the principal branch of the complex logarithm. No branch ambiguity at z = 1.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could SymPy's simplify() fail to reduce a nonzero expression to zero?",
+      "verification_performed": "For the expression exp(1) - ln(1) - E, SymPy evaluates exp(1) to E and ln(1) to 0 before simplify() is even called. The expression becomes E - 0 - E = 0, which is trivial constant arithmetic. There is no symbolic variable or complex cancellation involved. Additionally, the numerical cross-check confirms the result independently.",
+      "finding": "The simplification is trivial constant folding (E - 0 - E = 0). No risk of simplify() missing a cancellation.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "exp_1_equals_e": true,
+    "ln_1_equals_zero": true,
+    "symbolic_residual_zero": true,
+    "numerical_crosscheck_passed": true,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.18.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-16"
+  }
+}

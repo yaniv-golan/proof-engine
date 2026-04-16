@@ -1,0 +1,106 @@
+{
+  "format_version": 3,
+  "claim_natural": "The binary operator eml is defined by the expression \\(\\text{eml}(a, b) = \\exp(a) - \\ln(b)\\) (where exp is the exponential function and ln is the principal branch of the natural logarithm). For every real \\(x > 0\\), the nested expression \\(\\text{eml}(1, \\text{eml}(\\text{eml}(1, x), 1))\\) equals the natural logarithm \\(\\ln(x)\\).",
+  "claim_formal": {
+    "subject": "Binary operator eml(a, b) = exp(a) - ln(b)",
+    "property": "eml(1, eml(eml(1, x), 1)) = ln(x) for all real x > 0",
+    "operator": "==",
+    "operator_note": "The claim asserts a symbolic identity for the triple nesting of eml. Working inside out: (1) eml(1, x) = exp(1) - ln(x) = e - ln(x). (2) eml(eml(1, x), 1) = exp(e - ln(x)) - ln(1) = exp(e)/x. (3) eml(1, exp(e)/x) = exp(1) - ln(exp(e)/x) = e - (e - ln(x)) = ln(x). The domain restriction x > 0 ensures ln(x) is real-valued. The proof verifies symbolically that the nested expression minus ln(x) simplifies to 0 for symbolic positive x.",
+    "threshold": true,
+    "is_time_sensitive": false
+  },
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "eml(1, x) = e - ln(x) (inner evaluation)",
+      "sub_claim": null,
+      "method": "SymPy symbolic evaluation of eml(1, x) = exp(1) - ln(x) for positive symbol x; verify simplify(result - (E - ln(x))) = 0",
+      "result": "Confirmed: eml(1, x) = e - ln(x)",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "eml(eml(1, x), 1) = exp(e)/x (middle evaluation)",
+      "sub_claim": null,
+      "method": "SymPy symbolic evaluation of eml(eml(1, x), 1) for positive symbol x; verify simplify(result - exp(E)/x) = 0",
+      "result": "Confirmed: eml(eml(1, x), 1) = exp(e)/x",
+      "depends_on": [
+        "A1"
+      ]
+    },
+    "A3": {
+      "type": "computed",
+      "label": "eml(1, eml(eml(1, x), 1)) - ln(x) = 0 (full identity)",
+      "sub_claim": null,
+      "method": "SymPy symbolic evaluation of eml(1, eml(eml(1, x), 1)) for positive symbol x; verify simplify(result - ln(x)) = 0",
+      "result": "Confirmed: full nested expression = ln(x), residual = 0",
+      "depends_on": [
+        "A1",
+        "A2"
+      ]
+    },
+    "A4": {
+      "type": "computed",
+      "label": "Numerical spot-check at 6 positive real points",
+      "sub_claim": null,
+      "method": "Numerical evaluation of eml(1, eml(eml(1, x), 1)) - ln(x) at x = 0.01, 0.5, 1, 2, e, 100 using Python math; verify all < 1e-10",
+      "result": "Confirmed: max |diff| = 8.88e-16",
+      "depends_on": []
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Symbolic (A3) vs numerical (A4): symbolic proves identity exactly for all x > 0; numerical confirms at 6 representative points spanning 4 orders of magnitude",
+      "fact_ids": [
+        "A3",
+        "A4"
+      ],
+      "agreement": true
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does the identity hold at the boundary x -> 0+?",
+      "verification_performed": "As x -> 0+, ln(x) -> -infinity. The inner expression eml(1, x) = e - ln(x) -> +infinity. Then eml(eml(1, x), 1) = exp(e - ln(x)) -> +infinity. Then eml(1, eml(...)) = e - ln(exp(e - ln(x))) = e - (e - ln(x)) = ln(x) -> -infinity. The algebraic identity holds for all x > 0 regardless of how large or small x is; the intermediate values may be extreme, but the cancellations are exact. The numerical test at x = 0.01 confirms this.",
+      "finding": "The identity holds even as x -> 0+. The intermediate expressions diverge, but the final cancellation is algebraically exact.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the identity hold at x -> +infinity?",
+      "verification_performed": "As x -> +infinity, ln(x) -> +infinity. eml(1, x) = e - ln(x) -> -infinity. eml(eml(1, x), 1) = exp(e - ln(x)) -> 0+. eml(1, exp(e - ln(x))) = e - ln(exp(e - ln(x))) = e - (e - ln(x)) = ln(x). Again the algebraic cancellation is exact. The numerical test at x = 100 confirms the identity holds for large x.",
+      "finding": "The identity holds as x -> +infinity. Despite intermediate expressions approaching 0 or -infinity, the cancellation is exact.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is ln(exp(e - ln(x))) = e - ln(x) always valid for x > 0?",
+      "verification_performed": "For real y, ln(exp(y)) = y holds for all real y (the natural logarithm and exponential are inverse functions on the reals). Here y = e - ln(x), which is real for any x > 0. So ln(exp(e - ln(x))) = e - ln(x) without restriction. This step would fail for complex x where branch cuts matter, but the claim restricts to real x > 0.",
+      "finding": "ln(exp(y)) = y holds for all real y. Since the claim restricts to x > 0 (making e - ln(x) real), no branch cut issue arises.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could numerical overflow in exp(e - ln(x)) cause false agreement?",
+      "verification_performed": "For small x (e.g., x = 0.01), e - ln(x) \u2248 2.718 + 4.605 \u2248 7.323, so exp(7.323) \u2248 1512 \u2014 well within float64 range. For very small x (e.g., x = 1e-300), e - ln(x) \u2248 694, and exp(694) \u2248 1e301 \u2014 still representable. Overflow would require x < exp(-exp(709)) which is below the smallest positive float. The symbolic proof does not depend on floating-point at all; the numerical cross-check is supplementary.",
+      "finding": "No overflow risk for representable positive floats. The proof rests on exact symbolic algebra, not numerics.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "inner_evaluation_verified": true,
+    "middle_evaluation_verified": true,
+    "full_identity_verified": true,
+    "numerical_crosscheck_passed": true,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.18.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-16"
+  }
+}
