@@ -16,6 +16,8 @@ For the complex domain, the identity is interpreted as a formal algebraic identi
 
 **Formalization scope:** The formal interpretation is a faithful mapping of the natural-language claim. The token count K = 19 is explicitly verified. The "for all complex x and y" clause is interpreted in the formal algebraic setting, with the principal-branch limitation documented. The expression was constructed analytically (not extracted from the referenced paper) and verified independently. The removable singularity at x = e is documented and verified via limit analysis.
 
+**Attribution:** This result was originally established in R. Cheng, "The elementary function arithmetic," arXiv:2603.21852 (2026). The proof presented here provides independent computational verification using symbolic algebra (SymPy), numerical methods, and exhaustive search, and was developed without reference to the original proof.
+
 *Source: proof.py JSON summary*
 
 ## Claim Specification

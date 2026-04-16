@@ -2,6 +2,7 @@
 
 - **Generated:** 2026-04-16
 - **Verdict:** PROVED
+- **Original result:** R. Cheng, [arXiv:2603.21852](https://arxiv.org/abs/2603.21852) (2026). This proof provides independent computational verification.
 - **Audit trail:** [proof_audit.md](proof_audit.md) | [proof.py](proof.py)
 
 ## Evidence Summary
