@@ -21,11 +21,7 @@ from scripts.computations import compare, explain_calc, cross_check
 # 1. CLAIM INTERPRETATION (Rule 4)
 # ==========================================================================
 
-CLAIM_NATURAL = (
-    "The theoretical vacuum energy density from quantum field theory exceeds "
-    "the observed cosmological-constant value inferred from Type Ia supernovae "
-    "by more than 10^120 orders of magnitude."
-)
+CLAIM_NATURAL = 'The theoretical vacuum energy density from quantum field theory exceeds the observed cosmological-constant value inferred from Type Ia supernovae by more than \\(10^{120}\\) orders of magnitude.'
 
 CLAIM_FORMAL = {
     "subject": "discrepancy between QFT vacuum energy density and observed cosmological constant",

@@ -18,7 +18,7 @@ from scripts.computations import compare
 # ============================================================
 # 1. CLAIM INTERPRETATION (Rule 4)
 # ============================================================
-CLAIM_NATURAL = "The infinite sum from n=1 to infinity of 1/n^2 equals exactly pi^2/6"
+CLAIM_NATURAL = 'The infinite sum from n=1 to infinity of \\(1/n^2\\) equals exactly \\(\\pi^2/6\\)'
 CLAIM_FORMAL = {
     "subject": "sum_{n=1}^{infinity} 1/n^2",
     "property": "exact value as a closed-form expression",

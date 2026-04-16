@@ -7,7 +7,7 @@
     "operator_note": "This is an exact mathematical identity, not an approximation. The sum converges to precisely pi^2/6. We verify this via: (1) symbolic computation confirming the identity exactly, (2) high-precision numerical agreement to 50+ decimal places, and (3) an independent method via Parseval's theorem on Fourier series. Equality is the only appropriate operator for an exact identity.",
     "threshold": "pi**2 / 6"
   },
-  "claim_natural": "The infinite sum from n=1 to infinity of 1/n^2 equals exactly pi^2/6",
+  "claim_natural": "The infinite sum from n=1 to infinity of \\(1/n^2\\) equals exactly \\(\\pi^2/6\\)",
   "evidence": {
     "A1": {
       "type": "computed",

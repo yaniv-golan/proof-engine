@@ -13,7 +13,7 @@ from datetime import date
 from scripts.computations import compare, explain_calc
 
 # 1. CLAIM INTERPRETATION (Rule 4)
-CLAIM_NATURAL = "641 divides 2^{32} + 1 exactly."
+CLAIM_NATURAL = '641 divides \\(2^{32} + 1\\) exactly.'
 CLAIM_FORMAL = {
     "subject": "2^32 + 1 (the fifth Fermat number, F_5)",
     "property": "(2^32 + 1) mod 641",

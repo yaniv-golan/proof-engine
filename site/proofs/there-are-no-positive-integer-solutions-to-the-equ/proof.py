@@ -20,7 +20,7 @@ from scripts.computations import compare
 
 # ── 1. CLAIM INTERPRETATION (Rule 4) ─────────────────────────────────────────
 
-CLAIM_NATURAL = "There are no positive integer solutions to the equation x^4 + y^4 = z^4."
+CLAIM_NATURAL = 'There are no positive integer solutions to the equation \\(x^4 + y^4 = z^4\\).'
 CLAIM_FORMAL = {
     "subject": "the Diophantine equation x^4 + y^4 = z^4",
     "property": "number of positive integer solutions (x, y, z) with x, y, z >= 1",

@@ -18,10 +18,7 @@ from scripts.computations import compare
 # =============================================================================
 # 1. CLAIM INTERPRETATION (Rule 4)
 # =============================================================================
-CLAIM_NATURAL = (
-    "For any triangle with sides a, b, c where a^2 + b^2 = c^2, "
-    "the angle opposite c is exactly 90 degrees, AND the converse also holds."
-)
+CLAIM_NATURAL = 'For any triangle with sides a, b, c where \\(a^2 + b^2 = c^2\\), the angle opposite c is exactly 90 degrees, AND the converse also holds.'
 
 CLAIM_FORMAL = {
     "subject": "Any triangle with sides a, b, c",

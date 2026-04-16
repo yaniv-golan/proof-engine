@@ -17,21 +17,7 @@ from scripts.computations import compare, explain_calc, emit_proof_summary
 # 1. CLAIM INTERPRETATION (Rule 4)
 # ============================================================================
 
-CLAIM_NATURAL = (
-    "Consider a sector with N >= 2 symmetric firms, each endowed with L "
-    "task-positions. Each firm i chooses an automation rate alpha_i in [0,1], "
-    "paying wage w per human-staffed task and cost c per automated task, with "
-    "integration friction cost (k/2)*L*alpha_i^2 where k > 0. Aggregate "
-    "sectoral demand is D = A + lambda*w*L*[N - (1-eta)*sum_j alpha_j], where "
-    "A > 0 is exogenous demand, lambda in (0,1] is workers' marginal propensity "
-    "to consume from wages, and eta in [0,1) is the fraction of displaced wage "
-    "income recovered through reemployment. Each firm's revenue is D/N (equal "
-    "market shares). Define s = w - c > 0 and ell = lambda*(1-eta)*w > 0. "
-    "Each firm i maximizes pi_i = D/N - w*L*(1-alpha_i) - c*L*alpha_i - "
-    "(k/2)*L*alpha_i^2. The Nash equilibrium automation rate is alpha^NE = "
-    "(s - ell/N)/k. The cooperative optimum is alpha^CO = (s - ell)/k. The "
-    "difference alpha^NE - alpha^CO = ell*(1 - 1/N)/k is strictly positive."
-)
+CLAIM_NATURAL = 'Consider a sector with \\(N \\geq 2\\) symmetric firms, each endowed with L task-positions. Each firm i chooses an automation rate \\(\\alpha_i\\) in [0,1], paying wage w per human-staffed task and cost c per automated task, with integration friction cost \\((k/2) \\cdot L \\cdot \\alpha_i^2\\) where \\(k > 0\\). Aggregate sectoral demand is \\(D = A + \\lambda \\cdot w \\cdot L \\cdot [N - (1-\\eta) \\sum_j \\alpha_j]\\), where \\(A > 0\\) is exogenous demand, \\(\\lambda \\in (0,1]\\) is workers\' marginal propensity to consume from wages, and \\(\\eta \\in [0,1)\\) is the fraction of displaced wage income recovered through reemployment. Each firm\'s revenue is \\(D/N\\) (equal market shares). Define \\(s = w - c > 0\\) and \\(\\ell = \\lambda(1-\\eta)w > 0\\). Each firm i maximizes \\(\\pi_i = D/N - wL(1-\\alpha_i) - cL\\alpha_i - (k/2)L\\alpha_i^2\\). The Nash equilibrium automation rate is \\(\\alpha^{NE} = (s - \\ell/N)/k\\). The cooperative optimum is \\(\\alpha^{CO} = (s - \\ell)/k\\). The difference \\(\\alpha^{NE} - \\alpha^{CO} = \\ell \\cdot (1 - 1/N)/k\\) is strictly positive.'
 
 CLAIM_FORMAL = {
     "subject": "Symmetric N-firm automation game with demand externality",
