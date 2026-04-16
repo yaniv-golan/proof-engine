@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from tools.lib.proof_loader import load_all_proofs
 from tools.lib.sanitizer import render_markdown
+from tools.lib.latex_utils import strip_latex
 from tools.lib.section_extractor import extract_sections
 from tools.lib.json_ld import generate_claim_review
 from tools.lib.citation import (
@@ -539,7 +540,7 @@ def build_pipeline_example_data(
     return {
         "slug": slug,
         "proof_url": f"{base_url}proofs/{slug}/",
-        "claim_natural": pd["claim_natural"],
+        "claim_natural": strip_latex(pd["claim_natural"]),
         "claim_formal_summary": formal_summary,
         "sources": sources,
         "citations": cit_rows,
@@ -575,6 +576,7 @@ def main():
     )
     from markupsafe import Markup
     env.filters["fact_tooltips"] = lambda html, tips: Markup(add_fact_tooltips(str(html), tips))
+    env.filters["strip_latex"] = strip_latex
 
     common = {"base_url": base_url, "site_url": site_url}
     stats = compute_stats(proofs)
@@ -823,7 +825,7 @@ def main():
         proof_og_path = output_dir / "proofs" / proof["slug"] / "og-image.png"
         custom_thumb = proofs_dir / proof["slug"] / "thumbnail.png"
         generate_proof_og_image(
-            claim=proof["proof_data"]["claim_natural"],
+            claim=strip_latex(proof["proof_data"]["claim_natural"]),
             verdict_raw=proof["verdict"]["raw"],
             verdict_category=proof["verdict"]["category"],
             citation_count=proof.get("citation_count"),
