@@ -209,7 +209,7 @@
     {% if proof.has_thumbnail %}
     <img class="myth-card-thumb" src="{{ base_url }}proofs/{{ proof.slug }}/thumbnail.png" alt="" width="80" height="80" loading="lazy">
     {% endif %}
-    <div class="myth-card-claim">{{ proof.proof_data.claim_natural }}</div>
+    <div class="myth-card-claim">{{ proof.proof_data.claim_natural | strip_latex }}</div>
     <div class="myth-card-meta">
         {% for tag in proof.tags %}
         <span class="tag">{{ tag }}</span>
@@ -234,7 +234,7 @@ window.FEATURED_PROOFS_DATA = [
 {% for proof in featured_proofs %}
 {
     slug: "{{ proof.slug }}",
-    claim: {{ proof.proof_data.claim_natural | tojson }},
+    claim: {{ proof.proof_data.claim_natural | strip_latex | tojson }},
     verdict: {{ proof.verdict.raw | tojson }},
     verdict_category: "{{ proof.verdict.category }}",
     filter_value: "{{ proof.verdict.filter_value }}",
