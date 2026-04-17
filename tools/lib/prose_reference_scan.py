@@ -265,7 +265,14 @@ _SENTENCE_END_RE = regex.compile(r'[.!?]\s{1,2}$')
 def boundary_check_ok(text: str, match_start: int) -> tuple[bool, str]:
     """Reject matches whose preceding 32 chars contain an unconsumed
     initial, particle, or given name (rev-8 partial-match defense).
+
+    If the match itself starts with an initial (e.g., ``R.``) or a longer
+    capitalized given name, we know the author prefix was consumed, so we
+    skip the check — a preceding lowercase word would be an English stop
+    word (``in``, ``by``, ``on``), not an unconsumed surname particle.
     """
+    if regex.match(r'\p{Lu}\.', text[match_start:match_start + 3]):
+        return True, ""
     preceding = text[max(0, match_start - 32):match_start]
     if _BOUNDARY_PARTICLE_RE.search(preceding):
         return False, (
@@ -389,7 +396,11 @@ def pass2_attribution_check(
         start = max(0, hit.span[0] - window)
         end = min(len(text), hit.span[1] + window)
         window_text = text[start:end]
-        m = ATTRIB_PATTERN.search(window_text)
+        m = None
+        for candidate in ATTRIB_PATTERN.finditer(window_text):
+            if candidate.group("title"):
+                m = candidate
+                break
         if m is None:
             continue
         match_start_in_text = start + m.start("authors")
@@ -403,7 +414,7 @@ def pass2_attribution_check(
             for e in errs:
                 errors.append(VerifyError(file, _line_of(text, match_start_in_text), e,
                                            (match_start_in_text, match_start_in_text + len(m.group("authors")))))
-        if m.group("title") and not check_title_jaccard(m.group("title"), ref.title):
+        if not check_title_jaccard(m.group("title"), ref.title):
             errors.append(VerifyError(
                 file, _line_of(text, match_start_in_text),
                 f"prose title {m.group('title')!r} does not match resolved {ref.title!r}",

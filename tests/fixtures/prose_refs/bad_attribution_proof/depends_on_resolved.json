@@ -1,0 +1,15 @@
+{
+  "arxiv:2603.21852": {
+    "identifier_type": "arxiv",
+    "identifier_value": "2603.21852",
+    "canonical_url": "https://arxiv.org/abs/2603.21852",
+    "title": "All elementary functions from a single binary operator",
+    "authors": ["Andrzej Odrzywo\u0142ek"],
+    "year": 2026,
+    "venue": "arXiv preprint",
+    "version": "v2",
+    "resolved_at": "2026-04-17T00:00:00Z",
+    "source_api": "export.arxiv.org/api/query",
+    "raw": {}
+  }
+}

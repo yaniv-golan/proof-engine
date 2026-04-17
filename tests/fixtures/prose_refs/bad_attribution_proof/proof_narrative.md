@@ -1,0 +1,3 @@
+## Narrative
+
+Based on arXiv:2603.21852, this proof shows...
