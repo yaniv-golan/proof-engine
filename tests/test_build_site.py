@@ -1670,3 +1670,52 @@ def test_math_claim_h1_has_raw_latex(site_fixture_math):
     h1 = h1_match.group(1)
     # h1 should contain raw \( for KaTeX auto-render
     assert r"\(" in h1 or "\\(" in h1, f"<h1> missing LaTeX delimiters: {h1}"
+
+
+def test_build_mirrors_depends_on_into_proof_json(site_fixture):
+    import yaml
+    target_meta = site_fixture / "site" / "proofs" / "test-claim" / "meta.yaml"
+    meta = yaml.safe_load(target_meta.read_text()) or {}
+    meta["depends_on"] = [
+        {"relation": "References",
+         "identifiers": [{"type": "arxiv", "value": "2603.21852"}]},
+    ]
+    target_meta.write_text(yaml.dump(meta, sort_keys=False))
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    built = json.loads(
+        (site_fixture / "_site" / "proofs" / "test-claim" / "proof.json").read_text()
+    )
+    assert "depends_on" in built
+    assert built["depends_on"][0]["identifiers"][0]["type"] == "arxiv"
+
+
+def test_build_emits_cff_and_codemeta(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    cff = site_fixture / "_site" / "proofs" / "test-claim" / "CITATION.cff"
+    cm = site_fixture / "_site" / "proofs" / "test-claim" / "codemeta.json"
+    assert cff.exists()
+    assert cm.exists()
+    import yaml
+    parsed = yaml.safe_load(cff.read_text())
+    assert parsed["cff-version"] == "1.2.0"
+    payload = json.loads(cm.read_text())
+    assert payload["@type"] == "SoftwareSourceCode"
+
+
+def test_build_validate_repo_fails_loudly(site_fixture):
+    """If a meta.yaml has an unresolved slug, the build must abort."""
+    import yaml
+    target_meta = site_fixture / "site" / "proofs" / "test-claim" / "meta.yaml"
+    meta = yaml.safe_load(target_meta.read_text()) or {}
+    meta["depends_on"] = [
+        {"relation": "IsDerivedFrom",
+         "identifiers": [{"type": "slug", "value": "phantom"}]},
+    ]
+    target_meta.write_text(yaml.dump(meta, sort_keys=False))
+
+    result = _run_build(site_fixture)
+    assert result.returncode != 0
+    assert "phantom" in (result.stdout + result.stderr)

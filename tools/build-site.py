@@ -21,7 +21,10 @@ from tools.lib.section_extractor import extract_sections
 from tools.lib.json_ld import generate_claim_review
 from tools.lib.citation import (
     build_citation_context, generate_bibtex, generate_ris, generate_cite_txt,
-    generate_apa, generate_chicago,
+    generate_apa, generate_chicago, build_cff, build_codemeta,
+)
+from tools.lib.depends_on import (
+    PREREQUISITE_RELATIONS, validate_repo, build_reverse_index,
 )
 
 SITE_GENERATOR_VERSION = "1.0.0"
@@ -53,6 +56,78 @@ Every proof published on this site includes a downloadable `proof.py` script. To
 
 The proof is self-contained: it fetches sources, verifies citations, runs computations, and prints the result. If the verdict matches what's published here, the proof is independently confirmed. Some proofs cite paywalled sources via local snapshot files — if those files are absent when you re-run, the affected citations will show as unverified but the computation and remaining citations still run.
 """
+
+
+_RELATION_HUMANIZED = {
+    "IsDerivedFrom": "is derived from",
+    "Requires": "requires",
+    "Continues": "continues",
+    "IsNewVersionOf": "is a new version of",
+    "References": "references",
+    "IsSupplementTo": "supplements",
+    "IsCitedBy": "is cited by",
+    "Cites": "cites",
+    "Documents": "documents",
+    "IsObsoletedBy": "is obsoleted by",
+    "Obsoletes": "obsoletes",
+    "Reviews": "reviews",
+}
+
+
+def _identifier_href(ident, base_url: str):
+    if ident.type == "slug":
+        return f"{base_url}proofs/{ident.value}/"
+    if ident.type == "doi":
+        return f"https://doi.org/{ident.value}"
+    if ident.type == "arxiv":
+        return f"https://arxiv.org/abs/{ident.value}"
+    if ident.type == "swhid":
+        return f"https://archive.softwareheritage.org/{ident.value}"
+    if ident.type == "handle":
+        return f"https://hdl.handle.net/{ident.value}"
+    if ident.type == "url":
+        return ident.value
+    return None
+
+
+def _identifier_label(ident, proofs_by_slug: dict) -> str:
+    if ident.type == "slug":
+        upstream = proofs_by_slug.get(ident.value)
+        if upstream:
+            claim = upstream["proof_data"].get("claim_natural", ident.value)
+            return claim if len(claim) <= 100 else claim[:97] + "..."
+        return ident.value
+    if ident.type == "doi":
+        return f"doi:{ident.value}"
+    if ident.type == "arxiv":
+        return f"arXiv:{ident.value}"
+    if ident.type == "swhid":
+        return ident.value[:24] + "..."
+    if ident.type == "handle":
+        return f"hdl:{ident.value}"
+    if ident.type == "url":
+        return ident.value if len(ident.value) <= 60 else ident.value[:57] + "..."
+    if ident.type == "isbn":
+        return f"ISBN {ident.value}"
+    return ident.value
+
+
+def _render_depends_on_entry(entry, proofs_by_slug: dict, base_url: str) -> dict:
+    """Build the view model for one depends_on entry (used by proof.html)."""
+    rendered_ids = []
+    for ident in entry.identifiers:
+        rendered_ids.append({
+            "type": ident.type,
+            "value": ident.value,
+            "href": _identifier_href(ident, base_url),
+            "label": _identifier_label(ident, proofs_by_slug),
+        })
+    return {
+        "relation": entry.relation,
+        "relation_humanized": _RELATION_HUMANIZED.get(entry.relation, entry.relation),
+        "note": entry.note,
+        "identifiers": rendered_ids,
+    }
 
 
 def parse_args():
@@ -570,6 +645,13 @@ def main():
     proofs_dir = site_dir / "proofs"
     proofs = load_all_proofs(proofs_dir) if proofs_dir.exists() else []
 
+    if proofs_dir.exists():
+        validate_repo(proofs_dir)
+        reverse_index = build_reverse_index(proofs_dir)
+    else:
+        reverse_index = {}
+    proofs_by_slug = {p["slug"]: p for p in proofs}
+
     env = Environment(
         loader=FileSystemLoader(str(site_dir / "templates")),
         autoescape=select_autoescape(["html"]),
@@ -666,6 +748,40 @@ def main():
         write_file(proof_out / "cite.ris", ris_str)
         write_file(proof_out / "cite.txt", generate_cite_txt(citation_ctx))
 
+        # depends_on view models for the proof page.
+        depends_on_entries = proof.get("depends_on", []) or []
+        builds_on_block = []
+        related_block = []
+        for entry in depends_on_entries:
+            has_slug = any(i.type == "slug" for i in entry.identifiers)
+            is_prereq = entry.relation in PREREQUISITE_RELATIONS
+            target = builds_on_block if (has_slug and is_prereq) else related_block
+            target.append(_render_depends_on_entry(
+                entry, proofs_by_slug=proofs_by_slug, base_url=base_url,
+            ))
+        used_by = []
+        for citer_slug in reverse_index.get(proof["slug"], []):
+            citer = proofs_by_slug.get(citer_slug)
+            if citer is None:
+                continue
+            used_by.append({
+                "slug": citer_slug,
+                "url": f"{base_url}proofs/{citer_slug}/",
+                "title": citer["proof_data"]["claim_natural"],
+            })
+
+        # CITATION.cff and codemeta.json.
+        write_file(
+            proof_out / "CITATION.cff",
+            build_cff(citation_ctx, depends_on_entries,
+                      base_url=base_url, site_url=site_url),
+        )
+        write_file(
+            proof_out / "codemeta.json",
+            build_codemeta(citation_ctx, depends_on_entries,
+                           base_url=base_url, site_url=site_url),
+        )
+
         # Pre-rendered citation strings for the template
         citation_formats = {
             "apa": apa_str,
@@ -692,6 +808,9 @@ def main():
             citation_formats=citation_formats,
             source_type_labels=_SOURCE_TYPE_DISPLAY_LABELS,
             fact_tooltips=tooltips,
+            builds_on=builds_on_block,
+            related_work=related_block,
+            used_by=used_by,
         ))
         shutil.copy2(src_dir / "proof.py", proof_out / "proof.py")
         shutil.copy2(src_dir / "proof_audit.md", proof_out / "proof_audit.md")
@@ -708,6 +827,16 @@ def main():
             "cite_bib_url": f"{base_url}proofs/{proof['slug']}/cite.bib",
             "cite_ris_url": f"{base_url}proofs/{proof['slug']}/cite.ris",
         }
+        augmented["depends_on"] = [
+            {
+                "relation": e.relation,
+                "identifiers": [
+                    {"type": i.type, "value": i.value} for i in e.identifiers
+                ],
+                "note": e.note,
+            }
+            for e in depends_on_entries
+        ]
         write_file(proof_out / "proof.json", json.dumps(augmented, indent=2, default=str))
 
         # PROV-JSON
