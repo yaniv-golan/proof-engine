@@ -197,11 +197,12 @@ def test_canonical_url_in_landing_page(site_fixture):
 
 
 def test_landing_page_has_verdict_summary_in_featured_data(site_fixture):
-    """FEATURED_PROOFS_DATA entries include verdict_summary."""
+    """Featured myth cards render a per-proof verdict summary."""
     result = _run_build(site_fixture)
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     html = (site_fixture / "_site" / "index.html").read_text()
-    assert "verdict_summary" in html
+    assert 'class="pev2-myth-sum"' in html
+    assert "see full proof for details" in html or "PROVED" in html
 
 
 def test_build_pipeline_example_data_with_citations(tmp_path):

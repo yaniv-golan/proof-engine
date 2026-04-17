@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Proof Engine — AI That Proves Instead of Asserts{% endblock %}
+{% block title %}Proof Engine — AI that proves instead of asserts{% endblock %}
 
 {% block meta_description %}Open-source AI skill that verifies claims through code and live sources — not by asking the LLM to check itself. Every fact cited, every calculation re-runnable.{% endblock %}
+
+{% block body_attrs %} class="landing-v2"{% endblock %}
 
 {% block head_extra %}
 <script type="application/ld+json">
@@ -14,247 +16,696 @@
     "description": "Open-source AI skill that verifies claims through code and live sources — not by asking the LLM to check itself. Every fact cited, every calculation re-runnable."
 }
 </script>
+<style>
+body.landing-v2{
+  --pev2-bg:#0a0e14; --pev2-bg-card:#10151c; --pev2-bg-alt:#0d1218;
+  --pev2-border:#1f2937; --pev2-border-subtle:#141b24;
+  --pev2-text:#e6edf3; --pev2-text-2:#9ca3af; --pev2-text-mute:#6b7785;
+  --pev2-link:#60a5fa; --pev2-accent:#7ee787; --pev2-accent-dim:#4a8e52;
+  --pev2-green:#238636; --pev2-green-bg:#0b2819; --pev2-green-text:#6ee7b7;
+  --pev2-red:#da3633; --pev2-red-bg:#2a0e0e; --pev2-red-text:#fca5a5;
+  --pev2-amber:#d29922; --pev2-amber-bg:#2a1f08; --pev2-amber-text:#fde68a;
+  --pev2-blue:#1f6feb; --pev2-blue-bg:#0e1c33; --pev2-blue-text:#93c5fd;
+  --pev2-mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --pev2-serif:Georgia,'Times New Roman', serif;
+  --pev2-sans:-apple-system, BlinkMacSystemFont,'Segoe UI', Helvetica, Arial, sans-serif;
+  --pev2-max:1080px;
+
+  background:var(--pev2-bg);
+  color:var(--pev2-text);
+  font-family:var(--pev2-mono);
+  font-size:14px;
+  line-height:1.55;
+  margin:0;
+}
+body.landing-v2 *{box-sizing:border-box}
+body.landing-v2 a{color:var(--pev2-link);text-decoration:none}
+body.landing-v2 a:hover{text-decoration:underline}
+body.landing-v2 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+body.landing-v2 ::selection{background:var(--pev2-accent);color:#000}
+body.landing-v2 .content{display:block}
+
+/* nav */
+body.landing-v2 .pev2-nav{border-bottom:1px solid var(--pev2-border-subtle)}
+body.landing-v2 .pev2-nav-inner{max-width:var(--pev2-max);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:14px 24px}
+body.landing-v2 .pev2-logo{font-weight:700;font-size:13px;color:var(--pev2-accent);letter-spacing:0.02em}
+body.landing-v2 .pev2-nav-links{display:flex;gap:22px;font-size:12px;align-items:center}
+body.landing-v2 .pev2-nav-links a{color:var(--pev2-text-mute)}
+body.landing-v2 .pev2-nav-links a:hover{color:var(--pev2-text);text-decoration:none}
+body.landing-v2 .pev2-nav-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--pev2-text-mute)}
+body.landing-v2 .pev2-nav-status:hover{color:var(--pev2-text);text-decoration:none}
+body.landing-v2 .pev2-nav-dot{width:6px;height:6px;border-radius:50%;background:var(--pev2-accent);box-shadow:0 0 8px var(--pev2-accent)}
+
+/* layout */
+body.landing-v2 .pev2-wrap{max-width:var(--pev2-max);margin:0 auto;padding:0 24px}
+body.landing-v2 .pev2-wrap section{padding:72px 0}
+body.landing-v2 .pev2-wrap section + section{border-top:1px solid var(--pev2-border-subtle)}
+body.landing-v2 .pev2-eyebrow{font-size:10px;color:var(--pev2-accent);text-transform:uppercase;letter-spacing:2.5px;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+body.landing-v2 .pev2-eyebrow::before{content:"";display:block;width:20px;height:1px;background:var(--pev2-accent)}
+body.landing-v2 .pev2-section-title{font-size:22px;font-weight:500;letter-spacing:-0.01em;margin-bottom:8px;font-family:var(--pev2-sans)}
+body.landing-v2 .pev2-section-sub{color:var(--pev2-text-2);font-size:13px;max-width:640px;margin-bottom:36px}
+
+/* HERO */
+body.landing-v2 .pev2-hero{padding:64px 0 48px;position:relative}
+body.landing-v2 .pev2-hero-grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:start}
+@media(min-width:880px){body.landing-v2 .pev2-hero-grid{grid-template-columns:1fr 1.05fr;gap:56px}}
+body.landing-v2 .pev2-hero-lede{max-width:520px}
+body.landing-v2 .pev2-hero-tag{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--pev2-accent);display:flex;align-items:center;gap:10px;margin-bottom:22px}
+body.landing-v2 .pev2-hero-tag::before{content:"";width:22px;height:1px;background:var(--pev2-accent)}
+body.landing-v2 .pev2-hero-h1{font-family:var(--pev2-sans);font-weight:500;font-size:44px;line-height:1.08;letter-spacing:-0.022em;margin-bottom:20px}
+body.landing-v2 .pev2-hero-h1 .strike{position:relative;color:var(--pev2-text-2);white-space:nowrap}
+body.landing-v2 .pev2-hero-h1 .strike::after{content:"";position:absolute;left:-2px;right:-2px;top:52%;height:2px;background:var(--pev2-red);transform:rotate(-2deg)}
+body.landing-v2 .pev2-hero-h1 em{font-style:normal;color:var(--pev2-accent)}
+body.landing-v2 .pev2-hero-sub{color:var(--pev2-text-2);font-size:14px;line-height:1.65;margin-bottom:26px;font-family:var(--pev2-sans)}
+body.landing-v2 .pev2-hero-sub code{color:var(--pev2-text);background:var(--pev2-bg-card);padding:1px 6px;border-radius:3px;font-size:12px;font-family:var(--pev2-mono)}
+body.landing-v2 .pev2-hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+body.landing-v2 .pev2-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:0.02em;font-family:var(--pev2-mono)}
+body.landing-v2 .pev2-btn-primary{background:var(--pev2-accent);color:#000}
+body.landing-v2 .pev2-btn-primary:hover{background:#a2f0a8;text-decoration:none}
+body.landing-v2 .pev2-btn-ghost{border:1px solid var(--pev2-border);color:var(--pev2-text)}
+body.landing-v2 .pev2-btn-ghost:hover{border-color:var(--pev2-accent);color:var(--pev2-accent);text-decoration:none}
+body.landing-v2 .pev2-hero-meta{font-size:11px;color:var(--pev2-text-mute);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+body.landing-v2 .pev2-hero-meta strong{color:var(--pev2-text);font-weight:700}
+body.landing-v2 .pev2-hero-meta-sep{color:var(--pev2-border)}
+
+/* exhibit */
+body.landing-v2 .pev2-exhibit{
+  background:var(--pev2-bg-card);
+  border:1px solid var(--pev2-border);
+  border-radius:8px;
+  font-size:12px;
+  overflow:hidden;
+  box-shadow:0 0 0 1px rgba(126,231,135,0.04), 0 30px 60px -30px rgba(126,231,135,0.10);
+}
+body.landing-v2 .pev2-exhibit-bar{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;
+  border-bottom:1px solid var(--pev2-border);
+  background:var(--pev2-bg-alt);
+  font-size:10px;color:var(--pev2-text-mute);letter-spacing:1.5px;text-transform:uppercase;
+}
+body.landing-v2 .pev2-exhibit-bar .dots{display:flex;gap:5px}
+body.landing-v2 .pev2-exhibit-bar .dots span{width:8px;height:8px;border-radius:50%;background:var(--pev2-border)}
+body.landing-v2 .pev2-exhibit-bar .dots span:nth-child(1){background:#3a1112}
+body.landing-v2 .pev2-exhibit-bar .dots span:nth-child(2){background:#3a2a08}
+body.landing-v2 .pev2-exhibit-bar .dots span:nth-child(3){background:#0e2a13}
+body.landing-v2 .pev2-exhibit-bar .path{margin-left:auto;color:var(--pev2-text-mute);font-size:10px}
+body.landing-v2 .pev2-exhibit-body{padding:16px 18px;font-size:12.5px;line-height:1.7}
+body.landing-v2 .pev2-trace-line{display:flex;gap:10px;padding:3px 0;opacity:1}
+body.landing-v2 .pev2-exhibit.play .pev2-trace-line{opacity:0;animation:pev2FadeIn .4s ease forwards}
+body.landing-v2 .pev2-trace-line .t{color:var(--pev2-text-mute);min-width:46px}
+body.landing-v2 .pev2-trace-line .prompt{color:var(--pev2-accent);min-width:14px}
+body.landing-v2 .pev2-trace-line .tag-run{background:var(--pev2-blue-bg);color:var(--pev2-blue-text);padding:0 6px;border-radius:2px;font-size:10px;letter-spacing:1px}
+body.landing-v2 .pev2-trace-line .tag-ok{background:var(--pev2-green-bg);color:var(--pev2-green-text);padding:0 6px;border-radius:2px;font-size:10px;letter-spacing:1px}
+body.landing-v2 .pev2-trace-line .tag-fail{background:var(--pev2-red-bg);color:var(--pev2-red-text);padding:0 6px;border-radius:2px;font-size:10px;letter-spacing:1px}
+body.landing-v2 .pev2-trace-line .v{color:var(--pev2-text)}
+body.landing-v2 .pev2-trace-line .dim{color:var(--pev2-text-mute)}
+body.landing-v2 .pev2-trace-line .num{color:var(--pev2-amber-text)}
+body.landing-v2 .pev2-trace-line .ok{color:var(--pev2-green-text)}
+body.landing-v2 .pev2-trace-line .bad{color:var(--pev2-red-text)}
+body.landing-v2 .pev2-trace-line .q{color:var(--pev2-text-2);font-style:italic}
+body.landing-v2 .pev2-trace-verdict{
+  margin-top:12px;padding:10px 14px;
+  background:linear-gradient(180deg,var(--pev2-red-bg),transparent);
+  border:1px solid var(--pev2-red);border-radius:4px;
+  display:flex;align-items:center;gap:12px;
+  opacity:1
+}
+body.landing-v2 .pev2-exhibit.play .pev2-trace-verdict{opacity:0;animation:pev2FadeIn .4s ease forwards;animation-delay:2.5s}
+body.landing-v2 .pev2-trace-verdict .stamp{
+  font-size:10px;font-weight:700;letter-spacing:2px;
+  background:var(--pev2-red);color:#fff;padding:4px 10px;border-radius:2px
+}
+body.landing-v2 .pev2-trace-verdict .note{font-size:11px;color:var(--pev2-red-text);line-height:1.5}
+body.landing-v2 .pev2-trace-verdict .note b{color:#fff}
+@keyframes pev2FadeIn{to{opacity:1}}
+body.landing-v2 .pev2-exhibit.play .pev2-trace-line:nth-child(1){animation-delay:.1s}
+body.landing-v2 .pev2-exhibit.play .pev2-trace-line:nth-child(2){animation-delay:.35s}
+body.landing-v2 .pev2-exhibit.play .pev2-trace-line:nth-child(3){animation-delay:.65s}
+body.landing-v2 .pev2-exhibit.play .pev2-trace-line:nth-child(4){animation-delay:.95s}
+body.landing-v2 .pev2-exhibit.play .pev2-trace-line:nth-child(5){animation-delay:1.2s}
+body.landing-v2 .pev2-exhibit.play .pev2-trace-line:nth-child(6){animation-delay:1.5s}
+body.landing-v2 .pev2-exhibit.play .pev2-trace-line:nth-child(7){animation-delay:1.8s}
+body.landing-v2 .pev2-exhibit.play .pev2-trace-line:nth-child(8){animation-delay:2.1s}
+body.landing-v2 .pev2-cursor{display:inline-block;width:7px;height:13px;background:var(--pev2-accent);vertical-align:middle;margin-left:2px;animation:pev2Blink 1s steps(2) infinite}
+@keyframes pev2Blink{50%{opacity:0}}
+
+/* rail */
+body.landing-v2 .pev2-rail{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--pev2-border-subtle);
+  border-bottom:1px solid var(--pev2-border-subtle);
+  margin-top:52px
+}
+body.landing-v2 .pev2-rail-cell{padding:22px 18px;border-right:1px solid var(--pev2-border-subtle)}
+body.landing-v2 .pev2-rail-cell:last-child{border-right:0}
+body.landing-v2 .pev2-rail-n{font-size:30px;font-weight:500;color:var(--pev2-accent);letter-spacing:-0.02em;font-family:var(--pev2-sans)}
+body.landing-v2 .pev2-rail-l{font-size:10px;color:var(--pev2-text-mute);text-transform:uppercase;letter-spacing:2px;margin-top:4px}
+@media(max-width:720px){body.landing-v2 .pev2-rail{grid-template-columns:repeat(2,1fr)}body.landing-v2 .pev2-rail-cell:nth-child(2){border-right:0}}
+
+/* PIPELINE */
+body.landing-v2 .pev2-pipe{display:grid;grid-template-columns:80px 1fr;gap:0}
+body.landing-v2 .pev2-pipe-step{display:contents}
+body.landing-v2 .pev2-pipe-num{
+  position:relative;padding:18px 16px 28px 0;text-align:right;
+  border-right:1px solid var(--pev2-border-subtle)
+}
+body.landing-v2 .pev2-pipe-num .n{font-size:10px;color:var(--pev2-text-mute);letter-spacing:2px}
+body.landing-v2 .pev2-pipe-num .glyph{font-size:22px;color:var(--pev2-accent);margin-top:6px;line-height:1}
+body.landing-v2 .pev2-pipe-body{padding:18px 0 28px 24px;border-bottom:1px dashed var(--pev2-border-subtle)}
+body.landing-v2 .pev2-pipe-step:last-child .pev2-pipe-body,
+body.landing-v2 .pev2-pipe-step:last-child .pev2-pipe-num{border-bottom:0}
+body.landing-v2 .pev2-pipe-step:last-child .pev2-pipe-num{padding-bottom:0}
+body.landing-v2 .pev2-pipe-step:last-child .pev2-pipe-body{padding-bottom:0}
+body.landing-v2 .pev2-pipe-title{font-size:14px;color:var(--pev2-text);margin-bottom:4px;display:flex;align-items:baseline;gap:10px}
+body.landing-v2 .pev2-pipe-title .tag-type{font-size:9px;letter-spacing:1.5px;color:var(--pev2-text-mute);border:1px solid var(--pev2-border);padding:1px 6px;border-radius:2px;text-transform:uppercase}
+body.landing-v2 .pev2-pipe-desc{color:var(--pev2-text-2);font-size:12.5px;line-height:1.65;margin-bottom:10px;max-width:620px}
+body.landing-v2 .pev2-pipe-shell{
+  background:var(--pev2-bg-alt);border:1px solid var(--pev2-border-subtle);border-radius:4px;
+  padding:10px 12px;font-size:11.5px;color:var(--pev2-text-2);overflow-x:auto
+}
+body.landing-v2 .pev2-pipe-shell .p{color:var(--pev2-accent)}
+body.landing-v2 .pev2-pipe-shell .k{color:var(--pev2-blue-text)}
+body.landing-v2 .pev2-pipe-shell .s{color:var(--pev2-amber-text)}
+body.landing-v2 .pev2-pipe-shell .c{color:var(--pev2-text-mute)}
+body.landing-v2 .pev2-pipe-shell .ok{color:var(--pev2-green-text)}
+body.landing-v2 .pev2-pipe-shell .bad{color:var(--pev2-red-text)}
+
+/* COMPARATOR */
+body.landing-v2 .pev2-cmp{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:760px){body.landing-v2 .pev2-cmp{grid-template-columns:1fr 1fr;gap:20px}}
+body.landing-v2 .pev2-cmp-col{border:1px solid var(--pev2-border);border-radius:8px;background:var(--pev2-bg-card);padding:22px;position:relative}
+body.landing-v2 .pev2-cmp-col.bad{border-color:rgba(218,54,51,0.35)}
+body.landing-v2 .pev2-cmp-col.good{border-color:rgba(126,231,135,0.35)}
+body.landing-v2 .pev2-cmp-label{
+  position:absolute;top:-9px;left:16px;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  padding:2px 8px;border-radius:2px;background:var(--pev2-bg);
+}
+body.landing-v2 .pev2-cmp-col.bad .pev2-cmp-label{color:var(--pev2-red-text);border:1px solid var(--pev2-red)}
+body.landing-v2 .pev2-cmp-col.good .pev2-cmp-label{color:var(--pev2-accent);border:1px solid var(--pev2-accent)}
+body.landing-v2 .pev2-cmp-title{font-size:12px;color:var(--pev2-text-mute);margin-bottom:14px;text-transform:uppercase;letter-spacing:1.5px}
+body.landing-v2 .pev2-cmp-quote{font-family:var(--pev2-serif);font-size:15px;line-height:1.55;color:var(--pev2-text);margin-bottom:14px;padding-left:12px;border-left:2px solid var(--pev2-border)}
+body.landing-v2 .pev2-cmp-col.good .pev2-cmp-quote{border-left-color:var(--pev2-accent)}
+body.landing-v2 .pev2-cmp-evidence{font-size:12px;color:var(--pev2-text-2);line-height:1.65}
+body.landing-v2 .pev2-cmp-evidence ul{list-style:none;padding:0;margin-top:8px}
+body.landing-v2 .pev2-cmp-evidence li{display:flex;gap:10px;padding:4px 0;align-items:baseline}
+body.landing-v2 .pev2-cmp-evidence li::before{content:"—";color:var(--pev2-text-mute);flex-shrink:0}
+body.landing-v2 .pev2-cmp-evidence code{color:var(--pev2-accent);font-size:11px}
+body.landing-v2 .pev2-cmp-flag{display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:3px 8px;border-radius:2px;margin-top:14px}
+body.landing-v2 .pev2-cmp-flag.bad{background:var(--pev2-red-bg);color:var(--pev2-red-text)}
+body.landing-v2 .pev2-cmp-flag.good{background:var(--pev2-green-bg);color:var(--pev2-green-text)}
+
+/* MYTHS */
+body.landing-v2 .pev2-mythbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+body.landing-v2 .pev2-mythbar .hint{font-size:11px;color:var(--pev2-text-mute)}
+body.landing-v2 .pev2-mythbar .hint kbd{border:1px solid var(--pev2-border);padding:1px 5px;border-radius:2px;font-size:10px;background:var(--pev2-bg-alt);color:var(--pev2-text-2);font-family:var(--pev2-mono)}
+body.landing-v2 .pev2-myth-filters{display:flex;gap:4px}
+body.landing-v2 .pev2-myth-filters button{font-size:11px;padding:4px 10px;border:1px solid var(--pev2-border-subtle);border-radius:3px;color:var(--pev2-text-mute);font-family:var(--pev2-mono)}
+body.landing-v2 .pev2-myth-filters button[data-active="true"]{border-color:var(--pev2-accent);color:var(--pev2-accent)}
+body.landing-v2 .pev2-myths{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+body.landing-v2 .pev2-myth{
+  position:relative;
+  border:1px solid var(--pev2-border);
+  background:var(--pev2-bg-card);
+  border-radius:6px;padding:18px;
+  cursor:pointer;overflow:hidden;
+  transition:border-color .15s, transform .15s;
+  text-align:left;display:block;color:inherit;
+}
+body.landing-v2 .pev2-myth:hover{border-color:var(--pev2-accent);transform:translateY(-1px);text-decoration:none}
+body.landing-v2 .pev2-myth-dom{font-size:9px;letter-spacing:2px;color:var(--pev2-text-mute);text-transform:uppercase;margin-bottom:12px}
+body.landing-v2 .pev2-myth-claim{font-family:var(--pev2-serif);font-size:14.5px;line-height:1.45;color:var(--pev2-text);margin-bottom:14px;min-height:66px}
+body.landing-v2 .pev2-myth-ver{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+body.landing-v2 .pev2-v-pill{
+  font-size:9px;font-weight:700;letter-spacing:1.5px;
+  padding:3px 8px;border-radius:2px;font-family:var(--pev2-mono);
+}
+body.landing-v2 .pev2-v-pill.hidden{background:transparent;color:var(--pev2-text-mute);border:1px dashed var(--pev2-border)}
+body.landing-v2 .pev2-v-pill.proved{background:var(--pev2-green);color:#000}
+body.landing-v2 .pev2-v-pill.disproved{background:var(--pev2-red);color:#fff}
+body.landing-v2 .pev2-v-pill.partial{background:var(--pev2-amber);color:#000}
+body.landing-v2 .pev2-v-pill.supported{background:var(--pev2-blue);color:#fff}
+body.landing-v2 .pev2-v-pill.undetermined{background:transparent;color:var(--pev2-text-mute);border:1px solid var(--pev2-border)}
+body.landing-v2 .pev2-myth-sum{font-size:11.5px;color:var(--pev2-text-2);margin-top:8px;line-height:1.55;display:none}
+body.landing-v2 .pev2-myth.revealed .pev2-myth-sum{display:block}
+body.landing-v2 .pev2-myth.revealed .pev2-v-pill.hidden{display:none}
+body.landing-v2 .pev2-myth:not(.revealed) .pev2-v-pill:not(.hidden){display:none}
+body.landing-v2 .pev2-myth.revealed[data-v="disproved"]{border-color:var(--pev2-red);background:linear-gradient(180deg,rgba(218,54,51,0.06),var(--pev2-bg-card))}
+body.landing-v2 .pev2-myth.revealed[data-v="proved"]{border-color:var(--pev2-accent);background:linear-gradient(180deg,rgba(126,231,135,0.06),var(--pev2-bg-card))}
+body.landing-v2 .pev2-myth.revealed[data-v="partial"]{border-color:var(--pev2-amber);background:linear-gradient(180deg,rgba(210,153,34,0.06),var(--pev2-bg-card))}
+body.landing-v2 .pev2-myth.revealed[data-v="supported"]{border-color:var(--pev2-blue);background:linear-gradient(180deg,rgba(31,111,235,0.06),var(--pev2-bg-card))}
+body.landing-v2 .pev2-myth-read{font-size:10px;color:var(--pev2-accent);margin-top:10px;display:none;letter-spacing:1px;text-transform:uppercase}
+body.landing-v2 .pev2-myth.revealed .pev2-myth-read{display:inline-block}
+
+/* WHY */
+body.landing-v2 .pev2-why{display:grid;grid-template-columns:1fr;gap:28px}
+@media(min-width:760px){body.landing-v2 .pev2-why{grid-template-columns:1.2fr 1fr;gap:48px;align-items:start}}
+body.landing-v2 .pev2-why-body p{color:var(--pev2-text-2);font-size:14px;line-height:1.75;margin-bottom:14px;font-family:var(--pev2-sans)}
+body.landing-v2 .pev2-why-body p em{color:var(--pev2-text);font-style:italic}
+body.landing-v2 .pev2-why-body .pq{
+  margin:20px 0;padding:14px 16px;
+  border-left:2px solid var(--pev2-accent);background:rgba(126,231,135,0.04);
+  font-family:var(--pev2-serif);font-size:14.5px;color:var(--pev2-text);font-style:italic
+}
+body.landing-v2 .pev2-why-card{
+  background:var(--pev2-bg-card);border:1px solid var(--pev2-border);border-radius:8px;
+  padding:22px;font-size:12px
+}
+body.landing-v2 .pev2-why-card .ax{font-size:10px;letter-spacing:2px;color:var(--pev2-text-mute);text-transform:uppercase;margin-bottom:12px}
+body.landing-v2 .pev2-why-card .eq{font-family:var(--pev2-serif);font-size:14px;color:var(--pev2-text);line-height:1.7;margin-bottom:4px}
+body.landing-v2 .pev2-why-card .eq s{color:var(--pev2-red-text);text-decoration:none;position:relative}
+body.landing-v2 .pev2-why-card .eq s::after{content:"";position:absolute;inset:50% -1px auto -1px;height:1px;background:var(--pev2-red-text)}
+body.landing-v2 .pev2-why-card hr{border:0;border-top:1px dashed var(--pev2-border);margin:16px 0}
+body.landing-v2 .pev2-why-card .ax-out{color:var(--pev2-accent);font-size:11px;letter-spacing:1.5px}
+
+/* SCOPE */
+body.landing-v2 .pev2-scope{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:760px){body.landing-v2 .pev2-scope{grid-template-columns:1fr 1fr;gap:24px}}
+body.landing-v2 .pev2-scope-col{border:1px solid var(--pev2-border-subtle);border-radius:8px;padding:22px;background:var(--pev2-bg-card)}
+body.landing-v2 .pev2-scope-col.ok{border-color:rgba(126,231,135,0.2)}
+body.landing-v2 .pev2-scope-col.no{border-color:rgba(218,54,51,0.15)}
+body.landing-v2 .pev2-scope-h{font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+body.landing-v2 .pev2-scope-col.ok .pev2-scope-h{color:var(--pev2-accent)}
+body.landing-v2 .pev2-scope-col.no .pev2-scope-h{color:var(--pev2-red-text)}
+body.landing-v2 .pev2-scope-h::before{content:"";display:block;width:16px;height:1px;background:currentColor}
+body.landing-v2 .pev2-scope-col ul{list-style:none;padding:0}
+body.landing-v2 .pev2-scope-col li{padding:12px 0;border-bottom:1px solid var(--pev2-border-subtle);display:grid;grid-template-columns:18px 1fr;gap:12px;font-size:12.5px;line-height:1.6;color:var(--pev2-text-2)}
+body.landing-v2 .pev2-scope-col li:last-child{border-bottom:0}
+body.landing-v2 .pev2-scope-col li strong{color:var(--pev2-text);display:block;margin-bottom:4px;font-weight:700}
+body.landing-v2 .pev2-scope-col li > div{min-width:0}
+body.landing-v2 .pev2-scope-col.ok li::before{content:"+";color:var(--pev2-accent);font-weight:700;text-align:center}
+body.landing-v2 .pev2-scope-col.no li::before{content:"−";color:var(--pev2-red-text);font-weight:700;text-align:center}
+
+/* ARTIFACTS */
+body.landing-v2 .pev2-artifacts{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:760px){body.landing-v2 .pev2-artifacts{grid-template-columns:repeat(2,1fr);gap:14px}}
+body.landing-v2 .pev2-art{
+  display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;
+  padding:14px 18px;border:1px solid var(--pev2-border-subtle);border-radius:6px;
+  background:var(--pev2-bg-card);transition:border-color .15s
+}
+body.landing-v2 .pev2-art:hover{border-color:var(--pev2-accent)}
+body.landing-v2 .pev2-art-glyph{font-size:18px;color:var(--pev2-accent);text-align:center}
+body.landing-v2 .pev2-art-name{font-size:13px;color:var(--pev2-text);margin-bottom:2px}
+body.landing-v2 .pev2-art-desc{font-size:11.5px;color:var(--pev2-text-2);line-height:1.5}
+body.landing-v2 .pev2-art-ext{font-size:10px;color:var(--pev2-text-mute);letter-spacing:1.5px}
+
+/* INSTALL */
+body.landing-v2 .pev2-install{
+  border:1px solid var(--pev2-accent);background:linear-gradient(180deg,rgba(126,231,135,0.04),transparent);
+  border-radius:8px;padding:36px 32px
+}
+body.landing-v2 .pev2-install-h{font-family:var(--pev2-sans);font-size:26px;font-weight:500;letter-spacing:-0.015em;line-height:1.15;margin-bottom:10px}
+body.landing-v2 .pev2-install-h em{color:var(--pev2-accent);font-style:normal}
+body.landing-v2 .pev2-install-p{color:var(--pev2-text-2);font-size:13px;margin-bottom:18px;max-width:560px;font-family:var(--pev2-sans)}
+body.landing-v2 .pev2-install-ctas{display:flex;gap:10px;flex-wrap:wrap}
+
+/* FOOTER */
+body.landing-v2 .pev2-foot{padding:40px 0;border-top:1px solid var(--pev2-border-subtle)}
+body.landing-v2 .pev2-foot-inner{display:flex;justify-content:space-between;gap:20px;font-size:11px;color:var(--pev2-text-mute);flex-wrap:wrap}
+body.landing-v2 .pev2-foot-links{display:flex;gap:18px}
+body.landing-v2 .pev2-foot-links a{color:var(--pev2-text-mute)}
+
+/* A11Y: focus rings + reduced motion */
+body.landing-v2 a:focus-visible,
+body.landing-v2 button:focus-visible,
+body.landing-v2 .pev2-myth:focus-visible,
+body.landing-v2 .pev2-btn:focus-visible{outline:2px solid var(--pev2-accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){
+  body.landing-v2 *,
+  body.landing-v2 *::before,
+  body.landing-v2 *::after{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important}
+  body.landing-v2 .pev2-cursor{animation:none}
+}
+</style>
+{% endblock %}
+
+{% block nav %}
+<nav class="pev2-nav">
+  <div class="pev2-nav-inner">
+    <a href="{{ base_url }}" class="pev2-logo">⟨proof-engine⟩</a>
+    <div class="pev2-nav-links">
+      <a href="{{ base_url }}methodology/">methodology</a>
+      <a href="{{ base_url }}catalog/">catalog</a>
+      <a href="#install">install</a>
+      <a href="{{ base_url }}submit/">submit</a>
+      {% if version %}
+      <a class="pev2-nav-status" href="https://github.com/yaniv-golan/proof-engine/releases" target="_blank" rel="noopener noreferrer" title="latest release"><span class="pev2-nav-dot"></span><span>v{{ version }}</span></a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
 {% endblock %}
 
 {% block content %}
-<div class="hero">
-    <h1>Every fact cited, every calculation re-runnable</h1>
-    <p class="hero-subtitle">// AI that proves instead of asserts</p>
+<div class="pev2-wrap">
 
-    <div id="hero-demo-container"></div>
+<!-- HERO -->
+<section class="pev2-hero">
+  <div class="pev2-hero-grid">
+    <div class="pev2-hero-lede">
+      <div class="pev2-hero-tag">exhibit A / live</div>
+      <h1 class="pev2-hero-h1">
+        LLMs <span class="strike">assert</span>.<br>
+        Proof Engine <em>proves</em>.
+      </h1>
+      <p class="pev2-hero-sub">
+        An open-source skill that makes every factual claim carry its receipts.
+        Numbers get computed in Python. Quotes get fetched from live URLs and
+        matched against the page. A fabricated citation fails the match — and
+        the verdict downgrades so the gap is visible instead of hidden.
+      </p>
+      <div class="pev2-hero-cta">
+        <a class="pev2-btn pev2-btn-primary" href="#install" onclick="gtag('event','cta_click',{cta_label:'install_skill_hero'})">install the skill →</a>
+        <a class="pev2-btn pev2-btn-ghost" href="{{ base_url }}catalog/" onclick="gtag('event','cta_click',{cta_label:'browse_proofs'})">browse {{ stats.total }} proofs</a>
+      </div>
+      <div class="pev2-hero-meta">
+        <span><strong>{{ stats.total }}</strong> proofs</span>
+        <span class="pev2-hero-meta-sep">·</span>
+        <span><strong>{{ stats.tags_count }}</strong> domains</span>
+        <span class="pev2-hero-meta-sep">·</span>
+        <span><strong>{{ stats.total_sources_checked }}</strong> sources checked</span>
+        <span class="pev2-hero-meta-sep">·</span>
+        <span>MIT · auditable · re-runnable</span>
+      </div>
+    </div>
 
-    <div class="stats">
-        <div class="stat">
-            <div class="stat-value">{{ stats.total }}</div>
-            <div class="stat-label">Proofs</div>
+    <aside class="pev2-exhibit" aria-label="Live proof trace">
+      <div class="pev2-exhibit-bar">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <span>proof.py — trace</span>
+        <span class="path">napoleon-bonaparte-stood-shorter.../</span>
+      </div>
+      <div class="pev2-exhibit-body">
+        <div class="pev2-trace-line"><span class="t">00:00</span><span class="prompt">›</span><span class="v">claim := <span class="q">"Napoleon was shorter than the average Frenchman"</span></span></div>
+        <div class="pev2-trace-line"><span class="t">00:12</span><span class="tag-run">FETCH</span><span class="v">britannica.com/biography/Napoleon <span class="dim">— 200 OK</span></span></div>
+        <div class="pev2-trace-line"><span class="t">00:14</span><span class="tag-run">FETCH</span><span class="v">aafp.org/historical-heights-france <span class="dim">— 200 OK</span></span></div>
+        <div class="pev2-trace-line"><span class="t">00:18</span><span class="tag-ok">MATCH</span><span class="v">B1 <span class="dim">"5 feet 6 inches (168 cm)"</span> <span class="ok">verified ✓</span></span></div>
+        <div class="pev2-trace-line"><span class="t">00:21</span><span class="tag-ok">MATCH</span><span class="v">B2 <span class="dim">avg French male ≈ 164.1 cm (1800s)</span> <span class="ok">verified ✓</span></span></div>
+        <div class="pev2-trace-line"><span class="t">00:23</span><span class="prompt">›</span><span class="v"><span class="dim">compute</span>: 168 &gt; 164.1 → <span class="num">True</span></span></div>
+        <div class="pev2-trace-line"><span class="t">00:23</span><span class="prompt">›</span><span class="v"><span class="dim">claim holds?</span> <span class="bad">False</span></span></div>
+        <div class="pev2-trace-line"><span class="t">00:24</span><span class="prompt">›</span><span class="v"><span class="dim">return verdict</span><span class="pev2-cursor"></span></span></div>
+        <div class="pev2-trace-verdict">
+          <span class="stamp">DISPROVED</span>
+          <span class="note"><b>Napoleon was taller</b> than the era's average Frenchman by ~3.9 cm. 2 citations verified, 1 computation re-runnable.</span>
         </div>
-        <div class="stat">
-            <div class="stat-value">{{ stats.tags_count }}</div>
-            <div class="stat-label">Domains</div>
-        </div>
-        <div class="stat">
-            <div class="stat-value">{{ stats.total_sources_checked }}</div>
-            <div class="stat-label">Sources checked</div>
-        </div>
-    </div>
-    <p class="hero-trust">open source · auditable · re-runnable</p>
-    <div class="cta-row">
-        <a href="{{ base_url }}catalog/" class="cta" onclick="gtag('event','cta_click',{cta_label:'browse_proofs'})">browse proofs</a>
-    </div>
-    <div class="cta-links">
-        <a href="https://github.com/yaniv-golan/proof-engine#installation" rel="nofollow" onclick="gtag('event','cta_click',{cta_label:'install_skill'})">install the Claude skill →</a>
-        <a href="{{ base_url }}submit/#ai-agents" onclick="gtag('event','cta_click',{cta_label:'ai_agents'})">build AI agents that prove →</a>
-    </div>
-</div>
+      </div>
+    </aside>
+  </div>
 
-<section class="landing-pipeline-section">
-    <h2 class="section-heading" id="pipeline-heading">how it works</h2>
-    <div id="pipeline-static" class="pipeline">
-        <div class="pipeline-step">
-            <div class="pipeline-icon">?</div>
-            <div>
-                <div class="pipeline-label">claim</div>
-                <div class="pipeline-desc">any factual assertion — from viral myths to mathematical theorems</div>
-            </div>
-        </div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-step">
-            <div class="pipeline-icon">⌕</div>
-            <div>
-                <div class="pipeline-label">fetch sources</div>
-                <div class="pipeline-desc">academic papers, government data, reference encyclopedias</div>
-            </div>
-        </div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-step">
-            <div class="pipeline-icon">✓</div>
-            <div>
-                <div class="pipeline-label">verify quotes</div>
-                <div class="pipeline-desc">fetch each URL, match the exact quote on the live page</div>
-            </div>
-        </div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-step">
-            <div class="pipeline-icon">▶</div>
-            <div>
-                <div class="pipeline-label">run proof.py</div>
-                <div class="pipeline-desc">executable Python — calculations you can re-run yourself</div>
-            </div>
-        </div>
-        <div class="pipeline-arrow">→</div>
-        <div class="pipeline-step">
-            <div class="pipeline-icon">∎</div>
-            <div>
-                <div class="pipeline-label">verdict</div>
-                <div class="pipeline-desc">proved, disproved, or partial — with full audit trail</div>
-            </div>
-        </div>
-    </div>
-    <div id="pipeline-interactive" hidden></div>
+  <div class="pev2-rail">
+    <div class="pev2-rail-cell"><div class="pev2-rail-n">{{ stats.total }}</div><div class="pev2-rail-l">Proofs</div></div>
+    <div class="pev2-rail-cell"><div class="pev2-rail-n">{{ stats.tags_count }}</div><div class="pev2-rail-l">Domains</div></div>
+    <div class="pev2-rail-cell"><div class="pev2-rail-n">{{ stats.total_sources_checked }}</div><div class="pev2-rail-l">Sources checked</div></div>
+    <div class="pev2-rail-cell"><div class="pev2-rail-n">100%</div><div class="pev2-rail-l">Re-runnable</div></div>
+  </div>
 </section>
 
-<section class="landing-outputs-section">
-    <h2 class="section-heading">what every proof includes</h2>
-    <div class="outputs-grid">
-        <div class="outputs-col">
-            <h3>core artifacts</h3>
-            <ul>
-                <li><strong>proof.py</strong> — re-runnable verification script</li>
-                <li><strong>proof.md</strong> — structured report with verdict</li>
-                <li><strong>proof_audit.md</strong> — citation-by-citation evidence trail</li>
-                <li><strong>proof_narrative.md</strong> — plain-language summary</li>
-            </ul>
-        </div>
-        <div class="outputs-col">
-            <h3>machine-readable formats</h3>
-            <ul>
-                <li><span class="output-symbol">⬡</span> <strong>Jupyter Notebook</strong> — interactive re-verification</li>
-                <li><span class="output-symbol">⟳</span> <strong>W3C PROV-JSON</strong> — provenance chain for pipelines</li>
-                <li><span class="output-symbol">⧉</span> <strong>RO-Crate 1.1</strong> — research object for archival</li>
-            </ul>
-        </div>
+<!-- WHY -->
+<section id="why">
+  <div class="pev2-eyebrow">§01 · premise</div>
+  <h2 class="pev2-section-title">The witness cannot corroborate itself.</h2>
+  <p class="pev2-section-sub">LLMs hallucinate facts <em>and</em> hallucinate the checks on those facts. Asking one to verify its own answer runs the same error-prone process twice.</p>
+  <div class="pev2-why">
+    <div class="pev2-why-body">
+      <p>Search-grounded AI finds pages, but still lets the model summarize them. A link says "the evidence is over there." A proof says: <em>here is the evidence, here is the code that checked it, here is what happened when it ran</em>.</p>
+      <p>Proof Engine routes every claim through a gate the LLM can't fake. Python doesn't hallucinate. A fabricated citation fails to match live page text. A partial match downgrades the verdict so the gap is visible — instead of smoothed away by a confident summary.</p>
+      <div class="pq">The LLM is an untrusted author. Every claim it makes passes through a deterministic checkpoint. When it hallucinates, the pipeline breaks visibly instead of hiding the error.</div>
+      <p>The model still does useful work: it drafts code, finds sources, formalizes claims. It just doesn't get to <em>be</em> the verification.</p>
     </div>
+    <div class="pev2-why-card">
+      <div class="ax">The circular check</div>
+      <div class="eq">LLM(<s>LLM(claim)</s>) ≠ proof</div>
+      <hr>
+      <div class="ax">The proof pipeline</div>
+      <div class="eq">fetch(url) ∘ match(quote) ∘ compute(python) → <span style="color:var(--pev2-accent)">verdict</span></div>
+      <div class="ax-out" style="margin-top:12px">— deterministic, replayable, breakable</div>
+    </div>
+  </div>
 </section>
 
-<section class="landing-why-section">
-    <h2 class="section-heading">why this exists</h2>
-    <div class="why-content">
-        <p class="why-lead">
-            LLMs hallucinate facts <em>and</em> hallucinate the checks on those facts.
-            Ask an LLM to verify its own claim and it runs the same error-prone process
-            again — the check is circular. "Double-checking" with an LLM is like asking
-            the same witness to corroborate their own testimony.
-        </p>
-        <p>
-            Proof Engine breaks the circle by routing every claim through a gate the LLM
-            can't fake. Numbers are computed by Python — Python doesn't hallucinate.
-            Quotes are fetched from live URLs and matched against the actual page text — a
-            fabricated citation fails the match, and a partial match downgrades the verdict
-            so the gap is visible. Constants come from reviewed, version-controlled
-            code — not from the LLM's memory.
-        </p>
-        <blockquote class="why-pullquote">
-            The design principle: when the LLM hallucinates, the error breaks visibly
-            rather than hiding.
-        </blockquote>
-        <p>
-            The LLM is useful: it finds sources, writes code, formalizes claims. But it is
-            never trusted to <em>be</em> the verification. It is an untrusted author whose
-            every claim must pass through a deterministic checkpoint. When it hallucinates,
-            the pipeline breaks visibly instead of hiding the error.
-        </p>
+<!-- PIPELINE -->
+<section id="pipeline">
+  <div class="pev2-eyebrow">§02 · how it works</div>
+  <h2 class="pev2-section-title">Five steps. No LLM in the verification path.</h2>
+  <p class="pev2-section-sub">Each step produces an artifact that survives independently of the model that drafted it. You can re-run the whole pipeline from source, offline, in Python.</p>
+
+  <div class="pev2-pipe">
+    <div class="pev2-pipe-step">
+      <div class="pev2-pipe-num"><div class="n">01</div><div class="glyph">?</div></div>
+      <div class="pev2-pipe-body">
+        <div class="pev2-pipe-title">claim <span class="tag-type">input</span></div>
+        <div class="pev2-pipe-desc">Any factual assertion — a viral myth, a stat, a mathematical identity, a VC pitch-deck number. The LLM decomposes it into sub-claims (SC1, SC2…) and extractable facts (B1, B2, A1…).</div>
+        <div class="pev2-pipe-shell"><span class="c"># from a session</span><br><span class="p">›</span> <span class="k">claim</span> = <span class="s">"0.999… &lt; 1"</span><br><span class="p">›</span> <span class="k">decompose</span>(claim) → [SC1: <span class="s">"0.999 repeating equals 1"</span>]</div>
+      </div>
     </div>
+
+    <div class="pev2-pipe-step">
+      <div class="pev2-pipe-num"><div class="n">02</div><div class="glyph">⌕</div></div>
+      <div class="pev2-pipe-body">
+        <div class="pev2-pipe-title">fetch sources <span class="tag-type">network</span></div>
+        <div class="pev2-pipe-desc">Academic papers, government data, reference encyclopedias — never the model's memory. Every URL goes in the audit trail with HTTP status, fetch mode (<code style="color:var(--pev2-text)">live</code>, <code style="color:var(--pev2-text)">wayback</code>, <code style="color:var(--pev2-text)">snapshot</code>), and credibility tier.</div>
+        <div class="pev2-pipe-shell"><span class="p">›</span> <span class="k">fetch</span>(<span class="s">"planck.esa.int/2018-legacy"</span>) → <span class="ok">200</span> <span class="c">// tier-1 · academic</span></div>
+      </div>
+    </div>
+
+    <div class="pev2-pipe-step">
+      <div class="pev2-pipe-num"><div class="n">03</div><div class="glyph">✓</div></div>
+      <div class="pev2-pipe-body">
+        <div class="pev2-pipe-title">verify quotes <span class="tag-type">text match</span></div>
+        <div class="pev2-pipe-desc">Each quoted sentence must appear on the live page, modulo Unicode/HTML normalization. Partial matches downgrade the verdict. Fabricated citations break the pipeline visibly, with coverage percentages in the audit log.</div>
+        <div class="pev2-pipe-shell"><span class="p">›</span> <span class="k">match</span>(quote=<span class="s">"Ω_Λ = 0.6853 ± 0.0074"</span>, page) → <span class="ok">verified</span> <span class="c">// 100% word coverage</span></div>
+      </div>
+    </div>
+
+    <div class="pev2-pipe-step">
+      <div class="pev2-pipe-num"><div class="n">04</div><div class="glyph">▶</div></div>
+      <div class="pev2-pipe-body">
+        <div class="pev2-pipe-title">run proof.py <span class="tag-type">python</span></div>
+        <div class="pev2-pipe-desc">Deterministic computation. <code style="color:var(--pev2-text)">sympy</code> for exact math, <code style="color:var(--pev2-text)">numpy</code> for quantitative, every constant version-controlled. Anyone can <code style="color:var(--pev2-text)">python proof.py</code> and see the same result.</div>
+        <div class="pev2-pipe-shell"><span class="p">›</span> <span class="k">compare</span>(omega_lambda, threshold=<span class="s">0.68</span>, op=<span class="s">"&gt;"</span>) → <span class="ok">True</span><br><span class="p">›</span> <span class="k">assert</span> <span class="s">"0.6853 &gt; 0.68"</span> <span class="c"># holds</span></div>
+      </div>
+    </div>
+
+    <div class="pev2-pipe-step">
+      <div class="pev2-pipe-num"><div class="n">05</div><div class="glyph">∎</div></div>
+      <div class="pev2-pipe-body">
+        <div class="pev2-pipe-title">verdict <span class="tag-type">output</span></div>
+        <div class="pev2-pipe-desc">Structured outcome: <code style="color:var(--pev2-accent)">PROVED</code>, <code style="color:var(--pev2-red-text)">DISPROVED</code>, <code style="color:var(--pev2-amber-text)">PARTIAL</code>, <code style="color:var(--pev2-blue-text)">SUPPORTED</code>, or <code style="color:var(--pev2-text-2)">UNDETERMINED</code>. Every verdict ships with a Jupyter notebook, PROV-JSON provenance chain, and an RO-Crate 1.1 archive bundle.</div>
+        <div class="pev2-pipe-shell"><span class="p">›</span> <span class="k">verdict</span>: <span class="ok">PROVED</span> <span class="c">// Ω_Λ = 0.6853 &gt; 0.68 — confirmed</span></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="landing-limits-section">
-    <h2 class="section-heading">what it can and can't do</h2>
-    <div class="limits-grid">
-        <div class="limits-col limits-good">
-            <h3>works well for</h3>
-            <ul>
-                <li><strong>Factual claims with verifiable evidence</strong> — dates, numbers, quotes, statistics from citable sources</li>
-                <li><strong>Mathematical assertions</strong> — anything Python and sympy can compute deterministically</li>
-                <li><strong>Debunking or confirming specific claims</strong> — "Did X really say Y?" or "Is statistic Z accurate?"</li>
-                <li><strong>Compound claims</strong> — decomposes "X and Y" into independently verified sub-claims</li>
-            </ul>
-        </div>
-        <div class="limits-col limits-bad">
-            <h3>doesn't work for</h3>
-            <ul>
-                <li><strong>Causal claims</strong> — "X caused Y" gets PARTIALLY VERIFIED at best; the engine verifies facts but can't weigh competing causal theories</li>
-                <li><strong>Broad literature synthesis</strong> — "coffee reduces diabetes risk" requires a systematic review, not a proof</li>
-                <li><strong>JavaScript-rendered pages</strong> — citation verification degrades when the source requires a browser to render</li>
-                <li><strong>Absence-of-evidence</strong> — search-based facts reach SUPPORTED at best, never PROVED; the engine can't prove something doesn't exist</li>
-                <li><strong>Contested definitions</strong> — "Is a hot dog a sandwich?" depends on the definition, not evidence</li>
-                <li><strong>Deep original mathematics</strong> — the engine isn't a theorem prover; it handles computations, not novel conjectures</li>
-            </ul>
-        </div>
+<!-- COMPARATOR -->
+<section id="compare">
+  <div class="pev2-eyebrow">§03 · the difference</div>
+  <h2 class="pev2-section-title">"Why not just ask the model?"</h2>
+  <p class="pev2-section-sub">Same claim, same sources, two radically different artifacts. The one on the left is a confident summary. The one on the right is a re-runnable script with a trace.</p>
+  <div class="pev2-cmp">
+    <div class="pev2-cmp-col bad">
+      <span class="pev2-cmp-label">typical LLM</span>
+      <div class="pev2-cmp-title">prompt: "does using AI tools make humans worse at critical thinking?"</div>
+      <div class="pev2-cmp-quote">"The claim is too absolute to confirm or deny cleanly. The real picture appears to be that passive, over-reliant use degrades critical thinking, while active, interrogative use can augment it — making the unqualified 'makes humans worse' framing false as a universal statement."</div>
+      <div class="pev2-cmp-evidence">
+        <ul>
+          <li>hedges into unfalsifiability — "too absolute," "context-dependent"</li>
+          <li>names one 2025 study without a URL, quote, or coverage check</li>
+          <li>invokes "cognitive-offloading theory" without citing a source</li>
+          <li>concludes "false as a universal statement" — but no universal was claimed</li>
+          <li>a second ask re-runs the same mechanism; the hedge persists</li>
+        </ul>
+      </div>
+      <span class="pev2-cmp-flag bad">✗ plausible-sounding · zero provenance</span>
     </div>
-</section>
-
-<section class="landing-comparison-section">
-    <h2 class="section-heading">how is this different?</h2>
-    <div class="comparison-content">
-        <p><strong>"Why not just ask ChatGPT to check?"</strong>
-        Because the check uses the same mechanism that produced the error.
-        If the LLM hallucinated a fact, asking it to verify the fact just
-        hallucination-checks the hallucination. Proof Engine moves verification
-        out of the LLM entirely — into Python code and live page fetches that
-        either pass or fail mechanically.</p>
-
-        <p><strong>"Why not use Perplexity / search-grounded AI?"</strong>
-        Search-grounded tools find relevant pages but still let the LLM
-        summarize and interpret what's on those pages. Proof Engine goes further:
-        it fetches the URL, matches the quoted text against the live page (after
-        normalizing Unicode and HTML), and extracts values from the matched text
-        programmatically. If the match is only partial, the verdict downgrades to
-        flag it. The difference is between "the LLM read a source and told you
-        what it said" and "here's the code that fetched the source, checked the
-        text, and reported what matched — run it yourself."</p>
-
-        <p><strong>"Why not just link to sources like Wikipedia?"</strong>
-        A link says "the evidence is over there." A proof says "here's the evidence,
-        here's the code that checked it, and here's what happened when it ran."
-        Every proof is a re-runnable Python script. You don't have to trust the
-        summary — you can execute it.</p>
+    <div class="pev2-cmp-col good">
+      <span class="pev2-cmp-label">proof engine</span>
+      <div class="pev2-cmp-title">same claim → verdict + audit trail</div>
+      <div class="pev2-cmp-quote">PROVED — four independent research groups, different institutions and methods, reach the same association: AI tool use correlates with measurable drops in critical-thinking scores.</div>
+      <div class="pev2-cmp-evidence">
+        <ul>
+          <li><code>B1</code> Gerlich 2025, n=666 — negative correlation (r=-0.68), cognitive offloading (quote-verified)</li>
+          <li><code>B2</code> Lee et al. 2025 (Microsoft Research / CHI), n=319 knowledge workers — confidence ↑ → critical effort ↓ (quote-verified)</li>
+          <li><code>B3</code> Harvard Gazette 2025 — faculty cross-discipline panel, same concern (quote-verified)</li>
+          <li><code>B4</code> Jose et al. 2025 (Frontiers / PMC) — ChatGPT users solved 48% more problems but scored 17% lower on concept tests (quote-verified)</li>
+          <li>verdict qualifier in the record: <em>correlation, not proven causation; routine use &gt; high-stakes use</em></li>
+        </ul>
+      </div>
+      <div style="margin-top:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span class="pev2-cmp-flag good">✓ 4 sources verified · consensus threshold met · re-runnable</span>
+        <a href="{{ base_url }}proofs/using-ai-tools-makes-humans-worse-at-critical-thin/" style="font-size:11px;color:var(--pev2-accent);letter-spacing:1px;text-transform:uppercase" onclick="gtag('event','cta_click',{cta_label:'comparator_read_proof'})">read the full proof →</a>
+      </div>
     </div>
+  </div>
 </section>
 
 {% if featured_proofs %}
-<h2 class="section-heading">think you know the answer?</h2>
-<p class="myth-subtext">Hover to reveal verdicts. Click to read the full proof.</p>
-<div id="myth-container">
-{% for proof in featured_proofs %}
-<article class="myth-card{% if proof.has_thumbnail %} myth-card-has-thumb{% endif %}" data-proof-url="{{ base_url }}proofs/{{ proof.slug }}/" data-verdict-category="{{ proof.verdict.category }}" data-filter-value="{{ proof.verdict.filter_value }}">
-    {% if proof.has_thumbnail %}
-    <img class="myth-card-thumb" src="{{ base_url }}proofs/{{ proof.slug }}/thumbnail.png" alt="" width="80" height="80" loading="lazy">
-    {% endif %}
-    <div class="myth-card-claim">{{ proof.proof_data.claim_natural | strip_latex }}</div>
-    <div class="myth-card-meta">
-        {% for tag in proof.tags %}
-        <span class="tag">{{ tag }}</span>
-        {% endfor %}
+<!-- MYTHS -->
+<section id="myths">
+  <div class="pev2-eyebrow">§04 · exhibit room</div>
+  <h2 class="pev2-section-title">Think you know the answer?</h2>
+  <p class="pev2-section-sub">{{ featured_proofs|length }} claims, verdicts redacted. Tap a card to reveal what the pipeline actually found. Every one of them is a re-runnable Python script in the catalog.</p>
+
+  <div class="pev2-mythbar">
+    <div class="pev2-myth-filters" id="pev2-filters" role="group" aria-label="filter featured proofs by verdict">
+      <button data-filter="all" data-active="true" aria-pressed="true">all · {{ featured_proofs|length }}</button>
+      <button data-filter="disproved" aria-pressed="false">disproved</button>
+      <button data-filter="proved" aria-pressed="false">proved</button>
+      <button data-filter="partial" aria-pressed="false">partial</button>
     </div>
-    <div class="myth-card-reveal-state">
-        <span class="badge badge-hidden">hover to reveal</span>
-        <span class="badge badge-{{ proof.verdict.category }} myth-card-verdict-badge">{{ proof.verdict.raw }}</span>
-    </div>
-    <div class="myth-card-summary">{{ proof.verdict_summary }}</div>
-    <a class="myth-card-link" href="{{ base_url }}proofs/{{ proof.slug }}/">read proof →</a>
-</article>
-{% endfor %}
-</div>
-<div class="myth-bottom-link">
-    <a href="{{ base_url }}catalog/">explore all {{ stats.total }} proofs →</a>
-</div>
+    <div class="hint">tap to reveal · <kbd>R</kbd> to reveal all</div>
+  </div>
+
+  <div class="pev2-myths" id="pev2-myths-grid">
+  {% for proof in featured_proofs %}
+    <a class="pev2-myth" data-v="{{ proof.verdict.filter_value }}" href="{{ base_url }}proofs/{{ proof.slug }}/" onclick="gtag('event','cta_click',{cta_label:'myth_card',proof_slug:{{ proof.slug | tojson }}})">
+      <div class="pev2-myth-dom">{{ "%02d"|format(loop.index) }} · {{ proof.tags | join(" / ") }}</div>
+      <div class="pev2-myth-claim">{{ proof.proof_data.claim_natural | strip_latex }}</div>
+      <div class="pev2-myth-ver">
+        <span class="pev2-v-pill hidden">tap to reveal</span>
+        <span class="pev2-v-pill {{ proof.verdict.filter_value }}">{{ proof.verdict.raw }}</span>
+      </div>
+      <div class="pev2-myth-sum">{{ proof.verdict_summary }}</div>
+      <span class="pev2-myth-read">read proof →</span>
+    </a>
+  {% endfor %}
+  </div>
+
+  <div style="text-align:center;margin-top:28px">
+    <a href="{{ base_url }}catalog/" style="font-size:12px;color:var(--pev2-accent)" onclick="gtag('event','cta_click',{cta_label:'explore_all_catalog'})">explore all {{ stats.total }} proofs in the catalog →</a>
+  </div>
+</section>
 {% endif %}
 
-<script>
-window.FEATURED_PROOFS_DATA = [
-{% for proof in featured_proofs %}
-{
-    slug: "{{ proof.slug }}",
-    claim: {{ proof.proof_data.claim_natural | strip_latex | tojson }},
-    verdict: {{ proof.verdict.raw | tojson }},
-    verdict_category: "{{ proof.verdict.category }}",
-    filter_value: "{{ proof.verdict.filter_value }}",
-    verdict_summary: {{ proof.verdict_summary | tojson }},
-    tags: {{ proof.tags | tojson }},
-    source_names: {{ (proof.source_names or []) | tojson }},
-    source_names_extra: {{ proof.source_names_extra or 0 }},
-    url: "{{ base_url }}proofs/{{ proof.slug }}/"
-}{{ "," if not loop.last }}
-{% endfor %}
-];
-</script>
-{% if pipeline_example %}
-<script>
-window.PIPELINE_EXAMPLE_DATA = {{ pipeline_example | tojson }};
-</script>
-{% endif %}
+<!-- SCOPE -->
+<section id="scope">
+  <div class="pev2-eyebrow">§05 · scope</div>
+  <h2 class="pev2-section-title">What it can and can't do.</h2>
+  <p class="pev2-section-sub">Calibrated honesty beats confident vagueness. The engine refuses to gesture at things it can't mechanically check.</p>
+  <div class="pev2-scope">
+    <div class="pev2-scope-col ok">
+      <div class="pev2-scope-h">works well for</div>
+      <ul>
+        <li><div><strong>Factual claims with citable evidence</strong> <span>dates, numbers, quotes, statistics with verifiable source pages</span></div></li>
+        <li><div><strong>Mathematical assertions</strong> <span>anything Python + sympy can compute deterministically, including symbolic identities</span></div></li>
+        <li><div><strong>Debunking specific claims</strong> <span>"did X really say Y?" · "is statistic Z accurate?" · "does this compound claim decompose?"</span></div></li>
+        <li><div><strong>Compound claims</strong> <span>decomposes "X and Y" into independently verified sub-claims (SC1 ∧ SC2)</span></div></li>
+      </ul>
+    </div>
+    <div class="pev2-scope-col no">
+      <div class="pev2-scope-h">doesn't work for</div>
+      <ul>
+        <li><div><strong>Causal claims</strong> <span>"X caused Y" tops out at PARTIAL — facts yes, causal theory weighting no</span></div></li>
+        <li><div><strong>Broad literature synthesis</strong> <span>"coffee reduces diabetes risk" needs a systematic review, not a proof</span></div></li>
+        <li><div><strong>JS-rendered pages</strong> <span>citation match degrades when the source needs a browser to render</span></div></li>
+        <li><div><strong>Absence-of-evidence</strong> <span>search-based facts reach SUPPORTED at best; the engine can't prove non-existence</span></div></li>
+        <li><div><strong>Contested definitions</strong> <span>"is a hot dog a sandwich?" — depends on definition, not evidence</span></div></li>
+        <li><div><strong>Original theorem proving</strong> <span>computations yes, novel conjectures no</span></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ARTIFACTS -->
+<section id="artifacts">
+  <div class="pev2-eyebrow">§06 · every proof ships</div>
+  <h2 class="pev2-section-title">Eight files. Nothing to take on faith.</h2>
+  <p class="pev2-section-sub">Every verdict in the catalog includes these artifacts, versioned, DOI-minted, and downloadable. Run the Python. Open the notebook. Cite the JSON.</p>
+  <div class="pev2-artifacts">
+    <div class="pev2-art"><div class="pev2-art-glyph">▶</div><div><div class="pev2-art-name">proof.py</div><div class="pev2-art-desc">re-runnable verification script — <code>python proof.py</code></div></div><div class="pev2-art-ext">.py</div></div>
+    <div class="pev2-art"><div class="pev2-art-glyph">§</div><div><div class="pev2-art-name">proof.md</div><div class="pev2-art-desc">structured report with verdict + sub-claim breakdown</div></div><div class="pev2-art-ext">.md</div></div>
+    <div class="pev2-art"><div class="pev2-art-glyph">✓</div><div><div class="pev2-art-name">proof_audit.md</div><div class="pev2-art-desc">citation-by-citation evidence trail, coverage % per quote</div></div><div class="pev2-art-ext">.md</div></div>
+    <div class="pev2-art"><div class="pev2-art-glyph">¶</div><div><div class="pev2-art-name">proof_narrative.md</div><div class="pev2-art-desc">plain-language summary for non-technical readers</div></div><div class="pev2-art-ext">.md</div></div>
+    <div class="pev2-art"><div class="pev2-art-glyph">⎔</div><div><div class="pev2-art-name">Jupyter Notebook</div><div class="pev2-art-desc">interactive re-verification in a browser cell-by-cell</div></div><div class="pev2-art-ext">.ipynb</div></div>
+    <div class="pev2-art"><div class="pev2-art-glyph">⟳</div><div><div class="pev2-art-name">W3C PROV-JSON</div><div class="pev2-art-desc">provenance chain — feed it to downstream fact pipelines</div></div><div class="pev2-art-ext">.json</div></div>
+    <div class="pev2-art"><div class="pev2-art-glyph">⧉</div><div><div class="pev2-art-name">RO-Crate 1.1</div><div class="pev2-art-desc">archival research-object bundle, DOI-minted</div></div><div class="pev2-art-ext">.crate</div></div>
+    <div class="pev2-art"><div class="pev2-art-glyph">⌖</div><div><div class="pev2-art-name">Citation files</div><div class="pev2-art-desc">BibTeX, RIS, CFF, Chicago, APA — ready to cite</div></div><div class="pev2-art-ext">.bib</div></div>
+  </div>
+</section>
+
+<!-- INSTALL -->
+<section id="install">
+  <div class="pev2-install">
+    <div class="pev2-eyebrow" style="margin-bottom:14px">§07 · install</div>
+    <div class="pev2-install-h">Build agents that <em>prove</em> instead of assert.</div>
+    <div class="pev2-install-p">Drop the skill into Claude or any other agent that supports Skills. Then just say: <em>"use the proof-engine skill to verify …"</em> — it auto-activates when a claim needs checking, and refuses to guess when it can't.</div>
+    <div class="pev2-install-ctas">
+      <a class="pev2-btn pev2-btn-primary" href="{{ base_url }}static/install-claude-desktop.html" onclick="gtag('event','cta_click',{cta_label:'install_claude_desktop'})">install in Claude Desktop →</a>
+      <a class="pev2-btn pev2-btn-ghost" href="https://github.com/yaniv-golan/proof-engine#installation" onclick="gtag('event','cta_click',{cta_label:'install_other_platforms'})">install on other platforms →</a>
+      <a class="pev2-btn pev2-btn-ghost" href="{{ base_url }}submit/#ai-agents" onclick="gtag('event','cta_click',{cta_label:'ai_agents'})">build AI agents that prove →</a>
+      <a class="pev2-btn pev2-btn-ghost" href="{{ base_url }}methodology/">docs</a>
+      <a class="pev2-btn pev2-btn-ghost" href="https://github.com/yaniv-golan/proof-engine">github</a>
+    </div>
+  </div>
+</section>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="pev2-foot">
+  <div class="pev2-wrap pev2-foot-inner">
+    <span>built with <a href="https://github.com/yaniv-golan/proof-engine" style="color:inherit">⟨proof-engine⟩</a> · MIT · open to PRs</span>
+    <div class="pev2-foot-links">
+      <a href="https://github.com/yaniv-golan/proof-engine">github</a>
+      <a href="{{ base_url }}catalog/">catalog</a>
+      <a href="{{ base_url }}methodology/">methodology</a>
+      <a href="{{ base_url }}submit/">submit</a>
+    </div>
+  </div>
+</footer>
 {% endblock %}
 
 {% block scripts %}
-<script type="module" src="{{ base_url }}static/enhance/hero-enhance.js"></script>
-<script type="module" src="{{ base_url }}static/enhance/pipeline-enhance.js"></script>
+<script>
+(function(){
+  var grid = document.getElementById("pev2-myths-grid");
+  var filters = document.getElementById("pev2-filters");
+  if(grid && filters){
+    filters.addEventListener("click", function(e){
+      var b = e.target.closest("button"); if(!b) return;
+      filters.querySelectorAll("button").forEach(function(x){x.dataset.active="false";x.setAttribute("aria-pressed","false");});
+      b.dataset.active="true";
+      b.setAttribute("aria-pressed","true");
+      var f = b.dataset.filter;
+      grid.querySelectorAll(".pev2-myth").forEach(function(el){
+        el.style.display = (f==="all" || el.dataset.v===f) ? "" : "none";
+      });
+    });
+
+    // first click: reveal; second click: follow the link
+    // allow cmd/ctrl/middle-click and keyboard-modified nav to bypass reveal and open directly
+    grid.querySelectorAll(".pev2-myth").forEach(function(el){
+      el.addEventListener("click", function(e){
+        if(e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+        if(!el.classList.contains("revealed")){
+          e.preventDefault();
+          el.classList.add("revealed");
+        }
+      });
+    });
+  }
+
+  document.addEventListener("keydown", function(e){
+    if((e.key||"").toLowerCase()!=="r") return;
+    var t = e.target;
+    if(t && (t.tagName==="INPUT" || t.tagName==="TEXTAREA" || t.tagName==="SELECT" || t.isContentEditable)) return;
+    if(e.ctrlKey || e.metaKey || e.altKey) return;
+    document.querySelectorAll(".pev2-myth").forEach(function(m){m.classList.add("revealed")});
+  });
+
+  var ex = document.querySelector(".pev2-exhibit");
+  if(ex){
+    var go = function(){ ex.classList.add("play"); };
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){ if(en.isIntersecting){ go(); io.disconnect(); }});
+      }, {threshold:0.1});
+      io.observe(ex);
+    } else { go(); }
+  }
+})();
+</script>
 {% endblock %}
