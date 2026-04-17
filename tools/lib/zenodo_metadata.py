@@ -78,7 +78,11 @@ def build_related_identifiers(
         "scheme":     "url",
     }
     rest: list[dict] = []
-    seen: set[tuple[str, str]] = {(proof_url, "isSupplementedBy")}
+    # Dedup on (identifier, relation, scheme) — scheme matters because the
+    # same literal (e.g., '10.5072/FK2') can validly parse as both a DOI
+    # and a Handle, and Zenodo treats them as distinct related_identifier
+    # records.
+    seen: set[tuple[str, str, str]] = {(proof_url, "isSupplementedBy", "url")}
 
     for entry in entries:
         ident = _pick_canonical(entry)
@@ -93,7 +97,8 @@ def build_related_identifiers(
             )
             continue
         relation = _camel(entry.relation)
-        key = (ident.value, relation)
+        scheme = _SCHEME_BY_TYPE[ident.type]
+        key = (ident.value, relation, scheme)
         if key in seen:
             continue
         seen.add(key)
@@ -101,7 +106,7 @@ def build_related_identifiers(
         entry_out = {
             "identifier": ident.value,
             "relation":   relation,
-            "scheme":     _SCHEME_BY_TYPE[ident.type],
+            "scheme":     scheme,
         }
         if ident.type in _RESOURCE_TYPE_BY_TYPE:
             entry_out["resource_type"] = _RESOURCE_TYPE_BY_TYPE[ident.type]

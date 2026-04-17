@@ -135,6 +135,23 @@ def test_duplicate_identifier_relation_pair_is_deduped():
     assert len(doi_edges) == 1
 
 
+def test_same_value_different_scheme_is_not_deduped():
+    # '10.5072/FK2' is a legitimate literal that parses as both a DOI
+    # (per _DOI_RE) and a Handle (per _HANDLE_RE). Zenodo treats these
+    # as distinct related_identifier records — scheme is part of the
+    # uniqueness key, not incidental metadata.
+    entries = [
+        DependsOnEntry(relation="References",
+                       identifiers=[Identifier(type="doi", value="10.5072/FK2")]),
+        DependsOnEntry(relation="References",
+                       identifiers=[Identifier(type="handle", value="10.5072/FK2")]),
+    ]
+    result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+    matching = [r for r in result if r.get("identifier") == "10.5072/FK2"]
+    schemes = sorted(r["scheme"] for r in matching)
+    assert schemes == ["doi", "handle"]
+
+
 def test_stable_ordering_isDerivedFrom_before_references():
     entries = [
         DependsOnEntry(relation="References",
