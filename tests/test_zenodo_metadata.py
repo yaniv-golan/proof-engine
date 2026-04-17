@@ -164,6 +164,25 @@ def test_stable_ordering_isDerivedFrom_before_references():
     assert relations == ["isSupplementedBy", "isDerivedFrom", "references"]
 
 
+def test_every_allowed_relation_converts_pascal_to_camel():
+    # Spec §Testing item 3: "PascalCase → camelCase relation mapping for
+    # every DataCite value in ALLOWED_RELATIONS." Locks the whole DataCite
+    # RelationType vocabulary against silent drift in either our allowed
+    # list or the conversion helper.
+    from tools.lib.depends_on import ALLOWED_RELATIONS
+
+    doi = Identifier(type="doi", value="10.5281/zenodo.1")
+    for pascal in sorted(ALLOWED_RELATIONS):
+        expected_camel = pascal[0].lower() + pascal[1:]
+        entries = [DependsOnEntry(relation=pascal, identifiers=[doi])]
+        result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+        propagated = [r for r in result if r.get("identifier") == "10.5281/zenodo.1"]
+        assert len(propagated) == 1, f"{pascal} did not propagate"
+        assert propagated[0]["relation"] == expected_camel, (
+            f"{pascal} -> {propagated[0]['relation']}, expected {expected_camel}"
+        )
+
+
 def test_author_supplied_isSupplementedBy_does_not_jump_webpage_edge():
     # Only the synthetic webpage edge should be pinned first. An
     # author-supplied IsSupplementedBy in depends_on is a plain "other"
