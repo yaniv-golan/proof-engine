@@ -628,6 +628,110 @@ def cmd_mint_doi(args) -> int:
         return 1
 
 
+def cmd_sync_doi_deps(args) -> int:
+    """Propagate upstream DOIs into downstream meta.yaml depends_on entries."""
+    import yaml
+    from tools.lib.depends_on import parse_depends_on
+
+    site_dir = Path(args.site_dir)
+    proofs_dir = site_dir / "proofs"
+
+    if not proofs_dir.is_dir():
+        error(f"Proofs directory not found: {proofs_dir}")
+        return 1
+
+    if args.all:
+        upstreams = []
+        for child in sorted(proofs_dir.iterdir()):
+            if child.name.startswith(".") or not child.is_dir():
+                continue
+            if (child / "doi.json").exists():
+                upstreams.append(child.name)
+    elif args.slug:
+        upstreams = [args.slug]
+    else:
+        error("must pass --slug X or --all")
+        return 1
+
+    if not upstreams:
+        success("Nothing to do — no upstreams with doi.json")
+        return 0
+
+    total_changed = 0
+    for upstream_slug in upstreams:
+        up_dir = proofs_dir / upstream_slug
+        doi_json_path = up_dir / "doi.json"
+        if not doi_json_path.exists():
+            log(f"No doi.json for {upstream_slug} — skipping")
+            continue
+        doi_data = json.loads(doi_json_path.read_text())
+        canonical_doi = doi_data.get("concept_doi") or doi_data.get("doi")
+        version_doi = doi_data.get("doi")
+        if not canonical_doi:
+            log(f"{upstream_slug} doi.json has neither concept_doi nor doi — skipping")
+            continue
+
+        for child in sorted(proofs_dir.iterdir()):
+            if child.name.startswith(".") or not child.is_dir():
+                continue
+            if child.name == upstream_slug:
+                continue
+            meta_path = child / "meta.yaml"
+            if not meta_path.exists():
+                continue
+            meta = yaml.safe_load(meta_path.read_text()) or {}
+            entries, parse_errs = parse_depends_on(
+                meta, source=str(meta_path),
+            )
+            if parse_errs:
+                log(f"Skipping {child.name} due to parse errors:")
+                for e in parse_errs:
+                    error(e)
+                continue
+
+            changed_in_meta = False
+            raw_entries = meta.get("depends_on") or []
+            for raw_entry in raw_entries:
+                ids = raw_entry.get("identifiers") or []
+                slug_match = any(
+                    i.get("type") == "slug" and i.get("value") == upstream_slug
+                    for i in ids
+                )
+                if not slug_match:
+                    continue
+                existing_doi = next(
+                    (i for i in ids if i.get("type") == "doi"), None,
+                )
+                if existing_doi is None:
+                    log(f"{child.name}: append {{doi: {canonical_doi}}} (was: none)")
+                    if not args.dry_run:
+                        ids.append({"type": "doi", "value": canonical_doi})
+                        changed_in_meta = True
+                elif existing_doi.get("value") == canonical_doi:
+                    continue
+                elif existing_doi.get("value") == version_doi:
+                    log(f"{child.name}: skip (hand-pin to version DOI {version_doi})")
+                    continue
+                else:
+                    old = existing_doi.get("value")
+                    log(f"{child.name}: replace doi {old} → {canonical_doi}")
+                    if not args.dry_run:
+                        existing_doi["value"] = canonical_doi
+                        changed_in_meta = True
+
+            if changed_in_meta and not args.dry_run:
+                meta_path.write_text(
+                    yaml.dump(meta, default_flow_style=False, sort_keys=False),
+                )
+                total_changed += 1
+
+    if args.dry_run:
+        success("Dry-run complete — no files written")
+    else:
+        success(f"Sync complete — {total_changed} meta.yaml file(s) updated")
+    return 0
+
+
 def add_site_dir_arg(p):
     """Add --site-dir to a subparser so it works after the subcommand."""
     p.add_argument(
@@ -674,6 +778,19 @@ def main():
     mint.add_argument("--output-dir", help="Path to built _site/ directory; enables upload of provenance.json, proof.ipynb, ro-crate-metadata.json")
     add_site_dir_arg(mint)
 
+    # sync-doi-deps
+    sync = subparsers.add_parser(
+        "sync-doi-deps",
+        help="Propagate an upstream DOI into downstream depends_on entries",
+    )
+    sync_group = sync.add_mutually_exclusive_group(required=True)
+    sync_group.add_argument("--slug", help="Sync downstream of this upstream slug")
+    sync_group.add_argument("--all", action="store_true",
+                            help="Sync downstream of every upstream with a doi.json")
+    sync.add_argument("--dry-run", action="store_true",
+                      help="Print what would change; write nothing")
+    add_site_dir_arg(sync)
+
     args = parser.parse_args()
 
     if args.command == "publish":
@@ -686,6 +803,8 @@ def main():
         sys.exit(cmd_repair_featured(args))
     elif args.command == "mint-doi":
         sys.exit(cmd_mint_doi(args))
+    elif args.command == "sync-doi-deps":
+        sys.exit(cmd_sync_doi_deps(args))
 
 
 if __name__ == "__main__":

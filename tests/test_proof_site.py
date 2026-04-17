@@ -216,6 +216,147 @@ def test_publish_rejects_missing_narrative(source_proof, tmp_path):
     assert "proof_narrative.md" in result.stdout or "proof_narrative.md" in result.stderr
 
 
+def _write_proof_dir(proofs_dir, slug, meta=None, doi_json=None):
+    """Helper: build a minimal published-proof shape under proofs_dir/slug/."""
+    import yaml
+    pdir = proofs_dir / slug
+    pdir.mkdir(parents=True)
+    (pdir / "proof.json").write_text("{}")
+    if meta is not None:
+        (pdir / "meta.yaml").write_text(yaml.dump(meta, sort_keys=False))
+    if doi_json is not None:
+        (pdir / "doi.json").write_text(json.dumps(doi_json))
+    return pdir
+
+
+def test_sync_doi_deps_appends_canonical_doi(tmp_path):
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "upstream", doi_json={
+        "doi": "10.5281/zenodo.222",
+        "concept_doi": "10.5281/zenodo.111",
+    })
+    _write_proof_dir(proofs, "downstream", meta={
+        "tags": ["mathematics"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "upstream"}]},
+        ],
+    })
+
+    result = run_cli("sync-doi-deps", "--slug", "upstream",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+
+    import yaml
+    meta = yaml.safe_load((proofs / "downstream" / "meta.yaml").read_text())
+    types = sorted(i["type"] for i in meta["depends_on"][0]["identifiers"])
+    assert types == ["doi", "slug"]
+    doi_id = next(i for i in meta["depends_on"][0]["identifiers"]
+                  if i["type"] == "doi")
+    assert doi_id["value"] == "10.5281/zenodo.111"  # concept_doi wins
+
+
+def test_sync_doi_deps_replaces_stale_doi(tmp_path):
+    """An existing DOI that is neither the concept DOI nor the current version
+    DOI is treated as stale and replaced."""
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "upstream", doi_json={
+        "doi": "10.5281/zenodo.222",
+        "concept_doi": "10.5281/zenodo.111",
+    })
+    _write_proof_dir(proofs, "downstream", meta={
+        "tags": ["mathematics"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [
+                 {"type": "slug", "value": "upstream"},
+                 {"type": "doi", "value": "10.5281/zenodo.000"},
+             ]},
+        ],
+    })
+
+    result = run_cli("sync-doi-deps", "--slug", "upstream",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+
+    import yaml
+    meta = yaml.safe_load((proofs / "downstream" / "meta.yaml").read_text())
+    dois = [i["value"] for i in meta["depends_on"][0]["identifiers"]
+            if i["type"] == "doi"]
+    assert dois == ["10.5281/zenodo.111"]
+
+
+def test_sync_doi_deps_preserves_hand_pinned_version_doi(tmp_path):
+    """A DOI matching the upstream's current version DOI is treated as a
+    deliberate pin; sync leaves it alone."""
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "upstream", doi_json={
+        "doi": "10.5281/zenodo.222",
+        "concept_doi": "10.5281/zenodo.111",
+    })
+    _write_proof_dir(proofs, "downstream", meta={
+        "tags": ["mathematics"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [
+                 {"type": "slug", "value": "upstream"},
+                 {"type": "doi", "value": "10.5281/zenodo.222"},
+             ]},
+        ],
+    })
+
+    result = run_cli("sync-doi-deps", "--slug", "upstream",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+
+    import yaml
+    meta = yaml.safe_load((proofs / "downstream" / "meta.yaml").read_text())
+    dois = [i["value"] for i in meta["depends_on"][0]["identifiers"]
+            if i["type"] == "doi"]
+    assert dois == ["10.5281/zenodo.222"]
+
+
+def test_sync_doi_deps_dry_run_writes_nothing(tmp_path):
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "upstream", doi_json={
+        "doi": "10.5281/zenodo.111",
+        "concept_doi": "10.5281/zenodo.111",
+    })
+    _write_proof_dir(proofs, "downstream", meta={
+        "tags": ["mathematics"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "upstream"}]},
+        ],
+    })
+    before = (proofs / "downstream" / "meta.yaml").read_text()
+    result = run_cli("sync-doi-deps", "--slug", "upstream", "--dry-run",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+    after = (proofs / "downstream" / "meta.yaml").read_text()
+    assert before == after
+
+
+def test_sync_doi_deps_missing_doi_json_is_no_op(tmp_path):
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "upstream")
+    _write_proof_dir(proofs, "downstream", meta={
+        "tags": ["mathematics"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "upstream"}]},
+        ],
+    })
+    result = run_cli("sync-doi-deps", "--slug", "upstream",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+
+
 def test_publish_rejects_unknown_dependency_slug(site_dir, source_proof):
     """publish must fail when depends_on slug points to a non-existent proof."""
     import yaml
