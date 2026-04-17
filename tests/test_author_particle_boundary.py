@@ -42,6 +42,32 @@ def test_extract_resolved_author_parts_prefers_structured_family_name():
     assert given == ["A\u00e4ron"]
 
 
+from tools.lib.prose_reference_scan import boundary_check_ok
+
+
+def test_boundary_rejects_anchored_tail_after_particle():
+    """Rev-8: 'R. van den Oord, "WaveNet"' — if the regex anchors on just
+    'Oord, "WaveNet"', the preceding 32 chars contain unconsumed particles."""
+    text = 'R. van den Oord, "WaveNet: A Generative Model for Raw Audio"'
+    match_start = text.index("Oord")
+    ok, msg = boundary_check_ok(text, match_start)
+    assert not ok
+    assert "particle" in msg.lower() or "initial" in msg.lower() or "not consumed" in msg.lower()
+
+
+def test_boundary_accepts_clean_match_at_start():
+    text = 'R. van den Oord wrote "WaveNet".'
+    ok, msg = boundary_check_ok(text, 0)
+    assert ok
+
+
+def test_boundary_accepts_sentence_boundary_before_match():
+    text = 'Research continued. Smith published this.'
+    match_start = text.index("Smith")
+    ok, msg = boundary_check_ok(text, match_start)
+    assert ok
+
+
 def test_extract_resolved_author_parts_falls_back_to_unstructured_parser():
     """Rev-9 resolved-side priority 2: arXiv unstructured name gets same parser
     used on prose side — compound surname, not last token."""

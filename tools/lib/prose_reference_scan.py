@@ -41,14 +41,25 @@ def pass1_identifiers(text: str) -> list[Hit]:
     """
     hits: list[Hit] = []
 
+    LINK_RE = _re.compile(r"\[(?P<display>[^\]\n]+)\]\((?P<url>[^)\s]+)(?:\s+\"[^\"]*\")?\)")
+    link_spans = [lm.span() for lm in LINK_RE.finditer(text)]
+
+    def _in_link(span: tuple[int, int]) -> bool:
+        return any(span[0] >= ls[0] and span[1] <= ls[1] for ls in link_spans)
+
     for m in ARXIV_PATTERN.finditer(text):
+        if _in_link(m.span()):
+            continue
         hits.append(Hit("arxiv", m.group(1), m.span(), "literal"))
     for m in DOI_PATTERN.finditer(text):
+        if _in_link(m.span()):
+            continue
         hits.append(Hit("doi", m.group(1), m.span(), "literal"))
     for m in SWHID_PATTERN.finditer(text):
+        if _in_link(m.span()):
+            continue
         hits.append(Hit("swhid", m.group(0), m.span(), "literal"))
 
-    LINK_RE = _re.compile(r"\[(?P<display>[^\]\n]+)\]\((?P<url>[^)\s]+)(?:\s+\"[^\"]*\")?\)")
     for lm in LINK_RE.finditer(text):
         url = lm.group("url")
         display = lm.group("display")
@@ -243,3 +254,282 @@ def check_authors(authors_str: str, ref) -> tuple[bool, list[str]]:
         errors.append("no author match against resolved paper")
 
     return (not errors), errors
+
+
+_BOUNDARY_INITIAL_RE = regex.compile(r'\p{Lu}\.\s$')
+_BOUNDARY_PARTICLE_RE = regex.compile(_PARTICLE + r'\s$', regex.UNICODE)
+_BOUNDARY_GIVEN_RE = regex.compile(r'\p{Lu}[\p{L}\'\-]+\s$', regex.UNICODE)
+_SENTENCE_END_RE = regex.compile(r'[.!?]\s{1,2}$')
+
+
+def boundary_check_ok(text: str, match_start: int) -> tuple[bool, str]:
+    """Reject matches whose preceding 32 chars contain an unconsumed
+    initial, particle, or given name (rev-8 partial-match defense).
+    """
+    preceding = text[max(0, match_start - 32):match_start]
+    if _BOUNDARY_PARTICLE_RE.search(preceding):
+        return False, (
+            "author attribution appears partially matched — preceding text "
+            f"{preceding[-30:]!r} contains an unconsumed lowercase particle "
+            "(e.g., 'van', 'den', 'de', 'la'). The regex is probably anchoring "
+            "on just the final capitalized token; the full author string almost "
+            "certainly includes the particle."
+        )
+    if _BOUNDARY_INITIAL_RE.search(preceding):
+        return False, (
+            "author attribution appears partially matched — preceding text "
+            f"{preceding[-20:]!r} contains an unconsumed initial. The regex "
+            "started too late; a given initial was dropped from the match."
+        )
+    if _BOUNDARY_GIVEN_RE.search(preceding):
+        last_8 = preceding[-8:]
+        if not _SENTENCE_END_RE.search(last_8):
+            return False, (
+                "author attribution appears partially matched — preceding text "
+                f"{preceding[-30:]!r} contains an unconsumed given name."
+            )
+    return True, ""
+
+
+import unicodedata as _unicodedata
+
+_STOPWORDS = {"the", "a", "an", "of", "for", "and", "from", "to", "in", "on"}
+
+
+def check_title_jaccard(prose_title: str, resolved_title: str, threshold: float = 0.6) -> bool:
+    def tokenize(s: str) -> set[str]:
+        s = _unicodedata.normalize("NFKC", s).lower()
+        return {w for w in regex.findall(r"\p{L}+", s) if w not in _STOPWORDS}
+    a, b = tokenize(prose_title), tokenize(resolved_title)
+    if not a or not b:
+        return False
+    if a.issubset(b) or b.issubset(a):
+        return True
+    inter, union = a & b, a | b
+    return len(inter) / len(union) >= threshold
+
+
+@dataclass
+class VerifyError:
+    file: str
+    line: int
+    message: str
+    span: tuple[int, int]
+
+
+def _line_of(text: str, offset: int) -> int:
+    return text.count("\n", 0, offset) + 1
+
+
+def pass2_attribution_check(
+    text: str,
+    hits: list[Hit],
+    resolved: dict,
+    *,
+    file: str = "<text>",
+    window: int = 160,
+) -> list[VerifyError]:
+    errors: list[VerifyError] = []
+    for hit in hits:
+        key = f"{hit.identifier_type}:{hit.identifier_value}"
+        ref = resolved.get(key)
+        if ref is None:
+            errors.append(VerifyError(
+                file=file,
+                line=_line_of(text, hit.span[0]),
+                message=(
+                    f"identifier {hit.identifier_type}:{hit.identifier_value} "
+                    "appears in prose but no resolved metadata in cache"
+                ),
+                span=hit.span,
+            ))
+            continue
+
+        if hit.source == "link-target":
+            display = hit.link_display or ""
+            m = SHORT_ATTRIB_PATTERN.search(display)
+            if m:
+                ok_bc, bc_msg = boundary_check_ok(display, m.start("authors"))
+                if not ok_bc:
+                    errors.append(VerifyError(file, _line_of(text, hit.span[0]), bc_msg, hit.span))
+                    continue
+                authors_str = m.group("authors")
+                ok, errs = check_authors(authors_str, ref)
+                if not ok:
+                    for e in errs:
+                        errors.append(VerifyError(file, _line_of(text, hit.span[0]),
+                                                   f"link citation: {e}", hit.span))
+                year_str = m.group("year")
+                if ref.year and year_str and int(year_str) != ref.year:
+                    errors.append(VerifyError(
+                        file, _line_of(text, hit.span[0]),
+                        f"year in link text ({year_str}) does not match resolved year ({ref.year})",
+                        hit.span,
+                    ))
+                continue
+            m_long = ATTRIB_PATTERN.search(display)
+            if m_long and m_long.group("title"):
+                ok_bc, bc_msg = boundary_check_ok(display, m_long.start("authors"))
+                if not ok_bc:
+                    errors.append(VerifyError(file, _line_of(text, hit.span[0]), bc_msg, hit.span))
+                    continue
+                ok, errs = check_authors(m_long.group("authors"), ref)
+                if not ok:
+                    for e in errs:
+                        errors.append(VerifyError(file, _line_of(text, hit.span[0]),
+                                                   f"link citation: {e}", hit.span))
+                if not check_title_jaccard(m_long.group("title"), ref.title):
+                    errors.append(VerifyError(
+                        file, _line_of(text, hit.span[0]),
+                        f"title in link text does not match resolved title {ref.title!r}",
+                        hit.span,
+                    ))
+            continue
+
+        start = max(0, hit.span[0] - window)
+        end = min(len(text), hit.span[1] + window)
+        window_text = text[start:end]
+        m = ATTRIB_PATTERN.search(window_text)
+        if m is None:
+            continue
+        match_start_in_text = start + m.start("authors")
+        ok_bc, bc_msg = boundary_check_ok(text, match_start_in_text)
+        if not ok_bc:
+            errors.append(VerifyError(file, _line_of(text, match_start_in_text), bc_msg,
+                                       (match_start_in_text, match_start_in_text + len(m.group("authors")))))
+            continue
+        ok, errs = check_authors(m.group("authors"), ref)
+        if not ok:
+            for e in errs:
+                errors.append(VerifyError(file, _line_of(text, match_start_in_text), e,
+                                           (match_start_in_text, match_start_in_text + len(m.group("authors")))))
+        if m.group("title") and not check_title_jaccard(m.group("title"), ref.title):
+            errors.append(VerifyError(
+                file, _line_of(text, match_start_in_text),
+                f"prose title {m.group('title')!r} does not match resolved {ref.title!r}",
+                hit.span,
+            ))
+    return errors
+
+
+DANGLING_LONG_PATTERN = regex.compile(
+    rf'(?P<authors>\b{_AUTHOR_TOKEN}'
+    rf'(?:\s*(?:,|and)\s*{_AUTHOR_TOKEN})*'
+    r'(?:\s*,?\s+et\s+al\.?)?)'
+    r'\s*,\s*["\u201C\u2018](?P<title>[^"\u201D\u2019\[\]\n]{4,200}?)["\u201D\u2019]'
+    r'(?=[,\s\.\(\[])',
+    regex.UNICODE,
+)
+
+DANGLING_SHORT_PATTERN = regex.compile(
+    rf'(?P<authors>\b{_AUTHOR_TOKEN}'
+    rf'(?:\s*(?:,|and)\s*{_AUTHOR_TOKEN})*'
+    r'(?:\s*,?\s+et\s+al\.?)?)'
+    r'\s*\((?P<year>\d{4})\)',
+    regex.UNICODE,
+)
+
+_ESCAPE_PAIR_RE = _re.compile(
+    r"<!--\s*not-a-citation-start\s*-->.*?<!--\s*not-a-citation-end\s*-->",
+    _re.DOTALL,
+)
+_ESCAPE_SINGLE_RE = _re.compile(r"<!--\s*not-a-citation:[^>]*-->")
+
+
+def _escape_short_spans(text: str) -> list[tuple[int, int]]:
+    spans = [m.span() for m in _ESCAPE_PAIR_RE.finditer(text)]
+    spans += [m.span() for m in _ESCAPE_SINGLE_RE.finditer(text)]
+    return spans
+
+
+def _verification_windows(text: str, hits: list[Hit], window: int = 160) -> list[tuple[int, int]]:
+    out = []
+    for h in hits:
+        if h.source == "literal":
+            out.append((max(0, h.span[0] - window), min(len(text), h.span[1] + window)))
+        elif h.source == "link-target" and h.link_span is not None:
+            out.append(h.link_span)
+    return out
+
+
+def _span_inside(span: tuple[int, int], windows: list[tuple[int, int]]) -> bool:
+    return any(span[0] >= w[0] and span[1] <= w[1] for w in windows)
+
+
+def pass3_bare_identifier_advisory(
+    declared: list[tuple[str, str]],
+    prose_hits: list[Hit],
+) -> list[str]:
+    prose_keys = {(h.identifier_type, h.identifier_value) for h in prose_hits}
+    warnings = []
+    for (t, v) in declared:
+        if (t, v) not in prose_keys:
+            warnings.append(
+                f"{t}:{v} is declared in depends_on/evidence but never mentioned "
+                "in prose. Consider citing with cite-expand or removing."
+            )
+    return warnings
+
+
+def pass4_dangling_sweep(
+    text: str,
+    hits: list[Hit],
+    *,
+    file: str = "<text>",
+) -> list[VerifyError]:
+    errors: list[VerifyError] = []
+    windows = _verification_windows(text, hits)
+    escape_short = _escape_short_spans(text)
+
+    for m in DANGLING_LONG_PATTERN.finditer(text):
+        span = m.span()
+        ok_bc, _ = boundary_check_ok(text, m.start("authors"))
+        if not ok_bc:
+            continue
+        if _span_inside(span, windows):
+            continue
+        if _span_inside(span, escape_short):
+            errors.append(VerifyError(
+                file, _line_of(text, span[0]),
+                (
+                    "quoted-title attribution inside not-a-citation span. "
+                    "The escape hatch suppresses short-form (author + year) "
+                    "false positives only. Author + quoted title must either "
+                    "carry an identifier or be rewritten to avoid the citation "
+                    "shape. To cite: write {{cite:arxiv:ID}} and run cite-expand."
+                ),
+                span,
+            ))
+            continue
+        errors.append(VerifyError(
+            file, _line_of(text, span[0]),
+            (
+                f"attribution {m.group(0)!r} has no associated identifier. "
+                "Every author/title claim in prose must be followed by a bare "
+                "identifier (arXiv:..., doi:...) or be wrapped in a Markdown "
+                "link to an identifier URL. Rewrite as:\n"
+                '    [<authors>, "<title>"](https://arxiv.org/abs/ID), or\n'
+                '    <authors>, "<title>" (arXiv:ID), or\n'
+                '    {{cite:arxiv:ID}} and run cite-expand.'
+            ),
+            span,
+        ))
+
+    for m in DANGLING_SHORT_PATTERN.finditer(text):
+        span = m.span()
+        ok_bc, _ = boundary_check_ok(text, m.start("authors"))
+        if not ok_bc:
+            continue
+        if _span_inside(span, windows):
+            continue
+        if _span_inside(span, escape_short):
+            continue
+        errors.append(VerifyError(
+            file, _line_of(text, span[0]),
+            (
+                f"bare author-year citation {m.group(0)!r} has no associated identifier. "
+                "Carry an identifier or suppress with <!-- not-a-citation-start/end -->."
+            ),
+            span,
+        ))
+    return errors

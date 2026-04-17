@@ -67,3 +67,42 @@ def test_eml_regression_cheng_vs_odrzywolek():
 def test_eml_regression_correct_attribution_passes():
     ok, errs = check_authors("A. Odrzywo\u0142ek", _odrzywolek_ref())
     assert ok, errs
+
+
+from tools.lib.prose_reference_scan import check_title_jaccard
+
+
+def test_title_jaccard_passes_on_prefix():
+    ok = check_title_jaccard(
+        "all elementary functions",
+        "All elementary functions from a single binary operator",
+    )
+    assert ok
+
+
+def test_title_jaccard_fails_on_wrong_title():
+    ok = check_title_jaccard(
+        "The elementary function arithmetic",
+        "All elementary functions from a single binary operator",
+    )
+    assert not ok
+
+
+def test_pass2_detects_wrong_author_near_identifier():
+    from tools.lib.prose_reference_scan import pass2_attribution_check, pass1_identifiers
+    text = (
+        'R. Cheng, "The elementary function arithmetic" '
+        '(arXiv:2603.21852) introduced this binary operator.'
+    )
+    hits = pass1_identifiers(text)
+    errors = pass2_attribution_check(text, hits, {"arxiv:2603.21852": _odrzywolek_ref()})
+    assert errors
+    assert any("cheng" in e.message.lower() or "odrzywolek" in e.message.lower() for e in errors)
+
+
+def test_pass2_accepts_correct_attribution():
+    from tools.lib.prose_reference_scan import pass2_attribution_check, pass1_identifiers
+    text = 'A. Odrzywo\u0142ek, "All elementary functions..." (arXiv:2603.21852) introduced...'
+    hits = pass1_identifiers(text)
+    errors = pass2_attribution_check(text, hits, {"arxiv:2603.21852": _odrzywolek_ref()})
+    assert not errors, [e.message for e in errors]
