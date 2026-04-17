@@ -1739,3 +1739,83 @@ def test_build_renders_builds_on_block(site_fixture):
     html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
     assert "Builds on" in html
     assert "u-stream" in html
+
+
+def test_build_renders_cited_by_block_for_external_inverse_relation(site_fixture):
+    """An IsCitedBy entry with an external DOI should appear in a dedicated
+    'Cited by' block — neither 'Builds on' (it's not a prerequisite) nor
+    'Related work' (it describes downstream consumers, not upstream literature)."""
+    import yaml
+    target_meta = site_fixture / "site" / "proofs" / "test-claim" / "meta.yaml"
+    meta = yaml.safe_load(target_meta.read_text()) or {}
+    meta["depends_on"] = [
+        {"relation": "IsCitedBy",
+         "identifiers": [{"type": "doi", "value": "10.5281/zenodo.99"}],
+         "note": "downstream review"},
+    ]
+    target_meta.write_text(yaml.dump(meta, sort_keys=False))
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "Cited by" in html
+    assert "10.5281/zenodo.99" in html
+    # Must not duplicate it under Related work or Builds on.
+    assert "Builds on" not in html
+    # Related-work heading should not appear without related entries.
+    assert "Related work" not in html
+
+
+def test_build_skips_slug_inverse_relation_to_avoid_double_display(site_fixture):
+    """A slug+IsCitedBy entry on test-claim ('downstream-x cites me') should
+    NOT render in test-claim's Cited by block — it's already surfaced via
+    test-claim's own 'Used by' block driven by the reverse index.
+    Showing it twice would be redundant."""
+    import shutil as _sh, yaml
+    other_dir = site_fixture / "site" / "proofs" / "downstream-x"
+    _sh.copytree(site_fixture / "site" / "proofs" / "test-claim", other_dir)
+    target_meta = site_fixture / "site" / "proofs" / "test-claim" / "meta.yaml"
+    meta = yaml.safe_load(target_meta.read_text()) or {}
+    meta["depends_on"] = [
+        {"relation": "IsCitedBy",
+         "identifiers": [{"type": "slug", "value": "downstream-x"}]},
+    ]
+    target_meta.write_text(yaml.dump(meta, sort_keys=False))
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    src_html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    # No Builds on / Related work / Cited by block should appear on source —
+    # the inverse-relation entry is suppressed to avoid duplication.
+    assert "Builds on" not in src_html
+    assert "Related work" not in src_html
+    assert "Cited by" not in src_html
+    # The same proof's "Used by" (driven by reverse index) must list downstream-x.
+    assert "Used by" in src_html
+    assert "downstream-x" in src_html
+
+
+def test_build_inverse_relation_does_not_appear_in_related_work(site_fixture):
+    """Confirm IsCitedBy with external id never lands in 'Related work'."""
+    import yaml
+    target_meta = site_fixture / "site" / "proofs" / "test-claim" / "meta.yaml"
+    meta = yaml.safe_load(target_meta.read_text()) or {}
+    meta["depends_on"] = [
+        {"relation": "References",
+         "identifiers": [{"type": "arxiv", "value": "2603.21852"}]},
+        {"relation": "IsRequiredBy",
+         "identifiers": [{"type": "doi", "value": "10.5281/zenodo.42"}]},
+    ]
+    target_meta.write_text(yaml.dump(meta, sort_keys=False))
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    # Related work must contain the References entry but not the IsRequiredBy.
+    related_idx = html.find("Related work")
+    cited_idx = html.find("Cited by")
+    assert related_idx != -1
+    assert cited_idx != -1
+    related_section = html[related_idx:cited_idx if cited_idx > related_idx else len(html)]
+    assert "2603.21852" in related_section
+    assert "10.5281/zenodo.42" not in related_section

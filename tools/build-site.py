@@ -24,7 +24,8 @@ from tools.lib.citation import (
     generate_apa, generate_chicago, build_cff, build_codemeta,
 )
 from tools.lib.depends_on import (
-    PREREQUISITE_RELATIONS, validate_repo, build_reverse_index,
+    PREREQUISITE_RELATIONS, INVERSE_RELATIONS, SYMMETRIC_RELATIONS,
+    validate_repo, build_reverse_index,
 )
 
 SITE_GENERATOR_VERSION = "1.0.0"
@@ -749,16 +750,32 @@ def main():
         write_file(proof_out / "cite.txt", generate_cite_txt(citation_ctx))
 
         # depends_on view models for the proof page.
+        # Three buckets, plus skip:
+        #   - "Builds on": forward prerequisites (PREREQUISITE_RELATIONS).
+        #   - "Cited by":  external inverse relations (target depends on us
+        #     but isn't in this site, so reverse-index can't show it).
+        #   - "Related work": forward, non-prereq citations (References,
+        #     Cites, IsSupplementTo, etc.) and symmetric (IsIdenticalTo).
+        #   - Skip slug-targeted inverse relations entirely — they're already
+        #     surfaced on the target proof's "Used by" block.
         depends_on_entries = proof.get("depends_on", []) or []
         builds_on_block = []
         related_block = []
+        cited_by_block = []
         for entry in depends_on_entries:
             has_slug = any(i.type == "slug" for i in entry.identifiers)
-            is_prereq = entry.relation in PREREQUISITE_RELATIONS
-            target = builds_on_block if (has_slug and is_prereq) else related_block
-            target.append(_render_depends_on_entry(
+            rendered = _render_depends_on_entry(
                 entry, proofs_by_slug=proofs_by_slug, base_url=base_url,
-            ))
+            )
+            if entry.relation in PREREQUISITE_RELATIONS:
+                builds_on_block.append(rendered)
+            elif entry.relation in INVERSE_RELATIONS:
+                if has_slug:
+                    continue  # avoid double-display vs reverse index
+                cited_by_block.append(rendered)
+            else:
+                # forward non-prereq + symmetric
+                related_block.append(rendered)
         used_by = []
         for citer_slug in reverse_index.get(proof["slug"], []):
             citer = proofs_by_slug.get(citer_slug)
@@ -810,6 +827,7 @@ def main():
             fact_tooltips=tooltips,
             builds_on=builds_on_block,
             related_work=related_block,
+            cited_by=cited_by_block,
             used_by=used_by,
         ))
         shutil.copy2(src_dir / "proof.py", proof_out / "proof.py")

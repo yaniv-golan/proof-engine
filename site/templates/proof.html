@@ -115,6 +115,27 @@
 </div>
 {% endif %}
 
+{% if cited_by %}
+<div class="depends-on-block depends-on-cited-by">
+  <h3 class="depends-on-heading">Cited by</h3>
+  <ul class="depends-on-list">
+    {% for entry in cited_by %}
+    <li class="depends-on-entry">
+      <span class="depends-on-relation">{{ entry.relation_humanized }}</span>
+      {% for id in entry.identifiers %}
+        {% if id.href %}
+          <a class="depends-on-pill depends-on-pill-{{ id.type }}" href="{{ id.href }}">{{ id.label }}</a>
+        {% else %}
+          <span class="depends-on-pill depends-on-pill-{{ id.type }}">{{ id.label }}</span>
+        {% endif %}
+      {% endfor %}
+      {% if entry.note %}<div class="depends-on-note">{{ entry.note }}</div>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
 {% if used_by %}
 <div class="depends-on-block depends-on-used-by">
   <h3 class="depends-on-heading">Used by</h3>
