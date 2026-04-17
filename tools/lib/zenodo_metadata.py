@@ -31,6 +31,16 @@ _SCHEME_BY_TYPE: dict[str, str] = {
 }
 
 
+_RESOURCE_TYPE_BY_TYPE: dict[str, str] = {
+    "arxiv": "publication-preprint",
+    "swhid": "software",
+    "isbn":  "publication-book",
+    # doi: omitted — could be article, dataset, software, etc. Our own DOIs
+    #   are datasets. Omit and let Zenodo/DataCite resolve from the target.
+    # handle, url: omitted — too ambiguous to guess.
+}
+
+
 def _pick_canonical(entry: DependsOnEntry) -> Identifier:
     """Pick the most-preferred identifier from an entry for Zenodo propagation."""
     by_type: dict[str, Identifier] = {}
@@ -63,11 +73,14 @@ def build_related_identifiers(
             )
             continue
         scheme = _SCHEME_BY_TYPE[ident.type]
-        out.append({
+        entry_out = {
             "identifier": ident.value,
             "relation": _camel(entry.relation),
             "scheme": scheme,
-        })
+        }
+        if ident.type in _RESOURCE_TYPE_BY_TYPE:
+            entry_out["resource_type"] = _RESOURCE_TYPE_BY_TYPE[ident.type]
+        out.append(entry_out)
     return out
 
 

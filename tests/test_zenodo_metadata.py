@@ -1,3 +1,5 @@
+import pytest
+
 from tools.lib.zenodo_metadata import build_related_identifiers
 from tools.lib.depends_on import DependsOnEntry, Identifier
 
@@ -80,3 +82,43 @@ def test_slug_only_entry_is_skipped_with_warning(capsys):
     captured = capsys.readouterr()
     assert "unminted-proof" in captured.err
     assert "not yet minted" in captured.err.lower() or "skipped" in captured.err.lower()
+
+
+@pytest.mark.parametrize("ident_type,ident_value,expected_rtype", [
+    ("arxiv", "2603.21852",                "publication-preprint"),
+    ("swhid", "swh:1:dir:0000000000000000000000000000000000000000", "software"),
+    ("isbn",  "9780000000000",             "publication-book"),
+])
+def test_resource_type_inferred_from_identifier_type(ident_type, ident_value, expected_rtype):
+    entries = [DependsOnEntry(
+        relation="References",
+        identifiers=[Identifier(type=ident_type, value=ident_value)],
+    )]
+    result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+    non_webpage = [r for r in result if r["relation"] != "isSupplementedBy"]
+    assert non_webpage[0]["resource_type"] == expected_rtype
+
+
+def test_doi_omits_resource_type():
+    # DOIs can point to articles, datasets, software, etc. Our own Zenodo
+    # records are minted as dataset, so hardcoding publication-article would
+    # be wrong. Omit and let Zenodo / DataCite look up the target's own type.
+    entries = [DependsOnEntry(
+        relation="IsDerivedFrom",
+        identifiers=[Identifier(type="doi", value="10.5281/zenodo.19626399")],
+    )]
+    result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+    doi_edge = next(r for r in result if r.get("scheme") == "doi")
+    assert "resource_type" not in doi_edge
+
+
+def test_handle_and_url_omit_resource_type():
+    entries = [
+        DependsOnEntry(relation="References",
+                       identifiers=[Identifier(type="url", value="https://ex.test/x")]),
+        DependsOnEntry(relation="References",
+                       identifiers=[Identifier(type="handle", value="10.5072/FK2")]),
+    ]
+    result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+    for r in result[1:]:  # skip webpage edge
+        assert "resource_type" not in r
