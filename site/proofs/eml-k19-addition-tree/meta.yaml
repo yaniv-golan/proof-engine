@@ -1,2 +1,18 @@
 tags:
 - mathematics
+depends_on:
+- relation: IsDerivedFrom
+  identifiers:
+  - type: slug
+    value: the-binary-operator-defined-by-text-eml-a-b-exp-a-ln-b-satisfies-text-eml-x-1
+  note: EXP identity eml(x,1)=exp(x)
+- relation: IsDerivedFrom
+  identifiers:
+  - type: slug
+    value: eml-triple-nesting-recovers-ln-x
+  note: LN identity from K=7 triple nesting
+- relation: References
+  identifiers:
+  - type: arxiv
+    value: '2603.21852'
+  note: Originating paper
