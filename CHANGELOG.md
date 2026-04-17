@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.19.0] - 2026-04-17
+
+### Added
+
+- **Rule 9: prose references mechanically resolvable** — new hardening rule closing the hand-typed-attribution escape route (e.g., a correct arXiv link laundering an incorrect "R. Cheng" author name in prose). Prose authors and titles in `proof.md`, `proof_audit.md`, and `proof_narrative.md` must either be rendered from `{{cite:<type>:<value>[:<style>]}}` tokens or agree with a registered identifier's resolved metadata. Documented in `references/hardening-rules.md` and the methodology page (`docs/DESIGN.md`).
+- **`tools/lib/reference_resolver.py`** — identifier-resolution library. Parses arXiv IDs, DOIs, SWHIDs, Handles, ISBNs, and URLs (`collect_identifiers`); resolves to canonical author/title metadata via arXiv API, DataCite, Crossref, Handle.Net, and OpenLibrary backends; caches per-proof in `depends_on_resolved.json`.
+- **`tools/lib/prose_reference_scan.py`** — four-pass prose verifier. Pass 1 discovers identifier mentions (literal or inside link targets); Pass 2 cross-checks nearby authors/titles against the resolved metadata with Unicode-folded compound-surname matching and Jaccard title similarity; Pass 3 advises on bare identifiers lacking attribution; Pass 4 sweeps dangling attributions not backed by any registered identifier. Verification windows bound at blank-line breaks so same-paragraph attributions are covered without absorbing cross-paragraph text.
+- **`tools/lib/cite_expander.py`** — renderer for `{{cite:<type>:<value>[:<style>]}}` tokens. Three styles (full / short / inline); idempotent — re-running over already-expanded output is a no-op; leaves a sidecar comment so the verifier treats the rendered region as trusted.
+- **CLI subcommands on `tools/proof-site.py`** — `resolve-deps` (populate or refresh a proof's resolved-metadata cache), `cite-expand` (render cite tokens, with `--check` mode for gating), and `verify-prose` (run the four-pass scan).
+- **Pre-flight gates**:
+  - **`publish`** — three-step offline pre-stage gate: `resolve-deps`, `cite-expand --check`, `verify-prose`. Preserves an existing `depends_on_resolved.json` cache on `--force` republish.
+  - **`mint-doi`** — two-step pre-flight: `cite-expand --check` + `verify-prose` before minting.
+  - **`validate-site-proof`** — invokes `verify_prose` on the staged directory as its sixth validation step; CI fails on prose-reference mismatches.
+- **`tools/migrate-prose-refs.py`** — one-time migration tool that resolves identifiers and runs the four-pass verifier over every proof under `site/proofs/`, writing `migration-report.md` with per-proof status.
+
+### Changed
+
+- **`SKILL.md`** — "The 8 Hardening Rules" → "The 9 Hardening Rules"; Rule 9 row added.
+- **README.md** — hardening-rule count and rule table updated to include Rule 9.
+- **`docs/DESIGN.md`** — new "Prose Reference Verification" section describing the four passes and the `{{cite:...}}` workflow. Methodology page registers the section via `tools/build-site.py`.
+
+### Notes
+
+- Existing site proofs do not need to be regenerated. Caches populate lazily on the next per-proof republish; a one-shot backfill can be done any time via `tools/migrate-prose-refs.py`.
+
 ## [1.18.0] - 2026-04-16
 
 ### Added
