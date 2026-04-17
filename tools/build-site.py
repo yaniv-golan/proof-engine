@@ -743,7 +743,9 @@ def main():
     env.filters["fact_tooltips"] = lambda html, tips: Markup(add_fact_tooltips(str(html), tips))
     env.filters["strip_latex"] = strip_latex
 
-    common = {"base_url": base_url, "site_url": site_url}
+    version_file = Path(__file__).parent.parent / "VERSION"
+    version = version_file.read_text().strip() if version_file.exists() else ""
+    common = {"base_url": base_url, "site_url": site_url, "version": version}
     stats = compute_stats(proofs)
 
     # Landing page — pass all featured proofs; JS picks 3 randomly per page load
