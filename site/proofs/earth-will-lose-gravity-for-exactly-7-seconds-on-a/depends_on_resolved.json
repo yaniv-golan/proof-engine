@@ -1,0 +1,49 @@
+{
+  "url:https://www.bgr.com/2081398/nasa-conspiracy-theory-earth-lose-gravity-august-2026-explained/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.bgr.com/2081398/nasa-conspiracy-theory-earth-lose-gravity-august-2026-explained/",
+    "canonical_url": "https://www.bgr.com/2081398/nasa-conspiracy-theory-earth-lose-gravity-august-2026-explained/",
+    "title": "NASA Debunked The Conspiracy Theory That Earth Will Lose Gravity In August - BGR",
+    "authors": [
+      "Chris Smith"
+    ],
+    "year": 2026,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:20Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 58496
+    }
+  },
+  "url:https://dailygalaxy.com/2026/01/earth-lose-gravity-for-7-seconds-2026-nasa/": {
+    "identifier_type": "url",
+    "identifier_value": "https://dailygalaxy.com/2026/01/earth-lose-gravity-for-7-seconds-2026-nasa/",
+    "canonical_url": "https://dailygalaxy.com/2026/01/earth-lose-gravity-for-7-seconds-2026-nasa/",
+    "title": "Is Earth Really Losing Gravity for 7 Seconds in 2026? Here&#039;s What NASA Actually Said",
+    "authors": [],
+    "year": 2026,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:21Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 146084
+    }
+  },
+  "url:https://spaceplace.nasa.gov/what-is-gravity/en/": {
+    "identifier_type": "url",
+    "identifier_value": "https://spaceplace.nasa.gov/what-is-gravity/en/",
+    "canonical_url": "https://spaceplace.nasa.gov/what-is-gravity/en/",
+    "title": "What Is Gravity? | NASA Space Place – NASA Science for Kids",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:22Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 20607
+    }
+  }
+}

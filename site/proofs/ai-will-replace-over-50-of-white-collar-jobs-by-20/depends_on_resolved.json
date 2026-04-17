@@ -1,0 +1,62 @@
+{
+  "url:https://fortune.com/2026/02/02/ai-labor-market-yale-budget-lab-ai-washing/": {
+    "identifier_type": "url",
+    "identifier_value": "https://fortune.com/2026/02/02/ai-labor-market-yale-budget-lab-ai-washing/",
+    "canonical_url": "https://fortune.com/2026/02/02/ai-labor-market-yale-budget-lab-ai-washing/",
+    "title": "If AI is roiling the job market, the data isn’t showing it, Yale Budget Lab report says, raising questions of ‘AI-washing’ to justify mass layoffs | Fortune",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:11:50Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 484551
+    }
+  },
+  "url:https://www.anthropic.com/research/labor-market-impacts": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.anthropic.com/research/labor-market-impacts",
+    "canonical_url": "https://www.anthropic.com/research/labor-market-impacts",
+    "title": "Labor market impacts of AI: A new measure and early evidence",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:11:54Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 212714
+    }
+  },
+  "url:https://www.jpmorgan.com/insights/global-research/artificial-intelligence/ai-impact-job-growth": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.jpmorgan.com/insights/global-research/artificial-intelligence/ai-impact-job-growth",
+    "canonical_url": "https://www.jpmorgan.com/insights/global-research/artificial-intelligence/ai-impact-job-growth",
+    "title": "AI’s Impact on Job Growth | J.P. Morgan Global Research",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:11:55Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 197226
+    }
+  },
+  "url:https://hbr.org/2026/03/research-how-ai-is-changing-the-labor-market": {
+    "identifier_type": "url",
+    "identifier_value": "https://hbr.org/2026/03/research-how-ai-is-changing-the-labor-market",
+    "canonical_url": "https://hbr.org/2026/03/research-how-ai-is-changing-the-labor-market",
+    "title": "Research: How AI Is Changing the Labor Market",
+    "authors": [],
+    "year": 2026,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:11:56Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 128506
+    }
+  }
+}

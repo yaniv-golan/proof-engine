@@ -1,0 +1,124 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC9938358/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9938358/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9938358/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:02Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21138
+    }
+  },
+  "url:https://www.health.harvard.edu/blog/will-blue-light-from-electronic-devices-increase-my-risk-of-macular-degeneration-and-blindness-2019040816365": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.health.harvard.edu/blog/will-blue-light-from-electronic-devices-increase-my-risk-of-macular-degeneration-and-blindness-2019040816365",
+    "canonical_url": "https://www.health.harvard.edu/blog/will-blue-light-from-electronic-devices-increase-my-risk-of-macular-degeneration-and-blindness-2019040816365",
+    "title": "Will blue light from electronic devices increase my risk of macular degeneration and blindness? - Harvard Health",
+    "authors": [
+      "David Ramsey, MD, PhD, MPH"
+    ],
+    "year": 2019,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:02Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 194214
+    }
+  },
+  "url:https://greenbusinesslight.com/resources/lighting-lux-lumens-watts/": {
+    "identifier_type": "url",
+    "identifier_value": "https://greenbusinesslight.com/resources/lighting-lux-lumens-watts/",
+    "canonical_url": "https://greenbusinesslight.com/resources/lighting-lux-lumens-watts/",
+    "title": "Read Our Ultimate Guide To Lux vs Lumens vs Watts For Lighting Installations | Warehouse & Factory Lighting |\r\n        GREEN BUSINESS LIGHT",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:06Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 141902
+    }
+  },
+  "url:https://www.aao.org/eye-health/tips-prevention/should-you-be-worried-about-blue-light": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.aao.org/eye-health/tips-prevention/should-you-be-worried-about-blue-light",
+    "canonical_url": "https://www.aao.org/eye-health/tips-prevention/should-you-be-worried-about-blue-light",
+    "title": "Should You Be Worried About Blue Light?",
+    "authors": [],
+    "year": 2021,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:08Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 93981
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC11154150/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11154150/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11154150/",
+    "title": "Effects of evening smartphone use on sleep and declarative memory consolidation in male adolescents and young adults - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:09Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 269849
+    }
+  },
+  "url:https://www.chronobiologyinmedicine.org/journal/view.php?number=167": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.chronobiologyinmedicine.org/journal/view.php?number=167",
+    "canonical_url": "https://www.chronobiologyinmedicine.org/journal/view.php?number=167",
+    "title": "Impacts of Blue Light Exposure From Electronic Devices on Circadian Rhythm and Sleep Disruption in Adolescent and Young Adult Students",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:11Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 112771
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC4313820/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4313820/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4313820/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:11Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21140
+    }
+  },
+  "url:https://www.sleepfoundation.org/how-sleep-works/how-electronics-affect-sleep": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.sleepfoundation.org/how-sleep-works/how-electronics-affect-sleep",
+    "canonical_url": "https://www.sleepfoundation.org/how-sleep-works/how-electronics-affect-sleep",
+    "title": "How Electronics Affect Sleep",
+    "authors": [],
+    "year": 2017,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:12Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 557772
+    }
+  }
+}

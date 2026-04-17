@@ -1,0 +1,47 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2776484/",
+    "title": "The Human Brain in Numbers: A Linearly Scaled-up Primate Brain - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:35Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 229116
+    }
+  },
+  "url:https://bri.ucla.edu/brain-fact/billions-of-neurons-trillions-of-synapses/": {
+    "identifier_type": "url",
+    "identifier_value": "https://bri.ucla.edu/brain-fact/billions-of-neurons-trillions-of-synapses/",
+    "canonical_url": "https://bri.ucla.edu/brain-fact/billions-of-neurons-trillions-of-synapses/",
+    "title": "Billions of neurons, trillions of synapses &#8211; UCLA Brain Research Institute (BRI)",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:37Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 77742
+    }
+  },
+  "url:https://bionumbers.hms.harvard.edu/bionumber.aspx?s=n&v=3&id=112055": {
+    "identifier_type": "url",
+    "identifier_value": "https://bionumbers.hms.harvard.edu/bionumber.aspx?s=n&v=3&id=112055",
+    "canonical_url": "https://bionumbers.hms.harvard.edu/bionumber.aspx?s=n&v=3&id=112055",
+    "title": "Average number of synaptic connections each n - Human Homo sapiens - BNID 112055",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:39Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 14241
+    }
+  }
+}

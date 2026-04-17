@@ -1,0 +1,47 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC4378297/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4378297/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4378297/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:52Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21139
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC12155732/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12155732/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12155732/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:53Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21139
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/30448083/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/30448083/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/30448083/",
+    "title": "The Effects of Grounding (Earthing) on Bodyworkers&#x27; Pain and Overall Quality of Life: A Randomized Controlled Trial - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:53Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 147589
+    }
+  }
+}

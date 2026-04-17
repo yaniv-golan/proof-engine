@@ -1,0 +1,64 @@
+{
+  "url:https://www.nhs.uk/live-well/eat-well/how-to-eat-a-balanced-diet/what-are-processed-foods/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.nhs.uk/live-well/eat-well/how-to-eat-a-balanced-diet/what-are-processed-foods/",
+    "canonical_url": "https://www.nhs.uk/live-well/eat-well/how-to-eat-a-balanced-diet/what-are-processed-foods/",
+    "title": "Processed foods",
+    "authors": [
+      "https://www.facebook.com/nhswebsite/"
+    ],
+    "year": 2022,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:04Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 33062
+    }
+  },
+  "url:https://nutritionsource.hsph.harvard.edu/processed-foods/": {
+    "identifier_type": "url",
+    "identifier_value": "https://nutritionsource.hsph.harvard.edu/processed-foods/",
+    "canonical_url": "https://nutritionsource.hsph.harvard.edu/processed-foods/",
+    "title": "Processed Foods and Health &bull; The Nutrition Source",
+    "authors": [],
+    "year": 2019,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:04Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 131731
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC6389637/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6389637/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6389637/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:04Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21140
+    }
+  },
+  "url:https://www.who.int/news-room/fact-sheets/detail/healthy-diet": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
+    "canonical_url": "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
+    "title": "Healthy diet",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:04Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 134043
+    }
+  }
+}

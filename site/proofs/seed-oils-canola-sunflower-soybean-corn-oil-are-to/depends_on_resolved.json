@@ -1,0 +1,77 @@
+{
+  "url:https://hsph.harvard.edu/news/scientists-debunk-seed-oil-health-risks/": {
+    "identifier_type": "url",
+    "identifier_value": "https://hsph.harvard.edu/news/scientists-debunk-seed-oil-health-risks/",
+    "canonical_url": "https://hsph.harvard.edu/news/scientists-debunk-seed-oil-health-risks/",
+    "title": "Scientists debunk claims of seed oil health risks | Harvard T.H. Chan School of Public Health",
+    "authors": [],
+    "year": 2022,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:48Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 264909
+    }
+  },
+  "url:https://med.stanford.edu/news/insights/2025/03/5-things-to-know-about-the-effects-of-seed-oils-on-health.html": {
+    "identifier_type": "url",
+    "identifier_value": "https://med.stanford.edu/news/insights/2025/03/5-things-to-know-about-the-effects-of-seed-oils-on-health.html",
+    "canonical_url": "https://med.stanford.edu/news/insights/2025/03/5-things-to-know-about-the-effects-of-seed-oils-on-health.html",
+    "title": "Five things to know about seed oils and your health",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:49Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 81036
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC11600290/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11600290/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11600290/",
+    "title": "Perspective on the health effects of unsaturated fatty acids and commonly consumed plant oils high in unsaturated fat - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:49Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 333379
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC6179509/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6179509/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6179509/",
+    "title": "Linoleic Acid, Vegetable Oils &amp; Inflammation - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:49Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 125726
+    }
+  },
+  "url:https://www.sciencedaily.com/releases/2025/06/250621103446.htm": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.sciencedaily.com/releases/2025/06/250621103446.htm",
+    "canonical_url": "https://www.sciencedaily.com/releases/2025/06/250621103446.htm",
+    "title": "Myth-busting study shows controversial seed oils reduce inflammation",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:50Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 48918
+    }
+  }
+}

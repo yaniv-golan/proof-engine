@@ -1,0 +1,47 @@
+{
+  "url:https://nutritionsource.hsph.harvard.edu/anti-nutrients/lectins/": {
+    "identifier_type": "url",
+    "identifier_value": "https://nutritionsource.hsph.harvard.edu/anti-nutrients/lectins/",
+    "canonical_url": "https://nutritionsource.hsph.harvard.edu/anti-nutrients/lectins/",
+    "title": "Lectins &bull; The Nutrition Source",
+    "authors": [],
+    "year": 2019,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:48Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 105337
+    }
+  },
+  "url:https://www.mdanderson.org/cancerwise/should-you-eat-a-lectin-free-diet.h00-159695178.html": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.mdanderson.org/cancerwise/should-you-eat-a-lectin-free-diet.h00-159695178.html",
+    "canonical_url": "https://www.mdanderson.org/cancerwise/should-you-eat-a-lectin-free-diet.h00-159695178.html",
+    "title": "Should you eat a lectin-free diet?",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:49Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 151931
+    }
+  },
+  "url:https://nutritionstudies.org/the-plant-paradox-by-steven-grundy-md-commentary/": {
+    "identifier_type": "url",
+    "identifier_value": "https://nutritionstudies.org/the-plant-paradox-by-steven-grundy-md-commentary/",
+    "canonical_url": "https://nutritionstudies.org/the-plant-paradox-by-steven-grundy-md-commentary/",
+    "title": "&#039;The Plant Paradox&#039; by Steven Gundry MD-- A Commentary",
+    "authors": [],
+    "year": 2017,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:51Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 117185
+    }
+  }
+}

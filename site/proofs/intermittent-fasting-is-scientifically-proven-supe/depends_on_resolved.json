@@ -1,0 +1,62 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC11930668/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11930668/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11930668/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:40Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21140
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC9108547/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9108547/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9108547/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:40Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21140
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC11262566/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11262566/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11262566/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:40Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21144
+    }
+  },
+  "url:https://newsroom.heart.org/news/8-hour-time-restricted-eating-linked-to-a-91-higher-risk-of-cardiovascular-death": {
+    "identifier_type": "url",
+    "identifier_value": "https://newsroom.heart.org/news/8-hour-time-restricted-eating-linked-to-a-91-higher-risk-of-cardiovascular-death",
+    "canonical_url": "https://newsroom.heart.org/news/8-hour-time-restricted-eating-linked-to-a-91-higher-risk-of-cardiovascular-death",
+    "title": "8-hour time-restricted eating linked to a 91% higher risk of cardiovascular death",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:43Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 79514
+    }
+  }
+}

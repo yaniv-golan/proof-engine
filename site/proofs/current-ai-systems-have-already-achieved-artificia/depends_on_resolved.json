@@ -1,0 +1,56 @@
+{
+  "arxiv:2311.02462": {
+    "identifier_type": "arxiv",
+    "identifier_value": "2311.02462",
+    "canonical_url": "https://arxiv.org/abs/2311.02462",
+    "title": "Levels of AGI for Operationalizing Progress on the Path to AGI",
+    "authors": [
+      "Meredith Ringel Morris",
+      "Jascha Sohl-Dickstein",
+      "Noah Fiedel",
+      "Tris Warkentin",
+      "Allan Dafoe",
+      "Aleksandra Faust",
+      "Clement Farabet",
+      "Shane Legg"
+    ],
+    "year": 2023,
+    "venue": "arXiv preprint",
+    "version": "v5",
+    "resolved_at": "2026-04-17T12:12:53Z",
+    "source_api": "export.arxiv.org/api/query",
+    "raw": {
+      "atom_feed": "<?xml version='1.0' encoding='UTF-8'?>\n<feed xmlns:opensearch=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns:arxiv=\"http://arxiv.org/schemas/atom\" xmlns=\"http://www.w3.org/2005/Atom\">\n  <id>https://arxiv.org/api/CqMptQi6ndj/7YpBmHqkp6cGRf0</id>\n  <title>arXiv Query: search_query=&amp;id_list=2311.02462&amp;start=0&amp;max_results=10</title>\n  <updated>2026-04-17T12:12:53Z</updated>\n  <link href=\"https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2311.02462\" type=\"application/atom+xml\"/>\n  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>\n  <opensearch:totalResults>1</opensearch:totalResults>\n  <opensearch:startIndex>0</opensearch:startIndex>\n  <entry>\n    <id>http://arxiv.org/abs/2311.02462v5</id>\n    <title>Levels of AGI for Operationalizing Progress on the Path to AGI</title>\n    <updated>2025-09-24T18:37:50Z</updated>\n    <link href=\"https://arxiv.org/abs/2311.02462v5\" rel=\"alternate\" type=\"text/html\"/>\n    <link href=\"https://arxiv.org/pdf/2311.02462v5\" rel=\"related\" type=\"application/pdf\" title=\"pdf\"/>\n    <summary>We propose a framework for classifying the capabilities and behavior of Artificial General Intelligence (AGI) models and their precursors. This framework introduces levels of AGI performance, generality, and autonomy, providing a common language to compare models, assess risks, and measure progress along the path to AGI. To develop our framework, we analyze existing definitions of AGI, and distill six principles that a useful ontology for AGI should satisfy. With these principles in mind, we propose \"Levels of AGI\" based on depth (performance) and breadth (generality) of capabilities, and reflect on how current systems fit into this ontology. We discuss the challenging requirements for future benchmarks that quantify the behavior and capabilities of AGI models against these levels. Finally, we discuss how these levels of AGI interact with deployment considerations such as autonomy and risk, and emphasize the importance of carefully selecting Human-AI Interaction paradigms for responsible and safe deployment of highly capable AI systems.</summary>\n    <category term=\"cs.AI\" scheme=\"http://arxiv.org/schemas/atom\"/>\n    <published>2023-11-04T17:44:58Z</published>\n    <arxiv:comment>version 5 - We updated the nomenclature of Level 4 to be \"Exceptional\" instead of \"Virtuoso\"; due to ICML 2024 position paper titling requirements, the title is now \"Levels of AGI for Operationalizing Progress on the Path to AGI\" rather than \"Levels of AGI: Operationalizing Progress on the Path to AGI\"</arxiv:comment>\n    <arxiv:primary_category term=\"cs.AI\"/>\n    <arxiv:journal_ref>Proceedings of ICML 2024</arxiv:journal_ref>\n    <author>\n      <name>Meredith Ringel Morris</name>\n    </author>\n    <author>\n      <name>Jascha Sohl-Dickstein</name>\n    </author>\n    <author>\n      <name>Noah Fiedel</name>\n    </author>\n    <author>\n      <name>Tris Warkentin</name>\n    </author>\n    <author>\n      <name>Allan Dafoe</name>\n    </author>\n    <author>\n      <name>Aleksandra Faust</name>\n    </author>\n    <author>\n      <name>Clement Farabet</name>\n    </author>\n    <author>\n      <name>Shane Legg</name>\n    </author>\n  </entry>\n</feed>\n"
+    }
+  },
+  "url:https://garymarcus.substack.com/p/rumors-of-agis-arrival-have-been": {
+    "identifier_type": "url",
+    "identifier_value": "https://garymarcus.substack.com/p/rumors-of-agis-arrival-have-been",
+    "canonical_url": "https://garymarcus.substack.com/p/rumors-of-agis-arrival-have-been",
+    "title": "Rumors of AGI’s arrival have been greatly exaggerated",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:54Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 215028
+    }
+  },
+  "url:https://timdettmers.com/2025/12/10/why-agi-will-not-happen/": {
+    "identifier_type": "url",
+    "identifier_value": "https://timdettmers.com/2025/12/10/why-agi-will-not-happen/",
+    "canonical_url": "https://timdettmers.com/2025/12/10/why-agi-will-not-happen/",
+    "title": "Why AGI Will Not Happen &mdash; Tim Dettmers",
+    "authors": [],
+    "year": 2025,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:58Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 57985
+    }
+  }
+}

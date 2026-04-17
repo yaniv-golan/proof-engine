@@ -1,0 +1,47 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC7190072/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7190072/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7190072/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:22Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21139
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC8137614/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8137614/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8137614/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:22Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21140
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC7400894/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7400894/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7400894/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:23Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21137
+    }
+  }
+}

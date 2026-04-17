@@ -1,0 +1,62 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC5515645/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5515645/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5515645/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:05Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21138
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/37443272/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/37443272/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/37443272/",
+    "title": "Long-term aspartame and saccharin intakes are related to greater volumes of visceral, intermuscular, and subcutaneous adipose tissue: the CARDIA study - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:08Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 172434
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/27216413/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/27216413/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/27216413/",
+    "title": "Aspartame intake is associated with greater glucose intolerance in individuals with obesity - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:08Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 165406
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/25231862/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/25231862/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/25231862/",
+    "title": "Artificial sweeteners induce glucose intolerance by altering the gut microbiota - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:09Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 218817
+    }
+  }
+}

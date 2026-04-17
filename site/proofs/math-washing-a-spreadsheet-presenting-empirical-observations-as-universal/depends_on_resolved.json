@@ -1,0 +1,47 @@
+{
+  "url:https://www.britannica.com/topic/criterion-of-falsifiability": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.britannica.com/topic/criterion-of-falsifiability",
+    "canonical_url": "https://www.britannica.com/topic/criterion-of-falsifiability",
+    "title": "Criterion of falsifiability | Falsificationism, Popper, Hypotheses | Britannica",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:01Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 64777
+    }
+  },
+  "url:https://plato.stanford.edu/entries/scientific-method/": {
+    "identifier_type": "url",
+    "identifier_value": "https://plato.stanford.edu/entries/scientific-method/",
+    "canonical_url": "https://plato.stanford.edu/entries/scientific-method/",
+    "title": "Scientific Method (Stanford Encyclopedia of Philosophy)",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:05Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 118834
+    }
+  },
+  "url:https://catalogofbias.org/biases/data-dredging-bias/": {
+    "identifier_type": "url",
+    "identifier_value": "https://catalogofbias.org/biases/data-dredging-bias/",
+    "canonical_url": "https://catalogofbias.org/biases/data-dredging-bias/",
+    "title": "Data-dredging bias | Catalog of Bias",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:08Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 108136
+    }
+  }
+}

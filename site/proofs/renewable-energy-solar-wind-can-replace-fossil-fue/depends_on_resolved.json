@@ -1,0 +1,62 @@
+{
+  "url:https://www.iea.org/reports/electricity-grids-and-secure-energy-transitions/executive-summary": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.iea.org/reports/electricity-grids-and-secure-energy-transitions/executive-summary",
+    "canonical_url": "https://www.iea.org/reports/electricity-grids-and-secure-energy-transitions/executive-summary",
+    "title": "Executive summary – Electricity Grids and Secure Energy Transitions – Analysis - IEA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:44Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 297785
+    }
+  },
+  "url:https://www.pv-tech.org/irena-grid-infrastructure-and-energy-storage-key-to-energy-transition/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.pv-tech.org/irena-grid-infrastructure-and-energy-storage-key-to-energy-transition/",
+    "canonical_url": "https://www.pv-tech.org/irena-grid-infrastructure-and-energy-storage-key-to-energy-transition/",
+    "title": "IRENA: Grid infrastructure and energy storage key to energy transition",
+    "authors": [],
+    "year": 2025,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:46Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 281983
+    }
+  },
+  "url:https://www.iea.org/reports/renewables-2025/renewable-electricity": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.iea.org/reports/renewables-2025/renewable-electricity",
+    "canonical_url": "https://www.iea.org/reports/renewables-2025/renewable-electricity",
+    "title": "Renewable electricity – Renewables 2025 – Analysis - IEA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:47Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 347239
+    }
+  },
+  "url:https://www.eia.gov/todayinenergy/detail.php?id=67205": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.eia.gov/todayinenergy/detail.php?id=67205",
+    "canonical_url": "https://www.eia.gov/todayinenergy/detail.php?id=67205",
+    "title": "New U.S. electric generating capacity expected to reach a record high in 2026 - U.S. Energy Information Administration (EIA)",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:47Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 65195
+    }
+  }
+}

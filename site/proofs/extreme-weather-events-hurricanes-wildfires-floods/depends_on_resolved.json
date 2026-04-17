@@ -1,0 +1,47 @@
+{
+  "url:https://www.gfdl.noaa.gov/global-warming-and-hurricanes/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.gfdl.noaa.gov/global-warming-and-hurricanes/",
+    "canonical_url": "https://www.gfdl.noaa.gov/global-warming-and-hurricanes/",
+    "title": "Global Warming and Hurricanes &#8211; Geophysical Fluid Dynamics Laboratory",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:39Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 146935
+    }
+  },
+  "url:https://pubs.usgs.gov/fs/fs07603/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubs.usgs.gov/fs/fs07603/",
+    "canonical_url": "https://pubs.usgs.gov/fs/fs07603/",
+    "title": "Effects of Urban Development on Floods",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:40Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 26098
+    }
+  },
+  "url:https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-11/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-11/",
+    "canonical_url": "https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-11/",
+    "title": "Chapter 11: Weather and Climate Extreme Events in a Changing Climate",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:43Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 2275063
+    }
+  }
+}

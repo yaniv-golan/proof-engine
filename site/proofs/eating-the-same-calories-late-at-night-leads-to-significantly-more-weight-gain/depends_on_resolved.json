@@ -1,0 +1,62 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC7337187/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7337187/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7337187/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:23Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21139
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC5657289/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5657289/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5657289/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:23Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21140
+    }
+  },
+  "url:https://news.harvard.edu/gazette/story/2022/10/study-looks-at-why-late-night-eating-increases-obesity-risk/": {
+    "identifier_type": "url",
+    "identifier_value": "https://news.harvard.edu/gazette/story/2022/10/study-looks-at-why-late-night-eating-increases-obesity-risk/",
+    "canonical_url": "https://news.harvard.edu/gazette/story/2022/10/study-looks-at-why-late-night-eating-increases-obesity-risk/",
+    "title": "Study looks at why late-night eating increases obesity risk",
+    "authors": [],
+    "year": 2022,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:23Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 135164
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC11530941/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11530941/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11530941/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:24Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21140
+    }
+  }
+}

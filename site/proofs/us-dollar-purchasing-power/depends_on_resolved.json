@@ -1,0 +1,32 @@
+{
+  "url:https://www.rateinflation.com/consumer-price-index/usa-historical-cpi/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi/",
+    "canonical_url": "https://www.rateinflation.com/consumer-price-index/usa-historical-cpi/",
+    "title": "USA historical consumer price index (CPI) - 1913 to 2026.",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:19:20Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 66017
+    }
+  },
+  "url:https://inflationdata.com/Inflation/Consumer_Price_Index/HistoricalCPI.aspx": {
+    "identifier_type": "url",
+    "identifier_value": "https://inflationdata.com/Inflation/Consumer_Price_Index/HistoricalCPI.aspx",
+    "canonical_url": "https://inflationdata.com/Inflation/Consumer_Price_Index/HistoricalCPI.aspx",
+    "title": "Historical Inflation",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:19:52Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 422462
+    }
+  }
+}

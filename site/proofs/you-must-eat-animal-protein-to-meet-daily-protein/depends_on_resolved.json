@@ -1,0 +1,47 @@
+{
+  "url:https://pubmed.ncbi.nlm.nih.gov/27886704/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/27886704/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/27886704/",
+    "title": "Position of the Academy of Nutrition and Dietetics: Vegetarian Diets - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:20:26Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 126176
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC6893534/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6893534/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6893534/",
+    "title": "Dietary Protein and Amino Acids in Vegetarian Diets—A Review - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:20:26Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 291641
+    }
+  },
+  "url:https://health.clevelandclinic.org/do-i-need-to-worry-about-eating-complete-proteins": {
+    "identifier_type": "url",
+    "identifier_value": "https://health.clevelandclinic.org/do-i-need-to-worry-about-eating-complete-proteins",
+    "canonical_url": "https://health.clevelandclinic.org/do-i-need-to-worry-about-eating-complete-proteins",
+    "title": "What’s a Complete Protein and Should You Care?",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:20:27Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 353703
+    }
+  }
+}

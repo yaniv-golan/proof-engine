@@ -1,0 +1,17 @@
+{
+  "url:https://a16z.com/2015/06/08/performance-data-and-the-babe-ruth-effect-in-venture-capital/": {
+    "identifier_type": "url",
+    "identifier_value": "https://a16z.com/2015/06/08/performance-data-and-the-babe-ruth-effect-in-venture-capital/",
+    "canonical_url": "https://a16z.com/2015/06/08/performance-data-and-the-babe-ruth-effect-in-venture-capital/",
+    "title": "Performance Data and the &lsquo;Babe Ruth&rsquo; Effect in Venture Capital | Andreessen Horowitz",
+    "authors": [],
+    "year": 2015,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:30Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 149020
+    }
+  }
+}

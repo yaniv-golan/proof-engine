@@ -1,0 +1,32 @@
+{
+  "url:https://pubmed.ncbi.nlm.nih.gov/16901981/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/16901981/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/16901981/",
+    "title": "Neocortical neurogenesis in humans is restricted to development - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:11:30Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 185381
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC4394608/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4394608/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4394608/",
+    "title": "Dynamics of hippocampal neurogenesis in adult humans - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:11:30Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 203572
+    }
+  }
+}

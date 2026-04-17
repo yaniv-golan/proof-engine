@@ -1,0 +1,32 @@
+{
+  "url:https://peacenow.org.il/en/settlements-watch/settlements-data/population": {
+    "identifier_type": "url",
+    "identifier_value": "https://peacenow.org.il/en/settlements-watch/settlements-data/population",
+    "canonical_url": "https://peacenow.org.il/en/settlements-watch/settlements-data/population",
+    "title": "Peace Now  Population",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:17:46Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 97916
+    }
+  },
+  "url:https://www.jewishvirtuallibrary.org/jewish-settlements-population-1970-present": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.jewishvirtuallibrary.org/jewish-settlements-population-1970-present",
+    "canonical_url": "https://www.jewishvirtuallibrary.org/jewish-settlements-population-1970-present",
+    "title": "Total Population of Jewish Settlements By Year",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:17:54Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 56726
+    }
+  }
+}

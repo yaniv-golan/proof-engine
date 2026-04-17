@@ -1,0 +1,32 @@
+{
+  "url:https://news.harvard.edu/gazette/story/2011/01/eight-weeks-to-a-better-brain/": {
+    "identifier_type": "url",
+    "identifier_value": "https://news.harvard.edu/gazette/story/2011/01/eight-weeks-to-a-better-brain/",
+    "canonical_url": "https://news.harvard.edu/gazette/story/2011/01/eight-weeks-to-a-better-brain/",
+    "title": "Eight weeks to a better brain &#8212; Harvard Gazette",
+    "authors": [],
+    "year": 2011,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:09Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 133566
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/21071182/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/21071182/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/21071182/",
+    "title": "Mindfulness practice leads to increases in regional brain gray matter density - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:13Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 176126
+    }
+  }
+}

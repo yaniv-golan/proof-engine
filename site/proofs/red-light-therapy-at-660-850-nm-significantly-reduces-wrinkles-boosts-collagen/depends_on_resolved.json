@@ -1,0 +1,77 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC3926176/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3926176/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3926176/",
+    "title": "A Controlled Trial to Determine the Efficacy of Red and Near-Infrared Light Treatment in Patient Satisfaction, Reduction of Fine Lines, Wrinkles, Skin Roughness, and Intradermal Collagen Density Increase - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:42Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 171049
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/36780572/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/36780572/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/36780572/",
+    "title": "Photobiomodulation Reduces Periocular Wrinkle Volume by 30%: A Randomized Controlled Trial - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:42Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 139040
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC11835066/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11835066/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11835066/",
+    "title": "Clinical study to evaluate the efficacy and safety of home-used LED and IRED mask for crow’s feet: A multi-center, randomized, double-blind, sham-controlled study - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:42Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 147439
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC4126803/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4126803/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4126803/",
+    "title": "Low-level laser (light) therapy (LLLT) in skin: stimulating, healing, restoring - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:43Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 280501
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC6099480/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6099480/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6099480/",
+    "title": "Light‐emitting diodes in dermatology: A systematic review of randomized controlled trials - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:43Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 220650
+    }
+  }
+}

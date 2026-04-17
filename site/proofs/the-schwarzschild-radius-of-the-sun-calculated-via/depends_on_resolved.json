@@ -1,0 +1,70 @@
+{
+  "url:https://physics.nist.gov/cgi-bin/cuu/Value?bg": {
+    "identifier_type": "url",
+    "identifier_value": "https://physics.nist.gov/cgi-bin/cuu/Value?bg",
+    "canonical_url": "https://physics.nist.gov/cgi-bin/cuu/Value?bg",
+    "title": "CODATA Value:    Newtonian constant of gravitation",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:18:20Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 7975
+    }
+  },
+  "url:https://physics.nist.gov/cgi-bin/cuu/Value?c": {
+    "identifier_type": "url",
+    "identifier_value": "https://physics.nist.gov/cgi-bin/cuu/Value?c",
+    "canonical_url": "https://physics.nist.gov/cgi-bin/cuu/Value?c",
+    "title": "CODATA Value:    speed of light in vacuum",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:18:21Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 7722
+    }
+  },
+  "arxiv:1510.07674": {
+    "identifier_type": "arxiv",
+    "identifier_value": "1510.07674",
+    "canonical_url": "https://arxiv.org/abs/1510.07674",
+    "title": "IAU 2015 Resolution B3 on Recommended Nominal Conversion Constants for Selected Solar and Planetary Properties",
+    "authors": [
+      "E. E. Mamajek",
+      "A. Prsa",
+      "G. Torres",
+      "P. Harmanec",
+      "M. Asplund",
+      "P. D. Bennett",
+      "N. Capitaine",
+      "J. Christensen-Dalsgaard",
+      "E. Depagne",
+      "W. M. Folkner",
+      "M. Haberreiter",
+      "S. Hekker",
+      "J. L. Hilton",
+      "V. Kostov",
+      "D. W. Kurtz",
+      "J. Laskar",
+      "B. D. Mason",
+      "E. F. Milone",
+      "M. M. Montgomery",
+      "M. T. Richards",
+      "J. Schou",
+      "S. G. Stewart"
+    ],
+    "year": 2015,
+    "venue": "arXiv preprint",
+    "version": "v1",
+    "resolved_at": "2026-04-17T12:18:23Z",
+    "source_api": "export.arxiv.org/api/query",
+    "raw": {
+      "atom_feed": "<?xml version='1.0' encoding='UTF-8'?>\n<feed xmlns:opensearch=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns:arxiv=\"http://arxiv.org/schemas/atom\" xmlns=\"http://www.w3.org/2005/Atom\">\n  <id>https://arxiv.org/api/xIVEoRI8AULVampljhQOtdWC1SY</id>\n  <title>arXiv Query: search_query=&amp;id_list=1510.07674&amp;start=0&amp;max_results=10</title>\n  <updated>2026-04-17T12:18:23Z</updated>\n  <link href=\"https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=1510.07674\" type=\"application/atom+xml\"/>\n  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>\n  <opensearch:totalResults>1</opensearch:totalResults>\n  <opensearch:startIndex>0</opensearch:startIndex>\n  <entry>\n    <id>http://arxiv.org/abs/1510.07674v1</id>\n    <title>IAU 2015 Resolution B3 on Recommended Nominal Conversion Constants for Selected Solar and Planetary Properties</title>\n    <updated>2015-10-26T20:52:26Z</updated>\n    <link href=\"https://arxiv.org/abs/1510.07674v1\" rel=\"alternate\" type=\"text/html\"/>\n    <link href=\"https://arxiv.org/pdf/1510.07674v1\" rel=\"related\" type=\"application/pdf\" title=\"pdf\"/>\n    <summary>Astronomers commonly quote the properties of celestial objects in units of parameters for the Sun, Jupiter, or the Earth. The resolution presented here was proposed by the IAU Inter-Division Working Group on Nominal Units for Stellar and Planetary Astronomy and passed by the XXIXth IAU General Assembly in Honolulu. IAU 2015 Resolution B3 adopts a set of nominal solar, terrestrial, and jovian conversion constants for stellar and (exo)planetary astronomy which are defined to be exact SI values. While the nominal constants are based on current best estimates (CBEs; which have uncertainties, are not secularly constant, and are updated regularly using new observations), they should be interpreted as standard values and not as CBEs. IAU 2015 Resolution B3 adopts five solar conversion constants (nominal solar radius, nominal total solar irradiance, nominal solar luminosity, nominal solar effective temperature, and nominal solar mass parameter) and six planetary conversion constants (nominal terrestrial equatorial radius, nominal terrestrial polar radius, nominal jovian equatorial radius, nominal jovian polar radius, nominal terrestrial mass parameter, and nominal jovian mass parameter).</summary>\n    <category term=\"astro-ph.SR\" scheme=\"http://arxiv.org/schemas/atom\"/>\n    <category term=\"astro-ph.EP\" scheme=\"http://arxiv.org/schemas/atom\"/>\n    <category term=\"astro-ph.GA\" scheme=\"http://arxiv.org/schemas/atom\"/>\n    <category term=\"astro-ph.HE\" scheme=\"http://arxiv.org/schemas/atom\"/>\n    <category term=\"astro-ph.IM\" scheme=\"http://arxiv.org/schemas/atom\"/>\n    <published>2015-10-26T20:52:26Z</published>\n    <arxiv:comment>6 pages, IAU 2015 Resolution B3, passed by the XXIXth IAU General Assembly in Honolulu, 13 August 2015. All IAU resolutions can be viewed at https://www.iau.org/administration/resolutions/general_assemblies/</arxiv:comment>\n    <arxiv:primary_category term=\"astro-ph.SR\"/>\n    <author>\n      <name>E. E. Mamajek</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>A. Prsa</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>G. Torres</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>P. Harmanec</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>M. Asplund</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>P. D. Bennett</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>N. Capitaine</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>J. Christensen-Dalsgaard</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>E. Depagne</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>W. M. Folkner</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>M. Haberreiter</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>S. Hekker</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>J. L. Hilton</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>V. Kostov</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>D. W. Kurtz</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>J. Laskar</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>B. D. Mason</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>E. F. Milone</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>M. M. Montgomery</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>M. T. Richards</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>J. Schou</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n    <author>\n      <name>S. G. Stewart</name>\n      <arxiv:affiliation>IAU Inter-Division A-G Working Group on Nominal Units for Stellar &amp; Planetary Astronomy</arxiv:affiliation>\n    </author>\n  </entry>\n</feed>\n"
+    }
+  }
+}

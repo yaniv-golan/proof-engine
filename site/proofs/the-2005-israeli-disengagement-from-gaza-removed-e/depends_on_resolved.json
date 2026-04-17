@@ -1,0 +1,62 @@
+{
+  "url:https://www.britannica.com/event/Israels-disengagement-from-Gaza": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.britannica.com/event/Israels-disengagement-from-Gaza",
+    "canonical_url": "https://www.britannica.com/event/Israels-disengagement-from-Gaza",
+    "title": "Israel’s disengagement from Gaza (2005) | Withdrawal, Map, Settlements, & Hamas | Britannica",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:25Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 89445
+    }
+  },
+  "url:https://www.adl.org/resources/backgrounder/disengagement": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.adl.org/resources/backgrounder/disengagement",
+    "canonical_url": "https://www.adl.org/resources/backgrounder/disengagement",
+    "title": "Disengagement",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:26Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 126357
+    }
+  },
+  "url:https://www.globalsecurity.org/military/world/palestine/pa-elections2006.htm": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.globalsecurity.org/military/world/palestine/pa-elections2006.htm",
+    "canonical_url": "https://www.globalsecurity.org/military/world/palestine/pa-elections2006.htm",
+    "title": "Palestinian Parliamentary Elections 2006",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:30Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 30322
+    }
+  },
+  "url:https://ecf.org.il/issues/issue/244": {
+    "identifier_type": "url",
+    "identifier_value": "https://ecf.org.il/issues/issue/244",
+    "canonical_url": "https://ecf.org.il/issues/issue/244",
+    "title": "Hamas Takeover of the Gaza Strip (2007)",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:35Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 14135
+    }
+  }
+}

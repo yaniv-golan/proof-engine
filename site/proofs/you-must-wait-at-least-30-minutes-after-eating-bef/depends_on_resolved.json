@@ -1,0 +1,62 @@
+{
+  "url:https://www.dukehealth.org/blog/myth-or-fact-should-you-wait-swim-after-eating": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.dukehealth.org/blog/myth-or-fact-should-you-wait-swim-after-eating",
+    "canonical_url": "https://www.dukehealth.org/blog/myth-or-fact-should-you-wait-swim-after-eating",
+    "title": "Myth or Fact: Should You Wait to Swim After Eating?",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:20:29Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 103500
+    }
+  },
+  "url:https://uamshealth.com/medical-myths/do-you-have-to-wait-30-minutes-after-eating-before-swimming/": {
+    "identifier_type": "url",
+    "identifier_value": "https://uamshealth.com/medical-myths/do-you-have-to-wait-30-minutes-after-eating-before-swimming/",
+    "canonical_url": "https://uamshealth.com/medical-myths/do-you-have-to-wait-30-minutes-after-eating-before-swimming/",
+    "title": "Do You Have to Wait 30 Minutes After Eating Before Swimming? | UAMS Health",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:20:30Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 44593
+    }
+  },
+  "url:https://www.britannica.com/story/is-it-really-dangerous-to-swim-after-eating": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.britannica.com/story/is-it-really-dangerous-to-swim-after-eating",
+    "canonical_url": "https://www.britannica.com/story/is-it-really-dangerous-to-swim-after-eating",
+    "title": "Is It Really Dangerous to Swim After Eating? | Britannica",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:20:32Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 67613
+    }
+  },
+  "url:https://www.ilsf.org/wp-content/uploads/2018/11/MPS-18-2014-Eating-before-Swimming.pdf": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.ilsf.org/wp-content/uploads/2018/11/MPS-18-2014-Eating-before-Swimming.pdf",
+    "canonical_url": "https://www.ilsf.org/wp-content/uploads/2018/11/MPS-18-2014-Eating-before-Swimming.pdf",
+    "title": "https://www.ilsf.org/wp-content/uploads/2018/11/MPS-18-2014-Eating-before-Swimming.pdf",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:20:32Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 320943
+    }
+  }
+}

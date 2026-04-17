@@ -1,0 +1,62 @@
+{
+  "url:https://science.nasa.gov/climate-change/evidence/": {
+    "identifier_type": "url",
+    "identifier_value": "https://science.nasa.gov/climate-change/evidence/",
+    "canonical_url": "https://science.nasa.gov/climate-change/evidence/",
+    "title": "Evidence - NASA Science",
+    "authors": [],
+    "year": 2022,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:17:12Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 289757
+    }
+  },
+  "url:https://www.climate.gov/news-features/understanding-climate/climate-change-global-temperature": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.climate.gov/news-features/understanding-climate/climate-change-global-temperature",
+    "canonical_url": "https://www.climate.gov/news-features/understanding-climate/climate-change-global-temperature",
+    "title": "Climate change: global temperature",
+    "authors": [],
+    "year": 2025,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:17:14Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 105772
+    }
+  },
+  "url:https://www.carbonbrief.org/in-depth-qa-the-ipccs-sixth-assessment-report-on-climate-science/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.carbonbrief.org/in-depth-qa-the-ipccs-sixth-assessment-report-on-climate-science/",
+    "canonical_url": "https://www.carbonbrief.org/in-depth-qa-the-ipccs-sixth-assessment-report-on-climate-science/",
+    "title": "In-depth Q&amp;A: The IPCC’s sixth assessment report on climate science - Carbon Brief",
+    "authors": [],
+    "year": 2021,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:17:15Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 358864
+    }
+  },
+  "url:https://news.arizona.edu/news/global-temperatures-over-last-24000-years-show-todays-warming-unprecedented": {
+    "identifier_type": "url",
+    "identifier_value": "https://news.arizona.edu/news/global-temperatures-over-last-24000-years-show-todays-warming-unprecedented",
+    "canonical_url": "https://news.arizona.edu/news/global-temperatures-over-last-24000-years-show-todays-warming-unprecedented",
+    "title": "Global Temperatures Over Last 24,000 Years Show Today&#039;s Warming &#039;Unprecedented&#039;",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:17:15Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 76183
+    }
+  }
+}

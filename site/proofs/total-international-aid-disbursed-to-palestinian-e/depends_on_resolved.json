@@ -1,0 +1,32 @@
+{
+  "url:https://borgenproject.org/foreign-aid-to-palestine/": {
+    "identifier_type": "url",
+    "identifier_value": "https://borgenproject.org/foreign-aid-to-palestine/",
+    "canonical_url": "https://borgenproject.org/foreign-aid-to-palestine/",
+    "title": "Foreign Aid to Palestine - The Borgen Project",
+    "authors": [],
+    "year": 2022,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:19:14Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 95424
+    }
+  },
+  "url:https://donortracker.org/publications/donor-updates-in-brief-2023-oecd-preliminary-data-2024": {
+    "identifier_type": "url",
+    "identifier_value": "https://donortracker.org/publications/donor-updates-in-brief-2023-oecd-preliminary-data-2024",
+    "canonical_url": "https://donortracker.org/publications/donor-updates-in-brief-2023-oecd-preliminary-data-2024",
+    "title": "Donor Updates in Brief: 2023 OECD Preliminary Data",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:19:15Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 118566
+    }
+  }
+}

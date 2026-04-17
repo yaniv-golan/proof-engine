@@ -1,0 +1,65 @@
+{
+  "url:https://epoch.ai/data-insights/ai-capabilities-progress-has-sped-up": {
+    "identifier_type": "url",
+    "identifier_value": "https://epoch.ai/data-insights/ai-capabilities-progress-has-sped-up",
+    "canonical_url": "https://epoch.ai/data-insights/ai-capabilities-progress-has-sped-up",
+    "title": "AI capabilities progress has sped up",
+    "authors": [
+      "Yafah Edelman",
+      "Jaeho Lee"
+    ],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:11:46Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 105404
+    }
+  },
+  "url:https://epochai.substack.com/p/frontier-ai-capabilities-accelerated": {
+    "identifier_type": "url",
+    "identifier_value": "https://epochai.substack.com/p/frontier-ai-capabilities-accelerated",
+    "canonical_url": "https://epochai.substack.com/p/frontier-ai-capabilities-accelerated",
+    "title": "Frontier AI capabilities accelerated in 2024",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:11:46Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 161532
+    }
+  },
+  "url:https://llm-stats.com/benchmarks/swe-bench-verified": {
+    "identifier_type": "url",
+    "identifier_value": "https://llm-stats.com/benchmarks/swe-bench-verified",
+    "canonical_url": "https://llm-stats.com/benchmarks/swe-bench-verified",
+    "title": "SWE-Bench Verified Leaderboard",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:11:48Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 269336
+    }
+  },
+  "url:https://epoch.ai/benchmarks/eci": {
+    "identifier_type": "url",
+    "identifier_value": "https://epoch.ai/benchmarks/eci",
+    "canonical_url": "https://epoch.ai/benchmarks/eci",
+    "title": "Epoch Capabilities Index",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:11:48Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 105979
+    }
+  }
+}

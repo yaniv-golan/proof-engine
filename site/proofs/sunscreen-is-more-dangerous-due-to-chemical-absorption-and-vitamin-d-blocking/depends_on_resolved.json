@@ -1,0 +1,62 @@
+{
+  "url:https://www.aad.org/media/stats-sunscreen": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.aad.org/media/stats-sunscreen",
+    "canonical_url": "https://www.aad.org/media/stats-sunscreen",
+    "title": "Sunscreen FAQs",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:12Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 238245
+    }
+  },
+  "url:https://www.mdanderson.org/cancerwise/sunscreen-myths-debunked.h00-159697545.html": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.mdanderson.org/cancerwise/sunscreen-myths-debunked.h00-159697545.html",
+    "canonical_url": "https://www.mdanderson.org/cancerwise/sunscreen-myths-debunked.h00-159697545.html",
+    "title": "10 sunscreen myths debunked",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:14Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 156594
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC7759112/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7759112/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7759112/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:14Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21139
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC9002342/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9002342/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9002342/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:16:14Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21139
+    }
+  }
+}

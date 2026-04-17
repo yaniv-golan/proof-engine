@@ -1,0 +1,62 @@
+{
+  "url:https://www.nasa.gov/centers-and-facilities/goddard/carbon-dioxide-fertilization-greening-earth-study-finds/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.nasa.gov/centers-and-facilities/goddard/carbon-dioxide-fertilization-greening-earth-study-finds/",
+    "canonical_url": "https://www.nasa.gov/centers-and-facilities/goddard/carbon-dioxide-fertilization-greening-earth-study-finds/",
+    "title": "Carbon Dioxide Fertilization Greening Earth, Study Finds - NASA",
+    "authors": [],
+    "year": 2016,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:06Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 270843
+    }
+  },
+  "url:https://science.nasa.gov/earth/earth-observatory/global-warming": {
+    "identifier_type": "url",
+    "identifier_value": "https://science.nasa.gov/earth/earth-observatory/global-warming",
+    "canonical_url": "https://science.nasa.gov/earth/earth-observatory/global-warming",
+    "title": "Global Warming - NASA Science",
+    "authors": [],
+    "year": 2010,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:07Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 362413
+    }
+  },
+  "url:https://science.nasa.gov/climate-change/effects": {
+    "identifier_type": "url",
+    "identifier_value": "https://science.nasa.gov/climate-change/effects",
+    "canonical_url": "https://science.nasa.gov/climate-change/effects",
+    "title": "Effects - NASA Science",
+    "authors": [],
+    "year": 2022,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:12Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 290253
+    }
+  },
+  "url:https://www.ipcc.ch/sr15/chapter/chapter-3/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.ipcc.ch/sr15/chapter/chapter-3/",
+    "canonical_url": "https://www.ipcc.ch/sr15/chapter/chapter-3/",
+    "title": "Chapter 3 — Global Warming of 1.5 ºC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:16Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 2074020
+    }
+  }
+}

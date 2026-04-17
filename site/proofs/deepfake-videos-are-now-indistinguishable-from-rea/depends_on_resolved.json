@@ -1,0 +1,47 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC10679876/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10679876/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10679876/",
+    "title": "Deepfake detection with and without content warnings - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:15Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 166485
+    }
+  },
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC12779810/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12779810/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12779810/",
+    "title": "Is this real? Susceptibility to deepfakes in machines and humans - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:15Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 268585
+    }
+  },
+  "url:https://fortune.com/2025/12/27/2026-deepfakes-outlook-forecast/": {
+    "identifier_type": "url",
+    "identifier_value": "https://fortune.com/2025/12/27/2026-deepfakes-outlook-forecast/",
+    "canonical_url": "https://fortune.com/2025/12/27/2026-deepfakes-outlook-forecast/",
+    "title": "2026 will be the year you get fooled by a deepfake, researcher says. Voice cloning has crossed the &#x27;indistinguishable threshold&#x27; | Fortune",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:16Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 482030
+    }
+  }
+}

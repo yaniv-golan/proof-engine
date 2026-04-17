@@ -1,0 +1,17 @@
+{
+  "url:https://builtin.com/articles/tech-funding-2022-pitchbook-report": {
+    "identifier_type": "url",
+    "identifier_value": "https://builtin.com/articles/tech-funding-2022-pitchbook-report",
+    "canonical_url": "https://builtin.com/articles/tech-funding-2022-pitchbook-report",
+    "title": "VC Funding Dropped in 2022 but Eclipsed Pre-2021 Totals | Built In",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:20:11Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 54052
+    }
+  }
+}

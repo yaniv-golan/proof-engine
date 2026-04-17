@@ -1,0 +1,49 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC2649674/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2649674/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2649674/",
+    "title": "Checking your browser - reCAPTCHA",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:16Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 21139
+    }
+  },
+  "url:https://www.simplypsychology.org/henry-molaison-patient-hm.html": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.simplypsychology.org/henry-molaison-patient-hm.html",
+    "canonical_url": "https://www.simplypsychology.org/henry-molaison-patient-hm.html",
+    "title": "Patient H.M. Case Study In Psychology: Henry Gustav Molaison",
+    "authors": [
+      "https://www.facebook.com/dill.pickle.581525/"
+    ],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:21Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 230853
+    }
+  },
+  "url:https://www.brainfacts.org/thinking-sensing-and-behaving/learning-and-memory/2013/patient-zero-what-we-learned-from-hm": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.brainfacts.org/thinking-sensing-and-behaving/learning-and-memory/2013/patient-zero-what-we-learned-from-hm",
+    "canonical_url": "https://www.brainfacts.org/thinking-sensing-and-behaving/learning-and-memory/2013/patient-zero-what-we-learned-from-hm",
+    "title": "Patient Zero: What We Learned from H.M.",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:22Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 74712
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC124895/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC124895/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC124895/",
+    "title": "Appraising the brain&#x27;s energy budget - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:17:38Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 137818
+    }
+  }
+}

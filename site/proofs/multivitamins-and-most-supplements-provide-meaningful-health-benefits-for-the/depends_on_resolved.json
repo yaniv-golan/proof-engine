@@ -1,0 +1,47 @@
+{
+  "url:https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/vitamin-supplementation-to-prevent-cvd-and-cancer-preventive-medication": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/vitamin-supplementation-to-prevent-cvd-and-cancer-preventive-medication",
+    "canonical_url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/vitamin-supplementation-to-prevent-cvd-and-cancer-preventive-medication",
+    "title": "Recommendation: Vitamin, Mineral, and Multivitamin Supplementation to Prevent Cardiovascular Disease and Cancer: Preventive Medication | United States Preventive Services Taskforce",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:11Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 118472
+    }
+  },
+  "url:https://ods.od.nih.gov/factsheets/MVMS-HealthProfessional/": {
+    "identifier_type": "url",
+    "identifier_value": "https://ods.od.nih.gov/factsheets/MVMS-HealthProfessional/",
+    "canonical_url": "https://ods.od.nih.gov/factsheets/MVMS-HealthProfessional/",
+    "title": "Office of Dietary Supplements - Multivitamin/mineral Supplements",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:19Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 269178
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/30959527/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/30959527/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/30959527/",
+    "title": "Association Among Dietary Supplement Use, Nutrient Intake, and Mortality Among U.S. Adults: A Cohort Study - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:15:20Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 161386
+    }
+  }
+}

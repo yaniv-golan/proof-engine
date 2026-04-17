@@ -1,0 +1,101 @@
+{
+  "url:https://blogs.library.duke.edu/blog/2026/01/05/its-2026-why-are-llms-still-hallucinating/": {
+    "identifier_type": "url",
+    "identifier_value": "https://blogs.library.duke.edu/blog/2026/01/05/its-2026-why-are-llms-still-hallucinating/",
+    "canonical_url": "https://blogs.library.duke.edu/blog/2026/01/05/its-2026-why-are-llms-still-hallucinating/",
+    "title": "It&#039;s 2026. Why Are LLMs Still Hallucinating? - Duke University Libraries Blogs",
+    "authors": [],
+    "year": 2026,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:12:59Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 72722
+    }
+  },
+  "url:https://www.vectara.com/blog/introducing-the-next-generation-of-vectaras-hallucination-leaderboard": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.vectara.com/blog/introducing-the-next-generation-of-vectaras-hallucination-leaderboard",
+    "canonical_url": "https://www.vectara.com/blog/introducing-the-next-generation-of-vectaras-hallucination-leaderboard",
+    "title": "Introducing the Next Generation of Vectara&#x27;s Hallucination Leaderboard",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:00Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 425009
+    }
+  },
+  "arxiv:2411.04368": {
+    "identifier_type": "arxiv",
+    "identifier_value": "2411.04368",
+    "canonical_url": "https://arxiv.org/abs/2411.04368",
+    "title": "Measuring short-form factuality in large language models",
+    "authors": [
+      "Jason Wei",
+      "Nguyen Karina",
+      "Hyung Won Chung",
+      "Yunxin Joy Jiao",
+      "Spencer Papay",
+      "Amelia Glaese",
+      "John Schulman",
+      "William Fedus"
+    ],
+    "year": 2024,
+    "venue": "arXiv preprint",
+    "version": "v1",
+    "resolved_at": "2026-04-17T12:13:00Z",
+    "source_api": "export.arxiv.org/api/query",
+    "raw": {
+      "atom_feed": "<?xml version='1.0' encoding='UTF-8'?>\n<feed xmlns:opensearch=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns:arxiv=\"http://arxiv.org/schemas/atom\" xmlns=\"http://www.w3.org/2005/Atom\">\n  <id>https://arxiv.org/api/pjeWK04LKiyXFqtwzu2ujSbKQ4A</id>\n  <title>arXiv Query: search_query=&amp;id_list=2411.04368&amp;start=0&amp;max_results=10</title>\n  <updated>2026-04-17T12:13:00Z</updated>\n  <link href=\"https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2411.04368\" type=\"application/atom+xml\"/>\n  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>\n  <opensearch:totalResults>1</opensearch:totalResults>\n  <opensearch:startIndex>0</opensearch:startIndex>\n  <entry>\n    <id>http://arxiv.org/abs/2411.04368v1</id>\n    <title>Measuring short-form factuality in large language models</title>\n    <updated>2024-11-07T01:58:42Z</updated>\n    <link href=\"https://arxiv.org/abs/2411.04368v1\" rel=\"alternate\" type=\"text/html\"/>\n    <link href=\"https://arxiv.org/pdf/2411.04368v1\" rel=\"related\" type=\"application/pdf\" title=\"pdf\"/>\n    <summary>We present SimpleQA, a benchmark that evaluates the ability of language models to answer short, fact-seeking questions. We prioritized two properties in designing this eval. First, SimpleQA is challenging, as it is adversarially collected against GPT-4 responses. Second, responses are easy to grade, because questions are created such that there exists only a single, indisputable answer. Each answer in SimpleQA is graded as either correct, incorrect, or not attempted. A model with ideal behavior would get as many questions correct as possible while not attempting the questions for which it is not confident it knows the correct answer. SimpleQA is a simple, targeted evaluation for whether models \"know what they know,\" and our hope is that this benchmark will remain relevant for the next few generations of frontier models. SimpleQA can be found at https://github.com/openai/simple-evals.</summary>\n    <category term=\"cs.CL\" scheme=\"http://arxiv.org/schemas/atom\"/>\n    <published>2024-11-07T01:58:42Z</published>\n    <arxiv:comment>Blog post: https://openai.com/index/introducing-simpleqa/</arxiv:comment>\n    <arxiv:primary_category term=\"cs.CL\"/>\n    <author>\n      <name>Jason Wei</name>\n    </author>\n    <author>\n      <name>Nguyen Karina</name>\n    </author>\n    <author>\n      <name>Hyung Won Chung</name>\n    </author>\n    <author>\n      <name>Yunxin Joy Jiao</name>\n    </author>\n    <author>\n      <name>Spencer Papay</name>\n    </author>\n    <author>\n      <name>Amelia Glaese</name>\n    </author>\n    <author>\n      <name>John Schulman</name>\n    </author>\n    <author>\n      <name>William Fedus</name>\n    </author>\n  </entry>\n</feed>\n"
+    }
+  },
+  "url:https://the-decoder.com/arc-agi-3-offers-2m-to-any-ai-that-matches-untrained-humans-yet-every-frontier-model-scores-below-1/": {
+    "identifier_type": "url",
+    "identifier_value": "https://the-decoder.com/arc-agi-3-offers-2m-to-any-ai-that-matches-untrained-humans-yet-every-frontier-model-scores-below-1/",
+    "canonical_url": "https://the-decoder.com/arc-agi-3-offers-2m-to-any-ai-that-matches-untrained-humans-yet-every-frontier-model-scores-below-1/",
+    "title": "ARC-AGI-3 offers $2M to any AI that matches untrained humans, yet every frontier model scores below 1%",
+    "authors": [],
+    "year": 2026,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:01Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 128906
+    }
+  },
+  "url:https://arcprize.org/blog/arc-prize-2025-results-analysis": {
+    "identifier_type": "url",
+    "identifier_value": "https://arcprize.org/blog/arc-prize-2025-results-analysis",
+    "canonical_url": "https://arcprize.org/blog/arc-prize-2025-results-analysis",
+    "title": "ARC Prize 2025 Results and Analysis | ARC Prize",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:04Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 122587
+    }
+  },
+  "url:https://theconversation.com/ai-is-failing-humanitys-last-exam-so-what-does-that-mean-for-machine-intelligence-274620": {
+    "identifier_type": "url",
+    "identifier_value": "https://theconversation.com/ai-is-failing-humanitys-last-exam-so-what-does-that-mean-for-machine-intelligence-274620",
+    "canonical_url": "https://theconversation.com/ai-is-failing-humanitys-last-exam-so-what-does-that-mean-for-machine-intelligence-274620",
+    "title": "AI is failing ‘Humanity’s Last Exam’. So what does that mean for machine intelligence?",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:13:04Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 174039
+    }
+  }
+}

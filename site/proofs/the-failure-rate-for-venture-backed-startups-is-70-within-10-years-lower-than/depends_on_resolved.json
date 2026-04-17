@@ -1,0 +1,17 @@
+{
+  "url:https://www.llc.org/startup-failure-rate-statistics/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.llc.org/startup-failure-rate-statistics/",
+    "canonical_url": "https://www.llc.org/startup-failure-rate-statistics/",
+    "title": "Startup Failure Rate Statistics (2026): What the Data Shows",
+    "authors": [],
+    "year": 2024,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:17:32Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 115330
+    }
+  }
+}

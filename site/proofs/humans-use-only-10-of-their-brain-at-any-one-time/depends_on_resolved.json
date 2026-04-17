@@ -1,0 +1,47 @@
+{
+  "url:https://www.scientificamerican.com/article/do-people-only-use-10-percent-of-their-brains/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.scientificamerican.com/article/do-people-only-use-10-percent-of-their-brains/",
+    "canonical_url": "https://www.scientificamerican.com/article/do-people-only-use-10-percent-of-their-brains/",
+    "title": "Do People Only Use 10 Percent of Their Brains?",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:26Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 56033
+    }
+  },
+  "url:https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/": {
+    "identifier_type": "url",
+    "identifier_value": "https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/",
+    "canonical_url": "https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/",
+    "title": "Do we only use 10 percent of our brain? - MIT McGovern Institute",
+    "authors": [],
+    "year": 2024,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:28Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 146520
+    }
+  },
+  "url:http://faculty.washington.edu/chudler/tenper.html": {
+    "identifier_type": "url",
+    "identifier_value": "http://faculty.washington.edu/chudler/tenper.html",
+    "canonical_url": "http://faculty.washington.edu/chudler/tenper.html",
+    "title": "Neuroscience For Kids - 10% of the Brain Myth",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:14:30Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 13343
+    }
+  }
+}

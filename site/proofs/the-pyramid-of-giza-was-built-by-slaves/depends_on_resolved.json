@@ -1,0 +1,32 @@
+{
+  "url:https://www.cbsnews.com/news/more-evidence-slaves-didnt-build-pyramids/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.cbsnews.com/news/more-evidence-slaves-didnt-build-pyramids/",
+    "canonical_url": "https://www.cbsnews.com/news/more-evidence-slaves-didnt-build-pyramids/",
+    "title": "More Evidence Slaves Didn",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:18:13Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 600976
+    }
+  },
+  "url:https://www.aap.com.au/factcheck/the-pyramids-of-giza-were-not-built-by-slaves/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.aap.com.au/factcheck/the-pyramids-of-giza-were-not-built-by-slaves/",
+    "canonical_url": "https://www.aap.com.au/factcheck/the-pyramids-of-giza-were-not-built-by-slaves/",
+    "title": "The pyramids of Giza were not built by slaves | AAP",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:18:15Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 48127
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "url:https://plato.stanford.edu/entries/paradox-stpetersburg/": {
+    "identifier_type": "url",
+    "identifier_value": "https://plato.stanford.edu/entries/paradox-stpetersburg/",
+    "canonical_url": "https://plato.stanford.edu/entries/paradox-stpetersburg/",
+    "title": "The St. Petersburg Paradox (Stanford Encyclopedia of Philosophy)",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-17T12:18:32Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 81862
+    }
+  }
+}
