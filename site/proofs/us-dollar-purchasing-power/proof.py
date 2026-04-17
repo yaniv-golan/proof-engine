@@ -11,7 +11,10 @@ import sys
 
 # Path to proof-engine scripts — relative to docs/examples/<name>/proof.py
 _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-PROOF_ENGINE_ROOT = os.path.join(_REPO_ROOT, "proof-engine", "skills", "proof-engine")
+PROOF_ENGINE_ROOT = os.environ.get(
+    "PROOF_ENGINE_ROOT",
+    "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine",
+)
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from datetime import date

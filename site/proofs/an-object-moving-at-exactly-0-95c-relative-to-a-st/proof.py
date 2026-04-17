@@ -9,7 +9,10 @@ import sys
 from math import sqrt
 from decimal import Decimal, getcontext
 
-PROOF_ENGINE_ROOT = "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine"
+PROOF_ENGINE_ROOT = os.environ.get(
+    "PROOF_ENGINE_ROOT",
+    "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine",
+)
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 

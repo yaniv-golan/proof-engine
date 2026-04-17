@@ -13,7 +13,10 @@ import json
 from datetime import date
 from sympy import isprime, primerange
 
-PROOF_ENGINE_ROOT = "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine"
+PROOF_ENGINE_ROOT = os.environ.get(
+    "PROOF_ENGINE_ROOT",
+    "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine",
+)
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from scripts.computations import compare, explain_calc

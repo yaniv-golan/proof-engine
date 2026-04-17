@@ -13,7 +13,10 @@ for _ in range(10):
     if os.path.isfile(os.path.join(_REPO_ROOT, "VERSION")):
         break
     _REPO_ROOT = os.path.dirname(_REPO_ROOT)
-PROOF_ENGINE_ROOT = os.path.join(_REPO_ROOT, "proof-engine", "skills", "proof-engine")
+PROOF_ENGINE_ROOT = os.environ.get(
+    "PROOF_ENGINE_ROOT",
+    "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine",
+)
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 

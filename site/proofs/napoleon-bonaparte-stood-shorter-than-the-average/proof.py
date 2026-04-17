@@ -5,7 +5,10 @@ Generated: 2026-04-16
 import os
 import sys
 
-PROOF_ENGINE_ROOT = "/Users/yaniv/.claude/plugins/cache/proof-engine-marketplace/proof-engine/1.15.0/skills/proof-engine"
+PROOF_ENGINE_ROOT = os.environ.get(
+    "PROOF_ENGINE_ROOT",
+    "/Users/yaniv/.claude/plugins/cache/proof-engine-marketplace/proof-engine/1.15.0/skills/proof-engine",
+)
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 

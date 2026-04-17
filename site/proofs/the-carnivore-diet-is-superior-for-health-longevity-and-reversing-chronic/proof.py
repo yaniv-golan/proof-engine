@@ -8,7 +8,10 @@ import os
 import sys
 from datetime import date
 
-PROOF_ENGINE_ROOT = "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine"
+PROOF_ENGINE_ROOT = os.environ.get(
+    "PROOF_ENGINE_ROOT",
+    "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine",
+)
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from scripts.verify_citations import verify_all_citations, build_citation_detail
