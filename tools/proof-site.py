@@ -592,6 +592,24 @@ def cmd_mint_doi(args) -> int:
         f"{f' v{version}' if version else ''}.</p>"
     )
 
+    # Load depends_on for related_identifiers. parse_depends_on validates
+    # shape; any error here would already have been caught upstream by
+    # resolve-deps / validate, so we treat validation errors as fatal.
+    import yaml as _yaml_for_deps
+    from tools.lib.depends_on import parse_depends_on
+    from tools.lib.zenodo_metadata import build_related_identifiers
+
+    meta_path_for_deps = proof_dir / "meta.yaml"
+    meta_for_deps = _yaml_for_deps.safe_load(meta_path_for_deps.read_text()) or {}
+    depends_on_entries, dep_errs = parse_depends_on(meta_for_deps, source=str(meta_path_for_deps))
+    if dep_errs:
+        error("depends_on failed validation — refusing to mint:")
+        for e in dep_errs:
+            error(f"  {e}")
+        sys.exit(1)
+
+    related_identifiers = build_related_identifiers(depends_on_entries, proof_url)
+
     try:
         if args.force and doi_json_path.exists():
             # Create new version
@@ -611,11 +629,7 @@ def cmd_mint_doi(args) -> int:
                 "keywords": keywords,
                 "license": "MIT",
                 "publication_date": date.today().isoformat(),
-                "related_identifiers": [{
-                    "identifier": proof_url,
-                    "relation": "isSupplementedBy",
-                    "scheme": "url",
-                }],
+                "related_identifiers": related_identifiers,
             })
         else:
             # Create new deposition
@@ -626,11 +640,7 @@ def cmd_mint_doi(args) -> int:
                 creators=[{"name": "Proof Engine"}],
                 keywords=keywords,
                 license="MIT",
-                related_identifiers=[{
-                    "identifier": proof_url,
-                    "relation": "isSupplementedBy",
-                    "scheme": "url",
-                }],
+                related_identifiers=related_identifiers,
             )
             dep_id = dep["id"]
             bucket_url = dep["links"]["bucket"]
