@@ -6,9 +6,23 @@ All notable changes to this project will be documented in this file.
 
 ## [1.21.0] - 2026-04-18
 
+### Added
+
+- **Binder launcher.** All published proofs now have a working "Open in Binder" link, routed through the new [`yaniv-golan/proof-engine-binder`](https://github.com/yaniv-golan/proof-engine-binder) repo. The launcher notebook reads a Zenodo DOI from the URL fragment, fetches `proof.py` from Zenodo, and runs it in a pinned Python environment. Proof pages render a new "Open in Binder" format card when a DOI is minted.
+- **`PROOF_ENGINE_ROOT` env-var override** in generated `proof.py` now supports an env-var override with a hardcoded fallback, enabling portable execution under Binder while keeping local-only proofs working unchanged.
+- **`tools/migrate-proof-root.py`**: one-shot script that converts legacy `proof.py` files (hardcoded and `__file__`-traversal forms) to the env-var pattern.
+- **`tools/migrate-binder-urls.py`**: one-shot script that converts legacy `binder_url` values in `doi.json` to the launcher-repo URL.
+
 ### Changed
 
 - **Landing page redesign.**
+- **`mint-doi` emits launcher-repo URLs for `binder_url`** instead of `mybinder.org/v2/zenodo/...` URLs (which never worked because Zenodo deposits lack a dependency manifest). The launcher tag is derived from `VERSION` so `bump-version.sh` propagates it automatically; a drift test pins the derivation.
+- **All 6 proof-template references updated** to generate proofs with the new `PROOF_ENGINE_ROOT` env-var shape.
+- **All published `proof.py` files (127) and minted `doi.json` files (74) migrated in place.** No Zenodo re-mints required — `binder_url` lives only in this repo.
+
+### Fixed
+
+- **"Open in Binder" on every proof page now works.** Prior URLs 404'd on the Zenodo-provider path and the link was never rendered in the template.
 
 ## [1.20.1] - 2026-04-17
 
