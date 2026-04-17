@@ -5,32 +5,44 @@ depends_on:
   identifiers:
   - type: slug
     value: the-binary-operator-eml-is-defined-by-the-expression-text-eml-a-b-exp-a-ln-b
+  - type: doi
+    value: 10.5281/zenodo.19626393
   note: eml definition
 - relation: IsDerivedFrom
   identifiers:
   - type: slug
     value: the-binary-operator-defined-by-text-eml-a-b-exp-a-ln-b-satisfies-text-eml-x-1
+  - type: doi
+    value: 10.5281/zenodo.19626399
   note: EXP identity eml(x,1)=exp(x)
 - relation: IsDerivedFrom
   identifiers:
   - type: slug
     value: eml-triple-nesting-recovers-ln-x
+  - type: doi
+    value: 10.5281/zenodo.19626401
   note: LN identity from K=7 triple nesting
 - relation: IsDerivedFrom
   identifiers:
   - type: slug
     value: eml-k19-addition-tree
+  - type: doi
+    value: 10.5281/zenodo.19626406
   note: Addition via K=19 eml tree
 - relation: IsDerivedFrom
   identifiers:
   - type: slug
     value: eml-k17-multiplication-tree
+  - type: doi
+    value: 10.5281/zenodo.19626409
   note: Multiplication via K=17 eml tree
 - relation: IsDerivedFrom
   identifiers:
   - type: slug
     value: eml-pi-and-i-from-1
-  note: π and i from constant 1
+  - type: doi
+    value: 10.5281/zenodo.19626411
+  note: "\u03C0 and i from constant 1"
 - relation: References
   identifiers:
   - type: arxiv

@@ -1,2 +1,8 @@
 tags:
 - cosmology
+depends_on:
+- relation: References
+  identifiers:
+  - type: arxiv
+    value: '1807.06209'
+  note: Planck 2018 results VI — cosmological parameters (originating measurement)

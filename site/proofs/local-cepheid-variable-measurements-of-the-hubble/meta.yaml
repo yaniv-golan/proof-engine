@@ -1,2 +1,13 @@
 tags:
 - cosmology
+depends_on:
+- relation: References
+  identifiers:
+  - type: arxiv
+    value: '2112.04510'
+  note: Riess et al. 2022 SH0ES — local Cepheid H0 measurement (originating result)
+- relation: References
+  identifiers:
+  - type: arxiv
+    value: '1807.06209'
+  note: Planck 2018 — CMB-based H0 (disagreeing value)

@@ -5,6 +5,8 @@ depends_on:
   identifiers:
   - type: slug
     value: the-binary-operator-defined-by-text-eml-a-b-exp-a-ln-b-satisfies-text-eml-x-1
+  - type: doi
+    value: 10.5281/zenodo.19626399
   note: EXP identity eml(x,1)=exp(x)
 - relation: References
   identifiers:

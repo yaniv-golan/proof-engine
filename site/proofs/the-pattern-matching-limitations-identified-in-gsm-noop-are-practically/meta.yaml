@@ -1,2 +1,13 @@
 tags:
 - ai
+depends_on:
+- relation: References
+  identifiers:
+  - type: arxiv
+    value: '2410.05229'
+  note: Mirzadeh et al. GSM-Symbolic / GSM-NoOp (originating finding)
+- relation: References
+  identifiers:
+  - type: arxiv
+    value: '2211.10435'
+  note: Gao et al. PAL — program-aided language models (counter-evidence method)
