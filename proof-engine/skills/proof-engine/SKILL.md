@@ -9,7 +9,7 @@ description: >
   questions with no verifiable answer.
 metadata:
   author: Yaniv Golan
-  version: "1.18.0"
+  version: "1.19.0"
   license: MIT
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
@@ -58,7 +58,7 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **`parse_percentage_from_quote(quote, fact_id)` has no `pattern` kwarg**: For pattern-based extraction, use `parse_number_from_quote(quote, pattern, fact_id)` instead. The two functions have different signatures — check the Bundled Scripts table.
 - **JSON summary key is `claim_natural`, not `claim`**: The publish toolchain reads `proof_data.get("claim_natural")`. Using `"claim"` as the key silently drops the claim text from the published proof.
 - **Use LaTeX delimiters for math in `claim_natural` and markdown sections**: When the claim contains mathematical notation, use `\(...\)` for inline math and `\[...\]` for display math. Write `\(\alpha_i\)` not `alpha_i`, `\(\pi^2/6\)` not `pi^2/6`. Do NOT use `$...$` delimiters — they collide with currency dollar signs in claims. Non-math claims need no delimiters. The same convention applies to proof.md, proof_audit.md, and proof_narrative.md.
-- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: "1.18.0"
+- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: "1.19.0"
 
 ## Reference Files
 
@@ -107,7 +107,7 @@ apply_verdict_qualifier(base_verdict, any_unverified) -> str
 
 # proof_summary.py
 ProofSummaryBuilder(claim_natural, claim_formal, generator=None)
-#   Primary path for building proof.json. Produces format_version: "1.18.0"
+#   Primary path for building proof.json. Produces format_version: "1.19.0"
 #   builder.add_empirical_fact(fact_id, label=, source_name=, source_url=, source_quote=)
 #   builder.set_verification(fact_id, status=, method=, ...)
 #   builder.set_extraction(fact_id, value=, value_in_quote=, ...)
@@ -147,7 +147,7 @@ For environment-specific details (Claude Code, ChatGPT, sandboxed), paywalled so
 
 **Every proof has three parts**: (1) Fact Registry — numbered facts tagged Type A, B, or S, (2) Proof Logic — a self-contained Python script, (3) Verdict — one of the levels below.
 
-## The 8 Hardening Rules
+## The 9 Hardening Rules
 
 | Rule | Closes failure mode | Enforced by |
 |------|-------------------|-------------|
@@ -159,6 +159,7 @@ For environment-specific details (Claude Code, ChatGPT, sandboxed), paywalled so
 | 6. Independent cross-checks | Shared-variable bugs | Multiple sources parsed separately |
 | 7. Never hard-code constants/formulas | LLM misremembers values | `scripts/computations.py` |
 | 8. Evidence relevance for rejection | Weak/off-subject rejection sources | `adversarial_checks` documentation |
+| 9. Prose references mechanically resolvable | Hand-typed attribution hallucinations; raw tokens archived | `tools/lib/reference_resolver.py` + `prose_reference_scan.py` + `cite-expand` |
 
 See [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for detailed examples of each.
 

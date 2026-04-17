@@ -466,3 +466,47 @@ The three-column output (symbolic → substituted → result) makes every step a
 Document the subject-match and language classification in the `adversarial_checks` finding field.
 
 **Structural enforcement via `rejection_statement`:** Add a `rejection_statement` field to each `empirical_facts` entry in disproof proofs, containing the verbatim phrase from the quote that constitutes the rejection. This makes the evidentiary link between source and claim explicit and auditable without semantic analysis. `validate_proof.py` warns when the field is absent and raises an issue when it is present but not a verbatim substring of the quote.
+
+---
+
+## Rule 9 — Prose references are mechanically resolvable
+
+**Closes:** hand-typed author/title strings in narrative prose (the
+Cheng-vs-Odrzywołek class), and the artifact-gap where build-time template
+rendering would leave unresolved tokens in the archived file.
+
+**Enforced by:** `tools/lib/reference_resolver.py` + `tools/lib/prose_reference_scan.py` + `cite-expand` pre-publish gate.
+
+**Bad (hand-typed, unverified):**
+```markdown
+R. Cheng, "The elementary function arithmetic" (arXiv:2603.21852)
+```
+
+**Good (verified via `{{cite:...}}` + `cite-expand`):**
+```markdown
+{{cite:arxiv:2603.21852}}
+```
+
+After running `proof-site.py cite-expand`, the committed markdown becomes:
+
+```markdown
+[A. Odrzywołek, "All elementary functions from a single binary operator"](https://arxiv.org/abs/2603.21852) (2026, arXiv preprint) <!-- cite-source: arxiv:2603.21852 -->
+```
+
+This is what `mint-doi` uploads to Zenodo, so the archived artifact carries
+the resolved attribution, not a template placeholder or a hand-typed claim.
+
+**Authoring workflow:**
+```
+proof-site.py resolve-deps --artifacts-dir <dir> --refresh
+proof-site.py cite-expand  --artifacts-dir <dir>
+proof-site.py verify-prose --artifacts-dir <dir>
+proof-site.py publish <dir>
+```
+
+**Escape hatch** (rare — use only for historical prose, never for actual citations):
+```markdown
+<!-- not-a-citation-start --> Einstein (1905) famously... <!-- not-a-citation-end -->
+```
+
+The escape hatch suppresses only `DANGLING_SHORT_PATTERN` (bare author-year). Author + quoted title must always carry an identifier — there is no escape hatch for that form.

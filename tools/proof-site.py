@@ -117,6 +117,42 @@ def cmd_publish(args) -> int:
             return 1
         success("Thumbnail is 240x240")
 
+    # 6b. Pre-stage gate — strictly offline: resolve-deps (cache-only),
+    # cite-expand --check, verify-prose.
+    from tools.lib.reference_resolver import collect_identifiers, load_cache
+    from tools.lib.cite_expander import check as cite_check
+    from tools.lib.prose_reference_scan import verify_prose
+
+    log("Pre-stage gate: resolve-deps (cache-only)...")
+    idents = collect_identifiers(source_dir)
+    cache = load_cache(source_dir)
+    missing = [f"{t}:{v}" for (t, v) in idents if f"{t}:{v}" not in cache]
+    if missing:
+        error(
+            "publish: resolved-metadata cache is missing for: "
+            + ", ".join(missing) + ". "
+            f"run: proof-site.py resolve-deps --artifacts-dir {source_dir} --refresh "
+            "and commit depends_on_resolved.json, then retry publish."
+        )
+        return 1
+
+    log("Pre-stage gate: cite-expand --check...")
+    for name in ("proof.md", "proof_audit.md", "proof_narrative.md"):
+        path = source_dir / name
+        if path.exists():
+            errs = cite_check(path.read_text(), cache)
+            for e in errs:
+                error(f"{path}: {e}")
+            if errs:
+                return 1
+
+    log("Pre-stage gate: verify-prose...")
+    result = verify_prose(source_dir)
+    for e in result.errors:
+        error(f"{source_dir}/{e.file}:{e.line}: {e.message}")
+    if result.errors:
+        return 1
+
     # 7. Stage (on same filesystem as proofs_dir for atomic moves)
     log("Staging artifacts...")
     staging = stage_proof(source_dir, proofs_dir=proofs_dir)
@@ -422,6 +458,28 @@ def cmd_mint_doi(args) -> int:
         error(f"Proof not found: {slug}")
         return 1
 
+    # Pre-flight: identical two-step gate used by publish (offline only).
+    from tools.lib.reference_resolver import load_cache
+    from tools.lib.cite_expander import check as cite_check
+    from tools.lib.prose_reference_scan import verify_prose as _vp
+
+    log("mint-doi pre-flight: cite-expand --check...")
+    cache = load_cache(proof_dir)
+    for name in ("proof.md", "proof_audit.md", "proof_narrative.md"):
+        p = proof_dir / name
+        if p.exists():
+            errs = cite_check(p.read_text(), cache)
+            for e in errs:
+                error(f"{p}: {e}")
+            if errs:
+                return 1
+    log("mint-doi pre-flight: verify-prose...")
+    vp_result = _vp(proof_dir)
+    for e in vp_result.errors:
+        error(f"{proof_dir}/{e.file}:{e.line}: {e.message}")
+    if vp_result.errors:
+        return 1
+
     doi_json_path = proof_dir / "doi.json"
 
     # Check for existing DOI
@@ -627,6 +685,119 @@ def cmd_mint_doi(args) -> int:
     except ZenodoError as e:
         error(f"Zenodo API error: {e}")
         return 1
+
+
+def _select_targets(args) -> list[Path]:
+    if getattr(args, "artifacts_dir", None):
+        return [Path(args.artifacts_dir)]
+    site_dir = Path(args.site_dir)
+    proofs_dir = site_dir / "proofs"
+    if getattr(args, "all", False):
+        return sorted(p for p in proofs_dir.iterdir() if p.is_dir() and not p.name.startswith("."))
+    if getattr(args, "slug", None):
+        return [proofs_dir / args.slug]
+    error("must specify --slug, --all, or --artifacts-dir")
+    sys.exit(2)
+
+
+def _selector_flag(args, proof_dir: Path) -> str:
+    if getattr(args, "artifacts_dir", None):
+        return f"--artifacts-dir {args.artifacts_dir}"
+    return f"--slug {proof_dir.name}"
+
+
+def _asdict_or_none(ref):
+    from dataclasses import asdict as _ad
+    return _ad(ref) if ref else None
+
+
+def cmd_resolve_deps(args) -> int:
+    from tools.lib.reference_resolver import (
+        collect_identifiers, load_cache, save_cache, resolve,
+    )
+    targets = _select_targets(args)
+    any_err = 0
+    for proof_dir in targets:
+        log(f"resolve-deps: {proof_dir}")
+        idents = collect_identifiers(proof_dir)
+        cache = load_cache(proof_dir)
+        changed = False
+        unresolved: list[str] = []
+        for t, v in idents:
+            key = f"{t}:{v}"
+            if key in cache and not args.refresh:
+                continue
+            if not args.refresh:
+                unresolved.append(key)
+                continue
+            try:
+                ref = resolve(t, v, refresh=True)
+                prev = cache.get(key)
+                if prev is None or _asdict_or_none(prev) != _asdict_or_none(ref):
+                    cache[key] = ref
+                    changed = True
+            except Exception as e:
+                error(f"resolve-deps: failed to refresh {key}: {e}")
+                any_err = 1
+        if unresolved:
+            for key in unresolved:
+                error(f"cache missing for {key}; "
+                      f"run: proof-site.py resolve-deps {_selector_flag(args, proof_dir)} --refresh")
+            any_err = 1
+            continue
+        if changed:
+            save_cache(proof_dir, cache)
+            success(f"cache updated: {proof_dir / 'depends_on_resolved.json'}")
+        else:
+            success("cache is up to date")
+    return any_err
+
+
+def cmd_cite_expand(args) -> int:
+    from tools.lib.cite_expander import expand, check
+    from tools.lib.reference_resolver import load_cache
+    targets = _select_targets(args)
+    any_err = 0
+    for proof_dir in targets:
+        cache = load_cache(proof_dir)
+        for name in ("proof.md", "proof_audit.md", "proof_narrative.md"):
+            path = proof_dir / name
+            if not path.exists():
+                continue
+            text = path.read_text()
+            if args.check:
+                errs = check(text, cache)
+                if errs:
+                    for e in errs:
+                        error(f"{path}: {e}")
+                    any_err = 1
+                continue
+            try:
+                out = expand(text, cache, force=args.force)
+            except KeyError as e:
+                error(str(e))
+                any_err = 1
+                continue
+            if out != text:
+                path.write_text(out)
+                success(f"expanded: {path}")
+    return any_err
+
+
+def cmd_verify_prose(args) -> int:
+    from tools.lib.prose_reference_scan import verify_prose
+    targets = _select_targets(args)
+    any_err = 0
+    for proof_dir in targets:
+        result = verify_prose(proof_dir, strict=args.strict)
+        for w in result.warnings:
+            log(f"WARNING {proof_dir}: {w}")
+        for e in result.errors:
+            error(f"{proof_dir}/{e.file}:{e.line}: {e.message}")
+            any_err = 1
+        if not result.errors:
+            success(f"verify-prose: {proof_dir} OK")
+    return any_err
 
 
 def cmd_sync_doi_deps(args) -> int:
@@ -998,6 +1169,32 @@ def main():
     )
     add_site_dir_arg(audit)
 
+    rd = subparsers.add_parser("resolve-deps", help="Resolve identifiers to canonical metadata (cache-only by default)")
+    g = rd.add_mutually_exclusive_group(required=True)
+    g.add_argument("--slug")
+    g.add_argument("--all", action="store_true")
+    g.add_argument("--artifacts-dir")
+    rd.add_argument("--refresh", action="store_true", help="Re-fetch from registry; touches network")
+    rd.add_argument("--report", action="store_true", help="Emit changelog for PR review")
+    rd.add_argument("--site-dir", default="site")
+
+    ce = subparsers.add_parser("cite-expand", help="Materialize {{cite:...}} tokens into committed markdown")
+    g = ce.add_mutually_exclusive_group(required=True)
+    g.add_argument("--slug")
+    g.add_argument("--all", action="store_true")
+    g.add_argument("--artifacts-dir")
+    ce.add_argument("--check", action="store_true", help="Do not rewrite; fail on unexpanded tokens or drift")
+    ce.add_argument("--force", action="store_true", help="Re-expand even when already rendered")
+    ce.add_argument("--site-dir", default="site")
+
+    vp = subparsers.add_parser("verify-prose", help="Cross-check prose attributions against resolved metadata")
+    g = vp.add_mutually_exclusive_group(required=True)
+    g.add_argument("--slug")
+    g.add_argument("--all", action="store_true")
+    g.add_argument("--artifacts-dir")
+    vp.add_argument("--strict", action="store_true", help="Promote Pass-3 advisories to errors")
+    vp.add_argument("--site-dir", default="site")
+
     args = parser.parse_args()
 
     if args.command == "publish":
@@ -1016,6 +1213,12 @@ def main():
         sys.exit(cmd_show_deps(args))
     elif args.command == "audit-deps":
         sys.exit(cmd_audit_deps(args))
+    elif args.command == "resolve-deps":
+        sys.exit(cmd_resolve_deps(args))
+    elif args.command == "cite-expand":
+        sys.exit(cmd_cite_expand(args))
+    elif args.command == "verify-prose":
+        sys.exit(cmd_verify_prose(args))
 
 
 if __name__ == "__main__":

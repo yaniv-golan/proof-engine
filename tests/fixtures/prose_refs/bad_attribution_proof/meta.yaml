@@ -1,0 +1,6 @@
+tags: [math]
+depends_on:
+  - relation: References
+    identifiers:
+      - type: arxiv
+        value: '2603.21852'

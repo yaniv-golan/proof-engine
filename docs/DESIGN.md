@@ -56,6 +56,19 @@ These aren't coding guidelines. Each one closes a specific, observed failure mod
 
 A static analyzer (`validate_proof.py`) runs before execution to catch common structural problems — missing `CLAIM_FORMAL`, hardcoded verdicts, probable hand-typed values. It's heuristic, not exhaustive: a fast first pass, not a proof of rule compliance.
 
+## Prose Reference Verification
+
+Every external scholarly reference in a proof — whether in `meta.yaml` `depends_on`, in v3 `evidence[*].source.url`, or in free prose inside any `.md` file — is resolved to canonical metadata from an authoritative registry (arXiv, DataCite, Crossref, Software Heritage, Handle.Net, OpenLibrary) and cached per-proof in `depends_on_resolved.json`.
+
+Prose attributions are cross-checked against the resolved metadata by four passes:
+
+1. **Pass 1** finds identifiers in literal prose and inside Markdown link targets.
+2. **Pass 2** cross-checks every prose attribution within a 160-char window of each identifier (and every link-display-text for short-form link citations) against the resolved author list and title.
+3. **Pass 3** advises (warns) when a declared identifier is never mentioned in prose.
+4. **Pass 4** sweeps the whole file for dangling `Author, "Title"` and `Author (YYYY)` shapes that are not covered by any verification window, closing the launder-attack class where a correct linked citation elsewhere in the file would otherwise launder a hand-typed misattribution.
+
+Authors use `{{cite:<type>:<value>[:<style>]}}` tokens in draft prose and run `proof-site.py cite-expand` to materialize them into canonical Markdown citations — committed to git, served by the HTML build, and archived verbatim to Zenodo on `mint-doi`. Both `publish` and `mint-doi` run a strictly-offline pre-flight gate (`cite-expand --check` + `verify-prose`) so a wrong attribution or unexpanded token cannot reach the archived artifact.
+
 ## Source independence and conflicts of interest
 
 Rule 6 requires independent cross-checks, but "independent" isn't binary. A news article and an advocacy report might both cite the same government intelligence dossier — technically different outlets, but not independent primary sources. And a source with a direct stake in the claim's outcome may confirm it for reasons other than truth.

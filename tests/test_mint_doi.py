@@ -179,3 +179,39 @@ def test_mint_doi_uploads_all_five_artifacts(mock_cls, proof_dir):
     assert "proof_audit.md" in uploaded_filenames
     assert "proof_narrative.md" in uploaded_filenames
     assert "proof.json" in uploaded_filenames
+
+
+def test_mint_doi_preflight_blocks_on_unexpanded_token(tmp_path, monkeypatch):
+    import subprocess
+    import sys
+    import os
+    from pathlib import Path as P
+    REPO = P(__file__).resolve().parent.parent
+    slug = "bad_slug"
+    site = tmp_path / "site"
+    proof = site / "proofs" / slug
+    proof.mkdir(parents=True)
+    (proof / "proof.py").write_text("print('{}')")
+    (proof / "proof.md").write_text("See {{cite:arxiv:2603.21852}}.\n")
+    (proof / "proof_audit.md").write_text("x\n")
+    (proof / "proof_narrative.md").write_text("x\n")
+    (proof / "proof.json").write_text('{"claim_natural": "x"}')
+    (proof / "meta.yaml").write_text(
+        "tags: [math]\ndepends_on:\n  - relation: References\n"
+        "    identifiers:\n      - type: arxiv\n        value: '2603.21852'\n"
+    )
+    (proof / "depends_on_resolved.json").write_text(
+        '{"arxiv:2603.21852": {"identifier_type":"arxiv","identifier_value":"2603.21852",'
+        '"canonical_url":"u","title":"t","authors":["Andrzej Odrzywo\u0142ek"],"year":2026,'
+        '"venue":null,"version":null,"resolved_at":"r","source_api":"s","raw":{}}}'
+    )
+
+    env = {**os.environ, "ZENODO_TOKEN": "dummy"}
+    r = subprocess.run(
+        [sys.executable, str(REPO / "tools" / "proof-site.py"), "mint-doi",
+         "--slug", slug, "--site-dir", str(site)],
+        capture_output=True, text=True, env=env,
+    )
+    assert r.returncode != 0
+    combined = r.stdout + r.stderr
+    assert "cite-expand" in combined or "unexpanded" in combined
