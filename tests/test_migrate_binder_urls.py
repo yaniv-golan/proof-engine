@@ -26,7 +26,7 @@ def test_rewrites_old_zenodo_url(tmp_path):
     after = _run(tmp_path / "doi.json")
     expected = (
         "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0"
-        "?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19635623"
+        "?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.19635623"
     )
     assert after["binder_url"] == expected
 
@@ -47,7 +47,7 @@ def test_idempotent(tmp_path):
         "zenodo_id": "19635623",
         "binder_url": (
             "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0"
-            "?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19635623"
+            "?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.19635623"
         ),
     }))
     first = _run(path)

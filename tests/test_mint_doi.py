@@ -112,7 +112,7 @@ def test_mint_doi_writes_launcher_binder_url(mock_cls, proof_dir):
     data = json.loads((proof_dir / "site" / "proofs" / "test-slug" / "doi.json").read_text())
     expected = (
         f"https://mybinder.org/v2/gh/{proof_site.BINDER_LAUNCHER_REPO}/{proof_site.BINDER_LAUNCHER_TAG}"
-        "?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.12345"
+        "?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.12345"
     )
     assert data["binder_url"] == expected
 

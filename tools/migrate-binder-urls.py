@@ -24,7 +24,7 @@ ZENODO_DOI_RE = re.compile(r"^10\.\d{4,9}/zenodo\.\d+$")
 def build_url(doi: str) -> str:
     return (
         f"https://mybinder.org/v2/gh/{BINDER_LAUNCHER_REPO}/{BINDER_LAUNCHER_TAG}"
-        f"?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D{quote(doi, safe='')}"
+        f"?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D{quote(doi, safe='')}"
     )
 
 

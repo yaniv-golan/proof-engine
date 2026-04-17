@@ -4,11 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.21.1] - 2026-04-18
+
+### Fixed
+
+- **"Open in Binder" DOI pre-population actually works end to end.** The 1.21.0 launcher shipped with a URL-fragment scheme (`#doi=...`) that could never reach the server and that JupyterLab's SPA router strips from the client before any widget JS runs. The launcher repo's `v1.21.0` tag was moved to a fixed commit that installs a Jupyter Server extension to capture `?doi=` server-side and write it to `/tmp/binder_doi`; this release updates the main-repo emitter (`proof-site.py`), the one-shot migrator, and all 74 published `doi.json` `binder_url` values to the query-parameter shape that the server extension can actually see. Also refreshes `docs/DESIGN.md` to describe the real mechanism.
+
 ## [1.21.0] - 2026-04-18
 
 ### Added
 
-- **Binder launcher.** All published proofs now have a working "Open in Binder" link, routed through the new [`yaniv-golan/proof-engine-binder`](https://github.com/yaniv-golan/proof-engine-binder) repo. The launcher notebook reads a Zenodo DOI from the URL fragment, fetches `proof.py` from Zenodo, and runs it in a pinned Python environment. Proof pages render a new "Open in Binder" format card when a DOI is minted.
+- **Binder launcher.** All published proofs now have a working "Open in Binder" link, routed through the new [`yaniv-golan/proof-engine-binder`](https://github.com/yaniv-golan/proof-engine-binder) repo. The launcher notebook reads a Zenodo DOI from a `?doi=` query parameter (captured server-side by a Jupyter Server extension, since JupyterLab's SPA router strips query strings before client JS runs), fetches `proof.py` from Zenodo, and runs it in a pinned Python environment. Proof pages render a new "Open in Binder" format card when a DOI is minted.
 - **`PROOF_ENGINE_ROOT` env-var override** in generated `proof.py` now supports an env-var override with a hardcoded fallback, enabling portable execution under Binder while keeping local-only proofs working unchanged.
 - **`tools/migrate-proof-root.py`**: one-shot script that converts legacy `proof.py` files (hardcoded and `__file__`-traversal forms) to the env-var pattern.
 - **`tools/migrate-binder-urls.py`**: one-shot script that converts legacy `binder_url` values in `doi.json` to the launcher-repo URL.

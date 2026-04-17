@@ -725,7 +725,7 @@ def cmd_mint_doi(args) -> int:
             # is still useful for in-Zenodo preview but is not required.
             doi_data["binder_url"] = (
                 f"https://mybinder.org/v2/gh/{BINDER_LAUNCHER_REPO}/{BINDER_LAUNCHER_TAG}"
-                f"?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D{_url_quote(doi, safe='')}"
+                f"?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D{_url_quote(doi, safe='')}"
             )
             doi_json_path.write_text(json.dumps(doi_data, indent=2) + "\n")
         else:
