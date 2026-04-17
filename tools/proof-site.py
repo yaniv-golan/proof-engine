@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from urllib.parse import quote as _url_quote
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -19,6 +20,27 @@ from tools.lib.publish import (
 )
 from tools.lib.zenodo import ZenodoClient, ZenodoError
 from tools.lib.tagger import llm_tag, canonicalize_tag
+
+
+# Binder launcher repo. Pinned per (MAJOR, MINOR) of the main proof-engine
+# version — each launcher tag maps 1:1 to a proof-engine minor release.
+BINDER_LAUNCHER_REPO = "yaniv-golan/proof-engine-binder"
+
+
+def _launcher_tag_from_version() -> str:
+    """Derive the immutable launcher tag from VERSION.
+
+    Patch bumps within a minor (e.g. 1.21.0 → 1.21.1) keep the launcher tag
+    fixed at v<MAJOR>.<MINOR>.0 — within a minor, only one launcher image
+    ever exists. Minor bumps (1.21.x → 1.22.0) move the tag automatically.
+    """
+    version_path = Path(__file__).resolve().parent.parent / "VERSION"
+    version = version_path.read_text().strip()
+    major, minor, _patch = version.split(".")
+    return f"v{major}.{minor}.0"
+
+
+BINDER_LAUNCHER_TAG = _launcher_tag_from_version()
 
 
 def log(msg: str) -> None:
@@ -698,8 +720,13 @@ def cmd_mint_doi(args) -> int:
                 "claim_natural": claim,
                 "minted_at": date.today().isoformat(),
             }
-            if "proof.ipynb" in mr_available:
-                doi_data["binder_url"] = f"https://mybinder.org/v2/zenodo/{zenodo_id}/?filepath=proof.ipynb"
+            # Unconditional: the launcher can run any proof.py, regardless of
+            # whether this deposit happens to include proof.ipynb. proof.ipynb
+            # is still useful for in-Zenodo preview but is not required.
+            doi_data["binder_url"] = (
+                f"https://mybinder.org/v2/gh/{BINDER_LAUNCHER_REPO}/{BINDER_LAUNCHER_TAG}"
+                f"?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D{_url_quote(doi, safe='')}"
+            )
             doi_json_path.write_text(json.dumps(doi_data, indent=2) + "\n")
         else:
             log("--sandbox: not persisting doi.json (sandbox record is ephemeral)")

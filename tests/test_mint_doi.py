@@ -89,6 +89,35 @@ def test_mint_doi_creates_doi_json(mock_cls, proof_dir):
 
 
 @patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
+@patch("tools.proof_site.ZenodoClient")
+def test_mint_doi_writes_launcher_binder_url(mock_cls, proof_dir):
+    """Prod mint writes a launcher-repo binder_url with the DOI in the URL fragment.
+
+    Version-agnostic: computes expected tag from the live BINDER_LAUNCHER_TAG so it
+    passes both before and after VERSION bumps.
+    """
+    client = _mock_zenodo_client()
+    client.publish.return_value = {
+        "doi": "10.5281/zenodo.12345",
+        "conceptdoi": "10.5281/zenodo.12340",
+        "id": 12345,
+        "conceptrecid": "12340",
+    }
+    mock_cls.return_value = client
+    args = MagicMock(
+        slug="test-slug", site_dir=str(proof_dir / "site"),
+        force=False, sandbox=False,
+    )
+    assert cmd_mint_doi(args) == 0
+    data = json.loads((proof_dir / "site" / "proofs" / "test-slug" / "doi.json").read_text())
+    expected = (
+        f"https://mybinder.org/v2/gh/{proof_site.BINDER_LAUNCHER_REPO}/{proof_site.BINDER_LAUNCHER_TAG}"
+        "?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.12345"
+    )
+    assert data["binder_url"] == expected
+
+
+@patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
 def test_mint_doi_refuses_if_doi_exists(proof_dir):
     """mint-doi (prod, no --force) should refuse when doi.json exists.
 
