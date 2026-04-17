@@ -12,7 +12,7 @@ The formal interpretation uses exact equality (==) with threshold True. The oper
 
 **Formalization scope:** The formal interpretation is a faithful 1:1 mapping of the natural-language claim. The operator eml is fully defined in the claim, the domain is all complex numbers, and the identity to verify is explicit. The only interpretive choice is using the principal branch of the complex logarithm, which is the standard convention and produces the unique value ln(1) = 0.
 
-**Attribution:** This result was originally established in R. Cheng, "The elementary function arithmetic," arXiv:2603.21852 (2026). The proof presented here provides independent computational verification using symbolic algebra (SymPy) and numerical methods, and was developed without reference to the original proof.
+**Attribution:** This result was originally established in A. Odrzywołek, "All elementary functions from a single binary operator," arXiv:2603.21852 (2026). The proof presented here provides independent computational verification using symbolic algebra (SymPy) and numerical methods, and was developed without reference to the original proof.
 
 *Source: proof.py JSON summary*
 

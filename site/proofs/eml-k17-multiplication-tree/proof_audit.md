@@ -18,7 +18,7 @@ For the complex domain, the identity is interpreted as a formal algebraic identi
 
 **Formalization scope:** The formal interpretation is a faithful mapping of the natural-language claim. The token count K = 17 is explicitly verified. The "for all complex x and y" clause is interpreted in the formal algebraic setting, with the domain restrictions (x != 0, y != 0, x != e^e) documented. The expression was constructed analytically using algebraic identities from the previously verified eml proofs (triple-nesting, subtraction) and verified independently. The construction was performed without reference to the original paper's proof.
 
-**Attribution:** This result was originally established in R. Cheng, "The elementary function arithmetic," arXiv:2603.21852 (2026). The proof presented here provides independent computational verification using symbolic algebra (SymPy), numerical methods, and exhaustive search, and was developed without reference to the original proof.
+**Attribution:** This result was originally established in A. Odrzywołek, "All elementary functions from a single binary operator," arXiv:2603.21852 (2026). The proof presented here provides independent computational verification using symbolic algebra (SymPy), numerical methods, and exhaustive search, and was developed without reference to the original proof.
 
 *Source: proof.py JSON summary*
 

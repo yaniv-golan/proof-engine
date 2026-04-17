@@ -21,7 +21,7 @@ Branch-cut analysis: the construction traverses the negative real axis at two we
 
 **Formalization scope:** The claim is existence-only. Minimality is not claimed and not verified here. The reported token counts K_pi = 137 and K_i = 91 are upper bounds on the minimum K for π and i respectively. The expressions were constructed analytically using algebraic identities from previously verified eml proofs (the published K=11, K=19, and K=17 proofs in this site) without reference to the original article.
 
-**Attribution:** This result was originally established in R. Cheng, "The elementary function arithmetic," arXiv:2603.21852 (2026). The proof presented here provides independent computational verification using symbolic algebra (SymPy), numerical methods (cmath), and stage-by-stage cross-checking, and was developed without reference to the original proof.
+**Attribution:** This result was originally established in A. Odrzywołek, "All elementary functions from a single binary operator," arXiv:2603.21852 (2026). The proof presented here provides independent computational verification using symbolic algebra (SymPy), numerical methods (cmath), and stage-by-stage cross-checking, and was developed without reference to the original proof.
 
 *Source: proof.py JSON summary*
 

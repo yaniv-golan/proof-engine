@@ -21,7 +21,7 @@ The constants π (K = 137), e (K = 3) and i (K = 91) are imported from the separ
 
 **Formalization scope:** Existence of eml-trees for every listed primitive, plus closure under composition and inverse. Minimality of token counts is NOT claimed; the reported K values are finite upper bounds. Natural-domain restrictions match the standard scientific-calculator scope: |x| < 1 for arcsin/arccos, x > 0 for real-input sqrt and log10. MULT inherits a removable singularity at xy = 0 (documented in eml-k17-multiplication-tree); this propagates to sqrt(1), sin(0), log10(1), etc., whose true function values (1, 0, 0) are finite and match what a calculator displays by continuous extension. Numerical verification uses interior test points that avoid those removable zeros.
 
-**Attribution:** This result was originally established in R. Cheng, "The elementary function arithmetic," arXiv:2603.21852 (2026). The proof presented here provides independent computational verification using the five previously published eml-identity proofs on this site, and was developed without reference to the original article.
+**Attribution:** This result was originally established in A. Odrzywołek, "All elementary functions from a single binary operator," arXiv:2603.21852 (2026). The proof presented here provides independent computational verification using the five previously published eml-identity proofs on this site, and was developed without reference to the original article.
 
 *Source: proof.py JSON summary*
 
