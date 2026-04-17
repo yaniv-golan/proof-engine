@@ -1,6 +1,6 @@
 {
-  "doi": "10.5281/zenodo.19626638",
-  "zenodo_id": "19626638",
+  "doi": "10.5281/zenodo.19635554",
+  "zenodo_id": "19635554",
   "concept_doi": "10.5281/zenodo.19626406",
   "concept_zenodo_id": "19626406",
   "claim_natural": "The binary operator eml is defined by the expression \\(\\text{eml}(a, b) = \\exp(a) - \\ln(b)\\). There exists a finite binary tree consisting solely of eml operations, whose 10 leaves are drawn from \\(\\{1, x, y\\}\\), such that the tree evaluates exactly to \\(x + y\\). The tree has K = 19 tokens (9 eml operations and 10 leaves), and the identity holds for all real \\(x\\) and \\(y\\) (and formally for all complex \\(x, y\\) in the algebraic setting where \\(\\ln \\circ \\exp\\) is the identity).",

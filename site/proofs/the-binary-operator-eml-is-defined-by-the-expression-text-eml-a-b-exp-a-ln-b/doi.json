@@ -1,6 +1,6 @@
 {
-  "doi": "10.5281/zenodo.19626609",
-  "zenodo_id": "19626609",
+  "doi": "10.5281/zenodo.19635535",
+  "zenodo_id": "19635535",
   "concept_doi": "10.5281/zenodo.19626393",
   "concept_zenodo_id": "19626393",
   "claim_natural": "The binary operator eml is defined by the expression \\(\\text{eml}(a, b) = \\exp(a) - \\ln(b)\\) (where exp is the exponential function and ln is the principal branch of the natural logarithm). The expression \\(\\text{eml}(1, 1)\\) equals the base of the natural logarithm \\(e\\).",
