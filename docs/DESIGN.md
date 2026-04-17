@@ -180,6 +180,16 @@ The four output files (proof.py, proof.md, proof_audit.md, proof_narrative.md) f
 
 For machine consumption, each published proof also includes three additional formats generated at build time: a **Jupyter Notebook** (`proof.ipynb`) for interactive re-verification in any notebook environment, a **W3C PROV-JSON** document (`provenance.json`) encoding the full provenance chain in the W3C Provenance standard, and an **RO-Crate 1.1** metadata file (`ro-crate-metadata.json`) packaging all proof artifacts as a self-describing research object for archival and interoperability. These are derived from the four core files — they don't add new information, but they make the same information accessible to notebook environments, provenance-aware pipelines, and research data management systems.
 
+### Interactive re-verification
+
+Every published proof page links to a one-click Binder launcher. The launcher repo [`yaniv-golan/proof-engine-binder`](https://github.com/yaniv-golan/proof-engine-binder) pins the Python runtime, installs the dependencies `proof.py` scripts use, and clones the main `proof-engine` repo at the matching minor-release tag. The proof page's "Open in Binder" link passes the Zenodo DOI in the URL fragment (`#doi=...`); the launcher notebook reads the fragment, fetches `proof.py` from Zenodo's REST API, and executes it with `PROOF_ENGINE_ROOT` set to the cloned skill path.
+
+Four properties of this design worth noting:
+1. **Immutable launcher reference.** `binder_url` values in `doi.json` point at a specific launcher git tag (e.g. `v1.21.0`) — never a moving branch. A proof minted today resolves to the same launcher image and same `proof-engine` clone a year from now.
+2. **Zero Zenodo mutations per launcher change.** The launcher URL lives in this repo's `doi.json` files, not in Zenodo metadata. Rotating a compromised tag or patching an infrastructure break is a repo commit, not a Zenodo republication.
+3. **One Binder cold build per launcher release.** Each immutable launcher tag has its own Binder image cache; image reuse is keyed by git ref.
+4. **Forward-portable proof.py.** Generated proofs read `PROOF_ENGINE_ROOT` from an env var with a hardcoded fallback. Local runs use the fallback; the launcher sets the env var. One file shape serves both environments.
+
 ## Separation of concerns
 
 The proof has four output files because it serves four audiences. `proof.py` is for anyone who wants to re-run the verification. `proof.md` is the structured proof report with verdict and key numbers. `proof_audit.md` is for a reviewer who wants the citation-by-citation evidence trail and hardening-rule checklist. `proof_narrative.md` is a plain-language narrative summary for general readers. Combining them into one artifact would force every reader through material meant for someone else.
