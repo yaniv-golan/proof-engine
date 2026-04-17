@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- `mint-doi`: Zenodo records now include the full `depends_on` graph as typed
+  `related_identifiers` (originating papers, upstream proof DOIs, etc.), not
+  just a single `isSupplementedBy` edge to the proof's webpage. Brings our
+  DataCite metadata in line with standard practice for derivative deposits.
+
+### Changed
+
+- New module `tools/lib/zenodo_metadata.py` — pure helper that converts
+  parsed `depends_on` entries to Zenodo-API-shaped dicts. Existing records
+  are unaffected until re-minted with `--force`.
+
 ## [1.19.0] - 2026-04-17
 
 ### Added
