@@ -122,3 +122,26 @@ def test_handle_and_url_omit_resource_type():
     result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
     for r in result[1:]:  # skip webpage edge
         assert "resource_type" not in r
+
+
+def test_duplicate_identifier_relation_pair_is_deduped():
+    doi = Identifier(type="doi", value="10.5281/zenodo.1")
+    entries = [
+        DependsOnEntry(relation="IsDerivedFrom", identifiers=[doi]),
+        DependsOnEntry(relation="IsDerivedFrom", identifiers=[doi], note="second mention"),
+    ]
+    result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+    doi_edges = [r for r in result if r.get("identifier") == "10.5281/zenodo.1"]
+    assert len(doi_edges) == 1
+
+
+def test_stable_ordering_isDerivedFrom_before_references():
+    entries = [
+        DependsOnEntry(relation="References",
+                       identifiers=[Identifier(type="arxiv", value="2603.21852")]),
+        DependsOnEntry(relation="IsDerivedFrom",
+                       identifiers=[Identifier(type="doi", value="10.5281/zenodo.1")]),
+    ]
+    result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+    relations = [r["relation"] for r in result]
+    assert relations == ["isSupplementedBy", "isDerivedFrom", "references"]

@@ -41,6 +41,16 @@ _RESOURCE_TYPE_BY_TYPE: dict[str, str] = {
 }
 
 
+# Stable ordering for Zenodo related_identifiers output. Known relations
+# come first in the defined order; anything else falls in after, in original
+# input order. Helps diffing Zenodo records across versions.
+_RELATION_ORDER: dict[str, int] = {
+    "isSupplementedBy": 0,
+    "isDerivedFrom":    1,
+    "references":       2,
+}
+
+
 def _pick_canonical(entry: DependsOnEntry) -> Identifier:
     """Pick the most-preferred identifier from an entry for Zenodo propagation."""
     by_type: dict[str, Identifier] = {}
@@ -60,6 +70,8 @@ def build_related_identifiers(
     out: list[dict] = [
         {"identifier": proof_url, "relation": "isSupplementedBy", "scheme": "url"},
     ]
+    seen: set[tuple[str, str]] = {(proof_url, "isSupplementedBy")}
+
     for entry in entries:
         ident = _pick_canonical(entry)
         if ident.type == "slug":
@@ -72,15 +84,25 @@ def build_related_identifiers(
                 file=sys.stderr,
             )
             continue
-        scheme = _SCHEME_BY_TYPE[ident.type]
+        relation = _camel(entry.relation)
+        key = (ident.value, relation)
+        if key in seen:
+            continue
+        seen.add(key)
+
         entry_out = {
             "identifier": ident.value,
-            "relation": _camel(entry.relation),
-            "scheme": scheme,
+            "relation":   relation,
+            "scheme":     _SCHEME_BY_TYPE[ident.type],
         }
         if ident.type in _RESOURCE_TYPE_BY_TYPE:
             entry_out["resource_type"] = _RESOURCE_TYPE_BY_TYPE[ident.type]
         out.append(entry_out)
+
+    # Stable sort: known relations first in the defined order, then others
+    # in original order. The webpage edge always stays at index 0 because
+    # its relation has priority 0.
+    out.sort(key=lambda r: _RELATION_ORDER.get(r["relation"], 99))
     return out
 
 
