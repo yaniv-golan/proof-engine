@@ -28,3 +28,5 @@ snapshots/
 docs/examples/*/proof.json
 docs/examples/*/output.txt
 docs/specs/
+# Playwright MCP session artifacts
+.playwright-mcp/
