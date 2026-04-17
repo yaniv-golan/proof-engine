@@ -733,6 +733,114 @@ def cmd_sync_doi_deps(args) -> int:
     return 0
 
 
+def cmd_show_deps(args) -> int:
+    """Print a proof's depends_on / consumers in text or JSON form."""
+    import yaml
+    from tools.lib.depends_on import (
+        parse_depends_on, build_reverse_index, PREREQUISITE_RELATIONS,
+    )
+
+    site_dir = Path(args.site_dir)
+    proofs_dir = site_dir / "proofs"
+    slug = args.slug
+    proof_dir = proofs_dir / slug
+
+    if not proof_dir.is_dir() or not (proof_dir / "proof.json").exists():
+        error(f"Proof not found: {slug}")
+        return 1
+
+    def _read_entries(s: str):
+        meta_path = proofs_dir / s / "meta.yaml"
+        if not meta_path.exists():
+            return []
+        meta = yaml.safe_load(meta_path.read_text()) or {}
+        entries, _errs = parse_depends_on(meta, source=str(meta_path))
+        return entries
+
+    direct = _read_entries(slug)
+
+    def _ancestors(start: str) -> dict[str, list[str]]:
+        out: dict[str, list[str]] = {}
+        stack: list[str] = [start]
+        seen: set[str] = set()
+        while stack:
+            node = stack.pop()
+            if node in seen:
+                continue
+            seen.add(node)
+            kids = []
+            for entry in _read_entries(node):
+                if entry.relation not in PREREQUISITE_RELATIONS:
+                    continue
+                for ident in entry.identifiers:
+                    if ident.type == "slug":
+                        kids.append(ident.value)
+            out[node] = kids
+            stack.extend(kids)
+        return out
+
+    if args.reverse:
+        rev = build_reverse_index(proofs_dir)
+        consumers = rev.get(slug, [])
+        if args.format == "json":
+            print(json.dumps({"reverse": consumers}, indent=2))
+        else:
+            if not consumers:
+                print(f"(no proofs depend on {slug})")
+            else:
+                print(f"Used by ({len(consumers)}):")
+                for c in consumers:
+                    print(f"  {c}")
+        return 0
+
+    if args.format == "json":
+        payload = {
+            "slug": slug,
+            "direct": [_entry_to_dict(e) for e in direct],
+        }
+        if args.transitive:
+            payload["transitive_prereqs"] = _ancestors(slug)
+        print(json.dumps(payload, indent=2))
+        return 0
+
+    visible = [e for e in direct if _entry_visible(e, args.include_external)]
+    if not visible:
+        print(f"(no visible dependencies for {slug})")
+    for entry in visible:
+        ids = ", ".join(f"{i.type}:{i.value}" for i in entry.identifiers)
+        print(f"  [{entry.relation}] {ids}"
+              + (f"  — {entry.note}" if entry.note else ""))
+
+    if args.transitive:
+        print()
+        print(f"Transitive prerequisites ({slug}):")
+        for node, kids in _ancestors(slug).items():
+            for k in kids:
+                print(f"  {node} → {k}")
+    return 0
+
+
+def _entry_to_dict(entry) -> dict:
+    return {
+        "relation": entry.relation,
+        "identifiers": [
+            {"type": i.type, "value": i.value} for i in entry.identifiers
+        ],
+        "note": entry.note,
+    }
+
+
+def _entry_visible(entry, include_external: bool) -> bool:
+    """Default text view: slug + prerequisite relation. --include-external
+    additionally surfaces non-prerequisite entries and external-only entries."""
+    from tools.lib.depends_on import PREREQUISITE_RELATIONS
+    has_slug = any(i.type == "slug" for i in entry.identifiers)
+    is_prereq = entry.relation in PREREQUISITE_RELATIONS
+    if has_slug and is_prereq:
+        return True
+    return include_external
+
+
 def add_site_dir_arg(p):
     """Add --site-dir to a subparser so it works after the subcommand."""
     p.add_argument(
@@ -792,6 +900,22 @@ def main():
                       help="Print what would change; write nothing")
     add_site_dir_arg(sync)
 
+    # show-deps
+    show = subparsers.add_parser(
+        "show-deps",
+        help="Print a proof's depends_on entries or its consumers",
+    )
+    show.add_argument("slug", help="Slug of the proof to inspect")
+    show.add_argument("--transitive", action="store_true",
+                      help="Walk prerequisite slug edges to full ancestor closure")
+    show.add_argument("--reverse", action="store_true",
+                      help="Show proofs that depend on this one (any inbound slug edge)")
+    show.add_argument("--include-external", action="store_true",
+                      help="Text mode only: also show external-only and non-prereq entries")
+    show.add_argument("--format", choices=["text", "json"], default="text",
+                      help="Output format (json always includes every entry)")
+    add_site_dir_arg(show)
+
     args = parser.parse_args()
 
     if args.command == "publish":
@@ -806,6 +930,8 @@ def main():
         sys.exit(cmd_mint_doi(args))
     elif args.command == "sync-doi-deps":
         sys.exit(cmd_sync_doi_deps(args))
+    elif args.command == "show-deps":
+        sys.exit(cmd_show_deps(args))
 
 
 if __name__ == "__main__":

@@ -366,6 +366,118 @@ def test_sync_doi_deps_missing_doi_json_is_no_op(tmp_path):
     assert result.returncode == 0, result.stderr
 
 
+def test_show_deps_default_text_is_slug_only_prereq(tmp_path):
+    """Default text view shows only slug entries with prerequisite relations."""
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "u")
+    _write_proof_dir(proofs, "me", meta={
+        "tags": ["t"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "u"}]},
+            {"relation": "References",
+             "identifiers": [{"type": "arxiv", "value": "2603.21852"}]},
+        ],
+    })
+    result = run_cli("show-deps", "me", "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+    assert "u" in result.stdout
+    assert "2603.21852" not in result.stdout
+
+
+def test_show_deps_include_external(tmp_path):
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "u")
+    _write_proof_dir(proofs, "me", meta={
+        "tags": ["t"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "u"}]},
+            {"relation": "References",
+             "identifiers": [{"type": "arxiv", "value": "2603.21852"}]},
+        ],
+    })
+    result = run_cli("show-deps", "me", "--include-external",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+    assert "u" in result.stdout
+    assert "2603.21852" in result.stdout
+
+
+def test_show_deps_json_always_includes_everything(tmp_path):
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "u")
+    _write_proof_dir(proofs, "me", meta={
+        "tags": ["t"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "u"}]},
+            {"relation": "References",
+             "identifiers": [{"type": "arxiv", "value": "2603.21852"}]},
+        ],
+    })
+    result = run_cli("show-deps", "me", "--format", "json",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+    payload = json.loads(result.stdout)
+    types = {ident["type"] for entry in payload["direct"]
+             for ident in entry["identifiers"]}
+    assert types == {"slug", "arxiv"}
+
+
+def test_show_deps_transitive_walks_prereq_slugs(tmp_path):
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "deep")
+    _write_proof_dir(proofs, "u", meta={
+        "tags": ["t"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "deep"}]},
+        ],
+    })
+    _write_proof_dir(proofs, "me", meta={
+        "tags": ["t"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "u"}]},
+        ],
+    })
+    result = run_cli("show-deps", "me", "--transitive",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+    assert "u" in result.stdout
+    assert "deep" in result.stdout
+
+
+def test_show_deps_reverse(tmp_path):
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "u")
+    _write_proof_dir(proofs, "me", meta={
+        "tags": ["t"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "u"}]},
+        ],
+    })
+    result = run_cli("show-deps", "u", "--reverse",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+    assert "me" in result.stdout
+
+
+def test_show_deps_missing_slug_errors(tmp_path):
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    result = run_cli("show-deps", "ghost", "--site-dir", str(tmp_path / "site"))
+    assert result.returncode != 0
+    assert "ghost" in (result.stdout + result.stderr)
+
+
 def test_publish_rejects_unknown_dependency_slug(site_dir, source_proof):
     """publish must fail when depends_on slug points to a non-existent proof."""
     import yaml
