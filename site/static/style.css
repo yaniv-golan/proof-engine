@@ -650,6 +650,42 @@ abbr.fact-ref:hover::after { opacity: 1; }
 .generator-footer { font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); margin-top: 16px; }
 .generator-footer a { color: var(--link); }
 
+/* References & relationships (depends_on graph) */
+.rel-grid { display: flex; flex-direction: column; gap: 18px; margin-bottom: 32px; }
+.rel-heading { font-size: 12px; font-family: var(--font-mono); color: var(--text); margin: 0 0 8px 0; font-weight: 400; }
+.rel-heading-hint { color: var(--text-muted); font-size: 11px; font-weight: 400; }
+.rel-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.rel-entry { display: flex; flex-direction: column; gap: 4px; font-size: 13px; line-height: 1.5; padding-left: 10px; border-left: 2px solid var(--border-subtle); }
+.rel-primary { color: var(--link); text-decoration: none; line-height: 1.4; word-break: break-word; }
+a.rel-primary:hover { text-decoration: underline; }
+span.rel-primary { color: var(--text); }
+.rel-secondary { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.rel-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 7px 1px 3px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    max-width: 100%;
+    min-width: 0;
+}
+a.rel-pill { color: var(--link); }
+a.rel-pill:hover { background: #1c2129; border-color: var(--accent); text-decoration: none; }
+.rel-pill-type { display: inline-block; font-size: 9px; padding: 1px 4px; border-radius: 2px; background: var(--border); color: var(--text-muted); letter-spacing: 0.3px; flex-shrink: 0; }
+.rel-pill-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.rel-pill-doi .rel-pill-type { background: var(--green-bg); color: var(--green-text); }
+.rel-pill-arxiv .rel-pill-type { background: var(--amber-bg); color: var(--amber-text); }
+.rel-pill-swhid .rel-pill-type { background: var(--gray-bg); color: var(--gray-text); }
+.rel-pill-handle .rel-pill-type { background: var(--gray-bg); color: var(--gray-text); }
+.rel-pill-url .rel-pill-type { background: var(--gray-bg); color: var(--gray-text); }
+.rel-pill-isbn .rel-pill-type { background: var(--gray-bg); color: var(--gray-text); }
+
 /* Citation */
 .cite-section { margin-top: 24px; margin-bottom: 8px; }
 .cite-section summary { cursor: pointer; font-size: 13px; font-family: var(--font-mono); color: var(--link); padding: 8px 0; }

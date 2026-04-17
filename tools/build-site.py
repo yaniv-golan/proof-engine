@@ -123,39 +123,92 @@ def _identifier_label(ident, proofs_by_slug: dict) -> str:
     if ident.type == "slug":
         upstream = proofs_by_slug.get(ident.value)
         if upstream:
-            claim = upstream["proof_data"].get("claim_natural", ident.value)
-            return claim if len(claim) <= 100 else claim[:97] + "..."
+            return upstream["proof_data"].get("claim_natural", ident.value)
         return ident.value
     if ident.type == "doi":
         return f"doi:{ident.value}"
     if ident.type == "arxiv":
         return f"arXiv:{ident.value}"
     if ident.type == "swhid":
-        return ident.value[:24] + "..."
+        return ident.value
     if ident.type == "handle":
         return f"hdl:{ident.value}"
     if ident.type == "url":
-        return ident.value if len(ident.value) <= 60 else ident.value[:57] + "..."
+        return ident.value
     if ident.type == "isbn":
         return f"ISBN {ident.value}"
     return ident.value
 
 
+_TYPE_LABEL = {
+    "slug": "proof",
+    "doi": "doi",
+    "arxiv": "arXiv",
+    "swhid": "code",
+    "handle": "handle",
+    "url": "link",
+    "isbn": "ISBN",
+}
+
+
 def _render_depends_on_entry(entry, proofs_by_slug: dict, base_url: str) -> dict:
-    """Build the view model for one depends_on entry (used by proof.html)."""
-    rendered_ids = []
+    """Build the view model for one depends_on entry (used by proof.html).
+
+    Each entry surfaces:
+      - primary_text: a human-readable headline (note > upstream claim > id label)
+      - primary_href: where clicking the headline takes you (slug > url > first id)
+      - primary_tooltip: longer text on hover (upstream claim when note is primary)
+      - secondary: smaller citation pills (DOI/arXiv/etc.); the slug is omitted
+        because it already powers the primary link
+    """
+    slug_ident = next((i for i in entry.identifiers if i.type == "slug"), None)
+    upstream_claim = None
+    if slug_ident:
+        upstream = proofs_by_slug.get(slug_ident.value)
+        if upstream:
+            upstream_claim = upstream["proof_data"].get("claim_natural", slug_ident.value)
+        else:
+            upstream_claim = slug_ident.value
+
+    if entry.note:
+        primary_text = entry.note
+        primary_tooltip = upstream_claim or entry.note
+    elif upstream_claim is not None:
+        primary_text = upstream_claim
+        primary_tooltip = upstream_claim
+    elif entry.identifiers:
+        primary_text = _identifier_label(entry.identifiers[0], proofs_by_slug)
+        primary_tooltip = primary_text
+    else:
+        primary_text = ""
+        primary_tooltip = ""
+
+    if slug_ident:
+        primary_href = f"{base_url}proofs/{slug_ident.value}/"
+    elif entry.identifiers:
+        primary_href = _identifier_href(entry.identifiers[0], base_url)
+    else:
+        primary_href = None
+
+    secondary = []
     for ident in entry.identifiers:
-        rendered_ids.append({
+        if ident.type == "slug":
+            continue
+        label = _identifier_label(ident, proofs_by_slug)
+        secondary.append({
             "type": ident.type,
-            "value": ident.value,
+            "type_label": _TYPE_LABEL.get(ident.type, ident.type),
+            "label": label,
             "href": _identifier_href(ident, base_url),
-            "label": _identifier_label(ident, proofs_by_slug),
         })
+
     return {
         "relation": entry.relation,
         "relation_humanized": _RELATION_HUMANIZED.get(entry.relation, entry.relation),
-        "note": entry.note,
-        "identifiers": rendered_ids,
+        "primary_text": primary_text,
+        "primary_href": primary_href,
+        "primary_tooltip": primary_tooltip,
+        "secondary": secondary,
     }
 
 
