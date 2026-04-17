@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path
 
 REQUIRED_ARTIFACTS = ["proof.py", "proof.md", "proof_audit.md", "proof_narrative.md"]
-OPTIONAL_ARTIFACTS = ["proof.json", "thumbnail.png", "meta.yaml", "doi.json"]
+OPTIONAL_ARTIFACTS = ["proof.json", "thumbnail.png", "meta.yaml", "doi.json", "depends_on_resolved.json"]
 
 
 def check_required_artifacts(source_dir: Path) -> list[str]:
@@ -106,6 +106,11 @@ def finalize_proof(staging_dir: str, target_dir: Path, force: bool = False) -> N
                 )
             doi_to_preserve = existing_doi_path.read_bytes()
 
+        existing_cache_path = target_dir / "depends_on_resolved.json"
+        cache_to_preserve = None
+        if existing_cache_path.exists():
+            cache_to_preserve = existing_cache_path.read_bytes()
+
         backup_dir = target_dir.with_name("." + target_dir.name + ".backup")
         target_dir.rename(backup_dir)
         try:
@@ -117,6 +122,9 @@ def finalize_proof(staging_dir: str, target_dir: Path, force: bool = False) -> N
         # Restore doi.json if it was preserved
         if doi_to_preserve is not None and not (target_dir / "doi.json").exists():
             (target_dir / "doi.json").write_bytes(doi_to_preserve)
+
+        if cache_to_preserve is not None and not (target_dir / "depends_on_resolved.json").exists():
+            (target_dir / "depends_on_resolved.json").write_bytes(cache_to_preserve)
 
         shutil.rmtree(backup_dir)
     else:

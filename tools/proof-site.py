@@ -117,6 +117,42 @@ def cmd_publish(args) -> int:
             return 1
         success("Thumbnail is 240x240")
 
+    # 6b. Pre-stage gate — strictly offline: resolve-deps (cache-only),
+    # cite-expand --check, verify-prose.
+    from tools.lib.reference_resolver import collect_identifiers, load_cache
+    from tools.lib.cite_expander import check as cite_check
+    from tools.lib.prose_reference_scan import verify_prose
+
+    log("Pre-stage gate: resolve-deps (cache-only)...")
+    idents = collect_identifiers(source_dir)
+    cache = load_cache(source_dir)
+    missing = [f"{t}:{v}" for (t, v) in idents if f"{t}:{v}" not in cache]
+    if missing:
+        error(
+            "publish: resolved-metadata cache is missing for: "
+            + ", ".join(missing) + ". "
+            f"run: proof-site.py resolve-deps --artifacts-dir {source_dir} --refresh "
+            "and commit depends_on_resolved.json, then retry publish."
+        )
+        return 1
+
+    log("Pre-stage gate: cite-expand --check...")
+    for name in ("proof.md", "proof_audit.md", "proof_narrative.md"):
+        path = source_dir / name
+        if path.exists():
+            errs = cite_check(path.read_text(), cache)
+            for e in errs:
+                error(f"{path}: {e}")
+            if errs:
+                return 1
+
+    log("Pre-stage gate: verify-prose...")
+    result = verify_prose(source_dir)
+    for e in result.errors:
+        error(f"{source_dir}/{e.file}:{e.line}: {e.message}")
+    if result.errors:
+        return 1
+
     # 7. Stage (on same filesystem as proofs_dir for atomic moves)
     log("Staging artifacts...")
     staging = stage_proof(source_dir, proofs_dir=proofs_dir)
