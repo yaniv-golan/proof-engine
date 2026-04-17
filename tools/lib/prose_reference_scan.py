@@ -453,13 +453,26 @@ def _escape_short_spans(text: str) -> list[tuple[int, int]]:
     return spans
 
 
+def _expand_bounded_by_blank_line(text: str, start: int, end: int, window: int) -> tuple[int, int]:
+    left = max(0, start - window)
+    prev_blank = text.rfind("\n\n", left, start)
+    if prev_blank != -1:
+        left = prev_blank + 2
+    right = min(len(text), end + window)
+    next_blank = text.find("\n\n", end, right)
+    if next_blank != -1:
+        right = next_blank
+    return left, right
+
+
 def _verification_windows(text: str, hits: list[Hit], window: int = 160) -> list[tuple[int, int]]:
     out = []
     for h in hits:
         if h.source == "literal":
-            out.append((max(0, h.span[0] - window), min(len(text), h.span[1] + window)))
+            out.append(_expand_bounded_by_blank_line(text, h.span[0], h.span[1], window))
         elif h.source == "link-target" and h.link_span is not None:
-            out.append(h.link_span)
+            ls, le = h.link_span
+            out.append(_expand_bounded_by_blank_line(text, ls, le, window))
     return out
 
 
