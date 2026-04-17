@@ -363,14 +363,20 @@ def main():
         ))
         errors.extend(dep_errors)
 
-    # 6. Prose reference verification
-    try:
-        from tools.lib.prose_reference_scan import verify_prose as _vp
-        vp_result = _vp(proof_dir)
-        for e in vp_result.errors:
-            errors.append(f"{e.file}:{e.line}: {e.message}")
-    except Exception as e:
-        errors.append(f"verify_prose raised {e}")
+    # 6. Prose reference verification (skipped with --structural-only)
+    # Rule 9 depends on resolved-identifier metadata in
+    # depends_on_resolved.json, which is populated by network fetches
+    # during publish. Structural-only mode runs without network and
+    # without guaranteed cache presence, so treat prose verification
+    # as a provenance-class check.
+    if not structural_only:
+        try:
+            from tools.lib.prose_reference_scan import verify_prose as _vp
+            vp_result = _vp(proof_dir)
+            for e in vp_result.errors:
+                errors.append(f"{e.file}:{e.line}: {e.message}")
+        except Exception as e:
+            errors.append(f"verify_prose raised {e}")
 
     print_results(errors, warnings)
     sys.exit(1 if errors else 0)

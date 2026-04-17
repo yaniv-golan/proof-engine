@@ -298,10 +298,11 @@ def test_validate_site_proof_fails_on_prose_mismatch(tmp_path):
     shutil.copytree(src, dst)
     (dst / "proof.py").write_text("print('{}')")
     (dst / "proof.json").write_text('{"claim_natural":"x"}')
+    # Full mode (no --structural-only): prose verification is a
+    # provenance-class check and only runs in full mode.
     r = subprocess.run(
         [sys.executable, str(REPO / "tools" / "validate-site-proof.py"),
-         "--structural-only", str(dst),
-         "--candidate-slug", "bad_attribution_proof"],
+         str(dst), "--candidate-slug", "bad_attribution_proof"],
         capture_output=True, text=True,
     )
     combined = r.stdout + r.stderr
