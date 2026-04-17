@@ -4,5 +4,6 @@
   "concept_doi": "10.5281/zenodo.19510360",
   "concept_zenodo_id": "19510360",
   "claim_natural": "Co-occurrence of Lewy pathology and ADNC is common (\u226530% of AD cases have LP; \u226550% of DLB cases have ADNC)",
-  "minted_at": "2026-04-11"
+  "minted_at": "2026-04-11",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19510361"
 }

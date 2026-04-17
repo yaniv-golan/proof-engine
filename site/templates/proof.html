@@ -469,6 +469,13 @@
 
 <h2 class="section-heading" id="formats">machine-readable formats</h2>
 <div class="formats-row">
+    {% if citation and citation.binder_url %}
+    <a href="{{ citation.binder_url }}" class="format-card" rel="nofollow noopener" target="_blank" onclick="gtag('event','launch',{target:'binder',proof_slug:'{{ proof.slug }}'})">
+        <span class="format-icon">▶</span>
+        <span class="format-name">Open in Binder</span>
+        <span class="format-desc">run this proof in a browser, no install</span>
+    </a>
+    {% endif %}
     <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.ipynb" class="format-card" download onclick="gtag('event','download',{file_type:'notebook',proof_slug:'{{ proof.slug }}'})">
         <span class="format-icon">⬡</span>
         <span class="format-name">Jupyter Notebook</span>

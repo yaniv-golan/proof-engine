@@ -4,5 +4,6 @@
   "concept_doi": "10.5281/zenodo.19489859",
   "concept_zenodo_id": "19489859",
   "claim_natural": "The Pyramid of Giza was built by slaves.",
-  "minted_at": "2026-04-10"
+  "minted_at": "2026-04-10",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19489860"
 }

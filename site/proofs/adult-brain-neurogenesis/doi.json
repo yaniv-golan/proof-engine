@@ -4,5 +4,6 @@
   "concept_doi": "10.5281/zenodo.19454361",
   "concept_zenodo_id": "19454361",
   "claim_natural": "Critical periods of heightened cortical plasticity close permanently after early development, rendering the adult brain largely incapable of experience-dependent reorganization comparable to juvenile levels.",
-  "minted_at": "2026-04-07"
+  "minted_at": "2026-04-07",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19455649"
 }

@@ -4,5 +4,6 @@
   "concept_doi": "10.5281/zenodo.19489819",
   "concept_zenodo_id": "19489819",
   "claim_natural": "AI hallucinations occur on fewer than 5% of factual questions",
-  "minted_at": "2026-04-10"
+  "minted_at": "2026-04-10",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19489820"
 }

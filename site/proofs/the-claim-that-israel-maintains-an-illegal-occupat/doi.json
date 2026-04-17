@@ -4,5 +4,6 @@
   "concept_doi": "10.5281/zenodo.19489870",
   "concept_zenodo_id": "19489870",
   "claim_natural": "The claim that Israel maintains an illegal occupation of the entire West Bank is contradicted by the Oslo Accords designating Area C as remaining under full Israeli civil and security administration pending final-status negotiations.",
-  "minted_at": "2026-04-10"
+  "minted_at": "2026-04-10",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19489871"
 }

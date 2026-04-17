@@ -5,5 +5,5 @@
   "concept_zenodo_id": "19626415",
   "claim_natural": "Every elementary function that appears on a standard scientific calculator \u2014 including \\(+\\), \\(\\times\\), \\(\\div\\), exponentiation \\(x^y\\), \\(\\sin\\), \\(\\cos\\), \\(\\tan\\), \\(\\sqrt{x}\\), \\(\\log_{10}\\), \\(\\pi\\), \\(e\\), \\(i\\), and their compositions and inverses \u2014 can be realised as a finite binary tree of the operator \\(\\mathrm{eml}(a, b) = e^{a} - \\ln b\\) whose leaves are the constant \\(1\\) and the input variables. Each construction is verified to machine precision at multiple test points on its natural domain.",
   "minted_at": "2026-04-17",
-  "binder_url": "https://mybinder.org/v2/zenodo/19635623/?filepath=proof.ipynb"
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19635623"
 }

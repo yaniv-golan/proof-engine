@@ -36,9 +36,11 @@ def build_citation_context(
 
     doi = None
     concept_doi = None
+    binder_url = None
     if doi_data:
         doi = doi_data.get("doi")
         concept_doi = doi_data.get("concept_doi")
+        binder_url = doi_data.get("binder_url")
 
     return {
         "title": title,
@@ -48,6 +50,7 @@ def build_citation_context(
         "url": canonical_url,
         "doi": doi,
         "concept_doi": concept_doi,
+        "binder_url": binder_url,
         "version": generator.get("version", ""),
         "verdict": verdict_str,
         "slug_sanitized": slug_sanitized,
