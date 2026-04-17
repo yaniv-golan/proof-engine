@@ -841,6 +841,24 @@ def _entry_visible(entry, include_external: bool) -> bool:
     return include_external
 
 
+def cmd_audit_deps(args) -> int:
+    """Run the global depends_on validator over every proof."""
+    from tools.lib.depends_on import validate_repo, DependsOnRepoError
+
+    site_dir = Path(args.site_dir)
+    proofs_dir = site_dir / "proofs"
+    if not proofs_dir.is_dir():
+        error(f"Proofs directory not found: {proofs_dir}")
+        return 1
+    try:
+        validate_repo(proofs_dir)
+    except DependsOnRepoError as e:
+        error(str(e))
+        return 1
+    success("All depends_on entries are valid")
+    return 0
+
+
 def add_site_dir_arg(p):
     """Add --site-dir to a subparser so it works after the subcommand."""
     p.add_argument(
@@ -916,6 +934,13 @@ def main():
                       help="Output format (json always includes every entry)")
     add_site_dir_arg(show)
 
+    # audit-deps
+    audit = subparsers.add_parser(
+        "audit-deps",
+        help="Validate depends_on across every proof in the site",
+    )
+    add_site_dir_arg(audit)
+
     args = parser.parse_args()
 
     if args.command == "publish":
@@ -932,6 +957,8 @@ def main():
         sys.exit(cmd_sync_doi_deps(args))
     elif args.command == "show-deps":
         sys.exit(cmd_show_deps(args))
+    elif args.command == "audit-deps":
+        sys.exit(cmd_audit_deps(args))
 
 
 if __name__ == "__main__":

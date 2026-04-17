@@ -478,6 +478,36 @@ def test_show_deps_missing_slug_errors(tmp_path):
     assert "ghost" in (result.stdout + result.stderr)
 
 
+def test_audit_deps_passes_clean_site(tmp_path):
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "a")
+    _write_proof_dir(proofs, "b", meta={
+        "tags": ["t"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "a"}]},
+        ],
+    })
+    result = run_cli("audit-deps", "--site-dir", str(tmp_path / "site"))
+    assert result.returncode == 0, result.stderr
+
+
+def test_audit_deps_fails_on_broken_state(tmp_path):
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "b", meta={
+        "tags": ["t"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "ghost"}]},
+        ],
+    })
+    result = run_cli("audit-deps", "--site-dir", str(tmp_path / "site"))
+    assert result.returncode != 0
+    assert "ghost" in (result.stdout + result.stderr)
+
+
 def test_publish_rejects_unknown_dependency_slug(site_dir, source_proof):
     """publish must fail when depends_on slug points to a non-existent proof."""
     import yaml
