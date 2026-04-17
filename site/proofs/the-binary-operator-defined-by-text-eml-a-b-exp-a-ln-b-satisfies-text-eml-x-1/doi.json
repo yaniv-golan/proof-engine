@@ -1,8 +1,9 @@
 {
-  "doi": "10.5281/zenodo.19635542",
-  "zenodo_id": "19635542",
+  "doi": "10.5281/zenodo.19635614",
+  "zenodo_id": "19635614",
   "concept_doi": "10.5281/zenodo.19626399",
   "concept_zenodo_id": "19626399",
   "claim_natural": "The binary operator defined by \\(\\text{eml}(a, b) = \\exp(a) - \\ln(b)\\) satisfies \\(\\text{eml}(x, 1) = \\exp(x)\\) for every complex number x.",
-  "minted_at": "2026-04-17"
+  "minted_at": "2026-04-17",
+  "binder_url": "https://mybinder.org/v2/zenodo/19635614/?filepath=proof.ipynb"
 }
