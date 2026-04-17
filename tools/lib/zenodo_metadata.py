@@ -45,13 +45,14 @@ _RESOURCE_TYPE_BY_TYPE: dict[str, str] = {
 }
 
 
-# Stable ordering for Zenodo related_identifiers output. Known relations
-# come first in the defined order; anything else falls in after, in original
-# input order. Helps diffing Zenodo records across versions.
+# Stable ordering for the propagated (non-webpage) edges. The synthetic
+# webpage `isSupplementedBy` edge is pinned to index 0 outside the sort,
+# so `isSupplementedBy` is not privileged here — an author-supplied
+# `IsSupplementedBy` in `depends_on` sorts with the unknown-relation tail
+# at priority 99, landing after `isDerivedFrom` / `references`.
 _RELATION_ORDER: dict[str, int] = {
-    "isSupplementedBy": 0,
-    "isDerivedFrom":    1,
-    "references":       2,
+    "isDerivedFrom": 0,
+    "references":    1,
 }
 
 
@@ -71,9 +72,12 @@ def build_related_identifiers(
     entries: list[DependsOnEntry],
     proof_url: str,
 ) -> list[dict]:
-    out: list[dict] = [
-        {"identifier": proof_url, "relation": "isSupplementedBy", "scheme": "url"},
-    ]
+    webpage_edge = {
+        "identifier": proof_url,
+        "relation":   "isSupplementedBy",
+        "scheme":     "url",
+    }
+    rest: list[dict] = []
     seen: set[tuple[str, str]] = {(proof_url, "isSupplementedBy")}
 
     for entry in entries:
@@ -101,13 +105,12 @@ def build_related_identifiers(
         }
         if ident.type in _RESOURCE_TYPE_BY_TYPE:
             entry_out["resource_type"] = _RESOURCE_TYPE_BY_TYPE[ident.type]
-        out.append(entry_out)
+        rest.append(entry_out)
 
-    # Stable sort: known relations first in the defined order, then others
-    # in original order. The webpage edge always stays at index 0 because
-    # its relation has priority 0.
-    out.sort(key=lambda r: _RELATION_ORDER.get(r["relation"], 99))
-    return out
+    # Stable sort: isDerivedFrom → references → everything else (including
+    # author-supplied isSupplementedBy) in original input order.
+    rest.sort(key=lambda r: _RELATION_ORDER.get(r["relation"], 99))
+    return [webpage_edge, *rest]
 
 
 def _camel(pascal: str) -> str:

@@ -181,6 +181,117 @@ def test_mint_doi_uploads_all_five_artifacts(mock_cls, proof_dir):
     assert "proof.json" in uploaded_filenames
 
 
+@patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
+@patch("tools.proof_site.ZenodoClient")
+def test_mint_doi_passes_related_identifiers_to_create_deposition(mock_cls, proof_dir):
+    """Create-path must pass the computed related_identifiers graph (not just
+    a single webpage edge) into ZenodoClient.create_deposition."""
+    proof = proof_dir / "site" / "proofs" / "test-slug"
+    proof.joinpath("meta.yaml").write_text(
+        "tags: [math]\n"
+        "depends_on:\n"
+        "  - relation: References\n"
+        "    identifiers:\n"
+        "      - type: arxiv\n"
+        "        value: '2603.21852'\n"
+        "  - relation: IsDerivedFrom\n"
+        "    identifiers:\n"
+        "      - type: doi\n"
+        "        value: 10.5281/zenodo.9999\n"
+    )
+    client = _mock_zenodo_client()
+    mock_cls.return_value = client
+    args = MagicMock(
+        slug="test-slug", site_dir=str(proof_dir / "site"),
+        force=False, sandbox=True,
+    )
+    assert cmd_mint_doi(args) == 0
+
+    call = client.create_deposition.call_args
+    rel = call.kwargs["related_identifiers"]
+    relations = [r["relation"] for r in rel]
+    assert relations == ["isSupplementedBy", "isDerivedFrom", "references"]
+    arxiv_edge = next(r for r in rel if r.get("scheme") == "arxiv")
+    assert arxiv_edge["identifier"] == "2603.21852"
+    assert arxiv_edge["resource_type"] == "publication-preprint"
+    doi_edge = next(r for r in rel if r.get("scheme") == "doi")
+    assert doi_edge["identifier"] == "10.5281/zenodo.9999"
+    assert "resource_type" not in doi_edge
+
+
+@patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
+@patch("tools.proof_site.ZenodoClient")
+def test_mint_doi_force_passes_related_identifiers_to_update_metadata(mock_cls, proof_dir):
+    """--force path must pass the full related_identifiers graph into
+    ZenodoClient.update_metadata on the new version draft."""
+    proof = proof_dir / "site" / "proofs" / "test-slug"
+    proof.joinpath("meta.yaml").write_text(
+        "tags: [math]\n"
+        "depends_on:\n"
+        "  - relation: References\n"
+        "    identifiers:\n"
+        "      - type: arxiv\n"
+        "        value: '2603.21852'\n"
+    )
+    proof.joinpath("doi.json").write_text(json.dumps({
+        "doi": "10.5072/zenodo.99999",
+        "zenodo_id": "99999",
+        "concept_doi": "10.5072/zenodo.99990",
+        "concept_zenodo_id": "99990",
+        "claim_natural": "Test claim",
+        "minted_at": "2026-04-07",
+    }))
+    client = _mock_zenodo_client()
+    client.new_version.return_value = {
+        "id": 100000,
+        "links": {"bucket": "https://sandbox.zenodo.org/api/files/new-bucket"},
+    }
+    client.publish.return_value = {
+        "doi": "10.5072/zenodo.100000",
+        "conceptdoi": "10.5072/zenodo.99990",
+        "id": 100000,
+        "conceptrecid": "99990",
+    }
+    mock_cls.return_value = client
+    args = MagicMock(
+        slug="test-slug", site_dir=str(proof_dir / "site"),
+        force=True, sandbox=True,
+    )
+    assert cmd_mint_doi(args) == 0
+
+    update_call = client.update_metadata.call_args
+    payload = update_call.args[1] if len(update_call.args) > 1 else update_call.kwargs["metadata"]
+    rel = payload["related_identifiers"]
+    relations = [r["relation"] for r in rel]
+    assert relations == ["isSupplementedBy", "references"]
+
+
+@patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
+@patch("tools.proof_site.ZenodoClient")
+def test_mint_doi_aborts_before_zenodo_call_on_invalid_depends_on(mock_cls, proof_dir):
+    """Malformed depends_on must return 1 without creating any deposition."""
+    proof = proof_dir / "site" / "proofs" / "test-slug"
+    # relation value 'BogusRelation' is not in ALLOWED_RELATIONS — parser rejects
+    proof.joinpath("meta.yaml").write_text(
+        "tags: [math]\n"
+        "depends_on:\n"
+        "  - relation: BogusRelation\n"
+        "    identifiers:\n"
+        "      - type: doi\n"
+        "        value: 10.5281/zenodo.1\n"
+    )
+    client = _mock_zenodo_client()
+    mock_cls.return_value = client
+    args = MagicMock(
+        slug="test-slug", site_dir=str(proof_dir / "site"),
+        force=False, sandbox=True,
+    )
+    assert cmd_mint_doi(args) == 1
+    assert not client.create_deposition.called
+    assert not client.new_version.called
+    assert not client.update_metadata.called
+
+
 def test_mint_doi_preflight_blocks_on_unexpanded_token(tmp_path, monkeypatch):
     import subprocess
     import sys

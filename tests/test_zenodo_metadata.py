@@ -145,3 +145,27 @@ def test_stable_ordering_isDerivedFrom_before_references():
     result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
     relations = [r["relation"] for r in result]
     assert relations == ["isSupplementedBy", "isDerivedFrom", "references"]
+
+
+def test_author_supplied_isSupplementedBy_does_not_jump_webpage_edge():
+    # Only the synthetic webpage edge should be pinned first. An
+    # author-supplied IsSupplementedBy in depends_on is a plain "other"
+    # relation and must sort after isDerivedFrom / references, not merge
+    # into the webpage slot.
+    entries = [
+        DependsOnEntry(relation="IsSupplementedBy",
+                       identifiers=[Identifier(type="doi", value="10.5281/zenodo.AUX")]),
+        DependsOnEntry(relation="IsDerivedFrom",
+                       identifiers=[Identifier(type="doi", value="10.5281/zenodo.UP")]),
+        DependsOnEntry(relation="References",
+                       identifiers=[Identifier(type="arxiv", value="2603.21852")]),
+    ]
+    result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+    # Webpage edge is the only isSupplementedBy at index 0.
+    assert result[0]["identifier"] == "https://ex.test/proofs/foo/"
+    assert result[0]["relation"] == "isSupplementedBy"
+    # isDerivedFrom next, then references, then the author-supplied
+    # isSupplementedBy (priority 99) at the tail.
+    tail_relations = [r["relation"] for r in result[1:]]
+    assert tail_relations == ["isDerivedFrom", "references", "isSupplementedBy"]
+    assert result[-1]["identifier"] == "10.5281/zenodo.AUX"
