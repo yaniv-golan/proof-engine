@@ -26,6 +26,8 @@ All notable changes to this project will be documented in this file.
   operator workaround of manually moving `doi.json` aside before each
   sandbox run.
 
+## [1.20.0] - 2026-04-17
+
 ### Added
 
 - **`mint-doi`: propagate the full `depends_on` graph into Zenodo
