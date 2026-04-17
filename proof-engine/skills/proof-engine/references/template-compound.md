@@ -16,7 +16,7 @@ Generated: [date]
 import os
 import sys
 
-PROOF_ENGINE_ROOT = "..."  # LLM fills with actual path
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT", "...")  # LLM fills with actual path
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 

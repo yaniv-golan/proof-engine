@@ -30,7 +30,7 @@ Generated: [date]
 import os
 import sys
 
-PROOF_ENGINE_ROOT = "..."
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT", "...")
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 

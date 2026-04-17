@@ -26,7 +26,7 @@ import os
 import sys
 from urllib.parse import urlparse
 
-PROOF_ENGINE_ROOT = "..."  # LLM fills this with the actual path at proof-writing time
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT", "...")  # LLM fills this with the actual path at proof-writing time
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 

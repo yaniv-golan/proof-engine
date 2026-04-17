@@ -19,7 +19,7 @@ Generated: [date]
 import os
 import sys
 
-PROOF_ENGINE_ROOT = "..."  # LLM fills this with the actual path at proof-writing time
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT", "...")  # LLM fills this with the actual path at proof-writing time
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from scripts.verify_citations import verify_all_citations
