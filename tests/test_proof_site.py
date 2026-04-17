@@ -216,6 +216,15 @@ def test_publish_rejects_missing_narrative(source_proof, tmp_path):
     assert "proof_narrative.md" in result.stdout or "proof_narrative.md" in result.stderr
 
 
+def test_mint_doi_help_mentions_sync_doi_deps(tmp_path):
+    """Smoke test: the new CLI hint string is reachable without minting."""
+    import re
+    src = (Path(__file__).parent.parent / "tools" / "proof-site.py").read_text()
+    assert re.search(r"sync-doi-deps --slug", src), (
+        "mint-doi must end with a hint to run sync-doi-deps"
+    )
+
+
 def _write_proof_dir(proofs_dir, slug, meta=None, doi_json=None):
     """Helper: build a minimal published-proof shape under proofs_dir/slug/."""
     import yaml

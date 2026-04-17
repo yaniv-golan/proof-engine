@@ -621,6 +621,7 @@ def cmd_mint_doi(args) -> int:
         if "binder_url" in doi_data:
             log(f"Binder URL: {doi_data['binder_url']}")
         log("Rebuild the site to pick up the DOI in citation files.")
+        log(f"→ run `proof-site.py sync-doi-deps --slug {slug}` to propagate this DOI to downstream proofs")
         return 0
 
     except ZenodoError as e:
