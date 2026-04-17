@@ -1,8 +1,12 @@
 """Build Zenodo related_identifiers from a proof's depends_on graph.
 
-Pure function. No I/O, no network. The input `entries` list is assumed to
-have already passed `tools.lib.depends_on.parse_depends_on` validation;
-malformed shapes are surfaced there, not here.
+No network. Emits a stderr `warning: skipping...` line when a depends_on
+entry resolves to a slug-only identifier (upstream proof not yet minted),
+so the operator knows to re-run with `--force` after minting upstream.
+
+The input `entries` list is assumed to have already passed
+`tools.lib.depends_on.parse_depends_on` validation; malformed shapes are
+surfaced there, not here.
 """
 
 import sys

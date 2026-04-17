@@ -496,9 +496,9 @@ def cmd_mint_doi(args) -> int:
     claim = proof_data["claim_natural"]
 
     # Resolve tags (same logic as proof_loader)
+    import yaml
     meta_path = proof_dir / "meta.yaml"
     if meta_path.exists():
-        import yaml
         meta = yaml.safe_load(meta_path.read_text()) or {}
         if "tags" in meta:
             tags = [canonicalize_tag(t) for t in meta["tags"]]
@@ -508,7 +508,8 @@ def cmd_mint_doi(args) -> int:
             meta_path.write_text(yaml.dump(meta, default_flow_style=False))
     else:
         tags = llm_tag(claim)
-        meta_path.write_text(yaml.dump({"tags": tags}, default_flow_style=False))
+        meta = {"tags": tags}
+        meta_path.write_text(yaml.dump(meta, default_flow_style=False))
     keywords = tags + ["proof-engine", "fact-checking", "automated-verification"]
 
     # Get token
@@ -592,21 +593,18 @@ def cmd_mint_doi(args) -> int:
         f"{f' v{version}' if version else ''}.</p>"
     )
 
-    # Load depends_on for related_identifiers. parse_depends_on validates
-    # shape; any error here would already have been caught upstream by
-    # resolve-deps / validate, so we treat validation errors as fatal.
-    import yaml as _yaml_for_deps
+    # Build related_identifiers from the already-loaded meta. parse_depends_on
+    # validates shape; any error here would already have been caught upstream
+    # by resolve-deps / validate, so we treat validation errors as fatal.
     from tools.lib.depends_on import parse_depends_on
     from tools.lib.zenodo_metadata import build_related_identifiers
 
-    meta_path_for_deps = proof_dir / "meta.yaml"
-    meta_for_deps = _yaml_for_deps.safe_load(meta_path_for_deps.read_text()) or {}
-    depends_on_entries, dep_errs = parse_depends_on(meta_for_deps, source=str(meta_path_for_deps))
+    depends_on_entries, dep_errs = parse_depends_on(meta, source=str(meta_path))
     if dep_errs:
         error("depends_on failed validation — refusing to mint:")
         for e in dep_errs:
             error(f"  {e}")
-        sys.exit(1)
+        return 1
 
     related_identifiers = build_related_identifiers(depends_on_entries, proof_url)
 
