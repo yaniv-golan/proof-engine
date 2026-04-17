@@ -351,6 +351,46 @@ def test_reverse_index_empty_for_proof_with_no_consumers(tmp_path):
     assert rev == {"lonely": []}
 
 
+def test_reverse_index_inverse_relation_iscitedby_swaps_direction(tmp_path):
+    # 'a' declares "IsCitedBy: b" — meaning b cites a → b depends on a.
+    # rev[a] must contain b (a is the upstream from b's perspective).
+    proofs = tmp_path / "proofs"
+    proofs.mkdir()
+    _write_proof(proofs, "a", depends_on=[
+        {"relation": "IsCitedBy",
+         "identifiers": [{"type": "slug", "value": "b"}]},
+    ])
+    _write_proof(proofs, "b")
+    rev = build_reverse_index(proofs)
+    assert rev == {"a": ["b"], "b": []}
+
+
+def test_reverse_index_inverse_relation_isrequiredby_swaps_direction(tmp_path):
+    # 'lib' declares "IsRequiredBy: app" — app requires lib → app depends on lib.
+    proofs = tmp_path / "proofs"
+    proofs.mkdir()
+    _write_proof(proofs, "lib", depends_on=[
+        {"relation": "IsRequiredBy",
+         "identifiers": [{"type": "slug", "value": "app"}]},
+    ])
+    _write_proof(proofs, "app")
+    rev = build_reverse_index(proofs)
+    assert rev == {"lib": ["app"], "app": []}
+
+
+def test_reverse_index_isidenticalto_excluded(tmp_path):
+    # IsIdenticalTo is symmetric: it's neither a forward nor reverse dep edge.
+    proofs = tmp_path / "proofs"
+    proofs.mkdir()
+    _write_proof(proofs, "a", depends_on=[
+        {"relation": "IsIdenticalTo",
+         "identifiers": [{"type": "slug", "value": "b"}]},
+    ])
+    _write_proof(proofs, "b")
+    rev = build_reverse_index(proofs)
+    assert rev == {"a": [], "b": []}
+
+
 def test_canonical_identifier_doi_wins():
     entry = DependsOnEntry("IsDerivedFrom", [
         Identifier("slug", "u"),

@@ -478,6 +478,97 @@ def test_show_deps_missing_slug_errors(tmp_path):
     assert "ghost" in (result.stdout + result.stderr)
 
 
+def test_show_deps_surfaces_parse_errors(tmp_path):
+    """show-deps must not silently drop parse errors — it should surface them
+    and exit non-zero so broken metadata can't masquerade as 'no deps'."""
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "broken", meta={
+        "tags": ["t"],
+        "depends_on": [
+            {"relation": "NoSuchRelation",
+             "identifiers": [{"type": "slug", "value": "anything"}]},
+        ],
+    })
+    result = run_cli("show-deps", "broken",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode != 0
+    combined = result.stdout + result.stderr
+    assert "NoSuchRelation" in combined or "relation" in combined.lower()
+
+
+def test_show_deps_reverse_surfaces_parse_errors(tmp_path):
+    """--reverse mode must also fail loudly when a proof's metadata is broken."""
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "target")
+    _write_proof_dir(proofs, "broken", meta={
+        "tags": ["t"],
+        "depends_on": [
+            {"relation": "BogusRelation",
+             "identifiers": [{"type": "slug", "value": "target"}]},
+        ],
+    })
+    result = run_cli("show-deps", "target", "--reverse",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode != 0
+
+
+def test_sync_doi_deps_rejects_invalid_downstream(tmp_path):
+    """sync-doi-deps must validate downstream meta.yaml and refuse to mutate
+    a proof whose depends_on is structurally broken."""
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "upstream", doi_json={
+        "doi": "10.5281/zenodo.222",
+        "concept_doi": "10.5281/zenodo.111",
+    })
+    # Broken downstream: empty identifiers list (parses but fails check_local).
+    _write_proof_dir(proofs, "downstream", meta={
+        "tags": ["mathematics"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "upstream"}]},
+            {"relation": "IsDerivedFrom", "identifiers": []},
+        ],
+    })
+
+    result = run_cli("sync-doi-deps", "--slug", "upstream",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode != 0
+    combined = result.stdout + result.stderr
+    assert "downstream" in combined
+
+    # File must remain unchanged.
+    import yaml
+    meta = yaml.safe_load((proofs / "downstream" / "meta.yaml").read_text())
+    upstream_entry = meta["depends_on"][0]
+    types = sorted(i["type"] for i in upstream_entry["identifiers"])
+    assert types == ["slug"]  # no doi was appended
+
+
+def test_sync_doi_deps_rejects_unknown_relation(tmp_path):
+    """sync-doi-deps must surface parse errors before mutating."""
+    proofs = tmp_path / "site" / "proofs"
+    proofs.mkdir(parents=True)
+    _write_proof_dir(proofs, "upstream", doi_json={
+        "doi": "10.5281/zenodo.222",
+        "concept_doi": "10.5281/zenodo.111",
+    })
+    # Broken via relation typo.
+    _write_proof_dir(proofs, "downstream", meta={
+        "tags": ["mathematics"],
+        "depends_on": [
+            {"relation": "TotallyMadeUp",
+             "identifiers": [{"type": "slug", "value": "upstream"}]},
+        ],
+    })
+
+    result = run_cli("sync-doi-deps", "--slug", "upstream",
+                     "--site-dir", str(tmp_path / "site"))
+    assert result.returncode != 0
+
+
 def test_audit_deps_passes_clean_site(tmp_path):
     proofs = tmp_path / "site" / "proofs"
     proofs.mkdir(parents=True)

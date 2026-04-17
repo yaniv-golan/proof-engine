@@ -51,6 +51,23 @@ PREREQUISITE_RELATIONS: frozenset[str] = frozenset({
     "IsDerivedFrom", "Requires", "Continues", "IsNewVersionOf",
 })
 
+# Relations where the *target* of the entry depends on the *source* (this
+# proof), i.e. the arrow flips. An entry "IsCitedBy: X" on proof P says
+# "X cites P" — so X depends on P, and the reverse index for P must list X.
+# Everything outside INVERSE_RELATIONS and SYMMETRIC_RELATIONS is forward:
+# the source depends on the target.
+INVERSE_RELATIONS: frozenset[str] = frozenset({
+    "IsCitedBy", "IsSupplementedBy", "IsContinuedBy", "IsDescribedBy",
+    "HasMetadata", "HasVersion", "IsPreviousVersionOf", "HasPart",
+    "IsReferencedBy", "IsDocumentedBy", "IsCompiledBy", "IsOriginalFormOf",
+    "IsReviewedBy", "IsSourceOf", "IsRequiredBy", "IsObsoletedBy",
+    "IsCollectedBy", "HasTranslation",
+})
+
+# Relations that don't create a dependency edge in either direction. These
+# must not appear in the reverse index at all.
+SYMMETRIC_RELATIONS: frozenset[str] = frozenset({"IsIdenticalTo"})
+
 DEFAULT_RELATION: str = "IsDerivedFrom"
 
 
@@ -417,8 +434,12 @@ def canonical_identifier(entry: DependsOnEntry) -> Identifier:
 def build_reverse_index(proofs_dir: Path) -> dict[str, list[str]]:
     """For every proof in proofs_dir, list the slugs that depend on it.
 
-    Counts inbound slug edges regardless of relation (any 'this proof cites
-    that proof' connection puts the citer in the citee's "Used by" list).
+    Honors DataCite relation direction:
+      - forward relations (e.g. IsDerivedFrom, References, Cites): target is
+        upstream of source → rev[target].append(source)
+      - inverse relations (e.g. IsCitedBy, IsRequiredBy, IsReferencedBy):
+        source is upstream of target → rev[source].append(target)
+      - symmetric relations (IsIdenticalTo): no edge.
     Output values are sorted for determinism.
     """
     proofs_dir = Path(proofs_dir)
@@ -437,16 +458,26 @@ def build_reverse_index(proofs_dir: Path) -> dict[str, list[str]]:
         entries, _errors = parse_depends_on(
             meta, source=str(proofs_dir / slug / "meta.yaml"),
         )
-        seen_targets: set[str] = set()
+        seen_pairs: set[tuple[str, str]] = set()
         for entry in entries:
+            if entry.relation in SYMMETRIC_RELATIONS:
+                continue
+            inverse = entry.relation in INVERSE_RELATIONS
             for ident in entry.identifiers:
                 if ident.type != "slug":
                     continue
-                if ident.value in seen_targets:
+                target = ident.value
+                if inverse:
+                    # source (this proof) is upstream of target
+                    upstream, downstream = slug, target
+                else:
+                    # target is upstream of source
+                    upstream, downstream = target, slug
+                if (upstream, downstream) in seen_pairs:
                     continue
-                seen_targets.add(ident.value)
-                if ident.value in rev:
-                    rev[ident.value].append(slug)
+                seen_pairs.add((upstream, downstream))
+                if upstream in rev:
+                    rev[upstream].append(downstream)
 
     for slug in rev:
         rev[slug] = sorted(set(rev[slug]))

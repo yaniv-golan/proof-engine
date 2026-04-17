@@ -4,7 +4,7 @@
 import json as _json
 
 from tools.lib.depends_on import (
-    DependsOnEntry, Identifier, canonical_identifier,
+    DependsOnEntry, Identifier, PREREQUISITE_RELATIONS, canonical_identifier,
 )
 from tools.lib.latex_utils import strip_latex
 
@@ -235,6 +235,11 @@ def build_codemeta(
     if depends_on:
         based: list[dict] = []
         for entry in depends_on:
+            # CodeMeta isBasedOn is for true prerequisites only — citations
+            # (References) and inverse edges (IsCitedBy etc.) belong elsewhere
+            # and would make the metadata semantically false here.
+            if entry.relation not in PREREQUISITE_RELATIONS:
+                continue
             canon = canonical_identifier(entry)
             uri = _identifier_uri(canon, base_url, site_url)
             block: dict = {
@@ -250,5 +255,6 @@ def build_codemeta(
             elif canon.type == "slug":
                 block["name"] = canon.value
             based.append(block)
-        payload["isBasedOn"] = based
+        if based:
+            payload["isBasedOn"] = based
     return _json.dumps(payload, indent=2)

@@ -632,7 +632,9 @@ def cmd_mint_doi(args) -> int:
 def cmd_sync_doi_deps(args) -> int:
     """Propagate upstream DOIs into downstream meta.yaml depends_on entries."""
     import yaml
-    from tools.lib.depends_on import parse_depends_on
+    from tools.lib.depends_on import (
+        check_local, parse_depends_on,
+    )
 
     site_dir = Path(args.site_dir)
     proofs_dir = site_dir / "proofs"
@@ -657,6 +659,35 @@ def cmd_sync_doi_deps(args) -> int:
     if not upstreams:
         success("Nothing to do — no upstreams with doi.json")
         return 0
+
+    # Validate every downstream meta.yaml *before* mutating anything. A
+    # structurally invalid file gets rewritten cleanly by yaml.dump and
+    # masquerades as fixed — fail fast instead.
+    pre_check_failures: dict[str, list[str]] = {}
+    for child in sorted(proofs_dir.iterdir()):
+        if child.name.startswith(".") or not child.is_dir():
+            continue
+        meta_path = child / "meta.yaml"
+        if not meta_path.exists():
+            continue
+        try:
+            meta = yaml.safe_load(meta_path.read_text()) or {}
+        except yaml.YAMLError as e:
+            pre_check_failures[child.name] = [f"YAML parse error: {e}"]
+            continue
+        entries, parse_errs = parse_depends_on(meta, source=str(meta_path))
+        local_errs = check_local(entries, candidate_slug=child.name)
+        all_errs = list(parse_errs) + list(local_errs)
+        if all_errs:
+            pre_check_failures[child.name] = all_errs
+
+    if pre_check_failures:
+        error("Refusing to sync — depends_on validation failed:")
+        for slug, errs in sorted(pre_check_failures.items()):
+            error(f"  --- {slug} ---")
+            for e in errs:
+                error(f"    {e}")
+        return 1
 
     total_changed = 0
     for upstream_slug in upstreams:
@@ -749,15 +780,31 @@ def cmd_show_deps(args) -> int:
         error(f"Proof not found: {slug}")
         return 1
 
+    parse_failures: dict[str, list[str]] = {}
+
     def _read_entries(s: str):
         meta_path = proofs_dir / s / "meta.yaml"
         if not meta_path.exists():
             return []
         meta = yaml.safe_load(meta_path.read_text()) or {}
-        entries, _errs = parse_depends_on(meta, source=str(meta_path))
+        entries, errs = parse_depends_on(meta, source=str(meta_path))
+        if errs:
+            parse_failures[s] = list(errs)
         return entries
 
+    def _surface_failures() -> int:
+        if not parse_failures:
+            return 0
+        error("depends_on parse errors:")
+        for s, errs in sorted(parse_failures.items()):
+            error(f"  --- {s} ---")
+            for e in errs:
+                error(f"    {e}")
+        return 1
+
     direct = _read_entries(slug)
+    if parse_failures:
+        return _surface_failures()
 
     def _ancestors(start: str) -> dict[str, list[str]]:
         out: dict[str, list[str]] = {}
@@ -780,6 +827,16 @@ def cmd_show_deps(args) -> int:
         return out
 
     if args.reverse:
+        # Walk every proof's meta.yaml first to surface parse errors that
+        # build_reverse_index would otherwise silently drop.
+        for child in sorted(proofs_dir.iterdir()):
+            if child.name.startswith(".") or not child.is_dir():
+                continue
+            if not (child / "proof.json").exists():
+                continue
+            _read_entries(child.name)
+        if parse_failures:
+            return _surface_failures()
         rev = build_reverse_index(proofs_dir)
         consumers = rev.get(slug, [])
         if args.format == "json":

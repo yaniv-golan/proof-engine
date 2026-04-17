@@ -277,9 +277,44 @@ def test_codemeta_canonical_id_uses_doi():
 
 
 def test_codemeta_isbn_uses_urn():
-    deps = [DependsOnEntry("References", [Identifier("isbn", "9780201896831")])]
+    # An IsDerivedFrom entry with an ISBN canonical id lives in isBasedOn.
+    deps = [DependsOnEntry("IsDerivedFrom", [Identifier("isbn", "9780201896831")])]
     payload = json.loads(build_codemeta(
         _ctx(), depends_on=deps,
         base_url="/proof-engine/", site_url="https://yaniv-golan.github.io",
     ))
     assert payload["isBasedOn"][0]["@id"] == "urn:isbn:9780201896831"
+
+
+def test_codemeta_isbasedon_only_includes_prerequisite_relations():
+    # IsDerivedFrom + Requires populate isBasedOn; References + IsCitedBy
+    # do not — they're citations or inverse edges, not prerequisites.
+    deps = [
+        DependsOnEntry("IsDerivedFrom", [Identifier("slug", "upstream-a")]),
+        DependsOnEntry("Requires", [Identifier("doi", "10.5281/zenodo.42")]),
+        DependsOnEntry("References", [Identifier("arxiv", "2603.21852")]),
+        DependsOnEntry("IsCitedBy", [Identifier("doi", "10.5281/zenodo.99")]),
+    ]
+    payload = json.loads(build_codemeta(
+        _ctx(), depends_on=deps,
+        base_url="/proof-engine/", site_url="https://yaniv-golan.github.io",
+    ))
+    based = payload["isBasedOn"]
+    assert len(based) == 2
+    ids = {b["@id"] for b in based}
+    assert ids == {
+        "https://yaniv-golan.github.io/proof-engine/proofs/upstream-a/",
+        "https://doi.org/10.5281/zenodo.42",
+    }
+
+
+def test_codemeta_omits_isbasedon_when_only_non_prereq_deps():
+    deps = [
+        DependsOnEntry("References", [Identifier("arxiv", "2603.21852")]),
+        DependsOnEntry("IsCitedBy", [Identifier("doi", "10.5281/zenodo.99")]),
+    ]
+    payload = json.loads(build_codemeta(
+        _ctx(), depends_on=deps,
+        base_url="/proof-engine/", site_url="https://yaniv-golan.github.io",
+    ))
+    assert "isBasedOn" not in payload
