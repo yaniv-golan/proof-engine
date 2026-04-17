@@ -5,18 +5,72 @@ have already passed `tools.lib.depends_on.parse_depends_on` validation;
 malformed shapes are surfaced there, not here.
 """
 
-from tools.lib.depends_on import DependsOnEntry
+import sys
+
+from tools.lib.depends_on import DependsOnEntry, Identifier
+
+
+# Zenodo-local canonical-identifier precedence. Intentionally distinct
+# from tools.lib.depends_on._CANONICAL_PREFERENCE, which is tuned for
+# internal use where SWHID beats arXiv and slug beats URL. For Zenodo
+# propagation, arXiv must beat SWHID (our primary citation of the source
+# paper is by arXiv ID, not by the SWH archival hash) and URL must beat
+# slug (slug is not externally resolvable; URL is).
+_ZENODO_PREFERENCE: tuple[str, ...] = (
+    "doi", "arxiv", "swhid", "handle", "isbn", "url", "slug",
+)
+
+
+_SCHEME_BY_TYPE: dict[str, str] = {
+    "doi": "doi",
+    "arxiv": "arxiv",
+    "swhid": "swhid",
+    "handle": "handle",
+    "isbn": "isbn",
+    "url": "url",
+}
+
+
+def _pick_canonical(entry: DependsOnEntry) -> Identifier:
+    """Pick the most-preferred identifier from an entry for Zenodo propagation."""
+    by_type: dict[str, Identifier] = {}
+    for ident in entry.identifiers:
+        by_type.setdefault(ident.type, ident)
+    for type_ in _ZENODO_PREFERENCE:
+        if type_ in by_type:
+            return by_type[type_]
+    # Fallback: first identifier. parse_depends_on guarantees non-empty list.
+    return entry.identifiers[0]
 
 
 def build_related_identifiers(
     entries: list[DependsOnEntry],
     proof_url: str,
 ) -> list[dict]:
-    """Convert depends_on entries into Zenodo related_identifiers payload.
-
-    The webpage edge (`isSupplementedBy` → proof_url) is always emitted
-    first so the deposit's landing page remains obvious on Zenodo.
-    """
-    return [
+    out: list[dict] = [
         {"identifier": proof_url, "relation": "isSupplementedBy", "scheme": "url"},
     ]
+    for entry in entries:
+        ident = _pick_canonical(entry)
+        if ident.type == "slug":
+            # slug = internal identifier only; no external resolution.
+            # Skip and warn so the human running mint-doi can re-run with
+            # --force after the upstream proof is minted.
+            print(
+                f"warning: skipping depends_on entry '{entry.relation} → "
+                f"slug:{ident.value}' — upstream proof not yet minted",
+                file=sys.stderr,
+            )
+            continue
+        scheme = _SCHEME_BY_TYPE[ident.type]
+        out.append({
+            "identifier": ident.value,
+            "relation": _camel(entry.relation),
+            "scheme": scheme,
+        })
+    return out
+
+
+def _camel(pascal: str) -> str:
+    """DataCite PascalCase → Zenodo/DataCite camelCase (`IsDerivedFrom` → `isDerivedFrom`)."""
+    return pascal[0].lower() + pascal[1:]
