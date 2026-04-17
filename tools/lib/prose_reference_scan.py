@@ -533,3 +533,59 @@ def pass4_dangling_sweep(
             span,
         ))
     return errors
+
+
+from pathlib import Path
+
+
+@dataclass
+class VerifyResult:
+    errors: list
+    warnings: list
+
+
+def verify_prose(proof_dir, *, strict: bool = False) -> VerifyResult:
+    """Full four-pass scan over the three committed markdown files.
+
+    Loads depends_on_resolved.json from proof_dir; collects declared identifiers
+    from meta.yaml + proof.json; scans each .md file for Pass 1 hits,
+    cross-checks in Pass 2, runs Pass 3 advisory, Pass 4 dangling sweep.
+
+    `strict=True` promotes Pass-3 advisories to errors.
+    """
+    from tools.lib.reference_resolver import load_cache, collect_identifiers
+    proof_dir = Path(proof_dir)
+    resolved = {k: v for k, v in load_cache(proof_dir).items()}
+    declared = collect_identifiers(proof_dir)
+
+    errors: list[VerifyError] = []
+    warnings: list[str] = []
+    all_prose_hits: list[Hit] = []
+    declared_set = {(t, v) for (t, v) in declared}
+
+    for name in ("proof.md", "proof_audit.md", "proof_narrative.md"):
+        path = proof_dir / name
+        if not path.exists():
+            continue
+        text = path.read_text()
+        hits = pass1_identifiers(text)
+        all_prose_hits.extend(hits)
+        for h in hits:
+            if (h.identifier_type, h.identifier_value) not in declared_set:
+                errors.append(VerifyError(
+                    file=name, line=_line_of(text, h.span[0]),
+                    message=(
+                        f"identifier {h.identifier_type}:{h.identifier_value} "
+                        "appears in prose but is not declared in depends_on or evidence"
+                    ),
+                    span=h.span,
+                ))
+        errors.extend(pass2_attribution_check(text, hits, resolved, file=name))
+        errors.extend(pass4_dangling_sweep(text, hits, file=name))
+
+    warnings.extend(pass3_bare_identifier_advisory(declared, all_prose_hits))
+    if strict:
+        for w in warnings:
+            errors.append(VerifyError("<meta>", 0, w, (0, 0)))
+        warnings = []
+    return VerifyResult(errors=errors, warnings=warnings)
