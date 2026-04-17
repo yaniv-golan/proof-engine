@@ -147,7 +147,7 @@ For environment-specific details (Claude Code, ChatGPT, sandboxed), paywalled so
 
 **Every proof has three parts**: (1) Fact Registry — numbered facts tagged Type A, B, or S, (2) Proof Logic — a self-contained Python script, (3) Verdict — one of the levels below.
 
-## The 8 Hardening Rules
+## The 9 Hardening Rules
 
 | Rule | Closes failure mode | Enforced by |
 |------|-------------------|-------------|
@@ -159,6 +159,7 @@ For environment-specific details (Claude Code, ChatGPT, sandboxed), paywalled so
 | 6. Independent cross-checks | Shared-variable bugs | Multiple sources parsed separately |
 | 7. Never hard-code constants/formulas | LLM misremembers values | `scripts/computations.py` |
 | 8. Evidence relevance for rejection | Weak/off-subject rejection sources | `adversarial_checks` documentation |
+| 9. Prose references mechanically resolvable | Hand-typed attribution hallucinations; raw tokens archived | `tools/lib/reference_resolver.py` + `prose_reference_scan.py` + `cite-expand` |
 
 See [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for detailed examples of each.
 
