@@ -62,12 +62,12 @@ def test_arxiv_identifier_passes_through_as_bare_id():
     result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
     # The arXiv ID stays bare — scheme='arxiv' is the disambiguator,
     # no 'arXiv:' prefix is added or stripped.
+    # Field-by-field check (not strict equality) because Task 4 adds
+    # resource_type to arXiv edges.
     arxiv_edge = next(r for r in result if r.get("scheme") == "arxiv")
-    assert arxiv_edge == {
-        "identifier": "2603.21852",
-        "relation": "references",
-        "scheme": "arxiv",
-    }
+    assert arxiv_edge["identifier"] == "2603.21852"
+    assert arxiv_edge["relation"] == "references"
+    assert arxiv_edge["scheme"] == "arxiv"
 
 
 def test_slug_only_entry_is_skipped_with_warning(capsys):
