@@ -287,3 +287,24 @@ def test_validate_site_proof_rejects_unknown_relation(tmp_path):
     )
     assert result.returncode != 0
     assert "Bogus" in (result.stdout + result.stderr)
+
+
+def test_validate_site_proof_fails_on_prose_mismatch(tmp_path):
+    import subprocess, sys, shutil
+    from pathlib import Path as P
+    REPO = P(__file__).resolve().parent.parent
+    src = REPO / "tests" / "fixtures" / "prose_refs" / "bad_attribution_proof"
+    dst = tmp_path / "staged"
+    shutil.copytree(src, dst)
+    (dst / "proof.py").write_text("print('{}')")
+    (dst / "proof.json").write_text('{"claim_natural":"x"}')
+    r = subprocess.run(
+        [sys.executable, str(REPO / "tools" / "validate-site-proof.py"),
+         "--structural-only", str(dst),
+         "--candidate-slug", "bad_attribution_proof"],
+        capture_output=True, text=True,
+    )
+    combined = r.stdout + r.stderr
+    if r.returncode == 0:
+        import pytest
+        pytest.fail(f"validate-site-proof should have failed on prose mismatch; got {combined!r}")
