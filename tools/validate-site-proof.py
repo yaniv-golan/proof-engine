@@ -253,14 +253,26 @@ def extract_verdict_from_conclusion(proof_md_path):
 
 
 def main():
-    structural_only = "--structural-only" in sys.argv
-    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    import argparse
+    parser = argparse.ArgumentParser(
+        description="Validate a proof submission for the Proof Engine site."
+    )
+    parser.add_argument("proof_dir", help="Path to the proof directory")
+    parser.add_argument(
+        "--structural-only",
+        action="store_true",
+        help="Skip provenance check (do not re-execute proof.py)",
+    )
+    parser.add_argument(
+        "--candidate-slug",
+        default=None,
+        help="Slug the proof will be published under; used for self-reference "
+             "check on depends_on. Defaults to the basename of proof_dir.",
+    )
+    args = parser.parse_args()
 
-    if not args:
-        print("Usage: validate-site-proof.py [--structural-only] <proof-dir>", file=sys.stderr)
-        sys.exit(1)
-
-    proof_dir = Path(args[0])
+    structural_only = args.structural_only
+    proof_dir = Path(args.proof_dir)
     errors = []
     warnings = []
 
@@ -333,6 +345,23 @@ def main():
         warnings.extend(narrative_warnings)
     else:
         errors.append("proof_narrative.md not found")
+
+    # 5. depends_on validation (proof-local only — cross-proof checks run in
+    # proof-site.py publish and tools/lib/depends_on.py:validate_repo).
+    import yaml
+    from tools.lib.depends_on import parse_depends_on, check_local
+
+    meta_path = proof_dir / "meta.yaml"
+    if meta_path.exists():
+        meta = yaml.safe_load(meta_path.read_text()) or {}
+        candidate_slug = args.candidate_slug or proof_dir.name
+        depends_entries, dep_errors = parse_depends_on(
+            meta, source=str(meta_path),
+        )
+        dep_errors.extend(check_local(
+            depends_entries, candidate_slug=candidate_slug,
+        ))
+        errors.extend(dep_errors)
 
     print_results(errors, warnings)
     sys.exit(1 if errors else 0)

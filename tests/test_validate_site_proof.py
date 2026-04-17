@@ -246,3 +246,44 @@ def test_validate_site_proof_narrative_verdict_mismatch(tmp_path):
     )
     assert result.returncode != 0
     assert "does not match" in result.stdout or "does not match" in result.stderr
+
+
+def test_validate_site_proof_rejects_unknown_relation(tmp_path):
+    """validate-site-proof.py exits non-zero when meta.yaml depends_on uses an
+    unknown relation, even when --candidate-slug is supplied."""
+    import yaml
+    proof_dir = tmp_path / "candidate-slug"
+    proof_dir.mkdir()
+    (proof_dir / "proof.json").write_text(json.dumps({
+        "format_version": 3,
+        "claim_formal": {"operator_note": "x"},
+        "claim_natural": "test",
+        "evidence": {},
+        "verdict": {"value": "PROVED"},
+        "key_results": {},
+        "generator": {
+            "name": "proof-engine", "version": "1.0", "repo": "x",
+            "generated_at": "2026-04-17",
+        },
+    }))
+    (proof_dir / "proof.py").write_text("# x\n")
+    (proof_dir / "proof.md").write_text("# x\n")
+    (proof_dir / "proof_audit.md").write_text("# x\n")
+    (proof_dir / "proof_narrative.md").write_text("# x\n")
+    meta = {
+        "tags": ["test"],
+        "depends_on": [
+            {"relation": "Bogus",
+             "identifiers": [{"type": "slug", "value": "u"}]},
+        ],
+    }
+    (proof_dir / "meta.yaml").write_text(yaml.dump(meta))
+
+    tool = Path(__file__).parent.parent / "tools" / "validate-site-proof.py"
+    result = subprocess.run(
+        [sys.executable, str(tool), "--structural-only", str(proof_dir),
+         "--candidate-slug", "candidate-slug"],
+        capture_output=True, text=True,
+    )
+    assert result.returncode != 0
+    assert "Bogus" in (result.stdout + result.stderr)
