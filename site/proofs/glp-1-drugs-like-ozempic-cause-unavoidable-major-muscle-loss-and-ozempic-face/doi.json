@@ -5,5 +5,5 @@
   "concept_zenodo_id": "19489786",
   "claim_natural": "GLP-1 drugs like Ozempic cause unavoidable major muscle loss and \"Ozempic face\" even with exercise and high protein intake",
   "minted_at": "2026-04-10",
-  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19489787"
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.19489787"
 }

@@ -5,5 +5,5 @@
   "concept_zenodo_id": "19489790",
   "claim_natural": "Intermittent fasting is scientifically proven superior to other diets for fat loss and longevity.",
   "minted_at": "2026-04-10",
-  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19489791"
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.19489791"
 }

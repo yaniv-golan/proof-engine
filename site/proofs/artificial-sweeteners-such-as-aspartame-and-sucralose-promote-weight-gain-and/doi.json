@@ -5,5 +5,5 @@
   "concept_zenodo_id": "19454300",
   "claim_natural": "Artificial sweeteners such as aspartame and sucralose promote weight gain and metabolic disease.",
   "minted_at": "2026-04-07",
-  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19455606"
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.19455606"
 }

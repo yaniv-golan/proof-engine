@@ -5,5 +5,5 @@
   "concept_zenodo_id": "19489823",
   "claim_natural": "AI will replace over 50% of white-collar jobs by 2035",
   "minted_at": "2026-04-10",
-  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19489824"
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.19489824"
 }

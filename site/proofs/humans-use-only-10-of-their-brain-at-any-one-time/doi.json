@@ -5,5 +5,5 @@
   "concept_zenodo_id": "19489851",
   "claim_natural": "Humans use only 10% of their brain at any one time.",
   "minted_at": "2026-04-16",
-  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19600322"
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.19600322"
 }

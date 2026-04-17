@@ -5,5 +5,5 @@
   "concept_zenodo_id": "19626411",
   "claim_natural": "Using only the eml operator applied to the constant 1 (and allowing complex intermediates), there exist finite expressions that evaluate exactly to the mathematical constant \\(\\pi\\) and to the imaginary unit \\(i\\). These expressions can be verified by symbolic simplification or by numerical evaluation that matches the known values \\(\\pi \\approx 3.1415926535\\ldots\\) and \\(i^2 = -1\\) to machine precision.",
   "minted_at": "2026-04-17",
-  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%23doi%3D10.5281%2Fzenodo.19635622"
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.21.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.19635622"
 }
