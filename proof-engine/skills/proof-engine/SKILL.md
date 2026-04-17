@@ -126,8 +126,9 @@ verify_data_values(url, data_values, fact_id, timeout=15, snapshot=None) -> dict
 
 **Import pattern:**
 ```python
+import os
 import sys
-PROOF_ENGINE_ROOT = "${CLAUDE_SKILL_DIR}"  # replaced with actual path at proof-writing time
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT", "${CLAUDE_SKILL_DIR}")  # hardcoded fallback replaced with actual path at proof-writing time
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 ```
 
