@@ -1134,7 +1134,17 @@ def main():
     add_site_dir_arg(repair)
 
     # mint-doi
-    mint = subparsers.add_parser("mint-doi", help="Mint a Zenodo DOI for a proof")
+    mint = subparsers.add_parser(
+        "mint-doi",
+        help="Mint a Zenodo DOI for a proof",
+        description=(
+            "Mint a Zenodo DOI for a proof. The proof's full meta.yaml "
+            "depends_on graph is propagated into the Zenodo record as "
+            "DataCite related_identifiers (isDerivedFrom, references, "
+            "etc.); slug-only entries for not-yet-minted upstream proofs "
+            "are skipped with a stderr warning."
+        ),
+    )
     mint.add_argument("slug", help="Slug of the proof to mint a DOI for")
     mint.add_argument("--force", action="store_true", help="Create new version if DOI exists")
     mint.add_argument("--sandbox", action="store_true", help="Use Zenodo sandbox")

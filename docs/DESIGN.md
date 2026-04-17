@@ -212,6 +212,8 @@ Citations use the version-specific DOI for reproducibility. The concept DOI (whi
 
 At build time, `build-site.py` reads `doi.json` (if present), generates citation export files (`cite.bib`, `cite.ris`, `cite.txt`), injects a `citation` block into the built `proof.json`, adds `doi` to `index.json` entries, and enriches the JSON-LD `ClaimReview` with `identifier` and `sameAs` fields.
 
+When a proof is minted via `mint-doi`, its full `meta.yaml depends_on` graph is propagated into the Zenodo record's DataCite `related_identifiers` — every originating paper, upstream proof DOI, Software Heritage archive, and external URL, each with the correct DataCite `relation` (`isDerivedFrom`, `references`, …). A `resource_type` is attached only where the identifier scheme maps unambiguously (arXiv → preprint, SWHID → software, ISBN → book); DOIs intentionally omit it so Zenodo/DataCite resolves the target's own type. Slug-only entries (upstream not yet minted) are skipped with a stderr warning; re-run with `--force` after minting upstream to pick them up.
+
 ## Design choices that might seem wrong
 
 **Why not use an LLM to verify citations?** The whole point is removing LLM trust from the verification chain. If an LLM writes the quote and an LLM verifies it, you've added a step without adding reliability. The verification is mechanical: fetch, normalize, match.

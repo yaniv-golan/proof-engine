@@ -4,18 +4,44 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.20.0] - 2026-04-17
+
 ### Added
 
-- `mint-doi`: Zenodo records now include the full `depends_on` graph as typed
-  `related_identifiers` (originating papers, upstream proof DOIs, etc.), not
-  just a single `isSupplementedBy` edge to the proof's webpage. Brings our
-  DataCite metadata in line with standard practice for derivative deposits.
+- **`mint-doi`: propagate the full `depends_on` graph into Zenodo
+  `related_identifiers`**. Zenodo records now include every originating
+  paper, upstream proof DOI, Software Heritage archive, and external URL
+  declared in a proof's `meta.yaml depends_on`, with the correct DataCite
+  `relation` (`isDerivedFrom`, `references`, etc.) and — where unambiguous
+  — a DataCite `resource_type` (`arxiv` → `publication-preprint`, `swhid`
+  → `software`, `isbn` → `publication-book`). The synthetic
+  `isSupplementedBy` edge to the proof's webpage is preserved as edge 0.
+  Brings our DataCite metadata in line with standard practice for
+  derivative scholarly deposits. Applies to both first-mint and
+  `--force` new-version paths; existing records are unaffected until
+  re-minted.
+- New module **`tools/lib/zenodo_metadata.py`** — pure helper (no network)
+  that converts parsed `depends_on` entries into the Zenodo API's
+  `related_identifiers[]` shape. Uses a Zenodo-local canonical-identifier
+  precedence (`doi > arxiv > swhid > handle > isbn > url > slug`)
+  deliberately distinct from the internal `canonical_identifier()` order,
+  because arXiv and URL are more broadly resolvable than SWHID and slug
+  for external DataCite consumers. `resource_type` is emitted only for
+  identifier types with an unambiguous DataCite mapping — DOIs are
+  omitted so Zenodo/DataCite can resolve the target's own type rather
+  than having us hard-code `publication-article` for what may actually
+  be a dataset, software record, or book.
+- Dedup key for related identifiers is `(identifier, relation, scheme)`,
+  so literals like `10.5072/FK2` that parse validly as both a DOI and a
+  Handle are preserved as two distinct records (Zenodo treats them as
+  separate edges).
 
 ### Changed
 
-- New module `tools/lib/zenodo_metadata.py` — pure helper that converts
-  parsed `depends_on` entries to Zenodo-API-shaped dicts. Existing records
-  are unaffected until re-minted with `--force`.
+- `mint-doi` now emits a stderr `warning: skipping...` line when a
+  `depends_on` entry resolves to a slug-only identifier (upstream proof
+  not yet minted), instead of silently dropping it. Re-run with
+  `--force` after minting the upstream to pick it up.
 
 ## [1.19.0] - 2026-04-17
 
