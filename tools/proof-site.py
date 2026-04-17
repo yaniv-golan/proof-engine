@@ -458,6 +458,28 @@ def cmd_mint_doi(args) -> int:
         error(f"Proof not found: {slug}")
         return 1
 
+    # Pre-flight: identical two-step gate used by publish (offline only).
+    from tools.lib.reference_resolver import load_cache
+    from tools.lib.cite_expander import check as cite_check
+    from tools.lib.prose_reference_scan import verify_prose as _vp
+
+    log("mint-doi pre-flight: cite-expand --check...")
+    cache = load_cache(proof_dir)
+    for name in ("proof.md", "proof_audit.md", "proof_narrative.md"):
+        p = proof_dir / name
+        if p.exists():
+            errs = cite_check(p.read_text(), cache)
+            for e in errs:
+                error(f"{p}: {e}")
+            if errs:
+                return 1
+    log("mint-doi pre-flight: verify-prose...")
+    vp_result = _vp(proof_dir)
+    for e in vp_result.errors:
+        error(f"{proof_dir}/{e.file}:{e.line}: {e.message}")
+    if vp_result.errors:
+        return 1
+
     doi_json_path = proof_dir / "doi.json"
 
     # Check for existing DOI
