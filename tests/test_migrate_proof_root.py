@@ -48,3 +48,43 @@ def test_leaves_nonmatching_untouched(tmp_path):
     unrelated = "print('hello')\n"
     (tmp_path / "proof.py").write_text(unrelated)
     assert run(tmp_path) == unrelated
+
+
+LEGACY_JOIN = '''\
+import os
+import sys
+
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+PROOF_ENGINE_ROOT = os.path.join(_REPO_ROOT, "proof-engine", "skills", "proof-engine")
+sys.path.insert(0, PROOF_ENGINE_ROOT)
+'''
+
+MIGRATED_FROM_JOIN = '''\
+import os
+import sys
+
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+PROOF_ENGINE_ROOT = os.environ.get(
+    "PROOF_ENGINE_ROOT",
+    "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine",
+)
+sys.path.insert(0, PROOF_ENGINE_ROOT)
+'''
+
+
+def test_rewrites_os_path_join_form(tmp_path):
+    """Handle the 4 historical proofs using __file__-traversal via _REPO_ROOT."""
+    (tmp_path / "proof.py").write_text(LEGACY_JOIN)
+    assert run(tmp_path) == MIGRATED_FROM_JOIN
+
+
+def test_preserves_repo_root_line(tmp_path):
+    """_REPO_ROOT may be used for other lookups (e.g. VERSION); must survive."""
+    (tmp_path / "proof.py").write_text(LEGACY_JOIN)
+    out = run(tmp_path)
+    assert "_REPO_ROOT = os.path.dirname" in out
+
+
+def test_idempotent_on_join_migrated(tmp_path):
+    (tmp_path / "proof.py").write_text(MIGRATED_FROM_JOIN)
+    assert run(tmp_path) == MIGRATED_FROM_JOIN
