@@ -1,9 +1,12 @@
 # tests/test_citation.py
+import json
 import pytest
+import yaml as _yaml
 from tools.lib.citation import (
     build_citation_context, generate_bibtex, generate_ris, generate_cite_txt,
-    generate_apa, generate_chicago,
+    generate_apa, generate_chicago, build_cff, build_codemeta,
 )
+from tools.lib.depends_on import DependsOnEntry, Identifier
 
 
 SAMPLE_PROOF_DATA = {
@@ -182,3 +185,101 @@ def test_apa_strips_latex():
     txt = generate_cite_txt(ctx)
     assert r"\(" not in txt
     assert "\u03B1" in txt  # alpha present as Unicode
+
+
+# --- CFF / codemeta builders ---
+
+
+def _ctx():
+    return build_citation_context(SAMPLE_PROOF_DATA, SAMPLE_URL, SAMPLE_SLUG, doi_data=None)
+
+
+def test_cff_minimal_no_deps():
+    cff_str = build_cff(_ctx(), depends_on=[])
+    parsed = _yaml.safe_load(cff_str)
+    assert parsed["cff-version"] == "1.2.0"
+    assert parsed["title"].startswith("Claim Verification:")
+    assert parsed["version"] == "1.8.0"
+    assert parsed["date-released"] == "2026-04-07"
+    assert parsed["authors"] == [{"name": "Proof Engine"}]
+    assert parsed["url"] == SAMPLE_URL
+    assert parsed["license"] == "MIT"
+    assert "doi" not in parsed
+    assert "references" not in parsed
+
+
+def test_cff_with_doi():
+    doi_data = {"doi": "10.5281/zenodo.1", "concept_doi": "10.5281/zenodo.0",
+                "claim_natural": "x", "minted_at": "2026-04-07"}
+    ctx = build_citation_context(SAMPLE_PROOF_DATA, SAMPLE_URL, SAMPLE_SLUG,
+                                  doi_data=doi_data)
+    cff_str = build_cff(ctx, depends_on=[])
+    parsed = _yaml.safe_load(cff_str)
+    assert parsed["doi"] == "10.5281/zenodo.1"
+
+
+def test_cff_with_three_deps_spanning_types():
+    deps = [
+        DependsOnEntry("IsDerivedFrom", [
+            Identifier("slug", "upstream-proof"),
+            Identifier("doi", "10.5281/zenodo.99"),
+        ]),
+        DependsOnEntry("References", [Identifier("arxiv", "2603.21852")]),
+        DependsOnEntry("IsSupplementTo", [
+            Identifier("url", "https://example.org/data"),
+        ]),
+    ]
+    cff_str = build_cff(_ctx(), depends_on=deps, base_url="/proof-engine/",
+                        site_url="https://yaniv-golan.github.io")
+    parsed = _yaml.safe_load(cff_str)
+    refs = parsed["references"]
+    assert len(refs) == 3
+
+    assert refs[0]["type"] == "article"
+    assert refs[0]["doi"] == "10.5281/zenodo.99"
+    assert any(i["type"] == "url"
+               and "upstream-proof" in i["value"]
+               for i in refs[0].get("identifiers", []))
+
+    assert refs[1]["type"] == "article"
+    assert refs[1]["url"] == "https://arxiv.org/abs/2603.21852"
+
+    assert refs[2]["type"] == "website"
+    assert refs[2]["url"] == "https://example.org/data"
+
+
+def test_codemeta_minimal_no_deps():
+    payload = json.loads(build_codemeta(_ctx(), depends_on=[]))
+    assert payload["@context"] == "https://w3id.org/codemeta/3.0"
+    assert payload["@type"] == "SoftwareSourceCode"
+    assert payload["name"].startswith("Claim Verification:")
+    assert payload["url"] == SAMPLE_URL
+    assert payload["license"] == "https://spdx.org/licenses/MIT"
+    assert "isBasedOn" not in payload
+
+
+def test_codemeta_canonical_id_uses_doi():
+    deps = [DependsOnEntry("IsDerivedFrom", [
+        Identifier("slug", "upstream-proof"),
+        Identifier("doi", "10.5281/zenodo.99"),
+        Identifier("arxiv", "2603.21852"),
+    ])]
+    payload = json.loads(build_codemeta(
+        _ctx(), depends_on=deps,
+        base_url="/proof-engine/", site_url="https://yaniv-golan.github.io",
+    ))
+    based = payload["isBasedOn"]
+    assert len(based) == 1
+    assert based[0]["@id"] == "https://doi.org/10.5281/zenodo.99"
+    ids = set(based[0]["identifier"])
+    assert "https://doi.org/10.5281/zenodo.99" in ids
+    assert "https://arxiv.org/abs/2603.21852" in ids
+
+
+def test_codemeta_isbn_uses_urn():
+    deps = [DependsOnEntry("References", [Identifier("isbn", "9780201896831")])]
+    payload = json.loads(build_codemeta(
+        _ctx(), depends_on=deps,
+        base_url="/proof-engine/", site_url="https://yaniv-golan.github.io",
+    ))
+    assert payload["isBasedOn"][0]["@id"] == "urn:isbn:9780201896831"

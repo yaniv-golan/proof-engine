@@ -1,6 +1,11 @@
 # tools/lib/citation.py
 """Generate citation metadata and export formats for proofs."""
 
+import json as _json
+
+from tools.lib.depends_on import (
+    DependsOnEntry, Identifier, canonical_identifier,
+)
 from tools.lib.latex_utils import strip_latex
 
 
@@ -107,3 +112,143 @@ def generate_chicago(ctx: dict) -> str:
 def generate_cite_txt(ctx: dict) -> str:
     """Generate combined APA + Chicago citation text file."""
     return f"APA:\n{generate_apa(ctx)}\n\nChicago:\n{generate_chicago(ctx)}\n"
+
+
+def _identifier_uri(ident: Identifier, base_url: str, site_url: str) -> str:
+    if ident.type == "doi":
+        return f"https://doi.org/{ident.value}"
+    if ident.type == "swhid":
+        return f"https://archive.softwareheritage.org/{ident.value}"
+    if ident.type == "handle":
+        return f"https://hdl.handle.net/{ident.value}"
+    if ident.type == "arxiv":
+        return f"https://arxiv.org/abs/{ident.value}"
+    if ident.type == "isbn":
+        return f"urn:isbn:{ident.value}"
+    if ident.type == "slug":
+        return f"{site_url}{base_url}proofs/{ident.value}/"
+    return ident.value
+
+
+_CFF_TYPE_BY_CANONICAL: dict[str, str] = {
+    "doi": "article",
+    "arxiv": "article",
+    "swhid": "software",
+    "slug": "software",
+    "isbn": "book",
+    "url": "website",
+    "handle": "generic",
+}
+
+
+def _cff_reference(
+    entry: DependsOnEntry, base_url: str, site_url: str,
+) -> dict:
+    """Render one depends_on entry as a CFF reference dict."""
+    canon = canonical_identifier(entry)
+    ref: dict = {"type": _CFF_TYPE_BY_CANONICAL[canon.type]}
+
+    if canon.type == "doi":
+        ref["doi"] = canon.value
+        ref["url"] = f"https://doi.org/{canon.value}"
+    elif canon.type == "arxiv":
+        ref["url"] = f"https://arxiv.org/abs/{canon.value}"
+    elif canon.type == "swhid":
+        ref["url"] = f"https://archive.softwareheritage.org/{canon.value}"
+    elif canon.type == "slug":
+        ref["url"] = f"{site_url}{base_url}proofs/{canon.value}/"
+    elif canon.type == "isbn":
+        ref["isbn"] = canon.value
+    elif canon.type == "url":
+        ref["url"] = canon.value
+    elif canon.type == "handle":
+        ref["url"] = f"https://hdl.handle.net/{canon.value}"
+
+    if entry.note:
+        ref["title"] = entry.note
+    elif canon.type == "slug":
+        ref["title"] = canon.value
+
+    extras = [i for i in entry.identifiers if i is not canon]
+    if extras:
+        # CFF allowed identifier types: doi, url, swh, other.
+        cff_type_map = {"doi": "doi", "swhid": "swh"}
+        ref["identifiers"] = []
+        for extra in extras:
+            ref["identifiers"].append({
+                "type": cff_type_map.get(extra.type, "url"),
+                "value": _identifier_uri(extra, base_url, site_url),
+            })
+
+    return ref
+
+
+def build_cff(
+    ctx: dict,
+    depends_on: list[DependsOnEntry],
+    base_url: str = "/proof-engine/",
+    site_url: str = "https://yaniv-golan.github.io",
+) -> str:
+    """Render the proof's CITATION.cff (1.2.0) as a YAML string."""
+    import yaml as _yaml
+    payload: dict = {
+        "cff-version": "1.2.0",
+        "message": "If you use this proof, please cite it as below.",
+        "title": ctx["title"],
+        "version": ctx["version"],
+        "date-released": ctx["date"],
+        "authors": [{"name": "Proof Engine"}],
+        "url": ctx["url"],
+        "repository-code": ctx["repository"],
+        "license": "MIT",
+    }
+    if ctx.get("doi"):
+        payload["doi"] = ctx["doi"]
+    if depends_on:
+        payload["references"] = [
+            _cff_reference(entry, base_url, site_url) for entry in depends_on
+        ]
+    return _yaml.dump(payload, sort_keys=False, default_flow_style=False)
+
+
+def build_codemeta(
+    ctx: dict,
+    depends_on: list[DependsOnEntry],
+    base_url: str = "/proof-engine/",
+    site_url: str = "https://yaniv-golan.github.io",
+) -> str:
+    """Render the proof's codemeta.json (CodeMeta 3.0) as a JSON string."""
+    payload: dict = {
+        "@context": "https://w3id.org/codemeta/3.0",
+        "@type": "SoftwareSourceCode",
+        "name": ctx["title"],
+        "description": f"Verdict: {ctx['verdict']}",
+        "version": ctx["version"],
+        "dateCreated": ctx["date"],
+        "license": "https://spdx.org/licenses/MIT",
+        "codeRepository": ctx["repository"],
+        "url": ctx["url"],
+        "author": [{"@type": "Organization", "name": "Proof Engine"}],
+    }
+    if ctx.get("doi"):
+        payload["identifier"] = f"https://doi.org/{ctx['doi']}"
+    if depends_on:
+        based: list[dict] = []
+        for entry in depends_on:
+            canon = canonical_identifier(entry)
+            uri = _identifier_uri(canon, base_url, site_url)
+            block: dict = {
+                "@type": "CreativeWork",
+                "@id": uri,
+                "identifier": [
+                    _identifier_uri(i, base_url, site_url)
+                    for i in entry.identifiers
+                ],
+            }
+            if entry.note:
+                block["name"] = entry.note
+            elif canon.type == "slug":
+                block["name"] = canon.value
+            based.append(block)
+        payload["isBasedOn"] = based
+    return _json.dumps(payload, indent=2)
