@@ -54,6 +54,22 @@ def test_url_beats_slug_within_single_entry():
     assert non_webpage[0]["identifier"] == "https://external.test/thing"
 
 
+def test_arxiv_identifier_passes_through_as_bare_id():
+    entries = [DependsOnEntry(
+        relation="References",
+        identifiers=[Identifier(type="arxiv", value="2603.21852")],
+    )]
+    result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+    # The arXiv ID stays bare — scheme='arxiv' is the disambiguator,
+    # no 'arXiv:' prefix is added or stripped.
+    arxiv_edge = next(r for r in result if r.get("scheme") == "arxiv")
+    assert arxiv_edge == {
+        "identifier": "2603.21852",
+        "relation": "references",
+        "scheme": "arxiv",
+    }
+
+
 def test_slug_only_entry_is_skipped_with_warning(capsys):
     entries = [DependsOnEntry(
         relation="IsDerivedFrom",
