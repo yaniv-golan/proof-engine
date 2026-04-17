@@ -73,6 +73,61 @@
     <a href="{{ base_url }}submit/">submit your own</a>
 </div>
 
+{% if builds_on %}
+<div class="depends-on-block depends-on-builds">
+  <h3 class="depends-on-heading">Builds on</h3>
+  <ul class="depends-on-list">
+    {% for entry in builds_on %}
+    <li class="depends-on-entry">
+      <span class="depends-on-relation">{{ entry.relation_humanized }}</span>
+      {% for id in entry.identifiers %}
+        {% if id.href %}
+          <a class="depends-on-pill depends-on-pill-{{ id.type }}" href="{{ id.href }}">{{ id.label }}</a>
+        {% else %}
+          <span class="depends-on-pill depends-on-pill-{{ id.type }}">{{ id.label }}</span>
+        {% endif %}
+      {% endfor %}
+      {% if entry.note %}<div class="depends-on-note">{{ entry.note }}</div>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if related_work %}
+<div class="depends-on-block depends-on-related">
+  <h3 class="depends-on-heading">Related work</h3>
+  <ul class="depends-on-list">
+    {% for entry in related_work %}
+    <li class="depends-on-entry">
+      <span class="depends-on-relation">{{ entry.relation_humanized }}</span>
+      {% for id in entry.identifiers %}
+        {% if id.href %}
+          <a class="depends-on-pill depends-on-pill-{{ id.type }}" href="{{ id.href }}">{{ id.label }}</a>
+        {% else %}
+          <span class="depends-on-pill depends-on-pill-{{ id.type }}">{{ id.label }}</span>
+        {% endif %}
+      {% endfor %}
+      {% if entry.note %}<div class="depends-on-note">{{ entry.note }}</div>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if used_by %}
+<div class="depends-on-block depends-on-used-by">
+  <h3 class="depends-on-heading">Used by</h3>
+  <ul class="depends-on-list">
+    {% for citer in used_by %}
+    <li class="depends-on-entry">
+      <a href="{{ citer.url }}">{{ citer.title | truncate(100) }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
 <div class="jump-links">
     <a href="#summary">summary</a>
     {%- set counter_ev = rendered_sections_md.get("Counter-Evidence Search") or rendered_sections_md.get("What Could Challenge This Verdict?") -%}
@@ -408,6 +463,8 @@
             <button class="cite-copy-btn share-btn" style="display:none">copy</button>
             <a href="{{ base_url }}proofs/{{ proof.slug }}/cite.bib" class="share-btn" download>download .bib</a>
             <a href="{{ base_url }}proofs/{{ proof.slug }}/cite.ris" class="share-btn" download>download .ris</a>
+            <a href="{{ base_url }}proofs/{{ proof.slug }}/CITATION.cff" class="share-btn" download>download CITATION.cff</a>
+            <a href="{{ base_url }}proofs/{{ proof.slug }}/codemeta.json" class="share-btn" download>download codemeta.json</a>
         </div>
     </div>
 </details>

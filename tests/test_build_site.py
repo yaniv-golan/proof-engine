@@ -1719,3 +1719,23 @@ def test_build_validate_repo_fails_loudly(site_fixture):
     result = _run_build(site_fixture)
     assert result.returncode != 0
     assert "phantom" in (result.stdout + result.stderr)
+
+
+def test_build_renders_builds_on_block(site_fixture):
+    """A proof with a slug+IsDerivedFrom dependency renders a 'Builds on' block."""
+    import shutil as _sh, yaml
+    upstream_dir = site_fixture / "site" / "proofs" / "u-stream"
+    _sh.copytree(site_fixture / "site" / "proofs" / "test-claim", upstream_dir)
+    target_meta = site_fixture / "site" / "proofs" / "test-claim" / "meta.yaml"
+    meta = yaml.safe_load(target_meta.read_text()) or {}
+    meta["depends_on"] = [
+        {"relation": "IsDerivedFrom",
+         "identifiers": [{"type": "slug", "value": "u-stream"}]},
+    ]
+    target_meta.write_text(yaml.dump(meta, sort_keys=False))
+
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    html = (site_fixture / "_site" / "proofs" / "test-claim" / "index.html").read_text()
+    assert "Builds on" in html
+    assert "u-stream" in html
