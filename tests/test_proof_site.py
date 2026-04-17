@@ -214,3 +214,26 @@ def test_publish_rejects_missing_narrative(source_proof, tmp_path):
     )
     assert result.returncode != 0
     assert "proof_narrative.md" in result.stdout or "proof_narrative.md" in result.stderr
+
+
+def test_publish_rejects_unknown_dependency_slug(site_dir, source_proof):
+    """publish must fail when depends_on slug points to a non-existent proof."""
+    import yaml
+    # Pad narrative past the 200-word minimum so we reach the cross-check stage.
+    narrative = source_proof / "proof_narrative.md"
+    narrative.write_text(
+        narrative.read_text()
+        + "\n## Additional Notes\n\n"
+        + ("Padding sentence to satisfy minimum narrative length. " * 20)
+        + "\n"
+    )
+    (source_proof / "meta.yaml").write_text(yaml.dump({
+        "tags": ["test"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "slug", "value": "ghost-prereq"}]},
+        ],
+    }))
+    result = run_cli("publish", str(source_proof), "--site-dir", str(site_dir))
+    assert result.returncode != 0
+    assert "ghost-prereq" in (result.stdout + result.stderr)

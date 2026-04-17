@@ -130,7 +130,8 @@ def cmd_publish(args) -> int:
     log("Running full validation (validate-site-proof.py)...")
     validator = Path(__file__).parent / "validate-site-proof.py"
     result = subprocess.run(
-        [sys.executable, str(validator), staging],
+        [sys.executable, str(validator), staging,
+         "--candidate-slug", slug],
         capture_output=True, text=True, timeout=600,
     )
     if result.returncode != 0:
@@ -138,6 +139,31 @@ def cmd_publish(args) -> int:
         shutil.rmtree(staging)
         return 1
     success("Proof validation passed")
+
+    # 8b. Cross-proof depends_on check (slug resolution + cycle detection).
+    log("Running cross-proof depends_on check...")
+    try:
+        import yaml as _yaml
+        from tools.lib.depends_on import parse_depends_on, check_cross
+        meta_path_staging = Path(staging) / "meta.yaml"
+        if meta_path_staging.exists():
+            meta_staged = _yaml.safe_load(meta_path_staging.read_text()) or {}
+            entries_staged, parse_errs = parse_depends_on(
+                meta_staged, source=str(meta_path_staging),
+            )
+            cross_errs = check_cross(
+                entries_staged, candidate_slug=slug, proofs_dir=proofs_dir,
+            )
+            for e in parse_errs + cross_errs:
+                error(e)
+            if parse_errs or cross_errs:
+                shutil.rmtree(staging)
+                return 1
+        success("Cross-proof dependency check passed")
+    except Exception as e:
+        error(f"Cross-proof dependency check raised: {e}")
+        shutil.rmtree(staging)
+        return 1
 
     # 9. Site-buildability check via load_proof
     log("Checking site-buildability (load_proof)...")
