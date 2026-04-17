@@ -72,19 +72,26 @@ def canonicalize_tag(tag: str) -> str:
     return slug
 
 
-def llm_tag(claim_text: str, max_tags: int = 3, model: str = "haiku") -> list[str]:
-    """Classify claim into 1-3 tags from TAG_VOCABULARY using LLM.
+def llm_tag(claim_text: str, max_tags: int = 4, model: str = "haiku") -> list[str]:
+    """Classify claim into 1-4 tags from TAG_VOCABULARY using LLM.
 
     Raises RuntimeError on failure (no silent fallback).
     """
     vocab_lines = "\n".join(f"- {slug}: {desc}" for slug, desc in TAG_VOCABULARY.items())
     prompt = (
         f"You are a content classifier. Given a factual claim, select 1 to {max_tags} tags "
-        f"from the allowed list below that best describe the claim's topic.\n\n"
+        f"from the allowed list below that describe the claim's topic.\n\n"
         f"Allowed tags:\n{vocab_lines}\n\n"
         f"Claim: \"{claim_text}\"\n\n"
         f"Respond with a JSON array of tag slugs, e.g. [\"health\", \"nutrition\"]. "
-        f"Only use tags from the allowed list. Pick the most specific tags that apply."
+        f"Only use tags from the allowed list.\n\n"
+        f"Guidance: include every tag that genuinely applies, not just the single "
+        f"most-specific one. A narrow tag (e.g. neuroscience) does NOT exclude a "
+        f"broader parent (e.g. biology) when both apply to the claim. A claim about "
+        f"a clinical neurology topic should carry both neuroscience and health. A "
+        f"claim counting neurons in the brain should carry neuroscience, biology, "
+        f"and mathematics. Only drop a tag if the claim truly has nothing to do "
+        f"with that topic."
     )
 
     try:

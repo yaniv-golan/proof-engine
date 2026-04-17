@@ -21,6 +21,27 @@ import yaml
 from tools.lib.tagger import llm_tag
 
 
+def _progress(i: int, total: int, label: str) -> None:
+    """Print progress that survives piped output.
+
+    On a TTY: inline \\r update (concise, no scrolling).
+    Piped (CI, tail, log files): newline-terminated to stderr, one line per
+    proof, unbuffered. Ensures a process running under `tee`, `tail`, or a
+    log-collecting harness shows live progress instead of nothing until exit.
+    """
+    msg = f"  [{i}/{total}] {label}..."
+    if sys.stderr.isatty():
+        # Same line, inline update.
+        sys.stderr.write("\r" + msg)
+        if i == total:
+            sys.stderr.write("\n")
+        sys.stderr.flush()
+    else:
+        # Piped: one line per step, to stderr so stdout stays clean.
+        sys.stderr.write(msg + "\n")
+        sys.stderr.flush()
+
+
 def retag_proof(proof_dir: Path, dry_run: bool = False, model: str = "haiku",
                 verbose: bool = False) -> bool:
     """Retag a single proof. Returns True if tags changed, False if no change.
@@ -53,7 +74,8 @@ def retag_proof(proof_dir: Path, dry_run: bool = False, model: str = "haiku",
     # Raises RuntimeError on failure — caller decides how to handle
     new_tags = llm_tag(claim, model=model)
 
-    if old_tags == new_tags:
+    # Set-equality: reordering the same tags is a no-op, not a change.
+    if set(old_tags) == set(new_tags):
         if verbose:
             print(f"  UNCHANGED {proof_dir.name}: {old_tags}")
         return False
@@ -141,8 +163,7 @@ def main():
                 try:
                     tags = llm_tag(claim, model="sonnet")
                     if not args.verbose:
-                        print(f"\r  [{i}/{len(proof_dirs)}] collecting (tagging uncached)...",
-                              end="", flush=True)
+                        _progress(i, len(proof_dirs), "collecting (tagging uncached)")
                 except RuntimeError as e:
                     print(f"\n  WARNING: could not tag {slug_dir.name}: {e}",
                           file=sys.stderr)
@@ -205,7 +226,7 @@ def main():
                                verbose=args.verbose):
                     retag_changed += 1
                 if not args.verbose:
-                    print(f"\r  [{i}/{len(proof_dirs)}] retagging...", end="", flush=True)
+                    _progress(i, len(proof_dirs), "retagging")
             except RuntimeError as e:
                 print(f"\n  FAIL [{i}/{len(proof_dirs)}] {slug_dir.name}: {e}",
                       file=sys.stderr)
@@ -258,7 +279,7 @@ def main():
                                verbose=args.verbose):
                     changed += 1
                 if not args.verbose:
-                    print(f"\r  [{i}/{total}] retagging...", end="", flush=True)
+                    _progress(i, total, "retagging")
             except RuntimeError as e:
                 print(f"\n  FAIL [{i}/{total}] {slug_dir.name}: {e}", file=sys.stderr)
                 failed += 1
