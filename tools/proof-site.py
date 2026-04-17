@@ -481,15 +481,26 @@ def cmd_mint_doi(args) -> int:
         return 1
 
     doi_json_path = proof_dir / "doi.json"
+    sandbox = args.sandbox
 
-    # Check for existing DOI
-    if doi_json_path.exists() and not args.force:
-        existing = json.loads(doi_json_path.read_text())
-        error(
-            f"DOI already exists: {existing.get('doi')}. "
-            f"Use --force to create a new version."
-        )
-        return 1
+    # Sandbox mode is ephemeral: doi.json records the prod DOI and must not
+    # be read for existence checks (a prod record ID doesn't exist in the
+    # sandbox API) and must not be overwritten with the sandbox DOI. The
+    # entire doi.json lifecycle is bypassed under --sandbox.
+    if sandbox:
+        if doi_json_path.exists():
+            log("--sandbox: ignoring existing doi.json (prod state preserved)")
+        if args.force:
+            log("--sandbox: --force is a no-op (sandbox always creates a fresh deposition)")
+    else:
+        # Prod mode: doi.json gates re-mints unless --force is given.
+        if doi_json_path.exists() and not args.force:
+            existing = json.loads(doi_json_path.read_text())
+            error(
+                f"DOI already exists: {existing.get('doi')}. "
+                f"Use --force to create a new version."
+            )
+            return 1
 
     # Read proof data
     proof_data = json.loads((proof_dir / "proof.json").read_text())
@@ -512,13 +523,20 @@ def cmd_mint_doi(args) -> int:
         meta_path.write_text(yaml.dump(meta, default_flow_style=False))
     keywords = tags + ["proof-engine", "fact-checking", "automated-verification"]
 
-    # Get token
-    token = os.environ.get("ZENODO_TOKEN")
-    if not token:
-        error("ZENODO_TOKEN environment variable not set")
-        return 1
+    # Get token. Sandbox prefers ZENODO_SANDBOX_TOKEN so operators can keep
+    # prod and sandbox credentials side by side in .env; falls back to
+    # ZENODO_TOKEN for backwards compatibility with single-token setups.
+    if sandbox:
+        token = os.environ.get("ZENODO_SANDBOX_TOKEN") or os.environ.get("ZENODO_TOKEN")
+        if not token:
+            error("ZENODO_SANDBOX_TOKEN (or ZENODO_TOKEN) environment variable not set")
+            return 1
+    else:
+        token = os.environ.get("ZENODO_TOKEN")
+        if not token:
+            error("ZENODO_TOKEN environment variable not set")
+            return 1
 
-    sandbox = args.sandbox
     client = ZenodoClient(token=token, sandbox=sandbox)
 
     site_url = "https://yaniv-golan.github.io"
@@ -609,7 +627,10 @@ def cmd_mint_doi(args) -> int:
     related_identifiers = build_related_identifiers(depends_on_entries, proof_url)
 
     try:
-        if args.force and doi_json_path.exists():
+        # New-version path is prod-only. In sandbox mode we always create a
+        # fresh deposition, ignoring any existing doi.json (which holds a
+        # prod record ID unknown to sandbox.zenodo.org).
+        if args.force and doi_json_path.exists() and not sandbox:
             # Create new version
             existing = json.loads(doi_json_path.read_text())
             log(f"Creating new version of Zenodo record {existing['zenodo_id']}...")
@@ -667,24 +688,27 @@ def cmd_mint_doi(args) -> int:
         zenodo_id = str(result["id"])
         concept_zenodo_id = str(result.get("conceptrecid", ""))
 
-        # Write doi.json
-        doi_data = {
-            "doi": doi,
-            "zenodo_id": zenodo_id,
-            "concept_doi": concept_doi,
-            "concept_zenodo_id": concept_zenodo_id,
-            "claim_natural": claim,
-            "minted_at": date.today().isoformat(),
-        }
-        if "proof.ipynb" in mr_available:
-            doi_data["binder_url"] = f"https://mybinder.org/v2/zenodo/{zenodo_id}/?filepath=proof.ipynb"
-        doi_json_path.write_text(json.dumps(doi_data, indent=2) + "\n")
+        # Write doi.json (prod only — sandbox is ephemeral).
+        if not sandbox:
+            doi_data = {
+                "doi": doi,
+                "zenodo_id": zenodo_id,
+                "concept_doi": concept_doi,
+                "concept_zenodo_id": concept_zenodo_id,
+                "claim_natural": claim,
+                "minted_at": date.today().isoformat(),
+            }
+            if "proof.ipynb" in mr_available:
+                doi_data["binder_url"] = f"https://mybinder.org/v2/zenodo/{zenodo_id}/?filepath=proof.ipynb"
+            doi_json_path.write_text(json.dumps(doi_data, indent=2) + "\n")
+        else:
+            log("--sandbox: not persisting doi.json (sandbox record is ephemeral)")
 
         success(f"DOI minted: {doi}")
         if concept_doi:
             log(f"Concept DOI (all versions): {concept_doi}")
         log(f"Zenodo record: https://{'sandbox.' if sandbox else ''}zenodo.org/records/{zenodo_id}")
-        if "binder_url" in doi_data:
+        if not sandbox and "binder_url" in doi_data:
             log(f"Binder URL: {doi_data['binder_url']}")
         log("Rebuild the site to pick up the DOI in citation files.")
         log(f"→ run `proof-site.py sync-doi-deps --slug {slug}` to propagate this DOI to downstream proofs")

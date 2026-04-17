@@ -4,7 +4,27 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [1.20.0] - 2026-04-17
+## [1.20.1] - 2026-04-17
+
+### Added
+
+- **`ZENODO_SANDBOX_TOKEN` env var**. `mint-doi --sandbox` now reads
+  `ZENODO_SANDBOX_TOKEN` first and falls back to `ZENODO_TOKEN`, so
+  operators can keep prod and sandbox credentials side by side in
+  `.env` instead of swapping a single variable.
+
+### Fixed
+
+- **`mint-doi --sandbox` no longer touches prod `doi.json`**. Previously,
+  running a sandbox smoke test against a proof that already had a
+  production DOI either failed with "DOI already exists" or — with
+  `--force` — tried to create a new version of a prod record ID against
+  the sandbox API (guaranteed 404). Sandbox mode is now fully ephemeral:
+  it ignores existing `doi.json` for existence checks, bypasses the
+  `--force` new-version path, and does not write the sandbox DOI back
+  to disk. `--force` is a no-op under `--sandbox`. This removes the
+  operator workaround of manually moving `doi.json` aside before each
+  sandbox run.
 
 ### Added
 

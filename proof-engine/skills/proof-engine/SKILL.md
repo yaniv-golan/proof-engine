@@ -9,7 +9,7 @@ description: >
   questions with no verifiable answer.
 metadata:
   author: Yaniv Golan
-  version: "1.20.0"
+  version: "1.20.1"
   license: MIT
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
@@ -58,7 +58,7 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **`parse_percentage_from_quote(quote, fact_id)` has no `pattern` kwarg**: For pattern-based extraction, use `parse_number_from_quote(quote, pattern, fact_id)` instead. The two functions have different signatures — check the Bundled Scripts table.
 - **JSON summary key is `claim_natural`, not `claim`**: The publish toolchain reads `proof_data.get("claim_natural")`. Using `"claim"` as the key silently drops the claim text from the published proof.
 - **Use LaTeX delimiters for math in `claim_natural` and markdown sections**: When the claim contains mathematical notation, use `\(...\)` for inline math and `\[...\]` for display math. Write `\(\alpha_i\)` not `alpha_i`, `\(\pi^2/6\)` not `pi^2/6`. Do NOT use `$...$` delimiters — they collide with currency dollar signs in claims. Non-math claims need no delimiters. The same convention applies to proof.md, proof_audit.md, and proof_narrative.md.
-- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: "1.20.0"
+- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: "1.20.1"
 
 ## Reference Files
 
@@ -107,7 +107,7 @@ apply_verdict_qualifier(base_verdict, any_unverified) -> str
 
 # proof_summary.py
 ProofSummaryBuilder(claim_natural, claim_formal, generator=None)
-#   Primary path for building proof.json. Produces format_version: "1.20.0"
+#   Primary path for building proof.json. Produces format_version: "1.20.1"
 #   builder.add_empirical_fact(fact_id, label=, source_name=, source_url=, source_quote=)
 #   builder.set_verification(fact_id, status=, method=, ...)
 #   builder.set_extraction(fact_id, value=, value_in_quote=, ...)

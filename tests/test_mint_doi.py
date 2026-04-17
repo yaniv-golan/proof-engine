@@ -62,37 +62,52 @@ def _mock_zenodo_client():
 @patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
 @patch("tools.proof_site.ZenodoClient")
 def test_mint_doi_creates_doi_json(mock_cls, proof_dir):
-    """Successful mint writes doi.json with correct fields."""
-    mock_cls.return_value = _mock_zenodo_client()
+    """Successful prod mint writes doi.json with correct fields.
+
+    Uses sandbox=False — doi.json persistence is prod-only.
+    """
+    client = _mock_zenodo_client()
+    client.publish.return_value = {
+        "doi": "10.5281/zenodo.12345",
+        "conceptdoi": "10.5281/zenodo.12340",
+        "id": 12345,
+        "conceptrecid": "12340",
+    }
+    mock_cls.return_value = client
     args = MagicMock(
         slug="test-slug", site_dir=str(proof_dir / "site"),
-        force=False, sandbox=True,
+        force=False, sandbox=False,
     )
     result = cmd_mint_doi(args)
     assert result == 0
     doi_path = proof_dir / "site" / "proofs" / "test-slug" / "doi.json"
     assert doi_path.exists()
     data = json.loads(doi_path.read_text())
-    assert data["doi"] == "10.5072/zenodo.12345"
-    assert data["concept_doi"] == "10.5072/zenodo.12340"
+    assert data["doi"] == "10.5281/zenodo.12345"
+    assert data["concept_doi"] == "10.5281/zenodo.12340"
     assert data["claim_natural"] == "Test claim"
 
 
 @patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
 def test_mint_doi_refuses_if_doi_exists(proof_dir):
-    """mint-doi without --force should refuse when doi.json exists."""
+    """mint-doi (prod, no --force) should refuse when doi.json exists.
+
+    Uses sandbox=False because the existence check is prod semantics —
+    in sandbox mode doi.json is treated as opaque prod metadata and is
+    intentionally bypassed (see test_sandbox_ignores_existing_doi_json).
+    """
     doi_path = proof_dir / "site" / "proofs" / "test-slug" / "doi.json"
     doi_path.write_text(json.dumps({
-        "doi": "10.5072/zenodo.99999",
+        "doi": "10.5281/zenodo.99999",
         "zenodo_id": "99999",
-        "concept_doi": "10.5072/zenodo.99990",
+        "concept_doi": "10.5281/zenodo.99990",
         "concept_zenodo_id": "99990",
         "claim_natural": "Test claim",
         "minted_at": "2026-04-07",
     }))
     args = MagicMock(
         slug="test-slug", site_dir=str(proof_dir / "site"),
-        force=False, sandbox=True,
+        force=False, sandbox=False,
     )
     result = cmd_mint_doi(args)
     assert result == 1  # should fail
@@ -100,13 +115,147 @@ def test_mint_doi_refuses_if_doi_exists(proof_dir):
 
 @patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
 @patch("tools.proof_site.ZenodoClient")
-def test_mint_doi_force_creates_new_version(mock_cls, proof_dir):
-    """mint-doi --force should call new_version when doi.json exists."""
+def test_sandbox_ignores_existing_doi_json(mock_cls, proof_dir):
+    """--sandbox must NOT refuse when a prod doi.json exists, and must NOT
+    call new_version (which would hit a prod record ID against the sandbox
+    API). Sandbox always creates a fresh deposition."""
+    doi_path = proof_dir / "site" / "proofs" / "test-slug" / "doi.json"
+    prod_doi = {
+        "doi": "10.5281/zenodo.99999",
+        "zenodo_id": "99999",
+        "concept_doi": "10.5281/zenodo.99990",
+        "concept_zenodo_id": "99990",
+        "claim_natural": "Test claim",
+        "minted_at": "2026-04-07",
+    }
+    doi_path.write_text(json.dumps(prod_doi))
+    client = _mock_zenodo_client()
+    mock_cls.return_value = client
+    args = MagicMock(
+        slug="test-slug", site_dir=str(proof_dir / "site"),
+        force=False, sandbox=True,
+    )
+    assert cmd_mint_doi(args) == 0
+    client.create_deposition.assert_called_once()
+    client.new_version.assert_not_called()
+
+
+@patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
+@patch("tools.proof_site.ZenodoClient")
+def test_sandbox_does_not_write_doi_json(mock_cls, proof_dir):
+    """Sandbox mints are ephemeral — must not persist sandbox DOI into
+    prod doi.json (would corrupt the proof's production citation state)."""
+    doi_path = proof_dir / "site" / "proofs" / "test-slug" / "doi.json"
+    prod_doi_text = json.dumps({
+        "doi": "10.5281/zenodo.99999",
+        "zenodo_id": "99999",
+        "concept_doi": "10.5281/zenodo.99990",
+        "concept_zenodo_id": "99990",
+        "claim_natural": "Test claim",
+        "minted_at": "2026-04-07",
+    }, indent=2) + "\n"
+    doi_path.write_text(prod_doi_text)
+    mock_cls.return_value = _mock_zenodo_client()
+    args = MagicMock(
+        slug="test-slug", site_dir=str(proof_dir / "site"),
+        force=False, sandbox=True,
+    )
+    assert cmd_mint_doi(args) == 0
+    # Prod doi.json must be byte-for-byte unchanged after sandbox mint.
+    assert doi_path.read_text() == prod_doi_text
+
+
+@patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
+@patch("tools.proof_site.ZenodoClient")
+def test_sandbox_first_time_mint_does_not_create_doi_json(mock_cls, proof_dir):
+    """Sandbox mint on a fresh proof (no prior doi.json) must not leave
+    one behind — sandbox is ephemeral, no persistent state."""
+    doi_path = proof_dir / "site" / "proofs" / "test-slug" / "doi.json"
+    assert not doi_path.exists()
+    mock_cls.return_value = _mock_zenodo_client()
+    args = MagicMock(
+        slug="test-slug", site_dir=str(proof_dir / "site"),
+        force=False, sandbox=True,
+    )
+    assert cmd_mint_doi(args) == 0
+    assert not doi_path.exists()
+
+
+@patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
+@patch("tools.proof_site.ZenodoClient")
+def test_sandbox_with_force_still_creates_fresh_deposition(mock_cls, proof_dir):
+    """--sandbox --force must not call new_version — sandbox never touches
+    the prod record graph. --force is a no-op in sandbox mode."""
     doi_path = proof_dir / "site" / "proofs" / "test-slug" / "doi.json"
     doi_path.write_text(json.dumps({
-        "doi": "10.5072/zenodo.99999",
+        "doi": "10.5281/zenodo.99999",
         "zenodo_id": "99999",
-        "concept_doi": "10.5072/zenodo.99990",
+        "concept_doi": "10.5281/zenodo.99990",
+        "concept_zenodo_id": "99990",
+        "claim_natural": "Test claim",
+        "minted_at": "2026-04-07",
+    }))
+    client = _mock_zenodo_client()
+    mock_cls.return_value = client
+    args = MagicMock(
+        slug="test-slug", site_dir=str(proof_dir / "site"),
+        force=True, sandbox=True,
+    )
+    assert cmd_mint_doi(args) == 0
+    client.new_version.assert_not_called()
+    client.create_deposition.assert_called_once()
+
+
+@patch.dict("os.environ", {"ZENODO_SANDBOX_TOKEN": "sandbox-tok"}, clear=False)
+@patch("tools.proof_site.ZenodoClient")
+def test_sandbox_prefers_zenodo_sandbox_token_env(mock_cls, proof_dir):
+    """--sandbox should use ZENODO_SANDBOX_TOKEN so operators can keep
+    prod and sandbox credentials side by side in .env."""
+    import os
+    env = {k: v for k, v in os.environ.items() if k != "ZENODO_TOKEN"}
+    env["ZENODO_SANDBOX_TOKEN"] = "sandbox-tok"
+    mock_cls.return_value = _mock_zenodo_client()
+    with patch.dict("os.environ", env, clear=True):
+        args = MagicMock(
+            slug="test-slug", site_dir=str(proof_dir / "site"),
+            force=False, sandbox=True,
+        )
+        assert cmd_mint_doi(args) == 0
+    kwargs = mock_cls.call_args.kwargs
+    assert kwargs.get("token") == "sandbox-tok"
+    assert kwargs.get("sandbox") is True
+
+
+@patch("tools.proof_site.ZenodoClient")
+def test_sandbox_falls_back_to_zenodo_token(mock_cls, proof_dir):
+    """For operators with only a single-token setup, --sandbox should
+    still work off ZENODO_TOKEN when ZENODO_SANDBOX_TOKEN is unset."""
+    import os
+    env = {k: v for k, v in os.environ.items() if k != "ZENODO_SANDBOX_TOKEN"}
+    env["ZENODO_TOKEN"] = "legacy-tok"
+    mock_cls.return_value = _mock_zenodo_client()
+    with patch.dict("os.environ", env, clear=True):
+        args = MagicMock(
+            slug="test-slug", site_dir=str(proof_dir / "site"),
+            force=False, sandbox=True,
+        )
+        assert cmd_mint_doi(args) == 0
+    kwargs = mock_cls.call_args.kwargs
+    assert kwargs.get("token") == "legacy-tok"
+
+
+@patch.dict("os.environ", {"ZENODO_TOKEN": "fake-token"})
+@patch("tools.proof_site.ZenodoClient")
+def test_mint_doi_force_creates_new_version(mock_cls, proof_dir):
+    """mint-doi --force should call new_version when doi.json exists.
+
+    Uses sandbox=False — the new_version path only fires in prod mode.
+    """
+    doi_path = proof_dir / "site" / "proofs" / "test-slug" / "doi.json"
+    doi_path.write_text(json.dumps({
+        "doi": "10.5281/zenodo.99999",
+        "zenodo_id": "99999",
+        "concept_doi": "10.5281/zenodo.99990",
         "concept_zenodo_id": "99990",
         "claim_natural": "Test claim",
         "minted_at": "2026-04-07",
@@ -117,21 +266,21 @@ def test_mint_doi_force_creates_new_version(mock_cls, proof_dir):
         "links": {"bucket": "https://sandbox.zenodo.org/api/files/new-bucket"},
     }
     client.publish.return_value = {
-        "doi": "10.5072/zenodo.100000",
-        "conceptdoi": "10.5072/zenodo.99990",
+        "doi": "10.5281/zenodo.100000",
+        "conceptdoi": "10.5281/zenodo.99990",
         "id": 100000,
         "conceptrecid": "99990",
     }
     mock_cls.return_value = client
     args = MagicMock(
         slug="test-slug", site_dir=str(proof_dir / "site"),
-        force=True, sandbox=True,
+        force=True, sandbox=False,
     )
     result = cmd_mint_doi(args)
     assert result == 0
     client.new_version.assert_called_once_with(99999)
     data = json.loads(doi_path.read_text())
-    assert data["doi"] == "10.5072/zenodo.100000"
+    assert data["doi"] == "10.5281/zenodo.100000"
 
 
 def test_mint_doi_fails_without_token(proof_dir):
@@ -223,7 +372,11 @@ def test_mint_doi_passes_related_identifiers_to_create_deposition(mock_cls, proo
 @patch("tools.proof_site.ZenodoClient")
 def test_mint_doi_force_passes_related_identifiers_to_update_metadata(mock_cls, proof_dir):
     """--force path must pass the full related_identifiers graph into
-    ZenodoClient.update_metadata on the new version draft."""
+    ZenodoClient.update_metadata on the new version draft.
+
+    Uses sandbox=False — the new_version path is prod-only; --sandbox
+    ignores doi.json and always creates a fresh deposition.
+    """
     proof = proof_dir / "site" / "proofs" / "test-slug"
     proof.joinpath("meta.yaml").write_text(
         "tags: [math]\n"
@@ -255,7 +408,7 @@ def test_mint_doi_force_passes_related_identifiers_to_update_metadata(mock_cls, 
     mock_cls.return_value = client
     args = MagicMock(
         slug="test-slug", site_dir=str(proof_dir / "site"),
-        force=True, sandbox=True,
+        force=True, sandbox=False,
     )
     assert cmd_mint_doi(args) == 0
 
