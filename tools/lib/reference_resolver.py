@@ -200,7 +200,151 @@ def _resolve_doi_crossref(value: str, http=None) -> ResolvedReference:
     )
 
 
-_BACKENDS = {"arxiv": _resolve_arxiv, "doi": _resolve_doi}
+def _resolve_swhid(value: str, http=None) -> ResolvedReference:
+    http = http or requests
+    url = f"https://archive.softwareheritage.org/api/1/resolve/{value}/"
+    resp = _fetch_with_retry(http, url)
+    data = resp.json()
+    origin = data.get("origin_url") or ""
+    title = origin or f"SWHID {value}"
+    return ResolvedReference(
+        identifier_type="swhid",
+        identifier_value=value,
+        canonical_url=f"https://archive.softwareheritage.org/{value}",
+        title=title,
+        authors=[],
+        year=None,
+        venue="Software Heritage Archive",
+        version=None,
+        resolved_at=_now_iso(),
+        source_api="archive.softwareheritage.org/api/1/resolve",
+        raw={"swh": data},
+    )
+
+
+def _resolve_handle(value: str, http=None) -> ResolvedReference:
+    http = http or requests
+    url = f"https://hdl.handle.net/api/handles/{value}"
+    resp = _fetch_with_retry(http, url)
+    data = resp.json()
+    return ResolvedReference(
+        identifier_type="handle", identifier_value=value,
+        canonical_url=f"https://hdl.handle.net/{value}",
+        title=f"Handle {value}", authors=[], year=None,
+        venue=None, version=None, resolved_at=_now_iso(),
+        source_api="hdl.handle.net", raw={"handle": data},
+    )
+
+
+def _resolve_isbn(value: str, http=None) -> ResolvedReference:
+    http = http or requests
+    url = f"https://openlibrary.org/api/books?bibkeys=ISBN:{value}&format=json&jscmd=data"
+    resp = _fetch_with_retry(http, url)
+    data = resp.json()
+    entry = data.get(f"ISBN:{value}", {})
+    title = entry.get("title", f"ISBN {value}")
+    authors = [a.get("name", "") for a in entry.get("authors", []) if a.get("name")]
+    pub_date = entry.get("publish_date", "")
+    year = None
+    m = re.search(r"\b(19|20)\d{2}\b", pub_date)
+    if m:
+        year = int(m.group(0))
+    publishers = entry.get("publishers") or []
+    venue = publishers[0].get("name") if publishers else None
+    return ResolvedReference(
+        identifier_type="isbn", identifier_value=value,
+        canonical_url=f"https://openlibrary.org/isbn/{value}",
+        title=title, authors=authors, year=year,
+        venue=venue, version=None, resolved_at=_now_iso(),
+        source_api="openlibrary.org", raw={"openlibrary": data},
+    )
+
+
+_OG_RE = re.compile(
+    r'<meta\s+[^>]*?property=["\']og:title["\'][^>]*?content=["\']([^"\']+)["\']',
+    re.IGNORECASE,
+)
+_OG_AUTHOR_RE = re.compile(
+    r'<meta\s+[^>]*?property=["\'](?:og:)?article:author["\'][^>]*?content=["\']([^"\']+)["\']',
+    re.IGNORECASE,
+)
+_OG_PUB_RE = re.compile(
+    r'<meta\s+[^>]*?property=["\']article:published_time["\'][^>]*?content=["\']([^"\']+)["\']',
+    re.IGNORECASE,
+)
+_TITLE_RE = re.compile(r"<title>([^<]+)</title>", re.IGNORECASE)
+
+
+def _resolve_url(value: str, http=None) -> ResolvedReference:
+    http = http or requests
+    resp = _fetch_with_retry(http, value)
+    html = resp.text
+    title = (_OG_RE.search(html) or _TITLE_RE.search(html))
+    title_str = title.group(1).strip() if title else value
+    authors = [a.strip() for a in _OG_AUTHOR_RE.findall(html) if a.strip()]
+    pub = _OG_PUB_RE.search(html)
+    year = None
+    if pub:
+        m = re.search(r"\b(19|20)\d{2}\b", pub.group(1))
+        if m:
+            year = int(m.group(0))
+    return ResolvedReference(
+        identifier_type="url", identifier_value=value,
+        canonical_url=value, title=title_str, authors=authors,
+        year=year, venue=None, version=None, resolved_at=_now_iso(),
+        source_api="og_extraction", raw={"html_len": len(html)},
+    )
+
+
+_BACKENDS = {
+    "arxiv": _resolve_arxiv,
+    "doi": _resolve_doi,
+    "swhid": _resolve_swhid,
+    "handle": _resolve_handle,
+    "isbn": _resolve_isbn,
+    "url": _resolve_url,
+}
+
+
+def collect_identifiers(proof_dir: Path) -> list[tuple[str, str]]:
+    """Collect every (type, value) identifier this proof declares.
+
+    Sources: meta.yaml `depends_on[*].identifiers` (excluding `slug`) +
+    proof.json `evidence[*].source.url` passed through `identifier_from_url`.
+    Deduplicated; order preserved.
+    """
+    import yaml
+    proof_dir = Path(proof_dir)
+    seen: list[tuple[str, str]] = []
+
+    meta_path = proof_dir / "meta.yaml"
+    if meta_path.exists():
+        meta = yaml.safe_load(meta_path.read_text()) or {}
+        for entry in meta.get("depends_on") or []:
+            for ident in entry.get("identifiers") or []:
+                t, v = ident.get("type"), ident.get("value")
+                if t and v and t != "slug":
+                    pair = (t, str(v))
+                    if pair not in seen:
+                        seen.append(pair)
+
+    proof_json = proof_dir / "proof.json"
+    if proof_json.exists():
+        data = json.loads(proof_json.read_text())
+        evidence = data.get("evidence") or {}
+        if isinstance(evidence, dict):
+            iterable = evidence.values()
+        elif isinstance(evidence, list):
+            iterable = evidence
+        else:
+            iterable = []
+        for ev in iterable:
+            url = ((ev or {}).get("source") or {}).get("url")
+            pair = identifier_from_url(url)
+            if pair and pair not in seen:
+                seen.append(pair)
+
+    return seen
 
 
 def resolve(

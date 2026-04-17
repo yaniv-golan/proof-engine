@@ -125,3 +125,89 @@ def test_resolve_doi_crossref_fallback_on_404():
     assert ref.title == "Crossref-only paper"
     assert ref.year == 2019
     assert ref.authors == ["Jane Smith"]
+
+
+_SWH_RESPONSE = {
+    "object_type": "directory",
+    "object_id": "0" * 40,
+    "origin_url": "https://github.com/yaniv-golan/proof-engine",
+}
+
+
+def test_resolve_swhid():
+    resp = MagicMock(status_code=200)
+    resp.raise_for_status = MagicMock()
+    resp.json = MagicMock(return_value=_SWH_RESPONSE)
+    with patch("tools.lib.reference_resolver.requests.get", return_value=resp):
+        ref = resolve("swhid", "swh:1:dir:" + "0" * 40, refresh=True)
+    assert ref.identifier_type == "swhid"
+    assert ref.title
+    assert ref.source_api == "archive.softwareheritage.org/api/1/resolve"
+
+
+_ISBN_RESPONSE = {
+    "ISBN:9780262033848": {
+        "title": "Introduction to Algorithms",
+        "authors": [{"name": "Thomas H. Cormen"}, {"name": "Charles E. Leiserson"}],
+        "publish_date": "2009",
+        "publishers": [{"name": "MIT Press"}],
+    }
+}
+
+
+def test_resolve_isbn():
+    resp = MagicMock(status_code=200)
+    resp.raise_for_status = MagicMock()
+    resp.json = MagicMock(return_value=_ISBN_RESPONSE)
+    with patch("tools.lib.reference_resolver.requests.get", return_value=resp):
+        ref = resolve("isbn", "9780262033848", refresh=True)
+    assert ref.title == "Introduction to Algorithms"
+    assert "Thomas H. Cormen" in ref.authors
+    assert ref.year == 2009
+
+
+def test_resolve_url_reads_og_meta():
+    html = (
+        '<html><head>'
+        '<meta property="og:title" content="My Blog Post"/>'
+        '<meta property="og:article:author" content="Jane Smith"/>'
+        '<meta property="article:published_time" content="2024-03-01"/>'
+        '</head><body></body></html>'
+    )
+    resp = MagicMock(status_code=200, text=html)
+    resp.raise_for_status = MagicMock()
+    with patch("tools.lib.reference_resolver.requests.get", return_value=resp):
+        ref = resolve("url", "https://example.com/post", refresh=True)
+    assert ref.title == "My Blog Post"
+    assert ref.authors == ["Jane Smith"]
+    assert ref.year == 2024
+
+
+def test_collect_identifiers_from_meta_and_evidence(tmp_path):
+    import json as _json
+    from tools.lib.reference_resolver import collect_identifiers
+    (tmp_path / "meta.yaml").write_text(
+        "tags: [math]\n"
+        "depends_on:\n"
+        "  - relation: References\n"
+        "    identifiers:\n"
+        "      - type: arxiv\n"
+        "        value: '2603.21852'\n"
+        "      - type: doi\n"
+        "        value: '10.1051/0004-6361/201833910'\n"
+        "      - type: slug\n"
+        "        value: some-other-proof\n"
+    )
+    (tmp_path / "proof.json").write_text(_json.dumps({
+        "claim_natural": "x",
+        "evidence": {
+            "B1": {"source": {"url": "https://arxiv.org/abs/1609.03499"}},
+            "B2": {"source": {"url": "https://example.com/blog"}},
+        }
+    }))
+    identifiers = collect_identifiers(tmp_path)
+    assert ("arxiv", "2603.21852") in identifiers
+    assert ("doi", "10.1051/0004-6361/201833910") in identifiers
+    assert ("arxiv", "1609.03499") in identifiers
+    assert ("url", "https://example.com/blog") in identifiers
+    assert len(identifiers) == len(set(identifiers))
