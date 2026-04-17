@@ -60,18 +60,46 @@ The proof is self-contained: it fetches sources, verifies citations, runs comput
 
 
 _RELATION_HUMANIZED = {
+    # Forward prerequisites (Builds on)
     "IsDerivedFrom": "is derived from",
     "Requires": "requires",
     "Continues": "continues",
     "IsNewVersionOf": "is a new version of",
+    # Forward non-prereq (Related work)
     "References": "references",
-    "IsSupplementTo": "supplements",
-    "IsCitedBy": "is cited by",
     "Cites": "cites",
+    "IsSupplementTo": "supplements",
+    "IsDescribedBy": "is described by",
+    "IsMetadataFor": "is metadata for",
+    "IsVersionOf": "is a version of",
+    "IsPartOf": "is part of",
+    "IsPublishedIn": "is published in",
     "Documents": "documents",
-    "IsObsoletedBy": "is obsoleted by",
-    "Obsoletes": "obsoletes",
+    "Compiles": "compiles",
+    "IsVariantFormOf": "is a variant form of",
+    "IsIdenticalTo": "is identical to",
     "Reviews": "reviews",
+    "IsSourceOf": "is the source of",
+    "Obsoletes": "obsoletes",
+    "Collects": "collects",
+    "IsTranslationOf": "is a translation of",
+    "HasPart": "has part",
+    "HasVersion": "has version",
+    "HasMetadata": "has metadata",
+    "HasTranslation": "has translation",
+    # Inverse — used in 'Cited by' for external targets
+    "IsCitedBy": "is cited by",
+    "IsReferencedBy": "is referenced by",
+    "IsSupplementedBy": "is supplemented by",
+    "IsRequiredBy": "is required by",
+    "IsObsoletedBy": "is obsoleted by",
+    "IsContinuedBy": "is continued by",
+    "IsDocumentedBy": "is documented by",
+    "IsCompiledBy": "is compiled by",
+    "IsOriginalFormOf": "is the original form of",
+    "IsReviewedBy": "is reviewed by",
+    "IsCollectedBy": "is collected by",
+    "IsPreviousVersionOf": "is a previous version of",
 }
 
 
