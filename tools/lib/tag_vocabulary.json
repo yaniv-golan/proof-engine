@@ -1,6 +1,6 @@
 {
-  "proof_count_at_last_audit": 119,
-  "last_audit_at": "2026-04-11",
+  "proof_count_at_last_audit": 127,
+  "last_audit_at": "2026-04-17",
   "retag_pending": false,
   "vocabulary": {
     "economics": "Macroeconomics, GDP, inflation, trade, monetary/fiscal policy, recessions",
@@ -20,6 +20,7 @@
     "biohacking": "Wellness interventions, recovery protocols, and body-optimization techniques popular on social media",
     "middle-east": "Israel-Palestine conflict, Arab-Israeli relations, West Bank, Gaza, and regional geopolitics",
     "cosmology": "Dark energy, Hubble constant, black holes, vacuum energy, and large-scale structure of the universe",
-    "sleep": "Sleep quality, circadian rhythm, sleep hygiene interventions, and melatonin disruption"
+    "sleep": "Sleep quality, circadian rhythm, sleep hygiene interventions, and melatonin disruption",
+    "myths": "Well-known folk beliefs, urban legends, and popular misconceptions that span multiple subject domains"
   }
 }
