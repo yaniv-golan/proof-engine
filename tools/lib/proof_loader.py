@@ -200,6 +200,19 @@ def load_proof(proof_dir: Path) -> dict:
         meta["tags"] = tags
         meta_path.write_text(yaml.dump(meta, default_flow_style=False))
 
+    # depends_on: parse + proof-local checks. Cross-proof checks run later
+    # (proof-site.py publish, build-site.py validate_repo).
+    from tools.lib.depends_on import parse_depends_on, check_local
+    depends_on_entries, dep_errors = parse_depends_on(
+        meta, source=str(meta_path),
+    )
+    dep_errors.extend(check_local(depends_on_entries, candidate_slug=slug))
+    if dep_errors:
+        raise ValueError(
+            f"{slug}: meta.yaml depends_on invalid:\n  "
+            + "\n  ".join(dep_errors)
+        )
+
     # Citation/search counts — always v3 after normalization
     evidence = proof_data.get("evidence", {})
     citation_count = sum(1 for e in evidence.values() if e.get("type") == "empirical")
@@ -215,6 +228,7 @@ def load_proof(proof_dir: Path) -> dict:
         "sections_audit": sections_audit,
         "verdict": verdict,
         "tags": tags,
+        "depends_on": depends_on_entries,
         "featured": False,
         "citation_count": citation_count,
         "search_count": search_count,

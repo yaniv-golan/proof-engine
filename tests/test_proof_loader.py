@@ -457,3 +457,42 @@ def test_v3_citation_count_from_evidence(tmp_path, monkeypatch):
     proof_dir = _create_v3_proof_dir(tmp_path, n_empirical=3)
     proof = load_proof(proof_dir)
     assert proof["citation_count"] == 3
+
+
+def test_load_proof_exposes_depends_on(proof_dir, mock_llm_tag):
+    """load_proof reads depends_on from meta.yaml and returns the parsed list."""
+    meta = {
+        "tags": ["test"],
+        "depends_on": [
+            {"relation": "IsDerivedFrom",
+             "identifiers": [{"type": "arxiv", "value": "2603.21852"}]},
+        ],
+    }
+    (proof_dir / "test-claim" / "meta.yaml").write_text(yaml.dump(meta))
+
+    result = load_proof(proof_dir / "test-claim")
+    deps = result["depends_on"]
+    assert len(deps) == 1
+    assert deps[0].relation == "IsDerivedFrom"
+    assert deps[0].identifiers[0].type == "arxiv"
+    assert deps[0].identifiers[0].value == "2603.21852"
+
+
+def test_load_proof_absent_depends_on_returns_empty_list(proof_dir, mock_llm_tag):
+    """A proof with no depends_on key in meta.yaml returns []."""
+    result = load_proof(proof_dir / "test-claim")
+    assert result["depends_on"] == []
+
+
+def test_load_proof_rejects_invalid_depends_on(proof_dir, mock_llm_tag):
+    """An unresolvable relation must be rejected at load time."""
+    meta = {
+        "tags": ["test"],
+        "depends_on": [
+            {"relation": "NotARealRelation",
+             "identifiers": [{"type": "slug", "value": "u"}]},
+        ],
+    }
+    (proof_dir / "test-claim" / "meta.yaml").write_text(yaml.dump(meta))
+    with pytest.raises(ValueError, match="depends_on invalid"):
+        load_proof(proof_dir / "test-claim")
