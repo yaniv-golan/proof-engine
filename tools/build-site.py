@@ -49,7 +49,17 @@ METHODOLOGY_SECTIONS_FROM_DESIGN = [
 RERUN_SECTION = """
 ## How to Re-run a Proof
 
-Every proof published on this site includes a downloadable `proof.py` script. To independently verify a proof:
+Every proof published on this site is independently re-verifiable. You have three options, from lowest to highest effort:
+
+### 1. Inspect the source in-page (zero install)
+
+Every proof's detail page has a collapsible **"View proof source"** section showing the exact `proof.py` that was deposited to Zenodo, syntax-highlighted. Every fact in the verdict banner traces to code visible in that section. If you just want to audit the logic, you never need to leave the page.
+
+### 2. Re-execute in your browser via Binder (~60s, zero install)
+
+Click **"Re-execute in Binder"** on any proof page. Binder spins up a temporary container, fetches the immutable Zenodo deposit of that proof, runs it, and prints a verdict. Every cell is visible — no hidden orchestration. First run takes longer while the image builds; subsequent runs are cached.
+
+### 3. Run locally (persistent setup)
 
 1. **Install proof-engine** — follow the [installation guide](https://github.com/yaniv-golan/proof-engine)
 2. **Download `proof.py`** from the proof's detail page
