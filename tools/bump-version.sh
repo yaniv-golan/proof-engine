@@ -30,7 +30,7 @@ sedi() {
 
 sedi "s/\"version\": \"[^\"]*\"/\"version\": \"$VERSION\"/" "$ROOT/proof-engine/.claude-plugin/plugin.json"
 sedi "s/\"version\": \"[^\"]*\"/\"version\": \"$VERSION\"/" "$ROOT/.cursor-plugin/plugin.json"
-sedi "s/version: .*/version: \"$VERSION\"/" "$ROOT/proof-engine/skills/proof-engine/SKILL.md"
+sedi "s/^  version: .*/  version: \"$VERSION\"/" "$ROOT/proof-engine/skills/proof-engine/SKILL.md"
 cp "$VERSION_FILE" "$ROOT/proof-engine/skills/proof-engine/VERSION"
 sedi "s/^version: .*/version: $VERSION/" "$ROOT/CITATION.cff"
 
