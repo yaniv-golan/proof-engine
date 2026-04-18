@@ -20,27 +20,7 @@ from tools.lib.publish import (
 )
 from tools.lib.zenodo import ZenodoClient, ZenodoError
 from tools.lib.tagger import llm_tag, canonicalize_tag
-
-
-# Binder launcher repo. Pinned per (MAJOR, MINOR) of the main proof-engine
-# version — each launcher tag maps 1:1 to a proof-engine minor release.
-BINDER_LAUNCHER_REPO = "yaniv-golan/proof-engine-binder"
-
-
-def _launcher_tag_from_version() -> str:
-    """Derive the immutable launcher tag from VERSION.
-
-    Patch bumps within a minor (e.g. 1.21.0 → 1.21.1) keep the launcher tag
-    fixed at v<MAJOR>.<MINOR>.0 — within a minor, only one launcher image
-    ever exists. Minor bumps (1.21.x → 1.22.0) move the tag automatically.
-    """
-    version_path = Path(__file__).resolve().parent.parent / "VERSION"
-    version = version_path.read_text().strip()
-    major, minor, _patch = version.split(".")
-    return f"v{major}.{minor}.0"
-
-
-BINDER_LAUNCHER_TAG = _launcher_tag_from_version()
+from tools.lib.binder_config import BINDER_LAUNCHER_REPO, BINDER_LAUNCHER_TAG
 
 
 def log(msg: str) -> None:

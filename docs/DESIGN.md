@@ -182,13 +182,21 @@ For machine consumption, each published proof also includes three additional for
 
 ### Interactive re-verification
 
-Every published proof page links to a one-click Binder launcher. The launcher repo [`yaniv-golan/proof-engine-binder`](https://github.com/yaniv-golan/proof-engine-binder) pins the Python runtime, installs the dependencies `proof.py` scripts use, and clones the main `proof-engine` repo at the matching minor-release tag. The proof page's "Open in Binder" link passes the Zenodo DOI as a URL query parameter (`?doi=...`) on the launcher notebook path. Binder's redirect chain preserves the query string on the first request that reaches the user's Jupyter server, but JupyterLab's SPA router strips it from `window.location.search` before client-side JavaScript can read it; a Jupyter Server extension in the launcher image intercepts every completed request, extracts a valid Zenodo DOI from `?doi=`, and writes it to `/tmp/binder_doi`. The launcher notebook reads that file on cell execution, fetches `proof.py` from Zenodo's REST API, and executes it with `PROOF_ENGINE_ROOT` set to the cloned skill path.
+Every published proof page links to a one-click Binder launcher. The launcher repo [`yaniv-golan/proof-engine-binder`](https://github.com/yaniv-golan/proof-engine-binder) pins the Python runtime, installs the dependencies `proof.py` scripts use, and clones the main `proof-engine` repo at the matching minor-release tag. A Jupyter Server extension in the launcher image intercepts every incoming request and captures one of two URL shapes that the proof page emits, writing the parsed identifier to a sentinel file under `/tmp/`. The launcher notebook reads the sentinel on cell execution, fetches `proof.py`, and executes it with `PROOF_ENGINE_ROOT` set to the cloned skill path.
 
-Four properties of this design worth noting:
-1. **Immutable launcher reference.** `binder_url` values in `doi.json` point at a specific launcher git tag (e.g. `v1.21.0`) — never a moving branch. A proof minted today resolves to the same launcher image and same `proof-engine` clone a year from now.
-2. **Zero Zenodo mutations per launcher change.** The launcher URL lives in this repo's `doi.json` files, not in Zenodo metadata. Rotating a compromised tag or patching an infrastructure break is a repo commit, not a Zenodo republication.
-3. **One Binder cold build per launcher release.** Each immutable launcher tag has its own Binder image cache; image reuse is keyed by git ref.
-4. **Forward-portable proof.py.** Generated proofs read `PROOF_ENGINE_ROOT` from an env var with a hardcoded fallback. Local runs use the fallback; the launcher sets the env var. One file shape serves both environments.
+The two URL shapes correspond to two trust anchors:
+
+- **Minted proofs** (`?doi=<Zenodo DOI>`) — the DOI resolves via Zenodo's REST API to immutable bytes deposited at mint time. A proof verified this way resolves to the same `proof.py` a year from now.
+- **Unminted proofs** (`?slug=<slug>&ref=<40-hex-sha>`) — the launcher fetches `https://raw.githubusercontent.com/yaniv-golan/proof-engine/<sha>/site/proofs/<slug>/proof.py`. The trust anchor is the commit SHA in the URL: the executed bytes are the same bytes the "View proof source" section on the page rendered at that commit. The site build embeds the deploying commit SHA into every unminted proof's Binder URL, so the page text and the executable code can never diverge.
+
+The capture mechanism is necessary because Binder's redirect chain preserves the query string on the first request that reaches the user's Jupyter server, but JupyterLab's SPA router strips it from `window.location.search` before any client-side JavaScript runs.
+
+Five properties of this design worth noting:
+1. **Immutable launcher reference.** `binder_url` values in `doi.json` and rendered HTML both point at a specific launcher git tag (e.g. `v1.22.0`) — never a moving branch. The launcher tag is derived from the main repo's `VERSION` (`vMAJOR.MINOR.0`), so `bump-version.sh` propagates it automatically.
+2. **Two trust anchors, one mechanism.** DOI mode is anchored on Zenodo; slug mode is anchored on a git commit SHA. Both are immutable. The launcher cell handling these is a single branch on `MODE`; nothing else differs between the paths.
+3. **Zero Zenodo mutations per launcher change.** The launcher URL lives in this repo (in `doi.json` files for minted proofs, computed at build time for unminted), not in Zenodo metadata. Rotating a compromised tag or patching an infrastructure break is a repo commit, not a Zenodo republication.
+4. **One Binder cold build per launcher release.** Each immutable launcher tag has its own Binder image cache; image reuse is keyed by git ref.
+5. **Forward-portable proof.py.** Generated proofs read `PROOF_ENGINE_ROOT` from an env var with a hardcoded fallback. Local runs use the fallback; the launcher sets the env var. One file shape serves both environments.
 
 ## Separation of concerns
 

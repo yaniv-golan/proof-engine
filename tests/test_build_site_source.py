@@ -33,15 +33,17 @@ def _build_fixture_site(tmp_path, keep_slugs):
     return fixture_site
 
 
-def _run_build(fixture_site, out_dir, timeout=120):
+def _run_build(fixture_site, out_dir, timeout=120, commit_sha=None):
+    cmd = ["python", "tools/build-site.py",
+           "--site-dir", str(fixture_site), "--output-dir", str(out_dir),
+           "--base-url", "/proof-engine/", "--site-url", "https://example.test",
+           "--design-md", "docs/DESIGN.md",
+           "--hardening-rules-md",
+           "proof-engine/skills/proof-engine/references/hardening-rules.md"]
+    if commit_sha is not None:
+        cmd += ["--commit-sha", commit_sha]
     return subprocess.run(
-        ["python", "tools/build-site.py",
-         "--site-dir", str(fixture_site), "--output-dir", str(out_dir),
-         "--base-url", "/proof-engine/", "--site-url", "https://example.test",
-         "--design-md", "docs/DESIGN.md",
-         "--hardening-rules-md",
-         "proof-engine/skills/proof-engine/references/hardening-rules.md"],
-        cwd=REPO, capture_output=True, text=True, timeout=timeout,
+        cmd, cwd=REPO, capture_output=True, text=True, timeout=timeout,
     )
 
 
@@ -102,6 +104,39 @@ def test_proof_page_includes_inline_source_unminted(tmp_path):
     # Should show the fallback intro:
     assert "working copy from this repository" in html, \
         "un-minted fallback intro copy missing"
+
+
+def test_unminted_proof_has_slug_mode_binder_url(tmp_path):
+    """Un-minted proof: the rendered page must include a slug-mode Binder URL
+    pinned to the passed commit SHA, plus a human-readable provenance hint
+    showing the short SHA. Guards the end-to-end wiring from
+    build-site.py `--commit-sha` → citation.py `commit_sha` → proof.html
+    template → rendered HTML."""
+    unminted = None
+    for d in sorted((REPO / "site" / "proofs").iterdir()):
+        if d.is_dir() and (d / "proof.py").is_file() \
+           and not (d / "doi.json").is_file():
+            unminted = d.name
+            break
+    if unminted is None:
+        pytest.skip("no un-minted proofs in site/proofs/")
+
+    fake_sha = "deadbeef" + ("0" * 32)  # 40-hex, validates against ^[0-9a-f]{40}$
+    fixture_site = _build_fixture_site(tmp_path, [unminted])
+    out = tmp_path / "_site"
+    result = _run_build(fixture_site, out, timeout=60, commit_sha=fake_sha)
+    assert result.returncode == 0, result.stderr
+
+    html = (out / "proofs" / unminted / "index.html").read_text()
+    # Binder URL carries both slug and ref as the inner (URL-encoded)
+    # query of the mybinder.org `?urlpath=lab/tree/launcher.ipynb?slug=X&ref=Y`
+    # trick — so `?slug=` renders in the HTML as `%3Fslug%3D` and `&` as `%26`.
+    expected_fragment = f"%3Fslug%3D{unminted}%26ref%3D{fake_sha}"
+    assert expected_fragment in html, \
+        f"slug-mode Binder URL fragment {expected_fragment!r} not found in rendered HTML"
+    # And the provenance hint:
+    assert "GitHub commit <code>deadbee</code>" in html, \
+        "short-SHA provenance copy missing from rendered HTML"
 
 
 @pytest.mark.slow  # full-site build; run in CI, skip in fast local iterations

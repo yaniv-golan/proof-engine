@@ -54,7 +54,8 @@ jobs:
             --base-url /proof-engine/ \
             --site-url https://yaniv-golan.github.io \
             --design-md docs/DESIGN.md \
-            --hardening-rules-md proof-engine/skills/proof-engine/references/hardening-rules.md
+            --hardening-rules-md proof-engine/skills/proof-engine/references/hardening-rules.md \
+            --commit-sha "${GITHUB_SHA}"
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -6,12 +6,14 @@ import json
 import math
 import re
 import shutil
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from xml.sax.saxutils import escape as xml_escape
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
+REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from tools.lib.proof_loader import load_all_proofs
@@ -27,6 +29,49 @@ from tools.lib.depends_on import (
     PREREQUISITE_RELATIONS, INVERSE_RELATIONS, SYMMETRIC_RELATIONS,
     validate_repo, build_reverse_index,
 )
+from tools.lib.binder_config import BINDER_LAUNCHER_REPO, BINDER_LAUNCHER_TAG
+
+
+_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+
+
+def _resolve_commit_sha(explicit: str | None) -> str:
+    """Return a validated 40-hex commit SHA, or abort with a clear message.
+
+    If ``--commit-sha`` was passed, validate it. Otherwise shell out to
+    ``git rev-parse HEAD`` in ``REPO_ROOT``. If git is unavailable or the
+    working tree is not a checkout, abort with an instruction to pass
+    ``--commit-sha`` explicitly (matters for tarball-extracted builds).
+    """
+    if explicit is not None:
+        sha = explicit.strip()
+        if not _SHA_RE.fullmatch(sha):
+            sys.stderr.write(
+                f"error: --commit-sha {sha!r} is not a 40-hex string.\n"
+            )
+            sys.exit(2)
+        return sha
+
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=REPO_ROOT, capture_output=True, text=True, check=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        sys.stderr.write(
+            f"error: could not determine commit SHA ({type(exc).__name__}: {exc}).\n"
+            "       pass --commit-sha <40-hex-sha> explicitly (e.g. when building\n"
+            "       from a tarball or outside a git checkout).\n"
+        )
+        sys.exit(2)
+    sha = result.stdout.strip()
+    if not _SHA_RE.fullmatch(sha):
+        sys.stderr.write(
+            f"error: git rev-parse HEAD returned {sha!r}, not a 40-hex string.\n"
+            "       pass --commit-sha <40-hex-sha> explicitly.\n"
+        )
+        sys.exit(2)
+    return sha
 
 SITE_GENERATOR_VERSION = "1.0.0"
 PROOFS_PER_TAG_PAGE = 50
@@ -231,6 +276,12 @@ def parse_args():
     parser.add_argument("--site-url", default="https://yaniv-golan.github.io", help="Full site origin")
     parser.add_argument("--design-md", required=True, help="Path to docs/DESIGN.md")
     parser.add_argument("--hardening-rules-md", required=True, help="Path to hardening-rules.md")
+    parser.add_argument(
+        "--commit-sha", default=None,
+        help="40-hex commit SHA used to pin slug-mode Binder URLs for unminted "
+             "proofs. If omitted, falls back to `git rev-parse HEAD` in the "
+             "repo root.",
+    )
     return parser.parse_args()
 
 
@@ -730,6 +781,7 @@ def main():
     output_dir = Path(args.output_dir)
     base_url = args.base_url if args.base_url.endswith("/") else args.base_url + "/"
     site_url = args.site_url.rstrip("/")
+    commit_sha = _resolve_commit_sha(args.commit_sha)
 
     if output_dir.exists():
         shutil.rmtree(output_dir)
@@ -822,9 +874,27 @@ def main():
             provenance_url=f"{site_url}{base_url}proofs/{proof['slug']}/provenance.json",
         )
 
+        # For unminted proofs, compute a slug-mode Binder URL pinned to the
+        # current commit SHA. The launcher's binder_capture extension reads
+        # ?slug=&ref= and the notebook fetches proof.py from raw.github at
+        # that SHA — so the executed bytes match the bytes rendered in
+        # "View proof source" on this page at this commit. Slug matches
+        # ^[a-z0-9-]{1,80}$ and ref is 40-hex — both URL-safe under RFC
+        # 3986, no urllib.parse.quote needed.
+        slug_binder_url = None
+        if not doi_data:
+            slug_binder_url = (
+                f"https://mybinder.org/v2/gh/{BINDER_LAUNCHER_REPO}/{BINDER_LAUNCHER_TAG}"
+                f"?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fslug%3D{proof['slug']}"
+                f"%26ref%3D{commit_sha}"
+            )
+
         # Build citation context and files
         citation_ctx = build_citation_context(
-            proof["proof_data"], canonical_url, proof["slug"], doi_data=doi_data,
+            proof["proof_data"], canonical_url, proof["slug"],
+            doi_data=doi_data,
+            binder_url_fallback=slug_binder_url,
+            commit_sha=commit_sha,
         )
 
         # Collect DOI -> slug mapping for site-wide doi-index.json (Task 6b).

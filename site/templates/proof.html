@@ -498,6 +498,11 @@
         <code>proof.py</code> shown in "View proof source" and see the verdict recomputed live,
         launch it in your browser — no install required.
     </p>
+    {% if citation.doi %}
+    <p>Re-execute the exact bytes deposited at Zenodo.</p>
+    {% else %}
+    <p>Re-execute from GitHub commit <code>{{ citation.commit_sha[:7] }}</code> — same bytes shown above.</p>
+    {% endif %}
     <a href="{{ citation.binder_url }}" class="rerun-cta" rel="nofollow noopener" target="_blank"
        onclick="gtag('event','launch',{target:'binder',proof_slug:'{{ proof.slug }}'})">
         <span class="rerun-cta-icon">▶</span>

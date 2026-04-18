@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.22.0] - 2026-04-18
+
+### Added
+
+- **"Open in Binder" card on every published proof, not just minted ones.** Previously the re-execute call-out only appeared when a proof had been deposited to Zenodo (`doi.json` present) — roughly half of the ~127 proofs on the site. Un-minted proofs now render a Binder URL that pins to the current commit SHA (`?slug=<slug>&ref=<40-hex-sha>`), so the one-click re-execution path is available for every published proof. The trust anchor is the commit SHA embedded in the URL: the launcher fetches `proof.py` from `raw.githubusercontent.com/yaniv-golan/proof-engine/<sha>/…` — same bytes the "View proof source" section on the page rendered at that commit.
+- **`--commit-sha` CLI flag on `tools/build-site.py`** (validated `^[0-9a-f]{40}$`). Falls back to `git rev-parse HEAD` when omitted; aborts with a clear message pointing at `--commit-sha` if git is unavailable (tarball builds). `.github/workflows/deploy-site.yml` passes `--commit-sha "${GITHUB_SHA}"` explicitly — auditable pin, redundant with the fallback for a `push` trigger but still wired through.
+- **`tools/lib/binder_config.py`** hosting the shared `BINDER_LAUNCHER_REPO` and `BINDER_LAUNCHER_TAG` constants (previously inline in `tools/proof-site.py`). Both `proof-site.py` and `build-site.py` now import from here — `proof-site.py` can't be imported as a Python module (the filename has a hyphen), so the constants have to live in a shared library.
+- Provenance copy in the "Re-execute" section branches on mode: DOI proofs say "Re-execute the exact bytes deposited at Zenodo"; un-minted proofs say "Re-execute from GitHub commit `<short-sha>` — same bytes shown above".
+- `tests/test_build_site_source.py::test_unminted_proof_has_slug_mode_binder_url` end-to-end regression for the SHA-pinned rendering path.
+
+### Changed
+
+- **`build_citation_context` signature: `doi_data`, `binder_url_fallback`, and `commit_sha` are now keyword-only** (after a `*`). All existing call sites in `tests/test_citation.py` already passed `doi_data` by keyword, so this is source-compatible.
+- **Companion to `proof-engine-binder` v1.22.0** (extension renamed `binder_doi_capture` → `binder_capture`, dual-mode capture `?doi=` OR `?slug=&ref=`, launcher cells 1/2/4 branch on mode, `postBuild` clones `proof-engine` at `v1.22.0`). Both must ship together: the main-repo `VERSION` bump to 1.22.0 is what moves `BINDER_LAUNCHER_TAG` from `v1.21.0` to `v1.22.0`, so un-minted proof Binder URLs point at the new launcher image. A stale browser tab holding a Binder URL against the pre-1.22.0 image will fall back to the built-in example DOI rather than crash.
+
 ## [1.21.4] - 2026-04-18
 
 ### Fixed

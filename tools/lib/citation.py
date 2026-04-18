@@ -13,9 +13,23 @@ def build_citation_context(
     proof_data: dict,
     canonical_url: str,
     slug: str,
-    doi_data: dict | None,
+    *,
+    doi_data: dict | None = None,
+    binder_url_fallback: str | None = None,
+    commit_sha: str | None = None,
 ) -> dict:
-    """Build citation context from proof data and optional DOI sidecar."""
+    """Build citation context from proof data and optional DOI sidecar.
+
+    Kwargs:
+        doi_data: Parsed doi.json for a minted proof, or None. When set,
+            its ``binder_url`` populates the DOI-mode launcher URL.
+        binder_url_fallback: Slug-mode Binder URL computed by the caller
+            (build-site.py) for unminted proofs. Used when ``doi_data`` is
+            falsy; unused otherwise.
+        commit_sha: 40-hex commit SHA the caller used to build the
+            ``binder_url_fallback``. Echoed back into the returned dict
+            so templates can render a short-SHA provenance hint.
+    """
     generator = proof_data["generator"]
     date = generator["generated_at"]
     year = date[:4] if date else ""
@@ -41,6 +55,8 @@ def build_citation_context(
         doi = doi_data.get("doi")
         concept_doi = doi_data.get("concept_doi")
         binder_url = doi_data.get("binder_url")
+    else:
+        binder_url = binder_url_fallback
 
     return {
         "title": title,
@@ -51,6 +67,7 @@ def build_citation_context(
         "doi": doi,
         "concept_doi": concept_doi,
         "binder_url": binder_url,
+        "commit_sha": commit_sha,
         "version": generator.get("version", ""),
         "verdict": verdict_str,
         "slug_sanitized": slug_sanitized,
