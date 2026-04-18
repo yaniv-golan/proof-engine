@@ -20,7 +20,7 @@ SAMPLE_PROOF_DATA = {
     },
 }
 
-SAMPLE_URL = "https://yaniv-golan.github.io/proof-engine/proofs/us-dollar-purchasing-power/"
+SAMPLE_URL = "https://proofengine.info/proofs/us-dollar-purchasing-power/"
 SAMPLE_SLUG = "us-dollar-purchasing-power"
 
 
@@ -154,7 +154,7 @@ MATH_PROOF_DATA = {
     },
 }
 
-MATH_URL = "https://yaniv-golan.github.io/proof-engine/proofs/nash-equilibrium/"
+MATH_URL = "https://proofengine.info/proofs/nash-equilibrium/"
 MATH_SLUG = "nash-equilibrium"
 
 
@@ -229,8 +229,8 @@ def test_cff_with_three_deps_spanning_types():
             Identifier("url", "https://example.org/data"),
         ]),
     ]
-    cff_str = build_cff(_ctx(), depends_on=deps, base_url="/proof-engine/",
-                        site_url="https://yaniv-golan.github.io")
+    cff_str = build_cff(_ctx(), depends_on=deps, base_url="/",
+                        site_url="https://proofengine.info")
     parsed = _yaml.safe_load(cff_str)
     refs = parsed["references"]
     assert len(refs) == 3
@@ -266,7 +266,7 @@ def test_codemeta_canonical_id_uses_doi():
     ])]
     payload = json.loads(build_codemeta(
         _ctx(), depends_on=deps,
-        base_url="/proof-engine/", site_url="https://yaniv-golan.github.io",
+        base_url="/", site_url="https://proofengine.info",
     ))
     based = payload["isBasedOn"]
     assert len(based) == 1
@@ -281,7 +281,7 @@ def test_codemeta_isbn_uses_urn():
     deps = [DependsOnEntry("IsDerivedFrom", [Identifier("isbn", "9780201896831")])]
     payload = json.loads(build_codemeta(
         _ctx(), depends_on=deps,
-        base_url="/proof-engine/", site_url="https://yaniv-golan.github.io",
+        base_url="/", site_url="https://proofengine.info",
     ))
     assert payload["isBasedOn"][0]["@id"] == "urn:isbn:9780201896831"
 
@@ -297,13 +297,13 @@ def test_codemeta_isbasedon_only_includes_prerequisite_relations():
     ]
     payload = json.loads(build_codemeta(
         _ctx(), depends_on=deps,
-        base_url="/proof-engine/", site_url="https://yaniv-golan.github.io",
+        base_url="/", site_url="https://proofengine.info",
     ))
     based = payload["isBasedOn"]
     assert len(based) == 2
     ids = {b["@id"] for b in based}
     assert ids == {
-        "https://yaniv-golan.github.io/proof-engine/proofs/upstream-a/",
+        "https://proofengine.info/proofs/upstream-a/",
         "https://doi.org/10.5281/zenodo.42",
     }
 
@@ -315,6 +315,6 @@ def test_codemeta_omits_isbasedon_when_only_non_prereq_deps():
     ]
     payload = json.loads(build_codemeta(
         _ctx(), depends_on=deps,
-        base_url="/proof-engine/", site_url="https://yaniv-golan.github.io",
+        base_url="/", site_url="https://proofengine.info",
     ))
     assert "isBasedOn" not in payload

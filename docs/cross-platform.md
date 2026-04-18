@@ -18,7 +18,7 @@ proof-engine/                         <- plugin subdirectory
 
 ## Browse without installing
 
-You can browse verified proofs at [yaniv-golan.github.io/proof-engine](https://yaniv-golan.github.io/proof-engine/) without installing anything. Each proof page includes downloadable `proof.py` scripts you can re-run locally for independent verification.
+You can browse verified proofs at [proofengine.info](https://proofengine.info/) without installing anything. Each proof page includes downloadable `proof.py` scripts you can re-run locally for independent verification.
 
 ## How Each Platform Consumes the Skill
 

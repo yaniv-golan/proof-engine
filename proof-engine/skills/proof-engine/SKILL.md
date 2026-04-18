@@ -267,7 +267,7 @@ python tools/proof-site.py publish <proof-dir> --site-dir site
 **Mint a Zenodo DOI** (archives the proof as a citable research object; requires `ZENODO_TOKEN`):
 ```bash
 # Build the site first so machine-readable artifacts are generated
-python tools/build-site.py --site-dir site --output-dir _site --base-url /proof-engine/ --site-url https://yaniv-golan.github.io --design-md docs/DESIGN.md --hardening-rules-md proof-engine/skills/proof-engine/references/hardening-rules.md
+python tools/build-site.py --site-dir site --output-dir _site --base-url / --site-url https://proofengine.info --design-md docs/DESIGN.md --hardening-rules-md proof-engine/skills/proof-engine/references/hardening-rules.md
 
 # Mint DOI — pass --output-dir to include provenance.json, proof.ipynb, ro-crate-metadata.json
 source .env

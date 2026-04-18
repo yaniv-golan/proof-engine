@@ -206,8 +206,8 @@ def _cff_reference(
 def build_cff(
     ctx: dict,
     depends_on: list[DependsOnEntry],
-    base_url: str = "/proof-engine/",
-    site_url: str = "https://yaniv-golan.github.io",
+    base_url: str = "/",
+    site_url: str = "https://proofengine.info",
 ) -> str:
     """Render the proof's CITATION.cff (1.2.0) as a YAML string."""
     import yaml as _yaml
@@ -234,8 +234,8 @@ def build_cff(
 def build_codemeta(
     ctx: dict,
     depends_on: list[DependsOnEntry],
-    base_url: str = "/proof-engine/",
-    site_url: str = "https://yaniv-golan.github.io",
+    base_url: str = "/",
+    site_url: str = "https://proofengine.info",
 ) -> str:
     """Render the proof's codemeta.json (CodeMeta 3.0) as a JSON string."""
     payload: dict = {

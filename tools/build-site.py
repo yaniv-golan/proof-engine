@@ -272,8 +272,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Build Proof Engine site")
     parser.add_argument("--site-dir", required=True, help="Path to site/ source directory")
     parser.add_argument("--output-dir", required=True, help="Path to _site/ output directory")
-    parser.add_argument("--base-url", default="/proof-engine/", help="Base URL path")
-    parser.add_argument("--site-url", default="https://yaniv-golan.github.io", help="Full site origin")
+    parser.add_argument("--base-url", default="/", help="Base URL path")
+    parser.add_argument("--site-url", default="https://proofengine.info", help="Full site origin")
     parser.add_argument("--design-md", required=True, help="Path to docs/DESIGN.md")
     parser.add_argument("--hardening-rules-md", required=True, help="Path to hardening-rules.md")
     parser.add_argument(
