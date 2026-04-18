@@ -1,0 +1,9 @@
+{
+  "doi": "10.5281/zenodo.19645782",
+  "zenodo_id": "19645782",
+  "concept_doi": "10.5281/zenodo.19645781",
+  "concept_zenodo_id": "19645781",
+  "claim_natural": "Let (X,Y) ~ p(x,y). For each contrastive training instance, sample one positive Y_1 ~ p(y|X) and N-1 negatives Y_2,...,Y_N iid ~ p(y), conditionally independent given X. Let i* be the index of the positive, uniformly distributed over {1,...,N}. For any measurable scoring function s(x,y), define L_N(s) = - E[ log( exp(s(X,Y_{i*})) / sum_j exp(s(X,Y_j)) ) ]. Then log N - L_N(s) is a lower bound on I(X;Y). The Bayes-optimal score is s*(x,y) = log(p(y|x)/p(y)) + c(x), where c(x) is arbitrary. Under the standard multi-sample setup, the resulting InfoNCE lower bound tightens as N increases.",
+  "minted_at": "2026-04-18",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.23.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.19645782"
+}
