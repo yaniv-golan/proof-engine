@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.21.2] - 2026-04-18
+
+### Added
+
+- **Inline proof source on every proof page.** New collapsible "View proof source" section renders the full `proof.py` server-side with Pygments syntax highlighting, so auditors can inspect the verification code without leaving the page or downloading artifacts. `Pygments` added as a build dependency; `codehilite` enabled in the Markdown pipeline.
+- **Re-execute call-out lifted to its own section.** The Binder "Open in Binder" card moves out of the `machine-readable formats` row into a dedicated "Re-execute this proof yourself" block with primary CTA styling — re-running a proof is an action, not a download target.
+- **Methodology page documents three re-run options** (local clone, Binder one-click, Zenodo download), so the skeptic path is described in one place.
+- **`site/doi-index.json`** emitted at the site root: a DOI→slug map consumed by the launcher's verdict cell to deep-link back to the matching proof page (concept and versioned DOIs both resolve).
+- Regression tests in `tests/test_build_site_source.py` covering the inline-source template wiring and `doi-index.json` emission.
+
+### Changed
+
+- **Companion to `proof-engine-binder` v1.21.2** (multi-cell launcher, `anywidget` removed, source display moved to the proof page). Both ship together so the values-aligned UX — confirmer reads cached verdict, auditor inspects source on the page, skeptic re-executes via transparent cells on Binder — lands in one coordinated step.
+
 ## [1.21.1] - 2026-04-18
 
 ### Fixed
