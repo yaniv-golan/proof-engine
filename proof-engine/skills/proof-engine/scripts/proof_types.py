@@ -54,16 +54,16 @@ class SubClaim(TypedDict, total=False):
 class ClaimFormal(TypedDict, total=False):
     subject: str
     property: str
-    operator: str               # ">=", "==", ">", "within"
-    threshold: float | int | str
+    operator: str               # ">=", "==", ">", "within", "holds"
+    threshold: float | int | str | bool | None
     operator_note: str
     # Compound proofs
     sub_claims: list[SubClaim] | dict[str, SubClaim | str]
     compound_operator: str      # "AND", "OR"
     # Qualitative disproofs
     proof_direction: str        # "disprove", "absence"
-    # Open problems
-    claim_type: str             # "open_problem"
+    # Open problems / theorems
+    claim_type: str             # "open_problem", "theorem"
 
 
 # ---------------------------------------------------------------------------

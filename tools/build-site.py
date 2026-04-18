@@ -749,12 +749,13 @@ def build_pipeline_example_data(
     subject = cf.get("subject", "")
     prop = cf.get("property", "")
     op = cf.get("operator", "")
-    threshold = cf.get("threshold", "")
-    formal_summary = (
-        f"{subject}: {prop} {op} {threshold}"
-        if subject and prop
-        else ""
-    )
+    threshold = cf.get("threshold")
+    if not (subject and prop):
+        formal_summary = ""
+    elif threshold is None or threshold == "":
+        formal_summary = f"{subject}: {prop} {op}".rstrip()
+    else:
+        formal_summary = f"{subject}: {prop} {op} {threshold}"
 
     return {
         "slug": slug,

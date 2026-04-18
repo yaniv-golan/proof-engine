@@ -938,31 +938,36 @@ class ProofValidator:
                         "must use compare() so the verdict is computed from evidence",
                         [],
                     ))
-                elif "compare(" in rhs:
-                    self.passed.append(f"Verdict: {var_name} assigned from compare()")
+                elif "compare(" in rhs or "prove_holds(" in rhs:
+                    src = "compare()" if "compare(" in rhs else "prove_holds()"
+                    self.passed.append(f"Verdict: {var_name} assigned from {src}")
                 else:
                     # Could be a variable alias (overall_claim_holds = sc1 and sc2)
                     # or a boolean expression — warn, don't fail
                     self.warnings.append((
                         f"Verdict: {var_name} assigned from '{rhs}' (line {i}) — "
-                        "prefer using compare() for auditable verdict computation",
+                        "prefer using compare() or prove_holds() for auditable verdict computation",
                         [],
                     ))
 
         if not found_any:
             # Check inside __main__ block as fallback
             for i, line in enumerate(self.lines, 1):
-                if "claim_holds" in line and "compare(" in line:
-                    self.passed.append("Verdict: claim_holds assigned from compare() (inside __main__)")
+                if "claim_holds" in line and ("compare(" in line or "prove_holds(" in line):
+                    src = "compare()" if "compare(" in line else "prove_holds()"
+                    self.passed.append(f"Verdict: claim_holds assigned from {src} (inside __main__)")
                     return
 
     def check_hardcoded_compare_input(self):
-        """Check that variables passed as the first arg to compare() are not hardcoded True/False.
+        """Check that variables passed as the first arg to compare() or prove_holds() are not hardcoded True/False.
 
         Complements check_claim_holds_computed() which only catches *_holds* variable names.
         This catches patterns like:
             rh_is_solved = False
             claim_holds = compare(rh_is_solved, "==", True)
+        and the theorem-mode analog:
+            all_conditions_met = True
+            claim_holds = prove_holds(all_conditions_met)
         """
         # Step 1: Find all varname = True/False assignments
         # (skip comments, UPPER_CASE constants, *_holds* names already handled)
@@ -981,19 +986,20 @@ class ProofValidator:
                     continue
                 bool_assignments[var_name] = (i, m.group(2))
 
-        # Step 2: Find compare() calls and check if first arg is a hardcoded var
-        compare_pattern = re.compile(r'compare\(\s*(\w+)\s*,')
+        # Step 2: Find compare() and prove_holds() calls; check if first arg is a hardcoded var
+        call_pattern = re.compile(r'(compare|prove_holds)\(\s*(\w+)\s*[,)]')
         for i, line in enumerate(self.lines, 1):
             stripped = line.strip()
             if stripped.startswith("#"):
                 continue
-            for cm in compare_pattern.finditer(line):
-                first_arg = cm.group(1)
+            for cm in call_pattern.finditer(line):
+                func_name = cm.group(1)
+                first_arg = cm.group(2)
                 if first_arg in bool_assignments:
                     assign_line, assign_val = bool_assignments[first_arg]
                     self.issues.append((
                         f"Verdict: {first_arg} is hardcoded to {assign_val} "
-                        f"(line {assign_line}) but passed to compare() (line {i}) "
+                        f"(line {assign_line}) but passed to {func_name}() (line {i}) "
                         "— must be computed from evidence",
                         [],
                     ))
@@ -1012,6 +1018,7 @@ class ProofValidator:
         CRITICAL_FUNCTIONS = {
             "verify_all_citations", "verify_citation",
             "verify_data_values", "verify_search_registry",
+            "prove_holds",
         }
 
         imported = extract_script_imports(self.source)

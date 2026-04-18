@@ -177,3 +177,42 @@ exhaustive_solutions = [
 A2_result = compare(len(exhaustive_solutions), "==", 0,
                     label="exhaustive search confirms no solutions")
 ```
+
+### Adaptation: Theorem-shaped claims (boolean, no numeric threshold)
+
+For structural theorems where the claim is inherently boolean ("X implies Y", "property Z is preserved under operation W", existence/uniqueness), use `prove_holds()` instead of `compare(x, "==", True)`. This is a **readability** improvement over the numeric idiom — both produce the same verdict, but `prove_holds()` makes the audit output read as a theorem rather than a pretend-numeric comparison.
+
+1. **Imports:** add `prove_holds` to the `from scripts.computations import ...` line. If the proof has no numeric comparisons, `compare` can be dropped from that import.
+2. **CLAIM_FORMAL:** omit `threshold` entirely (or set to `None`), set `operator` to `"holds"`, and add `"claim_type": "theorem"` as documentation (no runtime effect — it signals intent to human readers).
+3. **`operator_note`:** explain what "holds" means in the logical domain — which propositions are being asserted, over what quantifier domain, and what the verification strategy is. Do NOT write tautologies like *"'True' means the conditions are satisfied."*
+4. **Cross-checks (Rule 6):** numeric cross-checks don't apply. Choose one of:
+   - **Symbolic re-derivation** — derive the same implication by an independent route (e.g., sympy manipulation vs. hand-coded algebra).
+   - **Exhaustive small-case verification** — confirm the theorem on a documented battery of specific instances. Suitable for finite domains or finite projections.
+   - **Structural decomposition** — if the theorem is `A and B`, verify `A` and `B` by independent methods.
+   - If no mechanical cross-check is feasible, set the verdict to `UNDETERMINED` and document the gap in `operator_note`. A theorem without a mechanical second check should not claim `PROVED`.
+5. **Verdict:** assign `claim_holds = prove_holds(all_conditions_met, label="…")`. Compose `all_conditions_met` from A-type fact results using `and` — do NOT hardcode it to `True`.
+
+```python
+from scripts.computations import prove_holds, explain_calc  # drop `compare` if unused
+
+CLAIM_FORMAL = {
+    "subject": "composition of convex functions",
+    "property": "preserves convexity under monotonic outer function",
+    "operator": "holds",
+    "claim_type": "theorem",  # documentation only — no runtime effect
+    "operator_note": (
+        "Asserts: for f convex and g convex-and-nondecreasing, g ∘ f is convex "
+        "on the intersection of their domains. Verified by (A1) applying the "
+        "composition rule from Boyd & Vandenberghe §3.2.4 and (A2) exhaustive "
+        "check on a 50-point grid of parameterized (f, g) pairs covering the "
+        "relevant monotonicity regimes. 'holds' = both verifications succeed."
+    ),
+    # No 'threshold' key: theorem claims are inherently boolean.
+}
+
+# Verdict
+all_conditions_met = A1_result and A2_result
+claim_holds = prove_holds(all_conditions_met, label="composition theorem holds")
+```
+
+**Note on `prove_holds()`:** coerces via `bool()` so numpy/sympy booleans (`np.bool_`, `BooleanTrue`) work correctly. Raises `TypeError` on `None` — an uninitialized FACT_REGISTRY entry silently becoming `False` would make missing evidence look like a disproof. Truthy non-bool values (non-empty strings, nonzero ints) coerce to `True` via `bool()` rather than erroring — compose `claim_holds` inputs from real booleans (A-type `result` values, comparison outputs) so the audit output reads cleanly.

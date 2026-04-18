@@ -226,3 +226,69 @@ def test_apply_verdict_qualifier_partial_no_suffix():
     assert result["value"] == "PARTIALLY VERIFIED"
     assert result["qualified"] is False
     assert result["qualifier"] is None
+
+
+# ---------------------------------------------------------------------------
+# prove_holds() — theorem-mode verdict helper
+# ---------------------------------------------------------------------------
+
+
+def test_prove_holds_true_returns_true():
+    from scripts.computations import prove_holds
+    assert prove_holds(True) is True
+
+
+def test_prove_holds_false_returns_false():
+    from scripts.computations import prove_holds
+    assert prove_holds(False) is False
+
+
+def test_prove_holds_none_raises_type_error():
+    from scripts.computations import prove_holds
+    with pytest.raises(TypeError, match="None"):
+        prove_holds(None)
+
+
+def test_prove_holds_truthy_values_coerce_via_bool():
+    """bool() coercion means truthy values return True. Authors should avoid this
+    by composing from real booleans, but the function won't silently fail."""
+    from scripts.computations import prove_holds
+    # All truthy → True (via bool())
+    assert prove_holds("non-empty") is True
+    assert prove_holds(1) is True
+    assert prove_holds(2) is True
+    assert prove_holds([1, 2]) is True
+    # All falsy → False
+    assert prove_holds("") is False
+    assert prove_holds(0) is False
+    assert prove_holds([]) is False
+
+
+def test_prove_holds_numpy_bool_true():
+    """np.bool_(True) should be treated as True — critical for numpy-heavy proofs."""
+    np = pytest.importorskip("numpy")
+    from scripts.computations import prove_holds
+    assert prove_holds(np.bool_(True)) is True
+    assert prove_holds(np.bool_(False)) is False
+    assert prove_holds(np.array([True, True]).all()) is True
+
+
+def test_prove_holds_prints_holds_format(capsys):
+    from scripts.computations import prove_holds
+    prove_holds(True, label="my theorem")
+    captured = capsys.readouterr()
+    assert "my theorem:" in captured.out
+    assert "holds" in captured.out
+    # Should NOT print threshold or operator noise
+    assert "==" not in captured.out
+    assert "None" not in captured.out
+
+
+def test_compare_unchanged_regression():
+    """Ensure compare() still works for all 6 operators."""
+    assert compare(5, ">", 3) is True
+    assert compare(3, ">=", 3) is True
+    assert compare(3, "<", 5) is True
+    assert compare(3, "<=", 3) is True
+    assert compare(3, "==", 3) is True
+    assert compare(3, "!=", 5) is True

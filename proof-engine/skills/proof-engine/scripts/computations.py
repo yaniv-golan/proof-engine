@@ -214,6 +214,46 @@ def compare(value, op_str: str, threshold, label=None) -> bool:
     return result
 
 
+def prove_holds(value, label=None) -> bool:
+    """Assert a boolean-shaped proposition holds — theorem-mode counterpart to compare().
+
+    Use when the claim is inherently boolean (structural theorem, existence, implication)
+    rather than a numeric comparison. Produces a verdict without pretending there's a
+    numeric threshold.
+
+    Coerces via bool() so numpy/sympy booleans (np.bool_, BooleanTrue) work. Raises
+    TypeError on None — an uninitialized FACT_REGISTRY entry silently becoming False
+    would make missing evidence look like a disproof.
+
+    Args:
+        value: The proposition result. Must coerce to bool and must not be None.
+            Truthy non-bool values (non-empty strings, nonzero ints) are accepted
+            via bool() coercion but should be avoided — keep theorem inputs as real
+            booleans composed from A-type fact results.
+        label: Optional description for audit output.
+
+    Returns:
+        bool — the result of bool(value). Returns the True or False singleton
+        (always a native Python bool, never np.bool_).
+
+    Raises:
+        TypeError: if value is None.
+
+    Example:
+        >>> prove_holds(True, label="Pythagorean theorem")
+        True
+    """
+    if value is None:
+        raise TypeError(
+            "prove_holds() received None — check that all FACT_REGISTRY entries "
+            "are assigned before evaluating the theorem"
+        )
+    result = bool(value)
+    tag = label or "prove_holds"
+    print(f"  {tag}: {value} holds = {result}")
+    return result
+
+
 def cross_check(value_a, value_b, tolerance=0.01, mode="absolute", label=None):
     """Compare two independently sourced values with tolerance.
 
