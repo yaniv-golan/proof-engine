@@ -890,3 +890,35 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .highlight .vi { color: #19177C } /* Name.Variable.Instance */
 .highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+
+.proof-source-section {
+    margin: 2em 0;
+    padding: 1em;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    background: #fafafa;
+}
+.proof-source-section > summary {
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.proof-source-meta {
+    color: #666;
+    font-size: 0.85rem;
+    font-weight: normal;
+}
+.proof-source-body {
+    margin-top: 1em;
+}
+.proof-source-intro {
+    margin: 0 0 1em 0;
+    color: #444;
+    font-size: 0.9rem;
+}
+.proof-source-actions {
+    margin-top: 1em;
+    font-size: 0.85rem;
+}

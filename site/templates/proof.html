@@ -467,6 +467,29 @@
     </div>
 </details>
 
+{% if proof.proof_py_html %}
+<details class="proof-source-section" id="proof-source">
+    <summary>
+        <span class="proof-source-label">View proof source</span>
+        <span class="proof-source-meta">{{ proof.proof_py_lines | default("?") }} lines · {{ proof.proof_py_size_human | default("") }}</span>
+    </summary>
+    <div class="proof-source-body">
+        <p class="proof-source-intro">
+            {% if citation and citation.doi %}
+            This is the exact <code>proof.py</code> that was deposited to Zenodo and runs when you re-execute via Binder. Every fact in the verdict above traces to code below.
+            {% else %}
+            This is the <code>proof.py</code> that produced the verdict above. Every fact traces to code below. (This proof has not yet been minted to Zenodo; the source here is the working copy from this repository.)
+            {% endif %}
+        </p>
+        {{ proof.proof_py_html | safe }}
+        <p class="proof-source-actions">
+            <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.py" download>↓ download proof.py</a>
+            {% if citation and citation.doi %} · <a href="https://doi.org/{{ citation.doi }}" rel="noopener">view on Zenodo (immutable)</a>{% endif %}
+        </p>
+    </div>
+</details>
+{% endif %}
+
 <h2 class="section-heading" id="formats">machine-readable formats</h2>
 <div class="formats-row">
     {% if citation and citation.binder_url %}
