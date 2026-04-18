@@ -36,7 +36,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install Jinja2 Markdown PyYAML bleach Pillow pymdown-extensions regex unidecode requests
+        run: pip install Jinja2 Markdown Pygments PyYAML bleach Pillow pymdown-extensions regex unidecode requests
 
       - name: Validate all proofs (structural only — provenance checked in PR)
         run: |

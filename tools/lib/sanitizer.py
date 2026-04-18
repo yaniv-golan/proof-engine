@@ -1,6 +1,11 @@
 import bleach
 import markdown
 
+# Required for codehilite syntax highlighting. Codehilite silently falls back
+# to plain <pre><code> if Pygments is missing — which produces a build that
+# looks correct but ships unstyled code blocks. Fail loudly instead.
+import pygments  # noqa: F401
+
 
 ALLOWED_TAGS = [
     "p", "h1", "h2", "h3", "h4", "h5", "h6",

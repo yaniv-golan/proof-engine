@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.21.4] - 2026-04-18
+
+### Fixed
+
+- **Pygments syntax highlighting now actually ships in the deployed site.** v1.21.2 enabled `codehilite` in the Markdown pipeline and v1.21.3 wired up a dark-theme stylesheet, but the deployed pages still rendered the inline proof source as plain `<pre><code class="language-python">` with no token spans. Root cause: `Pygments` was missing from `.github/workflows/deploy-site.yml`'s `pip install` line, so codehilite silently fell back to the `fenced_code` output (no `.highlight` wrapper, no token classes — nothing for the dark theme to colour). The `validate.yml` workflow already installed Pygments, which is why local builds and CI checks looked correct. Adding `Pygments` to the deploy workflow makes the syntax highlighting actually reach production.
+
 ## [1.21.3] - 2026-04-18
 
 ### Fixed
