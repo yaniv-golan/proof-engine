@@ -9,7 +9,8 @@ from pathlib import Path
 
 # Resolve scripts path relative to this file's location (tools/lib/proof_runner.py)
 # so it works regardless of CWD.
-_scripts = str(Path(__file__).resolve().parent.parent.parent / "proof-engine" / "skills" / "proof-engine" / "scripts")
+_skill_root = Path(__file__).resolve().parent.parent.parent / "proof-engine" / "skills" / "proof-engine"
+_scripts = str(_skill_root / "scripts")
 if _scripts not in sys.path:
     sys.path.insert(0, _scripts)
 from proof_types import ProofData, ProofDataV3
@@ -26,6 +27,7 @@ def run_proof_and_extract_json(proof_py_path):
     env = dict(os.environ)
     env.pop("GITHUB_TOKEN", None)
     env.pop("ACTIONS_RUNTIME_TOKEN", None)
+    env.setdefault("PROOF_ENGINE_ROOT", str(_skill_root))
 
     result = subprocess.run(
         [sys.executable, str(proof_py_path)],

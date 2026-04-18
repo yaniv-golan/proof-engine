@@ -12,10 +12,16 @@ Generated: [date]
 import os
 import sys
 
-# Path to proof-engine scripts directory (the directory containing SKILL.md).
-# In Claude Code, replace with the resolved value of ${CLAUDE_SKILL_DIR}.
-# In standalone use, set to the absolute path of the skills/proof-engine directory.
-PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT", "...")  # LLM fills this with the actual path at proof-writing time
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
+if not PROOF_ENGINE_ROOT:
+    _d = os.path.dirname(os.path.abspath(__file__))
+    while _d != os.path.dirname(_d):
+        if os.path.isdir(os.path.join(_d, "proof-engine", "skills", "proof-engine", "scripts")):
+            PROOF_ENGINE_ROOT = os.path.join(_d, "proof-engine", "skills", "proof-engine")
+            break
+        _d = os.path.dirname(_d)
+    if not PROOF_ENGINE_ROOT:
+        raise RuntimeError("PROOF_ENGINE_ROOT not set and skill dir not found via walk-up from proof.py")
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 

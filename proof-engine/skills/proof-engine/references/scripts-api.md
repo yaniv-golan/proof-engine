@@ -11,11 +11,21 @@ Every proof script begins with:
 ```python
 import os
 import sys
-PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT", "${CLAUDE_SKILL_DIR}")  # hardcoded fallback replaced with actual path at proof-writing time
+
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
+if not PROOF_ENGINE_ROOT:
+    _d = os.path.dirname(os.path.abspath(__file__))
+    while _d != os.path.dirname(_d):
+        if os.path.isdir(os.path.join(_d, "proof-engine", "skills", "proof-engine", "scripts")):
+            PROOF_ENGINE_ROOT = os.path.join(_d, "proof-engine", "skills", "proof-engine")
+            break
+        _d = os.path.dirname(_d)
+    if not PROOF_ENGINE_ROOT:
+        raise RuntimeError("PROOF_ENGINE_ROOT not set and skill dir not found via walk-up from proof.py")
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 ```
 
-The hardcoded fallback is the absolute path at proof-writing time (resolves at generation). The env-var override lets the Binder launcher and other re-runners set the correct path for their environment without touching the published proof.
+**Resolution order:** (1) `PROOF_ENGINE_ROOT` env var if set — Binder and site-publishing tools set it explicitly; (2) walk up from proof.py's directory until `proof-engine/skills/proof-engine/scripts/` is found — makes the published proof portable to any clone of the repo; (3) raise a clear `RuntimeError`. Do NOT replace the block with a hardcoded absolute path — it leaks the generating agent's filesystem and doesn't work anywhere else.
 
 ## computations.py
 
