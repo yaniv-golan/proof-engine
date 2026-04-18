@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.21.3] - 2026-04-18
+
+### Fixed
+
+- **Inline proof source is now actually readable on the dark site theme.** v1.21.2 shipped Pygments' light `default` style on the dark page background, which collapsed all syntax tokens into low-contrast washes of the same colour. Replaced with the `github-dark` style (background tweaked to match `--bg-card`); strings are now bright cyan, keywords red, comments dim italic, identifiers light. The `.proof-source-section` and `.rerun-section` containers also switch from hardcoded light colours (`#fafafa`, `#f0f7ff`) to the site's CSS variables (`--bg-card`, `--blue-bg`) so they integrate with the dark theme instead of fighting it.
+
 ## [1.21.2] - 2026-04-18
 
 ### Added
