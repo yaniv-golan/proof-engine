@@ -17,7 +17,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests sympy python-dateutil pytest Jinja2 Markdown PyYAML bleach Pillow jsonschema pymdown-extensions regex unidecode
+        run: pip install requests sympy python-dateutil pytest Jinja2 Markdown Pygments PyYAML bleach Pillow jsonschema pymdown-extensions regex unidecode
 
       - name: Run unit tests
         run: python -m pytest tests/ -v
@@ -133,7 +133,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install Jinja2 Markdown PyYAML bleach requests sympy python-dateutil Pillow pymdown-extensions regex unidecode
+        run: pip install Jinja2 Markdown Pygments PyYAML bleach requests sympy python-dateutil Pillow pymdown-extensions regex unidecode
 
       - name: Find and validate new/changed proofs
         run: |
