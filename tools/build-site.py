@@ -891,6 +891,33 @@ def main():
             "ris": ris_str.rstrip("\n"),
         }
 
+        # Inline proof.py source for the "View proof source" section.
+        # Must be attached to `proof` (what the template sees) before tpl.render below.
+        # Attaching to `augmented` would be too late — that dict is built after render
+        # for JSON summary emission, not consumed by the template.
+        proof_py_path = src_dir / "proof.py"
+        if proof_py_path.exists():
+            proof_py_text = proof_py_path.read_text()
+            proof["proof_py_html"] = render_markdown(
+                f"```python\n{proof_py_text}\n```"
+            )
+            proof["proof_py_lines"] = proof_py_text.count("\n") + 1
+            _bytes = len(proof_py_text.encode("utf-8"))
+            proof["proof_py_bytes"] = _bytes
+            # Pre-format a human-readable size (Jinja's filesizeformat is not
+            # registered in this env — only fact_tooltips and strip_latex are).
+            if _bytes < 1024:
+                proof["proof_py_size_human"] = f"{_bytes} B"
+            elif _bytes < 1024 * 1024:
+                proof["proof_py_size_human"] = f"{_bytes / 1024:.1f} KB"
+            else:
+                proof["proof_py_size_human"] = f"{_bytes / (1024 * 1024):.1f} MB"
+        else:
+            proof["proof_py_html"] = None
+            proof["proof_py_lines"] = 0
+            proof["proof_py_bytes"] = 0
+            proof["proof_py_size_human"] = ""
+
         write_file(proof_out / "index.html", tpl.render(
             **common, proof=proof,
             rendered_sections_md=rendered_md,
