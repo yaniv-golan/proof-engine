@@ -1,0 +1,9 @@
+{
+  "doi": "10.5281/zenodo.19646034",
+  "zenodo_id": "19646034",
+  "concept_doi": "10.5281/zenodo.19646033",
+  "concept_zenodo_id": "19646033",
+  "claim_natural": "For a correctly specified discrete-time spike train model with conditional spike probabilities p_k, define A_m = sum_{k=tau_{m-1}+1}^{tau_m-1} -log(1-p_k) and R_m = A_m - log(1 - U_m * p_{tau_m}), where U_m ~ Uniform(0,1) independently. Then R_m are i.i.d. Exp(1), equivalently Z_m = 1 - exp(-R_m) are i.i.d. Uniform(0,1).",
+  "minted_at": "2026-04-19",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.24.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.19646034"
+}

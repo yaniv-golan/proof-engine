@@ -1,0 +1,58 @@
+# Proof: COVID-19 vaccines killed 20,000 to 60,000 people in Germany (as claimed in Dr. Helmut Sterz's March 19, 2026 parliamentary testimony and amplified by Elon Musk on April 12).
+
+**Generated:** 2026-04-19
+**Verdict:** DISPROVED
+**Audit trail:** [proof_audit.md](proof_audit.md) | [proof.py](proof.py)
+
+## Evidence Summary
+
+| ID | Fact | Verified |
+|----|------|----------|
+| B1 | SC1: FactCheck.org confirms Sterz testimony and Musk amplification | Yes |
+| B2 | SC1: NewsBytes confirms Sterz Bundestag testimony on March 19, 2026 | Yes |
+| B3 | SC1: BusinessToday confirms Musk's April 12 comments | Yes |
+| A1 | SC1 verified source count | Computed: 3 independent sources confirmed provenance |
+| A2 | SC2 verified source count | Computed: 0 independent scientific sources support the causal claim |
+
+Note: 3 citation(s) come from unclassified (tier 2) sources. These are established news and fact-checking outlets whose credibility tier was not pre-classified in the automated system. See Source Credibility Assessment in the [audit trail](proof_audit.md).
+
+## Proof Logic
+
+This claim was decomposed into two sub-claims using the contested qualifier pattern, because the word "killed" asserts a causal relationship that requires independent scientific support.
+
+### SC1: Provenance — Was the claim made and amplified as described?
+
+Three independent sources confirm the provenance. FactCheck.org reports that Sterz "baselessly claimed that the Pfizer/BioNTech vaccine killed 60,000 people in Germany" (B1). NewsBytes confirms the testimony occurred "before Germany's Bundestag's Corona Enquete Commission on March 19, 2026" (B2). BusinessToday confirms Musk's April 12, 2026 amplification, quoting him saying "my second vaccine shot almost sent me to the hospital. Felt like I was dying" (B3). SC1 holds with 3/3 sources verified.
+
+### SC2: Scientific Support — Did vaccines actually kill 20,000–60,000 people in Germany?
+
+No independent scientific source supports this claim. The SC2 threshold requires at least 3 independent scientific sources confirming a causal link between COVID-19 vaccination and 20,000–60,000 deaths in Germany. Zero such sources exist.
+
+The 20,000–60,000 figure was derived by taking 2,133 death reports from Germany's Paul Ehrlich Institute (PEI) — which are reports of deaths *after* vaccination, not deaths *caused by* vaccination — and multiplying by an "underreporting factor" of 30. This methodology has three fundamental flaws: it assumes all reported post-vaccination deaths were caused by the vaccine (conflating temporal association with causation); it applies an underreporting multiplier designed for minor adverse events to deaths (which are more thoroughly reported); and it ignores that PEI's own causal assessment found only 28 deaths "possibly or probably" related to Pfizer vaccination (74 across all COVID vaccines).
+
+## What could challenge this verdict?
+
+Four adversarial checks were conducted, all searching for evidence that could support the claim:
+
+The methodology of multiplying passive surveillance reports by a fixed underreporting factor is rejected by pharmacovigilance experts including Dr. Mahmoud Zureik and Jeffrey Morris. The VAERS FAQ explicitly warns against using such data to establish causation.
+
+The Paul Ehrlich Institute — the very source Sterz cited — assessed only 28 Pfizer-related deaths as possibly/probably causal (74 across all COVID vaccines), orders of magnitude below the claimed 20,000–60,000.
+
+Large-scale epidemiological studies, including a French study of 28 million adults, consistently find COVID vaccines *reduced* mortality. No peer-reviewed study supports the specific death count claimed.
+
+The strongest evidence in the direction of the claim is one ecological study noting a correlation between German vaccination rates and excess mortality — but that study explicitly disclaims causal inference and does not support the specific 20,000–60,000 figure.
+
+## Conclusion
+
+**Verdict: DISPROVED**
+
+The claim that COVID-19 vaccines killed 20,000 to 60,000 people in Germany is **DISPROVED** under the contested qualifier analysis:
+
+SC1 (provenance) **holds**: Dr. Helmut Sterz did make this claim before the German Bundestag on March 19, 2026, and Elon Musk did amplify it on April 12, 2026. This is confirmed by 3 independently verified sources.
+
+SC2 (scientific support) **fails**: Zero independent scientific sources confirm that COVID-19 vaccines caused 20,000–60,000 deaths in Germany. The methodology used to generate the figure — multiplying passive surveillance death reports by an arbitrary underreporting factor — is rejected by pharmacovigilance experts, contradicted by the cited source's own causal assessment (28–74 deaths, not 20,000–60,000), and inconsistent with large-scale epidemiological evidence showing vaccines reduced mortality.
+
+The assertion exists, but the causal qualifier "killed" is not scientifically warranted.
+
+---
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.23.0 on 2026-04-19.

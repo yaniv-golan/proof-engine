@@ -1,0 +1,218 @@
+{
+  "format_version": 3,
+  "claim_natural": "COVID-19 vaccines killed 20,000 to 60,000 people in Germany (as claimed in Dr. Helmut Sterz's March 19, 2026 parliamentary testimony and amplified by Elon Musk on April 12).",
+  "claim_formal": {
+    "subject": "COVID-19 vaccine deaths in Germany",
+    "sub_claims": [
+      {
+        "id": "SC1",
+        "property": "Dr. Helmut Sterz made the 20,000-60,000 death claim in German parliamentary testimony on March 19, 2026, and Elon Musk amplified it on April 12, 2026",
+        "operator": ">=",
+        "threshold": 3,
+        "operator_note": "SC1 checks provenance \u2014 did Sterz make this claim and did Musk amplify it? This is a factual question about whether the events occurred, not whether the claim is true."
+      },
+      {
+        "id": "SC2",
+        "property": "The claim that COVID-19 vaccines killed 20,000-60,000 people in Germany is scientifically supported",
+        "operator": ">=",
+        "threshold": 3,
+        "operator_note": "SC2 checks the epistemic qualifier \u2014 'killed' asserts a causal relationship. For the compound claim to be PROVED, it must be the case that vaccines actually caused 20,000-60,000 deaths. SC2 requires independent scientific sources confirming this causation. Sources rejecting the methodology or finding no causal link belong in adversarial_checks."
+      }
+    ],
+    "compound_operator": "AND",
+    "operator_note": "The claim uses the contested qualifier 'killed' (causal language). SC1 checks provenance (the assertion was made and amplified as described). SC2 checks the epistemic qualifier (the causal claim is scientifically warranted). Both must hold for the compound claim to be PROVED. If SC1 holds but SC2 fails, the verdict is DISPROVED \u2014 the assertion exists but the causal claim is not scientifically supported."
+  },
+  "evidence": {
+    "B1": {
+      "type": "empirical",
+      "label": "SC1: FactCheck.org confirms Sterz testimony and Musk amplification",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "FactCheck.org",
+        "url": "https://www.factcheck.org/2026/04/elon-musk-amplifies-baseless-claim-about-covid-19-vaccine/",
+        "quote": "baselessly claimed that the Pfizer/BioNTech vaccine killed 60,000 people in Germany"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "factcheck.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "baselessly claimed that the Pfizer/BioNTech vaccine killed 60,000 people in Germ"
+      }
+    },
+    "B2": {
+      "type": "empirical",
+      "label": "SC1: NewsBytes confirms Sterz Bundestag testimony on March 19, 2026",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "NewsBytes",
+        "url": "https://www.newsbytesapp.com/news/world/fact-check-did-60-000-die-in-germany-from-covid-vaccine/story",
+        "quote": "before Germany's Bundestag's Corona Enquete Commission on March 19, 2026"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "newsbytesapp.com",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "before Germany's Bundestag's Corona Enquete Commission on March 19, 2026"
+      }
+    },
+    "B3": {
+      "type": "empirical",
+      "label": "SC1: BusinessToday confirms Musk's April 12 comments",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "BusinessToday India",
+        "url": "https://www.businesstoday.in/latest/trends/story/covid-19-vaccine-scrutiny-back-in-focus-after-elon-musks-comments-heres-what-he-said-525275-2026-04-12",
+        "quote": "my second vaccine shot almost sent me to the hospital. Felt like I was dying"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "businesstoday.in",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "my second vaccine shot almost sent me to the hospital. Felt like I was dying"
+      }
+    },
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count",
+      "sub_claim": "SC1",
+      "method": "count(verified sc1 citations) = 3",
+      "result": "3",
+      "depends_on": [
+        "B1",
+        "B2",
+        "B3"
+      ]
+    },
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count",
+      "sub_claim": "SC2",
+      "method": "count(verified sc2 citations) = 0",
+      "result": "0",
+      "depends_on": []
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "SC1: independent sources on provenance of Sterz testimony and Musk amplification",
+      "fact_ids": [
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "agreement": true,
+      "n_sources_consulted": 3,
+      "n_sources_verified": 3,
+      "sources": {
+        "sc1_factcheck_org": "verified",
+        "sc1_newsbytes": "verified",
+        "sc1_businesstoday": "verified"
+      },
+      "independence_note": "FactCheck.org (Annenberg), NewsBytes, BusinessToday \u2014 independent publications",
+      "coi_flags": []
+    },
+    {
+      "description": "SC2: independent scientific sources confirming 20k-60k vaccine deaths in Germany",
+      "fact_ids": [],
+      "agreement": false,
+      "n_sources_consulted": 0,
+      "n_sources_verified": 0,
+      "sources": {},
+      "independence_note": "No independent scientific sources confirm the claim",
+      "coi_flags": []
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does Sterz's methodology \u2014 multiplying PEI death reports by an underreporting factor of 30 \u2014 have any scientific basis?",
+      "verification_performed": "Searched FactCheck.org, VAERS FAQ (vaers.hhs.gov), Science Feedback, and NewsGuard Reality Check. Dr. Mahmoud Zureik (Versailles epidemiologist) stated: 'It is not valid to presume the 2000 reported deaths were caused by vaccines, much less to presume that there were 30x this number.' Jeffrey Morris noted that 'applying a fixed underreporting factor is not only unsupported but also ignores the possibility of reporting inflation.' The VAERS FAQ states: 'VAERS reports alone cannot be used to determine if a vaccine caused or contributed to an adverse event or illness.' An arXiv paper (2202.04204) specifically analyzed the absurdity of death estimates based on VAERS underreporting factors.",
+      "finding": "No credible pharmacovigilance authority endorses multiplying passive surveillance death reports by a fixed underreporting factor to estimate causal deaths. The methodology conflates temporal association with causation and misapplies underreporting factors designed for non-serious events to deaths (which are more thoroughly reported). Multiple independent experts reject it.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Did the Paul Ehrlich Institute itself attribute 20,000-60,000 deaths to COVID vaccines?",
+      "verification_performed": "Checked PEI's official pharmacovigilance report (March 2025, covering data through Dec 2024). PEI received 2,133 reports of deaths following Pfizer/BioNTech vaccination. Of these, PEI assessed only 28 as having a 'possible or probable' causal relationship. NewsGuard reported the figure as 74 deaths across all COVID vaccines where causality was 'possible or probable.' PEI explicitly states: 'spontaneous reports are not suitable for determining if the reported adverse reaction was caused by vaccination.'",
+      "finding": "PEI's own assessment found 28 deaths possibly/probably related to Pfizer vaccination specifically (74 across all COVID vaccines) \u2014 orders of magnitude below the 20,000-60,000 claimed. The official regulator's causal assessment directly contradicts the claimed figure.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Do large-scale epidemiological studies find that COVID vaccines increased mortality?",
+      "verification_performed": "Searched for peer-reviewed studies on COVID vaccine mortality. A French study of 28 million adults (cited by FactCheck.org) found vaccinated people were less likely to die. The Lancet published data showing high vaccination rates correlated with lower mortality in Western Europe. Science Feedback analyzed and debunked a claim that vaccines killed 17 million people globally, noting the analysis was 'highly flawed' and 'doesn't account for COVID-19 mortality surges.'",
+      "finding": "Large epidemiological studies consistently find COVID vaccines reduced mortality rather than increasing it. No peer-reviewed study supports the 20,000-60,000 death figure for Germany.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there any credible evidence supporting the claim that might make SC2 hold?",
+      "verification_performed": "Searched for studies supporting vaccine-caused excess mortality in Germany. Found one ecological study noting a correlation between vaccination rates and excess mortality in Germany's third pandemic year. However, Science Feedback noted this was an ecological correlation that 'provides moderate-strength evidence of an unexpected, statistically robust association' WITHOUT establishing causality. The study does not claim 20,000-60,000 deaths and explicitly states it cannot determine causation. No peer-reviewed source supports the specific 20,000-60,000 figure.",
+      "finding": "The strongest evidence in the direction of the claim is an ecological correlation study that explicitly disclaims causal inference and does not support the specific death count. This does not meet the threshold for SC2. The adversarial search confirms no credible source supports the claim.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "n_holding": 1,
+    "n_total": 2,
+    "claim_holds": false
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.24.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-19"
+  },
+  "sub_claim_results": [
+    {
+      "id": "SC1",
+      "n_confirming": 3,
+      "threshold": 3,
+      "holds": true
+    },
+    {
+      "id": "SC2",
+      "n_confirming": 0,
+      "threshold": 3,
+      "holds": false
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "format_version": 3,
+  "claim_natural": "For a correctly specified discrete-time spike train model with conditional spike probabilities p_k, define A_m = sum_{k=tau_{m-1}+1}^{tau_m-1} -log(1-p_k) and R_m = A_m - log(1 - U_m * p_{tau_m}), where U_m ~ Uniform(0,1) independently. Then R_m are i.i.d. Exp(1), equivalently Z_m = 1 - exp(-R_m) are i.i.d. Uniform(0,1).",
+  "claim_formal": {
+    "subject": "Randomized discrete-time rescaling R_m = A_m - log(1 - U_m p_{tau_m})",
+    "property": "R_m ~ Exp(1) and R_m are i.i.d. (conditional on model correctness)",
+    "operator": "==",
+    "operator_note": "The claim has two parts: (1) each R_m is marginally Exp(1), and (2) the R_m are mutually independent. Part (1) follows from the randomized probability integral transform (PIT) theorem applied to the discrete CDF of the interspike interval. Part (2) follows from the tower property of conditional expectation and the independence of the U_m from the filtration. We verify both analytically and by Monte Carlo simulation. The proof is universal \u2014 it holds for ANY correctly specified model with p_k in (0,1), not just constant p. We test with both constant and time-varying p_k.",
+    "threshold": "Exp(1)",
+    "is_time_sensitive": false
+  },
+  "evidence": {
+    "A1": {
+      "type": "computed",
+      "label": "Analytical PIT verification (constant p)",
+      "sub_claim": null,
+      "method": "Computed P(Z <= z) analytically for z in [0.1, 0.25, 0.5, 0.75, 0.9, 0.99] using constant p=0.3. Summed over geometric distribution support points with PIT formula. Verified P(Z <= z) = z to machine precision.",
+      "result": "Max error = 1.11e-16. PIT exact: True",
+      "depends_on": []
+    },
+    "A2": {
+      "type": "computed",
+      "label": "Monte Carlo KS test (constant p = 0.3)",
+      "sub_claim": null,
+      "method": "Monte Carlo: 100000 samples of R_m with constant p=0.3, KS test against Exp(1).",
+      "result": "KS stat = 0.003145 <= critical = 0.004301. Exp(1) NOT rejected.",
+      "depends_on": []
+    },
+    "A3": {
+      "type": "computed",
+      "label": "Monte Carlo KS test (constant p = 0.5)",
+      "sub_claim": null,
+      "method": "Monte Carlo: 100000 samples of R_m with constant p=0.5, KS test against Exp(1).",
+      "result": "KS stat = 0.002705 <= critical = 0.004301. Exp(1) NOT rejected.",
+      "depends_on": []
+    },
+    "A4": {
+      "type": "computed",
+      "label": "Monte Carlo KS test (time-varying p_k)",
+      "sub_claim": null,
+      "method": "Monte Carlo: 100000 samples of R_m with time-varying p_k = 0.1 + 0.08*sin(2*pi*k/50), KS test against Exp(1).",
+      "result": "KS stat = 0.002624 <= critical = 0.004301. Exp(1) NOT rejected.",
+      "depends_on": []
+    },
+    "A5": {
+      "type": "computed",
+      "label": "Independence test via serial correlation",
+      "sub_claim": null,
+      "method": "Computed lag-1 and lag-2 autocorrelation of Z_m = 1 - exp(-R_m) for 100000 samples with constant p=0.3. Under independence, |corr| should be < 1.96/sqrt(n).",
+      "result": "Lag-1 corr = -0.003418, lag-2 corr = 0.003510, threshold = 0.006198. Independence NOT rejected.",
+      "depends_on": []
+    },
+    "A6": {
+      "type": "computed",
+      "label": "Analytical CDF derivation matches PIT",
+      "sub_claim": null,
+      "method": "Compared Z_claim = 1 - exp(-R_m) with Z_PIT = F(n-1) + U*(F(n)-F(n-1)) for 6 test cases. Verified algebraic equivalence to machine precision.",
+      "result": "Max error = 0.00e+00. Formulas identical: True",
+      "depends_on": []
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "E[R_m] across three model specifications all match E[Exp(1)] = 1.0: p=0.3: 0.9989, p=0.5: 0.9960, varying: 0.9979",
+      "fact_ids": [
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "agreement": true,
+      "values_compared": [
+        "0.998945",
+        "0.995965",
+        "0.997933"
+      ]
+    },
+    {
+      "description": "Var[R_m] matches Var[Exp(1)] = 1.0: p=0.3: 0.9954, p=0.5: 0.9890",
+      "fact_ids": [
+        "A2",
+        "A3"
+      ],
+      "agreement": true,
+      "values_compared": [
+        "0.995362",
+        "0.988966"
+      ]
+    },
+    {
+      "description": "Analytical PIT verification (A1) independently confirms what Monte Carlo tests (A2-A4) show: both methods agree R_m ~ Exp(1).",
+      "fact_ids": [
+        "A1",
+        "A2"
+      ],
+      "agreement": true,
+      "values_compared": [
+        "PIT_error=1.11e-16",
+        "KS_stat=0.003145"
+      ]
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does the previous disproof (of the DIFFERENT formula R_m = A_m + U*h_{tau_m}) also apply to this formula?",
+      "verification_performed": "Compared the two formulas algebraically. The previous claim used R_m = A_m + U * h_{tau_m} = A_m + U * (-log(1-p)), which gives Z = 1 - exp(-A_m) * (1-p)^U. This new claim uses R_m = A_m - log(1 - U*p), which gives Z = 1 - exp(-A_m) * (1 - U*p). The difference is (1-p)^U vs (1-Up). By Jensen's inequality on the concave function log, (1-p)^U <= 1 - Up with equality only at p=0. The previous disproof showed the old formula fails precisely because (1-p)^U != 1 - Up. This new formula uses the correct expression (1 - Up) which matches the PIT.",
+      "finding": "The two formulas are algebraically distinct. The previous disproof applies only to the linear-hazard interpolation formula, not to this log-transform formula.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the PIT theorem fail for conditional distributions where p_k depend on the filtration (i.e., on past spikes)?",
+      "verification_performed": "Analyzed the PIT argument under conditioning. The PIT theorem requires: (1) a random variable X with CDF F, and (2) U independent of X. Conditional on F_{tau_{m-1}}, tau_m has a well-defined CDF F (which depends on the conditioning), and U_m is independent of F_{tau_{m-1}} and tau_m by construction. The PIT applies conditionally: Z_m | F_{tau_{m-1}} ~ U(0,1). Since this holds for ALL realizations of F_{tau_{m-1}}, integrating out gives Z_m ~ U(0,1) marginally. The Monte Carlo test with time-varying p_k (A4) confirms this computationally.",
+      "finding": "The PIT theorem applies conditionally on F_{tau_{m-1}}. The result holds for arbitrary filtration-adapted p_k sequences, as confirmed by the time-varying Monte Carlo test.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the independence claim (R_m are mutually independent) valid, or could there be serial dependence despite marginal Exp(1) distributions?",
+      "verification_performed": "Analyzed independence via the tower property. Z_m is a function of (F_{tau_{m-1}}, Y_{tau_{m-1}+1}...Y_{tau_m}, U_m). Given F_{tau_{m-1}}: (a) Z_1,...,Z_{m-1} are measurable w.r.t. F_{tau_{m-1}} join sigma(U_1,...,U_{m-1}); (b) Z_m depends on F_{tau_{m-1}}, future Y's (conditionally independent of past given F_{tau_{m-1}}), and U_m (independent of everything); so Z_m is conditionally independent of Z_1,...,Z_{m-1} given F_{tau_{m-1}}. Since Z_m | F_{tau_{m-1}} ~ U(0,1) (constant \u2014 doesn't depend on F_{tau_{m-1}}), Z_m is also unconditionally independent of Z_1,...,Z_{m-1}. By induction, the Z_m (equivalently R_m) are mutually independent. The lag-1 autocorrelation test (A5) confirms this computationally.",
+      "finding": "Independence follows from the tower property: Z_m | F_{tau_{m-1}} ~ U(0,1) is constant (doesn't depend on the conditioning), so Z_m is unconditionally independent of all past Z's. Serial correlation tests confirm no dependence.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the formula fail at boundary cases (p_k very close to 0 or 1)?",
+      "verification_performed": "Checked: when p_k -> 0, -log(1-U*p) -> U*p -> 0, and A_m dominates (recovers continuous-time limit). When p_k -> 1, -log(1-U*p) -> -log(1-U), which is Exp(1) \u2014 correct for a spike that occurs with near-certainty. The formula is well-defined for all p in (0,1) and U in [0,1). At U=1, p=1: -log(1-1*1) = -log(0) = infinity, but P(U=1) = 0 and p=1 is excluded by assumption (p_k in (0,1)). Monte Carlo with p=0.5 (A3) tests a moderately extreme case.",
+      "finding": "The formula is well-defined and correct for all p in (0,1). Boundary behavior is mathematically sound.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "pit_max_error": 1.11e-16,
+    "formula_max_error": 0.0,
+    "ks_stat_p03": 0.003145,
+    "ks_stat_p05": 0.002705,
+    "ks_stat_varying": 0.002624,
+    "ks_critical": 0.004301,
+    "lag1_autocorrelation": -0.003418,
+    "corr_threshold": 0.006198,
+    "mc_mean_R_p03": 0.998945,
+    "mc_mean_R_p05": 0.995965,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.24.0",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-19"
+  }
+}
