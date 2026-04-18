@@ -154,3 +154,34 @@ def test_builder_emit_prints_json(capsys):
     captured = capsys.readouterr()
     assert "=== PROOF SUMMARY (JSON) ===" in captured.out
     assert '"format_version": 3' in captured.out
+
+
+def test_builder_coerces_numpy_scalars():
+    """numpy bool_/int64/float64 must not crash schema validation in emit().
+
+    Regression: pure-math proofs that use numpy commonly pass np.bool_ to
+    add_cross_check(agreement=...), which jsonschema rejected because
+    np.bool_ is not a Python bool. The builder now coerces via .item().
+    """
+    pytest.importorskip("numpy")
+    import numpy as np
+    from proof_summary import ProofSummaryBuilder
+
+    builder = ProofSummaryBuilder(claim_natural="test", claim_formal={})
+    builder.add_computed_fact("A1", label="x", method="np", result=np.int64(7))
+    builder.add_computed_fact("A2", label="y", method="np", result=np.float64(3.14))
+    builder.add_cross_check(
+        description="numpy bool agreement",
+        fact_ids=["A1", "A2"],
+        agreement=np.array([True, True]).all(),  # np.bool_, not bool
+    )
+    builder.set_verdict("PROVED")
+    builder.set_key_results(margin=np.float64(0.5), holds=np.bool_(True))
+
+    summary = builder.build()
+    assert summary["cross_checks"][0]["agreement"] is True
+    assert isinstance(summary["cross_checks"][0]["agreement"], bool)
+    assert summary["key_results"]["margin"] == 0.5
+    assert isinstance(summary["key_results"]["margin"], float)
+    assert summary["key_results"]["holds"] is True
+    builder.emit()  # must not raise on schema validation

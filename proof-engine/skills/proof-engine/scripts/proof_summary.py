@@ -20,6 +20,29 @@ import os
 from datetime import date
 
 
+def _to_native(obj):
+    """Recursively coerce numpy (and similar) scalars to Python primitives.
+
+    numpy's bool_/int64/float64 all expose an ``.item()`` method that returns
+    the native equivalent. We duck-type on that so the skill stays free of a
+    hard numpy dependency. Without this, a proof that does e.g.
+    ``builder.add_cross_check(agreement=arr.all())`` crashes at ``emit()``
+    because jsonschema's ``"type": "boolean"`` rejects ``np.bool_``.
+    """
+    if isinstance(obj, dict):
+        return {k: _to_native(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_to_native(x) for x in obj]
+    if isinstance(obj, (bool, int, float, str)) or obj is None:
+        return obj
+    if hasattr(obj, "item") and callable(obj.item):
+        try:
+            return obj.item()
+        except (ValueError, TypeError):
+            return obj
+    return obj
+
+
 class ProofSummaryBuilder:
     """Constructs a v3 proof.json summary."""
 
@@ -248,7 +271,7 @@ class ProofSummaryBuilder:
         if self.sub_claim_results:
             summary["sub_claim_results"] = self.sub_claim_results
         summary.update(self._extra)
-        return summary
+        return _to_native(summary)
 
     def emit(self, validate_schema: bool = True):
         """Build, optionally validate against JSON Schema, and print the proof summary."""
