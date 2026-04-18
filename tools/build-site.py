@@ -785,6 +785,7 @@ def main():
     # Proof detail pages
     tpl = env.get_template("proof.html")
     proof_dois = {}  # slug -> doi string or None
+    doi_index = {}  # doi (lowercase, canonical, no URL prefix) -> slug
     for proof in proofs:
         tooltips = build_fact_tooltips(proof["proof_data"])
         rendered_md = render_proof_sections(proof["sections_md"], tooltips)
@@ -815,6 +816,16 @@ def main():
         citation_ctx = build_citation_context(
             proof["proof_data"], canonical_url, proof["slug"], doi_data=doi_data,
         )
+
+        # Collect DOI -> slug mapping for site-wide doi-index.json (Task 6b).
+        # The launcher notebook uses this to resolve a loaded DOI back to its proof page.
+        _doi = (citation_ctx.get("doi") or "").strip().lower()
+        if _doi:
+            doi_index[_doi] = proof["slug"]
+        _concept = (citation_ctx.get("concept_doi") or "").strip().lower()
+        if _concept and _concept != _doi:
+            # Concept DOIs resolve to the latest version — map to same slug as the versioned DOI.
+            doi_index[_concept] = proof["slug"]
 
         proof_out = output_dir / "proofs" / proof["slug"]
         src_dir = proofs_dir / proof["slug"]
@@ -994,6 +1005,14 @@ def main():
             concept_doi=doi_data.get("concept_doi") if doi_data else None,
         )
         write_file(proof_out / "ro-crate-metadata.json", json.dumps(ro_crate, indent=2))
+
+    # Site-wide DOI -> slug index (Task 6b). Lives at site root alongside
+    # index.json / sitemap.xml so the launcher notebook can fetch it and
+    # resolve the DOI it loaded back to the proof page.
+    write_file(
+        output_dir / "doi-index.json",
+        json.dumps(doi_index, indent=2, sort_keys=True) + "\n",
+    )
 
     # Tag pages
     tag_proofs = {}
