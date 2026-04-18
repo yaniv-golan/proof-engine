@@ -27,6 +27,14 @@ Produces four outputs: a re-runnable `proof.py` script, a reader-facing `proof.m
 
 The highest-value lessons from field testing, grouped by area. Read before writing any proof code.
 
+### By proof type
+
+| Proof type | What to read |
+|---|---|
+| Empirical (any Type B fact, including Type S proofs with B-type corroboration) | All subsections below |
+| Pure math (Type A only) | Skip "Citation handling" and "Source behavior & fetch failures". In "Methodology pitfalls," skip the `verify_extraction()` / `data_values` item. |
+| Absence of evidence (Type S, no Type B corroboration) | Skip "Citation handling". In "Source behavior & fetch failures," only the blocked-domains item applies (search URLs can also be blocked). Pay particular attention to "Absence claims need search documentation" under "Verdict semantics." |
+
 ### Citation handling
 
 - **Handle Unicode in citations**: Real web pages use en-dashes, curly quotes, ring-above vs degree, non-breaking spaces. `verify_citations.py` handles this automatically.
