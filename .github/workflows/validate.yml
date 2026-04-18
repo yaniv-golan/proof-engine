@@ -156,7 +156,7 @@ jobs:
           python tools/build-site.py \
             --site-dir site \
             --output-dir _site \
-            --base-url /proof-engine/ \
-            --site-url https://yaniv-golan.github.io \
+            --base-url / \
+            --site-url https://proofengine.info \
             --design-md docs/DESIGN.md \
             --hardening-rules-md proof-engine/skills/proof-engine/references/hardening-rules.md
