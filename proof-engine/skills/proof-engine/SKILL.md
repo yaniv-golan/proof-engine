@@ -10,7 +10,7 @@ description: >
 license: MIT
 metadata:
   author: Yaniv Golan
-  version: "1.23.0"
+  version: "1.24.0"
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
   sympy (symbolic math). Outbound HTTP needed for Type B (empirical) proofs.

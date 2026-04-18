@@ -4,6 +4,42 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.24.0] - 2026-04-19
+
+### Added
+
+- **`prove_holds()` theorem-mode verdict helper** in `scripts/computations.py`, the boolean counterpart to `compare()`. Pure-math claims that are inherently boolean (implications, structural theorems, existence/uniqueness) no longer have to fake a numeric comparison via `compare(x, "==", True)` — the audit output now reads as a theorem ("holds") rather than a pretend-numeric check. Coerces via `bool()` so numpy/sympy booleans (`np.bool_`, `BooleanTrue`) work correctly; raises `TypeError` on `None` so an uninitialized FACT_REGISTRY entry cannot silently disprove a theorem.
+- **"Adaptation: Theorem-shaped claims" section** in `references/template-pure-math.md` with a filled-in convex-composition example, four Rule 6 cross-check options (symbolic re-derivation, exhaustive small-case, structural decomposition, or explicit `UNDETERMINED` when no mechanical check is feasible), and notes on `bool()` coercion behaviour.
+- **Proof-type skim guide** in `SKILL.md` Gotchas section: a short table routing pure-math / absence-of-evidence proofs past gotchas that only apply to empirical proofs (citation handling, most source-behaviour pitfalls, `verify_extraction()`). Addresses a cowork finding that pure-math authors were being forced through empirical-only guidance.
+- **Binder runtime-deps note** at the top of `references/template-pure-math.md`: the Binder launcher image ships only `sympy`, `requests`, `python-dateutil`, and `Pillow` on top of the standard library. Proofs that need `numpy`/`scipy` would crash on re-run; the template now documents this and sets a preference order (`sympy` first, stdlib second, `numpy`/`scipy` only when necessary with an explicit dep comment).
+
+### Changed
+
+- **Site migrated to custom domain `proofengine.info`.** `CNAME` file added at repo root; `.github/workflows/deploy-site.yml` and `validate.yml` invoke `build-site.py` with `--site-url https://proofengine.info`; `README.md` and `docs/cross-platform.md` references updated. The old `yaniv-golan.github.io/proof-engine` URL continues to work as GitHub Pages redirects to the custom domain.
+- **`ClaimFormal.threshold` TypedDict widened** to accept `bool | None` so theorem-shaped claims can omit the threshold key (or set it to `None`) without failing schema validation. `claim_type` comment now lists `"theorem"` alongside `"open_problem"`.
+- **Formal-summary string in `build-site.py`** omits the threshold token entirely when the value is `None` or empty, so theorem-shaped proofs render as `subject: property holds` instead of `subject: property holds None` or with a trailing space.
+- **Validator (`scripts/validate_proof.py`) teaches three checks about `prove_holds()`:** `check_claim_holds_computed` accepts `prove_holds(` as a valid verdict source; `check_hardcoded_compare_input` regex is broadened to `(compare|prove_holds)` so the theorem-mode path can't bypass the hardcoded-input check; `CRITICAL_FUNCTIONS` gains `prove_holds` so unused-import detection stays correct.
+
+### Fixed
+
+- **`ProofSummaryBuilder` numpy scalar coercion.** `scripts/proof_summary.py` now duck-types on `.item()` to coerce numpy scalars (`np.bool_`, `np.int64`, `np.float64`) to native Python types before JSON serialization. Previously a proof that used numpy comparisons for a fact-registry `result` would fail jsonschema validation or serialize as a type that downstream consumers couldn't parse.
+
+## [1.23.0] - 2026-04-19
+
+### Changed
+
+- **SKILL.md restructured.** Gotchas section grouped by theme; long-form material extracted into `references/` subfiles (progressive disclosure). Rule count synced to the canonical 9 hardening rules; step numbers renumbered after the prior edit truncation.
+
+### Fixed
+
+- **`bump-version.sh` sed anchoring.** The `SKILL.md` frontmatter version-line substitution previously used an unanchored pattern that also matched `format_version: 3` in the body, quietly rewriting it on every release. The sed command is now anchored to the frontmatter's `  version:` line specifically.
+
+## [1.22.1] - 2026-04-18
+
+### Fixed
+
+- **Restored truncated gotchas in SKILL.md.** A prior edit had silently dropped several gotcha entries; this release restores them, syncs the rule count, and renumbers the remaining steps so the document reads coherently end-to-end.
+
 ## [1.22.0] - 2026-04-18
 
 ### Added
