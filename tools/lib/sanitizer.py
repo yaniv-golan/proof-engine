@@ -23,7 +23,12 @@ ALLOWED_ATTRIBUTES = {
     "code": ["class"],
 }
 
-_ARITHMATEX_CONFIG = {
+_EXTENSION_CONFIGS = {
+    "codehilite": {
+        "guess_lang": False,
+        "css_class": "highlight",
+        "use_pygments": True,
+    },
     "pymdownx.arithmatex": {
         "generic": True,
         "inline_syntax": ["round"],   # \(...\) only — no $...$ (currency collision)
@@ -35,8 +40,8 @@ _ARITHMATEX_CONFIG = {
 def render_markdown(text: str) -> str:
     """Render markdown to sanitized HTML."""
     md = markdown.Markdown(
-        extensions=["tables", "fenced_code", "toc", "pymdownx.arithmatex"],
-        extension_configs=_ARITHMATEX_CONFIG,
+        extensions=["tables", "fenced_code", "codehilite", "toc", "pymdownx.arithmatex"],
+        extension_configs=_EXTENSION_CONFIGS,
     )
     raw_html = md.convert(text)
     clean_html = bleach.clean(
