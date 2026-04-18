@@ -10,3 +10,7 @@ SCRIPTS_DIR = os.path.join(
     os.path.dirname(__file__), "..", "proof-engine", "skills", "proof-engine"
 )
 sys.path.insert(0, SCRIPTS_DIR)
+
+
+def pytest_configure(config):
+    config.addinivalue_line("markers", "slow: slow test (full-site build)")
