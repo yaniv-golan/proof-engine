@@ -24,10 +24,16 @@ import sys
 import math
 import numpy as np
 
-PROOF_ENGINE_ROOT = os.environ.get(
-    "PROOF_ENGINE_ROOT",
-    "/sessions/lucid-peaceful-thompson/mnt/.remote-plugins/plugin_01XTFg5zCzEf8gfhTURAn7wR/skills/proof-engine",
-)
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
+if not PROOF_ENGINE_ROOT:
+    _d = os.path.dirname(os.path.abspath(__file__))
+    while _d != os.path.dirname(_d):
+        if os.path.isdir(os.path.join(_d, "proof-engine", "skills", "proof-engine", "scripts")):
+            PROOF_ENGINE_ROOT = os.path.join(_d, "proof-engine", "skills", "proof-engine")
+            break
+        _d = os.path.dirname(_d)
+    if not PROOF_ENGINE_ROOT:
+        raise RuntimeError("PROOF_ENGINE_ROOT not set and skill dir not found via walk-up from proof.py")
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from scripts.computations import compare

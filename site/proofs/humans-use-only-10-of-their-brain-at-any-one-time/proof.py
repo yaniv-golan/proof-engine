@@ -3,12 +3,19 @@ Proof: Humans use only 10% of their brain at any one time.
 Generated: 2026-04-15
 Direction: DISPROVE — authoritative neuroscience sources reject this claim
 """
+import os
 import sys
 
-PROOF_ENGINE_ROOT = os.environ.get(
-    "PROOF_ENGINE_ROOT",
-    "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine",
-)
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
+if not PROOF_ENGINE_ROOT:
+    _d = os.path.dirname(os.path.abspath(__file__))
+    while _d != os.path.dirname(_d):
+        if os.path.isdir(os.path.join(_d, "proof-engine", "skills", "proof-engine", "scripts")):
+            PROOF_ENGINE_ROOT = os.path.join(_d, "proof-engine", "skills", "proof-engine")
+            break
+        _d = os.path.dirname(_d)
+    if not PROOF_ENGINE_ROOT:
+        raise RuntimeError("PROOF_ENGINE_ROOT not set and skill dir not found via walk-up from proof.py")
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
 from scripts.verify_citations import verify_all_citations

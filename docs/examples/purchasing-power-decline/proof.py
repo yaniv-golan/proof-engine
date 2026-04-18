@@ -9,10 +9,18 @@ import os
 import re
 import sys
 
-# Path to proof-engine scripts — relative to docs/examples/<name>/proof.py
-_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-PROOF_ENGINE_ROOT = os.path.join(_REPO_ROOT, "proof-engine", "skills", "proof-engine")
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
+if not PROOF_ENGINE_ROOT:
+    _d = os.path.dirname(os.path.abspath(__file__))
+    while _d != os.path.dirname(_d):
+        if os.path.isdir(os.path.join(_d, "proof-engine", "skills", "proof-engine", "scripts")):
+            PROOF_ENGINE_ROOT = os.path.join(_d, "proof-engine", "skills", "proof-engine")
+            break
+        _d = os.path.dirname(_d)
+    if not PROOF_ENGINE_ROOT:
+        raise RuntimeError("PROOF_ENGINE_ROOT not set and skill dir not found via walk-up from proof.py")
 sys.path.insert(0, PROOF_ENGINE_ROOT)
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(PROOF_ENGINE_ROOT)))
 
 from datetime import date
 

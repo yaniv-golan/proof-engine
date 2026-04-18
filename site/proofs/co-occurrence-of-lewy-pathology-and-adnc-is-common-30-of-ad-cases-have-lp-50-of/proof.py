@@ -6,18 +6,18 @@ Generated: 2026-04-11
 import os
 import sys
 
-# Find repo root by walking up from this file until we find VERSION
-_here = os.path.dirname(os.path.abspath(__file__))
-_REPO_ROOT = _here
-for _ in range(10):
-    if os.path.isfile(os.path.join(_REPO_ROOT, "VERSION")):
-        break
-    _REPO_ROOT = os.path.dirname(_REPO_ROOT)
-PROOF_ENGINE_ROOT = os.environ.get(
-    "PROOF_ENGINE_ROOT",
-    "/Users/yaniv/Documents/code/proof-engine/proof-engine/skills/proof-engine",
-)
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
+if not PROOF_ENGINE_ROOT:
+    _d = os.path.dirname(os.path.abspath(__file__))
+    while _d != os.path.dirname(_d):
+        if os.path.isdir(os.path.join(_d, "proof-engine", "skills", "proof-engine", "scripts")):
+            PROOF_ENGINE_ROOT = os.path.join(_d, "proof-engine", "skills", "proof-engine")
+            break
+        _d = os.path.dirname(_d)
+    if not PROOF_ENGINE_ROOT:
+        raise RuntimeError("PROOF_ENGINE_ROOT not set and skill dir not found via walk-up from proof.py")
 sys.path.insert(0, PROOF_ENGINE_ROOT)
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(PROOF_ENGINE_ROOT)))
 from datetime import date
 
 from scripts.verify_citations import verify_all_citations, build_citation_detail
