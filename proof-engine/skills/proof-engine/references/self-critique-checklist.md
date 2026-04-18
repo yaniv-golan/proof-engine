@@ -1,6 +1,6 @@
 # Self-Critique Checklist
 
-Read this at **Step 6** before presenting results.
+Read this at **Step 7** before presenting results.
 
 **Must-check** items are structural — if these fail, the proof is broken. **Verify** items are quality checks.
 
@@ -22,7 +22,7 @@ Read this at **Step 6** before presenting results.
 
 - [ ] All `quote` fields are verbatim substrings of the source page, not paraphrases (spot-check: does the first word match? are parenthetical insertions preserved?)
 - [ ] PDF citations include `snapshot` with extracted text for re-run reproducibility
-- [ ] All 8 hardening rules checked in proof_audit.md hardening checklist
+- [ ] All 9 hardening rules checked in proof_audit.md hardening checklist
 - [ ] proof.md has executive summary with key numbers directly under verdict
 - [ ] proof.md verification statuses derivable from JSON summary `citations[].status` (not from message strings)
 - [ ] proof.md conclusion addresses unverified/partially verified citations with impact analysis (if any)

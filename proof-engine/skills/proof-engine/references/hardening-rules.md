@@ -1,6 +1,6 @@
 # Hardening Rules Reference
 
-These eight rules close specific failure modes where LLM-generated proof code looks correct but is silently wrong. Each rule creates a verifiable link between the proof's internal representation and an external ground truth — so that when the LLM hallucinates, the error breaks visibly rather than hiding.
+These nine rules close specific failure modes where LLM-generated proof code looks correct but is silently wrong. Each rule creates a verifiable link between the proof's internal representation and an external ground truth — so that when the LLM hallucinates, the error breaks visibly rather than hiding.
 
 For proof templates, see [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md).
 
@@ -13,12 +13,13 @@ For proof templates, see [proof-templates.md](${CLAUDE_SKILL_DIR}/references/pro
 6. [Rule 6: Cross-Checks Must Be Truly Independent](#rule-6-cross-checks-must-be-truly-independent)
 7. [Rule 7: Never Hard-Code Constants or Formulas](#rule-7-never-hard-code-constants-or-formulas)
 8. [Rule 8: Evidence Relevance for Rejection Verdicts](#rule-8-evidence-relevance-for-rejection-verdicts)
+9. [Rule 9: Prose References Are Mechanically Resolvable](#rule-9--prose-references-are-mechanically-resolvable)
 
 ---
 
 ## Rule Applicability by Proof Type
 
-The validator checks all 8 rules for every proof. Some rules auto-pass when
+The validator checks all 9 rules for every proof. Some rules auto-pass when
 the proof doesn't contain the patterns they target. This table shows typical
 validator behavior — the "Auto-pass when" column describes the heuristic.
 

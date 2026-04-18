@@ -2,7 +2,7 @@
 validate_proof.py — Static analysis of proof scripts for Hardening Rule compliance.
 
 Runs BEFORE execution to catch LLM errors early. Checks that the generated
-proof code follows all 8 Hardening Rules without actually running it.
+proof code follows all 9 Hardening Rules without actually running it.
 
 Usage:
     python scripts/validate_proof.py proof_file.py

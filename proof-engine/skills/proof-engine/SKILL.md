@@ -7,10 +7,10 @@ description: >
   "is it really true", "can you prove", "verify this", "fact-check this",
   "prove it", "show me the logic". Do NOT use for opinions, essays, or
   questions with no verifiable answer.
+license: MIT
 metadata:
   author: Yaniv Golan
-  version: "1.22.0"
-  license: MIT
+  version: "1.22.1"
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
   sympy (symbolic math). Outbound HTTP needed for Type B (empirical) proofs.
@@ -58,7 +58,7 @@ These are the highest-value lessons from field testing. Read before writing any 
 - **`parse_percentage_from_quote(quote, fact_id)` has no `pattern` kwarg**: For pattern-based extraction, use `parse_number_from_quote(quote, pattern, fact_id)` instead. The two functions have different signatures — check the Bundled Scripts table.
 - **JSON summary key is `claim_natural`, not `claim`**: The publish toolchain reads `proof_data.get("claim_natural")`. Using `"claim"` as the key silently drops the claim text from the published proof.
 - **Use LaTeX delimiters for math in `claim_natural` and markdown sections**: When the claim contains mathematical notation, use `\(...\)` for inline math and `\[...\]` for display math. Write `\(\alpha_i\)` not `alpha_i`, `\(\pi^2/6\)` not `pi^2/6`. Do NOT use `$...$` delimiters — they collide with currency dollar signs in claims. Non-math claims need no delimiters. The same convention applies to proof.md, proof_audit.md, and proof_narrative.md.
-- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: "1.22.0"
+- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: 3`, validates against the JSON schema, and emits the `=== PROOF SUMMARY (JSON) ===` marker. See any template file for usage. The older `emit_proof_summary()` in `computations.py` is a legacy fallback that produces v2-shape JSON — do not use it for new proofs.
 
 ## Reference Files
 
@@ -66,10 +66,10 @@ Read these on demand, not all upfront.
 
 | File | Read when |
 |------|-----------|
-| [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) | **Step 3** — the 8 rules with bad/good examples |
+| [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) | **Step 3** — the 9 rules with bad/good examples |
 | [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) | **Step 3** — read this index to choose a template, then read the specific template file it directs you to |
 | [output-specs.md](${CLAUDE_SKILL_DIR}/references/output-specs.md) | **Step 5** — proof.md, proof_audit.md, and proof_narrative.md structure |
-| [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md) | **Step 6** — before presenting results |
+| [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md) | **Step 7** — before presenting results |
 | [advanced-patterns.md](${CLAUDE_SKILL_DIR}/references/advanced-patterns.md) | When encountering complex quotes or table-sourced data |
 | [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) | When facing fetch failures, paywalls, or .gov 403s |
 
@@ -107,7 +107,7 @@ apply_verdict_qualifier(base_verdict, any_unverified) -> str
 
 # proof_summary.py
 ProofSummaryBuilder(claim_natural, claim_formal, generator=None)
-#   Primary path for building proof.json. Produces format_version: "1.22.0"
+#   Primary path for building proof.json. Produces format_version: 3.
 #   builder.add_empirical_fact(fact_id, label=, source_name=, source_url=, source_quote=)
 #   builder.set_verification(fact_id, status=, method=, ...)
 #   builder.set_extraction(fact_id, value=, value_in_quote=, ...)
@@ -230,7 +230,7 @@ Do not proceed to Step 3 with fixable `not_found` or `partial` results — these
 **If a quote must be paraphrased** (e.g., the verbatim text is unwieldy or the source is paywalled and a snapshot is unavailable), declare `"verbatim": False` on the `empirical_facts` entry. The validator will warn and the proof report will note the reduced evidentiary weight. Do not omit this field silently — an undeclared paraphrase is harder to audit than a declared one.
 
 ### Step 3: Write the Proof Code
-Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 8 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) to identify which template matches your claim type. Then read the specific template file it directs you to (e.g., `template-qualitative.md`, `template-compound.md`). Do not skip the second read — the index contains only the decision table, not the template code. **If the claim uses an epistemic qualifier** ("verified," "confirmed," "proven," "established"), **use the compound claim template** (`template-compound.md`) with the contested qualifier pattern: SC1 (provenance — do the numbers come from a credible source?) + SC2 (epistemic warrant — has the qualifier been independently confirmed?). **If the claim uses causal language** ("causes," "leads to," "promotes," "damages," "prevents"), **use the compound claim template** (`template-compound.md`) with SC-association + SC-causation sub-claims — see "Causal vs. associational claims" in the Verdicts section. For claims where the *primary* answer is absence of supporting evidence (and no authoritative sources actively debunk the claim), use `template-absence.md`. If authoritative sources actively reject the claim — even if absence language also appears — use `template-qualitative.md` with `proof_direction: "disprove"`; this produces a DISPROVED verdict rather than the weaker SUPPORTED. The proof script must be self-contained: `python proof.py` produces the full output.
+Read [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for the 9 rules. Then read [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) to identify which template matches your claim type. Then read the specific template file it directs you to (e.g., `template-qualitative.md`, `template-compound.md`). Do not skip the second read — the index contains only the decision table, not the template code. **If the claim uses an epistemic qualifier** ("verified," "confirmed," "proven," "established"), **use the compound claim template** (`template-compound.md`) with the contested qualifier pattern: SC1 (provenance — do the numbers come from a credible source?) + SC2 (epistemic warrant — has the qualifier been independently confirmed?). **If the claim uses causal language** ("causes," "leads to," "promotes," "damages," "prevents"), **use the compound claim template** (`template-compound.md`) with SC-association + SC-causation sub-claims — see "Causal vs. associational claims" in the Verdicts section. For claims where the *primary* answer is absence of supporting evidence (and no authoritative sources actively debunk the claim), use `template-absence.md`. If authoritative sources actively reject the claim — even if absence language also appears — use `template-qualitative.md` with `proof_direction: "disprove"`; this produces a DISPROVED verdict rather than the weaker SUPPORTED. The proof script must be self-contained: `python proof.py` produces the full output.
 
 Required elements:
 - `CLAIM_FORMAL` dict with `operator_note` (Rule 4)
@@ -275,7 +275,7 @@ The fourth and final output file. Written AFTER proof.py, proof.md, proof_audit.
 - Purpose-based language with explicit markdown links for formal outputs
 - Verdict declaration must use the EXACT full verdict string from proof.json (including qualifiers like "with unverified citations")
 
-### Step 5.5: Citation Recovery
+### Step 6: Citation Recovery
 
 After executing proof.py, check the citation verification output. If any citation has status `not_found` or `partial`:
 
@@ -294,7 +294,7 @@ After executing proof.py, check the citation verification output. If any citatio
 
 Do not skip this step. The difference between `PROVED` and `PROVED (with unverified citations)` is often a fixable quote mismatch, not a genuinely missing source. A 5-minute recovery loop is almost always worth the verdict upgrade.
 
-### Step 6: Self-Critique
+### Step 7: Self-Critique
 Before presenting results, run through the checklist in [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md).
 
 ## Publishing
