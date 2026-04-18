@@ -490,15 +490,30 @@
 </details>
 {% endif %}
 
+{% if citation and citation.binder_url %}
+<section class="rerun-section" id="rerun">
+    <h2 class="section-heading">Re-execute this proof</h2>
+    <p class="rerun-intro">
+        The verdict above is cached from when this proof was minted. To re-run the exact
+        <code>proof.py</code> shown in "View proof source" and see the verdict recomputed live,
+        launch it in your browser — no install required.
+    </p>
+    <a href="{{ citation.binder_url }}" class="rerun-cta" rel="nofollow noopener" target="_blank"
+       onclick="gtag('event','launch',{target:'binder',proof_slug:'{{ proof.slug }}'})">
+        <span class="rerun-cta-icon">▶</span>
+        <span class="rerun-cta-label">
+            <span class="rerun-cta-title">Re-execute in Binder</span>
+            <span class="rerun-cta-desc">runs in your browser · ~60s · no install</span>
+        </span>
+    </a>
+    <p class="rerun-note">
+        First run takes longer while Binder builds the container image; subsequent runs are cached.
+    </p>
+</section>
+{% endif %}
+
 <h2 class="section-heading" id="formats">machine-readable formats</h2>
 <div class="formats-row">
-    {% if citation and citation.binder_url %}
-    <a href="{{ citation.binder_url }}" class="format-card" rel="nofollow noopener" target="_blank" onclick="gtag('event','launch',{target:'binder',proof_slug:'{{ proof.slug }}'})">
-        <span class="format-icon">▶</span>
-        <span class="format-name">Open in Binder</span>
-        <span class="format-desc">run this proof in a browser, no install</span>
-    </a>
-    {% endif %}
     <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.ipynb" class="format-card" download onclick="gtag('event','download',{file_type:'notebook',proof_slug:'{{ proof.slug }}'})">
         <span class="format-icon">⬡</span>
         <span class="format-name">Jupyter Notebook</span>
