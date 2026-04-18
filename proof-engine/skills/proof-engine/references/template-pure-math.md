@@ -4,6 +4,24 @@
 
 For claims that are entirely mathematical (no empirical sources, no URLs, no citations).
 
+## Runtime dependencies for re-runners
+
+The Binder launcher image (where re-runners execute your `proof.py`) ships only `sympy`, `requests`, `python-dateutil`, and `Pillow` on top of the standard library. If your proof needs `numpy` or `scipy`, the Binder run will crash on `import` — re-runners can't `pip install` mid-notebook on Binder.
+
+Prefer in this order:
+
+1. **`sympy`** for algebra, calculus, polynomials, exact rational/integer arithmetic, symbolic linear algebra. Already in the image, deterministic, exact.
+2. **Standard library** (`math`, `decimal`, `fractions`, `itertools`) for elementary numerics. Always available.
+3. **`numpy`/`scipy`** only if `sympy` genuinely cannot do the job (large dense linear algebra, FFT, ODE integration). When you must, document the dep at the top of `proof.py` so a maintainer can decide whether to grow the Binder image vs. rewrite the proof:
+
+   ```python
+   # RUNTIME DEPENDENCY: requires numpy + scipy. Not in the default Binder
+   # launcher image (proof-engine-binder/requirements.txt) — re-running on
+   # Binder needs an image bump or proof rewrite to use sympy.
+   import numpy as np
+   from scipy import optimize
+   ```
+
 ```python
 """
 Proof: [claim text]
