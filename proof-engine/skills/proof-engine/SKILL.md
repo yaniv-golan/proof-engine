@@ -10,7 +10,7 @@ description: >
 license: MIT
 metadata:
   author: Yaniv Golan
-  version: "1.22.1"
+  version: "1.23.0"
 compatibility: >
   Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
   sympy (symbolic math). Outbound HTTP needed for Type B (empirical) proofs.
@@ -25,40 +25,60 @@ Produces four outputs: a re-runnable `proof.py` script, a reader-facing `proof.m
 
 ## Gotchas
 
-These are the highest-value lessons from field testing. Read before writing any proof code.
+The highest-value lessons from field testing, grouped by area. Read before writing any proof code.
 
-- **Don't inline verification logic**: Import the bundled scripts. Rewriting `normalize_text()` inline risks garbling the HTML-stripping logic.
-- **Don't use `int()` truncation as a cross-check**: `int(days / 365.2425) == calendar_years` is not independent — both are functions of the same input.
-- **Don't restate the proof as an adversarial check**: "70 years after 1948 is 2018, and 2026 > 2018" catches nothing. Search for counter-evidence.
+### Citation handling
+
 - **Handle Unicode in citations**: Real web pages use en-dashes, curly quotes, ring-above vs degree, non-breaking spaces. `verify_citations.py` handles this automatically.
 - **WebFetch/WebSearch return summaries, not verbatim text** — Never use text from WebFetch/WebSearch directly as the `quote` field in `empirical_facts`. Use these tools to identify sources, then obtain verbatim quotes via Python `requests.get()`, browser-captured `snapshot`, or Wayback archive. See [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for the full workflow. If a citation returns `partial`/`not_found` on a source you know contains the finding, suspect paraphrasing — obtain raw page text and update the quote.
-- **Quotes must be VERBATIM, never paraphrased**: The `quote` field in `empirical_facts` must be an exact substring copied from the source page — not recalled from memory, rephrased, condensed, or "cleaned up." If the page says "16 study participants" do not write "Sixteen participants." If the page says "returned to the level back then" do not write "returned to the level of that year." Paraphrased quotes are the #1 cause of citation verification failures (14 of 25 in field testing). When in doubt, copy a shorter exact substring rather than a longer paraphrased one. Workflow: fetch the URL via `requests.get()`, find the relevant sentence in the response, copy it character-for-character into `quote`.
+- **Quotes must be VERBATIM, never paraphrased**: The `quote` field in `empirical_facts` must be an exact substring copied from the source page — not recalled from memory, rephrased, condensed, or "cleaned up." If the page says "16 study participants" do not write "Sixteen participants." Paraphrased quotes are the #1 cause of citation verification failures (14 of 25 in field testing). When in doubt, copy a shorter exact substring rather than a longer paraphrased one. Workflow: fetch the URL via `requests.get()`, find the relevant sentence in the response, copy it character-for-character into `quote`.
 - **PDF sources need snapshots**: When citing a PDF, use your native PDF reading (or PyMuPDF/pdfplumber) to extract the text during Step 2. Copy the verbatim quote and include the full extracted text as `snapshot` in `empirical_facts`. Without a snapshot, re-run verification requires `pdfplumber` to be installed — which is an optional dependency. The snapshot makes the proof self-contained.
-- **`explain_calc()` vs `compute_*()`**: Use named functions (`compute_percentage_change()`, `compute_age()`) when they match your computation — they self-document. Use `explain_calc()` for ad-hoc expressions. Don't wrap a `compute_*()` call in `explain_calc()`.
-- **Don't call `verify_extraction()` on data_values**: It's circular. Instead, call `verify_data_values(url, data_values, fact_id)` to confirm each value string appears on the source page, then cross-check across sources (Rule 6).
-- **Never create pseudo-quote fields for table data**: Don't store table cell values in fields like `cpi_1913_quote: "9.883"`. If the source evidence is a table cell or numeric grid, store it under `data_values` and verify with `verify_data_values()`. The validator will reject pseudo-quote fields containing bare numeric or date literals that are parsed as evidence.
-- **Handle `verify_data_values()` failures**: If `verify_data_values()` returns `found: false` for a source (common with JS-rendered pages), do not use that source's `data_values` as the primary computation input. Use a verified source as primary, and note the unverified source's data as corroborating only. If both sources fail verification, search for a third source with static HTML. A cross-check between two unverified `data_values` sources is circular — it compares your authored strings against each other.
-- **Index base mismatches**: Economic data from different aggregators may use different base periods. If `cross_check()` flags a large disagreement, check whether sources use different scaling. Document the base period in source_name.
-- **Dynamic/JS-rendered sites**: Many aggregators (officialdata.org, in2013dollars.com, inflationdata.com) render page chrome via JavaScript. Live fetch gets raw HTML — data tables may be static but page titles, headings, and navigation are often JS-rendered. Quote verification on page titles commonly fails even when data is correct. Use `verify_data_values()` as the primary verification for table data; treat quote verification as a bonus, not a requirement.
-- **`cross_check()` mode and tolerance**: Use `mode="absolute"` for computed results that should match closely. Use `mode="relative"` for source-to-source comparisons. Tolerance heuristics for government statistics: expect 1-5% variation across aggregators due to rounding, month selection (annual avg vs December), and base-period differences. If sources disagree by more than 5%, investigate: find a third source, check if they use different base periods or date ranges, and document the discrepancy in adversarial checks. Don't silently ignore large disagreements — they may indicate one source is wrong.
 - **Quote selection for qualitative claims**: Pick quotes that directly state the claim's core assertion, not tangential mentions. A source that says "the brain is remarkable" does not support "adult neurogenesis occurs." The quote must be specific enough that citation verification confirms the source actually addresses the claim.
 - **Citation presence ≠ citation entailment**: `verify_all_citations()` confirms a quote exists on the page — not that it supports the claim's conclusion. Each Type B quote must name or describe the specific subject of the claim. A quote stating a generic principle (e.g., "falsifiability is a hallmark of science") does not entail a conclusion about a specific subject (e.g., "math washing is not valid science") without author reasoning to bridge the gap. If the bridge requires inference, document it in `operator_note` and note it as an entailment gap in proof.md's Claim Interpretation section.
+
+### Source behavior & fetch failures
+
+- **Handle `verify_data_values()` failures**: If `verify_data_values()` returns `found: false` for a source (common with JS-rendered pages), do not use that source's `data_values` as the primary computation input. Use a verified source as primary, and note the unverified source's data as corroborating only. If both sources fail verification, search for a third source with static HTML. A cross-check between two unverified `data_values` sources is circular — it compares your authored strings against each other.
+- **Dynamic/JS-rendered sites**: Many aggregators (officialdata.org, in2013dollars.com, inflationdata.com) render page chrome via JavaScript. Live fetch gets raw HTML — data tables may be static but page titles, headings, and navigation are often JS-rendered. Quote verification on page titles commonly fails even when data is correct. Use `verify_data_values()` as the primary verification for table data; treat quote verification as a bonus, not a requirement.
 - **Academic HTML degrades citation matches**: PMC and journal pages embed inline reference markers (`[1]`, superscripts) that inject noise after HTML stripping. If a real verbatim quote gets `partial` status, check whether the source is academic HTML before suspecting the quote itself. Use `snapshot` to capture clean text if needed.
 - **Domains that commonly block automated fetches**: The following domains frequently return blocked, captcha, or degraded content for automated HTTP requests. Plan to use `snapshot` or `snapshot_file` for sources from these domains: `pmc.ncbi.nlm.nih.gov` (PubMed Central), `nature.com`, `link.springer.com`, `sciencedirect.com` (Elsevier), `wiley.com`. See the snapshot fallback pattern in the proof templates. The live→snapshot→Wayback fallback chain in `verify_citations.py` handles this automatically when a snapshot is provided.
+
+### JSON summary & FACT_REGISTRY
+
+- **Never create pseudo-quote fields for table data**: Don't store table cell values in fields like `cpi_1913_quote: "9.883"`. If the source evidence is a table cell or numeric grid, store it under `data_values` and verify with `verify_data_values()`. The validator will reject pseudo-quote fields containing bare numeric or date literals that are parsed as evidence.
+- **`FACT_REGISTRY` entries must be dicts, not strings**: B/S-type: `{"key": "source_a", "label": "..."}`. A-type: `{"label": "...", "method": None, "result": None}`. Plain strings like `{"B1": "source_a"}` crash `build_citation_detail()` which calls `.get("key")` on each entry.
+- **JSON summary key is `claim_natural`, not `claim`**: The publish toolchain reads `proof_data.get("claim_natural")`. Using `"claim"` as the key silently drops the claim text from the published proof.
+- **Use LaTeX delimiters for math in `claim_natural` and markdown sections**: When the claim contains mathematical notation, use `\(...\)` for inline math and `\[...\]` for display math. Write `\(\alpha_i\)` not `alpha_i`, `\(\pi^2/6\)` not `pi^2/6`. Do NOT use `$...$` delimiters — they collide with currency dollar signs in claims. Non-math claims need no delimiters. The same convention applies to proof.md, proof_audit.md, and proof_narrative.md.
+- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: 3`, validates against the JSON schema, and emits the `=== PROOF SUMMARY (JSON) ===` marker. See any template file for usage. The older `emit_proof_summary()` in `computations.py` is a legacy fallback that produces v2-shape JSON — do not use it for new proofs.
+
+### Computation API
+
+- **`explain_calc()` vs `compute_*()`**: Use named functions (`compute_percentage_change()`, `compute_age()`) when they match your computation — they self-document. Use `explain_calc()` for ad-hoc expressions. Don't wrap a `compute_*()` call in `explain_calc()`.
+- **`cross_check()` mode and tolerance**: Use `mode="absolute"` for computed results that should match closely. Use `mode="relative"` for source-to-source comparisons. Tolerance heuristics for government statistics: expect 1-5% variation across aggregators due to rounding, month selection (annual avg vs December), and base-period differences. If sources disagree by more than 5%, investigate: find a third source, check if they use different base periods or date ranges, and document the discrepancy in adversarial checks. Don't silently ignore large disagreements — they may indicate one source is wrong.
+- **`compute_percentage_change(mode="decline")` is for purchasing-power decline only**: It computes `(1 - old/new) * 100` — the denominator is the new value. For standard year-over-year decline, use the default `mode="increase"` with `(old_value, new_value)` — the result will be negative when new < old.
+- **`parse_percentage_from_quote(quote, fact_id)` has no `pattern` kwarg**: For pattern-based extraction, use `parse_number_from_quote(quote, pattern, fact_id)` instead. The two functions have different signatures — check the Bundled Scripts table.
+
+### Verdict semantics & claim formalization
+
 - **Don't conflate source count with evidence strength**: 5 news articles citing the same study count as 1 independent source, not 5. For qualitative consensus proofs, check whether sources trace to independent primary research. Document the independence rationale in the cross-checks section.
 - **Absence claims need search documentation**: For "no evidence exists" claims, use the Absence-of-Evidence template. Document what was searched (databases, query terms, date ranges), not just what was found. The `search_registry` structure makes this machine-checkable.
 - **Don't weaken causal claims to prove them**: If the claim says X "causes" Y, you cannot redefine it to X "is associated with" Y in `operator_note` and then PROVE the weaker version. Decompose into SC-association + SC-causation sub-claims using the compound claim template. If only observational evidence exists without causal inference methods (Bradford Hill, Mendelian randomization, natural experiments), the result is PARTIALLY VERIFIED (association confirmed, causation not established), not PROVED.
 - **Don't rank from point estimates when the source says they overlap**: If Our World in Data says "nuclear: 0.07/TWh, solar: 0.05/TWh" but also says "the uncertainties mean these values are likely to overlap," you cannot conclude solar is safer than nuclear. Set `uncertainty_override = True` and return UNDETERMINED.
 - **Don't hardcode decisive variables**: Any variable assigned `True` or `False` that is later passed to `compare()` circumvents evidence-based verdict computation. The validator catches `*_holds` names, but other names (e.g., `rh_is_solved = False`) must also be computed from evidence. Use `compare()` or derive from `verify_*()` / `extract_*()` results.
-- **Adversarial evidence is prose-only, not citation-verified**: Sources in `adversarial_checks` are documented as prose in `verification_performed` — they are not machine-verified by `verify_all_citations()`. For contested qualifier proofs, this means the strongest counter-evidence (e.g., independent reviews rejecting a qualifier) is only as trustworthy as the proof author's characterization. Mitigate by: (1) quoting specific findings verbatim in `verification_performed`, (2) citing the source URL so reviewers can check, and (3) using multiple adversarial sources that independently reach the same conclusion.
 - **Verdict qualifier suffix**: `PARTIALLY VERIFIED` and `UNDETERMINED` never get `(with unverified citations)`. Always use `apply_verdict_qualifier(base_verdict, any_unverified)` — never `verdict +=` or manual if/elif chains for the suffix. The function validates the base verdict string and only applies the suffix to PROVED, DISPROVED, and SUPPORTED.
+
+### Methodology pitfalls
+
+- **Don't use `int()` truncation as a cross-check**: `int(days / 365.2425) == calendar_years` is not independent — both are functions of the same input.
+- **Don't restate the proof as an adversarial check**: "70 years after 1948 is 2018, and 2026 > 2018" catches nothing. Search for counter-evidence.
+- **Don't call `verify_extraction()` on data_values**: It's circular. Instead, call `verify_data_values(url, data_values, fact_id)` to confirm each value string appears on the source page, then cross-check across sources (Rule 6).
+- **Adversarial evidence is prose-only, not citation-verified**: Sources in `adversarial_checks` are documented as prose in `verification_performed` — they are not machine-verified by `verify_all_citations()`. For contested qualifier proofs, this means the strongest counter-evidence (e.g., independent reviews rejecting a qualifier) is only as trustworthy as the proof author's characterization. Mitigate by: (1) quoting specific findings verbatim in `verification_performed`, (2) citing the source URL so reviewers can check, and (3) using multiple adversarial sources that independently reach the same conclusion.
+
+### Paths & imports
+
+- **Don't inline verification logic**: Import the bundled scripts. Rewriting `normalize_text()` inline risks garbling the HTML-stripping logic.
+- **Index base mismatches**: Economic data from different aggregators may use different base periods. If `cross_check()` flags a large disagreement, check whether sources use different scaling. Document the base period in source_name.
 - **`PROOF_ENGINE_ROOT` uses env-var override with a hardcoded fallback**: Generate proof.py with `PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT", "${CLAUDE_SKILL_DIR}")`. The hardcoded fallback is an absolute path at proof-writing time (resolves at generation). Do not replace the fallback with `os.path.dirname(__file__)` traversal — it breaks when staged during publishing or run from a different working directory. The env-var override lets the Binder launcher and other re-runners set the correct path for their environment without touching the published proof. Keep `os` imported above this line.
-- **`FACT_REGISTRY` entries must be dicts, not strings**: B/S-type: `{"key": "source_a", "label": "..."}`. A-type: `{"label": "...", "method": None, "result": None}`. Plain strings like `{"B1": "source_a"}` crash `build_citation_detail()` which calls `.get("key")` on each entry.
-- **`compute_percentage_change(mode="decline")` is for purchasing-power decline only**: It computes `(1 - old/new) * 100` — the denominator is the new value. For standard year-over-year decline, use the default `mode="increase"` with `(old_value, new_value)` — the result will be negative when new < old.
-- **`parse_percentage_from_quote(quote, fact_id)` has no `pattern` kwarg**: For pattern-based extraction, use `parse_number_from_quote(quote, pattern, fact_id)` instead. The two functions have different signatures — check the Bundled Scripts table.
-- **JSON summary key is `claim_natural`, not `claim`**: The publish toolchain reads `proof_data.get("claim_natural")`. Using `"claim"` as the key silently drops the claim text from the published proof.
-- **Use LaTeX delimiters for math in `claim_natural` and markdown sections**: When the claim contains mathematical notation, use `\(...\)` for inline math and `\[...\]` for display math. Write `\(\alpha_i\)` not `alpha_i`, `\(\pi^2/6\)` not `pi^2/6`. Do NOT use `$...$` delimiters — they collide with currency dollar signs in claims. Non-math claims need no delimiters. The same convention applies to proof.md, proof_audit.md, and proof_narrative.md.
-- **Use `ProofSummaryBuilder` for the JSON summary**: Import from `scripts.proof_summary` — it builds v3 format with `format_version: 3`, validates against the JSON schema, and emits the `=== PROOF SUMMARY (JSON) ===` marker. See any template file for usage. The older `emit_proof_summary()` in `computations.py` is a legacy fallback that produces v2-shape JSON — do not use it for new proofs.
 
 ## Reference Files
 
@@ -68,6 +88,8 @@ Read these on demand, not all upfront.
 |------|-----------|
 | [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) | **Step 3** — the 9 rules with bad/good examples |
 | [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md) | **Step 3** — read this index to choose a template, then read the specific template file it directs you to |
+| [scripts-api.md](${CLAUDE_SKILL_DIR}/references/scripts-api.md) | **Step 3** — exact function signatures and import pattern |
+| [research-workflow.md](${CLAUDE_SKILL_DIR}/references/research-workflow.md) | **Step 2** — recency check, academic-paper deep dives, snapshot pre-fetching, quote harvesting, verify-as-you-go |
 | [output-specs.md](${CLAUDE_SKILL_DIR}/references/output-specs.md) | **Step 5** — proof.md, proof_audit.md, and proof_narrative.md structure |
 | [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md) | **Step 7** — before presenting results |
 | [advanced-patterns.md](${CLAUDE_SKILL_DIR}/references/advanced-patterns.md) | When encountering complex quotes or table-sourced data |
@@ -87,50 +109,7 @@ Import these instead of re-implementing verification logic.
 | `scripts/validate_proof.py` | Static analysis for rule compliance | `ProofValidator(filepath).validate()` |
 | `scripts/proof_summary.py` | Build v3 proof.json summary (primary path) | `ProofSummaryBuilder` |
 
-**Key function signatures:**
-
-```python
-# computations.py
-cross_check(value_a, value_b, tolerance=0.01, mode="absolute", label=None) -> bool
-#   mode="absolute": |a - b| <= tolerance
-#   mode="relative": |a - b| / max(|a|, |b|) <= tolerance
-compute_percentage_change(old_value, new_value, label=None, mode="increase") -> float
-#   mode="increase": (new - old) / old * 100
-#   mode="decline": (1 - old / new) * 100
-explain_calc(expr_str, scope, label=None) -> object
-#   Prints symbolic -> substituted -> result. RETURNS the computed value.
-compare(value, op_str, threshold, label=None) -> bool
-#   Prints "{label}: {value} {op_str} {threshold} = {result}". Label defaults to "compare".
-apply_verdict_qualifier(base_verdict, any_unverified) -> str
-#   Validates base_verdict, applies "(with unverified citations)" only to
-#   PROVED, DISPROVED, SUPPORTED. PARTIALLY VERIFIED and UNDETERMINED pass through.
-
-# proof_summary.py
-ProofSummaryBuilder(claim_natural, claim_formal, generator=None)
-#   Primary path for building proof.json. Produces format_version: 3.
-#   builder.add_empirical_fact(fact_id, label=, source_name=, source_url=, source_quote=)
-#   builder.set_verification(fact_id, status=, method=, ...)
-#   builder.set_extraction(fact_id, value=, value_in_quote=, ...)
-#   builder.add_computed_fact(fact_id, label=, method=, result=, depends_on=[])
-#   builder.add_cross_check(description=, fact_ids=, agreement=)
-#   builder.add_adversarial_check(question=, verification_performed=, finding=, breaks_proof=)
-#   builder.set_verdict(base_verdict, any_unverified=False, reason=None)
-#   builder.set_key_results(**kwargs)
-#   builder.emit()  # validates and prints JSON
-
-# verify_citations.py
-build_citation_detail(fact_registry, citation_results, empirical_facts) -> dict
-verify_data_values(url, data_values, fact_id, timeout=15, snapshot=None) -> dict
-#   Fetches page and confirms each value string appears. Returns {key: {found, value, fetch_mode}}
-```
-
-**Import pattern:**
-```python
-import os
-import sys
-PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT", "${CLAUDE_SKILL_DIR}")  # hardcoded fallback replaced with actual path at proof-writing time
-sys.path.insert(0, PROOF_ENGINE_ROOT)
-```
+For exact function signatures, modes, and the standard import pattern, see [scripts-api.md](${CLAUDE_SKILL_DIR}/references/scripts-api.md). Read at Step 3.
 
 ## Environment
 
@@ -180,24 +159,15 @@ Guiding questions:
 
 ### Step 2: Gather Facts (Both Directions)
 
-**Use your environment's web search tool — do not rely on memory for source selection.** LLM training data has a cutoff; sources recalled from memory may be outdated. Perform at least three searches:
+**Use your environment's web search tool — do not rely on memory for source selection.** LLM training data has a cutoff; sources recalled from memory may be outdated. At minimum, run three core searches:
 
-1. **Search for the claim itself** — find authoritative sources that address it directly
-2. **Search for recent data** — find the latest benchmarks, studies, or statistics on the topic
-3. **Search for counter-evidence** — find sources that contradict, debunk, or criticize the claim. Search for "[claim] debunked", "[claim] wrong", or "[claim] criticism"
+1. **The claim itself** — authoritative sources that address it directly
+2. **Recent data** — latest benchmarks, studies, or statistics
+3. **Counter-evidence** — sources that contradict, debunk, or criticize the claim ("[claim] debunked", "[claim] wrong", "[claim] criticism")
 
-**Recency check:** If your best sources are older than 12 months, search specifically for newer data. Fast-moving fields (AI benchmarks, politics, economics, medicine) require sources from the current year when available. Prefer recent primary sources over older ones when they cover the same data.
+For the full workflow — recency check, academic-paper deep dives (follow-up authors, broader phenomenon, full-paper read, citation network), real-world demonstrations, snapshot pre-fetching, quote harvesting from rendered pages, and the `verify_citation()` pre-flight loop — read **[research-workflow.md](${CLAUDE_SKILL_DIR}/references/research-workflow.md)**.
 
-**Academic paper claims — additional searches:** When the claim is *about* a research paper (its findings, validity, or implications), the three standard searches above are necessary but insufficient. Also perform:
-
-4. **Search for follow-up work by the same authors** — researchers often publish extensions, corrections, or reinforcing results. Search for the lead authors' names + the topic (e.g., "Mirzadeh Bengio reasoning LLM 2025"). This catches sequels the original paper's citation page may not yet list.
-5. **Search for the broader phenomenon, not just the specific benchmark** — generate synonym and hypernym search terms. If the paper introduces "GSM-NoOp," also search for "irrelevant information robustness LLM," "distractor reasoning models," "math word problem perturbation." Benchmark names are jargon; the phenomenon they test has multiple names in the literature.
-6. **Read the actual paper, not just its metadata** — fetch and read the PDF (or at minimum the full-text HTML). Abstracts omit methodology caveats, appendix rebuttals, and statistical details that are often decisive. If the paper has multiple arXiv versions, read the latest version and note substantive changes between versions. Use PyMuPDF or pdfplumber for PDF extraction.
-7. **Check the citation network** — search for "paper title" + "cited by" or check Google Scholar / Semantic Scholar for papers that cite it. Look specifically for replications, critiques, and meta-analyses that reference the original work.
-
-**Search for real-world demonstrations, not just benchmarks.** After finding academic benchmark sources, search separately for practical applications where the claimed mechanism has been demonstrated in the wild — production systems, notable achievements, or high-profile case studies. These often live in different communities and vocabularies than the academic literature, and can provide qualitatively stronger evidence. Example searches: "[mechanism] real-world success," "[mechanism] breakthrough application," "[domain] solved using [approach]." A benchmark paper shows something *can* work under controlled conditions; a real-world demonstration shows it *does* work. The strongest proofs combine both.
-
-**If web search is unavailable** in your environment, note this limitation in the proof audit under adversarial checks and flag that sources may not reflect the latest data.
+If web search is unavailable in your environment, note this limitation in the proof audit under adversarial checks and flag that sources may not reflect the latest data.
 
 Find at least two independent sources (Rule 6). For math claims, plan two independent computation approaches.
 
@@ -205,27 +175,7 @@ Find at least two independent sources (Rule 6). For math claims, plan two indepe
 
 **Adversarial sources belong in `adversarial_checks`, not `empirical_facts`.** Sources that argue *against* your proof's conclusion should be documented in the `adversarial_checks` list's `verification_performed` field. For **disproof proofs** (`proof_direction: "disprove"`), the adversarial direction is reversed: search for sources that *support* the claim — evidence that it might be true. The adversarial question becomes "Is there credible support for the claim I'm disproving?" Only sources that *support* the proof's conclusion belong in `empirical_facts`. **Exception for disproof proofs:** if adversarial investigation produces a finding that is itself a verifiable rejection source — for example, the claim's stated empirical origin is demonstrated to be fabricated or non-existent — include that finding in `empirical_facts` as a rejection source (subject to citation verification) **and** document the investigation in `adversarial_checks`. The finding's dual role does not disqualify it from `empirical_facts`; the test is whether it supports the proof's conclusion, and for a disproof proof, exposing a fabricated premise is supporting evidence. This prevents adversarial citation failures from degrading the verdict via `any_unverified`. **For contested qualifier claims:** sources that *reject* the qualifier (e.g., "claims not substantiated," "allegations not verified") are adversarial to SC2 — put them in `adversarial_checks`, not SC2's `empirical_facts`. It is normal and expected for SC2 to have zero empirical facts when no independent body has confirmed the qualifier.
 
-**Pre-fetch snapshots early, not late.** Many news and advocacy sites now return 403 to automated fetches — not just .gov/.edu. During Step 2 research, pre-fetch the full page text for every source you plan to cite and include it as the `snapshot` field in `empirical_facts`. This avoids discovering fetch failures late during `verify_all_citations()`, which forces source substitution under time pressure. Note: WebFetch and `verify_all_citations()` use different HTTP clients — a WebFetch 403 does not mean the script will also get 403, and vice versa. If both fail, the snapshot is your only recourse. See [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) for details.
-
-**Quote Harvesting (required before Step 3).** For each source you plan to cite, obtain the verbatim quote from the *rendered* page text — not from WebSearch/WebFetch summaries (which paraphrase). Open the URL in a browser or use Python to fetch and extract the visible text. The quote should match what a human reader sees on the page, not the raw HTML — `verify_all_citations()` strips HTML tags and decodes entities before matching, so your quote should be plain text without markup. For PDFs, use your PDF Read tool or PyMuPDF. For pages that 403, use the snapshot workflow or Wayback. WebFetch/WebSearch are fine for *discovering* sources, but never use their returned text as a quote — it's summarized, not verbatim. **Delegated research carries the same risk:** if you use a subagent, parallel tool call, or any other delegation layer to perform Step 2 research, treat all returned quotes exactly like WebSearch/WebFetch output — assume they may be paraphrased rather than verbatim. Run `verify_citation()` on each quote before writing it to `empirical_facts`, regardless of how the source was obtained.
-
-Pay attention to:
-- Lowercase vs uppercase in paper titles and benchmark names (e.g., `gsm8k` not `GSM8K`)
-- En-dashes vs hyphens, curly vs straight quotes
-- LaTeX artifacts on academic pages (`$\Lambda$CDM`, `$H_0$`)
-- For arXiv papers, prefer `ar5iv.labs.arxiv.org/html/PAPER_ID` over `arxiv.org/abs/PAPER_ID` — the former serves full paper HTML with verifiable quotes; the latter is an abstract-only page with limited text
-
-**Verify as you go.** After assembling each `empirical_facts` entry (including its `snapshot` if pre-fetched), run a quick verification before moving to the next source:
-```python
-from scripts.verify_citations import verify_citation
-result = verify_citation(url, quote, "test",
-                         snapshot=snapshot_text,  # pass pre-fetched snapshot if available
-                         wayback_fallback=True)
-print(result["status"], result.get("closest_passage", ""))
-```
-If the status is `not_found` or `partial`, check `closest_passage` in the result — it's a **diagnostic hint** showing approximately where on the page your quote might be. Do NOT copy `closest_passage` directly into your quote — it uses simplified HTML cleaning and may have word-boundary artifacts. Instead, use it to locate the right region on the page, then copy the visible rendered text (what a reader sees, not raw HTML). If `closest_passage` is `None`, the page likely doesn't contain relevant text — find a different source. Note: always pass the `snapshot` field if you have one — many sources 403 on live fetch, and omitting the snapshot will produce false `fetch_failed` results.
-
-Do not proceed to Step 3 with fixable `not_found` or `partial` results — these usually mean the quote was paraphrased and can be corrected. However, `fetch_failed` from known-unfetchable sources (403, JS-rendered, paywalled) is expected — document these and proceed. The "with unverified citations" verdict exists for exactly this case.
+Do not proceed to Step 3 with fixable `not_found` or `partial` citation results — these usually mean the quote was paraphrased and can be corrected. However, `fetch_failed` from known-unfetchable sources (403, JS-rendered, paywalled) is expected — document these and proceed. The "with unverified citations" verdict exists for exactly this case.
 
 **If a quote must be paraphrased** (e.g., the verbatim text is unwieldy or the source is paywalled and a snapshot is unavailable), declare `"verbatim": False` on the `empirical_facts` entry. The validator will warn and the proof report will note the reduced evidentiary weight. Do not omit this field silently — an undeclared paraphrase is harder to audit than a declared one.
 
