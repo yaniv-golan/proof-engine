@@ -156,3 +156,6 @@ def test_json_ld_includes_main_entity():
         proof_json_url="https://example.com/proofs/test/proof.json"))
     assert "mainEntity" in result
     assert result["mainEntity"]["@type"] == "Dataset"
+    assert result["mainEntity"]["description"]
+    assert result["mainEntity"]["creator"]["name"] == "Proof Engine"
+    assert "opensource.org" in result["mainEntity"]["license"]

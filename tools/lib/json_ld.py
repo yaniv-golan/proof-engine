@@ -56,7 +56,18 @@ def generate_claim_review(
             "@type": "Dataset",
             "url": proof_json_url,
             "name": "proof.json",
+            "description": (
+                f"Machine-readable proof data for the claim: "
+                f"\"{strip_latex(proof_data['claim_natural'])}\". "
+                f"Verdict: {verdict_info['raw']}."
+            ),
             "encodingFormat": "application/json",
+            "creator": {
+                "@type": "Organization",
+                "name": "Proof Engine",
+                "url": REPO_URL,
+            },
+            "license": "https://opensource.org/licenses/MIT",
         }
 
     if provenance_url:

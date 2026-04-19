@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.24.2] - 2026-04-19
+
+### Fixed
+
+- **Dataset structured data on proof pages.** `tools/lib/json_ld.py` now emits `description`, `creator`, and `license` on the `mainEntity.Dataset` in the embedded JSON-LD. Google Search Console was flagging the missing `description` as a critical issue (prevents pages from appearing in rich results) and `creator`/`license` as non-critical warnings on every proof page.
+
 ## [1.24.0] - 2026-04-19
 
 ### Added
