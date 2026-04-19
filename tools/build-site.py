@@ -841,9 +841,26 @@ def main():
         ),
     )
 
-    # Catalog page
+    # Proofs hub (canonical /proofs/)
     tpl = env.get_template("catalog.html")
-    write_file(output_dir / "catalog" / "index.html", tpl.render(**common, canonical_url=f"{site_url}{base_url}catalog/"))
+    write_file(output_dir / "proofs" / "index.html", tpl.render(**common, canonical_url=f"{site_url}{base_url}proofs/"))
+
+    # /catalog/ redirect shim — permanent, covers old links and minted references.
+    # Not in sitemap; noindex so search engines consolidate on /proofs/.
+    catalog_shim = (
+        "<!doctype html>\n"
+        '<meta charset="utf-8">\n'
+        "<title>Moved — Proof Engine</title>\n"
+        f'<link rel="canonical" href="{site_url}{base_url}proofs/">\n'
+        f'<meta http-equiv="refresh" content="0; url={base_url}proofs/">\n'
+        '<meta name="robots" content="noindex">\n'
+        f'<p>This page moved to <a href="{base_url}proofs/">{base_url}proofs/</a>.</p>\n'
+    )
+    write_file(output_dir / "catalog" / "index.html", catalog_shim)
+
+    # 404 page — GitHub Pages auto-serves this for unmatched paths
+    tpl404 = env.get_template("404.html")
+    write_file(output_dir / "404.html", tpl404.render(**common, canonical_url=None, noindex=True))
 
     # Proof detail pages
     tpl = env.get_template("proof.html")
@@ -1165,6 +1182,18 @@ def main():
     }
     write_file(output_dir / "index.json", json.dumps(catalog, indent=2))
 
+    # Slim search index — consumed by the 404 page's client-side search.
+    # Kept separate from index.json so growth in catalog metadata doesn't bloat 404-path loads.
+    search_index = [
+        {
+            "slug": p["slug"],
+            "claim": p["proof_data"]["claim_natural"],
+            "url": f"{base_url}proofs/{p['slug']}/",
+        }
+        for p in proofs
+    ]
+    write_file(output_dir / "search-index.json", json.dumps(search_index))
+
     # Static assets
     shutil.copytree(site_dir / "static", output_dir / "static")
 
@@ -1197,7 +1226,7 @@ def main():
     # Collect all page URLs for sitemap
     sitemap_urls = [
         f"{site_url}{base_url}",
-        f"{site_url}{base_url}catalog/",
+        f"{site_url}{base_url}proofs/",
         f"{site_url}{base_url}methodology/",
         f"{site_url}{base_url}submit/",
     ]
@@ -1239,7 +1268,7 @@ def main():
         "\n"
         "## Browsing Proofs\n"
         "\n"
-        f"- [Proof Catalog]({site_url}{base_url}catalog/): Browse all verified proofs\n"
+        f"- [All Proofs]({site_url}{base_url}proofs/): Browse all verified proofs\n"
         f"- [Catalog API]({site_url}{base_url}index.json): Machine-readable JSON catalog with all proofs, verdicts, tags, and links to individual proof.json files\n"
         f"- [Methodology]({site_url}{base_url}methodology/): How Proof Engine works — citation verification, executable proofs, structured verdicts\n"
         "\n"

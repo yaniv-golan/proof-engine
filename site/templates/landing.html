@@ -347,7 +347,7 @@ body.landing-v2 .pev2-btn:focus-visible{outline:2px solid var(--pev2-accent);out
     <a href="{{ base_url }}" class="pev2-logo">⟨proof-engine⟩</a>
     <div class="pev2-nav-links">
       <a href="{{ base_url }}methodology/">methodology</a>
-      <a href="{{ base_url }}catalog/">catalog</a>
+      <a href="{{ base_url }}proofs/">catalog</a>
       <a href="#install">install</a>
       <a href="{{ base_url }}submit/">submit</a>
       {% if version %}
@@ -378,7 +378,7 @@ body.landing-v2 .pev2-btn:focus-visible{outline:2px solid var(--pev2-accent);out
       </p>
       <div class="pev2-hero-cta">
         <a class="pev2-btn pev2-btn-primary" href="#install" onclick="gtag('event','cta_click',{cta_label:'install_skill_hero'})">install the skill →</a>
-        <a class="pev2-btn pev2-btn-ghost" href="{{ base_url }}catalog/" onclick="gtag('event','cta_click',{cta_label:'browse_proofs'})">browse {{ stats.total }} proofs</a>
+        <a class="pev2-btn pev2-btn-ghost" href="{{ base_url }}proofs/" onclick="gtag('event','cta_click',{cta_label:'browse_proofs'})">browse {{ stats.total }} proofs</a>
       </div>
       <div class="pev2-hero-meta">
         <span><strong>{{ stats.total }}</strong> proofs</span>
@@ -574,7 +574,7 @@ body.landing-v2 .pev2-btn:focus-visible{outline:2px solid var(--pev2-accent);out
   </div>
 
   <div style="text-align:center;margin-top:28px">
-    <a href="{{ base_url }}catalog/" style="font-size:12px;color:var(--pev2-accent)" onclick="gtag('event','cta_click',{cta_label:'explore_all_catalog'})">explore all {{ stats.total }} proofs in the catalog →</a>
+    <a href="{{ base_url }}proofs/" style="font-size:12px;color:var(--pev2-accent)" onclick="gtag('event','cta_click',{cta_label:'explore_all_catalog'})">explore all {{ stats.total }} proofs in the catalog →</a>
   </div>
 </section>
 {% endif %}
@@ -650,7 +650,7 @@ body.landing-v2 .pev2-btn:focus-visible{outline:2px solid var(--pev2-accent);out
     <span>built with <a href="https://github.com/yaniv-golan/proof-engine" style="color:inherit">⟨proof-engine⟩</a> · MIT · open to PRs</span>
     <div class="pev2-foot-links">
       <a href="https://github.com/yaniv-golan/proof-engine">github</a>
-      <a href="{{ base_url }}catalog/">catalog</a>
+      <a href="{{ base_url }}proofs/">catalog</a>
       <a href="{{ base_url }}methodology/">methodology</a>
       <a href="{{ base_url }}submit/">submit</a>
     </div>

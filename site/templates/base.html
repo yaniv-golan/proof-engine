@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Proof Engine{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Open-source verifiable proofs. Every fact cited, every calculation re-runnable.{% endblock %}">
-    <link rel="canonical" href="{{ canonical_url }}">
+    {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
+    {% if noindex %}<meta name="robots" content="noindex">{% endif %}
     <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{{ self.meta_description() }}{% endblock %}">
-    <meta property="og:url" content="{{ canonical_url }}">
+    {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}">{% endif %}
     <meta property="og:type" content="{{ og_type | default('website') }}">
     <meta property="og:site_name" content="Proof Engine">
     <meta name="twitter:card" content="summary_large_image">
@@ -35,7 +36,7 @@
         <div class="nav-inner">
             <a href="{{ base_url }}" class="nav-logo">⟨proof-engine⟩</a>
             <div class="nav-links">
-                <a href="{{ base_url }}catalog/">catalog</a>
+                <a href="{{ base_url }}proofs/">catalog</a>
                 <a href="{{ base_url }}methodology/">methodology</a>
                 <a href="{{ base_url }}submit/">submit</a>
                 <a href="https://github.com/yaniv-golan/proof-engine" class="nav-github" rel="nofollow" aria-label="GitHub">

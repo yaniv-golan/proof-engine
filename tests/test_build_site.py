@@ -121,7 +121,10 @@ def test_build_produces_output(site_fixture):
     output = site_fixture / "_site"
     assert (output / "index.html").exists()
     assert (output / "index.json").exists()
-    assert (output / "catalog" / "index.html").exists()
+    assert (output / "search-index.json").exists()
+    assert (output / "proofs" / "index.html").exists()
+    assert (output / "catalog" / "index.html").exists()  # redirect shim
+    assert (output / "404.html").exists()
     assert (output / "methodology" / "index.html").exists()
     assert (output / "submit" / "index.html").exists()
     assert (output / "proofs" / "test-claim" / "index.html").exists()
@@ -163,10 +166,12 @@ def test_sitemap_xml_at_root(site_fixture):
     sitemap = (site_fixture / "_site" / "sitemap.xml").read_text()
     assert 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' in sitemap
     assert "<url><loc>https://example.com/proof-engine/</loc></url>" in sitemap
-    assert "<url><loc>https://example.com/proof-engine/catalog/</loc></url>" in sitemap
+    assert "<url><loc>https://example.com/proof-engine/proofs/</loc></url>" in sitemap
     assert "<url><loc>https://example.com/proof-engine/proofs/test-claim/</loc></url>" in sitemap
     assert "<url><loc>https://example.com/proof-engine/methodology/</loc></url>" in sitemap
     assert "<url><loc>https://example.com/proof-engine/submit/</loc></url>" in sitemap
+    # Old /catalog/ URL must NOT be in the sitemap — it's a shim for old links only
+    assert "/proof-engine/catalog/</loc>" not in sitemap
 
 
 def test_meta_description_in_proof_page(site_fixture):
@@ -404,7 +409,7 @@ def test_base_url_without_trailing_slash(site_fixture):
     output = site_fixture / "_site"
     sitemap = (output / "sitemap.xml").read_text()
     assert "<url><loc>https://example.com/proof-engine/</loc></url>" in sitemap
-    assert "<url><loc>https://example.com/proof-engine/catalog/</loc></url>" in sitemap
+    assert "<url><loc>https://example.com/proof-engine/proofs/</loc></url>" in sitemap
     robots = (output / "robots.txt").read_text()
     assert "Sitemap: https://example.com/proof-engine/sitemap.xml" in robots
     html = (output / "index.html").read_text()
@@ -416,7 +421,7 @@ def test_llms_txt_at_root(site_fixture):
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     llms = (site_fixture / "_site" / "llms.txt").read_text()
     assert llms.startswith("# Proof Engine")
-    assert "https://example.com/proof-engine/catalog/" in llms
+    assert "https://example.com/proof-engine/proofs/" in llms
     assert "https://example.com/proof-engine/index.json" in llms
     assert "https://example.com/proof-engine/submit/" in llms
     assert "https://example.com/proof-engine/methodology/" in llms
@@ -425,15 +430,60 @@ def test_llms_txt_at_root(site_fixture):
     assert "proof.md" in llms
     assert "proof_audit.md" in llms
     assert "proof.json" in llms
+    # Old /catalog/ URL should not appear in llms.txt — /proofs/ is canonical
+    assert "https://example.com/proof-engine/catalog/" not in llms
 
 
 def test_llms_txt_urls_with_root_base_url(site_fixture):
     result = _run_build(site_fixture, base_url="/")
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     llms = (site_fixture / "_site" / "llms.txt").read_text()
-    assert "https://example.com/catalog/" in llms
+    assert "https://example.com/proofs/" in llms
     assert "https://example.com/index.json" in llms
     assert "/proof-engine/" not in llms
+    assert "https://example.com/catalog/" not in llms
+
+
+def test_catalog_shim_has_canonical_and_noindex(site_fixture):
+    """The /catalog/ redirect shim must carry noindex + canonical → /proofs/."""
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    shim = (site_fixture / "_site" / "catalog" / "index.html").read_text()
+    assert 'name="robots"' in shim and "noindex" in shim
+    assert 'rel="canonical"' in shim
+    assert "/proof-engine/proofs/" in shim
+    assert 'http-equiv="refresh"' in shim
+
+
+def test_proofs_hub_has_correct_canonical(site_fixture):
+    """The new /proofs/ hub's canonical must point to itself."""
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    hub = (site_fixture / "_site" / "proofs" / "index.html").read_text()
+    assert '<link rel="canonical" href="https://example.com/proof-engine/proofs/">' in hub
+
+
+def test_404_page_exists_and_has_noindex(site_fixture):
+    """GitHub Pages serves /404.html for unmatched paths; must be noindex + not have a canonical."""
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    nf = (site_fixture / "_site" / "404.html").read_text()
+    assert "noindex" in nf
+    assert 'rel="canonical"' not in nf
+    assert "404" in nf
+
+
+def test_search_index_json_shape(site_fixture):
+    """/search-index.json is a slim list of {slug, claim, url} for 404-page search."""
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    data = json.loads((site_fixture / "_site" / "search-index.json").read_text())
+    assert isinstance(data, list)
+    assert len(data) == 1
+    entry = data[0]
+    assert set(entry.keys()) == {"slug", "claim", "url"}
+    assert entry["slug"] == "test-claim"
+    assert entry["url"] == "/proof-engine/proofs/test-claim/"
 
 
 def test_landing_page_has_ai_agents_link(site_fixture):

@@ -81,6 +81,12 @@
         });
     }
 
+    // Pre-populate search from ?q= so the 404 page's hint chips and search form land here cleanly.
+    try {
+        var initialQuery = new URLSearchParams(window.location.search).get("q");
+        if (initialQuery) search.value = initialQuery;
+    } catch (_) { /* ignore */ }
+
     fetch(window.CATALOG_JSON_URL)
         .then(function (r) { return r.json(); })
         .then(function (data) {

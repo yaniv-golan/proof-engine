@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.25.0] - 2026-04-19
+
+### Added
+
+- **Canonical `/proofs/` hub URL.** The proof catalog now lives at `/proofs/` instead of `/catalog/`. The URL hierarchy matches the content tree (`/proofs/` → `/proofs/:slug/`), which is the convention users path-trim to and which search engines treat as a structural signal. `/catalog/` is served as a permanent static redirect shim with `rel="canonical"` pointing to `/proofs/` and `noindex` so Google consolidates on the new URL; any old external link or bookmark keeps working.
+- **Branded `/404.html` page** with a themed "proof trace" that treats the 404 itself as a claim the pipeline DISPROVED. Client-side JS infers the requested path from the URL/referrer, stamps a deterministic trace_id, and computes a nearest-slug count by running Levenshtein against a new slim `/search-index.json`. Includes a search box and three quick-jump cards (home / catalog / submit).
+- **`/search-index.json`** — a slim `[{slug, claim, url}, ...]` emitted by `build-site.py`, kept separate from the full `/index.json` so the 404 path doesn't pay for audit metadata it doesn't need.
+- **Reserved-slug guard in `proof-site.py publish`** — rejects slugs that would collide with top-level routes or files (`index`, `404`, `tags`, `methodology`, `submit`, `static`, `doi-index`, `sitemap`, `robots`, `llms`, `og-image`, `catalog`). Prevents a future publish from silently overwriting the hub, the redirect shim, or the 404 page.
+- **`?q=` query-parameter support on the catalog hub** — `catalog.js` now pre-populates its search box from `?q=`, so the 404 page's search form and hint chips can deep-link into filtered results.
+
+### Changed
+
+- **`/proofs/` replaces `/catalog/` in the sitemap and `llms.txt`.** Internal hrefs across `base.html`, `landing.html`, and `proof.html` all point at `/proofs/`. The catalog hub's `<title>` and `<h1>` were updated from "catalog" to "all proofs" to match the new URL.
+- **`base.html` now emits `rel="canonical"` and `og:url` only when `canonical_url` is set**, and honours an optional `noindex` context flag — used by the 404 page.
+
 ## [1.24.2] - 2026-04-19
 
 ### Fixed

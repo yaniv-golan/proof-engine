@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}404 — claim DISPROVED · ⟨proof-engine⟩{% endblock %}
+
+{% block meta_description %}Page not found. The pipeline broke visibly, as designed. Browse the catalog or submit a claim.{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ base_url }}static/404.css">
+{% endblock %}
+
+{% block body_attrs %} class="notfound-page"{% endblock %}
+
+{% block nav %}
+<nav class="notfound-nav">
+    <div class="notfound-nav-inner">
+        <a href="{{ base_url }}" class="notfound-logo">⟨proof-engine⟩</a>
+        <div class="notfound-nav-links">
+            <a href="{{ base_url }}methodology/">methodology</a>
+            <a href="{{ base_url }}proofs/">catalog</a>
+            <a href="{{ base_url }}submit/">submit</a>
+            <span class="notfound-status"><span class="notfound-dot"></span>HTTP 404</span>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="notfound-wrap">
+    <div class="ribbon">exhibit · 404 · page not found</div>
+
+    <h1 class="notfound-h1">
+        Claim <em>exists</em>: page at this URL.
+    </h1>
+    <p class="notfound-sub">
+        We ran the proof on this URL. It didn't match any file in the catalog —
+        no quote to verify, no <code>proof.py</code> to execute, no audit trail to archive.
+        <br><br>
+        Per pipeline policy, the verdict stands.
+    </p>
+
+    <aside class="exhibit" aria-label="Live 404 trace">
+        <div class="exhibit-bar">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span>proof.py — 404 trace</span>
+            <span class="path" id="path-url">/this-page</span>
+        </div>
+        <div class="exhibit-body">
+            <div class="line"><span class="t">00:00</span><span class="prompt">›</span><span class="v">claim := <span class="q">"a page exists at <span id="claim-url">/this-page</span>"</span></span></div>
+            <div class="line"><span class="t">00:02</span><span class="tag-run">FETCH</span><span class="v"><span id="fetch-url">proofengine.info/this-page</span> <span class="bad">— 404 Not Found</span></span></div>
+            <div class="line"><span class="t">00:03</span><span class="tag-fail">MATCH</span><span class="v">B1 <span class="dim">expected page body</span> <span class="bad">no match · 0% coverage</span></span></div>
+            <div class="line"><span class="t">00:03</span><span class="tag-fail">MATCH</span><span class="v">B2 <span class="dim">expected proof artifacts</span> <span class="bad">no match · file not in catalog</span></span></div>
+            <div class="line"><span class="t">00:04</span><span class="prompt">›</span><span class="v"><span class="dim">search</span>: nearest slugs by Levenshtein → <span class="num" id="near-count">0 candidates</span></span></div>
+            <div class="line"><span class="t">00:04</span><span class="prompt">›</span><span class="v"><span class="dim">compute</span>: page_exists(url) → <span class="bad">False</span></span></div>
+            <div class="line"><span class="t">00:05</span><span class="prompt">›</span><span class="v"><span class="dim">return verdict</span><span class="cursor"></span></span></div>
+            <div class="verdict">
+                <span class="stamp">DISPROVED</span>
+                <span class="note"><b>No artifact found at this URL.</b> The pipeline broke visibly, as designed. Try the suggestions below, or re-file the claim against a known path.</span>
+            </div>
+        </div>
+    </aside>
+
+    <div class="rail">
+        <a class="card-404" href="{{ base_url }}">
+            <div class="k">§01 · home</div>
+            <div class="n">Return to index</div>
+            <div class="d">The full claim catalog, pipeline diagram, and install flow.</div>
+        </a>
+        <a class="card-404" href="{{ base_url }}proofs/">
+            <div class="k">§02 · catalog</div>
+            <div class="n">Browse all proofs</div>
+            <div class="d">Every verdict, filterable by domain and outcome.</div>
+        </a>
+        <a class="card-404" href="{{ base_url }}submit/">
+            <div class="k">§03 · submit</div>
+            <div class="n">File a new claim</div>
+            <div class="d">Think this page <em>should</em> exist? Propose the proof.</div>
+        </a>
+    </div>
+
+    <div class="nf-search">
+        <div class="nf-search-label">search the catalog instead</div>
+        <form class="nf-search-row" action="{{ base_url }}proofs/" method="get" role="search">
+            <div class="p">›</div>
+            <input id="q" name="q" type="search" placeholder='try: "napoleon height" or "dark energy"' autocomplete="off" autofocus>
+        </form>
+        <div class="nf-search-hints" id="hints">
+            <span data-q="0.999 equals 1">0.999… = 1</span>
+            <span data-q="napoleon height">napoleon height</span>
+            <span data-q="ai critical thinking">AI &amp; critical thinking</span>
+            <span data-q="dark energy">dark energy</span>
+            <span data-q="great wall from space">great wall from space</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="notfound-foot">
+    <span>built with ⟨proof-engine⟩ · MIT · <a href="https://github.com/yaniv-golan/proof-engine">github</a></span>
+    <span class="right">trace_id: <code id="trace-id">404-xxxxxxxx</code></span>
+</footer>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.SEARCH_INDEX_URL = "{{ base_url }}search-index.json";
+    window.BASE_URL = "{{ base_url }}";
+    window.CATALOG_PATH = "{{ base_url }}proofs/";
+</script>
+<script src="{{ base_url }}static/404.js"></script>
+{% endblock %}

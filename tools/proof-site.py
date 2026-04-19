@@ -85,6 +85,18 @@ def cmd_publish(args) -> int:
         slug = slugify_claim(claim)
         log(f"Derived slug from claim: {slug}")
 
+    # Reserved slugs would collide with built-site top-level routes/files.
+    RESERVED_SLUGS = {
+        "index", "404", "tags", "methodology", "submit", "static",
+        "doi-index", "sitemap", "robots", "llms", "og-image", "catalog",
+    }
+    if slug in RESERVED_SLUGS:
+        error(
+            f"Slug '{slug}' is reserved (collides with a site route or file). "
+            f"Pass an explicit --slug to override the auto-derived name."
+        )
+        return 1
+
     target_dir = proofs_dir / slug
 
     # 4. Duplicate detection
