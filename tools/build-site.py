@@ -73,6 +73,26 @@ def _resolve_commit_sha(explicit: str | None) -> str:
         sys.exit(2)
     return sha
 
+
+def _git_last_commit_date(path: Path) -> str | None:
+    """Return YYYY-MM-DD of the most recent commit touching ``path``, or None.
+
+    Used for sitemap ``<lastmod>``. Returns None when git is unavailable, the
+    path is outside the repo, or the path has no commit history (e.g. in test
+    fixtures that live under tmp). Callers must omit ``<lastmod>`` on None.
+    Requires full history — deploy workflow sets ``fetch-depth: 0``.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "log", "-1", "--format=%cs", "--", str(path)],
+            cwd=REPO_ROOT, capture_output=True, text=True, check=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    ts = result.stdout.strip()
+    return ts or None
+
+
 SITE_GENERATOR_VERSION = "1.0.0"
 PROOFS_PER_TAG_PAGE = 50
 
@@ -1223,29 +1243,47 @@ def main():
             default_thumbnail_path=default_thumb,
         )
 
-    # Collect all page URLs for sitemap
-    sitemap_urls = [
-        f"{site_url}{base_url}",
-        f"{site_url}{base_url}proofs/",
-        f"{site_url}{base_url}methodology/",
-        f"{site_url}{base_url}submit/",
+    # Collect all page URLs + lastmod for sitemap. Lastmod uses the latest
+    # commit date touching each proof's source dir. Aggregate pages (home,
+    # /proofs/, tag pages, etc.) inherit the newest lastmod of the proofs they
+    # surface. Test fixtures live outside the repo, so git log returns empty
+    # and lastmod is omitted (legacy format preserved for those assertions).
+    proof_lastmod: dict[str, str | None] = {
+        proof["slug"]: _git_last_commit_date(proofs_dir / proof["slug"])
+        for proof in proofs
+    }
+    all_proof_dates = [d for d in proof_lastmod.values() if d]
+    site_lastmod = max(all_proof_dates) if all_proof_dates else None
+
+    sitemap_entries: list[tuple[str, str | None]] = [
+        (f"{site_url}{base_url}", site_lastmod),
+        (f"{site_url}{base_url}proofs/", site_lastmod),
+        (f"{site_url}{base_url}methodology/", site_lastmod),
+        (f"{site_url}{base_url}submit/", site_lastmod),
     ]
     for proof in proofs:
-        sitemap_urls.append(f"{site_url}{base_url}proofs/{proof['slug']}/")
+        sitemap_entries.append((
+            f"{site_url}{base_url}proofs/{proof['slug']}/",
+            proof_lastmod[proof["slug"]],
+        ))
     for tag, tproofs in tag_proofs.items():
+        tag_dates = [d for d in (proof_lastmod[p["slug"]] for p in tproofs) if d]
+        tag_lastmod = max(tag_dates) if tag_dates else None
         total_pages = math.ceil(len(tproofs) / PROOFS_PER_TAG_PAGE)
         for page_num in range(1, total_pages + 1):
-            if page_num == 1:
-                sitemap_urls.append(f"{site_url}{base_url}tags/{tag}/")
-            else:
-                sitemap_urls.append(f"{site_url}{base_url}tags/{tag}/page/{page_num}/")
+            path = f"tags/{tag}/" if page_num == 1 else f"tags/{tag}/page/{page_num}/"
+            sitemap_entries.append((f"{site_url}{base_url}{path}", tag_lastmod))
 
-    # sitemap.xml
-    sitemap_entries = "\n".join(f"  <url><loc>{xml_escape(url)}</loc></url>" for url in sitemap_urls)
+    def _render_sitemap_url(loc: str, lastmod: str | None) -> str:
+        if lastmod:
+            return f"  <url><loc>{xml_escape(loc)}</loc><lastmod>{lastmod}</lastmod></url>"
+        return f"  <url><loc>{xml_escape(loc)}</loc></url>"
+
+    sitemap_body = "\n".join(_render_sitemap_url(loc, lm) for loc, lm in sitemap_entries)
     sitemap_xml = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f"{sitemap_entries}\n"
+        f"{sitemap_body}\n"
         "</urlset>\n"
     )
     write_file(output_dir / "sitemap.xml", sitemap_xml)

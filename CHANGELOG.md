@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.25.1] - 2026-04-22
+
+### Added
+
+- **`<lastmod>` per URL in `/sitemap.xml`.** `tools/build-site.py` now emits the committer date (YYYY-MM-DD, via `git log -1 --format=%cs`) of the most recent commit touching each proof's source directory. Aggregate pages (home, `/proofs/`, `/methodology/`, `/submit/`, tag pages) inherit the newest lastmod of the proofs they surface. Gives Google's crawler a priority signal for updated proofs instead of having to re-fetch and diff every URL blindly. Falls back to omitting `<lastmod>` when git history is unavailable (e.g. test fixtures built in tmp dirs) — preserves the legacy format for those assertions.
+
+### Changed
+
+- **Deploy workflow fetches full git history** (`fetch-depth: 0` on `actions/checkout@v4`) so `build-site.py` can resolve per-proof lastmod dates. Shallow clones only expose the tip commit and would collapse every URL's lastmod to the same date.
+
 ## [1.25.0] - 2026-04-19
 
 ### Added
