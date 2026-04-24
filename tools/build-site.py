@@ -10,6 +10,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 from xml.sax.saxutils import escape as xml_escape
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -1449,6 +1450,13 @@ def main():
         "- [GitHub Repository](https://github.com/yaniv-golan/proof-engine): Source code, documentation, and examples\n"
     )
     write_file(output_dir / "llms.txt", llms_txt)
+
+    # CNAME — required in the deployed artifact so GitHub Pages keeps the
+    # custom-domain setting across deploys. Without it, actions/deploy-pages
+    # unsets the domain, breaking the site until someone re-enters it.
+    host = urlparse(args.site_url).hostname
+    if host and not host.endswith(".github.io"):
+        write_file(output_dir / "CNAME", host + "\n")
 
     print(f"Built {len(proofs)} proofs to {output_dir}")
 
