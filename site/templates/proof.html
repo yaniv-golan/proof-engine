@@ -110,12 +110,13 @@
   {# Robustness cell #}
   {% if adv_checks %}
   {% set adv_broke = adv_checks | selectattr('breaks_proof') | list | length %}
+  {% set adv_withstood = adv_checks | length - adv_broke %}
   <div class="sb-cell">
     <div class="sb-l">robustness</div>
     <div class="sb-n {{ 'ok' if adv_broke == 0 else 'bad' }}">
-      {{ adv_broke }}<span class="of"> / {{ adv_checks | length }}</span>
+      {{ adv_withstood }}<span class="of"> / {{ adv_checks | length }}</span>
     </div>
-    <div class="sb-nsub">adversarial checks broke the proof</div>
+    <div class="sb-nsub">{% if adv_broke > 0 %}{{ adv_broke }} adversarial check{{ 's' if adv_broke != 1 }} broke the proof{% else %}adversarial challenges withstood{% endif %}</div>
   </div>
   {% endif %}
   {# DOI cell #}
