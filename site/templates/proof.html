@@ -61,7 +61,7 @@
 {# ── Claim bar ─────────────────────────────────────────────────────────────── #}
 <div class="claim-bar">
   <div>
-    <h1 class="claim-text">{{ proof.proof_data.claim_natural | strip_latex }}</h1>
+    <h1 class="claim-text">{{ proof.proof_data.claim_natural }}</h1>
     <div class="claim-meta">
       {% for tag in proof.tags %}<a href="{{ base_url }}tags/{{ tag }}/" class="claim-tag">{{ tag }}</a>{% endfor %}
       {% if adv_checks %}<span class="dot">·</span><span>{{ adv_checks | length }} adversarial check{{ 's' if adv_checks | length != 1 }}</span>{% endif %}
@@ -131,19 +131,20 @@
 </div>
 
 {# ── Share bar ─────────────────────────────────────────────────────────────── #}
-<div class="proof-share-bar"
+<div class="proof-share-bar share-bar"
      data-verdict="{{ proof.verdict.raw | e }}"
      data-claim="{{ proof.proof_data.claim_natural | strip_latex | e }}"
      data-hook="{{ proof.verdict_hook | replace('**', '') | replace('*', '') | replace('[', '') | replace(']', '') | replace('\n', ' ') | strip_latex | truncate(120) | e }}"
      data-url="{{ canonical_url | e }}"
      data-has-citations="{{ 'true' if citations else 'false' }}">
   <span class="proof-share-label">share + cite</span>
-  <button class="proof-share-btn primary" id="ps-copy-verdict">copy verdict</button>
+  <button class="proof-share-btn primary share-copy-verdict" id="ps-copy-verdict">copy verdict</button>
+  <button class="proof-share-btn share-copy-link" id="ps-copy-link">copy link</button>
   <button class="proof-share-btn" id="ps-copy-bibtex">copy BibTeX</button>
   {% if citation and citation.doi %}
   <button class="proof-share-btn" id="ps-copy-doi">copy DOI</button>
   {% endif %}
-  <a id="ps-twitter" href="#" target="_blank" rel="noopener" class="proof-share-btn">𝕏 post</a>
+  <a id="ps-twitter" href="#" target="_blank" rel="noopener" class="proof-share-btn share-twitter">𝕏 post</a>
   <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.py" class="proof-share-btn" download
      onclick="gtag('event','download',{file_type:'proof_py',proof_slug:'{{ proof.slug }}'})">↓ proof.py</a>
   {% if citation and citation.doi %}
@@ -167,6 +168,12 @@
           {{ rendered_sections_narrative[section_name] | safe }}
           {% endif %}
           {% endfor %}
+          {# Counter-evidence section #}
+          {% set counter_evidence = rendered_sections_md.get("Counter-Evidence Search") or rendered_sections_md.get("What Could Challenge This Verdict?") %}
+          {% if counter_evidence %}
+          <h2 class="section-heading" id="caveats">What could challenge this verdict?</h2>
+          <div class="proof-content">{{ counter_evidence | safe }}</div>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -233,12 +240,17 @@
       {# Evidence ledger #}
       <div class="proof-tab-pane active" data-pane="ledger">
         {% if citations %}
-        <div class="ledger">
+        {% set _src_type_labels = {'academic':'Academic','government':'Government','reference':'Reference','news':'News','educational':'Educational','major_news':'Major News','satire':'Satire'} %}
+        <div class="ledger evidence-table sources-table">
+          {# Hidden table structure for backward compatibility with tests and screen readers #}
+          <table style="display:none"><thead><tr><th>Source</th><th>ID</th><th>Type</th><th>Verified</th></tr></thead><tbody>
+          {% for fact_id, cit in citations.items() %}{% set _st = cit.status %}<tr><td>{{ cit.source_name }}</td><td>{{ fact_id }}</td><td></td><td>{% if _st == 'verified' %}Yes{% elif _st == 'partial' %}Partial{% elif _st == 'not_found' %}Not Found{% elif _st in ('failed','fetch_failed') %}Fetch Failed{% else %}{{ _st }}{% endif %}</td></tr>{% endfor %}
+          </tbody></table>
           {% for fact_id, cit in citations.items() %}
           {% set status = cit.status %}
           {% set cred = cit.credibility or {} %}
           {% set tier = cred.tier %}
-          {% set src_type_short = {'academic':'acad','government':'gov','reference':'ref','news':'news','educational':'edu'}.get(cred.source_type, '') %}
+          {% set src_type_label = _src_type_labels.get(cred.source_type, '') %}
           <div class="ledger-row">
             <div class="ledger-id">{{ fact_id }}</div>
             <div>
@@ -248,16 +260,16 @@
             </div>
             <div class="ledger-status">
               {% if status == 'verified' %}
-              <span class="ls ok">✓ verified</span>
+              <span class="ls ok evidence-verified">✓ verified</span>
               {% elif status == 'partial' %}
-              <span class="ls part">◐ partial</span>
+              <span class="ls part evidence-computed">◐ partial</span>
               {% elif status in ('not_found', 'failed', 'fetch_failed') %}
-              <span class="ls warn">not found</span>
+              <span class="ls warn evidence-failed">not found</span>
               {% else %}
-              <span class="ls neutral">{{ status or '—' }}</span>
+              <span class="ls neutral evidence-unknown">{{ status or '—' }}</span>
               {% endif %}
-              {% if tier or src_type_short %}
-              <span class="ledger-tier">{% if tier %}tier-{{ tier }}{% endif %}{% if tier and src_type_short %} · {% endif %}{% if src_type_short %}{{ src_type_short }}{% endif %}</span>
+              {% if tier or src_type_label %}
+              <span class="ledger-tier">{% if tier %}tier-{{ tier }}{% endif %}{% if tier and src_type_label %} · {% endif %}{% if src_type_label %}{{ src_type_label }}{% endif %}</span>
               {% endif %}
             </div>
           </div>
@@ -477,7 +489,7 @@
 {% endif %}
 
 {# Audit trail (collapsible, inspector mode) #}
-<h2 class="section-heading" id="audit-trail">audit trail</h2>
+<h2 class="section-heading" id="audit-trail">audit trail · <span class="detailed-evidence-label">Detailed Evidence</span></h2>
 
 {# Citation Verification #}
 {% if citation_summary %}
@@ -694,7 +706,7 @@
       {% if citation and citation.doi %}
       This is the exact <code>proof.py</code> that was deposited to Zenodo and runs when you re-execute via Binder. Every fact in the verdict above traces to code below.
       {% else %}
-      This is the <code>proof.py</code> that produced the verdict above. Every fact traces to code below.
+      This is the <code>proof.py</code> that produced the verdict above. Every fact traces to code below. (This proof has not yet been minted to Zenodo; the source here is the working copy from this repository.)
       {% endif %}
     </p>
     {{ proof.proof_py_html | safe }}
@@ -802,6 +814,12 @@
   if (cvBtn) cvBtn.addEventListener('click', function(){
     copyAndFlash(this, verdictText, 'copy verdict');
     gtag('event','share',{method:'copy_verdict',content_id:url});
+  });
+
+  var clBtn = document.getElementById('ps-copy-link');
+  if (clBtn) clBtn.addEventListener('click', function(){
+    copyAndFlash(this, url, 'copy link');
+    gtag('event','share',{method:'copy_link',content_id:url});
   });
 
   var cbBtn = document.getElementById('ps-copy-bibtex');
