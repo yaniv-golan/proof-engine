@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.26.0] - 2026-04-24
+
+### Added
+
+- **Inspector mode split-pane layout.** The INSPECTOR tab now shows a `1.25fr / 1fr` two-column grid: narrative prose on the left, syntax-highlighted `proof.py` on the right. Replaces the previous single-panel layout.
+- **Bidirectional prose↔code binding.** Every narrative paragraph is mapped to its corresponding `proof.py` section via `# ===` boundary parsing. Clicking a paragraph scrolls and highlights the matching lines; hovering a code line activates the owning paragraph. ESC unpins.
+- **Dynamic `proof.py` loader.** `proof.py` is fetched on inspector activation and rendered with a lightweight regex-based Python syntax highlighter (keywords, strings, comments, constants, function calls). No bundler dependency.
+- **Line-range label in code panel header.** Shows the active range (e.g. `· line 33–57`) as the user navigates sections.
+
+### Fixed
+
+- **`applyMode` initialization order.** `loadProofPy()` was called before `codeViewer` and `proofPyUrl` were assigned, causing an early return and leaving the code panel stuck on "loading proof.py…". Fixed by deferring `applyMode(savedMode)` until after all inspector DOM variables are set.
+- **CSS grid `min-width` collapse.** `white-space: pre` code lines forced the `.src-panel` min-content to ~944 px, consuming the entire grid width and collapsing the prose column to 2 px. Fixed with `.split > * { min-width: 0; }`.
+- **Double-separator section parser.** `proof.py` uses `# ====` / `# SECTION NAME` / `# ====` triple-block headers; the closing separator was parsed as a new section, producing 1-line ranges. Fixed by skipping separators whose following line does not start with `# `.
+
 ## [1.25.1] - 2026-04-22
 
 ### Added
