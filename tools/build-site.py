@@ -385,6 +385,118 @@ def build_fact_tooltips(proof_data):
     return tooltips
 
 
+def _kr_find(key_results, sc_id, suffixes):
+    """Try multiple key_results key patterns for a given SC ID and list of suffixes."""
+    sc_lower = sc_id.lower()  # sc1, a, b
+    sc_num = re.sub(r'[^0-9]', '', sc_id)  # "1", "2", "" for letter IDs
+    for suffix in suffixes:
+        for pattern in [
+            f"{sc_lower}_{suffix}",
+            f"sc{sc_num}_{suffix}" if sc_num else None,
+            f"subclaim_{sc_lower}_{suffix}",
+            f"n_{sc_lower}_{suffix}",
+            f"{sc_lower}{sc_num}_{suffix}" if sc_num else None,
+        ]:
+            if pattern and pattern in key_results:
+                return key_results[pattern]
+    return None
+
+
+def build_sub_claim_confidence(proof_data):
+    """Return a list of sub-claim confidence dicts for the evidence rail.
+
+    Each dict: {id, label, threshold, n_confirming, holds, cells}
+    cells = 0-5 filled cells for the discrete meter (None if unknown).
+    """
+    claim_formal = proof_data.get("claim_formal", {}) or {}
+    key_results = proof_data.get("key_results", {}) or {}
+    sub_claims_raw = claim_formal.get("sub_claims")
+    if not sub_claims_raw:
+        return []
+
+    # Normalize to [{id, label, threshold}]
+    normalized = []
+    if isinstance(sub_claims_raw, list):
+        for sc in sub_claims_raw:
+            if not isinstance(sc, dict):
+                continue
+            sc_id = sc.get("id", "")
+            label = sc.get("property") or sc.get("description", "")
+            threshold = sc.get("threshold")
+            if str(threshold) == "NOT_EVALUABLE":
+                continue
+            normalized.append({
+                "id": sc_id,
+                "label": label,
+                "threshold": threshold if isinstance(threshold, (int, float)) else None,
+            })
+    elif isinstance(sub_claims_raw, dict):
+        for sc_id, sc_val in sub_claims_raw.items():
+            if isinstance(sc_val, dict):
+                label = sc_val.get("property") or sc_val.get("description", "")
+                threshold = sc_val.get("threshold")
+                if str(threshold) == "NOT_EVALUABLE":
+                    continue
+            elif isinstance(sc_val, str):
+                label = sc_val
+                threshold = None
+            else:
+                continue
+            normalized.append({
+                "id": sc_id,
+                "label": label,
+                "threshold": threshold if isinstance(threshold, (int, float)) else None,
+            })
+
+    result = []
+    for sc in normalized:
+        sc_id = sc["id"]
+        threshold = sc["threshold"]
+
+        holds = _kr_find(key_results, sc_id, [
+            "holds", "disproved", "permanent_closure", "incapable",
+        ])
+        if isinstance(holds, bool) and sc_id.lower().endswith("disproved"):
+            holds = not holds  # "disproved" flag is inverted
+
+        n_confirming = _kr_find(key_results, sc_id, [
+            "n_confirming", "n_confirmed", "confirmed",
+        ])
+        if not isinstance(n_confirming, (int, float)):
+            n_confirming = None
+        else:
+            n_confirming = int(n_confirming)
+
+        # Infer holds from n_confirming vs threshold when not explicit
+        if holds is None and n_confirming is not None and threshold:
+            holds = (n_confirming >= threshold)
+
+        # Compute filled cells (0-5)
+        if holds is True:
+            if n_confirming is not None and threshold:
+                cells = min(5, round(n_confirming / threshold * 5))
+            else:
+                cells = 5
+        elif holds is False:
+            if n_confirming is not None and threshold and n_confirming > 0:
+                cells = min(4, round(n_confirming / threshold * 5))
+            else:
+                cells = 0
+        else:
+            cells = None
+
+        result.append({
+            "id": sc_id,
+            "label": sc["label"],
+            "threshold": threshold,
+            "n_confirming": n_confirming,
+            "holds": holds,
+            "cells": cells,
+        })
+
+    return result
+
+
 # Match standalone fact/sub-claim IDs in rendered HTML text (not inside HTML tags).
 # Matches: (B1), (B2, B3), B1, SC1 — but not inside <tag ...> attributes.
 _FACT_ID_RE = re.compile(r'(?<![<\w/])(?P<id>(?:B|A|S)\d+|SC\d+)(?!["\w>])')
@@ -1069,6 +1181,7 @@ def main():
             related_work=related_block,
             cited_by=cited_by_block,
             used_by=used_by,
+            sub_claim_confidence=build_sub_claim_confidence(proof["proof_data"]),
         ))
         shutil.copy2(src_dir / "proof.py", proof_out / "proof.py")
         shutil.copy2(src_dir / "proof_audit.md", proof_out / "proof_audit.md")

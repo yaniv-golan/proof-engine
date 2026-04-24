@@ -395,10 +395,57 @@
   </main>{# /main #}
 
   {# ── Rail ──────────────────────────────────────────────────────────────── #}
-  <aside>
+  <aside class="proof-rail-aside">
+
+    {# Sub-claim confidence card #}
+    {% if sub_claim_confidence %}
+    <details class="rail-card rail-collapsible" open>
+      <summary class="rail-title rail-summary">sub-claim confidence</summary>
+      <div class="rail-sc-list">
+      {% for sc in sub_claim_confidence %}
+      {% set sc_cells = sc.cells if sc.cells is not none else 0 %}
+      {% set sc_state = 'mint' if sc.holds == true else ('red' if sc.holds == false else 'amb') %}
+      {%- if sc.n_confirming is not none and sc.threshold -%}
+        {%- set sc_reason = sc.n_confirming | string + ' of ' + sc.threshold | string + ' sources confirmed' -%}
+        {%- if sc.holds == false %}{%- set sc_reason = sc_reason + ' — threshold not met' -%}{%- endif -%}
+      {%- elif sc.holds == true -%}
+        {%- set sc_reason = 'confirmed' -%}
+      {%- elif sc.holds == false -%}
+        {%- set sc_reason = 'not confirmed' -%}
+      {%- else -%}
+        {%- set sc_reason = 'indeterminate' -%}
+      {%- endif -%}
+      <details class="rail-sc-row rail-sc-{{ sc_state }}">
+        <summary class="rail-sc-summary">
+          <span class="rail-sc-id">{{ sc.id }}</span>
+          <span class="rail-sc-label">{{ sc.label | truncate(38) }}</span>
+          <span class="rail-sc-meter">
+            {%- for i in range(5) -%}
+            {%- if sc.cells is not none and i < sc_cells -%}
+            <span class="sc-cell sc-cell-on sc-cell-{{ sc_state }}"></span>
+            {%- elif sc.holds == false -%}
+            <span class="sc-cell sc-cell-fail"></span>
+            {%- else -%}
+            <span class="sc-cell sc-cell-off"></span>
+            {%- endif -%}
+            {%- endfor -%}
+          </span>
+        </summary>
+        <div class="rail-sc-expand">
+          <div class="rail-sc-full-label">{{ sc.label }}</div>
+          <div class="rail-sc-reason rail-sc-reason-{{ sc_state }}">{{ sc_reason }}</div>
+        </div>
+      </details>
+      {% endfor %}
+      </div>
+    </details>
+    {% endif %}
+
+    {# Source ledger mini #}
     {% if citations %}
-    <div class="rail-card sticky-rail">
-      <div class="rail-title">{{ citations | length }} source{{ 's' if citations | length != 1 }}</div>
+    <details class="rail-card rail-collapsible sticky-rail" open>
+      <summary class="rail-title rail-summary">{{ citations | length }} source{{ 's' if citations | length != 1 }}</summary>
+      <div>
       {% for fact_id, cit in citations.items() %}
       {% set status = cit.status %}
       {% set cred = cit.credibility or {} %}
@@ -406,7 +453,7 @@
       {% set src_type_short = {'academic':'acad','government':'gov','reference':'ref','news':'news','educational':'edu'}.get(cred.source_type, '') %}
       <div class="rail-src-row">
         <span class="rail-src-id">{{ fact_id }}</span>
-        <span class="rail-src-host" title="{{ cit.source_name }}">{{ cit.url | replace('https://', '') | replace('http://', '') | truncate(28) if cit.url else cit.source_name | truncate(28) }}</span>
+        <span class="rail-src-host" title="{{ cit.source_name }}">{{ cit.url | replace('https://', '') | replace('http://', '') | truncate(26) if cit.url else cit.source_name | truncate(26) }}</span>
         {% if tier %}<span class="rail-src-tier">T{{ tier }}{% if src_type_short %}·{{ src_type_short }}{% endif %}</span>{% endif %}
         {% if status == 'verified' %}
         <span class="rail-src-s ok">✓</span>
@@ -419,7 +466,8 @@
         {% endif %}
       </div>
       {% endfor %}
-    </div>
+      </div>
+    </details>
     {% endif %}
 
     {# Trust note in rail #}
