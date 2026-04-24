@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.27.0] - 2026-04-24
+
+### Added
+
+- **Evidence rail — sub-claim confidence meter.** Each proof page now shows a "SUB-CLAIM CONFIDENCE" rail card when sub-claims are present. Each SC row displays a 5-cell discrete meter (mint = holds, dark-red = fails) and is click-to-expand: clicking reveals the full sub-claim label and a confidence reason (e.g. "1 of 3 sources confirmed — threshold not met"). Data is extracted from `claim_formal.sub_claims` + `key_results` with multi-format normalisation and threshold inference.
+- **Source ledger mini now collapsible.** The existing sources rail card is now wrapped in a `<details>` element alongside the SC card, with responsive layout: stacked at >1100 px, inline row at 760–1100 px, collapse-to-disclosure at <760 px.
+
+### Fixed
+
+- **Robustness score direction.** The ROBUSTNESS scoreboard cell previously showed `n_broke / n_total` (lower = better), which reads as a failure count. Now shows `n_withstood / n_total` (higher = better). Sublabel shows "adversarial challenges withstood" when all pass, or "N adversarial check(s) broke the proof" only when failures exist.
+
 ## [1.26.0] - 2026-04-24
 
 ### Added
