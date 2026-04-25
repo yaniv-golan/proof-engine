@@ -9,6 +9,7 @@ on:
       - 'tools/generate_og_images.py'
       - 'tools/validate-site-proof.py'
       - 'tools/lib/**'
+      - 'packages/proof-engine-registry/**'  # build-site imports from this package
       - 'docs/DESIGN.md'
       - 'proof-engine/skills/proof-engine/references/hardening-rules.md'
       - '.github/workflows/deploy-site.yml'
@@ -39,6 +40,11 @@ jobs:
 
       - name: Install dependencies
         run: pip install Jinja2 Markdown Pygments PyYAML bleach Pillow pymdown-extensions regex unidecode requests
+
+      - name: Install monorepo subpackages
+        # tools/build-site.py imports from proof_engine_registry.emit since v1.28.
+        # Without this, the build crashes with ModuleNotFoundError.
+        run: pip install -e packages/proof-citations -e packages/proof-engine-registry -e packages/proof-engine-wiki
 
       - name: Validate all proofs (structural only — provenance checked in PR)
         run: |
