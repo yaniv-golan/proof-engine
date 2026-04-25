@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proof Registry Discovery",
+  "type": "object",
+  "required": ["protocol_version", "name", "homepage",
+               "publishes_supported", "auth_required",
+               "proof_count", "generated_at"],
+  "properties": {
+    "protocol_version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+    "name": { "type": "string" },
+    "homepage": { "type": "string", "format": "uri" },
+    "publishes_supported": { "type": "boolean" },
+    "auth_required": { "type": "boolean" },
+    "proof_count": { "type": "integer", "minimum": 0 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "signing_key": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

@@ -31,6 +31,7 @@ from tools.lib.depends_on import (
     validate_repo, build_reverse_index,
 )
 from tools.lib.binder_config import BINDER_LAUNCHER_REPO, BINDER_LAUNCHER_TAG
+from proof_engine_registry.emit import emit_registry_files
 
 
 _SHA_RE = re.compile(r"^[0-9a-f]{40}$")
@@ -1314,10 +1315,12 @@ def main():
             for p in proofs
         ],
     }
-    write_file(output_dir / "index.json", json.dumps(catalog, indent=2))
+    # Catalog moved to /catalog.json so /index.json is reserved for the
+    # Registry Protocol v0.1 index (emitted below by emit_registry_files).
+    write_file(output_dir / "catalog.json", json.dumps(catalog, indent=2))
 
     # Slim search index — consumed by the 404 page's client-side search.
-    # Kept separate from index.json so growth in catalog metadata doesn't bloat 404-path loads.
+    # Kept separate from catalog.json so growth in catalog metadata doesn't bloat 404-path loads.
     search_index = [
         {
             "slug": p["slug"],
@@ -1411,6 +1414,18 @@ def main():
     )
     write_file(output_dir / "robots.txt", robots_txt)
 
+    # Registry Protocol v0.1 — JSON-over-HTTPS contract for public/private
+    # proof registries. Writes /.well-known/proof-registry.json, /index.json
+    # (registry index), /claims/{hash}.json, and /proofs/{slug}.json.
+    emit_registry_files(
+        proofs_dir=site_dir / "proofs",
+        output_dir=output_dir,
+        base_url=site_url,
+        registry_name="Proof Engine Public Registry",
+        publishes_supported=False,
+        auth_required=False,
+    )
+
     # llms.txt
     llms_txt = (
         "# Proof Engine\n"
@@ -1421,7 +1436,8 @@ def main():
         "## Browsing Proofs\n"
         "\n"
         f"- [All Proofs]({site_url}{base_url}proofs/): Browse all verified proofs\n"
-        f"- [Catalog API]({site_url}{base_url}index.json): Machine-readable JSON catalog with all proofs, verdicts, tags, and links to individual proof.json files\n"
+        f"- [Catalog API]({site_url}{base_url}catalog.json): Machine-readable JSON catalog with all proofs, verdicts, tags, and links to individual proof.json files\n"
+        f"- [Registry API]({site_url}{base_url}index.json): Proof Registry Protocol v0.1 index (claim hashes, verdicts, DOIs)\n"
         f"- [Methodology]({site_url}{base_url}methodology/): How Proof Engine works — citation verification, executable proofs, structured verdicts\n"
         "\n"
         "## Per-Proof Formats\n"

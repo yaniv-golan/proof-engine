@@ -262,6 +262,9 @@ Proof scripts run in your existing agent environment (Claude Code, ChatGPT, etc.
 
 For a deeper look at the design principles, trust boundaries, hardening rules, and limitations, see [`docs/DESIGN.md`](docs/DESIGN.md).
 
+- [Registry Protocol](docs/registry-protocol.md) — the JSON-over-HTTPS contract
+  for public and self-hosted proof registries.
+
 ## License
 
 MIT

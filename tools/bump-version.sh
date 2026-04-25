@@ -34,8 +34,10 @@ sedi "s/^  version: .*/  version: \"$VERSION\"/" "$ROOT/proof-engine/skills/proo
 cp "$VERSION_FILE" "$ROOT/proof-engine/skills/proof-engine/VERSION"
 sedi "s/^version: .*/version: $VERSION/" "$ROOT/CITATION.cff"
 
-# New: sync packaged subpackages introduced by the wiki-integration phases.
-for pkg in packages/proof-citations; do
+# Subpackages — keep their pyproject.toml + __init__.py in sync with the
+# repo VERSION so the proof-engine-registry / proof-citations wheels can be
+# released in lockstep with the skill.
+for pkg in packages/proof-citations packages/proof-engine-registry; do
   if [ -f "$ROOT/$pkg/pyproject.toml" ]; then
     sedi "s/^version = \"[^\"]*\"/version = \"$VERSION\"/" "$ROOT/$pkg/pyproject.toml"
   fi
@@ -52,5 +54,5 @@ echo "  .cursor-plugin/plugin.json"
 echo "  proof-engine/skills/proof-engine/SKILL.md"
 echo "  proof-engine/skills/proof-engine/VERSION (copied)"
 echo "  CITATION.cff"
-echo "  packages/proof-citations/pyproject.toml"
-echo "  packages/proof-citations/src/proof_citations/__init__.py"
+echo "  packages/*/pyproject.toml (when present)"
+echo "  packages/*/src/*/__init__.py (when present)"

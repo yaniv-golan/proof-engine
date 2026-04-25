@@ -1,0 +1,35 @@
+{
+  "format_version": 3,
+  "claim_formal": {
+    "subject": "The sky",
+    "property": "is blue during daytime",
+    "operator": "==",
+    "operator_note": "Normal atmospheric conditions, away from sunrise/sunset.",
+    "threshold": true
+  },
+  "claim_natural": "The sky is blue.",
+  "evidence": {
+    "B1": {
+      "type": "empirical",
+      "label": "NASA on Rayleigh scattering",
+      "sub_claim": "Blue wavelengths scatter more than red.",
+      "source": {
+        "name": "NASA Science",
+        "url": "https://example.com/rayleigh",
+        "quote": "shorter wavelengths are scattered more"
+      }
+    }
+  },
+  "verdict": {
+    "value": "SUPPORTED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": { "claim_holds": true },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.28.0",
+    "generated_at": "2026-04-24"
+  }
+}
