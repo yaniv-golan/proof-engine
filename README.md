@@ -142,8 +142,8 @@ The skill will:
 
 ## Standalone: verify citations without the skill
 
-The citation-verification primitive is also published as a standalone package for
-consumers (e.g., LLM wikis) that only need that piece:
+The citation-verification primitive is also published as a standalone package
+for tools (e.g., LLM wikis) that only need that piece:
 
     pip install proof-citations
 
