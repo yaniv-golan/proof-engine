@@ -1689,3 +1689,11 @@ summary.rail-summary {
 
 /* Proof page section divider */
 .proof-hr { border: none; border-top: 1px solid var(--border-subtle); margin: 36px 0 28px; }
+
+/* ── Embed panel (badge copy-paste) ──────────────────────────────────────── */
+.embed-panel { border-top: 1px solid var(--border-subtle); margin-top: 2rem; padding-top: 1rem; }
+.embed-panel h2 { font-size: 1rem; }
+.embed-panel pre { background: var(--bg-subtle, #f7f7f7); padding: 0.5rem; overflow-x: auto; font-size: 0.875rem; }
+.embed-panel .embed-tabs details { margin: 0.25rem 0; }
+.embed-panel .embed-tabs summary { cursor: pointer; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+.embed-panel .embed-preview { margin-top: 1rem; }
