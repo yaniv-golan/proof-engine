@@ -1,0 +1,29 @@
+# Optional pre-commit hooks. Install with:
+#   pip install pre-commit
+#   pre-commit install
+#
+# Hooks here mirror what CI checks, so contributors catch issues before push.
+# Hooks are intentionally lightweight — heavy formatters (black, isort) are NOT
+# imposed because the existing codebase has its own style and a sweeping reformat
+# would muddle blame.
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-added-large-files
+        args: [--maxkb=512]
+      - id: end-of-file-fixer
+        exclude: \.svg$
+      - id: trailing-whitespace
+        exclude: \.(svg|md)$
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.28.0
+    hooks:
+      - id: check-github-workflows

@@ -4,6 +4,44 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.32.0] - 2026-04-25
+
+### Added
+
+- **`proof-engine-wiki` package and Claude skill.** Adapter for LLM-wiki projects (Karpathy pattern, OmegaWiki, llm_wiki). Authors mark factual statements with `{{prove: claim}}`; `proof-engine-wiki ingest PAGE.md` extracts markers, looks them up in configured registries, rewrites the page with inline link + badge embeds. `lint WIKI/` reports unresolved markers and unreachable proof URLs. Marker regex masks code fences, inline code, HTML comments, and YAML frontmatter so documentation about the syntax doesn't trigger lookups. Sibling Claude skill at `packages/proof-engine-wiki/skills/proof-engine-wiki/`.
+- **Integration runbooks** for OmegaWiki and llm_wiki under `packages/proof-engine-wiki/examples/`.
+
+## [1.30.0] - 2026-04-25
+
+### Added
+
+- **Per-proof badges.** Every published proof now ships a `badge.json` (compact certificate payload — claim, verdict, confidence, doi, proof_url, badge_svg_url) and a deterministic `badge.svg` (shields-style inline SVG, byte-identical across builds). Available at `/proofs/{slug}/badge.json` and `/proofs/{slug}/badge.svg` on both the public site and self-hosted registries.
+- **Embed panel** on proof detail pages with copy-paste HTML, Markdown, and SVG-URL snippets.
+- **Pinned verdict colors** (`PROVED`/`SUPPORTED`/`PARTIALLY VERIFIED`/`UNDETERMINED`/`DISPROVED` → fixed hex codes). Color resolution uses prefix matching so qualified verdicts (e.g. `"SUPPORTED (with unverified citations)"`) inherit the family color.
+
+## [1.29.0] - 2026-04-25
+
+### Added
+
+- **Headless verify CLI.** `bin/proof-engine verify --claim "..." [--registry-check] [--registry-only] [--json]` produces a stable Verdict JSON contract (claim, claim_hash, verdict, confidence, registry_hit, generated artifacts, errors) with documented exit codes (0 pass, 1 fail, 2 error, 3 registry-only miss). Spec: `docs/headless-verify.md`.
+- **Unified `bin/proof-engine` dispatcher** routing `verify`/`registry`/`citations` to the right entry points with preflight checks for missing Python modules.
+- **`tools/lib/cli_verdict.py` + `tools/lib/cli_verdict_parser.py`** — verdict dataclass and v3-proof.json parser. (Note: `tools/lib/cli_verdict.py` is distinct from the pre-existing `tools/lib/verdict.py` which holds `VERDICT_TAXONOMY`.)
+- **`generate-proof.sh` accepts `--`** as end-of-options separator so a claim beginning with `--` cannot be parsed as a flag.
+
+## [1.28.0] - 2026-04-25
+
+### Added
+
+- **`proof-citations` package.** Standalone pip-installable library extracted from the bundled skill — `verify_citations.py`, `fetch.py`, `source_credibility.py`, `oa_lookup.py`, `latex_text.py`, plus the unicode-normalize helpers from `smart_extract.py`. Public API: `verify_citation(url, expected_quote, fact_id, ...)` returning a dict with status in `{verified, partial, not_found, fetch_failed}`. CLI: `proof-citations verify --url URL --quote "QUOTE" --fact-id ID`. The skill scripts under `proof-engine/skills/proof-engine/scripts/` are now thin shims that re-export from the package, preserving backwards compatibility for all 1062 pre-existing tests.
+- **`proof-engine-registry` package and Registry Protocol v0.1.** JSON-over-HTTPS protocol for querying ("is this claim already proven?") and optionally publishing proofs. The public `proofengine.info` site emits the protocol as static JSON at build time (`/.well-known/proof-registry.json`, `/index.json`, `/claims/{hash}.json`, `/proofs/{slug}.json`). Self-hosted deployments use `proof-registry serve <proofs-dir>` (stdlib `ThreadingHTTPServer`, bearer-token auth via `hmac.compare_digest`, publish lock for concurrent-publish safety, `do_HEAD` support). Same conformance suite (10 tests) runs against both implementations. Spec: `docs/registry-protocol.md`.
+- **Claim hashing.** `sha256(normalize(claim))` where normalize = NFC + lowercase + whitespace collapse + trailing-punctuation strip. Stable, pinned, treated as protocol breaking change to alter.
+- **No-implicit-fallback rule.** Configured registries are queried in order; a miss does NOT cascade to the next registry unless that next registry has `fallback = true`. Privacy guarantee for private/public registry pairs.
+- **`tools/build-site.py` integration.** Site builds emit Registry Protocol JSON alongside existing artifacts. Determinism preserved via fixed timestamps when supplied.
+
+### Changed
+
+- **Site catalog moved from `/index.json` to `/catalog.json`.** `/index.json` now serves the Registry Protocol index (different shape: claim hashes, verdicts, DOIs, badge URLs). The legacy catalog with richer per-proof metadata is at `/catalog.json`. `llms.txt`, README, and DESIGN.md updated accordingly.
+
 ## [1.27.0] - 2026-04-24
 
 ### Added
