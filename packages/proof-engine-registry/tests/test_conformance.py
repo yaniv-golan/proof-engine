@@ -1,7 +1,13 @@
-"""Conformance tests for any Registry Protocol v0.1 implementation.
+"""Conformance tests for any Registry Protocol implementation.
 
 Parametrized over (a) serving static JSON via http.server, and (b) the
 reference RegistryServer.
+
+Protocol-version-aware: tests assert behavior the protocol mandates at
+the version the server reports via discovery. Per ADR-0001 (adopted
+in v0.2), JSON error bodies MUST be RFC 7807 Problem Details; static
+deployments are exempt from the body shape because the host (e.g.
+GitHub Pages) serves its own 404 HTML.
 """
 
 import http.server
@@ -113,3 +119,25 @@ def test_proof_lookup_present(registry):
     for entry in idx["entries"]:
         r = requests.get(f"{registry}/proofs/{entry['slug']}.json", timeout=5)
         assert r.status_code == 200
+
+
+def test_error_body_is_problem_details_when_json(registry):
+    """Per protocol v0.2 (ADR-0001): JSON error bodies MUST be RFC 7807
+    Problem Details. Implementations that return non-JSON error bodies
+    (e.g. static hosts serving HTML 404) are exempt — they're treated
+    as opaque-error servers and don't claim Problem Details conformance.
+    """
+    r = requests.get(f"{registry}/claims/{'0' * 64}.json", timeout=5)
+    assert r.status_code == 404
+    ctype = r.headers.get("Content-Type", "")
+    if "json" not in ctype.lower():
+        pytest.skip(f"server returned non-JSON error body ({ctype}); exempt.")
+    # Strict: must be application/problem+json (not generic application/json).
+    assert ctype.startswith("application/problem+json"), \
+        f"JSON error body must use application/problem+json, got {ctype!r}"
+    body = r.json()
+    for required in ("type", "status", "title", "detail"):
+        assert required in body, f"Problem Details missing required field: {required}"
+    assert body["status"] == 404
+    assert body["type"].startswith(("http://", "https://")), \
+        "type must be an absolute URI"
