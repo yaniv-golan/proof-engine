@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proof Registry Problem (RFC 7807)",
+  "description": "RFC 7807 Problem Details payload emitted by the registry on errors. Served with Content-Type: application/problem+json.",
+  "type": "object",
+  "required": ["type", "status", "title", "detail", "code"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "format": "uri",
+      "description": "Absolute URI identifying the problem class. Stable across releases; safe to consume programmatically as a discriminator."
+    },
+    "status": {
+      "type": "integer",
+      "minimum": 400,
+      "maximum": 599,
+      "description": "HTTP status code, mirrored from the response status line per RFC 7807 §3.1."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Short, human-readable summary; constant per type."
+    },
+    "detail": {
+      "type": "string",
+      "description": "Per-occurrence human description with specific information about this instance."
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Non-standard extension: the legacy short machine-readable error key (e.g. \"not_found\"). Per RFC 7807 §3.2, additional members are allowed."
+    }
+  },
+  "additionalProperties": true
+}

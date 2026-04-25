@@ -61,9 +61,22 @@ class RegistryProof:
 
 
 @dataclass(frozen=True)
-class ErrorResponse:
-    error: str
-    message: str
+class Problem:
+    """RFC 7807 Problem Details payload.
+
+    `type`, `status`, `title`, `detail` are the IETF-defined fields.
+    `code` is a non-standard extension preserving the legacy short
+    machine-readable error key — useful for log-aggregation tools that
+    already key on it. Per RFC 7807 §3.2, additional members are
+    explicitly allowed.
+
+    Served with `Content-Type: application/problem+json`.
+    """
+    type: str          # absolute URI; e.g. https://proofengine.info/errors/not-found
+    status: int        # HTTP status code mirrored in the body
+    title: str         # short human-readable summary (constant per type)
+    detail: str        # per-occurrence human description
+    code: str          # legacy short code, e.g. "not_found"
 
 
 def to_json(obj: Any) -> dict:

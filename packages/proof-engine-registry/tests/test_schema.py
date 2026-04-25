@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from proof_engine_registry.schema import (
-    Discovery, IndexEntry, Index, RegistryProof,
+    Discovery, IndexEntry, Index, RegistryProof, Problem,
     to_json, from_json,
 )
 
@@ -109,3 +109,30 @@ def test_registry_proof_payload_matches_schema():
         narrative_summary=None,
     )
     jsonschema.validate(to_json(rp), _load("registry-proof.schema.json"))
+
+
+def test_problem_round_trip():
+    p = Problem(
+        type="https://proofengine.info/errors/not-found",
+        status=404,
+        title="Resource not found",
+        detail="no proof with that claim_hash",
+        code="not_found",
+    )
+    j = to_json(p)
+    assert j["type"] == "https://proofengine.info/errors/not-found"
+    assert j["status"] == 404
+    assert j["code"] == "not_found"
+    back = from_json(Problem, j)
+    assert back == p
+
+
+def test_problem_payload_matches_schema():
+    p = Problem(
+        type="https://proofengine.info/errors/not-found",
+        status=404,
+        title="Resource not found",
+        detail="no proof with that claim_hash",
+        code="not_found",
+    )
+    jsonschema.validate(to_json(p), _load("registry-problem.schema.json"))
