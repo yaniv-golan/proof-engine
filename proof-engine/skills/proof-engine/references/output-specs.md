@@ -2,6 +2,23 @@
 
 Read this at **Step 5** when writing proof.md and proof_audit.md.
 
+## Table of Contents
+
+- [proof.md structure](#proofmd-structure)
+- [proof_audit.md structure](#proof_auditmd-structure)
+- [proof.json structure](#proofjson-structure)
+- [proof_narrative.md structure](#proof_narrativemd-structure)
+  - [Verdict](#verdict)
+  - [What Was Claimed?](#what-was-claimed)
+  - [What Did We Find?](#what-did-we-find)
+  - [What Should You Keep In Mind?](#what-should-you-keep-in-mind)
+  - [How Was This Verified?](#how-was-this-verified)
+- [Consistency rules](#consistency-rules)
+- [Provenance labels](#provenance-labels)
+- [Machine-readable outputs](#machine-readable-outputs)
+
+---
+
 ## proof.md structure
 
 Section requirements are defined in `proof_format_schema.json` (single source of truth).
