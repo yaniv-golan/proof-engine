@@ -54,7 +54,8 @@ def test_client_discovery(tmp_path):
     with _serve_static(tmp_path) as url:
         client = RegistryClient([Registry(name="test", url=url)])
         disco = client.discovery(client.registries[0])
-    assert disco.protocol_version == "0.1"
+    from proof_engine_registry import __protocol_version__
+    assert disco.protocol_version == __protocol_version__
     assert disco.proof_count == 1
 
 

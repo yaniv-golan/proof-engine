@@ -39,7 +39,8 @@ def server(tmp_path):
 def test_server_discovery(server):
     r = requests.get(f"{server}/.well-known/proof-registry.json", timeout=5)
     r.raise_for_status()
-    assert r.json()["protocol_version"] == "0.1"
+    from proof_engine_registry import __protocol_version__
+    assert r.json()["protocol_version"] == __protocol_version__
     assert r.json()["publishes_supported"] is True
 
 

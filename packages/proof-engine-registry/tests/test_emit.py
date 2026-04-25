@@ -14,8 +14,9 @@ def test_emit_creates_discovery(tmp_path):
         base_url="https://example.com",
         registry_name="Test",
     )
+    from proof_engine_registry import __protocol_version__
     disco = json.loads((tmp_path / ".well-known" / "proof-registry.json").read_text())
-    assert disco["protocol_version"] == "0.1"
+    assert disco["protocol_version"] == __protocol_version__
     assert disco["name"] == "Test"
     assert disco["proof_count"] == 1
 
@@ -27,8 +28,9 @@ def test_emit_creates_index(tmp_path):
         base_url="https://example.com",
         registry_name="Test",
     )
+    from proof_engine_registry import __protocol_version__
     index = json.loads((tmp_path / "index.json").read_text())
-    assert index["protocol_version"] == "0.1"
+    assert index["protocol_version"] == __protocol_version__
     assert len(index["entries"]) == 1
     entry = index["entries"][0]
     # Slug is derived from the proof directory name.
