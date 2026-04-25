@@ -159,3 +159,13 @@ Standard codes: `not_found`, `unauthorized`, `forbidden`, `too_large`, `conflict
 - Breaking changes to response shapes → major bump.
 - Clients refuse to speak to registries with a higher major version than they
   support.
+
+## Reference implementations
+
+- **Public static (read-only):** `proofengine.info` — served by GitHub Pages
+  from static JSON written by `tools/build-site.py`.
+- **Reference server (read + publish):** `proof-registry serve <proofs-dir>`
+  from the `proof-engine-registry` package. Stdlib HTTP server, bearer-token
+  auth. Suitable for team/private deployments.
+- **Conformance suite:** `pytest packages/proof-engine-registry/tests/test_conformance.py`
+  — runs against any implementation.
