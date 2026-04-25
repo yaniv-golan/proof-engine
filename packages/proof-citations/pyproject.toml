@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proof-citations"
+version = "1.28.0"
+description = "Fetch URLs and verify that quoted text appears on the page. Extracted from proof-engine."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Yaniv Golan", email = "yaniv@lool.vc" }]
+requires-python = ">=3.11"
+dependencies = [
+  "requests>=2.31",
+  "pdfplumber>=0.10",
+  "PyPDF2>=3.0",
+]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Text Processing",
+]
+
+[project.scripts]
+proof-citations = "proof_citations.cli:main"
+
+[project.urls]
+Homepage = "https://proofengine.info"
+Repository = "https://github.com/yaniv-golan/proof-engine"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+proof_citations = ["data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

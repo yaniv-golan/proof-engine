@@ -13,7 +13,7 @@ from scripts.fetch import fetch_page, extract_pdf_text, try_wayback
 
 def test_fetch_page_snapshot_fallback_when_no_requests():
     """When requests is None and snapshot is provided, use snapshot."""
-    with patch("scripts.fetch.requests", None):
+    with patch("proof_citations.fetch.requests", None):
         text, mode, err = fetch_page(
             "https://example.com",
             snapshot="<html>snapshot content</html>",
@@ -29,7 +29,7 @@ def test_fetch_page_snapshot_fallback_after_live_failure():
     mock_requests.get.side_effect = real_requests.exceptions.ConnectionError("refused")
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page(
             "https://example.com",
             snapshot="<html>snapshot</html>",
@@ -45,7 +45,7 @@ def test_fetch_page_snapshot_fallback_after_live_failure():
 
 def test_fetch_page_no_requests_no_snapshot():
     """When requests is None and no snapshot, return fetch_failed."""
-    with patch("scripts.fetch.requests", None):
+    with patch("proof_citations.fetch.requests", None):
         text, mode, err = fetch_page("https://example.com")
     assert text is None
     assert mode == "fetch_failed"
@@ -67,7 +67,7 @@ def test_fetch_page_live_html_success():
     mock_requests.get.return_value = mock_resp
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page("https://example.com")
     assert text == "<html>live content</html>"
     assert mode == "live"
@@ -90,7 +90,7 @@ def test_fetch_page_http_403_falls_to_snapshot():
     mock_requests.get.return_value = mock_resp
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page(
             "https://example.com",
             snapshot="<html>snapshot</html>",
@@ -111,7 +111,7 @@ def test_fetch_page_http_404_no_fallback():
     mock_requests.get.return_value = mock_resp
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page("https://example.com")
     assert text is None
     assert mode == "fetch_failed"
@@ -128,7 +128,7 @@ def test_fetch_page_timeout_falls_to_snapshot():
     mock_requests.get.side_effect = real_requests.exceptions.Timeout("timed out")
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page(
             "https://example.com",
             snapshot="<html>snapshot</html>",
@@ -152,7 +152,7 @@ def test_fetch_page_wayback_fallback_success():
     ]
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page(
             "https://example.com",
             wayback_fallback=True,
@@ -168,7 +168,7 @@ def test_fetch_page_wayback_not_tried_without_flag():
     mock_requests.get.side_effect = real_requests.exceptions.ConnectionError("refused")
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page("https://example.com", wayback_fallback=False)
     assert text is None
     assert mode == "fetch_failed"
@@ -191,8 +191,8 @@ def test_fetch_page_pdf_by_content_type():
     mock_requests.get.return_value = mock_resp
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests), \
-         patch("scripts.fetch.extract_pdf_text", return_value="extracted text"):
+    with patch("proof_citations.fetch.requests", mock_requests), \
+         patch("proof_citations.fetch.extract_pdf_text", return_value="extracted text"):
         text, mode, err = fetch_page("https://example.com/paper")
     assert text == "extracted text"
     assert mode == "live"
@@ -209,8 +209,8 @@ def test_fetch_page_pdf_extraction_fails():
     mock_requests.get.return_value = mock_resp
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests), \
-         patch("scripts.fetch.extract_pdf_text", return_value=None):
+    with patch("proof_citations.fetch.requests", mock_requests), \
+         patch("proof_citations.fetch.extract_pdf_text", return_value=None):
         text, mode, err = fetch_page(
             "https://example.com/paper.pdf",
             snapshot="<html>snapshot</html>",
@@ -244,7 +244,7 @@ def test_try_github_raw_bare_repo_url():
     mock_requests.get.return_value = mock_resp
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         from scripts.fetch import try_github_raw
         result = try_github_raw("https://github.com/owner/repo")
     assert result == "# My Project\nSome README content"
@@ -262,7 +262,7 @@ def test_try_github_raw_trailing_slash():
     mock_requests.get.return_value = mock_resp
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         from scripts.fetch import try_github_raw
         result = try_github_raw("https://github.com/owner/repo/")
     assert result == "readme content"
@@ -296,7 +296,7 @@ def test_try_github_raw_falls_back_to_rst():
     mock_requests.get.side_effect = mock_get
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         from scripts.fetch import try_github_raw
         result = try_github_raw("https://github.com/owner/repo")
     assert result == "RST readme content"
@@ -311,7 +311,7 @@ def test_try_github_raw_all_404_returns_none():
     mock_requests.get.side_effect = real_requests.exceptions.HTTPError("404")
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         from scripts.fetch import try_github_raw
         result = try_github_raw("https://github.com/owner/repo")
     assert result is None
@@ -319,7 +319,7 @@ def test_try_github_raw_all_404_returns_none():
 
 def test_try_github_raw_no_requests_returns_none():
     """When requests is None, returns None."""
-    with patch("scripts.fetch.requests", None):
+    with patch("proof_citations.fetch.requests", None):
         from scripts.fetch import try_github_raw
         result = try_github_raw("https://github.com/owner/repo")
     assert result is None
@@ -346,7 +346,7 @@ def test_fetch_page_github_falls_back_to_raw_on_js_shell():
     mock_requests.get.side_effect = mock_get
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page("https://github.com/owner/repo")
     assert text == readme_text
     assert mode == "github_raw"
@@ -366,7 +366,7 @@ def test_fetch_page_github_uses_live_when_content_present():
     mock_requests.get.return_value = mock_resp
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page("https://github.com/owner/repo")
     assert mode == "live"  # Did NOT fall back to github_raw
 
@@ -382,7 +382,7 @@ def test_fetch_page_non_github_skips_raw():
     mock_requests.get.return_value = mock_resp
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page("https://example.com")
     assert mode == "live"
 
@@ -402,7 +402,7 @@ def test_fetch_page_snapshot_file_fallback_when_live_fails():
         mock_requests.get.side_effect = real_requests.exceptions.ConnectionError("refused")
         mock_requests.exceptions = real_requests.exceptions
 
-        with patch("scripts.fetch.requests", mock_requests):
+        with patch("proof_citations.fetch.requests", mock_requests):
             text, mode, err = fetch_page(
                 "https://example.com",
                 snapshot_file=tmppath,
@@ -425,7 +425,7 @@ def test_fetch_page_snapshot_file_missing_continues_to_wayback():
     ]
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page(
             "https://example.com",
             snapshot_file="/nonexistent/path/snapshot.txt",
@@ -441,7 +441,7 @@ def test_fetch_page_snapshot_file_missing_no_wayback_returns_fetch_failed():
     mock_requests.get.side_effect = real_requests.exceptions.ConnectionError("refused")
     mock_requests.exceptions = real_requests.exceptions
 
-    with patch("scripts.fetch.requests", mock_requests):
+    with patch("proof_citations.fetch.requests", mock_requests):
         text, mode, err = fetch_page(
             "https://example.com",
             snapshot_file="/nonexistent/snapshots/B2_snapshot.txt",
@@ -463,7 +463,7 @@ def test_fetch_page_inline_snapshot_takes_precedence_over_snapshot_file():
         mock_requests.get.side_effect = real_requests.exceptions.ConnectionError("refused")
         mock_requests.exceptions = real_requests.exceptions
 
-        with patch("scripts.fetch.requests", mock_requests):
+        with patch("proof_citations.fetch.requests", mock_requests):
             text, mode, err = fetch_page(
                 "https://example.com",
                 snapshot="inline content",

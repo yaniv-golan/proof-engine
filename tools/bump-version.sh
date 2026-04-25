@@ -34,9 +34,23 @@ sedi "s/^  version: .*/  version: \"$VERSION\"/" "$ROOT/proof-engine/skills/proo
 cp "$VERSION_FILE" "$ROOT/proof-engine/skills/proof-engine/VERSION"
 sedi "s/^version: .*/version: $VERSION/" "$ROOT/CITATION.cff"
 
+# New: sync packaged subpackages introduced by the wiki-integration phases.
+for pkg in packages/proof-citations; do
+  if [ -f "$ROOT/$pkg/pyproject.toml" ]; then
+    sedi "s/^version = \"[^\"]*\"/version = \"$VERSION\"/" "$ROOT/$pkg/pyproject.toml"
+  fi
+  for init_file in "$ROOT/$pkg"/src/*/__init__.py; do
+    if [ -f "$init_file" ]; then
+      sedi "s/^__version__ = \"[^\"]*\"/__version__ = \"$VERSION\"/" "$init_file"
+    fi
+  done
+done
+
 echo "Version $VERSION applied to:"
 echo "  proof-engine/.claude-plugin/plugin.json"
 echo "  .cursor-plugin/plugin.json"
 echo "  proof-engine/skills/proof-engine/SKILL.md"
 echo "  proof-engine/skills/proof-engine/VERSION (copied)"
 echo "  CITATION.cff"
+echo "  packages/proof-citations/pyproject.toml"
+echo "  packages/proof-citations/src/proof_citations/__init__.py"
