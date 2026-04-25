@@ -120,8 +120,11 @@ def test_build_produces_output(site_fixture):
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     output = site_fixture / "_site"
     assert (output / "index.html").exists()
-    assert (output / "index.json").exists()
+    assert (output / "index.json").exists()  # registry protocol index
+    assert (output / "catalog.json").exists()  # legacy catalog (renamed from index.json)
     assert (output / "search-index.json").exists()
+    # Registry Protocol v0.1 artifacts
+    assert (output / ".well-known" / "proof-registry.json").exists()
     assert (output / "proofs" / "index.html").exists()
     assert (output / "catalog" / "index.html").exists()  # redirect shim
     assert (output / "404.html").exists()
@@ -137,7 +140,9 @@ def test_build_produces_output(site_fixture):
 def test_index_json_structure(site_fixture):
     result = _run_build(site_fixture, base_url="/")
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
-    catalog = json.loads((site_fixture / "_site" / "index.json").read_text())
+    # Catalog moved to /catalog.json so /index.json is reserved for the
+    # Registry Protocol v0.1 index.
+    catalog = json.loads((site_fixture / "_site" / "catalog.json").read_text())
     assert catalog["total"] == 1
     assert catalog["proofs"][0]["slug"] == "test-claim"
     assert catalog["proofs"][0]["verdict"] == "PROVED"
@@ -422,7 +427,8 @@ def test_llms_txt_at_root(site_fixture):
     llms = (site_fixture / "_site" / "llms.txt").read_text()
     assert llms.startswith("# Proof Engine")
     assert "https://example.com/proof-engine/proofs/" in llms
-    assert "https://example.com/proof-engine/index.json" in llms
+    assert "https://example.com/proof-engine/catalog.json" in llms
+    assert "https://example.com/proof-engine/index.json" in llms  # registry index
     assert "https://example.com/proof-engine/submit/" in llms
     assert "https://example.com/proof-engine/methodology/" in llms
     assert "https://github.com/yaniv-golan/proof-engine#installation" in llms
@@ -439,7 +445,8 @@ def test_llms_txt_urls_with_root_base_url(site_fixture):
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
     llms = (site_fixture / "_site" / "llms.txt").read_text()
     assert "https://example.com/proofs/" in llms
-    assert "https://example.com/index.json" in llms
+    assert "https://example.com/catalog.json" in llms
+    assert "https://example.com/index.json" in llms  # registry index
     assert "/proof-engine/" not in llms
     assert "https://example.com/catalog/" not in llms
 
@@ -592,7 +599,7 @@ def test_index_json_has_source_names(site_fixture):
 
     result = _run_build(site_fixture, base_url="/")
     assert result.returncode == 0, f"Build failed:\n{result.stderr}"
-    catalog = json.loads((site_fixture / "_site" / "index.json").read_text())
+    catalog = json.loads((site_fixture / "_site" / "catalog.json").read_text())
     proof_entry = catalog["proofs"][0]
     assert "source_names" in proof_entry
     assert "MIT McGovern Institute" in proof_entry["source_names"]
@@ -1394,9 +1401,9 @@ def test_built_proof_json_has_citation_block(site_fixture):
 
 
 def test_index_json_has_doi_field(site_fixture):
-    """The site index.json should include doi per proof (null when no DOI)."""
+    """The site catalog.json should include doi per proof (null when no DOI)."""
     _run_build(site_fixture)
-    index = json.loads((site_fixture / "_site" / "index.json").read_text())
+    index = json.loads((site_fixture / "_site" / "catalog.json").read_text())
     proof_entry = index["proofs"][0]
     assert "doi" in proof_entry
     assert proof_entry["doi"] is None
@@ -1413,7 +1420,7 @@ def test_index_json_has_doi_when_present(site_fixture):
         "minted_at": "2026-01-01",
     }))
     _run_build(site_fixture)
-    index = json.loads((site_fixture / "_site" / "index.json").read_text())
+    index = json.loads((site_fixture / "_site" / "catalog.json").read_text())
     assert index["proofs"][0]["doi"] == "10.5281/zenodo.999"
 
 
