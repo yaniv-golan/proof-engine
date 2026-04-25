@@ -10,6 +10,7 @@ docs/superpowers/
 eval-results*/
 proofs/
 !site/proofs/
+!packages/proof-engine-registry/tests/fixtures/proofs/
 docs/internal/
 .superpowers/brainstorm/
 _site/
