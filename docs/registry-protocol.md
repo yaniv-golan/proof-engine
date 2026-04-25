@@ -16,8 +16,8 @@ Response:
   "homepage": "https://proofengine.info",
   "publishes_supported": false,
   "auth_required": false,
-  "proof_count": 133,
-  "generated_at": "2026-04-24T00:00:00Z",
+  "proof_count": 132,
+  "generated_at": "2026-04-25T00:00:00Z",
   "signing_key": null
 }
 ```
@@ -228,14 +228,70 @@ Test vectors:
 
 ## Error shapes
 
-All error responses are JSON:
+JSON error responses MUST be [RFC 7807 Problem Details](https://datatracker.ietf.org/doc/html/rfc7807),
+served with `Content-Type: application/problem+json`:
 
-```json
-{ "error": "not_found", "message": "no proof with that claim_hash" }
+```http
+HTTP/1.1 404 Not Found
+Content-Type: application/problem+json
+Cache-Control: no-store
+
+{
+  "type": "https://proofengine.info/errors/not-found",
+  "status": 404,
+  "title": "Resource not found",
+  "detail": "no proof with that claim_hash",
+  "code": "not_found"
+}
 ```
 
-Standard codes: `not_found`, `unauthorized`, `forbidden`, `too_large`, `conflict`,
-`unsupported_version`, `bad_request`.
+Required fields:
+
+- `type` — absolute URI identifying the problem class. Stable across
+  releases; safe to consume programmatically as a discriminator.
+  Self-hosted registries MAY emit a different base (e.g., point at
+  internal docs); the path component (e.g. `/not-found`) is the
+  canonical identifier.
+- `status` — HTTP status code, mirrored from the response status line
+  per RFC 7807 §3.1.
+- `title` — short, human-readable summary; constant per type.
+- `detail` — per-occurrence human description with specific information
+  about this instance. MUST NOT include the request body, the
+  `Authorization` header value, or any internal stack trace.
+
+Optional / extension fields (RFC 7807 §3.2 allows additional members):
+
+- `code` — short machine-readable error key matching the catalog (e.g.
+  `not_found`). This is a non-standard extension preserved from
+  protocol v0.1 for log-aggregation tooling.
+
+Standard codes and their canonical (status, title, type-path) tuples:
+
+| `code`                | Status | Title                              | Type path              |
+|-----------------------|--------|------------------------------------|------------------------|
+| `bad_request`         | 400    | Bad request                        | `/bad-request`         |
+| `unauthorized`        | 401    | Authentication required            | `/unauthorized`        |
+| `forbidden`           | 403    | Forbidden                          | `/forbidden`           |
+| `not_found`           | 404    | Resource not found                 | `/not-found`           |
+| `conflict`            | 409    | Conflict with existing state       | `/conflict`            |
+| `too_large`           | 413    | Payload too large                  | `/payload-too-large`   |
+| `unsupported_version` | 426    | Protocol version mismatch          | `/unsupported-version` |
+| `rebuild_failed`      | 500    | Internal: registry rebuild failed  | `/rebuild-failed`      |
+
+The full type URI is `<type_base><type_path>` where `<type_base>` defaults
+to `https://proofengine.info/errors`.
+
+### Static deployments are exempt from the body shape
+
+Static-JSON deployments (e.g., the public site on GitHub Pages /
+Cloudflare Pages) cannot customize the host's default 404 body — those
+hosts return their own `text/html` error pages. Such deployments are
+treated as opaque-error servers: clients MUST rely on the HTTP status
+code only and MUST NOT attempt to parse the body. A deployment
+returning a JSON error body MUST emit Problem Details; emitting a
+non-Problem JSON body (e.g., the legacy `{error, message}`) is a
+protocol violation as of v0.2.
+
 
 ## Versioning
 
