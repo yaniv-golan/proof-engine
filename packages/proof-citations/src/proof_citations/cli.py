@@ -45,8 +45,14 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     verify = sub.add_parser("verify", help="Verify a quote appears at a URL.")
-    verify.add_argument("--url")
-    verify.add_argument("--quote")
+    verify.add_argument("--url",
+                        help="The URL to fetch and verify against.")
+    verify.add_argument("--quote",
+                        help=("The exact quoted text, AS IT APPEARS on the page. "
+                              "Pass literal Unicode characters; do NOT pre-escape "
+                              "(e.g. backslash-x sequences land as literal backslashes "
+                              "and will not match). Single-quote the whole argument "
+                              "to preserve special chars."))
     verify.add_argument("--fact-id", default="B1",
                         help="Identifier used in messages (default: B1).")
     verify.add_argument("--facts", help="Path to JSON file of facts to verify.")

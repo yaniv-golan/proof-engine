@@ -18,10 +18,31 @@ from proof_engine_registry.server import RegistryServer
 
 def _cmd_serve(args) -> int:
     token = os.environ.get(args.token_env) if args.token_env else None
+    base_url = args.base_url or f"http://{args.bind}:{args.port}"
+    # Foot-gun guard: an explicit --base-url that omits the port (e.g.
+    # "http://127.0.0.1") will become the canonical proof_url / homepage in
+    # every IndexEntry — and then no client can resolve those URLs because
+    # the server isn't listening on 80/443. Warn loudly. Skip the warning
+    # for default (HTTPS+443 / HTTP+80) deployments where omitting the port
+    # is correct, and for hostnames behind reverse proxies that DO listen
+    # on a default port.
+    if args.base_url:
+        from urllib.parse import urlparse
+        parsed = urlparse(args.base_url)
+        url_port = parsed.port  # None if the URL has no explicit port
+        scheme_default = 443 if parsed.scheme == "https" else 80
+        if url_port is None and args.port not in (80, 443, scheme_default):
+            sys.stderr.write(
+                f"WARNING: --base-url {args.base_url!r} has no port, but server "
+                f"is bound to port {args.port}. Generated proof_url / homepage "
+                f"fields will not match where the server is listening. Either "
+                f"include the port in --base-url (e.g. {args.base_url}:{args.port}) "
+                f"or front the server with a reverse proxy on the default port.\n"
+            )
     srv = RegistryServer(
         proofs_dir=Path(args.proofs_dir),
         name=args.name,
-        base_url=args.base_url or f"http://{args.bind}:{args.port}",
+        base_url=base_url,
         bind=args.bind, port=args.port,
         auth_token=token,
         cors_origin=args.cors_origin,
@@ -31,9 +52,20 @@ def _cmd_serve(args) -> int:
         Path(args.print_port_to).write_text(str(srv.port))
     print(f"proof-registry serving {args.proofs_dir} on http://{args.bind}:{srv.port}",
           file=sys.stderr)
+    # Fix #6: graceful shutdown on SIGTERM so systemd / Docker stop signals
+    # don't kill the process mid-request. Calling srv.shutdown() from a
+    # signal handler deadlocks (shutdown() waits for serve_forever, which
+    # is on the same thread). Instead, raise KeyboardInterrupt — the
+    # `except` block below catches it and runs shutdown from the outer
+    # frame, which is no longer inside the serve_forever loop.
+    import signal
+    def _on_term(_signum, _frame):
+        raise KeyboardInterrupt
+    signal.signal(signal.SIGTERM, _on_term)
     try:
         srv.serve_forever()
     except KeyboardInterrupt:
+        sys.stderr.write("proof-registry: shutting down\n")
         srv.shutdown()
     return 0
 

@@ -12,6 +12,26 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+# Python version preflight (fix #5). The packages declare requires-python>=3.11.
+# Without this check, a user on Python 3.10 would get a cryptic ImportError
+# ("from typing import...") deep in the package modules instead of a clear
+# diagnostic.
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "proof-engine: python3 not found on \$PATH" >&2
+  exit 127
+fi
+_PY_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+case "$_PY_VERSION" in
+  3.11|3.12|3.13|3.14|3.15|3.16|3.17|3.18|3.19|4.*)
+    : # supported
+    ;;
+  *)
+    echo "proof-engine: Python 3.11+ required (found $_PY_VERSION)." >&2
+    echo "  Install a newer Python (e.g. via pyenv) and re-run." >&2
+    exit 78  # EX_CONFIG — configuration error
+    ;;
+esac
+
 _install_hint() {
   cat >&2 <<EOF
 
@@ -69,7 +89,15 @@ Usage:
   proof-engine registry <serve|emit|lookup|publish> [...]
   proof-engine citations <verify> [...]
 
-See each subcommand's --help for options. Spec: docs/registry-protocol.md
+Each subcommand has its own --help.
+
+Exit codes (verify):
+  0  pass verdict (PROVED / SUPPORTED / PARTIALLY VERIFIED)
+  1  fail verdict (DISPROVED / UNDETERMINED)
+  2  error before a verdict could be produced
+  3  --registry-only mode: no hit in any configured registry
+
+Spec: docs/registry-protocol.md (registry) · docs/headless-verify.md (verify)
 USAGE
     ;;
   *)

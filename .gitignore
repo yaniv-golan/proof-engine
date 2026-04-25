@@ -31,3 +31,6 @@ docs/examples/*/output.txt
 docs/specs/
 # Playwright MCP session artifacts
 .playwright-mcp/
+
+# RegistryServer runtime artifact (sibling of proofs dir; rebuilt on each start)
+.registry-view/

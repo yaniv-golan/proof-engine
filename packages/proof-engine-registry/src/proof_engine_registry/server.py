@@ -140,7 +140,11 @@ class RegistryServer:
                     content_type: str = "application/json",
                     head_only: bool = False) -> None:
         if not path.exists():
-            self._serve_error(handler, "not_found", f"not found: {path.name}",
+            # Echo the request URL path, not the on-disk filename — the URL
+            # is the client's input and meaningful to them; the on-disk
+            # path is an internal abstraction that leaks our file layout.
+            self._serve_error(handler, "not_found",
+                              f"no resource at {handler.path}",
                               head_only=head_only)
             return
         # Conditional GET: client sends If-None-Match — return 304 if matched.
