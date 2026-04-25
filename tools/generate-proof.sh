@@ -30,6 +30,16 @@ while [ $# -gt 0 ]; do
         -h|--help)
             sed -n '2,/^[^#]/p' "$0" | grep '^#' | sed 's/^# \?//'
             exit 0 ;;
+        --)
+            # End-of-options marker: everything after is the claim text.
+            # Lets callers pass an untrusted claim that begins with `--`.
+            shift
+            if [ $# -gt 0 ]; then
+                CLAIM="$1"; shift
+            fi
+            if [ $# -gt 0 ]; then
+                echo "Error: unexpected argument after claim: '$1'" >&2; exit 1
+            fi ;;
         *)
             if [ -z "$CLAIM" ]; then
                 CLAIM="$1"; shift

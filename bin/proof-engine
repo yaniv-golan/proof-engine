@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# proof-engine — top-level dispatcher.
+#
+#   proof-engine verify --claim "..."        # → tools/verify_cli.py
+#   proof-engine registry serve ./proofs     # → proof-registry (package CLI)
+#   proof-engine citations verify --url ...  # → proof-citations (package CLI)
+#
+# Keeps a single stable command surface even though the implementations live
+# in separate packages.
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+_install_hint() {
+  cat >&2 <<EOF
+
+Install the Proof Engine packages into the current Python env:
+  pip install -e $SCRIPT_DIR/packages/proof-citations
+  pip install -e $SCRIPT_DIR/packages/proof-engine-registry
+  # and, for 'wiki' subcommands, packages/proof-engine-wiki
+
+Or make sure the venv that has them is active.
+EOF
+}
+
+_require() {
+  # Abort with a clear install hint if a CLI dependency is not on $PATH.
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "proof-engine: '$1' not found on \$PATH." >&2
+    _install_hint
+    exit 127
+  fi
+}
+
+_require_python_module() {
+  # Abort cleanly if a Python module needed by `verify` isn't importable —
+  # otherwise the user would get a raw ModuleNotFoundError traceback.
+  if ! python3 -c "import $1" >/dev/null 2>&1; then
+    echo "proof-engine: Python module '$1' not importable in the current env." >&2
+    _install_hint
+    exit 127
+  fi
+}
+
+cmd="${1:-}"
+shift || true
+
+case "$cmd" in
+  verify)
+    _require_python_module proof_engine_registry
+    _require_python_module proof_citations
+    exec python3 "$SCRIPT_DIR/tools/verify_cli.py" "$@"
+    ;;
+  registry)
+    _require proof-registry
+    exec proof-registry "$@"
+    ;;
+  citations)
+    _require proof-citations
+    exec proof-citations "$@"
+    ;;
+  -h|--help|"")
+    cat <<USAGE
+proof-engine — verify claims, look up existing proofs, self-host a registry.
+
+Usage:
+  proof-engine verify --claim "..." [--registry-check] [--model opus|sonnet] [--json]
+  proof-engine registry <serve|emit|lookup|publish> [...]
+  proof-engine citations <verify> [...]
+
+See each subcommand's --help for options. Spec: docs/registry-protocol.md
+USAGE
+    ;;
+  *)
+    echo "proof-engine: unknown command '$cmd'" >&2
+    echo "run 'proof-engine --help' for usage" >&2
+    exit 2
+    ;;
+esac
