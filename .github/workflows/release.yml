@@ -4,6 +4,20 @@ on:
   push:
     tags:
       - 'v*'
+  # Manual trigger as a recovery path. Use this when the automatic
+  # tag-push trigger doesn't fire — e.g., when multiple tags are pushed
+  # in a single `git push origin tag1 tag2 tag3` command (GitHub
+  # silently drops workflow events for batched ref pushes), or when a
+  # branch-protection bypass swallows the trigger.
+  #
+  # Run from the Actions tab → Release → "Run workflow" → enter tag.
+  # Or from CLI: `gh workflow run release.yml -f tag=v1.34.0`
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release (e.g., v1.34.0). Must already exist.'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -12,30 +26,47 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Resolve tag
+        id: tag
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            # Manual dispatch: tag comes from the input.
+            TAG="${{ github.event.inputs.tag }}"
+          else
+            # Push-tag event: extract from GITHUB_REF.
+            TAG="${GITHUB_REF#refs/tags/}"
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
 
-      - name: Extract version from tag
-        id: version
-        run: echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+      - name: Checkout at the tag
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.tag.outputs.tag }}
 
       - name: Build generic zip (Manus, ChatGPT, Cursor, etc.)
         run: |
           mkdir -p dist
           cp -r proof-engine/skills/proof-engine dist/proof-engine
           find dist/proof-engine -name '*.md' -exec sed -i 's|\${CLAUDE_SKILL_DIR}/||g' {} +
-          echo "${{ steps.version.outputs.version }}" > dist/proof-engine/VERSION
+          echo "${{ steps.tag.outputs.version }}" > dist/proof-engine/VERSION
           cd dist && zip -r ../proof-engine.zip proof-engine/
 
       - name: Extract release notes from CHANGELOG.md
         id: changelog
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
+          VERSION="${{ steps.tag.outputs.version }}"
           NOTES=$(awk "/^## \\[${VERSION}\\]/{found=1; next} /^## \\[/{if(found) exit} found{print}" CHANGELOG.md)
+          if [ -z "$NOTES" ]; then
+            echo "::warning::No CHANGELOG.md section found for [${VERSION}]; release will have empty notes."
+          fi
           echo "$NOTES" > release-notes.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: ${{ steps.tag.outputs.tag }}
           body_path: release-notes.md
           files: |
             proof-engine.zip
