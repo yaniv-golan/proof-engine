@@ -37,7 +37,7 @@ sedi "s/^version: .*/version: $VERSION/" "$ROOT/CITATION.cff"
 # Subpackages — keep their pyproject.toml + __init__.py in sync with the
 # repo VERSION so the proof-engine-registry / proof-citations wheels can be
 # released in lockstep with the skill.
-for pkg in packages/proof-citations packages/proof-engine-registry; do
+for pkg in packages/proof-citations packages/proof-engine-registry packages/proof-engine-wiki; do
   if [ -f "$ROOT/$pkg/pyproject.toml" ]; then
     sedi "s/^version = \"[^\"]*\"/version = \"$VERSION\"/" "$ROOT/$pkg/pyproject.toml"
   fi
