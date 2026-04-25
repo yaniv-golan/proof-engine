@@ -188,17 +188,21 @@ def test_no_circular_import_between_emit_and_badge():
     module scope, while emit.py imports badge functions lazily (inside
     emit_registry_files). Flipping the direction would re-introduce
     the cycle.
+
+    Runs in a subprocess so reloading proof_engine_registry doesn't
+    pollute sys.modules for sibling tests (dataclasses imported under
+    a different module identity break == comparisons elsewhere).
     """
-    # Clear the cache so we actually exercise the import machinery.
-    import importlib, sys
-    for mod in list(sys.modules):
-        if mod.startswith("proof_engine_registry"):
-            del sys.modules[mod]
-    importlib.import_module("proof_engine_registry.emit")
-    for mod in list(sys.modules):
-        if mod.startswith("proof_engine_registry"):
-            del sys.modules[mod]
-    importlib.import_module("proof_engine_registry.badge")
+    import subprocess, sys
+    for first in ("proof_engine_registry.emit", "proof_engine_registry.badge"):
+        result = subprocess.run(
+            [sys.executable, "-c", f"import {first}"],
+            capture_output=True, text=True,
+        )
+        assert result.returncode == 0, (
+            f"importing {first} first failed:\n"
+            f"stdout={result.stdout}\nstderr={result.stderr}"
+        )
 
 
 def test_emit_is_deterministic(tmp_path):
