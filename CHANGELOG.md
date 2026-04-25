@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.33.0] - 2026-04-25
+
+### Changed
+
+- **Registry Protocol error responses now use RFC 7807 Problem Details.** All JSON error bodies emit `application/problem+json` with the canonical IETF fields (`type`, `status`, `title`, `detail`) plus a non-standard `code` extension preserving the legacy short machine key for log-aggregation tooling. Protocol version stays at 0.1; the change is in-place. Spec: `docs/registry-protocol.md` §Error shapes.
+
+### Added
+
+- `proof_engine_registry.problems` — catalog mapping each error code to (HTTP status, type URI path, title). Self-hosted registries can override the type URI base via `RegistryServer(problem_type_base=...)`.
+- `proof_engine_registry.schema.Problem` dataclass + `registry-problem.schema.json` JSON schema (Draft 2020-12).
+- 5 server tests + 1 conformance test pinning the new error shape (Problem body content type, required fields, type URI absoluteness, no body/traceback echo).
+
 ## [1.32.0] - 2026-04-25
 
 ### Added
