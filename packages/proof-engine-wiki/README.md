@@ -24,12 +24,19 @@ badges and links.
 
     proof-engine-wiki lint WIKI_DIR/
 
-Scans a wiki directory. Re-verifies Type B citations (URLs rot). Flags
-contradictions between wiki prose and registry verdicts. Reports stale
-proofs (Confidence below threshold, or generated more than N days ago).
+Scans every `.md` file under the directory and reports:
+
+- `unresolved_marker` — `{{prove:}}` markers in the page that haven't
+  been resolved yet (run `ingest` to resolve them).
+- `stale_proof` — embedded proof URLs that no longer respond to a HEAD
+  request (the proof was retracted or the registry moved).
+
+Pass `--skip-network` to suppress URL reachability checks (faster CI;
+catches only `unresolved_marker`).
 
 ## Registry-only mode
 
-Add `--registry-only` to both commands to skip generation entirely.
-Useful for CI: if every `{{prove:}}` claim already has a registered proof,
-ingest/lint runs offline and quickly.
+Add `--registry-only` to `ingest` to skip new-proof commissioning
+entirely. Useful for CI: if every `{{prove:}}` claim already has a
+registered proof, ingest runs offline and quickly. Misses are reported,
+not commissioned.
