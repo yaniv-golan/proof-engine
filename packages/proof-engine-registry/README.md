@@ -59,6 +59,20 @@ reverse proxy (nginx, Caddy, Cloudflare, AWS ALB) and route only
 encrypted traffic from the proxy to the server. Bearer tokens MUST NOT
 travel the network in cleartext.
 
+## Embedding badges
+
+Each proof has three badge representations:
+
+- `/proofs/SLUG/badge.svg` — inline SVG, our own rendering. Self-contained, no third-party dependencies. Style is fixed.
+- `/proofs/SLUG/badge.json` — structured payload (claim, verdict, confidence, doi, badge_svg_url) for tools that render their own UI.
+- `/proofs/SLUG/shields.json` — [shields.io endpoint](https://shields.io/badges/endpoint-badge) format. Plug it into shields.io and pick any style:
+
+```markdown
+[![proof](https://img.shields.io/endpoint?url=https://proofengine.info/proofs/SLUG/shields.json)](https://proofengine.info/proofs/SLUG/)
+```
+
+Style flexibility (`?style=flat-square`, `?style=for-the-badge`, etc.) and CDN caching come from shields.io; we just emit the JSON.
+
 ## Errors
 
 JSON error responses follow [RFC 7807 Problem Details](https://datatracker.ietf.org/doc/html/rfc7807):

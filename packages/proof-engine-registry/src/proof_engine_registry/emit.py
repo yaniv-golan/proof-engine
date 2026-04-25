@@ -207,7 +207,9 @@ def emit_registry_files(
     # Deferred to break the circular import: badge.py imports field-mapping
     # helpers from this module. Keeping the badge import at module scope here
     # would cause ImportError on first load.
-    from proof_engine_registry.badge import build_badge, render_badge_svg
+    from proof_engine_registry.badge import (
+        build_badge, build_shields_endpoint, render_badge_svg,
+    )
 
     base_url = base_url.rstrip("/")
     ts = fixed_timestamp or _now_iso()
@@ -266,3 +268,9 @@ def emit_registry_files(
             json.dumps(badge, indent=2, sort_keys=True) + "\n"
         )
         (badge_dir / "badge.svg").write_text(render_badge_svg(badge))
+        # shields.io endpoint format — embedders point shields.io at this
+        # JSON via ?url= and shields.io renders the SVG in whatever style
+        # the embedder picks.
+        (badge_dir / "shields.json").write_text(
+            json.dumps(build_shields_endpoint(badge), indent=2, sort_keys=True) + "\n"
+        )

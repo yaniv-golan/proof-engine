@@ -89,6 +89,33 @@ Inline SVG rendering of the badge. Deterministic — byte-identical across build
 for identical inputs. Safe to cache indefinitely against the proof's
 `generated_at` timestamp.
 
+### `GET /proofs/{slug}/shields.json`
+
+[Shields.io endpoint](https://shields.io/badges/endpoint-badge) format. Lets
+embedders point shields.io at the proof and get a rendered SVG in the
+embedder's chosen style (`?style=flat`, `?style=for-the-badge`, etc.):
+
+```markdown
+[![proof](https://img.shields.io/endpoint?url=https://proofengine.info/proofs/SLUG/shields.json)](https://proofengine.info/proofs/SLUG/)
+```
+
+Body shape (shields.io schema v1):
+
+```json
+{
+  "schemaVersion": 1,
+  "label": "proof",
+  "message": "PROVED",
+  "color": "2d8f5f",
+  "labelColor": "555",
+  "cacheSeconds": 300
+}
+```
+
+Hex colors are emitted without a leading `#` per shields.io convention.
+`cacheSeconds` matches our `Cache-Control: max-age` so shields.io's CDN holds
+the rendered SVG for the same window static consumers do.
+
 ## Write endpoints (optional)
 
 ### `POST /proofs`

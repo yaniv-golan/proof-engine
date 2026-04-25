@@ -225,3 +225,19 @@ def test_emit_is_deterministic(tmp_path):
     for f in a.rglob("*.json"):
         rel = f.relative_to(a)
         assert f.read_bytes() == (b / rel).read_bytes(), f"diff in {rel}"
+
+
+def test_emit_writes_shields_json_per_proof(tmp_path):
+    import json as _json
+    emit_registry_files(
+        proofs_dir=FIXTURES, output_dir=tmp_path,
+        base_url="https://example.com", registry_name="Test",
+    )
+    payload = _json.loads(
+        (tmp_path / "proofs" / "sample-claim" / "shields.json").read_text()
+    )
+    assert payload["schemaVersion"] == 1
+    assert payload["label"] == "proof"
+    assert payload["message"]  # not empty
+    assert payload["color"]    # not empty, no leading '#'
+    assert not payload["color"].startswith("#")

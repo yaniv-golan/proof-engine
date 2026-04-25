@@ -267,3 +267,17 @@ def test_problem_type_uri_uses_default_base(server):
     r = requests.get(f"{server}/claims/{'0' * 64}.json", timeout=5)
     body = r.json()
     assert body["type"].startswith("https://")
+
+
+def test_shields_endpoint_served(server):
+    """The /proofs/{slug}/shields.json route returns the shields.io payload."""
+    r = requests.get(f"{server}/proofs/sample-claim/shields.json", timeout=5)
+    assert r.status_code == 200
+    body = r.json()
+    assert body["schemaVersion"] == 1
+    assert body["label"] == "proof"
+    assert body["message"]
+    # shields.io accepts hex without leading '#'
+    assert not body["color"].startswith("#")
+    # CORS so shields.io's renderer can fetch from a browser context.
+    assert r.headers.get("Access-Control-Allow-Origin") == "*"

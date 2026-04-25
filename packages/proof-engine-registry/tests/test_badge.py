@@ -81,3 +81,27 @@ def test_render_svg_is_deterministic():
     b = render_badge_svg(build_badge(p, slug="s", doi=None,
                                      base_url="https://example.com"))
     assert a == b
+
+
+def test_build_shields_endpoint_shape():
+    from proof_engine_registry.badge import build_shields_endpoint
+    badge = build_badge(_sample_proof(), slug="s", doi=None,
+                        base_url="https://example.com")
+    payload = build_shields_endpoint(badge)
+    assert payload["schemaVersion"] == 1
+    assert payload["label"] == "proof"
+    assert payload["message"] == "SUPPORTED"
+    # Color is hex without leading '#' per shields.io convention.
+    assert payload["color"] == "5eb88a"
+    assert "labelColor" in payload
+    assert payload["cacheSeconds"] == 300
+
+
+def test_build_shields_endpoint_qualified_verdict_color():
+    from proof_engine_registry.badge import build_shields_endpoint
+    badge = build_badge(_sample_proof(qualified=True), slug="q", doi=None,
+                        base_url="https://example.com")
+    payload = build_shields_endpoint(badge)
+    # Qualified verdict still maps to the family color.
+    assert payload["color"] == "5eb88a"
+    assert payload["message"] == "SUPPORTED (with unverified citations)"

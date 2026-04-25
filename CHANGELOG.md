@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.33.2] - 2026-04-25
+
+### Added
+
+- **shields.io endpoint per proof.** Each proof now also emits `/proofs/{slug}/shields.json` in shields.io's endpoint-badge schema. Embedders point shields.io at it and pick any style: `[![proof](https://img.shields.io/endpoint?url=https://proofengine.info/proofs/SLUG/shields.json)](https://proofengine.info/proofs/SLUG/)`. Style flexibility (flat, flat-square, for-the-badge, etc.) and CDN caching come from shields.io; we emit ~70 bytes of JSON per proof. Spec: `docs/registry-protocol.md` §`GET /proofs/{slug}/shields.json`. Reference server route added; CORS header so shields.io can fetch from a browser context.
+
 ## [1.33.1] - 2026-04-25
 
 ### Changed

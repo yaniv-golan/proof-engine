@@ -28,6 +28,7 @@ _CLAIM_HASH_RE = re.compile(r"^/claims/([0-9a-f]{64})\.json$")
 _PROOF_SLUG_RE = re.compile(r"^/proofs/([a-z0-9\-]+)\.json$")
 _BADGE_JSON_RE = re.compile(r"^/proofs/([a-z0-9\-]+)/badge\.json$")
 _BADGE_SVG_RE = re.compile(r"^/proofs/([a-z0-9\-]+)/badge\.svg$")
+_SHIELDS_JSON_RE = re.compile(r"^/proofs/([a-z0-9\-]+)/shields\.json$")
 
 
 class RegistryServer:
@@ -251,6 +252,14 @@ class RegistryServer:
                 handler,
                 self._view_dir / "proofs" / m.group(1) / "badge.svg",
                 content_type="image/svg+xml",
+                head_only=head_only,
+            )
+            return
+        m = _SHIELDS_JSON_RE.match(path)
+        if m:
+            self._serve_file(
+                handler,
+                self._view_dir / "proofs" / m.group(1) / "shields.json",
                 head_only=head_only,
             )
             return

@@ -139,3 +139,33 @@ def _escape_html(s: str) -> str:
          .replace(">", "&gt;")
          .replace('"', "&quot;")
     )
+
+
+# shields.io endpoint schema v1 — see https://shields.io/badges/endpoint-badge
+# Embedders construct a URL like
+#   https://img.shields.io/endpoint?url=https://proofengine.info/proofs/SLUG/shields.json
+# and shields.io fetches the JSON, renders an SVG in whatever style the
+# embedder requested via ?style=, and caches via its CDN.
+SHIELDS_ENDPOINT_SCHEMA_VERSION = 1
+SHIELDS_DEFAULT_CACHE_SECONDS = 300
+
+
+def build_shields_endpoint(badge: dict) -> dict:
+    """Convert a proof badge into a shields.io endpoint payload.
+
+    The shields.io schema accepts hex colors with or without a leading '#';
+    we strip ours so the JSON stays tidy and matches their convention.
+
+    `cacheSeconds: 300` matches our protocol's Cache-Control max-age, so
+    shields.io's CDN holds the rendered SVG for the same window our static
+    consumers do.
+    """
+    color = badge["colors"]["verdict_bg"].lstrip("#")
+    return {
+        "schemaVersion": SHIELDS_ENDPOINT_SCHEMA_VERSION,
+        "label": "proof",
+        "message": badge["verdict"],
+        "color": color,
+        "labelColor": "555",
+        "cacheSeconds": SHIELDS_DEFAULT_CACHE_SECONDS,
+    }
