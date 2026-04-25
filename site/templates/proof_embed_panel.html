@@ -1,0 +1,26 @@
+<section class="embed-panel" aria-labelledby="embed-heading">
+  <h2 id="embed-heading">Embed this proof</h2>
+  <p>Cite this proof in your wiki, docs, or README:</p>
+
+  <div class="embed-tabs">
+    <details open>
+      <summary>HTML</summary>
+      <pre><code>{{ embed.html|e }}</code></pre>
+    </details>
+    <details>
+      <summary>Markdown</summary>
+      <pre><code>{{ embed.markdown|e }}</code></pre>
+    </details>
+    <details>
+      <summary>SVG URL</summary>
+      <pre><code>{{ embed.url|e }}</code></pre>
+    </details>
+  </div>
+
+  <p class="embed-preview">
+    Preview:
+    <a href="{{ embed_proof.proof_url }}">
+      <img src="{{ embed_proof.badge_svg_url }}" alt="proof: {{ embed_proof.verdict }}">
+    </a>
+  </p>
+</section>

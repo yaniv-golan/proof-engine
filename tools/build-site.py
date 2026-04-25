@@ -31,7 +31,8 @@ from tools.lib.depends_on import (
     validate_repo, build_reverse_index,
 )
 from tools.lib.binder_config import BINDER_LAUNCHER_REPO, BINDER_LAUNCHER_TAG
-from proof_engine_registry.emit import emit_registry_files
+from proof_engine_registry.emit import emit_registry_files, verdict_string
+from proof_engine_registry.badge import build_badge, render_embed_snippets
 
 
 _SHA_RE = re.compile(r"^[0-9a-f]{40}$")
@@ -1161,8 +1162,26 @@ def main():
             proof["proof_py_bytes"] = 0
             proof["proof_py_size_human"] = ""
 
+        # Badge embed payload: builds the per-proof copy-paste snippets
+        # (HTML/Markdown/URL) and the preview-image URLs for the embed panel.
+        # `embed_proof` is a small wrapper carrying just the badge URLs +
+        # public verdict string — kept separate from `proof` so it can't
+        # clobber the existing `proof.verdict` dict the template relies on.
+        _badge = build_badge(
+            proof["proof_data"], slug=proof["slug"],
+            doi=proof_dois[proof["slug"]], base_url=site_url,
+        )
+        _embed_snippets = render_embed_snippets(_badge)
+        _embed_proof = {
+            "proof_url": _badge["proof_url"],
+            "badge_svg_url": _badge["badge_svg_url"],
+            "verdict": verdict_string(proof["proof_data"]),
+        }
+
         write_file(proof_out / "index.html", tpl.render(
             **common, proof=proof,
+            embed=_embed_snippets,
+            embed_proof=_embed_proof,
             rendered_sections_md=rendered_md,
             rendered_sections_audit=rendered_audit,
             rendered_sections_narrative=rendered_narrative,

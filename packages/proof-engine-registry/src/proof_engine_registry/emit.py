@@ -204,6 +204,11 @@ def emit_registry_files(
     builds — set it for tests and for CI where output must be stable across
     runs.
     """
+    # Deferred to break the circular import: badge.py imports field-mapping
+    # helpers from this module. Keeping the badge import at module scope here
+    # would cause ImportError on first load.
+    from proof_engine_registry.badge import build_badge, render_badge_svg
+
     base_url = base_url.rstrip("/")
     ts = fixed_timestamp or _now_iso()
 
@@ -252,3 +257,12 @@ def emit_registry_files(
     for slug, proof, doi in loaded:
         rp = _proof_to_registry_proof(proof, slug, doi, base_url)
         _write_json(output_dir / "proofs" / f"{slug}.json", to_json(rp))
+
+    for slug, proof, doi in loaded:
+        badge = build_badge(proof, slug=slug, doi=doi, base_url=base_url)
+        badge_dir = output_dir / "proofs" / slug
+        badge_dir.mkdir(parents=True, exist_ok=True)
+        (badge_dir / "badge.json").write_text(
+            json.dumps(badge, indent=2, sort_keys=True) + "\n"
+        )
+        (badge_dir / "badge.svg").write_text(render_badge_svg(badge))

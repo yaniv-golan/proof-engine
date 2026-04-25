@@ -159,6 +159,52 @@ def test_emit_handles_missing_doi_file(tmp_path):
     assert entry["doi"] is None
 
 
+def test_emit_writes_badge_json_per_proof(tmp_path):
+    import json
+    emit_registry_files(
+        proofs_dir=FIXTURES, output_dir=tmp_path,
+        base_url="https://example.com", registry_name="Test",
+    )
+    badge = json.loads((tmp_path / "proofs" / "sample-claim" / "badge.json").read_text())
+    assert badge["schema_version"] == "1.0"
+    assert badge["slug"] == "sample-claim"
+
+
+def test_emit_writes_badge_svg_per_proof(tmp_path):
+    emit_registry_files(
+        proofs_dir=FIXTURES, output_dir=tmp_path,
+        base_url="https://example.com", registry_name="Test",
+    )
+    svg = (tmp_path / "proofs" / "sample-claim" / "badge.svg").read_text()
+    assert svg.startswith("<svg")
+    assert "proof" in svg
+
+
+def test_no_circular_import_between_emit_and_badge():
+    """Regression test: emit.py and badge.py both reference each other.
+
+    Loading either module first must succeed without ImportError. The
+    convention is that badge.py imports field helpers from emit.py at
+    module scope, while emit.py imports badge functions lazily (inside
+    emit_registry_files). Flipping the direction would re-introduce
+    the cycle.
+
+    Runs in a subprocess so reloading proof_engine_registry doesn't
+    pollute sys.modules for sibling tests (dataclasses imported under
+    a different module identity break == comparisons elsewhere).
+    """
+    import subprocess, sys
+    for first in ("proof_engine_registry.emit", "proof_engine_registry.badge"):
+        result = subprocess.run(
+            [sys.executable, "-c", f"import {first}"],
+            capture_output=True, text=True,
+        )
+        assert result.returncode == 0, (
+            f"importing {first} first failed:\n"
+            f"stdout={result.stdout}\nstderr={result.stderr}"
+        )
+
+
 def test_emit_is_deterministic(tmp_path):
     """Running emit twice on the same input produces byte-identical output
     (required for the public site's git history to stay clean)."""

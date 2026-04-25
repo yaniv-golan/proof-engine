@@ -66,7 +66,28 @@ source URLs, computation summary, links to artifacts.
 
 ### `GET /proofs/{slug}/badge.json`
 
-Compact badge payload (defined by Phase 3).
+Compact badge payload. Shape:
+
+```json
+{
+  "schema_version": "1.0",
+  "slug": "...",
+  "claim": "...",
+  "verdict": "SUPPORTED",
+  "confidence": 0.87,
+  "doi": null,
+  "proof_url": "...",
+  "badge_svg_url": "...",
+  "generated_at": "...",
+  "colors": { "verdict_bg": "#5eb88a", "verdict_fg": "#ffffff" }
+}
+```
+
+### `GET /proofs/{slug}/badge.svg`
+
+Inline SVG rendering of the badge. Deterministic — byte-identical across builds
+for identical inputs. Safe to cache indefinitely against the proof's
+`generated_at` timestamp.
 
 ## Write endpoints (optional)
 
