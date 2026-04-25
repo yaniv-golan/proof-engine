@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proof-engine-wiki"
+version = "0.1.0"
+description = "Attach verified Proof Engine proofs to LLM-wiki claims."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Yaniv Golan", email = "yaniv@lool.vc" }]
+requires-python = ">=3.11"
+dependencies = [
+  "proof-citations>=0.1",
+  "proof-engine-registry>=0.1",
+  "requests>=2.31",
+]
+
+[project.scripts]
+proof-engine-wiki = "proof_engine_wiki.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
