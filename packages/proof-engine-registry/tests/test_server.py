@@ -184,3 +184,85 @@ def test_server_does_not_log_authorization(capfd, server):
     captured = capfd.readouterr()
     assert "must-not-leak" not in captured.err
     assert "must-not-leak" not in captured.out
+
+
+# RFC 7807 Problem Details — error responses must be application/problem+json
+# with type/status/title/detail/code fields. The five tests below pin the
+# shape across every error path the server can take.
+
+def test_problem_shape_on_404_claim_lookup(server):
+    r = requests.get(f"{server}/claims/{'0' * 64}.json", timeout=5)
+    assert r.status_code == 404
+    assert r.headers.get("Content-Type") == "application/problem+json"
+    body = r.json()
+    assert body["status"] == 404
+    assert body["code"] == "not_found"
+    assert body["title"] == "Resource not found"
+    assert body["type"].endswith("/not-found")
+    assert "detail" in body and isinstance(body["detail"], str)
+
+
+def test_problem_shape_on_401_publish_without_auth(server):
+    r = requests.post(f"{server}/proofs", json={}, timeout=5)
+    assert r.status_code == 401
+    assert r.headers.get("Content-Type") == "application/problem+json"
+    body = r.json()
+    assert body["code"] == "unauthorized"
+    assert body["status"] == 401
+    assert body["type"].endswith("/unauthorized")
+
+
+def test_problem_shape_on_400_claim_mismatch(server):
+    body = {
+        "slug": "drift",
+        "claim": "outer claim",
+        "proof_json": {
+            "format_version": 3,
+            "claim_natural": "DIFFERENT inner claim",
+            "evidence": {"A1": {"type": "computed", "label": "x"}},
+            "verdict": {"value": "PROVED", "qualified": False,
+                        "qualifier": None, "reason": None},
+            "generator": {"name": "proof-engine", "version": "0",
+                          "generated_at": "2026-04-25"},
+        },
+    }
+    r = requests.post(
+        f"{server}/proofs", json=body,
+        headers={"Authorization": "Bearer secret"},
+        timeout=5,
+    )
+    assert r.status_code == 400
+    assert r.headers.get("Content-Type") == "application/problem+json"
+    p = r.json()
+    assert p["code"] == "bad_request"
+    assert p["status"] == 400
+    assert "claim_natural" in p["detail"] or "match" in p["detail"]
+
+
+def test_problem_includes_no_stack_trace_or_secret(server):
+    """detail is human-readable but MUST NOT echo the request body
+    or expose a Python traceback. Use the real bearer so auth passes
+    and we exercise the JSON-decode error path (not the auth path)."""
+    r = requests.post(
+        f"{server}/proofs",
+        data="not valid json — should-not-leak-into-body",
+        headers={
+            "Authorization": "Bearer secret",
+            "Content-Type": "application/json",
+        },
+        timeout=5,
+    )
+    assert r.status_code == 400
+    body = r.text
+    assert "should-not-leak-into-body" not in body
+    assert "Traceback" not in body
+    assert "  File " not in body  # python traceback marker
+
+
+def test_problem_type_uri_uses_default_base(server):
+    """The default fixture doesn't override problem_type_base, so type
+    URIs use https://proofengine.info/errors/... — consumers can rely on
+    a stable absolute URI even for the local dev server."""
+    r = requests.get(f"{server}/claims/{'0' * 64}.json", timeout=5)
+    body = r.json()
+    assert body["type"].startswith("https://")

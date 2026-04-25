@@ -18,6 +18,10 @@ from typing import Optional
 
 from proof_engine_registry import __protocol_version__
 from proof_engine_registry.emit import emit_registry_files
+from proof_engine_registry.problems import (
+    DEFAULT_TYPE_BASE, problem as _problem_spec,
+)
+from proof_engine_registry.schema import Problem, to_json
 
 
 _CLAIM_HASH_RE = re.compile(r"^/claims/([0-9a-f]{64})\.json$")
@@ -43,6 +47,7 @@ class RegistryServer:
         auth_token: Optional[str] = None,
         cors_origin: str = "*",
         log_json: bool = False,
+        problem_type_base: str = DEFAULT_TYPE_BASE,
     ):
         self.proofs_dir = Path(proofs_dir)
         self.name = name
@@ -57,6 +62,9 @@ class RegistryServer:
         # stderr (method, path, status, ms). Off by default to keep the
         # default deployment quiet. Useful for self-hosted compliance/audit.
         self.log_json = log_json
+        # Base URI for RFC 7807 `type` fields in error bodies. Self-hosted
+        # registries may override this so type URIs point at their own docs.
+        self.problem_type_base = problem_type_base
         self._view_dir = self.proofs_dir.parent / ".registry-view"
         # Publish is serialized: concurrent POST /proofs requests would
         # otherwise race in `_rebuild_view` and interleave writes in
@@ -132,7 +140,7 @@ class RegistryServer:
                     content_type: str = "application/json",
                     head_only: bool = False) -> None:
         if not path.exists():
-            self._serve_error(handler, 404, "not_found", f"not found: {path.name}",
+            self._serve_error(handler, "not_found", f"not found: {path.name}",
                               head_only=head_only)
             return
         # Conditional GET: client sends If-None-Match — return 304 if matched.
@@ -154,22 +162,38 @@ class RegistryServer:
         self._log(handler, 200)
 
     def _serve_error(self, handler: BaseHTTPRequestHandler,
-                     status: int, code: str, msg: str,
+                     code: str, detail: str,
                      head_only: bool = False) -> None:
-        body = json.dumps({"error": code, "message": msg}).encode("utf-8")
-        handler.send_response(status)
-        handler.send_header("Content-Type", "application/json")
+        """Emit an RFC 7807 Problem Details error body.
+
+        `code` is looked up in problems.CATALOG to derive HTTP status,
+        type URI, and title. `detail` is the per-occurrence human
+        message.
+
+        Served as `application/problem+json` per RFC 7807 §3. CORS
+        header is included so browsers can surface the body on 4xx.
+        Cache-Control: no-store keeps transient 5xx out of caches.
+        """
+        spec = _problem_spec(code)
+        problem_obj = Problem(
+            type=spec.type_uri(self.problem_type_base),
+            status=spec.status,
+            title=spec.title,
+            detail=detail,
+            code=spec.code,
+        )
+        body = json.dumps(to_json(problem_obj),
+                          indent=2, sort_keys=True).encode("utf-8") + b"\n"
+        handler.send_response(spec.status)
+        handler.send_header("Content-Type", "application/problem+json")
         handler.send_header("Content-Length", str(len(body)))
-        # CORS on errors too — browsers need it even on 4xx for fetch() to
-        # surface the response body. Cache-Control: no-store on errors so
-        # transient 5xx don't poison caches.
         if self.cors_origin:
             handler.send_header("Access-Control-Allow-Origin", self.cors_origin)
         handler.send_header("Cache-Control", "no-store")
         handler.end_headers()
         if not head_only:
             handler.wfile.write(body)
-        self._log(handler, status)
+        self._log(handler, spec.status)
 
     def handle_options(self, handler: BaseHTTPRequestHandler) -> None:
         """CORS preflight. Allow GET/HEAD + Authorization for read endpoints."""
@@ -226,39 +250,39 @@ class RegistryServer:
                 head_only=head_only,
             )
             return
-        self._serve_error(handler, 404, "not_found", f"no such path: {path}",
+        self._serve_error(handler, "not_found", f"no such path: {path}",
                           head_only=head_only)
 
     def handle_post_publish(self, handler: BaseHTTPRequestHandler) -> None:
         if not self._check_auth(handler):
-            self._serve_error(handler, 401, "unauthorized", "missing or bad bearer token")
+            self._serve_error(handler, "unauthorized", "missing or bad bearer token")
             return
         length = int(handler.headers.get("Content-Length", "0"))
         if length == 0 or length > 10 * 1024 * 1024:  # 10 MB cap
-            self._serve_error(handler, 413, "too_large", "payload too large or empty")
+            self._serve_error(handler, "too_large", "payload too large or empty")
             return
         raw = handler.rfile.read(length)
         try:
             body = json.loads(raw)
         except json.JSONDecodeError:
-            self._serve_error(handler, 400, "bad_request", "not valid JSON")
+            self._serve_error(handler, "bad_request", "not valid JSON")
             return
         slug = body.get("slug")
         if not slug or not re.fullmatch(r"[a-z0-9\-]+", slug):
-            self._serve_error(handler, 400, "bad_request", "invalid slug")
+            self._serve_error(handler, "bad_request", "invalid slug")
             return
         claim = body.get("claim")
         proof_json = body.get("proof_json") or {}
         inner_claim = proof_json.get("claim_natural")
         if not claim or not inner_claim:
-            self._serve_error(handler, 400, "bad_request",
+            self._serve_error(handler, "bad_request",
                               "both body.claim and proof_json.claim_natural are required")
             return
         # Silent-drift guard: outer claim MUST match inner claim_natural.
         # Without this, the index would advertise one claim while the proof
         # argues a different one.
         if claim.strip() != inner_claim.strip():
-            self._serve_error(handler, 400, "bad_request",
+            self._serve_error(handler, "bad_request",
                               "body.claim does not match proof_json.claim_natural")
             return
         # Serialize: mkdir/check/write/rebuild must be atomic w.r.t. other
@@ -266,7 +290,7 @@ class RegistryServer:
         with self._publish_lock:
             dest = self.proofs_dir / slug
             if dest.exists():
-                self._serve_error(handler, 409, "conflict", "slug exists")
+                self._serve_error(handler, "conflict", "slug exists")
                 return
             dest.mkdir(parents=True)
             (dest / "proof.json").write_text(
@@ -284,14 +308,14 @@ class RegistryServer:
                 import shutil as _shutil
                 _shutil.rmtree(dest, ignore_errors=True)
                 self._serve_error(
-                    handler, 500, "rebuild_failed",
+                    handler, "rebuild_failed",
                     f"could not rebuild registry view: {exc}",
                 )
                 return
         # Send the new proof JSON as the response body, with 201 Created.
         view_path = self._view_dir / "proofs" / f"{slug}.json"
         if not view_path.exists():
-            self._serve_error(handler, 500, "rebuild_failed",
+            self._serve_error(handler, "rebuild_failed",
                               "view did not produce expected proof file")
             return
         data = view_path.read_bytes()
@@ -328,7 +352,7 @@ def _make_handler(server: RegistryServer):
             if self.path == "/proofs":
                 server.handle_post_publish(self)
             else:
-                server._serve_error(self, 404, "not_found", f"no such path: {self.path}")
+                server._serve_error(self, "not_found", f"no such path: {self.path}")
 
         def do_OPTIONS(self):
             # CORS preflight for browser clients. Always 204 with the
