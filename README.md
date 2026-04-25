@@ -264,6 +264,8 @@ For a deeper look at the design principles, trust boundaries, hardening rules, a
 
 - [Registry Protocol](docs/registry-protocol.md) — the JSON-over-HTTPS contract
   for public and self-hosted proof registries.
+- [Proof Badges](docs/badges.md) — compact, embeddable verdict certificates
+  (`badge.json` + `badge.svg`) with copy-paste embed snippets.
 
 ## License
 
