@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proof Registry Proof",
+  "type": "object",
+  "required": ["claim_hash", "slug", "claim", "verdict", "confidence",
+               "proof_url", "badge_url", "generated_at",
+               "fact_ids", "source_urls"],
+  "properties": {
+    "claim_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "slug": { "type": "string" },
+    "claim": { "type": "string" },
+    "verdict": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "doi": { "type": ["string", "null"] },
+    "proof_url": { "type": "string", "format": "uri" },
+    "badge_url": { "type": "string", "format": "uri" },
+    "generated_at": { "type": "string" },
+    "fact_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "source_urls": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "narrative_summary": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}
