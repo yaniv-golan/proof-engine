@@ -1104,7 +1104,7 @@ def test_verify_citation_not_found_includes_closest_passage():
         "models.</p></body></html>"
     )
 
-    with patch("scripts.verify_citations._fetch_page", return_value=(page_html, "live", None)):
+    with patch("proof_citations.verify._fetch_page", return_value=(page_html, "live", None)):
         result = verify_citation(
             "https://example.com/page",
             "Addition of a single irrelevant clause provokes catastrophic accuracy drops on certain models",
@@ -1148,7 +1148,7 @@ def test_verify_all_citations_passes_snapshot_file():
         mock_requests.exceptions = real_req.exceptions
 
         with patch("proof_citations.fetch.requests", mock_requests), \
-             patch("scripts.verify_citations.requests", mock_requests):
+             patch("proof_citations.verify.requests", mock_requests):
             from scripts.verify_citations import verify_all_citations
             results = verify_all_citations(empirical_facts)
 
@@ -1175,7 +1175,7 @@ def test_verify_data_values_uses_snapshot_file():
         mock_requests.exceptions = real_req.exceptions
 
         with patch("proof_citations.fetch.requests", mock_requests), \
-             patch("scripts.verify_citations.requests", mock_requests):
+             patch("proof_citations.verify.requests", mock_requests):
             from scripts.verify_citations import verify_data_values
             results = verify_data_values(
                 "https://paywalled-stats.gov/cpi",
@@ -1211,8 +1211,8 @@ def test_verify_citation_tries_oa_after_fetch_failed():
     oa_page = "This study shows that X causes Y in all tested conditions."
 
     with patch("proof_citations.fetch.requests", mock_requests), \
-         patch("scripts.verify_citations.requests", mock_requests), \
-         patch("scripts.verify_citations._try_oa_fallback") as mock_oa:
+         patch("proof_citations.verify.requests", mock_requests), \
+         patch("proof_citations.verify._try_oa_fallback") as mock_oa:
         mock_oa.return_value = (oa_page, "https://oa.example.com/article")
         from scripts.verify_citations import verify_citation
         result = verify_citation(
@@ -1242,8 +1242,8 @@ def test_verify_citation_oa_mismatch_returns_fetch_failed():
     oa_page = "This preprint discusses a completely different finding about Z."
 
     with patch("proof_citations.fetch.requests", mock_requests), \
-         patch("scripts.verify_citations.requests", mock_requests), \
-         patch("scripts.verify_citations._try_oa_fallback") as mock_oa:
+         patch("proof_citations.verify.requests", mock_requests), \
+         patch("proof_citations.verify._try_oa_fallback") as mock_oa:
         mock_oa.return_value = (oa_page, "https://oa.example.com/article")
         from scripts.verify_citations import verify_citation
         result = verify_citation(
@@ -1266,8 +1266,8 @@ def test_verify_citation_no_doi_skips_oa():
     mock_requests.exceptions = real_req.exceptions
 
     with patch("proof_citations.fetch.requests", mock_requests), \
-         patch("scripts.verify_citations.requests", mock_requests), \
-         patch("scripts.verify_citations._try_oa_fallback") as mock_oa:
+         patch("proof_citations.verify.requests", mock_requests), \
+         patch("proof_citations.verify._try_oa_fallback") as mock_oa:
         mock_oa.return_value = (None, None)
         from scripts.verify_citations import verify_citation
         result = verify_citation(
@@ -1292,8 +1292,8 @@ def test_verify_citation_oa_disabled():
     mock_requests.exceptions = real_req.exceptions
 
     with patch("proof_citations.fetch.requests", mock_requests), \
-         patch("scripts.verify_citations.requests", mock_requests), \
-         patch("scripts.verify_citations._try_oa_fallback") as mock_oa:
+         patch("proof_citations.verify.requests", mock_requests), \
+         patch("proof_citations.verify._try_oa_fallback") as mock_oa:
         from scripts.verify_citations import verify_citation
         result = verify_citation(
             "https://doi.org/10.1234/test",
