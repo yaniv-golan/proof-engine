@@ -103,3 +103,25 @@ def test_no_registries_configured_errors_cleanly(tmp_path):
     payload = json.loads(result.stdout)
     assert any("registries" in e.lower() or "registry" in e.lower()
                for e in payload["errors"])
+
+
+@pytest.mark.integration
+def test_end_to_end_generation(tmp_path):
+    """End-to-end: invoke a real proof generation for a cheap claim."""
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        pytest.skip("no ANTHROPIC_API_KEY; generation would fail")
+    out = tmp_path / "proof-out"
+    result = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "tools" / "verify_cli.py"),
+         "--claim", "2 + 2 equals 4",
+         "--output-dir", str(out),
+         "--model", "sonnet",  # cheaper
+         "--json"],
+        capture_output=True, text=True, timeout=600,
+    )
+    # Regardless of verdict, we expect a parseable JSON payload.
+    payload = json.loads(result.stdout)
+    assert payload["source"] in {"generated", "error"}
+    if payload["source"] == "generated":
+        assert (out / "proof.json").exists()
+        assert (out / "proof.py").exists()
