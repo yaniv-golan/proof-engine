@@ -19,6 +19,14 @@ dependencies = [
 [project.scripts]
 proof-engine-wiki = "proof_engine_wiki.cli:main"
 
+[project.urls]
+Homepage = "https://proofengine.info"
+Repository = "https://github.com/yaniv-golan/proof-engine"
+Documentation = "https://github.com/yaniv-golan/proof-engine/blob/main/packages/proof-engine-wiki/README.md"
+Issues = "https://github.com/yaniv-golan/proof-engine/issues"
+Changelog = "https://github.com/yaniv-golan/proof-engine/blob/main/CHANGELOG.md"
+Source = "https://github.com/yaniv-golan/proof-engine/tree/main/packages/proof-engine-wiki"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 

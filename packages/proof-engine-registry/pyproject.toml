@@ -25,6 +25,14 @@ test = ["pytest", "jsonschema>=4.0"]
 [project.scripts]
 proof-registry = "proof_engine_registry.cli:main"
 
+[project.urls]
+Homepage = "https://proofengine.info"
+Repository = "https://github.com/yaniv-golan/proof-engine"
+Documentation = "https://github.com/yaniv-golan/proof-engine/blob/main/docs/registry-protocol.md"
+Issues = "https://github.com/yaniv-golan/proof-engine/issues"
+Changelog = "https://github.com/yaniv-golan/proof-engine/blob/main/CHANGELOG.md"
+Source = "https://github.com/yaniv-golan/proof-engine/tree/main/packages/proof-engine-registry"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
