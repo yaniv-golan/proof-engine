@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import re
 import threading
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Optional
@@ -40,21 +41,66 @@ class RegistryServer:
         bind: str = "127.0.0.1",
         port: int = 0,
         auth_token: Optional[str] = None,
+        cors_origin: str = "*",
+        log_json: bool = False,
     ):
         self.proofs_dir = Path(proofs_dir)
         self.name = name
         self.base_url = base_url
         self.auth_token = auth_token
+        # CORS: per the protocol spec, conformant servers MUST emit
+        # Access-Control-Allow-Origin on read responses. Public registries use
+        # "*"; private registries can pass a specific origin to restrict
+        # cross-origin browser access.
+        self.cors_origin = cors_origin
+        # log_json: when True, emit one structured JSON line per request to
+        # stderr (method, path, status, ms). Off by default to keep the
+        # default deployment quiet. Useful for self-hosted compliance/audit.
+        self.log_json = log_json
         self._view_dir = self.proofs_dir.parent / ".registry-view"
         # Publish is serialized: concurrent POST /proofs requests would
         # otherwise race in `_rebuild_view` and interleave writes in
         # index.json (ThreadingHTTPServer dispatches on per-request threads).
         self._publish_lock = threading.Lock()
         self._rebuild_view()
+        # ETag is derived from the view's generated_at — clients can
+        # If-None-Match against it.
+        self._etag = self._compute_etag()
         handler = _make_handler(self)
         self._httpd = ThreadingHTTPServer((bind, port), handler)
         # If the caller passed port=0, record the actual bound port.
         self.port = self._httpd.server_address[1]
+
+    def _compute_etag(self) -> str:
+        try:
+            disco = json.loads((self._view_dir / ".well-known"
+                                / "proof-registry.json").read_text())
+            return f'"{disco.get("generated_at", "0")}"'
+        except (OSError, json.JSONDecodeError):
+            return '"0"'
+
+    def _add_read_headers(self, handler: BaseHTTPRequestHandler) -> None:
+        """Headers that go on every successful READ response (not POST)."""
+        if self.cors_origin:
+            handler.send_header("Access-Control-Allow-Origin", self.cors_origin)
+            if self.cors_origin != "*":
+                handler.send_header("Vary", "Origin")
+        handler.send_header("Cache-Control", "public, max-age=300")
+        handler.send_header("ETag", self._etag)
+
+    def _log(self, handler: BaseHTTPRequestHandler, status: int) -> None:
+        if not self.log_json:
+            return
+        import sys
+        # Strip Authorization out of headers we'd log; never log it.
+        record = {
+            "ts": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "method": handler.command,
+            "path": handler.path,
+            "status": status,
+            "remote": handler.client_address[0],
+        }
+        sys.stderr.write(json.dumps(record) + "\n")
 
     def _rebuild_view(self) -> None:
         emit_registry_files(
@@ -89,13 +135,23 @@ class RegistryServer:
             self._serve_error(handler, 404, "not_found", f"not found: {path.name}",
                               head_only=head_only)
             return
+        # Conditional GET: client sends If-None-Match — return 304 if matched.
+        inm = handler.headers.get("If-None-Match", "")
+        if inm and inm == self._etag:
+            handler.send_response(304)
+            self._add_read_headers(handler)
+            handler.end_headers()
+            self._log(handler, 304)
+            return
         data = path.read_bytes()
         handler.send_response(200)
         handler.send_header("Content-Type", content_type)
         handler.send_header("Content-Length", str(len(data)))
+        self._add_read_headers(handler)
         handler.end_headers()
         if not head_only:
             handler.wfile.write(data)
+        self._log(handler, 200)
 
     def _serve_error(self, handler: BaseHTTPRequestHandler,
                      status: int, code: str, msg: str,
@@ -104,9 +160,30 @@ class RegistryServer:
         handler.send_response(status)
         handler.send_header("Content-Type", "application/json")
         handler.send_header("Content-Length", str(len(body)))
+        # CORS on errors too — browsers need it even on 4xx for fetch() to
+        # surface the response body. Cache-Control: no-store on errors so
+        # transient 5xx don't poison caches.
+        if self.cors_origin:
+            handler.send_header("Access-Control-Allow-Origin", self.cors_origin)
+        handler.send_header("Cache-Control", "no-store")
         handler.end_headers()
         if not head_only:
             handler.wfile.write(body)
+        self._log(handler, status)
+
+    def handle_options(self, handler: BaseHTTPRequestHandler) -> None:
+        """CORS preflight. Allow GET/HEAD + Authorization for read endpoints."""
+        handler.send_response(204)
+        if self.cors_origin:
+            handler.send_header("Access-Control-Allow-Origin", self.cors_origin)
+            if self.cors_origin != "*":
+                handler.send_header("Vary", "Origin")
+        handler.send_header("Access-Control-Allow-Methods", "GET, HEAD, POST")
+        handler.send_header("Access-Control-Allow-Headers", "Authorization, Content-Type")
+        handler.send_header("Access-Control-Max-Age", "86400")
+        handler.send_header("Content-Length", "0")
+        handler.end_headers()
+        self._log(handler, 204)
 
     def handle_get(self, handler: BaseHTTPRequestHandler,
                    head_only: bool = False) -> None:
@@ -197,6 +274,9 @@ class RegistryServer:
             )
             try:
                 self._rebuild_view()
+                # Refresh ETag so future If-None-Match revalidations notice
+                # the new proof.
+                self._etag = self._compute_etag()
             except Exception as exc:
                 # Rebuild failed — undo the source write so the server stays
                 # self-consistent. Logged to stderr via the handler's default
@@ -249,5 +329,12 @@ def _make_handler(server: RegistryServer):
                 server.handle_post_publish(self)
             else:
                 server._serve_error(self, 404, "not_found", f"no such path: {self.path}")
+
+        def do_OPTIONS(self):
+            # CORS preflight for browser clients. Always 204 with the
+            # cross-origin headers, even if the path doesn't exist — the
+            # actual GET will return 404, which is what the browser will
+            # then surface to the page.
+            server.handle_options(self)
 
     return _Handler

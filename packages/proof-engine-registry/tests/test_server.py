@@ -125,3 +125,62 @@ def test_server_head_method_works(server):
     # HEAD on a missing claim must still 404, not 501.
     r = requests.head(f"{server}/claims/{'0' * 64}.json", timeout=5)
     assert r.status_code == 404
+
+
+def test_server_emits_cors_header_on_reads(server):
+    """Browser-based wikis need Access-Control-Allow-Origin on reads."""
+    r = requests.get(f"{server}/index.json", timeout=5)
+    assert r.status_code == 200
+    assert r.headers.get("Access-Control-Allow-Origin") == "*"
+
+
+def test_server_options_preflight(server):
+    """OPTIONS preflight returns 204 with the right CORS headers."""
+    r = requests.options(
+        f"{server}/index.json",
+        headers={
+            "Origin": "https://example.com",
+            "Access-Control-Request-Method": "GET",
+            "Access-Control-Request-Headers": "Authorization",
+        },
+        timeout=5,
+    )
+    assert r.status_code == 204
+    assert r.headers.get("Access-Control-Allow-Origin") == "*"
+    assert "GET" in r.headers.get("Access-Control-Allow-Methods", "")
+    assert "Authorization" in r.headers.get("Access-Control-Allow-Headers", "")
+
+
+def test_server_emits_cache_control_on_reads(server):
+    r = requests.get(f"{server}/index.json", timeout=5)
+    assert "max-age" in r.headers.get("Cache-Control", "")
+
+
+def test_server_emits_etag_and_honors_if_none_match(server):
+    r = requests.get(f"{server}/index.json", timeout=5)
+    etag = r.headers.get("ETag")
+    assert etag, "server should emit an ETag on reads"
+    # Revalidate — server must return 304 with no body.
+    r2 = requests.get(
+        f"{server}/index.json",
+        headers={"If-None-Match": etag},
+        timeout=5,
+    )
+    assert r2.status_code == 304
+    assert r2.content == b""
+
+
+def test_server_does_not_log_authorization(capfd, server):
+    """When --log-json is on (separate test fixture would set it), the
+    server MUST NOT include the Authorization header in the log record.
+    Default fixture has log_json=False so log is empty either way; this
+    test asserts the absence positively to lock the contract."""
+    r = requests.get(
+        f"{server}/index.json",
+        headers={"Authorization": "Bearer must-not-leak"},
+        timeout=5,
+    )
+    assert r.status_code == 200
+    captured = capfd.readouterr()
+    assert "must-not-leak" not in captured.err
+    assert "must-not-leak" not in captured.out

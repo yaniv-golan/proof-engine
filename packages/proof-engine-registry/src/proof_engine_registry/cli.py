@@ -24,6 +24,8 @@ def _cmd_serve(args) -> int:
         base_url=args.base_url or f"http://{args.bind}:{args.port}",
         bind=args.bind, port=args.port,
         auth_token=token,
+        cors_origin=args.cors_origin,
+        log_json=args.log_json,
     )
     if args.print_port_to:
         Path(args.print_port_to).write_text(str(srv.port))
@@ -101,7 +103,17 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--version", action="version", version=__version__)
     sub = p.add_subparsers(dest="cmd", required=True)
 
-    s = sub.add_parser("serve", help="Run a self-hosted registry server.")
+    s = sub.add_parser(
+        "serve",
+        help="Run a self-hosted registry server.",
+        description=(
+            "Stdlib HTTP server. Suitable for development and local team "
+            "deployments. For public deployment over the open internet, "
+            "front this with a TLS-terminating reverse proxy (nginx, Caddy, "
+            "Cloudflare, etc.) — bearer tokens travel in the Authorization "
+            "header and MUST NOT cross the network in cleartext."
+        ),
+    )
     s.add_argument("proofs_dir")
     s.add_argument("--name", default="Self-Hosted Proof Registry")
     s.add_argument("--base-url", default=None)
@@ -109,6 +121,14 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--port", type=int, default=8080)
     s.add_argument("--token-env", default=None,
                    help="Env var holding the bearer token required for publishing.")
+    s.add_argument("--cors-origin", default="*",
+                   help=("Value for Access-Control-Allow-Origin on read responses. "
+                         "Default '*' for public registries; pass a specific origin "
+                         "to restrict cross-origin browser access."))
+    s.add_argument("--log-json", action="store_true",
+                   help=("Emit one structured JSON access log line per request to "
+                         "stderr. Off by default; useful for compliance/audit. "
+                         "Authorization headers are NEVER logged."))
     s.add_argument("--print-port-to", default=None,
                    help="Write the bound port to this file (for test orchestration).")
     s.set_defaults(func=_cmd_serve)
