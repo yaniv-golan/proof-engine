@@ -112,7 +112,7 @@ Download [`proof-engine.zip`](https://github.com/yaniv-golan/proof-engine/releas
 
 ## Published Proofs
 
-Browse verified proofs at **[proofengine.info](https://proofengine.info/)** — a searchable catalog of claims that have been formally proved or disproved, with full audit trails. AI agents can fetch structured proof data via the [JSON API](https://proofengine.info/index.json) or paste the [llms.txt](https://proofengine.info/llms.txt) URL into any LLM for a quick overview.
+Browse verified proofs at **[proofengine.info](https://proofengine.info/)** — a searchable catalog of claims that have been formally proved or disproved, with full audit trails. AI agents can fetch structured proof data via the [Registry API](https://proofengine.info/index.json) (Proof Registry Protocol v0.1 — claim hashes, verdicts, DOIs, badge URLs), the [legacy catalog](https://proofengine.info/catalog.json) (richer per-proof metadata for site browsing), or paste the [llms.txt](https://proofengine.info/llms.txt) URL into any LLM for a quick overview.
 
 Want to contribute? See [how to submit a proof](https://proofengine.info/submit/).
 

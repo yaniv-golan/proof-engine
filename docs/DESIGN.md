@@ -228,7 +228,7 @@ DOI state lives in a `doi.json` sidecar file in each proof's source directory, n
 
 Citations use the version-specific DOI for reproducibility. The concept DOI (which resolves to the latest version) is surfaced as an additional "all versions" link in the UI and JSON-LD `sameAs` array.
 
-At build time, `build-site.py` reads `doi.json` (if present), generates citation export files (`cite.bib`, `cite.ris`, `cite.txt`), injects a `citation` block into the built `proof.json`, adds `doi` to `index.json` entries, and enriches the JSON-LD `ClaimReview` with `identifier` and `sameAs` fields.
+At build time, `build-site.py` reads `doi.json` (if present), generates citation export files (`cite.bib`, `cite.ris`, `cite.txt`), injects a `citation` block into the built `proof.json`, adds `doi` to entries in both the legacy catalog (`/catalog.json`, formerly `/index.json` before v1.28.0) and the Proof Registry index (`/index.json`, per `docs/registry-protocol.md`), and enriches the JSON-LD `ClaimReview` with `identifier` and `sameAs` fields.
 
 When a proof is minted via `mint-doi`, its full `meta.yaml depends_on` graph is propagated into the Zenodo record's DataCite `related_identifiers` — every originating paper, upstream proof DOI, Software Heritage archive, and external URL, each with the correct DataCite `relation` (`isDerivedFrom`, `references`, …). A `resource_type` is attached only where the identifier scheme maps unambiguously (arXiv → preprint, SWHID → software, ISBN → book); DOIs intentionally omit it so Zenodo/DataCite resolves the target's own type. Slug-only entries (upstream not yet minted) are skipped with a stderr warning; re-run with `--force` after minting upstream to pick them up.
 
