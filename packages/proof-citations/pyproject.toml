@@ -31,5 +31,8 @@ Repository = "https://github.com/yaniv-golan/proof-engine"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+proof_citations = ["data/*.json"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]

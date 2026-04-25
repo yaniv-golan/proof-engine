@@ -53,7 +53,7 @@ def test_lookup_oa_url_returns_best_url():
     mock_requests = MagicMock()
     mock_requests.get.return_value = mock_resp
 
-    with patch("scripts.oa_lookup.requests", mock_requests):
+    with patch("proof_citations.oa_lookup.requests", mock_requests):
         result = lookup_oa_url("10.1234/test", email="test@example.com")
     assert result == "https://arxiv.org/abs/2024.12345"
     # Verify it prefers landing page over PDF
@@ -75,7 +75,7 @@ def test_lookup_oa_url_falls_back_to_pdf():
     mock_requests = MagicMock()
     mock_requests.get.return_value = mock_resp
 
-    with patch("scripts.oa_lookup.requests", mock_requests):
+    with patch("proof_citations.oa_lookup.requests", mock_requests):
         result = lookup_oa_url("10.1234/test", email="test@example.com")
     assert result == "https://arxiv.org/pdf/2024.12345.pdf"
 
@@ -90,7 +90,7 @@ def test_lookup_oa_url_no_oa_returns_none():
     mock_requests = MagicMock()
     mock_requests.get.return_value = mock_resp
 
-    with patch("scripts.oa_lookup.requests", mock_requests):
+    with patch("proof_citations.oa_lookup.requests", mock_requests):
         result = lookup_oa_url("10.1234/test", email="test@example.com")
     assert result is None
 
@@ -102,7 +102,7 @@ def test_lookup_oa_url_api_error_returns_none():
     mock_requests.get.side_effect = real_req.exceptions.ConnectionError("fail")
     mock_requests.exceptions = real_req.exceptions
 
-    with patch("scripts.oa_lookup.requests", mock_requests):
+    with patch("proof_citations.oa_lookup.requests", mock_requests):
         result = lookup_oa_url("10.1234/test", email="test@example.com")
     assert result is None
 
