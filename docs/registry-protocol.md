@@ -133,6 +133,69 @@ no body. HEAD support is required because downstream tools (e.g., the wiki
 adapter's lint step) issue `HEAD` to check proof-URL reachability; a 501
 would be indistinguishable from a rotted link.
 
+## Cross-origin access (CORS)
+
+Conformant servers MUST emit `Access-Control-Allow-Origin: *` on all read
+responses (`GET` and `HEAD` for the discovery, index, claim, proof, and
+badge endpoints). The protocol exposes only public read data; without
+`*`, browser-based wiki tools cannot consume the registry from a page
+served from a different origin.
+
+For private registries that require auth on reads, servers MAY restrict
+CORS instead by emitting a specific origin (e.g., the consuming wiki's
+origin) and adding `Vary: Origin`. Servers SHOULD respond to `OPTIONS`
+preflight requests for `Authorization`-bearing reads with
+`Access-Control-Allow-Headers: Authorization` and
+`Access-Control-Allow-Methods: GET, HEAD`.
+
+Static-JSON deployments (e.g., the public site on GitHub Pages /
+Cloudflare Pages) typically already emit `*` by default; verify with
+`curl -I` after deployment.
+
+## Caching
+
+Read endpoints serve content that changes only at registry rebuild time.
+Conformant servers SHOULD emit `Cache-Control: public, max-age=300` on
+read responses (5 minutes — short enough to pick up new proofs quickly,
+long enough to amortize CDN traffic). The discovery doc MAY use a longer
+TTL since its `proof_count` is the only field that drifts.
+
+Servers SHOULD also emit `ETag` headers derived from the registry's
+`generated_at` timestamp so clients can revalidate via
+`If-None-Match`.
+
+Clients SHOULD honor `Cache-Control` and SHOULD NOT cache 4xx responses.
+
+## Production deployment (TLS)
+
+The protocol is JSON-over-HTTPS. The bundled `proof-registry serve`
+reference server uses plain stdlib HTTP and binds to `127.0.0.1` by
+default — suitable for development and local team use, but NOT suitable
+for direct exposure to the public internet.
+
+Production self-hosted deployments MUST front the reference server with
+a TLS-terminating reverse proxy (nginx, Caddy, Cloudflare, AWS ALB,
+etc.) and route only encrypted traffic from the proxy to the server.
+The reference server MUST NOT be reachable directly from outside the
+deployment perimeter — bearer tokens travel in the `Authorization`
+header and would be exposed in cleartext otherwise.
+
+Static-JSON deployments inherit TLS from their hosting platform
+(GitHub Pages, Cloudflare Pages, S3 + CloudFront, etc.) — no separate
+proxy needed.
+
+## Rate limiting
+
+The protocol does not specify rate limits — they're a deployment
+concern. Public deployments SHOULD enforce limits at the CDN/proxy
+layer (Cloudflare's free tier offers per-path rate limits;
+nginx's `limit_req` directive is the classic approach).
+
+Private registries with publish enabled SHOULD additionally rate-limit
+the `POST /proofs` and `PUT /proofs/{slug}` endpoints — proof generation
+is expensive and a runaway client could exhaust the publish-target
+disk or the bearer token's API budget.
+
 ## Authentication
 
 Bearer token in `Authorization` header. Private registries MAY require auth on
