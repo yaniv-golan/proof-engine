@@ -63,9 +63,8 @@ The `workflow_dispatch` input is identical to what the push-tag trigger provides
 
 ## Coordinating with PyPI
 
-PyPI publication is a separate runbook ([pypi-namespace-reservation.md](./pypi-namespace-reservation.md) covers the first-time setup).
-
-For subsequent releases:
+The three packages (`proof-citations`, `proof-engine-registry`,
+`proof-engine-wiki`) live on PyPI. Each release follows the same flow:
 
 ```bash
 # After tag push + GitHub Release lands:
@@ -84,3 +83,12 @@ done
 If something's wrong with a published version, you can `yank` (PyPI:
 Manage → release → Yank). Yanking keeps the version installable by exact
 pin but excludes it from new resolutions.
+
+## PyPI account hygiene
+
+One-time setup tasks the project owner should keep up to date — not part of any single release flow:
+
+- **2FA on the PyPI account.** Required by PyPI as of 2024 for any account with publish rights to a project. Verify under PyPI → Account Settings → 2FA.
+- **API tokens scoped per project.** Avoid using "Entire account" tokens for routine releases. Generate per-project tokens (PyPI → project → Settings → "Add API token") and store them in `~/.pypirc` or — better — in a CI secret store.
+- **Trusted publishers via GitHub Actions** ([docs](https://docs.pypi.org/trusted-publishers/)). Lets a workflow on this repo upload to PyPI without any token at all (OIDC). Configure once per project on PyPI → Settings → Publishing. Removes the "where do I keep the token" problem entirely. Worth doing before the next release.
+- **Yank, don't delete, bad releases.** `gh` doesn't manage PyPI yanks — use the PyPI web UI. Yanked releases stay installable by exact pin (`pip install proof-citations==1.X.Y`) but new resolutions skip them.
