@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.33.1] - 2026-04-25
+
+### Changed
+
+- **`proof-registry serve` warns on misconfigured `--base-url`.** If `--base-url` omits a port and the server is bound to a non-default port, generated `proof_url` / `homepage` fields no longer match where the server is listening. Now flagged loudly with a fix hint.
+- **`proof-registry serve` shuts down gracefully on `SIGTERM`.** Previously systemd / Docker stop signals killed the process mid-request. Implemented by raising `KeyboardInterrupt` from the signal handler so the existing `except` block runs `srv.shutdown()` from the outer frame (calling `shutdown()` directly from a signal handler deadlocks because `shutdown()` waits for `serve_forever`, on the same thread).
+- **`bin/proof-engine` Python preflight.** Clear error message when run on Python <3.11 instead of a cryptic `ImportError` deep in package modules.
+- **`bin/proof-engine --help`** lists the four `verify` exit codes (0/1/2/3) and points at `docs/headless-verify.md`.
+- **`proof-citations verify --quote` help text** warns against pre-escaped sequences (e.g. `\xc3\x97`) that land as literal backslash text and never match.
+- **Catch-all 404 `detail` cleaner.** `_serve_file`'s 404 now echoes the request URL (`"no resource at /claims/..."`) instead of the on-disk filename. The URL is the client's input and meaningful to them; the on-disk path is an internal abstraction.
+
+### Fixed
+
+- **Deploy Site CI broke after v1.28.0** because `tools/build-site.py` imports from `proof_engine_registry` but `deploy-site.yml` never installed the local packages. Fixed in `139e648`.
+
 ## [1.33.0] - 2026-04-25
 
 ### Changed
