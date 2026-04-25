@@ -19,8 +19,23 @@ jobs:
       - name: Install dependencies
         run: pip install requests sympy python-dateutil pytest Jinja2 Markdown Pygments PyYAML bleach Pillow jsonschema pymdown-extensions regex unidecode
 
-      - name: Run unit tests
+      - name: Install monorepo subpackages
+        run: pip install -e packages/proof-citations -e packages/proof-engine-registry -e packages/proof-engine-wiki
+
+      - name: Run top-level unit tests
         run: python -m pytest tests/ -v
+
+      - name: Run proof-citations tests
+        working-directory: packages/proof-citations
+        run: python -m pytest -v
+
+      - name: Run proof-engine-registry tests
+        working-directory: packages/proof-engine-registry
+        run: python -m pytest -v
+
+      - name: Run proof-engine-wiki tests
+        working-directory: packages/proof-engine-wiki
+        run: python -m pytest -v
 
       - name: Syntax check bundled scripts
         run: |
