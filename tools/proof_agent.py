@@ -244,3 +244,152 @@ class Sandbox:
             return {"ok": False, "exit_code": -1, "error": "timeout",
                     "stdout": stdout, "stderr": stderr,
                     "proof_data": None, "stripped_keys": []}
+
+
+# ---------------------------------------------------------------------------
+# OpenRouter client
+# ---------------------------------------------------------------------------
+
+import time
+import requests as _requests  # use requests for (connect, read) split timeout
+
+_OPENROUTER_BASE = "https://openrouter.ai/api/v1"
+# Seconds to wait before each retry attempt.
+# Sequence length = 4 → 4 retries → 5 total attempts (initial + 4 retries).
+# After all 5 attempts fail on the primary model with QuotaError,
+# switch to fallback model once and restart the same backoff sequence.
+# 4 retries match the 4 backoff values listed in spec §3.7.
+_BACKOFF = (1, 4, 16, 64)   # waits for attempts 2–5 (attempt 1 has no wait)
+
+
+class QuotaError(Exception):
+    """Rate-limit / quota exhaustion — triggers model fallback after 4 retries."""
+
+
+class CapError(QuotaError):
+    """Per-run LLM call cap reached — subclass of QuotaError so isinstance()
+    can distinguish it from a genuine quota/rate-limit error without fragile
+    string matching on the exception message."""
+
+
+class AuthError(Exception):
+    """Invalid or missing API key — do not retry."""
+
+
+class NetworkError(Exception):
+    """Transient network failure — retry same model; do NOT switch to fallback."""
+
+
+class OpenRouterClient:
+    def __init__(self, api_key: str, model: str, fallback_model: str | None = None,
+                 api_base: str = _OPENROUTER_BASE, max_llm_calls: int = 150):
+        self.api_key = api_key
+        self.model = model
+        self.fallback_model = fallback_model
+        self.api_base = api_base.rstrip("/")
+        self.max_llm_calls = max_llm_calls
+        self._total_attempts = 0   # all HTTP attempts (retries + iterations)
+        self._calls = 0            # successful LLM calls
+        self._using_fallback = False
+
+    @property
+    def current_model(self) -> str:
+        return self.fallback_model if self._using_fallback else self.model
+
+    def chat(self, messages: list[dict], tools: list[dict] | None = None) -> dict:
+        """Send a chat-completion request; retry on transient errors.
+
+        Retry policy (spec §3.7):
+          - 401: raise AuthError immediately, no retry.
+          - 429/402/quota: backoff 1s, 4s, 16s, 64s (4 retries = 5 attempts).
+            After 4 failures on primary model, switch to fallback once and
+            restart the backoff sequence. After fallback exhaustion: raise QuotaError.
+          - Network errors (OSError): same backoff, no model switch.
+          - Per-run cap: raise CapError immediately.
+        """
+        if self._calls >= self.max_llm_calls:
+            raise CapError(f"Per-run LLM call cap ({self.max_llm_calls}) reached")
+
+        try:
+            return self._attempt_with_backoff(messages, tools)
+        except QuotaError as primary_exc:
+            if self.fallback_model and not self._using_fallback:
+                self._using_fallback = True
+                try:
+                    return self._attempt_with_backoff(messages, tools)
+                except (QuotaError, NetworkError) as e:
+                    raise QuotaError(
+                        f"Fallback model {self.fallback_model!r} also failed: {e}"
+                    ) from e
+            raise
+        # NetworkError propagates directly — no fallback switch.
+
+    def _attempt_with_backoff(self, messages: list[dict],
+                              tools: list[dict] | None) -> dict:
+        """Try up to 5 attempts (initial + 4 backoff retries). Raise on exhaustion."""
+        last_exc: Exception | None = None
+        for wait in [0] + list(_BACKOFF):
+            if self._total_attempts >= self.max_llm_calls:
+                raise CapError(f"Per-run LLM call cap ({self.max_llm_calls}) reached")
+            if wait:
+                time.sleep(wait)
+            self._total_attempts += 1
+            try:
+                resp = self._post(messages, tools)
+                self._calls += 1
+                return resp
+            except AuthError:
+                raise
+            except QuotaError as e:
+                last_exc = e
+            except NetworkError as e:
+                last_exc = e
+        # Preserve the error type: network failures stay NetworkError;
+        # quota failures stay QuotaError. Only QuotaError triggers fallback.
+        if isinstance(last_exc, NetworkError):
+            raise NetworkError(
+                f"Network failure after {len(_BACKOFF)+1} attempts: {last_exc}"
+            ) from last_exc
+        raise QuotaError(
+            f"Quota/rate-limit after {len(_BACKOFF)+1} attempts: {last_exc}"
+        ) from last_exc
+
+    def _post(self, messages: list[dict], tools: list[dict] | None) -> dict:
+        body = {"model": self.current_model, "messages": messages}
+        if tools:
+            body["tools"] = tools
+        try:
+            resp = _requests.post(
+                f"{self.api_base}/chat/completions",
+                json=body,
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                timeout=(10, 120),   # (connect_timeout, read_timeout) — spec §3.7
+            )
+        except _requests.exceptions.RequestException as e:
+            raise NetworkError(f"Network error: {e}") from e
+        if resp.status_code == 401:
+            raise AuthError(f"401 Unauthorized: {resp.text[:500]}")
+        if resp.status_code in (402, 429) or "insufficient_quota" in resp.text.lower():
+            raise QuotaError(f"HTTP {resp.status_code}: {resp.text[:500]}")
+        # Permanent client errors (wrong model name, bad request, etc.) — no retry.
+        if resp.status_code in (400, 403, 404, 405, 422):
+            raise AuthError(f"Permanent HTTP {resp.status_code}: {resp.text[:500]}")
+        if resp.status_code >= 400:
+            # 5xx and remaining 4xx are transient — NetworkError so we retry.
+            raise NetworkError(f"HTTP {resp.status_code}: {resp.text[:500]}")
+        try:
+            data = resp.json()
+        except Exception as e:
+            # Server returned 200 but non-JSON body (can happen during outages).
+            raise NetworkError(f"Non-JSON response: {resp.text[:200]}") from e
+        # OpenRouter returns HTTP 200 with {"error": {"code": ..., "message": ...}}
+        # for upstream rate-limit and model-unavailable errors — not a 4xx.
+        if isinstance(data.get("error"), dict):
+            err = data["error"]
+            code = err.get("code", 0)
+            msg = err.get("message", str(err))[:500]
+            # code 429 or any "rate" string → quota; everything else → transient
+            if code == 429 or "rate" in str(code).lower() or "rate" in msg.lower():
+                raise QuotaError(f"OpenRouter 200-error (rate limit): {msg}")
+            raise NetworkError(f"OpenRouter 200-error (code={code}): {msg}")
+        return data
