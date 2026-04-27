@@ -393,3 +393,481 @@ class OpenRouterClient:
                 raise QuotaError(f"OpenRouter 200-error (rate limit): {msg}")
             raise NetworkError(f"OpenRouter 200-error (code={code}): {msg}")
         return data
+
+
+# ---------------------------------------------------------------------------
+# Tool definitions (OpenAI function-call format)
+# ---------------------------------------------------------------------------
+
+def _canon(s: str) -> str:
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def canonical_display(v) -> str:
+    if v is None:
+        return ""
+    if isinstance(v, str):
+        return v
+    base = v.get("value", "")
+    if v.get("qualified") and v.get("qualifier") == "unverified_citations":
+        return f"{base} (with unverified citations)"
+    return base
+
+
+TOOLS = [
+    {"type": "function", "function": {
+        "name": "read_skill_file",
+        "description": "Read a file from the skill directory (SKILL.md, scripts/, references/). Read-only.",
+        "parameters": {"type": "object", "properties": {
+            "path": {"type": "string", "description": "Relative path within the skill directory"}},
+            "required": ["path"]}}},
+    {"type": "function", "function": {
+        "name": "read_file",
+        "description": "Read a file from the output directory.",
+        "parameters": {"type": "object", "properties": {
+            "path": {"type": "string"}}, "required": ["path"]}}},
+    {"type": "function", "function": {
+        "name": "read_old_proof_file",
+        "description": "Read a file from the old proof directory (scaffold). Returns error if not available.",
+        "parameters": {"type": "object", "properties": {
+            "path": {"type": "string"}}, "required": ["path"]}}},
+    {"type": "function", "function": {
+        "name": "write_file",
+        "description": "Write a file to the output directory. Allowed: proof.py, proof.md, proof_audit.md, proof_narrative.md, proof.json, notes.md.",
+        "parameters": {"type": "object", "properties": {
+            "path": {"type": "string"}, "content": {"type": "string"}},
+            "required": ["path", "content"]}}},
+    {"type": "function", "function": {
+        "name": "list_dir",
+        "description": "List files in a directory under the output directory.",
+        "parameters": {"type": "object", "properties": {
+            "path": {"type": "string", "default": "."}}, "required": []}}},
+    {"type": "function", "function": {
+        "name": "run_bash",
+        "description": (
+            "Run a shell command. LIMITATIONS: shell=False, no pipes/redirection/globs/env-var-expansion/$(...). "
+            "One command per call. For multi-step work, write a helper script and run it. "
+            "Use timeout=300 for validate_proof.py."
+        ),
+        "parameters": {"type": "object", "properties": {
+            "cmd": {"type": "string"},
+            "timeout": {"type": "integer", "default": 120}}, "required": ["cmd"]}}},
+    {"type": "function", "function": {
+        "name": "run_proof_py",
+        "description": "Run proof.py and return exit_code, stdout, stderr, proof_data, stripped_keys.",
+        "parameters": {"type": "object", "properties": {
+            "timeout": {"type": "integer", "default": 600}}, "required": []}}},
+    {"type": "function", "function": {
+        "name": "terminate",
+        "description": "Declare proof complete. Call only when all 5 artifacts exist, run_proof_py exited 0 with matching claim, and validate_proof.py passed.",
+        "parameters": {"type": "object", "properties": {
+            "reason": {"type": "string"}},
+            "required": ["reason"]}}},
+]
+
+
+def _dispatch_tool(sandbox, name: str, args: dict) -> dict:
+    try:
+        if name == "read_skill_file":
+            return sandbox.read_skill_file(args["path"])
+        if name == "read_file":
+            return sandbox.read_file(args["path"])
+        if name == "read_old_proof_file":
+            return sandbox.read_old_proof_file(args["path"])
+        if name == "write_file":
+            return sandbox.write_file(args["path"], args["content"])
+        if name == "list_dir":
+            return sandbox.list_dir(args.get("path", "."))
+        if name == "run_bash":
+            return sandbox.run_bash(args.get("cmd", ""), args.get("timeout", 120))
+        if name == "run_proof_py":
+            return sandbox.run_proof_py(args.get("timeout", 600))
+        return {"ok": False, "error": f"unknown tool: {name}"}
+    except KeyError as e:
+        return {"ok": False, "error": f"missing required argument: {e}"}
+
+
+def _build_system_prompt(slug: str, claim: str, output_dir, skill_dir, regen_mode: bool) -> str:
+    mode = (
+        "**Regeneration run** — `read_old_proof_file` is available. "
+        "Start by reading the old `proof.py` as a scaffold."
+    ) if regen_mode else (
+        "**New proof run** — `read_old_proof_file` is not available; build from scratch."
+    )
+    return f"""You are regenerating an existing proof under the current Proof Engine skill.
+
+Slug: {slug}
+Claim (verbatim — preserve exactly): {claim}
+Output directory: {output_dir}
+
+Mode: {mode}
+
+Read these skill files first (in order):
+1. SKILL.md
+2. references/hardening-rules.md
+3. references/output-specs.md (if it exists)
+4. List scripts/ to see what verification scripts are available.
+
+Required artifacts (write all five):
+- proof.py, proof.md, proof_audit.md, proof_narrative.md, proof.json
+
+Valid verdict values: PROVED, DISPROVED, SUPPORTED, PARTIALLY VERIFIED, UNDETERMINED
+(plus "(with unverified citations)" qualifier).
+
+proof.json must use the v3 verdict object shape:
+  {{"value": "PROVED", "qualified": false, "qualifier": null, "reason": null}}
+
+Termination contract — call `terminate` only when ALL hold:
+1. All five files exist.
+2. `run_proof_py()` returned exit_code 0 AND proof_data.claim_natural matches the claim above (after whitespace normalization).
+3. `validate_proof.py` passes — the dispatcher enforces this automatically when you call `terminate`.
+   You may run it voluntarily for early feedback, but note that `run_bash` uses `shell=False`
+   so `$PROOF_ENGINE_ROOT` will NOT expand. Write a helper `.sh` via `write_file` first if needed.
+4. proof_data.verdict is a valid v3 verdict object.
+
+Constraints:
+- Do NOT modify claim_natural — preserve the exact string given above.
+- Use $PROOF_ENGINE_ROOT env var for import paths, following the walk-up pattern in existing proofs.
+- Honor all 9 hardening rules (see references/hardening-rules.md).
+- `run_bash` uses shell=False. No pipes (`|`), redirection (`>`, `<`), globs (`*.py`),
+  `&&`/`||` chaining, env-var expansion (`$VAR`), or command substitution `$(...)`. One command per call.
+  For multi-step shell work, write a helper script via write_file then run it.
+- Pass timeout=300 to run_bash when running validate_proof.py or heavy computations.
+"""
+
+
+_REQUIRED_ARTIFACTS = ("proof.py", "proof.md", "proof_audit.md", "proof_narrative.md", "proof.json")
+_VALID_VERDICTS = {"PROVED", "DISPROVED", "SUPPORTED", "PARTIALLY VERIFIED", "UNDETERMINED"}
+
+
+def _check_terminate(sandbox, claim: str, all_stripped: list) -> tuple:
+    """Check termination preconditions.
+
+    Returns (rejection_dict, run_result).
+    - rejection_dict is non-None if any precondition failed.
+    - run_result is the run_proof_py() result (for stripped_keys accumulation).
+    """
+    if not _canon(claim):
+        return {"ok": False, "error": "claim argument is empty"}, None
+
+    missing = [a for a in _REQUIRED_ARTIFACTS
+               if not (sandbox.output_dir / a).exists()]
+    if missing:
+        return {"ok": False, "error": f"missing artifacts: {missing}"}, None
+
+    run = sandbox.run_proof_py()
+    if run.get("stripped_keys"):
+        all_stripped.append(set(run["stripped_keys"]))
+
+    if run["exit_code"] != 0:
+        cause = run.get("error") or run.get("stderr", "")[:300]
+        return (
+            {"ok": False, "error": f"run_proof_py failed (exit {run['exit_code']}): {cause}"},
+            run,
+        )
+
+    pd = run.get("proof_data") or {}
+    cn = pd.get("claim_natural")
+    if not isinstance(cn, str):
+        return (
+            {"ok": False,
+             "error": f"claim_natural is missing or not a string (got {type(cn).__name__})"},
+            run,
+        )
+    if _canon(cn) != _canon(claim):
+        return (
+            {"ok": False, "error": f"claim mismatch: proof has {cn!r}"},
+            run,
+        )
+
+    v = pd.get("verdict")
+    if not isinstance(v, dict):
+        return (
+            {"ok": False,
+             "error": f"verdict must be a v3 dict (e.g. {{\"value\":\"PROVED\",\"qualified\":false,\"qualifier\":null,\"reason\":null}}), got {type(v).__name__}"},
+            run,
+        )
+    base = v.get("value", "")
+    if base not in _VALID_VERDICTS:
+        return {"ok": False, "error": f"invalid verdict value: {base!r}"}, run
+    if not isinstance(v.get("qualified"), bool):
+        return {"ok": False, "error": f"verdict.qualified must be bool, got {v.get('qualified')!r}"}, run
+    if v.get("qualifier") is not None and not isinstance(v.get("qualifier"), str):
+        return {"ok": False, "error": f"verdict.qualifier must be str or null, got {v.get('qualifier')!r}"}, run
+    _VALID_QUALIFIERS = {None, "unverified_citations"}
+    if v.get("qualifier") not in _VALID_QUALIFIERS:
+        return {"ok": False, "error": f"verdict.qualifier must be null or 'unverified_citations', got {v.get('qualifier')!r}"}, run
+    if v.get("reason") is not None and not isinstance(v.get("reason"), str):
+        return {"ok": False, "error": f"verdict.reason must be str or null, got {v.get('reason')!r}"}, run
+
+    skill_dir_q = shlex.quote(str(sandbox.skill_dir))
+    val = sandbox.run_bash(
+        f"python {skill_dir_q}/scripts/validate_proof.py proof.py",
+        timeout=300,
+    )
+    if val["exit_code"] != 0:
+        if val.get("error") == "timeout":
+            cause = "validate_proof.py timed out after 300s"
+        else:
+            cause = (val.get("stdout") or val.get("stderr") or "")[:300]
+        return (
+            {"ok": False, "error": f"validate_proof.py failed: {cause}"},
+            run,
+        )
+
+    return None, run
+
+
+# ---------------------------------------------------------------------------
+# Agent loop
+# ---------------------------------------------------------------------------
+
+def _now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def run_agent(slug: str, claim: str, output_dir, skill_dir,
+              model: str, fallback_model: str, api_key: str,
+              api_base: str = _OPENROUTER_BASE,
+              max_iterations: int = 80, max_llm_calls: int = 150,
+              old_proof_dir=None,
+              transcript_path=None) -> AgentResult:
+    result = AgentResult(slug=slug, claim=claim, status="ok",
+                         started_at=_now_iso())
+    output_dir = Path(output_dir)
+    skill_dir = Path(skill_dir)
+    sandbox = Sandbox(output_dir=output_dir, skill_dir=skill_dir,
+                      old_proof_dir=old_proof_dir)
+    client = OpenRouterClient(api_key=api_key, model=model,
+                              fallback_model=fallback_model,
+                              api_base=api_base, max_llm_calls=max_llm_calls)
+    system_prompt = _build_system_prompt(slug, claim, output_dir, skill_dir,
+                                         regen_mode=old_proof_dir is not None)
+    messages = [{"role": "system", "content": system_prompt}]
+    all_stripped: list = []
+    transcript: list = []
+
+    def _record(entry: dict) -> None:
+        transcript.append(entry)
+
+    try:
+        for iteration in range(max_iterations):
+            result.iterations = iteration + 1
+            try:
+                resp = client.chat(messages, tools=TOOLS)
+            except AuthError as e:
+                result.status = "auth_error"
+                result.error = str(e)
+                result.model_used = client.current_model
+                result.fallback_triggered = client._using_fallback
+                _try_populate_result(result, output_dir, all_stripped)
+                return result
+            except QuotaError as e:
+                if isinstance(e, CapError):
+                    result.status = "quota_blocked"
+                elif client._using_fallback:
+                    result.status = "llm_error"
+                else:
+                    result.status = "quota_blocked"
+                result.error = str(e)
+                result.model_used = client.current_model
+                result.fallback_triggered = client._using_fallback
+                _try_populate_result(result, output_dir, all_stripped)
+                return result
+            except NetworkError as e:
+                result.status = "llm_error"
+                result.error = str(e)
+                result.model_used = client.current_model
+                result.fallback_triggered = client._using_fallback
+                _try_populate_result(result, output_dir, all_stripped)
+                return result
+
+            result.model_used = client.current_model
+            result.fallback_triggered = client._using_fallback
+
+            choices = resp.get("choices") or []
+            if not choices:
+                result.status = "llm_error"
+                result.error = f"LLM returned empty choices: {str(resp)[:200]}"
+                _try_populate_result(result, output_dir, all_stripped)
+                return result
+            choice = choices[0]
+            msg = choice.get("message")
+            if not isinstance(msg, dict):
+                result.status = "llm_error"
+                result.error = f"LLM choice missing 'message' dict: {str(choice)[:200]}"
+                _try_populate_result(result, output_dir, all_stripped)
+                return result
+            messages.append(msg)
+            _record({"role": "assistant", "content": msg.get("content"),
+                     "tool_calls": msg.get("tool_calls", []), "iteration": iteration})
+
+            tool_calls = msg.get("tool_calls") or []
+            if not tool_calls:
+                continue
+
+            tool_results = []
+            terminate_requested = False
+
+            for tc in tool_calls:
+                tc_id = tc.get("id", "unknown")
+                fn = tc.get("function")
+                if not isinstance(fn, dict) or not fn.get("name"):
+                    tool_results.append({
+                        "role": "tool",
+                        "tool_call_id": tc_id,
+                        "content": json.dumps({"ok": False,
+                                               "error": f"malformed tool_call entry: {str(tc)[:200]}"}),
+                    })
+                    _record({"role": "tool", "tool_call_id": tc_id,
+                             "error": "malformed tool_call entry"})
+                    continue
+                name = fn["name"]
+                try:
+                    args = json.loads(fn.get("arguments") or "{}")
+                except json.JSONDecodeError:
+                    args = {}
+
+                if not isinstance(args, dict):
+                    args = {}
+
+                if name == "terminate":
+                    rejection, _ = _check_terminate(sandbox, claim, all_stripped)
+                    if rejection:
+                        tool_result = rejection
+                    else:
+                        terminate_requested = True
+                        tool_result = {"ok": True, "message": "Termination accepted."}
+                elif name == "run_proof_py":
+                    tool_result = _dispatch_tool(sandbox, name, args)
+                    if tool_result.get("stripped_keys"):
+                        all_stripped.append(set(tool_result["stripped_keys"]))
+                else:
+                    tool_result = _dispatch_tool(sandbox, name, args)
+
+                _record({"role": "tool", "tool_call_id": tc_id,
+                          "name": name, "result": tool_result})
+                tool_results.append({
+                    "role": "tool",
+                    "tool_call_id": tc_id,
+                    "content": json.dumps(tool_result),
+                })
+
+            messages.extend(tool_results)
+
+            if terminate_requested:
+                try:
+                    pd = json.loads((output_dir / "proof.json").read_text())
+                    result.verdict = canonical_display(pd.get("verdict", ""))
+                    result.claim_natural_in_proof = pd.get("claim_natural")
+                    result.proof_json_written = True
+                    result.artifacts_written = [
+                        a for a in _REQUIRED_ARTIFACTS if (output_dir / a).exists()
+                    ]
+                except Exception:
+                    pass
+                result.stripped_proof_json_keys = sorted(set().union(*all_stripped)) if all_stripped else []
+                result.status = "ok"
+                return result
+
+        result.status = "gave_up"
+        result.error = f"max iterations ({max_iterations}) reached without terminate"
+        _try_populate_result(result, output_dir, all_stripped)
+        return result
+
+    finally:
+        result.ended_at = _now_iso()
+        if transcript_path:
+            transcript_path = Path(transcript_path)
+            transcript_path.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                transcript_path.write_text(
+                    "\n".join(json.dumps(e) for e in transcript) + "\n"
+                )
+            except Exception:
+                pass
+
+
+def _try_populate_result(result, output_dir, all_stripped: list) -> None:
+    """Populate result best-effort from any artifacts on disk."""
+    output_dir = Path(output_dir)
+    try:
+        pd = json.loads((output_dir / "proof.json").read_text())
+        result.verdict = canonical_display(pd.get("verdict", ""))
+        result.claim_natural_in_proof = pd.get("claim_natural")
+        result.proof_json_written = True
+    except Exception:
+        pass
+    result.artifacts_written = [
+        a for a in _REQUIRED_ARTIFACTS if (output_dir / a).exists()
+    ]
+    result.stripped_proof_json_keys = sorted(set().union(*all_stripped)) if all_stripped else []
+    if result.status == "gave_up" and not result.artifacts_written:
+        result.status = "invalid_output"
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
+def main() -> int:
+    import argparse
+    parser = argparse.ArgumentParser(description="Proof regeneration agent")
+    parser.add_argument("--slug", required=True)
+    parser.add_argument("--claim", required=True)
+    parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--skill-dir", type=Path, required=True)
+    parser.add_argument("--model", default="qwen/qwen3-coder:free")
+    parser.add_argument("--fallback-model", default="openai/gpt-oss-120b:free")
+    parser.add_argument("--max-iterations", type=int, default=80)
+    parser.add_argument("--max-llm-calls", type=int, default=150)
+    parser.add_argument("--transcript", type=Path)
+    parser.add_argument("--result-json", type=Path)
+    parser.add_argument("--old-proof-dir", type=Path)
+    parser.add_argument("--api-base", default=_OPENROUTER_BASE)
+    parser.add_argument("--api-key-env", default="OPENROUTER_API_KEY")
+    args = parser.parse_args()
+
+    _api_key = os.environ.pop(args.api_key_env, None)
+    if not _api_key:
+        print(f"ERROR: env var {args.api_key_env!r} is not set", file=sys.stderr)
+        return 2
+
+    if not args.claim.strip():
+        print("ERROR: --claim must be a non-empty string", file=sys.stderr)
+        return 2
+
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+
+    result = run_agent(
+        slug=args.slug,
+        claim=args.claim,
+        output_dir=args.output_dir,
+        skill_dir=args.skill_dir,
+        model=args.model,
+        fallback_model=args.fallback_model,
+        api_key=_api_key,
+        api_base=args.api_base,
+        max_iterations=args.max_iterations,
+        max_llm_calls=args.max_llm_calls,
+        old_proof_dir=args.old_proof_dir,
+        transcript_path=args.transcript,
+    )
+
+    if args.result_json:
+        args.result_json.parent.mkdir(parents=True, exist_ok=True)
+        args.result_json.write_text(json.dumps(asdict(result), indent=2))
+
+    status_exit = {
+        "ok": 0,
+        "gave_up": 3,
+        "invalid_output": 4,
+        "llm_error": 2,
+        "quota_blocked": 2,
+        "auth_error": 2,
+    }
+    return status_exit.get(result.status, 1)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

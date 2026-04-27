@@ -183,3 +183,102 @@ def test_run_proof_py_reports_stripped_keys(sandbox):
     assert "unknown_future_key" in result["stripped_keys"]
     # Key must still be in proof_data — we report, not delete
     assert "unknown_future_key" in result["proof_data"]
+
+
+# ---------------------------------------------------------------------------
+# _check_terminate tests (spec §3.6 dispatcher enforcement)
+# ---------------------------------------------------------------------------
+
+from tools.proof_agent import _check_terminate, _VALID_VERDICTS
+
+_GOOD_VERDICT = {"value": "PROVED", "qualified": False, "qualifier": None, "reason": None}
+_GOOD_JSON = json.dumps({
+    "claim_natural": "Test claim.",
+    "verdict": _GOOD_VERDICT,
+    "fact_registry": {},
+    "claim_formal": {},
+    "key_results": {},
+    "generator": {"name": "t", "version": "0", "repo": "r", "generated_at": "2026-01-01"},
+})
+_PROOF_PY_TEMPLATE = (
+    'import json\n'
+    'print("=== PROOF SUMMARY (JSON) ===")\n'
+    'print({!r})\n'
+)
+
+
+def _write_good_artifacts(sandbox, claim="Test claim.", verdict=None):
+    """Write all five required artifacts to sandbox output_dir."""
+    v = verdict if verdict is not None else _GOOD_VERDICT
+    pd = {
+        "claim_natural": claim,
+        "verdict": v,
+        "fact_registry": {},
+        "claim_formal": {},
+        "key_results": {},
+        "generator": {"name": "t", "version": "0", "repo": "r", "generated_at": "2026-01-01"},
+    }
+    proof_json_str = json.dumps(pd)
+    (sandbox.output_dir / "proof.py").write_text(
+        _PROOF_PY_TEMPLATE.format(proof_json_str)
+    )
+    (sandbox.output_dir / "proof.json").write_text(proof_json_str)
+    for name in ("proof.md", "proof_audit.md", "proof_narrative.md"):
+        (sandbox.output_dir / name).write_text(f"# {name}")
+
+
+def test_check_terminate_rejects_missing_artifacts(sandbox):
+    """Missing artifacts → rejection with list of missing files."""
+    (sandbox.output_dir / "proof.py").write_text("# nothing")
+    rejection, _ = _check_terminate(sandbox, "Test claim.", [])
+    assert rejection is not None
+    assert rejection["ok"] is False
+    assert "missing artifacts" in rejection["error"]
+
+
+def test_check_terminate_rejects_claim_mismatch(sandbox):
+    """proof.json claim doesn't match the dispatcher's claim → rejection."""
+    _write_good_artifacts(sandbox, claim="Different claim.")
+    rejection, _ = _check_terminate(sandbox, "Test claim.", [])
+    assert rejection is not None
+    assert "mismatch" in rejection["error"]
+
+
+def test_check_terminate_rejects_invalid_verdict_string(sandbox):
+    """Plain-string verdict (not v3 dict) → rejection."""
+    _write_good_artifacts(sandbox, verdict="PROVED")
+    rejection, _ = _check_terminate(sandbox, "Test claim.", [])
+    assert rejection is not None
+    assert "v3 dict" in rejection["error"]
+
+
+def test_check_terminate_rejects_unknown_qualifier(sandbox):
+    """Unknown qualifier string → rejection (whitelist enforced)."""
+    bad_v = {"value": "PROVED", "qualified": True, "qualifier": "invalid_qualifier", "reason": None}
+    _write_good_artifacts(sandbox, verdict=bad_v)
+    rejection, _ = _check_terminate(sandbox, "Test claim.", [])
+    assert rejection is not None
+    assert "qualifier" in rejection["error"]
+
+
+def test_check_terminate_rejects_proof_py_runtime_failure(sandbox):
+    """proof.py that exits non-zero → rejection."""
+    _write_good_artifacts(sandbox)
+    (sandbox.output_dir / "proof.py").write_text("raise RuntimeError('boom')")
+    rejection, _ = _check_terminate(sandbox, "Test claim.", [])
+    assert rejection is not None
+    assert "run_proof_py failed" in rejection["error"]
+
+
+def test_check_terminate_success_path(sandbox):
+    """All guards pass → _check_terminate returns (None, run) (success)."""
+    _write_good_artifacts(sandbox)
+    scripts_dir = sandbox.skill_dir / "scripts"
+    scripts_dir.mkdir(parents=True, exist_ok=True)
+    (scripts_dir / "validate_proof.py").write_text(
+        "import sys\nsys.exit(0)\n"
+    )
+    rejection, run = _check_terminate(sandbox, "Test claim.", [])
+    assert rejection is None
+    assert run is not None
+    assert run["exit_code"] == 0
