@@ -232,7 +232,27 @@ At build time, `build-site.py` reads `doi.json` (if present), generates citation
 
 When a proof is minted via `mint-doi`, its full `meta.yaml depends_on` graph is propagated into the Zenodo record's DataCite `related_identifiers` — every originating paper, upstream proof DOI, Software Heritage archive, and external URL, each with the correct DataCite `relation` (`isDerivedFrom`, `references`, …). A `resource_type` is attached only where the identifier scheme maps unambiguously (arXiv → preprint, SWHID → software, ISBN → book); DOIs intentionally omit it so Zenodo/DataCite resolves the target's own type. Slug-only entries (upstream not yet minted) are skipped with a stderr warning; re-run with `--force` after minting upstream to pick them up.
 
-## Design choices that might seem wrong
+## Proof freshness and the regeneration pipeline
+
+Published proofs go stale. A URL that resolved in 2024 may 404 in 2026. A quote may be edited, moved, or removed. A government dataset may be revised. A statistic may have a newer value that changes the verdict. The proof as an artifact is reproducible — but reproducibility only means "you get the same answer from the same sources"; it doesn't mean the sources are still correct.
+
+The regeneration pipeline is the mechanism for keeping the proof catalog current. A queue file (`tools/regen-queue.yaml`) tracks all published proofs with their regeneration status. A GitHub Actions workflow (`daily-regen.yml`) picks one proof at a time, reruns it through the proof agent, compares the result to the original, and opens a pull request. A human reviewer sees the full diff — old verdict vs. new verdict, old claim vs. new, artifact sizes, agent run stats — and decides whether to merge. The workflow is designed as a slow background process: one proof per run, every proof refreshed over time.
+
+The key gate before a PR is opened is claim identity. A regenerated proof must have the same `claim_natural` text as the original (whitespace-normalized). If the claim changed — the LLM drifted the wording, the topic shifted, anything — the run is rejected before a PR opens. This prevents a regen cycle from silently replacing a proof's question with a different one.
+
+Verdict changes don't block the PR, but they're flagged prominently. If a proof was PROVED and regenerates as SUPPORTED, the reviewer sees `⚠️ changed` in the PR body alongside the old and new verdicts. The review checklist explicitly includes "verdict matches the evidence presented" as a step, so a changed verdict triggers closer scrutiny rather than automatic approval or rejection.
+
+### Programmatic invocation and model selection
+
+Proof generation was originally a one-shot human-facing workflow: a shell script that called the skill interactively and printed a command to publish. The regeneration pipeline needed something different — a process that could be invoked programmatically, returned structured output, and could run with different models depending on context and cost.
+
+`tools/proof_agent.py` is that interface. It takes a slug, a claim, an output directory, the skill directory, a primary model, and an optional fallback model. It runs the full agent loop — calling the LLM, dispatching tool calls, enforcing the termination gate — and returns a structured `AgentResult` with status, iteration count, model used, timing, and any `proof.json` keys the LLM wrote that the schema didn't recognize. It also writes a full transcript of the agent session.
+
+Model selection goes through [OpenRouter](https://openrouter.ai/), which exposes a unified API for a large number of models. The `--model` and `--fallback-model` flags accept any OpenRouter model identifier. The fallback fires automatically when the primary model returns a quota or rate-limit error mid-run, so a long agent loop can switch models without starting over. The default workflow configuration uses cost-efficient models for queue automation, but any model — `anthropic/claude-opus-4-7`, `openai/gpt-4o`, `google/gemini-2.5-pro` — works with the same command.
+
+The agent enforces a per-run call cap (`max_llm_calls`, default 150) that counts every HTTP attempt including retries, not just successful calls. This prevents a malfunctioning loop from draining quota. A separate `max_iterations` cap (default 80) bounds tool-use cycles at the application level. Both are configurable at the call site.
+
+
 
 **Why not use an LLM to verify citations?** The whole point is removing LLM trust from the verification chain. If an LLM writes the quote and an LLM verifies it, you've added a step without adding reliability. The verification is mechanical: fetch, normalize, match.
 
