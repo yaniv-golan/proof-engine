@@ -1,9 +1,14 @@
 """Staging, validation, and finalization for proof publishing."""
 
 import json
+import re
 import shutil
 import tempfile
 from pathlib import Path
+
+
+def _canon_claim(s: str) -> str:
+    return re.sub(r"\s+", " ", s).strip()
 
 REQUIRED_ARTIFACTS = ["proof.py", "proof.md", "proof_audit.md", "proof_narrative.md"]
 OPTIONAL_ARTIFACTS = ["proof.json", "thumbnail.png", "meta.yaml", "doi.json", "depends_on_resolved.json"]
@@ -96,7 +101,7 @@ def finalize_proof(staging_dir: str, target_dir: Path, force: bool = False) -> N
             else:
                 incoming_claim = ""
 
-            if doi_claim and incoming_claim and doi_claim != incoming_claim:
+            if doi_claim and incoming_claim and _canon_claim(doi_claim) != _canon_claim(incoming_claim):
                 raise ValueError(
                     f"DOI was minted for a different claim. "
                     f"Existing DOI claim: {doi_claim!r}. "
