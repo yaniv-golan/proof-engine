@@ -64,6 +64,14 @@ def main() -> int:
     slug = args.slug
     proof_dir = args.new_proof_json.parent
 
+    # Validate required agent_result keys — hard-fail per spec §3.10
+    required_agent_keys = ["iterations", "model_used", "fallback_triggered",
+                            "started_at", "ended_at", "stripped_proof_json_keys"]
+    missing_keys = [k for k in required_agent_keys if k not in agent]
+    if missing_keys:
+        print(f"Error: agent_result.json missing required keys: {missing_keys}", file=sys.stderr)
+        return 1
+
     # Artifact sizes
     artifact_lines = []
     for name in ["proof.py", "proof.md", "proof_audit.md", "proof_narrative.md", "proof.json"]:
@@ -84,14 +92,6 @@ The agent wrote proof.json keys that the current schema does not recognise; they
 
 Check whether these are intentional new fields and update `proof_types.py` if so.
 """
-
-    # Validate required agent_result keys — hard-fail per spec §3.10
-    required_agent_keys = ["iterations", "model_used", "fallback_triggered",
-                            "started_at", "ended_at", "stripped_proof_json_keys"]
-    missing_keys = [k for k in required_agent_keys if k not in agent]
-    if missing_keys:
-        print(f"Error: agent_result.json missing required keys: {missing_keys}", file=sys.stderr)
-        return 1
 
     # Agent stats
     started = agent["started_at"]

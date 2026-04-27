@@ -65,7 +65,10 @@ def main() -> int:
         print("Error: --old-claim-file is empty", file=sys.stderr)
         return 1
 
-    new_claim = proof_json.get("claim_natural", "")
+    new_claim = proof_json.get("claim_natural")
+    if new_claim is None:
+        print("Error: proof.json missing claim_natural", file=sys.stderr)
+        return 1
     if not isinstance(new_claim, str):
         print(f"Error: proof.json claim_natural is not a string: {type(new_claim).__name__}",
               file=sys.stderr)
