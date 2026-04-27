@@ -1,0 +1,60 @@
+name: Regen Merged — auto-update queue
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: regen-merged
+  cancel-in-progress: false
+
+jobs:
+  mark-merged:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'regen/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main   # pull_request events check out a merge ref; force main branch
+          persist-credentials: false
+
+      - name: Mint GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+
+      - name: Install deps
+        run: pip install pyyaml
+
+      - name: Extract slug and mark merged
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+          # Branch format: regen/<run_id>/<slug>
+          # Strip the regen/<run_id>/ prefix (shortest-match glob: '#' not '##')
+          SLUG="${BRANCH#regen/*/}"
+          if [ -z "$SLUG" ] || [ "$SLUG" = "$BRANCH" ]; then
+            echo "Could not extract slug from branch: $BRANCH" >&2; exit 1
+          fi
+          echo "Marking $SLUG as merged"
+          CLEAN_ORIGIN="https://github.com/${{ github.repository }}"
+          trap 'git remote set-url origin "$CLEAN_ORIGIN"' EXIT
+          git config user.name "proof-engine-bot"
+          git config user.email "bot@proofengine.info"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}"
+          # Fetch and reset to origin/main (avoids detached-HEAD rebase issues)
+          git fetch origin main
+          git reset --hard origin/main
+          python tools/regen_queue.py mark "$SLUG" --status merged
+          git add tools/regen-queue.yaml
+          git diff --staged --quiet || git commit -m "regen: $SLUG → merged"
+          git push
