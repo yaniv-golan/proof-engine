@@ -868,13 +868,13 @@ proofs:
   pr: null
   slug: training-and-running-today-s-frontier-ai-models-co
   status: pending
-- attempts: 0
+- attempts: 1
   last_error: null
-  last_run: null
+  last_run: '2026-04-27T10:13:28.728965+00:00'
   notes: null
   pr: null
   slug: us-dollar-purchasing-power
-  status: pending
+  status: in_progress
 - attempts: 0
   last_error: null
   last_run: null
