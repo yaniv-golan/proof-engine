@@ -307,7 +307,7 @@ class OpenRouterClient:
           - Network errors (OSError): same backoff, no model switch.
           - Per-run cap: raise CapError immediately.
         """
-        if self._calls >= self.max_llm_calls:
+        if self._total_attempts >= self.max_llm_calls:
             raise CapError(f"Per-run LLM call cap ({self.max_llm_calls}) reached")
 
         try:
