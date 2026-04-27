@@ -101,3 +101,85 @@ def test_read_old_proof_file_reads_whitelisted(sandbox_with_old):
     result = sandbox_with_old.read_old_proof_file("proof.py")
     assert result["ok"] is True
     assert result["content"] == "# old proof"
+
+
+def test_write_file_rejects_non_whitelisted(sandbox):
+    result = sandbox.write_file("secrets.txt", "oops")
+    assert result["ok"] is False
+    assert "whitelist" in result["error"]
+
+
+def test_write_file_writes_whitelisted(sandbox):
+    result = sandbox.write_file("proof.py", "# hello")
+    assert result["ok"] is True
+    assert (sandbox.output_dir / "proof.py").read_text() == "# hello"
+
+
+def test_write_file_detects_disk_truncation(sandbox, monkeypatch):
+    original_write = Path.write_text
+    def short_write(self, content, encoding="utf-8"):
+        original_write(self, content[:len(content) // 2], encoding)
+    monkeypatch.setattr(Path, "write_text", short_write)
+    content = "full content here that is definitely longer than half"
+    result = sandbox.write_file("proof.py", content)
+    assert result["ok"] is False
+    assert "truncated" in result["error"]
+
+
+def test_read_file_rejects_traversal(sandbox):
+    result = sandbox.read_file("../other/secret.py")
+    assert result["ok"] is False
+
+
+def test_list_dir_returns_entries(sandbox):
+    (sandbox.output_dir / "proof.py").write_text("x")
+    result = sandbox.list_dir(".")
+    assert result["ok"] is True
+    assert "proof.py" in result["entries"]
+
+
+def test_run_bash_runs_simple_command(sandbox):
+    result = sandbox.run_bash("python3 -c \"print('hello')\"")
+    assert result["ok"] is True
+    assert result["exit_code"] == 0
+    assert "hello" in result["stdout"]
+
+
+def test_run_bash_no_api_key_in_env(sandbox, monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "sk-secret")
+    result = sandbox.run_bash("python3 -c \"import os; print(os.environ.get('OPENROUTER_API_KEY','ABSENT'))\"")
+    assert result["ok"] is True
+    assert "ABSENT" in result["stdout"]
+
+
+def test_run_proof_py_extracts_json(sandbox, tmp_path):
+    proof = sandbox.output_dir / "proof.py"
+    proof.write_text(
+        'import json\n'
+        'print("=== PROOF SUMMARY (JSON) ===")\n'
+        'print(json.dumps({"claim_natural": "X", "verdict": "PROVED", '
+        '"fact_registry": {}, "claim_formal": {}, "key_results": {}, '
+        '"generator": {"name":"t","version":"0","repo":"r","generated_at":"2026-01-01"}}))\n'
+    )
+    result = sandbox.run_proof_py()
+    assert result["ok"] is True
+    assert result["exit_code"] == 0
+    assert result["proof_data"]["claim_natural"] == "X"
+    assert result["stripped_keys"] == []
+
+
+def test_run_proof_py_reports_stripped_keys(sandbox):
+    proof = sandbox.output_dir / "proof.py"
+    proof.write_text(
+        'import json\n'
+        'print("=== PROOF SUMMARY (JSON) ===")\n'
+        'print(json.dumps({"claim_natural": "X", "verdict": "PROVED", '
+        '"fact_registry": {}, "claim_formal": {}, "key_results": {}, '
+        '"generator": {"name":"t","version":"0","repo":"r","generated_at":"2026-01-01"}, '
+        '"unknown_future_key": "oops"}))\n'
+    )
+    result = sandbox.run_proof_py()
+    assert result["ok"] is True
+    assert "unknown_future_key" in result["stripped_keys"]
+    # Key must still be in proof_data — we report, not delete
+    assert "unknown_future_key" in result["proof_data"]
