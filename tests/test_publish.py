@@ -226,3 +226,42 @@ def test_finalize_force_no_doi_json_works(source_dir, tmp_path):
     finalize_proof(staging, target, force=True)
     assert (target / "proof.py").exists()
     assert not (target / "doi.json").exists()
+
+
+def test_finalize_force_whitespace_drift_passes(source_dir, tmp_path):
+    """DOI claim with only whitespace difference should NOT raise ValueError."""
+    target = tmp_path / "site" / "proofs" / "test-claim"
+    target.mkdir(parents=True)
+    (target / "proof.py").write_text("old")
+    (target / "proof.json").write_text(json.dumps({"claim_natural": "Test claim"}))
+    (target / "doi.json").write_text(json.dumps({
+        "doi": "10.5281/zenodo.123",
+        "zenodo_id": "123",
+        "concept_doi": "10.5281/zenodo.100",
+        "concept_zenodo_id": "100",
+        "claim_natural": "Test  claim",   # extra space — whitespace-only drift
+        "minted_at": "2026-04-07",
+    }))
+    staging = stage_proof(source_dir)
+    # Should NOT raise — whitespace-only drift is allowed
+    finalize_proof(staging, target, force=True)
+    assert (target / "doi.json").exists()
+
+
+def test_finalize_force_real_drift_raises(source_dir, tmp_path):
+    """A genuinely different DOI claim must raise ValueError — not silently overwritten."""
+    target = tmp_path / "site" / "proofs" / "test-claim"
+    target.mkdir(parents=True)
+    (target / "proof.py").write_text("old")
+    (target / "proof.json").write_text(json.dumps({"claim_natural": "Test claim"}))
+    (target / "doi.json").write_text(json.dumps({
+        "doi": "10.5281/zenodo.999",
+        "zenodo_id": "999",
+        "concept_doi": "10.5281/zenodo.100",
+        "concept_zenodo_id": "100",
+        "claim_natural": "An entirely different claim",
+        "minted_at": "2026-04-07",
+    }))
+    staging = stage_proof(source_dir)
+    with pytest.raises(ValueError, match="DOI was minted for a different claim"):
+        finalize_proof(staging, target, force=True)

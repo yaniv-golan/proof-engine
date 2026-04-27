@@ -34,3 +34,13 @@ docs/specs/
 
 # RegistryServer runtime artifact (sibling of proofs dir; rebuilt on each start)
 .registry-view/
+
+# Regen pipeline runtime artifacts
+proofs-draft/
+agent_transcript.jsonl
+agent_result.json
+.old_claim
+.old_verdict
+.pr_body.md
+.pr_body.md.tmp
+.gate_error

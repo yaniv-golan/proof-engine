@@ -1,0 +1,456 @@
+name: Daily Proof Regen
+
+on:
+  # schedule:
+  #   - cron: '0 6 * * *'   # uncomment in Phase E after dry-run passes
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Override: regenerate this slug'
+        required: false
+
+permissions:
+  contents: read   # checkout only; all writes use GH_TOKEN (minted from GitHub App) via inline remote URL
+
+concurrency:
+  group: daily-regen
+  cancel-in-progress: false
+  # NOTE (gap #22, round-12): `daily-regen` and `regen-merged` are separate
+  # concurrency groups, so they can race on the same regen-queue.yaml commit.
+  # Mitigation: each job does `git fetch origin main && git reset --hard` before
+  # writing the queue, so the loser's push will fail with a non-fast-forward error.
+  # The impact is a failed queue-write that leaves the slug in the wrong state
+  # until the next daily run corrects it.  Manual fix: pull + re-run the failing step.
+  # A single concurrency group for both workflows would eliminate the race but
+  # would serialize PR merges with daily dispatches — acceptable for now given
+  # that PR merges are rare compared to daily runs.
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Mint GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+
+      - name: Install deps
+        run: |
+          pip install requests sympy python-dateutil pytest Jinja2 Markdown \
+                      Pygments PyYAML bleach Pillow jsonschema pymdown-extensions \
+                      regex unidecode
+          pip install -e packages/proof-citations \
+                      -e packages/proof-engine-registry \
+                      -e packages/proof-engine-wiki
+
+      - name: Pick next slug
+        id: pick
+        run: |
+          if [ -n "${{ github.event.inputs.slug }}" ]; then
+            SLUG="${{ github.event.inputs.slug }}"
+            STATUS=$(python -c "
+          import yaml, sys
+          try:
+              q = yaml.safe_load(open('tools/regen-queue.yaml'))
+          except FileNotFoundError:
+              print('NO_QUEUE_FILE'); sys.exit(0)
+          entry = next((p for p in q['proofs'] if p['slug'] == sys.argv[1]), None)
+          print(entry['status'] if entry else 'NOT_IN_QUEUE')
+          " "$SLUG")
+            if [ "$STATUS" = "NO_QUEUE_FILE" ]; then
+              echo "ERROR: tools/regen-queue.yaml not found." >&2; exit 1
+            fi
+            if [ "$STATUS" = "NOT_IN_QUEUE" ]; then
+              echo "ERROR: slug '$SLUG' not found in regen queue." >&2; exit 1
+            fi
+            if [ "$STATUS" = "in_progress" ] || [ "$STATUS" = "pr_open" ]; then
+              echo "ERROR: slug '$SLUG' is already $STATUS; aborting." >&2; exit 1
+            fi
+            echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            set +e
+            OUT=$(python tools/regen_queue.py pick-next --json)
+            RC=$?
+            set -e
+            if [ $RC -eq 1 ]; then
+              echo "found=false" >> "$GITHUB_OUTPUT"; exit 0
+            elif [ $RC -ne 0 ]; then
+              echo "pick-next failed (exit $RC)" >&2; exit $RC
+            fi
+            SLUG=$(python -c "import json,sys; print(json.loads(sys.argv[1])['slug'])" "$OUT")
+            echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Short-circuit if nothing to do
+        if: steps.pick.outputs.found != 'true'
+        run: echo "Queue empty." && exit 0
+
+      - name: Mark in_progress
+        id: mark_in_progress
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          CLEAN_ORIGIN="https://github.com/${{ github.repository }}"
+          trap 'git remote set-url origin "$CLEAN_ORIGIN"' EXIT
+          git config user.name "proof-engine-bot"
+          git config user.email "bot@proofengine.info"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}"
+          # Pull latest main before writing the queue — another run may have
+          # committed between our checkout and now (gap #11).
+          git fetch origin main && git reset --hard origin/main
+          python tools/regen_queue.py mark "${{ steps.pick.outputs.slug }}" \
+            --status in_progress
+          # Guard: if marking in_progress caused auto-fail (3rd attempt), emit
+          # an output flag and commit+push, but do NOT exit 0 — subsequent steps
+          # that lack an `if:` guard would still run after exit 0 (gap #10).
+          # Instead, gate them on steps.mark_in_progress.outputs.auto_failed.
+          CURRENT_STATUS=$(python -c "
+          import yaml, sys
+          q = yaml.safe_load(open('tools/regen-queue.yaml'))
+          e = next(p for p in q['proofs'] if p['slug'] == sys.argv[1])
+          print(e['status'])
+          " "${{ steps.pick.outputs.slug }}")
+          if [ "$CURRENT_STATUS" = "failed" ]; then
+            echo "Slug auto-failed on 3rd attempt; skipping agent run." >&2
+            git add tools/regen-queue.yaml
+            git diff --staged --quiet || git commit -m "regen: ${{ steps.pick.outputs.slug }} → failed (max attempts)"
+            git push
+            echo "auto_failed=true" >> "$GITHUB_OUTPUT"
+          else
+            git add tools/regen-queue.yaml
+            git diff --staged --quiet || git commit -m "regen: mark ${{ steps.pick.outputs.slug }} in_progress"
+            git push
+          fi
+
+      - name: Capture old proof metadata
+        if: success() && steps.mark_in_progress.outputs.auto_failed != 'true'
+        run: |
+          SLUG="${{ steps.pick.outputs.slug }}"
+          python - "$SLUG" <<'PY'
+          import json, sys
+          from pathlib import Path
+          slug = sys.argv[1]
+          proof_path = Path(f"site/proofs/{slug}/proof.json")
+          if not proof_path.exists():
+              print(f"ERROR: {proof_path} not found in repo", file=sys.stderr)
+              sys.exit(1)
+          d = json.loads(proof_path.read_text())
+          Path(".old_claim").write_text(d["claim_natural"])
+          v = d.get("verdict", "")
+          if isinstance(v, dict):
+              base = v.get("value", "")
+              verdict = (f"{base} (with unverified citations)"
+                         if v.get("qualified") and v.get("qualifier") == "unverified_citations"
+                         else base)
+          else:
+              verdict = v
+          Path(".old_verdict").write_text(verdict)
+          PY
+
+      - name: Stage draft dir
+        if: success() && steps.mark_in_progress.outputs.auto_failed != 'true'
+        run: |
+          SLUG="${{ steps.pick.outputs.slug }}"
+          DRAFT="proofs-draft/$SLUG"
+          rm -rf "$DRAFT" && mkdir -p "$DRAFT"
+          # Note: if Git LFS is enabled for thumbnails, `cp` copies the LFS pointer
+          # file, not the actual image. The checkout step uses `fetch-depth: 0` which
+          # does pull LFS objects by default on GitHub Actions, so this should be fine.
+          # If thumbnails start appearing as LFS pointer text in PRs, add
+          # `git lfs pull -- "site/proofs/$SLUG/thumbnail.png"` before the copy.
+          for f in thumbnail.png meta.yaml doi.json depends_on_resolved.json; do
+            if [ -f "site/proofs/$SLUG/$f" ]; then
+              cp "site/proofs/$SLUG/$f" "$DRAFT/$f"
+            fi
+          done
+
+      - name: Run proof agent
+        id: agent
+        if: success() && steps.mark_in_progress.outputs.auto_failed != 'true'
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          # proof_agent.py imports from tools.lib.proof_runner; PYTHONPATH=. makes
+          # that import work regardless of which directory the runner starts in.
+          PYTHONPATH: "."
+        run: |
+          SLUG="${{ steps.pick.outputs.slug }}"
+          set +e
+          python tools/proof_agent.py \
+            --slug "$SLUG" \
+            --claim "$(cat .old_claim)" \
+            --output-dir "proofs-draft/$SLUG" \
+            --skill-dir proof-engine/skills/proof-engine \
+            --old-proof-dir "site/proofs/$SLUG" \
+            --model qwen/qwen3-coder:free \
+            --fallback-model openai/gpt-oss-120b:free \
+            --max-iterations 80 \
+            --max-llm-calls 150 \
+            --transcript "proofs-draft/$SLUG/agent_transcript.jsonl" \
+            --result-json "proofs-draft/$SLUG/agent_result.json"
+          RC=$?
+          echo "rc=$RC" >> "$GITHUB_OUTPUT"
+
+      - name: Upload transcript artifact
+        if: always() && steps.pick.outputs.found == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-transcript-${{ steps.pick.outputs.slug }}-${{ github.run_id }}
+          path: proofs-draft/${{ steps.pick.outputs.slug }}/agent_transcript.jsonl
+          if-no-files-found: warn
+
+      - name: Handle pre-agent failure
+        # Fires if Capture-metadata or Stage-draft-dir failed — queue is stuck
+        # in_progress but no agent has run yet.  Reset to pending so the next
+        # scheduled run retries rather than waiting for a human.
+        #
+        # MUST be placed AFTER the "Run proof agent" step (id: agent).  GitHub
+        # Actions evaluates each step's `if:` when that step is reached in the
+        # top-to-bottom execution order.  If this step appeared BEFORE the agent
+        # step, `steps.agent` would not yet exist and `steps.agent.result` would
+        # be null/empty — the condition would never fire.  Placed here (after
+        # agent), `steps.agent.result` is 'skipped' when a pre-agent step failed.
+        #
+        # NOTE (G-A6): Resets status to pending but does NOT decrement the
+        # attempt counter incremented by "Mark in_progress".  Three pure
+        # infrastructure flakes (network, missing proof.json) can auto-fail a
+        # slug the agent never ran.  Manual reset if this happens:
+        #   python tools/regen_queue.py mark <slug> --status pending
+        # then edit regen-queue.yaml to reset attempts.
+        if: failure() && steps.agent.result == 'skipped'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          SLUG="${{ steps.pick.outputs.slug }}"
+          [ -z "$SLUG" ] && exit 0
+          CLEAN_ORIGIN="https://github.com/${{ github.repository }}"
+          trap 'git remote set-url origin "$CLEAN_ORIGIN"' EXIT
+          # Fetch+reset before writing — same non-fast-forward race mitigation as
+          # Handle agent/gate failure (gap #3, round-16).
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}"
+          git fetch origin main && git reset --hard origin/main
+          python tools/regen_queue.py mark "$SLUG" --status pending \
+            --error "pre-agent step failed; see workflow logs"
+          git add tools/regen-queue.yaml
+          git diff --staged --quiet || git commit -m "regen: $SLUG → pending (pre-agent failure)"
+          git push
+
+      - name: Handle agent failure
+        # Fire when agent exited non-zero OR when the agent step crashed before
+        # setting rc (rc is empty string in that case; '' != '0' is true).
+        if: steps.agent.result == 'failure' || (steps.agent.result == 'success' && steps.agent.outputs.rc != '0')
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          SLUG="${{ steps.pick.outputs.slug }}"
+          RC="${{ steps.agent.outputs.rc }}"
+          # Read the agent's own status field to distinguish quota_blocked from
+          # auth_error — both return RC=2 but require different queue states.
+          # auth_error → failed (requires human to fix API key; no point retrying)
+          # quota_blocked / llm_error → quota_blocked (auto-retryable)
+          # If agent crashed before writing result, default to "failed"
+          AGENT_STATUS=$(python -c "
+          import json,sys
+          try:
+              d=json.load(open(sys.argv[1]))
+              print(d.get('status','unknown'))
+          except Exception:
+              print('unknown')
+          " "proofs-draft/$SLUG/agent_result.json" 2>/dev/null || echo "unknown")
+          if [ "$RC" = "2" ] && [ "$AGENT_STATUS" = "quota_blocked" ]; then
+            # Per-run cap hit — both primary and fallback untried or fallback not attempted.
+            # Safe to auto-retry tomorrow when daily quota resets.
+            STATUS="quota_blocked"
+          else
+            # auth_error (bad key), llm_error (fallback exhausted or network), or
+            # any non-zero RC other than 2 — all require human inspection.
+            STATUS="failed"
+          fi
+          ERR=$(python -c "
+          import json,sys
+          try:
+              d=json.load(open(sys.argv[1]))
+              print(d.get('error') or d.get('status') or 'unknown')
+          except Exception:
+              print('agent crashed before writing result')
+          " "proofs-draft/$SLUG/agent_result.json" 2>/dev/null || echo "unknown")
+          # Strip newlines and truncate so regen_queue.py --error receives a safe
+          # single-line string (gap #19, round-12).
+          ERR=$(echo "$ERR" | tr -d '\n\r' | cut -c1-500)
+          CLEAN_ORIGIN="https://github.com/${{ github.repository }}"
+          trap 'git remote set-url origin "$CLEAN_ORIGIN"' EXIT
+          # Fetch+reset before writing — same race mitigation as Mark in_progress.
+          # Without this, a regen-merged push between checkout and here causes a
+          # non-fast-forward failure and leaves the slug stuck at in_progress
+          # (gap #1, round-14).
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}"
+          git fetch origin main && git reset --hard origin/main
+          python tools/regen_queue.py mark "$SLUG" --status "$STATUS" --error "$ERR"
+          git add tools/regen-queue.yaml
+          git diff --staged --quiet || git commit -m "regen: $SLUG → $STATUS"
+          git push
+          exit 1
+
+      - name: Claim equivalence gate
+        if: success() && steps.mark_in_progress.outputs.auto_failed != 'true'
+        run: |
+          set +e
+          ERR=$(python tools/regen_compare.py \
+            --slug "${{ steps.pick.outputs.slug }}" \
+            --draft-dir "proofs-draft/${{ steps.pick.outputs.slug }}" \
+            --old-claim-file .old_claim \
+            --old-verdict "$(cat .old_verdict)" \
+            --strict-claim 2>&1)
+          RC=$?
+          set -e
+          if [ $RC -ne 0 ]; then
+            echo "$ERR" > .gate_error
+            echo "Claim gate failed (exit $RC):" >&2
+            echo "$ERR" >&2
+            exit $RC
+          fi
+
+      - name: Restore curated files (defence-in-depth)
+        if: success() && steps.mark_in_progress.outputs.auto_failed != 'true'
+        run: |
+          SLUG="${{ steps.pick.outputs.slug }}"
+          DRAFT="proofs-draft/$SLUG"
+          for f in thumbnail.png meta.yaml doi.json depends_on_resolved.json; do
+            if [ -f "site/proofs/$SLUG/$f" ]; then
+              cp -f "site/proofs/$SLUG/$f" "$DRAFT/$f"
+            fi
+          done
+
+      - name: resolve-deps --refresh
+        if: success() && steps.mark_in_progress.outputs.auto_failed != 'true'
+        run: |
+          python tools/proof-site.py resolve-deps \
+            --artifacts-dir "proofs-draft/${{ steps.pick.outputs.slug }}" --refresh
+
+      - name: Publish
+        if: success() && steps.mark_in_progress.outputs.auto_failed != 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python tools/proof-site.py publish "proofs-draft/${{ steps.pick.outputs.slug }}" \
+            --slug "${{ steps.pick.outputs.slug }}" --force --site-dir site
+
+      - name: Handle gate/publish failure
+        if: failure() && steps.agent.result == 'success' && steps.agent.outputs.rc == '0'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          SLUG="${{ steps.pick.outputs.slug }}"
+          CLEAN_ORIGIN="https://github.com/${{ github.repository }}"
+          trap 'git remote set-url origin "$CLEAN_ORIGIN"' EXIT
+          GATE_ERR=$([ -f .gate_error ] && head -c 200 .gate_error || echo "gate or publish step failed; see workflow logs")
+          # Fetch+reset before writing — same race mitigation as Handle agent failure
+          # (gap #1, round-14).
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}"
+          git fetch origin main && git reset --hard origin/main
+          python tools/regen_queue.py mark "$SLUG" --status failed \
+            --error "$GATE_ERR"
+          git add tools/regen-queue.yaml
+          git diff --staged --quiet || git commit -m "regen: $SLUG → failed (gate)"
+          git push
+
+      - name: Render PR body
+        if: success() && steps.mark_in_progress.outputs.auto_failed != 'true'
+        run: |
+          python tools/regen_pr_body.py \
+            --slug "${{ steps.pick.outputs.slug }}" \
+            --old-verdict "$(cat .old_verdict)" \
+            --old-claim-file .old_claim \
+            --new-proof-json "site/proofs/${{ steps.pick.outputs.slug }}/proof.json" \
+            --agent-result "proofs-draft/${{ steps.pick.outputs.slug }}/agent_result.json" \
+            > .pr_body.md.tmp
+          mv .pr_body.md.tmp .pr_body.md
+
+      - name: Strip agent artifacts from draft
+        if: success() && steps.mark_in_progress.outputs.auto_failed != 'true'
+        run: |
+          SLUG="${{ steps.pick.outputs.slug }}"
+          rm -f "proofs-draft/$SLUG/agent_transcript.jsonl" \
+                "proofs-draft/$SLUG/agent_result.json"
+
+      - name: Open PR
+        id: open-pr
+        if: success() && steps.mark_in_progress.outputs.auto_failed != 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          branch: regen/${{ github.run_id }}/${{ steps.pick.outputs.slug }}
+          base: main
+          title: "regen: ${{ steps.pick.outputs.slug }}"
+          body-path: .pr_body.md
+          commit-message: "regen(${{ steps.pick.outputs.slug }}): refresh under current skill"
+          add-paths: |
+            site/proofs/${{ steps.pick.outputs.slug }}/**
+            site/proofs/**/meta.yaml
+            tools/lib/tag_vocabulary.json
+
+      - name: Mark pr_open
+        # Only mark pr_open if create-pull-request actually opened a PR (non-empty number).
+        # If there was no diff, peter-evans succeeds but creates no PR — skip marking.
+        #
+        # MUST run BEFORE Reset queue on cancellation so that steps.mark_pr_open.result
+        # is 'success' when the cancellation handler evaluates its guard (gap #1, round-21).
+        # GitHub Actions evaluates step `if:` expressions in file order; a step's `.result`
+        # is only 'success' if it completed before the evaluating step was reached.
+        id: mark_pr_open
+        if: success() && steps.open-pr.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          CLEAN_ORIGIN="https://github.com/${{ github.repository }}"
+          trap 'git remote set-url origin "$CLEAN_ORIGIN"' EXIT
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}"
+          git fetch origin main
+          # Force-create the local 'main' branch tracking origin/main — idempotent
+          # regardless of whether peter-evans left a detached HEAD or a different branch
+          # active (gap #2, round-21; replaces bare 'git checkout main' from round-20).
+          git checkout -B main origin/main
+          python tools/regen_queue.py mark "${{ steps.pick.outputs.slug }}" \
+            --status pr_open --pr "${{ steps.open-pr.outputs.pull-request-number }}"
+          git add tools/regen-queue.yaml
+          git diff --staged --quiet || git commit -m "regen: ${{ steps.pick.outputs.slug }} → pr_open"
+          git push
+
+      - name: Reset queue on cancellation
+        # Spec §4.1: the cancellation handler resets to pending WITHOUT decrementing
+        # attempts. Escalation toward failed comes automatically from the NEXT run's
+        # "Mark in_progress" step, which increments attempts again. We do NOT bump
+        # here — the current run already bumped when it marked in_progress earlier.
+        # Double-bumping would auto-fail after 1.5 cancellations instead of 3.
+        #
+        # Guard: skip if Mark pr_open already succeeded (id: mark_pr_open) — the queue
+        # is already at pr_open and resetting to pending would cause the next run to open
+        # a duplicate PR. Mark pr_open runs BEFORE this step (gap #1/#5, round-21), so
+        # steps.mark_pr_open.result is populated when this guard is evaluated.
+        if: cancelled() && steps.mark_pr_open.result != 'success'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          SLUG="${{ steps.pick.outputs.slug }}"
+          [ -z "$SLUG" ] && exit 0
+          CLEAN_ORIGIN="https://github.com/${{ github.repository }}"
+          trap 'git remote set-url origin "$CLEAN_ORIGIN"' EXIT
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}"
+          git fetch origin main && git reset --hard origin/main
+          python tools/regen_queue.py mark "$SLUG" --status pending \
+            --error "workflow cancelled or timed out"
+          git add tools/regen-queue.yaml
+          git diff --staged --quiet || git commit -m "regen: $SLUG → pending (cancelled)"
+          git push

@@ -15,7 +15,7 @@ if _scripts not in sys.path:
     sys.path.insert(0, _scripts)
 from proof_types import ProofData, ProofDataV3
 
-_KNOWN_KEYS = set(typing.get_type_hints(ProofData).keys()) | set(typing.get_type_hints(ProofDataV3).keys())
+KNOWN_PROOF_JSON_KEYS = set(typing.get_type_hints(ProofData).keys()) | set(typing.get_type_hints(ProofDataV3).keys())
 
 
 def run_proof_and_extract_json(proof_py_path):
@@ -49,7 +49,7 @@ def run_proof_and_extract_json(proof_py_path):
         return None, f"Invalid JSON in proof.py output: {e}"
 
     # Strip unknown keys — defense-in-depth for proofs that bypass emit_proof_summary()
-    unknown = set(proof_data.keys()) - _KNOWN_KEYS
+    unknown = set(proof_data.keys()) - KNOWN_PROOF_JSON_KEYS
     if unknown:
         print(
             f"WARNING: Stripping unknown keys from proof summary: {sorted(unknown)}. "
