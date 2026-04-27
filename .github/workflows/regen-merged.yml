@@ -1,8 +1,10 @@
 name: Regen Merged — auto-update queue
 
 on:
-  pull_request:
-    types: [closed]
+  # Disabled — regen pipeline paused pending model quality improvements.
+  push:
+    branches:
+      - _disabled_regen_never_matches
 
 permissions:
   contents: read

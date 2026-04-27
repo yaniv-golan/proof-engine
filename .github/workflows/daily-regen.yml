@@ -1,13 +1,11 @@
 name: Daily Proof Regen
 
 on:
-  # schedule:
-  #   - cron: '0 6 * * *'   # uncomment in Phase E after dry-run passes
-  workflow_dispatch:
-    inputs:
-      slug:
-        description: 'Override: regenerate this slug'
-        required: false
+  # Disabled — model quality not yet sufficient for automated regen.
+  # Re-enable by restoring workflow_dispatch and/or the schedule trigger.
+  push:
+    branches:
+      - _disabled_regen_never_matches
 
 permissions:
   contents: read   # checkout only; all writes use GH_TOKEN (minted from GitHub App) via inline remote URL
