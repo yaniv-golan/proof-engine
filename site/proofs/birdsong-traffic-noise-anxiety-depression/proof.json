@@ -1,0 +1,286 @@
+{
+  "format_version": 3,
+  "claim_natural": "Six minutes of birdsong reduced anxiety with a medium effect size, while six minutes of traffic noise raised depression with the same effect size.",
+  "claim_formal": {
+    "subject": "Stobbe et al. 2022 randomized online experiment on soundscape exposure",
+    "sub_claims": [
+      {
+        "id": "SC1",
+        "property": "In Stobbe et al. (2022), 6-minute exposure to birdsong soundscapes produced a significant decrease in self-reported anxiety, characterized by the authors as a medium effect size (Cohen's d in [-0.77, -0.70]).",
+        "operator": ">=",
+        "threshold": 2,
+        "operator_note": "SC1 verifies what the study reports about birdsong and anxiety. Two sources confirm: (a) the full Nature paper gives the raw Cohen's d values d = -0.77 (low diversity) and d = -0.70 (high diversity); (b) the PubMed-indexed abstract characterizes these as 'medium effect sizes'."
+      },
+      {
+        "id": "SC2",
+        "property": "In Stobbe et al. (2022), 6-minute exposure to traffic noise soundscapes produced a significant increase in self-reported depression, with a medium effect size in the high-diversity condition (Cohen's d = 0.59).",
+        "operator": ">=",
+        "threshold": 2,
+        "operator_note": "SC2 verifies what the study reports about traffic noise and depression. Two sources confirm: (a) the full Nature paper gives Cohen's d = 0.59 (high diversity, characterized as medium) and d = 0.29 (low diversity, characterized as small); (b) the PubMed-indexed abstract characterizes the high-diversity result as a 'medium effect size'. The claim's match for SC2 is to the high-diversity finding, not the low-diversity finding."
+      }
+    ],
+    "compound_operator": "AND",
+    "operator_note": "PRIMARY-SOURCE CLAIM. This is a claim about what one specific study reported. Both sub-claims trace to Stobbe et al. (2022) Scientific Reports 12:16414. Threshold of 2 is justified by domain scarcity: there is exactly one study with this design, so 'independent sources' are the full paper text and the PubMed-mirrored abstract, which agree on numeric d values and on the authors' magnitude labels. \n\nFORMALIZATION SCOPE NOTE: The natural-language phrase 'with the same effect size' is operationalized as 'both effects are characterized as medium by the study authors' (Cohen's d magnitude category), not as 'numerically identical d values'. Birdsong-anxiety has |d| in [0.70, 0.77] (authors: 'medium effect sizes'). Traffic-depression has d = 0.59 in the high-diversity condition (authors: 'medium effect size'). Both fall within Cohen's medium magnitude bracket per the authors' own classification. \n\nCAVEAT NOT CAPTURED IN THE CLAIM: The traffic-depression effect was 'medium' only in the high-diversity condition; the low-diversity traffic condition produced a small effect (d = 0.29). The compound claim oversimplifies by omitting this conditioning, but the medium effect the claim asserts does exist in the study. SC2 is satisfied by the high-diversity finding. \n\nThe claim is NOT a causal claim about long-term mental health outcomes \u2014 it describes immediate pre/post questionnaire changes after a 6-minute laboratory exposure. It is also NOT a claim that traffic noise causes clinical depression."
+  },
+  "evidence": {
+    "B1": {
+      "type": "empirical",
+      "label": "SC1: Nature paper (Stobbe et al. 2022) \u2014 verbatim Cohen's d values for birdsong-anxiety (d = -0.77 low diversity, d = -0.70 high diversity)",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Stobbe E, Sundermann J, Foerster L, K\u00fchn S (2022). Birdsongs alleviate anxiety and paranoia in healthy participants. Scientific Reports 12:16414.",
+        "url": "https://www.nature.com/articles/s41598-022-20841-0",
+        "quote": "low diversity: T(1, 62) =  \u2212 6.13, p < 0.001, d =  \u2212 0.77; high diversity: T(1, 60) =  \u2212 6.32, p < 0.001, d =  \u2212 0.70"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nature.com",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "low diversity: T(1, 62) =  \u2212 6.13, p < 0.001, d =  \u2212 0.77; high diversity: T(1, "
+      }
+    },
+    "B2": {
+      "type": "empirical",
+      "label": "SC1: PubMed-indexed abstract \u2014 author characterization 'Anxiety and paranoia significantly decreased in both birdsong conditions (medium effect sizes)'",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "PubMed-indexed abstract of Stobbe et al. 2022 (PMID 36229489), U.S. National Library of Medicine.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36229489/",
+        "quote": "Anxiety and paranoia significantly decreased in both birdsong conditions (medium effect sizes)."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Anxiety and paranoia significantly decreased in both birdsong conditions (medium"
+      }
+    },
+    "B3": {
+      "type": "empirical",
+      "label": "SC2: Nature paper (Stobbe et al. 2022) \u2014 verbatim Cohen's d values for traffic-depression (d = 0.29 low, d = 0.59 high diversity)",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "Stobbe E, Sundermann J, Foerster L, K\u00fchn S (2022). Birdsongs alleviate anxiety and paranoia in healthy participants. Scientific Reports 12:16414.",
+        "url": "https://www.nature.com/articles/s41598-022-20841-0",
+        "quote": "depressive symptoms significantly increased within both the low diversity urban soundscape (T(1, 82) = 2.64, p = 0.010, d = 0.29) and high diversity urban condition (T(1, 68) = 4.88, p < 0.001, d = 0.59)"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nature.com",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "depressive symptoms significantly increased within both the low diversity urban "
+      }
+    },
+    "B4": {
+      "type": "empirical",
+      "label": "SC2: PubMed-indexed abstract \u2014 author characterization 'increase in depression (small effect size in low, medium effect size in high diversity condition)'",
+      "sub_claim": "SC2",
+      "source": {
+        "name": "PubMed-indexed abstract of Stobbe et al. 2022 (PMID 36229489), U.S. National Library of Medicine.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36229489/",
+        "quote": "the traffic noise soundscapes were associated with a significant increase in depression (small effect size in low, medium effect size in high diversity condition)."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "the traffic noise soundscapes were associated with a significant increase in dep"
+      }
+    },
+    "B5": {
+      "type": "empirical",
+      "label": "Both SCs: Nature paper confirms 6-minute exposure duration",
+      "sub_claim": "SC1",
+      "source": {
+        "name": "Stobbe E, Sundermann J, Foerster L, K\u00fchn S (2022). Birdsongs alleviate anxiety and paranoia in healthy participants. Scientific Reports 12:16414.",
+        "url": "https://www.nature.com/articles/s41598-022-20841-0",
+        "quote": "N = 295 participants were exposed to one out of four conditions for 6 min: traffic noise low, traffic noise high, birdsong low, and birdsong high diversity soundscapes."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "nature.com",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Known academic/scholarly publisher"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "N = 295 participants were exposed to one out of four conditions for 6 min: traff"
+      }
+    },
+    "A1": {
+      "type": "computed",
+      "label": "SC1 verified source count",
+      "sub_claim": "SC1",
+      "method": "count(verified sc1 citations) = 2",
+      "result": "2",
+      "depends_on": [
+        "B1",
+        "B2"
+      ]
+    },
+    "A2": {
+      "type": "computed",
+      "label": "SC2 verified source count",
+      "sub_claim": "SC2",
+      "method": "count(verified sc2 citations) = 2",
+      "result": "2",
+      "depends_on": [
+        "B3",
+        "B4"
+      ]
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "SC1: independent quotation of birdsong-anxiety finding from primary paper (raw d values) and PubMed-indexed abstract (author 'medium effect size' label).",
+      "fact_ids": [
+        "B1",
+        "B2"
+      ],
+      "agreement": true,
+      "n_sources_consulted": 2,
+      "n_sources_verified": 2,
+      "sources": {
+        "sc1_nature_paper": "verified",
+        "sc1_pubmed_abstract": "verified"
+      },
+      "independence_note": "Nature paper full text and NLM PubMed abstract are separate hosted instances of the published record. They confirm both the numeric d values and the authors' qualitative label.",
+      "coi_flags": []
+    },
+    {
+      "description": "SC2: independent quotation of traffic-noise depression finding from primary paper (raw d values) and PubMed-indexed abstract (author 'medium effect size' label for high-diversity condition).",
+      "fact_ids": [
+        "B3",
+        "B4"
+      ],
+      "agreement": true,
+      "n_sources_consulted": 2,
+      "n_sources_verified": 2,
+      "sources": {
+        "sc2_nature_paper": "verified",
+        "sc2_pubmed_abstract": "verified"
+      },
+      "independence_note": "Same as SC1 \u2014 Nature and PubMed mirror the published record and are the canonical archival sources for the abstract and full text.",
+      "coi_flags": []
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Does the original paper actually report the effect sizes described, or did secondary coverage (press release, news articles) mischaracterize the findings?",
+      "verification_performed": "Fetched the full Nature paper at https://www.nature.com/articles/s41598-022-20841-0 and located the within-group t-test results in the Results section. Confirmed: anxiety decreased in both birdsong conditions (d = -0.77, d = -0.70) and depression increased in both traffic-noise conditions (d = 0.29, d = 0.59). Cross-checked the abstract verbatim on both nature.com and pubmed.ncbi.nlm.nih.gov to confirm the authors' own 'medium effect size' characterization for both finding.",
+      "finding": "The paper itself supports both sub-claims. The abstract explicitly labels both the birdsong-anxiety effects and the high-diversity traffic-depression effect as 'medium effect sizes'. The claim's language faithfully reflects the authors' own summary.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the qualifier 'the same effect size' break the claim? The d values are not numerically identical (anxiety |d| in [0.70, 0.77]; depression d = 0.59 high diversity).",
+      "verification_performed": "Reviewed Cohen's (1988) conventional d magnitude thresholds: 0.2 small, 0.5 medium, 0.8 large. Examined the authors' own labels: birdsong-anxiety = 'medium', traffic-depression high diversity = 'medium'. Considered the standard interpretation that 'effect size' in plain-language summaries refers to Cohen's magnitude category rather than to identical decimal values.",
+      "finding": "Both effects share the 'medium' magnitude category as labeled by the study authors. The d values differ (0.70-0.77 vs 0.59) but both lie within Cohen's medium bracket per the authors' classification. Operationalizing 'same effect size' as 'same magnitude category' is the standard reading for non-technical summaries of psychological findings, and this matches the abstract phrasing.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the low-diversity traffic condition (d = 0.29, small effect) contradict or break the claim?",
+      "verification_performed": "Re-read the abstract: 'small effect size in low, medium effect size in high diversity condition'. Considered whether the claim's omission of the low-diversity small-effect finding is a fatal oversimplification.",
+      "finding": "The low-diversity finding is not a contradiction \u2014 depression still increased, just less. The claim is faithful to the high-diversity finding (which IS medium) and to the abstract-level summary; it omits the diversity conditioning. SC2's operator_note documents this scope. Operationally, the claim is supported by the high-diversity arm and is not refuted by the low-diversity arm.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the study have methodological problems (sample, design, replication) that would undermine even the descriptive 'this study reported X' claim?",
+      "verification_performed": "Searched for replications, criticism, and retractions of Stobbe et al. 2022. Reviewed the published methods: N = 295, randomized online experiment, four between-subjects conditions, validated questionnaires (STAI-S for state anxiety, PHQ-D for depression, R-GPTS for paranoia), 6-minute soundscape exposure. The paper has been cited extensively in mental-health and environmental-psychology literature without retraction or formal correction.",
+      "finding": "The study is online-administered and has the usual limits of self-report and short-duration laboratory designs (immediate effects only, no ecological validity for long-term outcomes, no health-outcomes follow-up). These are limitations of what the finding GENERALIZES to, not of whether the study reported the effect sizes shown. The descriptive claim about what the study reported holds; broader causal/clinical generalizations are out of scope.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "PROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "n_holding": 2,
+    "n_total": 2,
+    "claim_holds": true,
+    "sc1_d_low": -0.77,
+    "sc1_d_high": -0.7,
+    "sc2_d_low": 0.29,
+    "sc2_d_high": 0.59,
+    "exposure_minutes": 6,
+    "sample_size": 295
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.33.2",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-28"
+  },
+  "sub_claim_results": [
+    {
+      "id": "SC1",
+      "n_confirming": 2,
+      "threshold": 2,
+      "holds": true
+    },
+    {
+      "id": "SC2",
+      "n_confirming": 2,
+      "threshold": 2,
+      "holds": true
+    }
+  ]
+}
