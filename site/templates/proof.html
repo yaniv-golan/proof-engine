@@ -91,6 +91,9 @@
   <div class="sb-cell verdict-cell {{ ns.vc_cell }}">
     <div class="sb-l">verdict</div>
     <div class="sb-stamp {{ ns.vc_color }}">{{ proof.verdict.raw }}</div>
+    {% if proof.purpose == "methodology_demonstration" %}
+    <div class="sb-q-small" style="text-transform:uppercase;letter-spacing:0.06em;font-weight:600;opacity:0.85;">methodology demonstration</div>
+    {% endif %}
     {% if proof.verdict.qualifier %}
     <div class="sb-q-small">{{ proof.verdict.qualifier }}</div>
     {% elif claim_formal.attribution %}
@@ -320,6 +323,9 @@
         {% if claim_formal.claim_type == "theorem" %}
           {% if claim_formal.attribution %}
         <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;">No empirical citations — verdict established by the deductive argument of <strong>{{ claim_formal.attribution }}</strong>. This artifact is a verifiable companion: it re-presents the cited argument and regression-tests the implementation. The mathematical authority is the cited source, not this artifact.</p>
+            {% if proof.purpose == "methodology_demonstration" %}
+        <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;">This artifact's <strong>purpose</strong> is methodology demonstration of the proof-engine framework on a known result. <strong>Cite this artifact only if your work evaluates the framework or its methodology</strong>; for the mathematical result itself, cite the primary source above.</p>
+            {% endif %}
           {% else %}
         <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;">No empirical citations — verdict established by deductive argument; computational checks regression-test the implementation.</p>
           {% endif %}

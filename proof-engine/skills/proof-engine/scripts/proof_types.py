@@ -71,6 +71,27 @@ class ClaimFormal(TypedDict, total=False):
     # attribution. Omit only when the result is genuinely novel (rare).
     # See template-deductive-theorem.md §"What this template produces".
     attribution: str
+    # Artifact purpose / value-proposition declaration. Distinguishes the
+    # engine's two product surfaces:
+    #   - "fact_verification"        → empirical claim with citations (the bulk
+    #                                   of the corpus; "did X happen, was the
+    #                                   number Y").
+    #   - "computation"              → closed-form math (e.g., 641 | 2^32+1);
+    #                                   the computation IS the proof.
+    #   - "absence_search"           → "no published evidence that..." claims
+    #                                   backed by reproducible search.
+    #   - "consensus_review"         → multi-source qualitative claims.
+    #   - "methodology_demonstration" → theorem-shape artifacts as verifiable
+    #                                   companions to a published result; the
+    #                                   citation target is the framework / the
+    #                                   methodology, NOT the math (cite the
+    #                                   primary source for that). Always paired
+    #                                   with an `attribution` field naming the
+    #                                   primary source.
+    # Optional. When omitted, defaults are inferred from `claim_type` (see
+    # tools/lib/proof_loader.py:default_purpose_for_claim_type) so the existing
+    # corpus continues to work unchanged.
+    purpose: str
 
 
 # ---------------------------------------------------------------------------

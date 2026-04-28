@@ -63,6 +63,7 @@ CLAIM_FORMAL = {
     ),
     "operator": "holds",
     "claim_type": "theorem",
+    "purpose": "methodology_demonstration",
     "attribution": (
         "Monderer & Shapley (1996), \"Potential Games,\" "
         "Games and Economic Behavior 14(1), 124–143"

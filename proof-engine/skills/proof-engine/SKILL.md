@@ -329,6 +329,18 @@ When the notebook is included, `doi.json` gains a `binder_url` field (`https://m
 
 Only omit `attribution` when the result is genuinely novel and you are confident it has not appeared in the literature. This is rare. If you are tempted to use this engine to publish a new mathematical result, prefer submitting a paper first; come back here when you want the published result archived as a verifiable companion.
 
+**Declare `purpose` so the artifact's value-proposition is explicit.** Phase 2 Path 3 of the deductive-theorem plan adds a `CLAIM_FORMAL.purpose` field that names what the artifact actually delivers. Five values:
+
+- **`fact_verification`** — empirical claim with citations (the bulk of the corpus). The artifact's value is verifying the fact; cite the artifact as evidence of the fact-check.
+- **`computation`** — closed-form math; the computation is the proof.
+- **`absence_search`** — "no published evidence that..." claims backed by reproducible search.
+- **`consensus_review`** — multi-source qualitative claims.
+- **`methodology_demonstration`** — theorem-shape artifacts as verifiable companions to a published result. The citation target for the *math* is the cited primary source (`attribution`); the artifact itself is citable only as evidence of the proof-engine framework's behavior on a known theorem. Always paired with `attribution`.
+
+For theorem proofs (`claim_type: "theorem"`), `purpose` should almost always be `methodology_demonstration` — the engine cannot independently establish a "for all" mathematical claim, and the prior reviewer feedback established that artifacts overstating this are correctly rejected. The site renders the purpose label next to the verdict chip so readers see at a glance whether they are looking at a verified empirical claim, a closed-form computation, or a methodology demonstration.
+
+If `purpose` is omitted, it defaults from `claim_type` via [tools/lib/proof_loader.py:default_purpose_for_claim_type](../../tools/lib/proof_loader.py): theorem and open_problem default to `methodology_demonstration`; everything else defaults to `fact_verification`. Set explicitly to override.
+
 See [template-deductive-theorem.md](${CLAUDE_SKILL_DIR}/references/template-deductive-theorem.md) §"What this template produces — and what it does NOT produce" and [Hardening Rule 10](${CLAUDE_SKILL_DIR}/references/hardening-rules.md#rule-10-quantifier-domain-match).
 
 **Threshold guidance for source-counting proofs:** The default `threshold: 3` means 3 independently verified sources must confirm the claim. Never set `threshold: 1` — a single source is not consensus.

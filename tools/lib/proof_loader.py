@@ -28,6 +28,42 @@ REQUIRED_GENERATOR_KEYS = ["name", "version", "repo", "generated_at"]
 REQUIRED_CLAIM_FORMAL_KEYS = []  # claim_formal structure varies by proof type
 
 
+# Default purpose for proofs that don't explicitly declare CLAIM_FORMAL.purpose.
+# Path 3 of the deductive-theorem plan: artifacts now declare their
+# value-proposition explicitly. This mapping lets the existing corpus continue
+# to work unchanged — every proof gets a sensible default — while new proofs
+# can override by setting `purpose` in CLAIM_FORMAL. See proof_types.py for
+# the enumeration of valid purpose values.
+_PURPOSE_DEFAULT_BY_CLAIM_TYPE = {
+    "theorem": "methodology_demonstration",
+    "open_problem": "methodology_demonstration",
+}
+
+
+def default_purpose_for_claim_type(claim_type, has_attribution=False):
+    """Infer the artifact's purpose from claim_type when CLAIM_FORMAL.purpose
+    is not set explicitly. Theorem and open_problem default to
+    methodology_demonstration (especially when attribution is present, which
+    confirms re-exposition status); all other claim types default to
+    fact_verification. The fallback is fact_verification because the bulk of
+    the corpus is empirical-claim verification, which is the engine's primary
+    product surface."""
+    if claim_type in _PURPOSE_DEFAULT_BY_CLAIM_TYPE:
+        return _PURPOSE_DEFAULT_BY_CLAIM_TYPE[claim_type]
+    return "fact_verification"
+
+
+def resolve_purpose(claim_formal):
+    """Return the artifact's purpose, preferring an explicit `purpose` field
+    in claim_formal and falling back to default_purpose_for_claim_type."""
+    explicit = claim_formal.get("purpose")
+    if explicit:
+        return explicit
+    claim_type = claim_formal.get("claim_type", "")
+    has_attribution = bool(claim_formal.get("attribution"))
+    return default_purpose_for_claim_type(claim_type, has_attribution)
+
+
 def extract_source_names(proof_data, max_sources=3):
     """Extract unique source names from v3 evidence map."""
     evidence = proof_data.get("evidence", {})
@@ -230,6 +266,7 @@ def load_proof(proof_dir: Path) -> dict:
         "slug": slug,
         "proof_data": proof_data,
         "format_version": format_version,
+        "purpose": resolve_purpose(proof_data.get("claim_formal", {})),
         "sections_md": sections_md,
         "sections_audit": sections_audit,
         "verdict": verdict,
