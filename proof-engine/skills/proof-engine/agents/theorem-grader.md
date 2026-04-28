@@ -29,9 +29,12 @@ Each item is **PASS / FAIL / N/A** with **specific evidence** (file path, line n
 
 8. `## Theorem statement` states the claim formally with display math and explicit hypotheses. Not a paraphrase or motivational paragraph — the precise statement that `## Proof` discharges.
 9. `## Proof` opens with the deductive argument as numbered steps. The argument is the FIRST content under this heading. No "this was verified computationally on N games" prefatory sentences.
+
+   **Re-exposition heading discipline.** If `CLAIM_FORMAL.attribution` is set (the result is a known theorem from the literature), the section heading must be `## Proof (after <Author Year>)`, not the bare `## Proof`. The bare heading is reserved for genuinely novel claims, which are rare in this engine. A bare `## Proof` heading on a re-exposed result is a FAIL.
 10. `## Corollaries` contains at least one corollary with a stated proposition and a proof sketch (≤ 1 paragraph each). Citing-paper authors quote corollaries; an empty section here defeats the citation purpose.
 11. `## Scope` lists at least 3 explicit "NOT proved" exclusions, each specific (not generic hedging). Typical exclusions for theorem proofs: mixed equilibria, infinite/continuous domains, convergence rates, broader learning dynamics, computational complexity, the converse direction.
 12. `## Relation to prior work` names at least one prior result the theorem relates to (special case of, forward direction of, generalization of) with citation. If the theorem is original to this artifact, that is also acceptable but must be stated explicitly.
+13. **Attribution discipline.** If the result is a known theorem (the common case), `CLAIM_FORMAL.attribution` must be set to a string identifying the primary source (typically `"Author (Year), \"Title,\" Journal vol(issue), pages"`). The `## Conclusion` must attribute the result to that source — phrasings like "established by us" or "we proved" without naming the primary authority are a FAIL. Concretely, the Conclusion should follow the structure: `**PROVED, after <Author Year>.** [One sentence attributing the result to the cited source.] [One sentence about what this artifact contributes — typically a regression-clean implementation and a verifiable presentation.]` If the result is genuinely novel and `attribution` is intentionally omitted, the Conclusion should explicitly state that no prior published version exists; this is a high bar — be specific.
 
 ### Section C — code style (FAIL is a strong recommendation to fix; orchestrator decides whether to block)
 

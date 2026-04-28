@@ -64,6 +64,13 @@ class ClaimFormal(TypedDict, total=False):
     proof_direction: str        # "disprove", "absence"
     # Open problems / theorems
     claim_type: str             # "open_problem", "theorem"
+    # Re-exposition attribution (for theorem proofs of known results).
+    # When set, the artifact is presenting a verifiable companion to a published
+    # result; the primary mathematical authority is the cited source, not this
+    # artifact. The site renders this next to the verdict so readers see the
+    # attribution. Omit only when the result is genuinely novel (rare).
+    # See template-deductive-theorem.md §"What this template produces".
+    attribution: str
 
 
 # ---------------------------------------------------------------------------

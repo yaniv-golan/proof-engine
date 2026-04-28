@@ -10,13 +10,35 @@ For claims that are **universally quantified theorems over an unbounded (or arbi
 
 Computation in these proofs cannot be load-bearing — sampling 10,000 instances does not prove a "for all" claim. Computation here is **regression-only**: it spot-checks the implementation that decided how to *interpret* the deductive argument, never the argument itself.
 
+## What this template produces — and what it does NOT produce
+
+**Read this section first.** A working game-theorist + formal-methods reviewer (2026-04-28) flagged that an earlier framing of theorem proofs in this engine overstated their epistemic status. This template was revised in response. Authors using this template should set expectations correctly:
+
+**What proof-engine theorem artifacts ARE:**
+- Paper-shaped, DOI-archivable, machine-runnable **companions** to a result.
+- Verifiable presentations: the `## Proof` section is a structured re-exposition of an argument; the `## Implementation regression checks` in proof_audit.md spot-check that the code-side detectors (GOP, exact-potential, pure-NE, etc.) match the formal definitions used in the argument.
+- Citation-hygiene tools: when a paper uses a theorem in software, the regression-clean implementation linked to the formalization gives reviewers a place to verify the implementation matches the math.
+
+**What they ARE NOT:**
+- A substitute for citing the primary source. If your claim is a known result (which is the common case in this engine), the **primary citation is the original paper**, not the proof-engine artifact. The artifact's job is to be a verifiable presentation, not a replacement source of authority.
+- A mechanized proof in the formal-methods sense (Lean, Coq, Isabelle). The artifact does not provide machine-checked induction over all instances; it provides bounded model checking + property-based regression testing of the implementation. Sampling cannot establish a "for all" claim, and we do not claim it does.
+- A vehicle for novel mathematical results. If you are tempted to use this template to make a *new* claim that has not appeared in the literature, **stop**. Submit a paper. Come back here when you want the published result archived as a verifiable companion.
+
+**The honest verdict framing.** When the result is a known theorem (the common case):
+- Set `attribution` in `CLAIM_FORMAL` to the primary source (e.g., `"Monderer & Shapley (1996), \"Potential Games,\" Games and Economic Behavior 14(1), 124–143"`). The site renders this prominently next to the verdict.
+- The `## Proof` heading should be `## Proof (after <Author Year>)` to make the re-exposition status visible.
+- The `## Conclusion` should attribute the result to the cited source, not claim that *this artifact* established it.
+- The verdict label remains `PROVED` (the existing taxonomy), but the page reads as "PROVED, after Monderer & Shapley (1996)" rather than "PROVED by us right now."
+
+If your result IS genuinely novel (rare; you should be very sure), omit `attribution`. The artifact then claims the result on its own authority — which is exactly the bar an external reviewer will hold it to. Don't bluff.
+
 If your claim is a finite, closed-form computation (no quantifier over an unbounded domain), use [template-pure-math.md](template-pure-math.md) instead. The "Theorem-shaped claims" adaptation in that file covers boolean theorems whose verification IS the computation; this template is for theorems whose verification is the **prose argument**.
 
 ## Hardening Rule 10 (Quantifier–domain match)
 
 This template is the canonical home for proofs governed by [Rule 10](hardening-rules.md#rule-10-quantifier-domain-match). Follow these structural disciplines or the validator will warn:
 
-1. **Declare `claim_type: "theorem"` in `CLAIM_FORMAL`.** This is what flips the loader from the v2 section profile to the theorem-aware profile, and what the validator's quantifier-domain check looks for.
+1. **Declare `claim_type: "theorem"` in `CLAIM_FORMAL`.** This is what flips the loader from the v2 section profile to the theorem-aware profile, and what the validator's quantifier-domain check looks for. **For re-exposed known results (the common case), also set `attribution`** in `CLAIM_FORMAL` — a string identifying the primary source (e.g., `"Monderer & Shapley (1996), \"Potential Games,\" Games and Economic Behavior 14(1), 124–143"`). The site renders this prominently next to the verdict; without it, the artifact reads as a novel claim and a careful external reviewer will hold it to that bar.
 2. **The deductive argument is the primary evidence.** It lives under `## Proof` in proof.md as numbered steps — see the section list below.
 3. **No sampling counts in proof.md body prose.** Sentences like "We verified this on 3,670 random games" do not belong in `## Proof`, `## Theorem statement`, `## Corollaries`, or `## Scope`. They belong in proof_audit.md, in `## Implementation regression checks`.
 4. **Computation role disclosed in the `method` text of every sampling fact.** Each `add_computed_fact()` call whose method describes sampling (`"sampled"`, `"random"`, `"Monte Carlo"`, etc.) MUST include role-disclosing wording in the same string within ~80 characters of the sampling token. Phrases that qualify: `"Implementation regression"`, `"regression"`, `"sanity check"`, `"spot-check"`. Without one of these, Rule 10 will warn that the sampling fact reads as primary evidence.
@@ -48,6 +70,8 @@ Section-by-section guidance:
 
 - **`## Proof`** — numbered deductive steps. **This is the FIRST major content section** (no `Evidence Summary` precedes it on theorem proofs — citation/computation tables move to proof_audit.md). The argument is the verdict-bearing evidence; treat it as you would the proof body in a textbook. Lemmas can be inlined or cross-referenced, but every step must follow either by definition, by a previously cited result, or by an earlier step. **No sampling counts in this section.** A closing sentence may reference proof_audit.md for implementation regression detail; that is not a sampling count.
 
+  **Heading convention for re-expositions.** When the result is a known theorem (you set `attribution` in `CLAIM_FORMAL`), the section heading should be `## Proof (after <Author Year>)` — e.g., `## Proof (after Monderer & Shapley, 1996)`. This signals to the reader that you are re-presenting an existing argument, not establishing a new result. Only use the bare `## Proof` heading when the proof is genuinely your own (rare; if you're tempted, re-read "What this template produces — and what it does NOT produce" above).
+
 - **`## Corollaries`** — at least one corollary, more if natural. Each corollary has a **statement** and a **one-paragraph proof sketch**. These are the statements that citing-paper authors will quote — invest in them. For the FIP/potential-games template instance, this means at minimum:
   - "Every finite exact-potential game has a pure Nash equilibrium."
   - "Every better-response path in a finite GOP game terminates in finitely many steps."
@@ -59,6 +83,11 @@ Section-by-section guidance:
 - **`## What could challenge this verdict?`** — existing convention; stays. Adversarial checks documented as prose; if a reader could imagine a hole in the argument or in the formalization, address it here.
 
 - **`## Conclusion`** — keep non-empty. Lead with `**PROVED.**` or another verdict prefix on its own line. The verdict-summary extractor (`tools/lib/proof_loader.py:50-68`'s `extract_verdict_summary()`) reads this section to populate cards, JSON-LD, and listing pages — an empty or fallback-shaped Conclusion will produce a fallback card on every aggregate surface.
+
+  **Conclusion attribution discipline for re-expositions.** When `attribution` is set in `CLAIM_FORMAL`, the Conclusion must attribute the result to the cited source — not claim that *this artifact* established it. The structure is roughly: `**PROVED.** [One-sentence attribution to the primary source.] [One sentence about what this artifact contributes — typically a regression-clean implementation and a verifiable presentation of the cited argument.]` Concrete example for a Monderer & Shapley re-exposition:
+  > **PROVED, after Monderer & Shapley (1996).** Theorem (A) follows from their Lemmas 2.3 + 2.5; Theorem (B) is their Lemma 4.2 specialized. This artifact is a verifiable companion to the published result: it presents the deductive argument with the canonical structure used in this engine, and the implementation regression checks confirm that our GOP, exact-potential, and pure-NE detectors agree with the formal definitions on a sampled-and-constructive test suite. The mathematical authority is the cited source; this artifact is a runnable, DOI-archivable presentation of it.
+
+  This is the framing that resolves the "uncanny valley" critique an external reviewer raised: the artifact is not claiming to be the formal proof of a known theorem, and it is not claiming to substitute for citing Monderer & Shapley. It is claiming to be a verifiable companion, which is a coherent and useful thing to be.
 
 ## Sampling moves to proof_audit.md
 

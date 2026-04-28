@@ -537,6 +537,26 @@ def render_proof_sections(sections, tooltips=None):
     if tooltips:
         rendered = {name: add_fact_tooltips(html, tooltips)
                     for name, html in rendered.items()}
+    # Add parenthetical-stripped aliases so templates can look up canonical
+    # heading names even when the author wrote a parenthetical suffix
+    # (e.g., "Proof (After Monderer & Shapley, 1996)" → also accessible as
+    # "Proof"). Mirrors the loader's section-validation behavior in
+    # tools/lib/section_extractor.py:validate_required_sections.
+    #
+    # The alias's content is the same HTML, but we ALSO record the original
+    # heading text under "<canonical>__heading" so templates can render the
+    # actual heading-as-written (e.g., "Proof (After Monderer & Shapley,
+    # 1996)") instead of the bare canonical name. Templates that don't
+    # consult __heading fall back to the canonical key with no behavior
+    # change.
+    paren_re = re.compile(r"\s*\(.*\)\s*$")
+    aliases = {}
+    for name, html in rendered.items():
+        base = paren_re.sub("", name).strip()
+        if base and base != name and base not in rendered:
+            aliases[base] = html
+            aliases[f"{base}__heading"] = name
+    rendered.update(aliases)
     return rendered
 
 

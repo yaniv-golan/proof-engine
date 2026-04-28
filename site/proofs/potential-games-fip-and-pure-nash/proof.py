@@ -63,19 +63,25 @@ CLAIM_FORMAL = {
     ),
     "operator": "holds",
     "claim_type": "theorem",
+    "attribution": (
+        "Monderer & Shapley (1996), \"Potential Games,\" "
+        "Games and Economic Behavior 14(1), 124–143"
+    ),
     "operator_note": (
         "Universally quantified over the (unbounded) class of finite "
         "strategic-form games, separately under each potential hypothesis. "
-        "Both parts are established by the deductive argument in proof.md's "
-        "`## Proof` section: Part A follows from the strict monotonicity of "
-        "the GOP along better-response edges (no profile can repeat in a "
-        "better-response path, so paths terminate at a profile with no "
-        "improving deviation, which is by definition a pure NE); Part B "
-        "follows because at a global maximizer no deviation can strictly "
-        "increase the exact potential, hence by exactness no deviation can "
-        "strictly increase any player's payoff. The computations below are "
-        "implementation regression checks; they cannot establish either "
-        "part — sampling cannot prove a 'for all' claim."
+        "Both parts are established by the deductive argument of Monderer & "
+        "Shapley (1996) — Theorem (A) follows their Lemmas 2.3 + 2.5 (strict "
+        "monotonicity of the GOP along better-response edges + finiteness of "
+        "the strategy space → no profile can repeat → paths terminate at a "
+        "pure NE), and Theorem (B) is their Lemma 4.2 specialized (at a "
+        "global maximizer of the exact potential, by exactness no deviation "
+        "can strictly increase any player's payoff). The deductive argument "
+        "in proof.md's `## Proof (after Monderer & Shapley, 1996)` section "
+        "is a re-exposition of their published proof; this artifact is a "
+        "verifiable companion, not a substitute for citing the primary "
+        "source. The computations are implementation regression checks; "
+        "they cannot establish a 'for all' claim and we do not claim they do."
     ),
 }
 

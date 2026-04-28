@@ -2,9 +2,9 @@
 
 ## Verdict
 
-**Verdict: PROVED**
+**Verdict: PROVED, after Monderer & Shapley (1996)**
 
-Both halves of this two-part theorem are established by a short, classical deductive argument. Game theorists have used this result since 1996; here it is written out cleanly with a re-runnable companion that cross-checks the supporting code.
+Both halves of this two-part theorem are theorems of <!-- not-a-citation-start -->Monderer & Shapley (1996), "Potential Games," *Games and Economic Behavior* 14(1), 124–143<!-- not-a-citation-end --> — Theorem (A) follows their Lemmas 2.3 + 2.5, and Theorem (B) is their Lemma 4.2 specialized. This artifact does not establish the result independently; it is a verifiable companion that re-presents the cited argument and regression-tests the implementation. A paper using these results should cite the primary source above.
 
 ## What Was Claimed?
 

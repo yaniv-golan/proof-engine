@@ -93,6 +93,8 @@
     <div class="sb-stamp {{ ns.vc_color }}">{{ proof.verdict.raw }}</div>
     {% if proof.verdict.qualifier %}
     <div class="sb-q-small">{{ proof.verdict.qualifier }}</div>
+    {% elif claim_formal.attribution %}
+    <div class="sb-q-small">after {{ claim_formal.attribution }}</div>
     {% elif citation_summary and citation_summary.flagged %}
     <div class="sb-q-small">{{ citation_summary.flagged | length }} citation{{ 's' if citation_summary.flagged | length != 1 }} unverified</div>
     {% endif %}
@@ -197,7 +199,7 @@
           <div class="proof-panel-body reader-prose">
             {% for key in theorem_section_keys %}
               {% if rendered_sections_md.get(key) %}
-              <h2 class="section-heading">{{ key }}</h2>
+              <h2 class="section-heading">{{ rendered_sections_md.get(key ~ "__heading", key) }}</h2>
               <div class="proof-content">{{ rendered_sections_md[key] | safe }}</div>
               {% endif %}
             {% endfor %}
@@ -316,7 +318,11 @@
         </div>
         {% else %}
         {% if claim_formal.claim_type == "theorem" %}
+          {% if claim_formal.attribution %}
+        <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;">No empirical citations — verdict established by the deductive argument of <strong>{{ claim_formal.attribution }}</strong>. This artifact is a verifiable companion: it re-presents the cited argument and regression-tests the implementation. The mathematical authority is the cited source, not this artifact.</p>
+          {% else %}
         <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;">No empirical citations — verdict established by deductive argument; computational checks regression-test the implementation.</p>
+          {% endif %}
         {% else %}
         <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;">No empirical citations — verdict established by computation.</p>
         {% endif %}
