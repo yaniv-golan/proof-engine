@@ -277,8 +277,24 @@ _TITLE_RE = re.compile(r"<title>([^<]+)</title>", re.IGNORECASE)
 
 def _resolve_url(value: str, http=None) -> ResolvedReference:
     http = http or requests
-    resp = _fetch_with_retry(http, value)
-    html = resp.text
+    source_api = "og_extraction"
+    try:
+        resp = _fetch_with_retry(http, value)
+        html = resp.text
+    except Exception as live_err:
+        # Some publishers (university WAFs, Cloudflare-bot rules) block
+        # programmatic fetches outright. Fall back to the Wayback Machine —
+        # the same fallback proof-citations uses for verify_citations.
+        wb_url = f"https://web.archive.org/web/{value}"
+        try:
+            resp = http.get(wb_url, timeout=20,
+                            headers={"User-Agent": "proof-engine/1.0"},
+                            allow_redirects=True)
+            resp.raise_for_status()
+            html = resp.text
+            source_api = "og_extraction_wayback"
+        except Exception:
+            raise live_err
     title = (_OG_RE.search(html) or _TITLE_RE.search(html))
     title_str = title.group(1).strip() if title else value
     authors = [a.strip() for a in _OG_AUTHOR_RE.findall(html) if a.strip()]
@@ -292,7 +308,7 @@ def _resolve_url(value: str, http=None) -> ResolvedReference:
         identifier_type="url", identifier_value=value,
         canonical_url=value, title=title_str, authors=authors,
         year=year, venue=None, version=None, resolved_at=_now_iso(),
-        source_api="og_extraction", raw={"html_len": len(html)},
+        source_api=source_api, raw={"html_len": len(html)},
     )
 
 
