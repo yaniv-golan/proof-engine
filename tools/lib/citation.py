@@ -45,7 +45,9 @@ def build_citation_context(
     else:
         verdict_str = verdict
     verdict_display = verdict_str.capitalize() if verdict_str else ""
-    title = f'Claim Verification: \u201c{claim}\u201d \u2014 {verdict_display}'
+    claim_type = proof_data.get("claim_formal", {}).get("claim_type")
+    title_prefix = "Deductive Proof" if claim_type == "theorem" else "Claim Verification"
+    title = f'{title_prefix}: \u201c{claim}\u201d \u2014 {verdict_display}'
     slug_sanitized = slug.replace("-", "_")
 
     doi = None

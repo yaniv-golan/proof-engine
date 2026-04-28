@@ -114,7 +114,13 @@ def load_proof(proof_dir: Path) -> dict:
 
     # Use the original format version (not the normalized one) for section validation,
     # since v1 proofs don't have the same required sections as v2+.
-    profile = "v2" if original_format_version >= 2 else "v1"
+    # claim_type == "theorem" dispatches to the v2_theorem profile (paper-shaped
+    # canonical theorem-proof sections); see proof_format_schema.json.
+    claim_type = proof_data.get("claim_formal", {}).get("claim_type")
+    profile = (
+        "v2_theorem" if claim_type == "theorem"
+        else ("v2" if original_format_version >= 2 else "v1")
+    )
     required_md = _FORMAT_SCHEMA["proof_md"][profile]["required"]
     optional_md = _FORMAT_SCHEMA["proof_md"][profile].get("optional", [])
     required_audit = _FORMAT_SCHEMA["proof_audit_md"][profile]["required"]

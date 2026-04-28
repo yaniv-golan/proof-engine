@@ -1,31 +1,42 @@
-# Proof Narrative: Potential Games — Generalized Ordinal Potential and Exact Potential Theorems
+# Proof Narrative: Generalized ordinal potentials imply FIP and a pure NE; exact-potential maximizers are pure Nash equilibria
 
 ## Verdict
 
 **Verdict: PROVED**
 
-Both fundamental theorems about potential games hold: ordinal potentials guarantee convergence and equilibrium existence, and exact potentials turn optimization into equilibrium-finding.
+Both halves of this two-part theorem are established by a short, classical deductive argument. Game theorists have used this result since 1996; here it is written out cleanly with a re-runnable companion that cross-checks the supporting code.
 
 ## What Was Claimed?
 
-In game theory, a "potential game" is one where the incentives of all players can be captured by a single global function. The claim makes two assertions about such games. First, if a game has a generalized ordinal potential — a function that goes up whenever any player makes an improving move — then the game can never cycle through improving moves forever, and it must have a stable state (a pure Nash equilibrium) where nobody wants to change their strategy. Second, if the game has an exact potential — where the potential change precisely matches each player's utility change — then simply maximizing the potential function directly finds a Nash equilibrium.
+The claim concerns *strategic games* — situations in which several decision-makers each pick an action and each one's payoff depends on what everybody chose. The claim has two parts.
 
-These results matter because they connect individual strategic behavior to a global optimization problem. If you can identify the potential function, you can analyze equilibria without reasoning about each player separately — a major simplification used throughout economics, engineering, and computer science.
+Part (A) starts from a structural condition called a *generalized ordinal potential*: a single bookkeeping function over the joint outcomes such that whenever any player can switch to a strictly better personal payoff, the bookkeeping value goes up. Whenever a game admits such a function, the claim says three things follow at once: any sequence of one-player-at-a-time improvements must eventually stop; the game has the so-called "finite improvement property"; and there is at least one outcome from which nobody wants to deviate — a pure Nash equilibrium.
+
+Part (B) strengthens the bookkeeping. If the bookkeeping function tracks payoff changes *exactly* — every personal payoff change equals the corresponding bookkeeping change — then any outcome where the bookkeeping is at its highest is automatically an equilibrium. Ties at the top all qualify.
+
+This matters because pure equilibria are notoriously hard to guarantee in arbitrary games. The potential-function machinery provides one of the cleanest sufficient conditions for the easier, more interpretable pure case, and it covers a large practical class including congestion games on roads, networks, and resource pools.
 
 ## What Did We Find?
 
-The proof verified both claims through a combination of logical deduction and exhaustive computational testing.
+The argument for Part (A) is a one-paragraph induction on path length. Whenever a player switches to a strictly better personal payoff, the potential function strictly increases. Strictly increasing means it cannot revisit a value, so it cannot revisit an outcome. With only finitely many outcomes available, the sequence has to stop. Wherever it stops, by definition no player has a strictly profitable switch — exactly the meaning of pure Nash equilibrium. The three conclusions of Part (A) all fall out of this single observation.
 
-For the first claim, the argument is elegantly simple. Every time a player makes an improving move, the potential function strictly increases. Since a finite game has finitely many strategy profiles, the potential can only take finitely many values. A strictly increasing sequence drawn from a finite set must eventually stop — it cannot cycle or go on forever. When it stops, no player can improve, which is exactly the definition of a Nash equilibrium.
+The argument for Part (B) is even shorter. At an outcome where the bookkeeping is at its highest, no neighboring outcome can have higher bookkeeping by definition. With *exact* bookkeeping, any single-player switch would change a personal payoff by exactly the same amount the bookkeeping changes — so no switch can strictly increase a payoff. That is the definition of equilibrium, and the argument never needed uniqueness, so ties don't break it.
 
-For the second claim, the reasoning is even more direct. If the potential is at its global maximum, no change to any single player's strategy can push it higher. But the exact potential property says that every player's utility change equals the potential change. So no player can increase their own utility either — the maximum of the potential is automatically a Nash equilibrium.
+We also examined four ways the argument could quietly go wrong. The reliance on finiteness is explicit, not hidden. The two phrasings "every better-response path is finite" and "the finite improvement property" name the same property, so the redundancy in the original claim is harmless. The Part (B) argument never assumed a unique maximum. Our formalization of the potential conditions matches the standard textbook one.
 
-To back up the logical arguments, the proof computationally verified both claims on over 70,000 randomly generated games of various sizes, plus specific well-known games including congestion games and the Prisoner's Dilemma. Not a single violation was found. Every game with a valid generalized ordinal potential had the finite improvement property and at least one pure Nash equilibrium. Every global maximizer of an exact potential was confirmed to be a Nash equilibrium.
+The companion script implements the relevant detectors and runs them on a hand-built example for each part, then on hundreds of random small games as a code-health check. Everything came back consistent. None of that establishes the theorem (sampling cannot prove a "for all" statement), but it confirms the supporting code does not silently disagree with the formal definitions used in the argument.
 
 ## What Should You Keep In Mind?
 
-The claims are about finite games only — infinite strategy spaces require different treatment. The results guarantee existence of pure Nash equilibria but say nothing about how quickly a better-response path converges (the bound is the total number of strategy profiles, which can be exponentially large). The generalized ordinal potential result applies to better-response paths, not best-response paths specifically — though best-response is a special case. Finally, these theorems tell you what happens when a potential exists, but determining whether a given game admits a potential is a separate question.
+The result is a *sufficient* condition: when a potential exists, equilibria exist. It says nothing about games that lack a potential, and nothing about *finding* an equilibrium efficiently — that question (the complexity of computing a pure equilibrium even when one is known to exist) is a separate, well-known harder problem.
+
+Both halves require finiteness. Infinite or continuous strategy spaces — common in models with prices or quantities — need additional assumptions and the conclusion can fail without them. The result also does not address mixed equilibria, learning dynamics other than naive better-response, or convergence rates beyond the worst-case bound that path length is at most the number of outcomes minus one.
+
+Finally, the result is foundational, not novel. It is the forward direction of an "if and only if" theorem in the canonical 1996 reference; the converse (FIP implies a generalized ordinal potential exists) is in the same paper but is not addressed here.
 
 ## How Was This Verified?
 
-The proof was constructed as a self-contained Python script that implements game-theoretic definitions from scratch, tests them exhaustively on randomly generated and analytically constructed games, and outputs a machine-checkable verdict. For the full logical argument with cross-references to each verification step, see [the structured proof report](proof.md). For complete computation traces and quality checks, see [the full verification audit](proof_audit.md). To reproduce everything independently, [re-run the proof yourself](proof.py).
+The proof is a deductive argument written out as numbered steps; it stands on its own without computation. A re-runnable Python script implements the detectors and a better-response simulator, runs them on a constructive example and a random-sample sweep as a code-health check, and emits a structured proof summary. See [the structured proof report](proof.md), [the full verification audit](proof_audit.md), or [re-run the proof yourself](proof.py).
+
+---
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.33.2 on 2026-04-28.

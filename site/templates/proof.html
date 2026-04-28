@@ -177,6 +177,44 @@
           {% endif %}
         </div>
       </div>
+
+      {# ── Proof body sections from proof.md (universal: renders deductive
+           argument across all claim types). Theorem proofs surface the
+           canonical theorem section list; non-theorem proofs surface the
+           Proof Logic section. Sections already routed elsewhere on the page
+           (Evidence Summary, Counter-Evidence Search, Claim Interpretation,
+           Conclusion) are deliberately excluded here to avoid double-render.
+      #}
+      {% if claim_formal.claim_type == "theorem" %}
+        {% set theorem_section_keys = ["Theorem Statement", "Proof", "Corollaries", "Scope", "Relation To Prior Work"] %}
+        {% set ns_pb = namespace(has_body=false) %}
+        {% for key in theorem_section_keys %}
+          {% if rendered_sections_md.get(key) %}{% set ns_pb.has_body = true %}{% endif %}
+        {% endfor %}
+        {% if ns_pb.has_body %}
+        <div class="proof-panel">
+          <div class="proof-panel-head"><span class="proof-panel-dot"></span>proof</div>
+          <div class="proof-panel-body reader-prose">
+            {% for key in theorem_section_keys %}
+              {% if rendered_sections_md.get(key) %}
+              <h2 class="section-heading">{{ key }}</h2>
+              <div class="proof-content">{{ rendered_sections_md[key] | safe }}</div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      {% else %}
+        {% if rendered_sections_md.get("Proof Logic") %}
+        <div class="proof-panel">
+          <div class="proof-panel-head"><span class="proof-panel-dot"></span>argument</div>
+          <div class="proof-panel-body reader-prose">
+            <h2 class="section-heading">Proof Logic</h2>
+            <div class="proof-content">{{ rendered_sections_md["Proof Logic"] | safe }}</div>
+          </div>
+        </div>
+        {% endif %}
+      {% endif %}
     </div>
 
     {# ── INSPECTOR mode: split pane ───────────────────────────────────────── #}
@@ -222,7 +260,7 @@
     <div class="proof-panel">
       <div class="proof-tabs" id="proof-tabs">
         <button class="proof-tab active" data-tab="ledger">
-          evidence ledger{% if citations %} <span class="ct">{{ citations | length }}</span>{% endif %}
+          {% if claim_formal.claim_type == "theorem" and not citations %}argument{% else %}evidence ledger{% endif %}{% if citations %} <span class="ct">{{ citations | length }}</span>{% endif %}
         </button>
         {% if adv_checks %}
         <button class="proof-tab" data-tab="adv">
@@ -277,7 +315,11 @@
           {% endfor %}
         </div>
         {% else %}
+        {% if claim_formal.claim_type == "theorem" %}
+        <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;">No empirical citations — verdict established by deductive argument; computational checks regression-test the implementation.</p>
+        {% else %}
         <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;">No empirical citations — verdict established by computation.</p>
+        {% endif %}
         {% endif %}
       </div>
 
@@ -752,10 +794,18 @@
   </summary>
   <div class="proof-source-body">
     <p class="proof-source-intro">
-      {% if citation and citation.doi %}
-      This is the exact <code>proof.py</code> that was deposited to Zenodo and runs when you re-execute via Binder. Every fact in the verdict above traces to code below.
+      {% if claim_formal.claim_type == "theorem" %}
+        {% if citation and citation.doi %}
+        This is the exact <code>proof.py</code> that was deposited to Zenodo and runs when you re-execute via Binder. The <code>proof.py</code> is a regression check on the implementation; the verdict above is established by the deductive argument shown earlier on this page, not by re-executing this code.
+        {% else %}
+        This is the <code>proof.py</code> that produced the verdict above. The <code>proof.py</code> is a regression check on the implementation; the verdict above is established by the deductive argument shown earlier on this page, not by re-executing this code. (This proof has not yet been minted to Zenodo; the source here is the working copy from this repository.)
+        {% endif %}
       {% else %}
-      This is the <code>proof.py</code> that produced the verdict above. Every fact traces to code below. (This proof has not yet been minted to Zenodo; the source here is the working copy from this repository.)
+        {% if citation and citation.doi %}
+        This is the exact <code>proof.py</code> that was deposited to Zenodo and runs when you re-execute via Binder. Every fact in the verdict above traces to code below.
+        {% else %}
+        This is the <code>proof.py</code> that produced the verdict above. Every fact traces to code below. (This proof has not yet been minted to Zenodo; the source here is the working copy from this repository.)
+        {% endif %}
       {% endif %}
     </p>
     {{ proof.proof_py_html | safe }}
@@ -770,6 +820,26 @@
 {# Rerun section #}
 {% if citation and citation.binder_url %}
 <section class="rerun-section" id="rerun">
+  {% if claim_formal.claim_type == "theorem" %}
+  <h2 class="section-heading">Re-run the regression checks</h2>
+  <p class="rerun-intro">
+    Re-running this <code>proof.py</code> exercises the implementation regression checks (sampling, exhaustive small-case verification, etc.) but does NOT re-establish the verdict — that follows from the deductive argument above. The Binder re-run is useful for verifying that the regression code itself still passes.
+  </p>
+  {% if citation.doi %}
+  <p>Re-run the exact bytes deposited at Zenodo.</p>
+  {% else %}
+  <p>Re-run from GitHub commit <code>{{ citation.commit_sha[:7] }}</code> — same bytes shown above.</p>
+  {% endif %}
+  <a href="{{ citation.binder_url }}" class="rerun-cta" rel="nofollow noopener" target="_blank"
+     onclick="gtag('event','launch',{target:'binder',proof_slug:'{{ proof.slug }}'})">
+    <span class="rerun-cta-icon">▶</span>
+    <span class="rerun-cta-label">
+      <span class="rerun-cta-title">Run regression checks in Binder</span>
+      <span class="rerun-cta-desc">runs in your browser · ~60s · no install</span>
+    </span>
+  </a>
+  <p class="rerun-note">First run takes longer while Binder builds the container image; subsequent runs are cached.</p>
+  {% else %}
   <h2 class="section-heading">Re-execute this proof</h2>
   <p class="rerun-intro">
     The verdict above is cached from when this proof was minted. To re-run the exact
@@ -790,6 +860,7 @@
     </span>
   </a>
   <p class="rerun-note">First run takes longer while Binder builds the container image; subsequent runs are cached.</p>
+  {% endif %}
 </section>
 {% endif %}
 
@@ -799,7 +870,11 @@
   <a href="{{ base_url }}proofs/{{ proof.slug }}/proof.ipynb" class="format-card" download onclick="gtag('event','download',{file_type:'notebook',proof_slug:'{{ proof.slug }}'})">
     <span class="format-icon">⬡</span>
     <span class="format-name">Jupyter Notebook</span>
+    {% if claim_formal.claim_type == "theorem" %}
+    <span class="format-desc">re-runs implementation regression checks</span>
+    {% else %}
     <span class="format-desc">interactive re-verification</span>
+    {% endif %}
   </a>
   <a href="{{ base_url }}proofs/{{ proof.slug }}/provenance.json" class="format-card" download onclick="gtag('event','download',{file_type:'prov_json',proof_slug:'{{ proof.slug }}'})">
     <span class="format-icon">⟳</span>

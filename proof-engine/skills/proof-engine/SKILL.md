@@ -106,6 +106,7 @@ Read these on demand, not all upfront.
 | [research-workflow.md](${CLAUDE_SKILL_DIR}/references/research-workflow.md) | **Step 2** — recency check, academic-paper deep dives, snapshot pre-fetching, quote harvesting, verify-as-you-go |
 | [output-specs.md](${CLAUDE_SKILL_DIR}/references/output-specs.md) | **Step 5** — proof.md, proof_audit.md, and proof_narrative.md structure |
 | [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md) | **Step 7** — before presenting results |
+| [agents/theorem-grader.md](${CLAUDE_SKILL_DIR}/agents/theorem-grader.md) | **Step 7** — spawn-as-subagent prompt; required for `claim_type: "theorem"`, never for other claim types |
 | [advanced-patterns.md](${CLAUDE_SKILL_DIR}/references/advanced-patterns.md) | When encountering complex quotes or table-sourced data |
 | [environment-and-sources.md](${CLAUDE_SKILL_DIR}/references/environment-and-sources.md) | When facing fetch failures, paywalls, or .gov 403s |
 
@@ -143,7 +144,7 @@ The `agents/openai.yaml` file in this skill directory is a small UX adapter for 
 
 **Every proof has three parts**: (1) Fact Registry — numbered facts tagged Type A, B, or S, (2) Proof Logic — a self-contained Python script, (3) Verdict — one of the levels below.
 
-## The 9 Hardening Rules
+## The 10 Hardening Rules
 
 | Rule | Closes failure mode | Enforced by |
 |------|-------------------|-------------|
@@ -156,6 +157,7 @@ The `agents/openai.yaml` file in this skill directory is a small UX adapter for 
 | 7. Never hard-code constants/formulas | LLM misremembers values | `scripts/computations.py` |
 | 8. Evidence relevance for rejection | Weak/off-subject rejection sources | `adversarial_checks` documentation |
 | 9. Prose references mechanically resolvable | Hand-typed attribution hallucinations; raw tokens archived | `tools/lib/reference_resolver.py` + `prose_reference_scan.py` + `cite-expand` |
+| 10. Quantifier–domain match | Sampling treated as load-bearing evidence for "for all" claims | `claim_type: "theorem"` + `template-deductive-theorem.md` + `validate_proof.py` regression-role check |
 
 See [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for detailed examples of each.
 
@@ -163,6 +165,8 @@ See [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for 
 
 ### Step 1: Analyze the Claim
 Classify: mathematical (Type A), empirical (Type B), or mixed. Identify ambiguous terms. Determine what constitutes proof AND disproof. For compound claims (X AND Y, X BECAUSE Y), decompose into sub-claims. Write a brief proof strategy and share with the user before proceeding.
+
+**Deductive theorems are a distinct branch.** If the claim is universally quantified over an unbounded (or arbitrarily-finite) domain — phrasings like *"every finite ..."*, *"for all finite-strategy ..."*, *"Let G be a finite ..."* — then sampling cannot be load-bearing; the verdict has to come from a deductive argument. Use [template-deductive-theorem.md](${CLAUDE_SKILL_DIR}/references/template-deductive-theorem.md) and declare `claim_type: "theorem"` in `CLAIM_FORMAL`. See also [Hardening Rule 10](${CLAUDE_SKILL_DIR}/references/hardening-rules.md#rule-10-quantifier-domain-match).
 
 If the claim is an opinion or has no verifiable answer, do NOT attempt a proof. Offer a related factual claim instead.
 
@@ -268,6 +272,21 @@ Do not skip this step. The difference between `PROVED` and `PROVED (with unverif
 ### Step 7: Self-Critique
 Before presenting results, run through the checklist in [self-critique-checklist.md](${CLAUDE_SKILL_DIR}/references/self-critique-checklist.md).
 
+**Strict rule for theorem proofs.** When `CLAIM_FORMAL.claim_type == "theorem"`, this inline checklist is necessary but not sufficient — author self-blindness on prose and code style is documented (an external reviewer caught chatty/exploratory comments that the author and inline self-critique both missed). After completing the inline checklist, the grader rubric in [agents/theorem-grader.md](${CLAUDE_SKILL_DIR}/agents/theorem-grader.md) MUST be applied to the artifact, in one of two ways:
+
+**Path 1 (preferred): grader as a separate subagent.** If a subagent dispatcher is available in your host (the `Agent` or `Task` tool), spawn a fresh general-purpose subagent with the grader prompt:
+- **Subagent type:** general-purpose.
+- **Prompt:** point the subagent at [agents/theorem-grader.md](${CLAUDE_SKILL_DIR}/agents/theorem-grader.md) plus the absolute path to the proof's working directory; tell them to read the grader prompt and return its structured report verbatim.
+- **What to do with the report:** if the subagent returns FAIL on any Section A or Section B item, fix the failures and re-spawn the grader to confirm. Section C failures are strong recommendations to fix. Section D is advisory.
+
+**Path 2 (fallback): grader inline.** If your host does not expose a subagent dispatcher (e.g., you are yourself running as a subagent and recursive dispatch is restricted, or the grader-rubric environment is constrained), execute the grader rubric inline against the artifact, with the same evidence-and-remediation discipline. State at the start of your inline grading that a subagent was unavailable. The rubric still applies; only the dispatch mechanism changes.
+
+The strict rule is: **the grader rubric is applied for every theorem proof, no exceptions.** Whether it runs in a separate subagent or inline depends on host capabilities, not on author judgment. Path 1 is preferred because it gives the grader fresh context and reduces author self-rationalization; Path 2 is the legitimate fallback when Path 1 is unavailable, not when the author thinks the artifact looks fine.
+
+For ANY OTHER value of `claim_type` (`"open_problem"`, `"compound_empirical"`, absent, etc.), do NOT apply the grader rubric. The inline self-critique checklist is sufficient. The grader exists specifically because canonical-citation-target theorems have a higher polish bar that author self-review reliably misses; for empirical/computation/absence proofs the inline checks are well-defined and a separate grader pass adds no marginal signal.
+
+This is a strict IF/ELSE on `claim_type`, not a judgment call: theorem → always apply the grader rubric; everything else → never.
+
 ## Publishing
 
 After a proof passes validation, it can be published to the site and archived as a citable research object.
@@ -303,6 +322,8 @@ When the notebook is included, `doi.json` gains a `binder_url` field (`https://m
 | **DISPROVED (with unverified citations)** | Counterexample found but some citations couldn't be fetched |
 | **PARTIALLY VERIFIED** | Some sub-claims met threshold, others did not — Conclusion states whether each failing SC lacked evidence or was contradicted |
 | **UNDETERMINED** | Insufficient evidence either way |
+
+**Verdict establishment for deductive theorems (`claim_type: "theorem"`):** When `CLAIM_FORMAL.claim_type == "theorem"`, the verdict is established by the deductive argument written in proof.md's `## Proof` section, not by computation. Computational checks attached to a theorem proof are *implementation regression checks* — they spot-check the code that decides whether a given instance satisfies the formal hypotheses, not the theorem itself. Do not frame the verdict as "PROVED via computation" for theorem proofs; the framing is "PROVED by deduction; the implementation is regression-checked." See [template-deductive-theorem.md](${CLAUDE_SKILL_DIR}/references/template-deductive-theorem.md) and [Hardening Rule 10](${CLAUDE_SKILL_DIR}/references/hardening-rules.md#rule-10-quantifier-domain-match).
 
 **Threshold guidance for source-counting proofs:** The default `threshold: 3` means 3 independently verified sources must confirm the claim. Never set `threshold: 1` — a single source is not consensus.
 

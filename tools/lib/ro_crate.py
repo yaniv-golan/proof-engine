@@ -1,5 +1,7 @@
 """Generate RO-Crate 1.1 metadata for a proof."""
 
+import copy
+
 FILE_TYPES = {
     "proof.py": {"@type": "SoftwareSourceCode", "name": "Verification Script",
                  "description": "Re-runnable Python script that verifies the claim",
@@ -25,6 +27,51 @@ FILE_TYPES = {
                     "encodingFormat": "application/x-ipynb+json", "programmingLanguage": "Python"},
 }
 
+# Theorem-aware overrides for FILE_TYPES. Each entry may override `description`
+# and/or `name`; @type/encodingFormat/programmingLanguage stay stable across
+# claim types. proof_narrative.md is intentionally absent — its description is
+# already claim-type-neutral.
+_THEOREM_OVERRIDES = {
+    "proof.py": {
+        "name": "Regression Script",
+        "description": "Implementation regression script; the deductive proof is in proof.md",
+    },
+    "proof.json": {
+        "description": "Machine-readable structured data for the deductive proof",
+    },
+    "proof.md": {
+        "description": (
+            "Structured deductive proof with theorem statement, proof, "
+            "corollaries, scope, and relation to prior work"
+        ),
+    },
+    "proof_audit.md": {
+        "name": "Audit Trail",
+        "description": (
+            "Audit trail with computation traces, implementation regression "
+            "checks, and adversarial checks"
+        ),
+    },
+    "provenance.json": {
+        "description": "W3C PROV-JSON provenance chain",
+    },
+    "proof.ipynb": {
+        "description": "Jupyter Notebook (re-runs implementation regression checks)",
+    },
+}
+
+
+def get_file_types(claim_type: str | None = None) -> dict:
+    """Return the FILE_TYPES dict, with theorem-aware overrides applied when
+    claim_type == "theorem". Returns a deep copy so callers can mutate the
+    result freely without affecting the module-level dict."""
+    types = copy.deepcopy(FILE_TYPES)
+    if claim_type == "theorem":
+        for filename, overrides in _THEOREM_OVERRIDES.items():
+            if filename in types:
+                types[filename].update(overrides)
+    return types
+
 
 def generate_ro_crate(proof_data: dict, slug: str, canonical_url: str,
                       available_files: list[str], doi: str | None = None,
@@ -33,6 +80,9 @@ def generate_ro_crate(proof_data: dict, slug: str, canonical_url: str,
     verdict_str = verdict.get("value", "") if isinstance(verdict, dict) else verdict
     generator = proof_data.get("generator", {})
     claim = proof_data.get("claim_natural", "")
+    claim_type = proof_data.get("claim_formal", {}).get("claim_type")
+    is_theorem = claim_type == "theorem"
+    file_types = get_file_types(claim_type)
 
     graph = []
 
@@ -41,9 +91,13 @@ def generate_ro_crate(proof_data: dict, slug: str, canonical_url: str,
                   "about": {"@id": "./"}, "conformsTo": {"@id": "https://w3id.org/ro/crate/1.1"}})
 
     # Root dataset
-    parts = [{"@id": f} for f in available_files if f in FILE_TYPES]
+    parts = [{"@id": f} for f in available_files if f in file_types]
+    if is_theorem:
+        root_description = f"Deductive proof of: {claim}. Verdict: {verdict_str}."
+    else:
+        root_description = f"Verification of: {claim}. Verdict: {verdict_str}."
     root = {"@id": "./", "@type": "Dataset", "name": f"Proof: {claim}",
-            "description": f"Verification of: {claim}. Verdict: {verdict_str}.",
+            "description": root_description,
             "datePublished": generator.get("generated_at", ""),
             "license": {"@id": "https://opensource.org/licenses/MIT"},
             "url": canonical_url, "hasPart": parts,
@@ -57,8 +111,8 @@ def generate_ro_crate(proof_data: dict, slug: str, canonical_url: str,
 
     # File entries
     for filename in available_files:
-        if filename in FILE_TYPES:
-            graph.append({"@id": filename, **FILE_TYPES[filename]})
+        if filename in file_types:
+            graph.append({"@id": filename, **file_types[filename]})
 
     # Creator
     graph.append({"@id": "#proof-engine", "@type": "SoftwareApplication",

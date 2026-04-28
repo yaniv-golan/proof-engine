@@ -2,96 +2,62 @@
   "format_version": 3,
   "claim_natural": "Let G be a finite strategic-form game. (A) If G admits a generalized ordinal potential P, then every better-response path is finite, G has the finite improvement property, and G admits a pure Nash equilibrium. (B) If G admits an exact potential P, then every global maximizer of P is a pure Nash equilibrium.",
   "claim_formal": {
-    "subject": "Finite strategic-form games with potential functions",
-    "property": "logical entailment of FIP and pure NE existence from potential conditions",
-    "operator": "==",
-    "operator_note": "This is a compound logical claim with two parts. (A) asserts that generalized ordinal potential (GOP) implies finite improvement property (FIP) and existence of at least one pure NE. The logical chain is: GOP => every better-response move strictly increases P => every better-response path is finite (since P takes finitely many values) => FIP => pure NE exists (terminal profile of any maximal better-response path). (B) asserts that for exact potentials, global maximizers of P are pure NE. The logical chain is: s* maximizes P => no unilateral deviation increases P => by exact potential property, no unilateral deviation increases u_i => s* is a pure NE. We verify both claims by: (1) exhaustive computational verification on all 2-player games with small action spaces and integer utilities, (2) independent cross-check via constructive potential games.",
-    "threshold": true,
-    "is_time_sensitive": false
+    "subject": "finite strategic-form games admitting either a generalized ordinal potential (Part A) or an exact potential (Part B)",
+    "property": "Part A: every better-response path is finite, the finite improvement property holds, and a pure Nash equilibrium exists. Part B: every global maximizer of the exact potential is a pure NE.",
+    "operator": "holds",
+    "claim_type": "theorem",
+    "operator_note": "Universally quantified over the (unbounded) class of finite strategic-form games, separately under each potential hypothesis. Both parts are established by the deductive argument in proof.md's `## Proof` section: Part A follows from the strict monotonicity of the GOP along better-response edges (no profile can repeat in a better-response path, so paths terminate at a profile with no improving deviation, which is by definition a pure NE); Part B follows because at a global maximizer no deviation can strictly increase the exact potential, hence by exactness no deviation can strictly increase any player's payoff. The computations below are implementation regression checks; they cannot establish either part \u2014 sampling cannot prove a 'for all' claim."
   },
   "evidence": {
     "A1": {
       "type": "computed",
-      "label": "Part (A) exhaustive verification: GOP => FIP + pure NE",
+      "label": "GOP-detector regression spot-check (Part A)",
       "sub_claim": null,
-      "method": "Sampled 50000 random 2x2 games and 20000 random 3x3 games. For each game with valid GOP, verified that every better-response move increases P, all BR paths are finite, and at least one pure NE exists.",
-      "result": "0 violations in 3670 GOP games (2x2) and 1 GOP games (3x3)",
+      "method": "Implementation regression spot-check: 600 sampled random 2-player games plus a hand-constructed 2x2 GOP-only game, used to spot-check that the GOP-detector agrees with the formal definition.",
+      "result": "True",
       "depends_on": []
     },
     "A2": {
       "type": "computed",
-      "label": "Part (A) constructive cross-check: known potential games",
+      "label": "FIP / pure-NE termination regression (Part A) and exact-implies-GOP closure (Corollary 1)",
       "sub_claim": null,
-      "method": "Constructed congestion games (2-player and 3-player) and Prisoner's Dilemma with their known exact potentials. Verified GOP properties, FIP, and NE existence for each.",
-      "result": "All constructive tests passed: True",
+      "method": "Implementation regression sanity check: 600 sampled random 2-player games plus the constructive coordination game (distinct from A1's GOP-only example), used to confirm better-response paths terminate as the deductive argument requires; also asserts the GOP-detector accepts the constructed exact potential, closing Corollary 1's 'exact-implies-GOP' sketch.",
+      "result": "True",
       "depends_on": []
     },
     "A3": {
       "type": "computed",
-      "label": "Part (B) exhaustive verification: exact potential max => NE",
+      "label": "Exact-potential maximizer is pure NE regression (Part B)",
       "sub_claim": null,
-      "method": "Sampled 50000 random 2x2 games and 20000 random 3x3 games. For each game with valid exact potential, verified that every global maximizer of P is a pure NE.",
-      "result": "0 violations in 17 exact-potential games (2x2) and 0 exact-potential games (3x3)",
-      "depends_on": []
-    },
-    "A4": {
-      "type": "computed",
-      "label": "Part (B) constructive cross-check: known exact potential games",
-      "sub_claim": null,
-      "method": "Verified on congestion games and Prisoner's Dilemma that global maximizers of the exact potential are pure Nash equilibria.",
-      "result": "All constructive tests passed: True",
+      "method": "Implementation regression spot-check: 600 sampled random common-payoff 2-player games plus a constructive coordination game, used to spot-check that every global maximizer of the exact potential is a pure NE.",
+      "result": "True",
       "depends_on": []
     }
   },
-  "cross_checks": [
-    {
-      "description": "Primary (exhaustive sampling) vs constructive (known games) for Part (A)",
-      "fact_ids": [
-        "A1",
-        "A2"
-      ],
-      "agreement": true,
-      "values_compared": [
-        "0 violations",
-        "True"
-      ]
-    },
-    {
-      "description": "Primary (exhaustive sampling) vs constructive (known games) for Part (B)",
-      "fact_ids": [
-        "A3",
-        "A4"
-      ],
-      "agreement": true,
-      "values_compared": [
-        "0 violations",
-        "True"
-      ]
-    }
-  ],
+  "cross_checks": [],
   "adversarial_checks": [
     {
-      "question": "Can a game have a generalized ordinal potential but fail to have the FIP?",
-      "verification_performed": "Attempted to construct a counterexample: a game with GOP where a better-response path cycles. This is impossible because each step strictly increases P, and P has finitely many distinct values on a finite strategy space. A strictly increasing sequence in a finite totally ordered set cannot revisit any value, hence cannot cycle. Verified computationally on 70,000+ sampled games with zero violations.",
-      "finding": "No counterexample exists. The finiteness argument is logically tight.",
+      "question": "Does the deductive argument silently rely on finiteness in a way the statement does not make explicit?",
+      "verification_performed": "Re-read the argument: termination of better-response paths uses strict monotonicity of P along edges plus finiteness of the profile set (no profile repeats; the strategy space is finite, hence paths cannot extend beyond |S| profiles). Both finiteness assumptions are explicit hypotheses of the theorem.",
+      "finding": "The reliance on finiteness is explicit: 'finite strategic-form game' is the first hypothesis. The argument fails for infinite strategy spaces (Part A's termination would require an additional well-ordering or compactness assumption).",
       "breaks_proof": false
     },
     {
-      "question": "Could a global maximizer of an exact potential fail to be a NE?",
-      "verification_performed": "Attempted to construct a counterexample. At a global max s* of P, for any player i and deviation s_i': P(s_i', s*_{-i}) <= P(s*). By exact potential: u_i(s_i', s*_{-i}) - u_i(s*_i, s*_{-i}) = P(s_i', s*_{-i}) - P(s*) <= 0. So u_i(s_i', s*_{-i}) <= u_i(s*). No player can strictly improve. Verified computationally on 70,000+ sampled games with zero violations.",
-      "finding": "No counterexample exists. The argument is logically airtight.",
+      "question": "Is 'better-response path is finite' equivalent to FIP, or is there an asymmetry the proof glosses over?",
+      "verification_performed": "Cross-check the standard definition: FIP = every better-response improvement path terminates after finitely many steps. The two phrasings are textbook-equivalent in Monderer & Shapley (1996); we keep both in the theorem statement to mirror the natural-language claim.",
+      "finding": "No asymmetry. 'Every better-response path is finite' and 'FIP' name the same property; including both in the conclusion is a redundancy of phrasing, not of substance.",
       "breaks_proof": false
     },
     {
-      "question": "Does the claim require P to be unique or satisfy additional conditions?",
-      "verification_performed": "Reviewed the claim statement. The claim only requires existence of a function P satisfying the potential conditions. No uniqueness, continuity, or other properties are assumed. For exact potentials, P is unique up to an additive constant (since the differences are fully determined). For GOP, P is not unique \u2014 any order-preserving transformation of a GOP is also a GOP. The proof only uses the defining property (improvement direction preservation), not any special structure of P.",
-      "finding": "No additional conditions needed. The proof uses only the defining properties.",
+      "question": "Could a global maximizer of an exact potential fail to be a pure NE because of a tie-breaking subtlety?",
+      "verification_performed": "Re-verified the Part B argument: at a global maximizer s*, no neighbor s' satisfies P(s') > P(s*) by definition of maximizer; exactness gives u_i(s') - u_i(s*) = P(s') - P(s*) \u2264 0 for every deviation by player i. The argument uses \u2265/\u2264 at the max; it does not require uniqueness of the maximizer.",
+      "finding": "No subtlety. Multiple global maximizers all qualify as pure NE, including ties \u2014 the regression sweep over the full argmax set confirms this for each sampled game.",
       "breaks_proof": false
     },
     {
-      "question": "Is the claim limited to pure strategies only? Does it extend to mixed?",
-      "verification_performed": "The claim explicitly states 'pure Nash equilibrium.' Potential games guarantee existence of pure NE, which is stronger than Nash's theorem (which only guarantees mixed NE). The proof uses the finite set of strategy profiles, which are pure strategy profiles. Mixed strategy extensions are not part of this claim.",
-      "finding": "The claim is correctly scoped to pure strategies. No issue.",
+      "question": "Does the formalization of 'generalized ordinal potential' match Monderer & Shapley's definition?",
+      "verification_performed": "Cross-checked our definition (sign of u_i payoff change matches sign of P change for every unilateral deviation) against Monderer & Shapley (1996), Definition 2.4. The one-directional implication used in the proof \u2014 strictly improving deviations strictly raise P \u2014 is sufficient for termination and is what we encode in the detector.",
+      "finding": "Definitions agree. The detector implements the same condition the deductive argument uses; the regression spot-checks below are consistent with this formalization.",
       "breaks_proof": false
     }
   ],
@@ -102,13 +68,8 @@
     "reason": null
   },
   "key_results": {
-    "part_a_gop_games_tested_2x2": 3670,
-    "part_a_gop_games_tested_3x3": 1,
-    "part_a_violations": 0,
-    "part_b_exact_games_tested_2x2": 17,
-    "part_b_exact_games_tested_3x3": 0,
-    "part_b_violations": 0,
-    "claim_holds": true
+    "part_a_regression_clean": true,
+    "part_b_regression_clean": true
   },
   "generator": {
     "name": "proof-engine",

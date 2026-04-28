@@ -15,10 +15,38 @@ def test_schema_has_both_profiles():
     assert "proof_md" in schema
     assert "proof_audit_md" in schema
     assert "proof_narrative_md" in schema
-    for version in ("v1", "v2"):
+    for version in ("v1", "v2", "v2_theorem"):
         assert version in schema["proof_md"], f"proof_md missing {version} profile"
         assert "required" in schema["proof_md"][version]
         assert version in schema["proof_audit_md"], f"proof_audit_md missing {version} profile"
+
+
+def test_v2_theorem_profile_shape():
+    """The v2_theorem profile has the canonical theorem-proof section list."""
+    schema = json.loads(SCHEMA_PATH.read_text())
+    md_required = schema["proof_md"]["v2_theorem"]["required"]
+    # Canonical theorem-proof sections (title-cased per section_extractor._normalize_heading)
+    expected_required = {
+        "Theorem Statement",
+        "Proof",
+        "Corollaries",
+        "Scope",
+        "Relation To Prior Work",
+        "What Could Challenge This Verdict?",
+        "Conclusion",
+    }
+    assert set(md_required) == expected_required, (
+        f"v2_theorem required mismatch: {set(md_required) ^ expected_required}"
+    )
+    # No Evidence Summary in theorem proofs (citation/computation tables move to audit)
+    assert "Evidence Summary" not in md_required
+    assert "Proof Logic" not in md_required  # replaced by "Proof"
+
+    audit = schema["proof_audit_md"]["v2_theorem"]
+    # Implementation Regression Checks is required for theorem proofs — locks in
+    # the structure that consolidates sampling/regression detail away from proof.md.
+    assert audit["required"] == ["Implementation Regression Checks"]
+    assert "Implementation Regression Checks" not in audit["optional"]
 
 
 def test_schema_has_conditional_sections():
@@ -50,7 +78,7 @@ def test_template_headings_exist_in_schema():
     schema = json.loads(SCHEMA_PATH.read_text())
 
     all_schema_headings = set()
-    for profile in ("v1", "v2"):
+    for profile in ("v1", "v2", "v2_theorem"):
         for artifact in ("proof_md", "proof_audit_md"):
             if profile in schema.get(artifact, {}):
                 all_schema_headings.update(schema[artifact][profile].get("required", []))

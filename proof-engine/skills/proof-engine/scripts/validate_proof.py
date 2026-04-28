@@ -1504,6 +1504,258 @@ class ProofValidator:
                     "contained in quote"
                 )
 
+    def check_rule10_quantifier_domain_match(self):
+        """Rule 10: Quantifier–domain match for theorem-shaped claims.
+
+        Two source-level checks (both WARNINGS, not errors):
+
+        10a — Universal-quantification heuristic. If CLAIM_NATURAL or
+        CLAIM_FORMAL phrasing matches a narrow set of theorem-style patterns
+        (e.g. "Let G be a finite ...", "every finite ", "all finite-strategy",
+        "for any finite ") AND CLAIM_FORMAL.claim_type is not "theorem", warn
+        and suggest declaring claim_type: "theorem". The heuristic is
+        intentionally narrow to avoid false positives on existing pure-math
+        proofs that prove "for every n in N ..." without intending the
+        deductive-theorem template.
+
+        10b — Sampling without regression-role labeling. If
+        claim_type == "theorem", scan computed-fact method/label string
+        literals (in FACT_REGISTRY dict literals AND in
+        ProofSummaryBuilder.add_computed_fact() calls) for sampling phrasing
+        ("sampled", "random", "Monte Carlo" — case-insensitive). Emit a
+        warning when a sampling token appears WITHOUT regression-role wording
+        ("regression", "implementation regression", "sanity check",
+        "spot-check") within ~80 chars in the same string literal. The
+        warning is clearable: relabeling the method as e.g.
+        "Implementation regression: sampled 3,670 games to spot-check ..."
+        suppresses the warning.
+
+        AST design-reversal note: existing AST helpers in this file
+        (e.g. _extract_quote_values around line 1213, _extract_empirical_facts_entries
+        around line 1264) deliberately skip ast.JoinedStr (f-strings) because
+        their runtime values can't be statically determined. Rule 10b is a
+        deliberate scope-narrowed reversal of that decision: the f-string
+        *literal parts* of method/label values DO need to be scanned because
+        the existing potential-games proof writes its sampling text inside an
+        f-string concatenation (e.g. f"Sampled {N} random ..."). The local
+        helper _extract_string_literals_from_node() below extracts only the
+        ast.Constant string children of an f-string and concatenates them,
+        ignoring ast.FormattedValue interpolations. Other f-string contexts
+        in this file remain unchanged — the global walker behavior is
+        preserved.
+        """
+        import ast
+
+        # ---- 10a: universal-quantification heuristic ----
+        try:
+            claim_type = self._extract_claim_formal_field("claim_type")
+        except Exception:
+            claim_type = None
+
+        # Build a probe string from CLAIM_NATURAL and CLAIM_FORMAL textual fields.
+        probe_parts = []
+        # CLAIM_NATURAL is typically a module-level string assignment (possibly
+        # parenthesized/concatenated). Walk module-level Assign nodes to pick up
+        # both ast.Constant and adjacent-string concatenations (also ast.Constant).
+        try:
+            tree = ast.parse(self.source)
+        except SyntaxError:
+            tree = None
+
+        if tree is not None:
+            for node in tree.body:
+                if not isinstance(node, ast.Assign) or len(node.targets) != 1:
+                    continue
+                target = node.targets[0]
+                if not (isinstance(target, ast.Name) and target.id == "CLAIM_NATURAL"):
+                    continue
+                if isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                    probe_parts.append(node.value.value)
+                break
+
+        # Pull a few CLAIM_FORMAL textual fields too — the heuristic is gentle
+        # so missing fields just mean less probe surface.
+        for field in ("subject", "property", "operator_note"):
+            try:
+                v = self._extract_claim_formal_field(field)
+            except Exception:
+                v = None
+            if isinstance(v, str):
+                probe_parts.append(v)
+
+        probe_text = "\n".join(probe_parts)
+
+        if probe_text and claim_type != "theorem":
+            patterns = [
+                "every finite ",
+                "all finite-strategy",
+                "for any finite ",
+            ]
+            matched = None
+            for pat in patterns:
+                if pat.lower() in probe_text.lower():
+                    matched = pat.strip()
+                    break
+            if matched is None:
+                # "Let [Var] be a finite ..." — single uppercase var, common form.
+                m = re.search(r"\bLet\s+[A-Z]\s+be\s+a\s+finite\s+", probe_text)
+                if m is not None:
+                    matched = m.group(0).strip()
+
+            if matched is not None:
+                self.warnings.append((
+                    "Rule 10: Claim phrasing looks universally quantified over an "
+                    "unbounded domain (matched: '" + matched + "') but "
+                    "CLAIM_FORMAL.claim_type is not 'theorem'. If this is a "
+                    "deductive theorem (proof is an argument; computation only "
+                    "regression-tests the implementation), declare "
+                    "claim_type: 'theorem' in CLAIM_FORMAL and use the "
+                    "deductive-theorem template.",
+                    [],
+                ))
+
+        # ---- 10b: sampling-without-regression-role proximity check ----
+        if claim_type != "theorem":
+            return  # 10b only applies to declared theorem proofs
+
+        if tree is None:
+            return  # malformed AST — degrade gracefully
+
+        SAMPLING_TOKENS = ("sampled", "random", "monte carlo")
+        REGRESSION_TOKENS = (
+            "regression",
+            "implementation regression",
+            "sanity check",
+            "spot-check",
+            "spot check",
+        )
+        PROXIMITY = 80
+
+        def _extract_string_literals_from_node(node):
+            """Return concatenated literal text for a string-or-fstring AST node.
+
+            Localized helper for Rule 10b only. Intentionally descends into
+            ast.JoinedStr.values to pick up the literal parts of f-strings —
+            this is a deliberate, scoped reversal of the file's broader
+            skip-JoinedStr design choice. Runtime-built strings (e.g.
+            " ".join([...])) remain out of scope and return "".
+            """
+            if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                return node.value
+            if isinstance(node, ast.JoinedStr):
+                parts = []
+                for child in node.values:
+                    if isinstance(child, ast.Constant) and isinstance(child.value, str):
+                        parts.append(child.value)
+                    # ast.FormattedValue interpolations: ignored on purpose.
+                return "".join(parts)
+            return ""
+
+        def _scan_literal(text, source_label):
+            """Look for sampling tokens in `text`. Return True if any unflagged
+            (no nearby regression-role token) sampling-token match was found."""
+            if not text:
+                return False
+            lower = text.lower()
+            for tok in SAMPLING_TOKENS:
+                start = 0
+                while True:
+                    idx = lower.find(tok, start)
+                    if idx < 0:
+                        break
+                    window_start = max(0, idx - PROXIMITY)
+                    window_end = min(len(lower), idx + len(tok) + PROXIMITY)
+                    window = lower[window_start:window_end]
+                    if not any(rt in window for rt in REGRESSION_TOKENS):
+                        return True
+                    start = idx + len(tok)
+            return False
+
+        # Surface 1: ProofSummaryBuilder.add_computed_fact(...) calls.
+        flagged_facts = []  # list of (fid_or_label, source_label)
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            func = node.func
+            attr_name = None
+            if isinstance(func, ast.Attribute):
+                attr_name = func.attr
+            elif isinstance(func, ast.Name):
+                attr_name = func.id
+            if attr_name != "add_computed_fact":
+                continue
+
+            fid = None
+            if node.args:
+                first = node.args[0]
+                if isinstance(first, ast.Constant) and isinstance(first.value, str):
+                    fid = first.value
+
+            for kw in node.keywords:
+                if kw.arg not in ("method", "label"):
+                    continue
+                lit = _extract_string_literals_from_node(kw.value)
+                if _scan_literal(lit, kw.arg):
+                    flagged_facts.append((fid or "<unnamed fact>", f"add_computed_fact({kw.arg}=...)"))
+                    break  # one warning per fact, not per token
+
+        # Surface 2: FACT_REGISTRY = {...} dict literal — method/label values.
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Assign) or len(node.targets) != 1:
+                continue
+            target = node.targets[0]
+            if not (isinstance(target, ast.Name) and target.id == "FACT_REGISTRY"):
+                continue
+            if not isinstance(node.value, ast.Dict):
+                break
+            for fid_key, fid_val in zip(node.value.keys, node.value.values):
+                if not (isinstance(fid_key, ast.Constant) and isinstance(fid_key.value, str)):
+                    continue
+                if not isinstance(fid_val, ast.Dict):
+                    continue
+                fid = fid_key.value
+                fact_flagged = False
+                for inner_k, inner_v in zip(fid_val.keys, fid_val.values):
+                    if not (isinstance(inner_k, ast.Constant) and isinstance(inner_k.value, str)):
+                        continue
+                    if inner_k.value not in ("method", "label"):
+                        continue
+                    lit = _extract_string_literals_from_node(inner_v)
+                    if _scan_literal(lit, inner_k.value):
+                        fact_flagged = True
+                        which = inner_k.value
+                        break
+                if fact_flagged:
+                    flagged_facts.append((fid, f"FACT_REGISTRY[{fid!r}][{which!r}]"))
+            break  # only first FACT_REGISTRY assignment
+
+        # De-duplicate by fact id while preserving order.
+        seen = set()
+        unique_flagged = []
+        for fid, src in flagged_facts:
+            if fid in seen:
+                continue
+            seen.add(fid)
+            unique_flagged.append((fid, src))
+
+        if unique_flagged:
+            details = [f"  {fid} ({src})" for fid, src in unique_flagged]
+            self.warnings.append((
+                "Rule 10: claim_type is 'theorem' but computed-fact method/label "
+                "strings contain sampling phrasing without nearby regression-role "
+                "wording. For deductive-theorem proofs, sampling cannot establish "
+                "the verdict; relabel each flagged fact's method/label to clearly "
+                "say it is a regression check (e.g. prefix with 'Implementation "
+                "regression: ...' or include 'spot-check'/'sanity check' within "
+                f"~{PROXIMITY} chars of the sampling token).",
+                details,
+            ))
+        elif claim_type == "theorem":
+            self.passed.append(
+                "Rule 10: theorem proof — sampling phrasing (if any) is clearly "
+                "labeled as a regression check"
+            )
+
     # ------------------------------------------------------------------
     # Run all checks
     # ------------------------------------------------------------------
@@ -1535,6 +1787,7 @@ class ProofValidator:
         self.check_fact_registry_format()
         self.check_claim_natural_key()
         self.check_disproof_quote_quality()
+        self.check_rule10_quantifier_domain_match()
         self.check_emit_proof_summary()
 
     def print_report(self) -> bool:
@@ -1624,6 +1877,7 @@ if __name__ == "__main__":
             "Rule 5": "PE005",
             "Rule 6": "PE006",
             "Rule 7": "PE007",
+            "Rule 10": "PE011",
             "FACT_REGISTRY": "PE008",
             "Contract": "PE009",
             "Verdict": "PE010",

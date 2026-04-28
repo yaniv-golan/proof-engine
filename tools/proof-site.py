@@ -520,6 +520,26 @@ def cmd_mint_doi(args) -> int:
     proof_data = json.loads((proof_dir / "proof.json").read_text())
     claim = proof_data["claim_natural"]
 
+    # Theorem DOI mint gate: the Zenodo deposit description is frozen on mint
+    # and lives in the DOI record forever. Phase 1 of the deductive-theorem
+    # plan requires the description text be reviewed in a sandbox dry run
+    # before any production mint. Sandbox mints are previewable, not frozen,
+    # so they bypass the gate.
+    claim_type = proof_data.get("claim_formal", {}).get("claim_type")
+    if claim_type == "theorem" and not sandbox:
+        if os.environ.get("THEOREM_DOI_GATE_OPEN") != "1":
+            error(
+                'Minting Zenodo DOIs for theorem-shaped proofs (claim_type: "theorem") is gated.\n'
+                "Phase 1 of the deductive-theorem plan requires that the Zenodo deposit description\n"
+                "be reviewed in a sandbox dry run before any production mint. To proceed:\n"
+                f"  1. Run: python tools/proof-site.py mint-doi {slug} --site-dir site --sandbox\n"
+                "  2. Inspect the deposit description on Zenodo's sandbox UI.\n"
+                "  3. Confirm with the team that the description correctly frames the proof as deductive.\n"
+                "  4. Set THEOREM_DOI_GATE_OPEN=1 and re-run the mint.\n"
+                "See docs/internal/2026-04-28-deductive-theorem-artifact-plan.md (P1.4d)."
+            )
+            return 1
+
     # Resolve tags (same logic as proof_loader)
     import yaml
     meta_path = proof_dir / "meta.yaml"
@@ -572,7 +592,9 @@ def cmd_mint_doi(args) -> int:
     else:
         verdict = verdict_raw
     verdict_display = verdict.capitalize() if verdict else ""
-    title = f'Claim Verification: \u201c{claim}\u201d \u2014 {verdict_display}'
+    claim_type = proof_data.get("claim_formal", {}).get("claim_type")
+    title_prefix = "Deductive Proof" if claim_type == "theorem" else "Claim Verification"
+    title = f'{title_prefix}: \u201c{claim}\u201d \u2014 {verdict_display}'
     version = proof_data.get("generator", {}).get("version", "")
 
     # Extract Key Findings from proof.md (full text, converted to HTML)
@@ -598,16 +620,33 @@ def cmd_mint_doi(args) -> int:
             if items:
                 key_findings_html = "<ul>\n" + "\n".join(items) + "\n</ul>"
 
-    description = (
-        f'<p>Automated fact-verification of the claim: "<em>{claim}</em>"</p>\n'
-        f"<p><strong>Verdict: {verdict}</strong></p>\n"
+    is_theorem = (
+        proof_data.get("claim_formal", {}).get("claim_type") == "theorem"
     )
+    if is_theorem:
+        description = (
+            f'<p>Deductive proof of the claim: "<em>{claim}</em>", '
+            f"with implementation regression checks.</p>\n"
+            f"<p><strong>Verdict: {verdict}</strong></p>\n"
+        )
+    else:
+        description = (
+            f'<p>Automated fact-verification of the claim: "<em>{claim}</em>"</p>\n'
+            f"<p><strong>Verdict: {verdict}</strong></p>\n"
+        )
     if key_findings_html:
         description += f"<h3>Key Findings</h3>\n{key_findings_html}\n"
+    description += "<h3>Files</h3>\n<ul>\n"
+    if is_theorem:
+        description += (
+            "<li><strong>proof.py</strong> — Implementation regression script; "
+            "the deductive argument is in proof.md.</li>\n"
+        )
+    else:
+        description += (
+            "<li><strong>proof.py</strong> — Re-runnable Python verification script</li>\n"
+        )
     description += (
-        "<h3>Files</h3>\n"
-        "<ul>\n"
-        "<li><strong>proof.py</strong> — Re-runnable Python verification script</li>\n"
         "<li><strong>proof.md</strong> — Structured proof report</li>\n"
         "<li><strong>proof_audit.md</strong> — Full verification audit trail</li>\n"
         "<li><strong>proof_narrative.md</strong> — Plain-language summary</li>\n"
@@ -616,7 +655,15 @@ def cmd_mint_doi(args) -> int:
     if "provenance.json" in mr_available:
         description += "<li><strong>provenance.json</strong> — W3C PROV-JSON provenance chain</li>\n"
     if "proof.ipynb" in mr_available:
-        description += "<li><strong>proof.ipynb</strong> — Jupyter Notebook (interactive re-verification)</li>\n"
+        if is_theorem:
+            description += (
+                "<li><strong>proof.ipynb</strong> — Jupyter Notebook "
+                "(re-runs implementation regression checks).</li>\n"
+            )
+        else:
+            description += (
+                "<li><strong>proof.ipynb</strong> — Jupyter Notebook (interactive re-verification)</li>\n"
+            )
     if "ro-crate-metadata.json" in mr_available:
         description += "<li><strong>ro-crate-metadata.json</strong> — RO-Crate 1.1 research object manifest</li>\n"
     description += (

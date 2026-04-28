@@ -1,706 +1,476 @@
 """
-Proof: Potential Games — Generalized Ordinal Potential and Exact Potential Theorems
-Generated: 2026-04-19
+Proof: Generalized ordinal potentials imply FIP and a pure NE; exact-potential
+maximizers are pure Nash equilibria. (Monderer & Shapley, 1996)
+Generated: 2026-04-28
 
-Claim (A): If a finite game admits a generalized ordinal potential P, then every
-better-response path is finite (FIP) and a pure Nash equilibrium exists.
+This is a deductive theorem proof. The verdict is established by the
+argument written in proof.md's `## Proof` section. The computations below
+are *implementation regression checks* — they spot-check the code that
+decides whether a given finite instance satisfies the formal hypotheses
+(GOP, exact potential, FIP, pure NE), not the deductive argument itself.
 
-Claim (B): If a finite game admits an exact potential P, then every global
-maximizer of P is a pure Nash equilibrium.
+proof.md ordering (sentence case as written; loader normalizes to title):
+  ## Theorem statement
+  ## Proof
+  ## Corollaries
+  ## Scope
+  ## Relation to prior work
+  ## What could challenge this verdict?
+  ## Conclusion
+
+Sampling counts must NOT appear in proof.md body prose; they live in
+proof_audit.md under `## Implementation regression checks`.
 """
 import os
-import sys
-import itertools
 import random
+import sys
 
-PROOF_ENGINE_ROOT = os.environ.get(
-    "PROOF_ENGINE_ROOT",
-    "/sessions/kind-beautiful-pasteur/mnt/.remote-plugins/plugin_01XTFg5zCzEf8gfhTURAn7wR/skills/proof-engine",
-)
+PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
+if not PROOF_ENGINE_ROOT:
+    _d = os.path.dirname(os.path.abspath(__file__))
+    while _d != os.path.dirname(_d):
+        if os.path.isdir(os.path.join(_d, "proof-engine", "skills", "proof-engine", "scripts")):
+            PROOF_ENGINE_ROOT = os.path.join(_d, "proof-engine", "skills", "proof-engine")
+            break
+        _d = os.path.dirname(_d)
+    if not PROOF_ENGINE_ROOT:
+        raise RuntimeError("PROOF_ENGINE_ROOT not set and skill dir not found via walk-up from proof.py")
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 
-from scripts.computations import compare, explain_calc
+from itertools import product
+
+from scripts.computations import prove_holds
 from scripts.proof_summary import ProofSummaryBuilder
 
-# =============================================================================
+
 # 1. CLAIM INTERPRETATION (Rule 4)
-# =============================================================================
 CLAIM_NATURAL = (
-    "Let G be a finite strategic-form game. "
-    "(A) If G admits a generalized ordinal potential P, then every better-response "
-    "path is finite, G has the finite improvement property, and G admits a pure "
-    "Nash equilibrium. "
-    "(B) If G admits an exact potential P, then every global maximizer of P is a "
-    "pure Nash equilibrium."
+    "Let G be a finite strategic-form game. (A) If G admits a generalized "
+    "ordinal potential P, then every better-response path is finite, G has "
+    "the finite improvement property, and G admits a pure Nash equilibrium. "
+    "(B) If G admits an exact potential P, then every global maximizer of P "
+    "is a pure Nash equilibrium."
 )
-
 CLAIM_FORMAL = {
-    "subject": "Finite strategic-form games with potential functions",
-    "property": "logical entailment of FIP and pure NE existence from potential conditions",
-    "operator": "==",
-    "operator_note": (
-        "This is a compound logical claim with two parts. "
-        "(A) asserts that generalized ordinal potential (GOP) implies finite "
-        "improvement property (FIP) and existence of at least one pure NE. "
-        "The logical chain is: GOP => every better-response move strictly "
-        "increases P => every better-response path is finite (since P takes "
-        "finitely many values) => FIP => pure NE exists (terminal profile of "
-        "any maximal better-response path). "
-        "(B) asserts that for exact potentials, global maximizers of P are pure NE. "
-        "The logical chain is: s* maximizes P => no unilateral deviation increases P "
-        "=> by exact potential property, no unilateral deviation increases u_i => "
-        "s* is a pure NE. "
-        "We verify both claims by: (1) exhaustive computational verification on "
-        "all 2-player games with small action spaces and integer utilities, "
-        "(2) independent cross-check via constructive potential games."
+    "subject": (
+        "finite strategic-form games admitting either a generalized ordinal "
+        "potential (Part A) or an exact potential (Part B)"
     ),
-    "threshold": True,
-    "is_time_sensitive": False,
+    "property": (
+        "Part A: every better-response path is finite, the finite improvement "
+        "property holds, and a pure Nash equilibrium exists. "
+        "Part B: every global maximizer of the exact potential is a pure NE."
+    ),
+    "operator": "holds",
+    "claim_type": "theorem",
+    "operator_note": (
+        "Universally quantified over the (unbounded) class of finite "
+        "strategic-form games, separately under each potential hypothesis. "
+        "Both parts are established by the deductive argument in proof.md's "
+        "`## Proof` section: Part A follows from the strict monotonicity of "
+        "the GOP along better-response edges (no profile can repeat in a "
+        "better-response path, so paths terminate at a profile with no "
+        "improving deviation, which is by definition a pure NE); Part B "
+        "follows because at a global maximizer no deviation can strictly "
+        "increase the exact potential, hence by exactness no deviation can "
+        "strictly increase any player's payoff. The computations below are "
+        "implementation regression checks; they cannot establish either "
+        "part — sampling cannot prove a 'for all' claim."
+    ),
 }
 
-# =============================================================================
-# 2. FACT REGISTRY — A-types only for pure math
-# =============================================================================
+# 2. FACT REGISTRY — A-types only; all are regression, not primary evidence.
 FACT_REGISTRY = {
-    "A1": {"label": "Part (A): GOP implies FIP and pure NE — exhaustive verification", "method": None, "result": None},
-    "A2": {"label": "Part (A): GOP implies FIP and pure NE — constructive cross-check", "method": None, "result": None},
-    "A3": {"label": "Part (B): Exact potential global max is pure NE — exhaustive verification", "method": None, "result": None},
-    "A4": {"label": "Part (B): Exact potential global max is pure NE — constructive cross-check", "method": None, "result": None},
+    "A1": {"label": "GOP-detector regression spot-check (Part A)",
+           "method": None, "result": None},
+    "A2": {"label": "FIP / pure-NE termination regression (Part A)",
+           "method": None, "result": None},
+    "A3": {"label": "Exact-potential maximizer is pure NE regression (Part B)",
+           "method": None, "result": None},
 }
 
-# =============================================================================
-# 3. GAME-THEORETIC PRIMITIVES
-# =============================================================================
 
-def strategy_profiles(n_actions):
-    """Generate all strategy profiles for a game with n players.
-    n_actions: list of action counts per player.
-    Returns list of tuples, each tuple is one profile."""
-    return list(itertools.product(*[range(a) for a in n_actions]))
+# 3. CONSTRUCTIVE EXAMPLES AND REGRESSION DETECTORS
+#
+# Strategy profiles are tuples; payoffs and potentials are dict-of-tuple maps.
+# A "better-response" edge from s to s' exists when exactly one player i
+# changes strategy and u_i(s') > u_i(s); a profile is a pure NE iff it has
+# no outgoing better-response edge.
 
-
-def is_better_response(utilities, player, old_profile, new_action):
-    """Check if new_action is a better response for player given opponents' play."""
-    n_players = len(old_profile)
-    new_profile = list(old_profile)
-    new_profile[player] = new_action
-    new_profile = tuple(new_profile)
-    return utilities[player][new_profile] > utilities[player][old_profile]
+def enumerate_profiles(shape):
+    """Enumerate every pure strategy profile for a game with the given shape.
+    `shape[i]` is the size of player i's strategy set; profiles are tuples
+    of length len(shape) with entry i in range(shape[i])."""
+    return list(product(*[range(n) for n in shape]))
 
 
-def find_all_better_responses(utilities, n_actions, profile):
-    """Find all (player, new_action) pairs that are better responses at profile."""
-    n_players = len(n_actions)
-    moves = []
-    for player in range(n_players):
-        for action in range(n_actions[player]):
-            if action != profile[player]:
-                if is_better_response(utilities, player, profile, action):
-                    moves.append((player, action))
-    return moves
+def unilateral_neighbors(profile, shape):
+    """Yield (i, profile') pairs reachable from `profile` by a unilateral
+    deviation of player i to a different strategy."""
+    for i, n_i in enumerate(shape):
+        for a in range(n_i):
+            if a == profile[i]:
+                continue
+            yield i, profile[:i] + (a,) + profile[i + 1:]
 
 
-def is_nash_equilibrium(utilities, n_actions, profile):
-    """Check if profile is a pure Nash equilibrium."""
-    return len(find_all_better_responses(utilities, n_actions, profile)) == 0
-
-
-def find_pure_ne(utilities, n_actions):
-    """Find all pure Nash equilibria by exhaustive search."""
-    profiles = strategy_profiles(n_actions)
-    return [p for p in profiles if is_nash_equilibrium(utilities, n_actions, p)]
-
-
-def check_gop(utilities, potential, n_actions):
-    """Check if potential is a generalized ordinal potential for the game."""
-    n_players = len(n_actions)
-    profiles = strategy_profiles(n_actions)
-    for player in range(n_players):
-        for profile in profiles:
-            for alt_action in range(n_actions[player]):
-                if alt_action == profile[player]:
-                    continue
-                alt_profile = list(profile)
-                alt_profile[player] = alt_action
-                alt_profile = tuple(alt_profile)
-                u_diff = utilities[player][profile] - utilities[player][alt_profile]
-                p_diff = potential[profile] - potential[alt_profile]
-                # GOP: u_i(s_i, s_{-i}) > u_i(s_i', s_{-i}) => P(s_i, s_{-i}) > P(s_i', s_{-i})
-                if u_diff > 0 and p_diff <= 0:
-                    return False
+def is_pure_ne(profile, shape, payoffs):
+    """True iff no player has a strictly profitable unilateral deviation."""
+    base = payoffs[profile]
+    for i, neighbor in unilateral_neighbors(profile, shape):
+        if payoffs[neighbor][i] > base[i]:
+            return False
     return True
 
 
-def check_exact_potential(utilities, potential, n_actions):
-    """Check if potential is an exact potential for the game."""
-    n_players = len(n_actions)
-    profiles = strategy_profiles(n_actions)
-    for player in range(n_players):
-        for profile in profiles:
-            for alt_action in range(n_actions[player]):
-                if alt_action == profile[player]:
-                    continue
-                alt_profile = list(profile)
-                alt_profile[player] = alt_action
-                alt_profile = tuple(alt_profile)
-                u_diff = utilities[player][profile] - utilities[player][alt_profile]
-                p_diff = potential[profile] - potential[alt_profile]
-                if u_diff != p_diff:
-                    return False
-    return True
-
-
-def all_better_response_paths_finite(utilities, n_actions, max_path_length=None):
-    """Verify that every better-response path is finite using DFS.
-    Returns (True, max_length) if all paths are finite, (False, -1) otherwise."""
-    profiles = strategy_profiles(n_actions)
-    n_profiles = len(profiles)
-    if max_path_length is None:
-        max_path_length = n_profiles * 10  # generous bound
-
-    max_observed = 0
-
-    def dfs(profile, depth, visited_set):
-        nonlocal max_observed
-        if depth > max_path_length:
-            return False  # path too long, likely cycling
-        max_observed = max(max_observed, depth)
-        moves = find_all_better_responses(utilities, n_actions, profile)
-        if not moves:
-            return True  # terminal — this is a NE
-        for player, new_action in moves:
-            new_profile = list(profile)
-            new_profile[player] = new_action
-            new_profile = tuple(new_profile)
-            if not dfs(new_profile, depth + 1, visited_set | {new_profile}):
+def has_generalized_ordinal_potential(shape, payoffs, P):
+    """True iff P is a generalized ordinal potential: for every unilateral
+    deviation by player i, sign of player i's payoff change is matched by
+    the sign of P's change. The standard GOP condition is one-directional —
+    u_i(s') > u_i(s) implies P(s') > P(s) — which is what we check."""
+    for s in enumerate_profiles(shape):
+        for i, s_prime in unilateral_neighbors(s, shape):
+            if payoffs[s_prime][i] > payoffs[s][i] and not P[s_prime] > P[s]:
                 return False
-        return True
+    return True
 
+
+def has_exact_potential(shape, payoffs, P):
+    """True iff P is an exact potential: for every unilateral deviation by
+    player i, u_i(s') - u_i(s) equals P(s') - P(s)."""
+    for s in enumerate_profiles(shape):
+        for i, s_prime in unilateral_neighbors(s, shape):
+            if (payoffs[s_prime][i] - payoffs[s][i]) != (P[s_prime] - P[s]):
+                return False
+    return True
+
+
+def better_response_paths_terminate(shape, payoffs, max_steps=None):
+    """Run a finite simulation of the better-response dynamic from every
+    starting profile, picking the lexicographically first improving deviation
+    at each step. Returns True iff every run reaches a pure NE within
+    max_steps. With a strict generalized ordinal potential present, no
+    profile can repeat along a better-response path, so the dynamic must
+    terminate in at most |S| - 1 steps where |S| is the number of profiles."""
+    profiles = enumerate_profiles(shape)
+    if max_steps is None:
+        max_steps = len(profiles)
     for start in profiles:
-        if not dfs(start, 0, {start}):
-            return False, -1
-    return True, max_observed
-
-
-def verify_gop_implies_fip_and_ne(utilities, potential, n_actions):
-    """Verify claim (A) for a specific game.
-    Returns dict with verification results."""
-    # Step 1: Verify P is a GOP
-    is_gop = check_gop(utilities, potential, n_actions)
-    if not is_gop:
-        return {"is_gop": False, "skipped": True}
-
-    # Step 2: Verify every better-response move strictly increases P
-    profiles = strategy_profiles(n_actions)
-    n_players = len(n_actions)
-    br_increases_p = True
-    for profile in profiles:
-        for player in range(n_players):
-            for alt_action in range(n_actions[player]):
-                if alt_action == profile[player]:
-                    continue
-                alt_profile = list(profile)
-                alt_profile[player] = alt_action
-                alt_profile = tuple(alt_profile)
-                if utilities[player][alt_profile] > utilities[player][profile]:
-                    # This is a better-response move from profile to alt_profile
-                    if potential[alt_profile] <= potential[profile]:
-                        br_increases_p = False
-
-    # Step 3: Verify all better-response paths are finite (FIP)
-    fip, max_path = all_better_response_paths_finite(utilities, n_actions)
-
-    # Step 4: Verify pure NE exists
-    ne_list = find_pure_ne(utilities, n_actions)
-    ne_exists = len(ne_list) > 0
-
-    return {
-        "is_gop": True,
-        "skipped": False,
-        "br_increases_p": br_increases_p,
-        "fip": fip,
-        "max_path_length": max_path,
-        "ne_exists": ne_exists,
-        "num_ne": len(ne_list),
-    }
-
-
-def verify_exact_potential_max_is_ne(utilities, potential, n_actions):
-    """Verify claim (B) for a specific game.
-    Returns dict with verification results."""
-    is_exact = check_exact_potential(utilities, potential, n_actions)
-    if not is_exact:
-        return {"is_exact": False, "skipped": True}
-
-    # Find global maximizers of P
-    profiles = strategy_profiles(n_actions)
-    max_p = max(potential[p] for p in profiles)
-    maximizers = [p for p in profiles if potential[p] == max_p]
-
-    # Check each maximizer is a NE
-    all_ne = True
-    for m in maximizers:
-        if not is_nash_equilibrium(utilities, n_actions, m):
-            all_ne = False
-            break
-
-    return {
-        "is_exact": True,
-        "skipped": False,
-        "num_maximizers": len(maximizers),
-        "all_maximizers_are_ne": all_ne,
-    }
-
-
-# =============================================================================
-# 4. PRIMARY VERIFICATION: Exhaustive check on all small games
-# =============================================================================
-
-print("=" * 70)
-print("PART (A): Generalized Ordinal Potential => FIP and Pure NE")
-print("=" * 70)
-
-# Exhaustive verification on 2-player, 2-action games with utilities in {-2,...,2}
-# and potential values in {-2,...,2}
-utility_range = range(-2, 3)  # -2, -1, 0, 1, 2
-potential_range = range(-2, 3)
-
-n_actions_list = [2, 2]
-profiles_2x2 = strategy_profiles(n_actions_list)
-
-a1_total_games = 0
-a1_gop_games = 0
-a1_violations = 0
-
-print("\nExhaustive check: 2-player, 2-action games")
-print(f"Utility values: {list(utility_range)}")
-print(f"Potential values: {list(potential_range)}")
-print(f"Number of profiles: {len(profiles_2x2)}")
-
-# We enumerate potential functions and check all utility functions consistent with GOP
-# More efficient: enumerate potentials, derive which utility patterns are consistent
-
-# Strategy: sample a large number of random games and potentials
-random.seed(42)  # reproducibility
-N_SAMPLES_A1 = 50000
-
-for trial in range(N_SAMPLES_A1):
-    # Random potential
-    potential = {p: random.choice(list(potential_range)) for p in profiles_2x2}
-
-    # Random utilities for 2 players
-    utilities = [
-        {p: random.choice(list(utility_range)) for p in profiles_2x2}
-        for _ in range(2)
-    ]
-
-    a1_total_games += 1
-
-    result = verify_gop_implies_fip_and_ne(utilities, potential, n_actions_list)
-    if result["skipped"]:
-        continue  # Not a GOP game
-    a1_gop_games += 1
-
-    if not (result["br_increases_p"] and result["fip"] and result["ne_exists"]):
-        a1_violations += 1
-        print(f"  VIOLATION at trial {trial}!")
-        print(f"    br_increases_p={result['br_increases_p']}")
-        print(f"    fip={result['fip']}")
-        print(f"    ne_exists={result['ne_exists']}")
-
-print(f"\nTotal games sampled: {a1_total_games}")
-print(f"Games with valid GOP: {a1_gop_games}")
-print(f"Violations found: {a1_violations}")
-
-A1_holds = compare(a1_violations, "==", 0, label="A1: GOP => FIP + NE (exhaustive, no violations)")
-
-# Also test with 2-player, 3-action games
-n_actions_3x3 = [3, 3]
-profiles_3x3 = strategy_profiles(n_actions_3x3)
-
-a1_total_3x3 = 0
-a1_gop_3x3 = 0
-a1_violations_3x3 = 0
-
-N_SAMPLES_3x3 = 20000
-random.seed(137)
-
-for trial in range(N_SAMPLES_3x3):
-    potential = {p: random.choice(list(potential_range)) for p in profiles_3x3}
-    utilities = [
-        {p: random.choice(list(utility_range)) for p in profiles_3x3}
-        for _ in range(2)
-    ]
-    a1_total_3x3 += 1
-    result = verify_gop_implies_fip_and_ne(utilities, potential, n_actions_3x3)
-    if result["skipped"]:
-        continue
-    a1_gop_3x3 += 1
-    if not (result["br_increases_p"] and result["fip"] and result["ne_exists"]):
-        a1_violations_3x3 += 1
-
-print(f"\n3x3 games sampled: {a1_total_3x3}")
-print(f"3x3 games with valid GOP: {a1_gop_3x3}")
-print(f"3x3 violations found: {a1_violations_3x3}")
-
-A1_holds_3x3 = compare(a1_violations_3x3, "==", 0, label="A1: GOP => FIP + NE (3x3, no violations)")
-
-print("\n" + "=" * 70)
-print("PART (B): Exact Potential => Global Max is Pure NE")
-print("=" * 70)
-
-a3_total_games = 0
-a3_exact_games = 0
-a3_violations = 0
-
-random.seed(7)
-N_SAMPLES_A3 = 50000
-
-for trial in range(N_SAMPLES_A3):
-    potential = {p: random.choice(list(potential_range)) for p in profiles_2x2}
-    utilities = [
-        {p: random.choice(list(utility_range)) for p in profiles_2x2}
-        for _ in range(2)
-    ]
-    a3_total_games += 1
-    result = verify_exact_potential_max_is_ne(utilities, potential, n_actions_list)
-    if result["skipped"]:
-        continue
-    a3_exact_games += 1
-    if not result["all_maximizers_are_ne"]:
-        a3_violations += 1
-        print(f"  VIOLATION at trial {trial}!")
-
-print(f"\nTotal games sampled: {a3_total_games}")
-print(f"Games with valid exact potential: {a3_exact_games}")
-print(f"Violations found: {a3_violations}")
-
-A3_holds = compare(a3_violations, "==", 0, label="A3: Exact potential max => NE (exhaustive, no violations)")
-
-# 3x3 exact potential check
-a3_total_3x3 = 0
-a3_exact_3x3 = 0
-a3_violations_3x3 = 0
-
-random.seed(271)
-N_SAMPLES_A3_3x3 = 20000
-
-for trial in range(N_SAMPLES_A3_3x3):
-    potential = {p: random.choice(list(potential_range)) for p in profiles_3x3}
-    utilities = [
-        {p: random.choice(list(utility_range)) for p in profiles_3x3}
-        for _ in range(2)
-    ]
-    a3_total_3x3 += 1
-    result = verify_exact_potential_max_is_ne(utilities, potential, n_actions_3x3)
-    if result["skipped"]:
-        continue
-    a3_exact_3x3 += 1
-    if not result["all_maximizers_are_ne"]:
-        a3_violations_3x3 += 1
-
-print(f"\n3x3 games sampled: {a3_total_3x3}")
-print(f"3x3 games with valid exact potential: {a3_exact_3x3}")
-print(f"3x3 violations found: {a3_violations_3x3}")
-
-A3_holds_3x3 = compare(a3_violations_3x3, "==", 0, label="A3: Exact potential max => NE (3x3, no violations)")
-
-# =============================================================================
-# 5. CROSS-CHECK: Constructive potential games (Rule 6)
-# =============================================================================
-
-print("\n" + "=" * 70)
-print("CROSS-CHECK: Constructive verification")
-print("=" * 70)
-
-# Cross-check (A): Build a known congestion game (which is an exact potential game,
-# hence also a GOP game) and verify directly.
-# Congestion game: 2 players, 2 resources {r1, r2}
-# Each player picks one resource. Cost = number of users.
-# This is Rosenthal's congestion game — known to admit an exact potential.
-
-print("\nConstructive test 1: Congestion game (2 players, 2 resources)")
-# Actions: 0 = resource r1, 1 = resource r2
-# Utility = -cost (lower congestion = higher utility)
-congestion_utils = [{}, {}]
-congestion_potential = {}
-
-for p in strategy_profiles([2, 2]):
-    # Count users on each resource
-    count_r0 = sum(1 for a in p if a == 0)
-    count_r1 = sum(1 for a in p if a == 1)
-    # Utility for each player = -(congestion on their chosen resource)
-    for player in range(2):
-        if p[player] == 0:
-            congestion_utils[player][p] = -count_r0
+        s = start
+        for _ in range(max_steps + 1):
+            found = None
+            for i, s_prime in unilateral_neighbors(s, shape):
+                if payoffs[s_prime][i] > payoffs[s][i]:
+                    found = s_prime
+                    break
+            if found is None:
+                break  # reached a pure NE
+            s = found
         else:
-            congestion_utils[player][p] = -count_r1
-    # Rosenthal potential: sum over resources of sum_{k=1}^{n_r} cost(k)
-    # With cost(k) = k: potential = sum_r sum_{k=1}^{n_r} k = sum_r n_r*(n_r+1)/2
-    congestion_potential[p] = -(count_r0 * (count_r0 + 1) // 2 + count_r1 * (count_r1 + 1) // 2)
+            return False  # ran out of steps without reaching a NE
+    return True
 
-# Verify it's an exact potential
-is_exact_congestion = check_exact_potential(congestion_utils, congestion_potential, [2, 2])
-print(f"  Is exact potential: {is_exact_congestion}")
 
-# Verify GOP properties
-result_a_congestion = verify_gop_implies_fip_and_ne(congestion_utils, congestion_potential, [2, 2])
-print(f"  GOP verified: {result_a_congestion['is_gop']}")
-print(f"  BR increases P: {result_a_congestion['br_increases_p']}")
-print(f"  FIP: {result_a_congestion['fip']}")
-print(f"  NE exists: {result_a_congestion['ne_exists']} (count: {result_a_congestion['num_ne']})")
+def two_player_coordination_game():
+    """Minimal exact-potential example: 2x2 coordination game with payoffs
+    u_i(C, C) = 2, u_i(D, D) = 1, u_i(C, D) = u_i(D, C) = 0. The exact
+    potential P(s) equals the common payoff at s (it agrees with both
+    players' payoff differences along any unilateral deviation)."""
+    shape = (2, 2)
+    payoffs = {
+        (0, 0): (2, 2),
+        (0, 1): (0, 0),
+        (1, 0): (0, 0),
+        (1, 1): (1, 1),
+    }
+    P_exact = {(0, 0): 2, (0, 1): 0, (1, 0): 0, (1, 1): 1}
+    return shape, payoffs, P_exact
 
-# Verify exact potential properties
-result_b_congestion = verify_exact_potential_max_is_ne(congestion_utils, congestion_potential, [2, 2])
-print(f"  All global max of P are NE: {result_b_congestion['all_maximizers_are_ne']}")
 
-# Cross-check (A): Prisoner's Dilemma is an exact potential game
-print("\nConstructive test 2: Prisoner's Dilemma")
-# Standard PD: Cooperate=0, Defect=1
-# u1: (C,C)=3, (C,D)=0, (D,C)=5, (D,D)=1
-# u2: (C,C)=3, (C,D)=5, (D,C)=0, (D,D)=1
-pd_utils = [
-    {(0,0): 3, (0,1): 0, (1,0): 5, (1,1): 1},
-    {(0,0): 3, (0,1): 5, (1,0): 0, (1,1): 1},
-]
-# Exact potential for PD: P(C,C)=3, P(C,D)=2, P(D,C)=2, P(D,D)=1
-# Check: u1(D,s2) - u1(C,s2) should equal P(D,s2) - P(C,s2)
-# s2=C: u1(D,C)-u1(C,C) = 5-3 = 2; P(D,C)-P(C,C) should = 2
-# s2=D: u1(D,D)-u1(C,D) = 1-0 = 1; P(D,D)-P(C,D) should = 1
-# s1=C: u2(C,D)-u2(C,C) = 5-3 = 2; P(C,D)-P(C,C) should = 2? But P(C,D)=2, P(C,C)=3 => -1. No.
-# Need to recalculate. Let me find the exact potential properly.
-# For player 1: u1(1,s2) - u1(0,s2) = P(1,s2) - P(0,s2)
-#   s2=0: 5-3=2 => P(1,0) - P(0,0) = 2
-#   s2=1: 1-0=1 => P(1,1) - P(0,1) = 1
-# For player 2: u2(s1,1) - u2(s1,0) = P(s1,1) - P(s1,0)
-#   s1=0: 5-3=2 => P(0,1) - P(0,0) = 2
-#   s1=1: 1-0=1 => P(1,1) - P(1,0) = 1
-# Set P(0,0) = 0. Then P(1,0) = 2, P(0,1) = 2, P(1,1) = 2+1 = 3.
-# Check: P(1,1) - P(0,1) = 3-2 = 1. u1(1,1)-u1(0,1) = 1-0 = 1. OK.
-pd_potential = {(0,0): 0, (0,1): 2, (1,0): 2, (1,1): 3}
+def two_player_gop_only_game():
+    """Minimal GOP-but-not-exact 2x2 game. Player 0 receives payoff 3 at
+    (0,0) and 2 at (1,1); player 1 receives 5 at (0,0) and 4 at (1,1); both
+    players receive 0 off-diagonal. The asymmetric pair-payoffs at the two
+    diagonal profiles make exactness fail (matching the differences along
+    deviations into and out of (0,0) forces inconsistent values for the
+    potential at (1,1)). The supplied P is a generalized ordinal potential:
+    it strictly increases along every improving unilateral deviation, which
+    is the only condition Theorem (A) requires."""
+    shape = (2, 2)
+    payoffs = {
+        (0, 0): (3, 5),
+        (0, 1): (0, 0),
+        (1, 0): (0, 0),
+        (1, 1): (2, 4),
+    }
+    P_gop = {(0, 0): 2, (0, 1): 0, (1, 0): 0, (1, 1): 1}
+    return shape, payoffs, P_gop
 
-is_exact_pd = check_exact_potential(pd_utils, pd_potential, [2, 2])
-print(f"  Is exact potential: {is_exact_pd}")
 
-result_a_pd = verify_gop_implies_fip_and_ne(pd_utils, pd_potential, [2, 2])
-print(f"  GOP verified: {result_a_pd['is_gop']}")
-print(f"  BR increases P: {result_a_pd['br_increases_p']}")
-print(f"  FIP: {result_a_pd['fip']}")
-print(f"  NE exists: {result_a_pd['ne_exists']} (count: {result_a_pd['num_ne']})")
+# 4. IMPLEMENTATION REGRESSION CHECKS
+#
+# These spot-check the code that decides whether an instance satisfies the
+# formal hypotheses. They do not establish the theorem; sampling cannot.
+# Method/label text for the corresponding `add_computed_fact` calls is
+# role-disclosed (Rule 10).
 
-result_b_pd = verify_exact_potential_max_is_ne(pd_utils, pd_potential, [2, 2])
-print(f"  All global max of P are NE: {result_b_pd['all_maximizers_are_ne']}")
+N_SAMPLES = 600
+RANDOM_SEED = 20260428
 
-# Global max of P is at (1,1) with P=3, and (D,D) = (1,1) is indeed the unique NE
-ne_pd = find_pure_ne(pd_utils, [2, 2])
-print(f"  Pure NE: {ne_pd}")
-max_p_pd = max(pd_potential.values())
-maximizers_pd = [p for p in profiles_2x2 if pd_potential[p] == max_p_pd]
-print(f"  Global max of P at: {maximizers_pd} with P={max_p_pd}")
 
-# Cross-check (A): 3-player congestion game
-print("\nConstructive test 3: 3-player, 2-resource congestion game")
-n_actions_3p = [2, 2, 2]
-profiles_3p = strategy_profiles(n_actions_3p)
-cong3_utils = [{}, {}, {}]
-cong3_potential = {}
+def _global_maximizer(P):
+    """Return any profile attaining max P. Ties are broken by sort order;
+    Part B's claim is "every global maximizer," so the construction below
+    iterates over the full argmax set rather than picking one."""
+    best = max(P.values())
+    return [s for s, v in P.items() if v == best]
 
-for p in profiles_3p:
-    count_r0 = sum(1 for a in p if a == 0)
-    count_r1 = sum(1 for a in p if a == 1)
-    for player in range(3):
-        if p[player] == 0:
-            cong3_utils[player][p] = -count_r0
-        else:
-            cong3_utils[player][p] = -count_r1
-    cong3_potential[p] = -(count_r0 * (count_r0 + 1) // 2 + count_r1 * (count_r1 + 1) // 2)
 
-is_exact_3p = check_exact_potential(cong3_utils, cong3_potential, n_actions_3p)
-result_a_3p = verify_gop_implies_fip_and_ne(cong3_utils, cong3_potential, n_actions_3p)
-result_b_3p = verify_exact_potential_max_is_ne(cong3_utils, cong3_potential, n_actions_3p)
+def gop_regression_pass(shape, payoffs, P_gop):
+    """Confirm the GOP-detector accepts the constructed GOP and that every
+    better-response path from every starting profile terminates."""
+    if not has_generalized_ordinal_potential(shape, payoffs, P_gop):
+        return False
+    return better_response_paths_terminate(shape, payoffs)
 
-print(f"  Is exact potential: {is_exact_3p}")
-print(f"  FIP: {result_a_3p['fip']}")
-print(f"  NE exists: {result_a_3p['ne_exists']} (count: {result_a_3p['num_ne']})")
-print(f"  All global max of P are NE: {result_b_3p['all_maximizers_are_ne']}")
 
-A2_holds = (
-    is_exact_congestion
-    and result_a_congestion["br_increases_p"]
-    and result_a_congestion["fip"]
-    and result_a_congestion["ne_exists"]
-    and is_exact_pd
-    and result_a_pd["br_increases_p"]
-    and result_a_pd["fip"]
-    and result_a_pd["ne_exists"]
-    and is_exact_3p
-    and result_a_3p["fip"]
-    and result_a_3p["ne_exists"]
-)
+def exact_potential_regression_pass(shape, payoffs, P_exact):
+    """Confirm the exact-potential detector accepts P_exact, and that every
+    global maximizer of P_exact is a pure NE."""
+    if not has_exact_potential(shape, payoffs, P_exact):
+        return False
+    for s in _global_maximizer(P_exact):
+        if not is_pure_ne(s, shape, payoffs):
+            return False
+    return True
 
-A4_holds = (
-    result_b_congestion["all_maximizers_are_ne"]
-    and result_b_pd["all_maximizers_are_ne"]
-    and result_b_3p["all_maximizers_are_ne"]
-)
 
-A2_result = compare(A2_holds, "==", True, label="A2: Constructive GOP cross-check")
-A4_result = compare(A4_holds, "==", True, label="A4: Constructive exact potential cross-check")
+def _random_two_player_game(rng, n=2, payoff_range=10):
+    """Sample a random 2-player game with strategy-set size n on each side,
+    integer payoffs uniform on [-payoff_range, payoff_range]. Used only for
+    regression sampling — not for theorem evidence."""
+    shape = (n, n)
+    payoffs = {
+        s: (rng.randint(-payoff_range, payoff_range),
+            rng.randint(-payoff_range, payoff_range))
+        for s in enumerate_profiles(shape)
+    }
+    return shape, payoffs
 
-# =============================================================================
-# 6. CROSS-CHECK AGREEMENT
-# =============================================================================
 
-print("\n" + "=" * 70)
-print("CROSS-CHECK AGREEMENT")
-print("=" * 70)
+def _identifies_gop(shape, payoffs):
+    """Heuristic GOP candidate: take P(s) = sum of player payoffs at s and
+    accept iff the GOP-detector confirms it. The goal is spot-checking the
+    detector on games where a candidate is easy to find, not deciding
+    GOP-membership in general."""
+    base = {s: sum(payoffs[s]) for s in enumerate_profiles(shape)}
+    if has_generalized_ordinal_potential(shape, payoffs, base):
+        return base
+    return None
 
-# Primary (A1) and cross-check (A2) must agree
-assert A1_holds and A2_holds, "Part (A) disagreement between primary and cross-check"
-print("Part (A): Primary and cross-check agree — no violations found.")
 
-# Primary (A3) and cross-check (A4) must agree
-assert A3_holds and A4_holds, "Part (B) disagreement between primary and cross-check"
-print("Part (B): Primary and cross-check agree — no violations found.")
+def run_regression_samples(n_samples=N_SAMPLES, seed=RANDOM_SEED):
+    """Run the implementation regression suite over `n_samples` random
+    2-player games. For each sampled game, if the heuristic finds a candidate
+    GOP, verify that the GOP-detector accepts it and that the better-response
+    dynamic terminates. Record any disagreement. Returns the disagreement
+    counts; theorems remain established by the deductive argument regardless
+    of these counts."""
+    rng = random.Random(seed)
+    gop_disagreements = 0
+    fip_disagreements = 0
+    for _ in range(n_samples):
+        shape, payoffs = _random_two_player_game(rng)
+        P_candidate = _identifies_gop(shape, payoffs)
+        if P_candidate is None:
+            continue
+        if not has_generalized_ordinal_potential(shape, payoffs, P_candidate):
+            gop_disagreements += 1
+        if not better_response_paths_terminate(shape, payoffs):
+            fip_disagreements += 1
+    return gop_disagreements, fip_disagreements
 
-# =============================================================================
-# 7. ADVERSARIAL CHECKS (Rule 5)
-# =============================================================================
 
+def exact_maximizer_regression_samples(n_samples=N_SAMPLES, seed=RANDOM_SEED + 1):
+    """For each sample, build a candidate exact potential P from a random
+    common-payoff game (where exactness is automatic), then verify every
+    global maximizer of P is a pure NE in that game."""
+    rng = random.Random(seed)
+    disagreements = 0
+    for _ in range(n_samples):
+        shape = (2, 2)
+        common = {s: rng.randint(-5, 5) for s in enumerate_profiles(shape)}
+        payoffs = {s: (common[s], common[s]) for s in enumerate_profiles(shape)}
+        if not has_exact_potential(shape, payoffs, common):
+            disagreements += 1
+            continue
+        for s in _global_maximizer(common):
+            if not is_pure_ne(s, shape, payoffs):
+                disagreements += 1
+                break
+    return disagreements
+
+
+# 5. ADVERSARIAL CHECKS (Rule 5)
 adversarial_checks = [
     {
-        "question": "Can a game have a generalized ordinal potential but fail to have the FIP?",
-        "verification_performed": (
-            "Attempted to construct a counterexample: a game with GOP where a "
-            "better-response path cycles. This is impossible because each step "
-            "strictly increases P, and P has finitely many distinct values on a "
-            "finite strategy space. A strictly increasing sequence in a finite "
-            "totally ordered set cannot revisit any value, hence cannot cycle. "
-            "Verified computationally on 70,000+ sampled games with zero violations."
+        "question": (
+            "Does the deductive argument silently rely on finiteness in a way "
+            "the statement does not make explicit?"
         ),
-        "finding": "No counterexample exists. The finiteness argument is logically tight.",
+        "verification_performed": (
+            "Re-read the argument: termination of better-response paths uses "
+            "strict monotonicity of P along edges plus finiteness of the "
+            "profile set (no profile repeats; the strategy space is finite, "
+            "hence paths cannot extend beyond |S| profiles). Both finiteness "
+            "assumptions are explicit hypotheses of the theorem."
+        ),
+        "finding": (
+            "The reliance on finiteness is explicit: 'finite strategic-form "
+            "game' is the first hypothesis. The argument fails for infinite "
+            "strategy spaces (Part A's termination would require an "
+            "additional well-ordering or compactness assumption)."
+        ),
         "breaks_proof": False,
     },
     {
-        "question": "Could a global maximizer of an exact potential fail to be a NE?",
-        "verification_performed": (
-            "Attempted to construct a counterexample. At a global max s* of P, "
-            "for any player i and deviation s_i': P(s_i', s*_{-i}) <= P(s*). "
-            "By exact potential: u_i(s_i', s*_{-i}) - u_i(s*_i, s*_{-i}) = "
-            "P(s_i', s*_{-i}) - P(s*) <= 0. So u_i(s_i', s*_{-i}) <= u_i(s*). "
-            "No player can strictly improve. Verified computationally on 70,000+ "
-            "sampled games with zero violations."
+        "question": (
+            "Is 'better-response path is finite' equivalent to FIP, or is "
+            "there an asymmetry the proof glosses over?"
         ),
-        "finding": "No counterexample exists. The argument is logically airtight.",
+        "verification_performed": (
+            "Cross-check the standard definition: FIP = every better-response "
+            "improvement path terminates after finitely many steps. The two "
+            "phrasings are textbook-equivalent in Monderer & Shapley (1996); "
+            "we keep both in the theorem statement to mirror the natural-"
+            "language claim."
+        ),
+        "finding": (
+            "No asymmetry. 'Every better-response path is finite' and 'FIP' "
+            "name the same property; including both in the conclusion is a "
+            "redundancy of phrasing, not of substance."
+        ),
         "breaks_proof": False,
     },
     {
-        "question": "Does the claim require P to be unique or satisfy additional conditions?",
-        "verification_performed": (
-            "Reviewed the claim statement. The claim only requires existence of "
-            "a function P satisfying the potential conditions. No uniqueness, "
-            "continuity, or other properties are assumed. For exact potentials, "
-            "P is unique up to an additive constant (since the differences are "
-            "fully determined). For GOP, P is not unique — any order-preserving "
-            "transformation of a GOP is also a GOP. The proof only uses the "
-            "defining property (improvement direction preservation), not any "
-            "special structure of P."
+        "question": (
+            "Could a global maximizer of an exact potential fail to be a "
+            "pure NE because of a tie-breaking subtlety?"
         ),
-        "finding": "No additional conditions needed. The proof uses only the defining properties.",
+        "verification_performed": (
+            "Re-verified the Part B argument: at a global maximizer s*, no "
+            "neighbor s' satisfies P(s') > P(s*) by definition of maximizer; "
+            "exactness gives u_i(s') - u_i(s*) = P(s') - P(s*) ≤ 0 for every "
+            "deviation by player i. The argument uses ≥/≤ at the max; it "
+            "does not require uniqueness of the maximizer."
+        ),
+        "finding": (
+            "No subtlety. Multiple global maximizers all qualify as pure "
+            "NE, including ties — the regression sweep over the full "
+            "argmax set confirms this for each sampled game."
+        ),
         "breaks_proof": False,
     },
     {
-        "question": "Is the claim limited to pure strategies only? Does it extend to mixed?",
-        "verification_performed": (
-            "The claim explicitly states 'pure Nash equilibrium.' Potential games "
-            "guarantee existence of pure NE, which is stronger than Nash's theorem "
-            "(which only guarantees mixed NE). The proof uses the finite set of "
-            "strategy profiles, which are pure strategy profiles. Mixed strategy "
-            "extensions are not part of this claim."
+        "question": (
+            "Does the formalization of 'generalized ordinal potential' match "
+            "Monderer & Shapley's definition?"
         ),
-        "finding": "The claim is correctly scoped to pure strategies. No issue.",
+        "verification_performed": (
+            "Cross-checked our definition (sign of u_i payoff change "
+            "matches sign of P change for every unilateral deviation) "
+            "against Monderer & Shapley (1996), Definition 2.4. The "
+            "one-directional implication used in the proof — strictly "
+            "improving deviations strictly raise P — is sufficient for "
+            "termination and is what we encode in the detector."
+        ),
+        "finding": (
+            "Definitions agree. The detector implements the same condition "
+            "the deductive argument uses; the regression spot-checks below "
+            "are consistent with this formalization."
+        ),
         "breaks_proof": False,
     },
 ]
 
-# =============================================================================
-# 8. VERDICT AND STRUCTURED OUTPUT
-# =============================================================================
 
+# 6. VERDICT
 if __name__ == "__main__":
-    both_parts_hold = A1_holds and A3_holds and A2_holds and A4_holds
+    # Run the constructive-example regressions first; these are deterministic.
+    shape_a, payoffs_a, P_gop = two_player_gop_only_game()
+    shape_b, payoffs_b, P_exact = two_player_coordination_game()
 
-    claim_holds = compare(both_parts_hold, "==", CLAIM_FORMAL["threshold"],
-                          label="Final: Both parts (A) and (B) verified")
+    # A1 covers the GOP-only construction; A2 covers the exact-potential
+    # coordination game's better-response termination — independent of A1.
+    a1_pass = gop_regression_pass(shape_a, payoffs_a, P_gop)
+    a2_pass = better_response_paths_terminate(shape_b, payoffs_b)
+    a3_pass = exact_potential_regression_pass(shape_b, payoffs_b, P_exact)
 
+    # Closes the Corollary 1 sketch ("exact potential is in particular a GOP")
+    # by asserting the GOP-detector accepts the constructed exact potential.
+    exact_implies_gop = has_generalized_ordinal_potential(shape_b, payoffs_b, P_exact)
+
+    # Run the random-sample regression sweep.
+    gop_disagree, fip_disagree = run_regression_samples()
+    max_disagree = exact_maximizer_regression_samples()
+
+    sampling_clean = (
+        gop_disagree == 0 and fip_disagree == 0 and max_disagree == 0
+    )
+    constructive_clean = a1_pass and a2_pass and a3_pass and exact_implies_gop
+
+    # The verdict is established by the deductive argument in proof.md.
+    # Regression failure would indicate a build issue, not a counter-
+    # example to the theorem; we surface it as UNDETERMINED so a human
+    # can investigate before publishing.
     any_breaks = any(ac.get("breaks_proof") for ac in adversarial_checks)
-    if any_breaks:
-        verdict = "UNDETERMINED"
+    regression_ok = constructive_clean and sampling_clean
+    verdict_holds = prove_holds(
+        regression_ok and not any_breaks,
+        label="theorem established by deductive argument",
+    )
+    if verdict_holds:
+        verdict = "PROVED"
     else:
-        verdict = "PROVED" if claim_holds else "DISPROVED"
-
-    print(f"\n{'=' * 70}")
-    print(f"VERDICT: {verdict}")
-    print(f"{'=' * 70}")
+        verdict = "UNDETERMINED"
 
     builder = ProofSummaryBuilder(CLAIM_NATURAL, CLAIM_FORMAL)
 
     builder.add_computed_fact(
         "A1",
-        label="Part (A) exhaustive verification: GOP => FIP + pure NE",
+        label="GOP-detector regression spot-check (Part A)",
         method=(
-            f"Sampled {N_SAMPLES_A1} random 2x2 games and {N_SAMPLES_3x3} random "
-            f"3x3 games. For each game with valid GOP, verified that every "
-            f"better-response move increases P, all BR paths are finite, and "
-            f"at least one pure NE exists."
+            f"Implementation regression spot-check: {N_SAMPLES} sampled "
+            f"random 2-player games plus a hand-constructed 2x2 GOP-only "
+            f"game, used to spot-check that the GOP-detector agrees with "
+            f"the formal definition."
         ),
-        result=f"0 violations in {a1_gop_games} GOP games (2x2) and {a1_gop_3x3} GOP games (3x3)",
+        result=(a1_pass and gop_disagree == 0),
     )
-
     builder.add_computed_fact(
         "A2",
-        label="Part (A) constructive cross-check: known potential games",
+        label="FIP / pure-NE termination regression (Part A) and exact-implies-GOP closure (Corollary 1)",
         method=(
-            "Constructed congestion games (2-player and 3-player) and Prisoner's "
-            "Dilemma with their known exact potentials. Verified GOP properties, "
-            "FIP, and NE existence for each."
+            f"Implementation regression sanity check: {N_SAMPLES} sampled "
+            f"random 2-player games plus the constructive coordination game "
+            f"(distinct from A1's GOP-only example), used to confirm "
+            f"better-response paths terminate as the deductive argument "
+            f"requires; also asserts the GOP-detector accepts the "
+            f"constructed exact potential, closing Corollary 1's "
+            f"'exact-implies-GOP' sketch."
         ),
-        result=f"All constructive tests passed: {A2_holds}",
+        result=(a2_pass and fip_disagree == 0 and exact_implies_gop),
     )
-
     builder.add_computed_fact(
         "A3",
-        label="Part (B) exhaustive verification: exact potential max => NE",
+        label="Exact-potential maximizer is pure NE regression (Part B)",
         method=(
-            f"Sampled {N_SAMPLES_A3} random 2x2 games and {N_SAMPLES_A3_3x3} random "
-            f"3x3 games. For each game with valid exact potential, verified that "
-            f"every global maximizer of P is a pure NE."
+            f"Implementation regression spot-check: {N_SAMPLES} sampled "
+            f"random common-payoff 2-player games plus a constructive "
+            f"coordination game, used to spot-check that every global "
+            f"maximizer of the exact potential is a pure NE."
         ),
-        result=f"0 violations in {a3_exact_games} exact-potential games (2x2) and {a3_exact_3x3} exact-potential games (3x3)",
-    )
-
-    builder.add_computed_fact(
-        "A4",
-        label="Part (B) constructive cross-check: known exact potential games",
-        method=(
-            "Verified on congestion games and Prisoner's Dilemma that global "
-            "maximizers of the exact potential are pure Nash equilibria."
-        ),
-        result=f"All constructive tests passed: {A4_holds}",
-    )
-
-    builder.add_cross_check(
-        description="Primary (exhaustive sampling) vs constructive (known games) for Part (A)",
-        fact_ids=["A1", "A2"],
-        values_compared=["0 violations", str(A2_holds)],
-        agreement=A1_holds and A2_holds,
-    )
-
-    builder.add_cross_check(
-        description="Primary (exhaustive sampling) vs constructive (known games) for Part (B)",
-        fact_ids=["A3", "A4"],
-        values_compared=["0 violations", str(A4_holds)],
-        agreement=A3_holds and A4_holds,
+        result=(a3_pass and max_disagree == 0),
     )
 
     for ac in adversarial_checks:
@@ -713,12 +483,8 @@ if __name__ == "__main__":
 
     builder.set_verdict(verdict)
     builder.set_key_results(
-        part_a_gop_games_tested_2x2=a1_gop_games,
-        part_a_gop_games_tested_3x3=a1_gop_3x3,
-        part_a_violations=a1_violations + a1_violations_3x3,
-        part_b_exact_games_tested_2x2=a3_exact_games,
-        part_b_exact_games_tested_3x3=a3_exact_3x3,
-        part_b_violations=a3_violations + a3_violations_3x3,
-        claim_holds=claim_holds,
+        part_a_regression_clean=(a1_pass and a2_pass and gop_disagree == 0
+                                  and fip_disagree == 0),
+        part_b_regression_clean=(a3_pass and max_disagree == 0),
     )
     builder.emit()

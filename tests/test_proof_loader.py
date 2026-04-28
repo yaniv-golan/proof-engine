@@ -142,6 +142,60 @@ def test_load_proof_missing_required_section_raises(proof_dir):
         load_proof(proof_dir / "test-claim")
 
 
+def test_load_proof_theorem_profile_missing_sections_raises(proof_dir):
+    """When claim_type == 'theorem', loader dispatches to v2_theorem profile.
+
+    Existing v2-shaped proof.md (Evidence Summary / Proof Logic / Conclusion)
+    is missing the theorem-required sections (Theorem Statement, Proof,
+    Corollaries, Scope, Relation To Prior Work, What Could Challenge This
+    Verdict?). The loader must raise ValueError naming those missing sections.
+    """
+    claim_dir = proof_dir / "test-claim"
+    data = json.loads((claim_dir / "proof.json").read_text())
+    data["claim_formal"]["claim_type"] = "theorem"
+    (claim_dir / "proof.json").write_text(json.dumps(data))
+
+    with pytest.raises(ValueError) as exc:
+        load_proof(claim_dir)
+
+    msg = str(exc.value)
+    assert "missing required" in msg
+    # At least some of the new theorem-only required sections must be flagged.
+    assert "Theorem Statement" in msg
+    assert "Corollaries" in msg
+
+
+def test_load_proof_theorem_profile_with_all_sections_succeeds(proof_dir):
+    """A theorem-typed proof with every canonical section should load cleanly."""
+    claim_dir = proof_dir / "test-claim"
+    data = json.loads((claim_dir / "proof.json").read_text())
+    data["claim_formal"]["claim_type"] = "theorem"
+    (claim_dir / "proof.json").write_text(json.dumps(data))
+
+    (claim_dir / "proof.md").write_text(
+        "# Proof\n\n"
+        "## Theorem statement\n\nLet G be finite. Then P(G).\n\n"
+        "## Proof\n\n1. Step one. 2. Step two.\n\n"
+        "## Corollaries\n\nC1: trivially follows.\n\n"
+        "## Scope\n\nNot covered: infinite G.\n\n"
+        "## Relation to prior work\n\nMonderer & Shapley 1996.\n\n"
+        "## What could challenge this verdict?\n\nA counterexample.\n\n"
+        "## Conclusion\n\n**PROVED.** The theorem holds.\n"
+    )
+
+    # v2_theorem audit profile requires Implementation Regression Checks.
+    (claim_dir / "proof_audit.md").write_text(
+        "# Audit\n\n## Implementation Regression Checks\n\nSampled N games; 0 violations.\n"
+    )
+
+    proof = load_proof(claim_dir)
+    assert proof["slug"] == "test-claim"
+    # Verify the title-cased canonical headings are present in the extracted sections.
+    assert "Theorem Statement" in proof["sections_md"]
+    assert "Corollaries" in proof["sections_md"]
+    assert "Relation To Prior Work" in proof["sections_md"]
+
+
 def test_load_all_proofs(proof_dir):
     proofs = load_all_proofs(proof_dir)
     assert len(proofs) == 1

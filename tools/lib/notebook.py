@@ -14,13 +14,27 @@ def generate_notebook(proof_py_text: str, proof_data: dict, slug: str, canonical
     verdict_str = verdict.get("value", "") if isinstance(verdict, dict) else verdict
     claim = proof_data.get("claim_natural", slug)
     date = proof_data.get("generator", {}).get("generated_at", "")
+    claim_type = proof_data.get("claim_formal", {}).get("claim_type")
+    is_theorem = claim_type == "theorem"
+
+    if is_theorem:
+        intro = (
+            "This notebook re-runs the implementation regression checks. "
+            "The verdict above is established by the deductive argument in proof.md, "
+            "not by re-executing this notebook."
+        )
+    else:
+        intro = (
+            "This notebook is an interactive version of the proof script. "
+            "Run each cell to re-verify the claim."
+        )
 
     cells = []
     cells.append(_markdown_cell(
         f"# Proof: {claim}\n\n"
         f"**Verdict:** {verdict_str}  \n**Date:** {date}  \n"
         f"**Source:** [{canonical_url}]({canonical_url})\n\n---\n\n"
-        f"This notebook is an interactive version of the proof script. Run each cell to re-verify the claim."
+        f"{intro}"
     ))
 
     sections = _split_on_markers(proof_py_text)

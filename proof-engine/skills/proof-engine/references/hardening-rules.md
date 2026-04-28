@@ -1,6 +1,6 @@
 # Hardening Rules Reference
 
-These nine rules close specific failure modes where LLM-generated proof code looks correct but is silently wrong. Each rule creates a verifiable link between the proof's internal representation and an external ground truth — so that when the LLM hallucinates, the error breaks visibly rather than hiding.
+These ten rules close specific failure modes where LLM-generated proof code looks correct but is silently wrong. Each rule creates a verifiable link between the proof's internal representation and an external ground truth — so that when the LLM hallucinates, the error breaks visibly rather than hiding.
 
 For proof templates, see [proof-templates.md](${CLAUDE_SKILL_DIR}/references/proof-templates.md).
 
@@ -14,6 +14,7 @@ For proof templates, see [proof-templates.md](${CLAUDE_SKILL_DIR}/references/pro
 7. [Rule 7: Never Hard-Code Constants or Formulas](#rule-7-never-hard-code-constants-or-formulas)
 8. [Rule 8: Evidence Relevance for Rejection Verdicts](#rule-8-evidence-relevance-for-rejection-verdicts)
 9. [Rule 9: Prose References Are Mechanically Resolvable](#rule-9--prose-references-are-mechanically-resolvable)
+10. [Rule 10: Quantifier–Domain Match](#rule-10-quantifier-domain-match)
 
 ---
 
@@ -511,3 +512,97 @@ proof-site.py publish <dir>
 ```
 
 The escape hatch suppresses only `DANGLING_SHORT_PATTERN` (bare author-year). Author + quoted title must always carry an identifier — there is no escape hatch for that form.
+
+---
+
+## Rule 10: Quantifier–Domain Match
+
+**Failure mode**: An LLM is given a universally-quantified claim over an unbounded domain ("every finite group of prime order is cyclic", "every finite exact-potential game has a pure NE", "Let G be a finite ... then ..."). The deductive argument is the only thing that can establish such a claim — sampling 10,000 instances proves nothing about the (n+1)th. But sampling code is easy to write and produces a clean number, while a deductive argument is harder. The LLM ends up filing a "PROVED" verdict whose visible evidence is "0 violations across 3,670 sampled games," reading to a reviewer as a demo, not a theorem. Worse, in the artifact text the sampling counts get more visual prominence than the argument, and the verdict is silently downgraded from a real theorem to a sampling result that happens to use the word "PROVED."
+
+**Rule**: If the claim is universally quantified over an unbounded domain (declared via `CLAIM_FORMAL.claim_type: "theorem"`, or detected by claim phrasing such as *"every finite"*, *"for all"*, *"Let G be a finite ..."*), then sampling cannot be the load-bearing evidence for the verdict. The proof must include either:
+
+- (a) a **deductive argument** written as numbered steps in proof.md's `## Proof` section, or
+- (b) a **coverage proof** showing exhaustive enumeration over the (necessarily finite) domain.
+
+Sampling-based facts must be labeled as **regression checks** in their `method` text (use phrases such as *"Implementation regression"*, *"regression"*, *"sanity check"*, *"spot-check"* within ~80 characters of any sampling token like *"sampled"*, *"random"*, *"Monte Carlo"*) and must live in **proof_audit.md**, in an `## Implementation regression checks` section — not in proof.md.
+
+For the canonical theorem-proof shape (section list, builder usage, role-disclosing `method` examples), see [template-deductive-theorem.md](template-deductive-theorem.md).
+
+**Bad — theorem proof with sampling counts as primary evidence in proof.md:**
+
+```markdown
+<!-- proof.md -->
+## Evidence Summary
+We verified the claim on **3,670 random 2x2 GOP games**. **0 violations**
+were found. The proof script (`proof.py`) re-runs this verification.
+
+## Proof Logic
+The implementation samples N games, builds the better-response graph, and
+counts cycles. Across 3,670 samples we observed no cycles, confirming the
+claim that every finite GOP game has a pure NE.
+```
+
+```python
+# proof.py — method text reads as primary evidence
+builder.add_computed_fact(
+    "A1",
+    label="GOP games verified",
+    method=f"Sampled {N_SAMPLES} random 2x2 games and confirmed each has a pure NE.",
+    result=0,
+)
+```
+
+This proves nothing about a "for all" claim — the (3,671)th game is unaddressed. The Rule 10 check warns because the `method` string contains *"sampled"* / *"random"* without nearby regression-role wording.
+
+**Good — same proof reorganized: deductive argument primary, regression-labeled sampling moved to proof_audit.md:**
+
+```markdown
+<!-- proof.md -->
+## Theorem statement
+**Theorem.** Let G be a finite strategic-form game with the finite
+improvement property (FIP). Then G has at least one pure Nash equilibrium.
+
+## Proof
+1. By FIP, every better-response path in G terminates.
+2. A maximal better-response path ends at a profile where no player has a
+   profitable unilateral deviation.
+3. Such a profile is, by definition, a pure Nash equilibrium.
+4. Hence G has at least one pure NE. ∎
+
+## Corollaries
+**Corollary 1.** Every finite exact-potential game has a pure NE. *(Sketch:
+exact-potential games satisfy FIP; apply the theorem.)*
+...
+
+## Conclusion
+**PROVED.** The argument is purely deductive; see proof_audit.md for the
+implementation regression checks confirming our GOP-detector matches the
+formal definition.
+```
+
+```markdown
+<!-- proof_audit.md -->
+## Implementation regression checks
+We sampled 3,670 finite 2-player games to spot-check that our
+GOP-detector implementation agrees with the formal definition (no cycles
+in the better-response graph). Across the sample: 0 disagreements.
+This regression-checks the *code*, not the theorem — sampling cannot
+prove a 'for all' claim.
+```
+
+```python
+# proof.py — method text discloses the regression role
+builder.add_computed_fact(
+    "A1",
+    label="GOP-detector regression spot-check",
+    method=(
+        f"Implementation regression: sampled {N_SAMPLES} games to "
+        f"spot-check the GOP-detector against the formal definition."
+    ),
+    result=0,
+)
+```
+
+The deductive argument carries the verdict; the sampling is honestly framed as a regression check on the code; and the `method` string includes *"Implementation regression"* and *"spot-check"* within ~80 characters of *"sampled"*, so the Rule 10 check is satisfied.
+
+**How validate_proof.py catches it**: When `CLAIM_FORMAL.claim_type == "theorem"`, the validator scans `add_computed_fact()` call args and `FACT_REGISTRY` dict literals for `method`/`label` strings (including f-string literal parts) containing sampling tokens (*"sampled"*, *"random"*, *"Monte Carlo"*). For each match, it requires regression-role wording (*"regression"*, *"implementation regression"*, *"sanity check"*, *"spot-check"*) within ~80 characters; otherwise it warns that the sampling fact reads as primary evidence. Independently, when the claim text or `CLAIM_FORMAL` looks universally quantified (*"every finite"*, *"all finite-strategy"*, *"for any finite"*, *"Let [Var] be a finite [domain]"*) but `claim_type != "theorem"`, the validator suggests declaring `claim_type: "theorem"`. Section-presence enforcement (the `## Proof` / `## Corollaries` / `## Scope` / `## Relation to prior work` requirements) lives in `tools/lib/proof_loader.py` at site-build time, not in `validate_proof.py`.

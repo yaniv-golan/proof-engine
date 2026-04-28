@@ -1,5 +1,5 @@
 {
-  "_comment": "Single source of truth for proof markdown section requirements. Consumed by tools/lib/proof_loader.py, tools/lib/narrative_validator.py, and verified against site/templates/proof.html by tests.",
+  "_comment": "Single source of truth for proof markdown section requirements. Consumed by tools/lib/proof_loader.py, tools/lib/narrative_validator.py, and verified against site/templates/proof.html by tests. The v2_theorem profile applies when claim_formal.claim_type == 'theorem' (deductive-theorem proofs); see docs/internal/2026-04-28-deductive-theorem-artifact-plan.md.",
   "proof_md": {
     "v1": {
       "required": [
@@ -18,6 +18,18 @@
         "Conclusion"
       ],
       "optional": ["What Could Challenge This Verdict?"]
+    },
+    "v2_theorem": {
+      "required": [
+        "Theorem Statement",
+        "Proof",
+        "Corollaries",
+        "Scope",
+        "Relation To Prior Work",
+        "What Could Challenge This Verdict?",
+        "Conclusion"
+      ],
+      "optional": []
     }
   },
   "proof_audit_md": {
@@ -48,11 +60,25 @@
         "Source Data"
       ]
     },
+    "v2_theorem": {
+      "required": ["Implementation Regression Checks"],
+      "optional": [
+        "Claim Specification",
+        "Claim Interpretation",
+        "Citation Verification Details",
+        "Computation Traces",
+        "Independent Source Agreement",
+        "Adversarial Checks",
+        "Quality Checks",
+        "Source Credibility Assessment",
+        "Source Data"
+      ]
+    },
     "conditional": [
       {
         "section": "Type S (Search) Facts",
         "when": "evidence contains type=search entries",
-        "applies_to": ["v1", "v2"]
+        "applies_to": ["v1", "v2", "v2_theorem"]
       }
     ]
   },

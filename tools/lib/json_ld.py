@@ -52,15 +52,26 @@ def generate_claim_review(
         }
 
     if proof_json_url:
+        is_theorem = (
+            proof_data.get("claim_formal", {}).get("claim_type") == "theorem"
+        )
+        if is_theorem:
+            dataset_description = (
+                f"Machine-readable data for the deductive proof of: "
+                f"\"{strip_latex(proof_data['claim_natural'])}\". "
+                f"Verdict: {verdict_info['raw']}."
+            )
+        else:
+            dataset_description = (
+                f"Machine-readable proof data for the claim: "
+                f"\"{strip_latex(proof_data['claim_natural'])}\". "
+                f"Verdict: {verdict_info['raw']}."
+            )
         dataset = {
             "@type": "Dataset",
             "url": proof_json_url,
             "name": "proof.json",
-            "description": (
-                f"Machine-readable proof data for the claim: "
-                f"\"{strip_latex(proof_data['claim_natural'])}\". "
-                f"Verdict: {verdict_info['raw']}."
-            ),
+            "description": dataset_description,
             "encodingFormat": "application/json",
             "creator": {
                 "@type": "Organization",
