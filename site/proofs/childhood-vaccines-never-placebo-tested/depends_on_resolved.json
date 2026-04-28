@@ -1,0 +1,77 @@
+{
+  "url:https://www.factcheck.org/2026/04/the-persistent-misleading-claim-that-vaccines-arent-properly-tested-for-safety/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.factcheck.org/2026/04/the-persistent-misleading-claim-that-vaccines-arent-properly-tested-for-safety/",
+    "canonical_url": "https://www.factcheck.org/2026/04/the-persistent-misleading-claim-that-vaccines-arent-properly-tested-for-safety/",
+    "title": "The Persistent Misleading Claim That Vaccines Aren’t Properly Tested for Safety - FactCheck.org",
+    "authors": [],
+    "year": 2026,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-28T08:16:16Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 108019
+    }
+  },
+  "url:https://www.aap.org/en/news-room/fact-checked/fact-checked-childhood-vaccines-are-carefully-studiedincluding-with-placebosto-ensure-theyre-safe-and-effective/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.aap.org/en/news-room/fact-checked/fact-checked-childhood-vaccines-are-carefully-studiedincluding-with-placebosto-ensure-theyre-safe-and-effective/",
+    "canonical_url": "https://www.aap.org/en/news-room/fact-checked/fact-checked-childhood-vaccines-are-carefully-studiedincluding-with-placebosto-ensure-theyre-safe-and-effective/",
+    "title": "Fact Checked: Childhood Vaccines Are Carefully Studied&#x2014;Including with Placebos&#x2014;to Ensure They&#x2019;re Safe and Effective",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-28T08:16:19Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 204978
+    }
+  },
+  "url:https://www.chop.edu/vaccine-update-healthcare-professionals/newsletter/75-years-placebo-controlled-vaccine-testing-us": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.chop.edu/vaccine-update-healthcare-professionals/newsletter/75-years-placebo-controlled-vaccine-testing-us",
+    "canonical_url": "https://www.chop.edu/vaccine-update-healthcare-professionals/newsletter/75-years-placebo-controlled-vaccine-testing-us",
+    "title": "Technically Speaking: 75 Years of Placebo-Controlled Vaccine Testing in the U.S.",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-28T08:16:23Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 92643
+    }
+  },
+  "url:https://www.voicesforvaccines.org/jtf_topics/why-arent-vaccines-tested-against-placebos/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.voicesforvaccines.org/jtf_topics/why-arent-vaccines-tested-against-placebos/",
+    "canonical_url": "https://www.voicesforvaccines.org/jtf_topics/why-arent-vaccines-tested-against-placebos/",
+    "title": "Were vaccines tested against placebos?",
+    "authors": [],
+    "year": 2024,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-28T08:16:24Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 100671
+    }
+  },
+  "url:https://publichealth.jhu.edu/ivac/vaccine-safety-trials-and-placebos-an-explainer": {
+    "identifier_type": "url",
+    "identifier_value": "https://publichealth.jhu.edu/ivac/vaccine-safety-trials-and-placebos-an-explainer",
+    "canonical_url": "https://publichealth.jhu.edu/ivac/vaccine-safety-trials-and-placebos-an-explainer",
+    "title": "Vaccine Safety Trials and Placebos: An Explainer | International Vaccine Access Center",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-04-28T08:16:23Z",
+    "source_api": "og_extraction_wayback",
+    "raw": {
+      "html_len": 33616
+    }
+  }
+}

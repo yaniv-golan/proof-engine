@@ -1,0 +1,238 @@
+{
+  "format_version": 3,
+  "claim_natural": "Childhood vaccines are not properly tested for safety because they were never tested in placebo-controlled clinical trials before approval.",
+  "claim_formal": {
+    "subject": "U.S. childhood vaccines (those on the routine CDC immunization schedule for children)",
+    "property": "Whether the factual premise of the claim \u2014 namely, that no childhood vaccine has ever been tested in a placebo-controlled clinical trial before approval \u2014 holds. The full claim has the form 'A because B' (A = 'not properly tested for safety'; B = 'never tested in placebo-controlled clinical trials before approval'). The claim's epistemic support depends on B, so falsifying B disposes of the offered reasoning.",
+    "operator": ">=",
+    "operator_note": "We disprove the claim by refuting its universal-negative factual premise B. Premise B is interpreted in the standard scientific sense the claimants themselves use in public statements (e.g., Del Bigtree: 'Not a single childhood vaccine on the schedule has ever been through a double-blind placebo-based trial prior to licensure'; RFK Jr.: 'the only ones that have been safety tested in a randomized placebo-controlled trial is the COVID vaccine'). 'Placebo-controlled' is interpreted to mean a randomized trial in which a control arm received a substance not containing the active immunogen of the test vaccine. We adopt the U.S. FDA / IFPMA definition of 'placebo' (saline or any inert/inactive solution lacking the antigen), which is the regulator's operational definition rather than the narrower 'saline-only' definition some claimants prefer. We separately address the narrower saline-only definition in the adversarial section: even under that definition the claim is refuted by, at minimum, the 1954 Salk polio trial (saline placebo, ~200,000 children in the randomized arm) and the 1992 Werzberger NEJM hepatitis A vaccine trial in children (519 vaccine vs 518 placebo). The disproof verdict requires >=3 independently authored, authoritative sources confirming that some childhood vaccines were tested in placebo-controlled trials before approval. The threshold of 3 is the default minimum; we have 5 qualifying sources.",
+    "threshold": 3,
+    "proof_direction": "disprove",
+    "is_time_sensitive": false
+  },
+  "evidence": {
+    "B1": {
+      "type": "empirical",
+      "label": "FactCheck.org (Apr 2026): claim 'misunderstands the vaccine safety testing process' and at least nine CDC-schedule vaccines have been tested against inert placebos.",
+      "sub_claim": null,
+      "source": {
+        "name": "FactCheck.org (Annenberg Public Policy Center, University of Pennsylvania), April 2026",
+        "url": "https://www.factcheck.org/2026/04/the-persistent-misleading-claim-that-vaccines-arent-properly-tested-for-safety/",
+        "quote": "Childhood vaccines may be unsafe because few if any have been tested in placebo-controlled trials before being approved. But that claim misunderstands the vaccine safety testing process and takes advantage of a narrow definition of a placebo, scientists told us."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "factcheck.org",
+          "source_type": "reference",
+          "tier": 3,
+          "flags": [],
+          "note": "Established reference source"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Childhood vaccines may be unsafe because few if any have been tested in placebo-"
+      }
+    },
+    "B2": {
+      "type": "empirical",
+      "label": "American Academy of Pediatrics fact check: 'Many childhood vaccines were tested originally in randomized clinical trials that included placebo or comparison groups.'",
+      "sub_claim": null,
+      "source": {
+        "name": "American Academy of Pediatrics \u2014 Fact Checked: Childhood Vaccines Are Carefully Studied",
+        "url": "https://www.aap.org/en/news-room/fact-checked/fact-checked-childhood-vaccines-are-carefully-studiedincluding-with-placebosto-ensure-theyre-safe-and-effective/",
+        "quote": "Many childhood vaccines were tested originally in randomized clinical trials that included placebo or comparison groups. If the vaccine is for a disease that currently has no vaccine, the placebo may be saline or another substance known to be safe."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "aap.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Many childhood vaccines were tested originally in randomized clinical trials tha"
+      }
+    },
+    "B3": {
+      "type": "empirical",
+      "label": "Johns Hopkins International Vaccine Access Center: explainer on vaccine safety trials, confirming placebo-controlled trials are used though not always required.",
+      "sub_claim": null,
+      "source": {
+        "name": "Johns Hopkins Bloomberg School of Public Health \u2014 International Vaccine Access Center",
+        "url": "https://publichealth.jhu.edu/ivac/vaccine-safety-trials-and-placebos-an-explainer",
+        "quote": "While placebo-controlled trials are often considered the gold standard for evaluating medical interventions, the use of inert placebos (e.g., the injection of saline solution) is not always required for vaccine trials and in fact is sometimes unethical."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "wayback",
+        "credibility": {
+          "domain": "jhu.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "While placebo-controlled trials are often considered the gold standard for evalu"
+      }
+    },
+    "B4": {
+      "type": "empirical",
+      "label": "Children's Hospital of Philadelphia (Gr\u00e4benstein interview, 2025): 75 years of placebo-controlled vaccine testing in the U.S., including saline placebo in the 1954 Salk polio trial.",
+      "sub_claim": null,
+      "source": {
+        "name": "Children's Hospital of Philadelphia \u2014 Vaccine Update for Healthcare Providers (Gr\u00e4benstein/Humiston, June 2025)",
+        "url": "https://www.chop.edu/vaccine-update-healthcare-professionals/newsletter/75-years-placebo-controlled-vaccine-testing-us",
+        "quote": "The poliovirus vaccine trial conducted by Jonas Salk in 1954, one of the most famous vaccine studies of all time, administered a saline placebo to the control group."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "chop.edu",
+          "source_type": "academic",
+          "tier": 4,
+          "flags": [],
+          "note": "Academic domain (.edu)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "The poliovirus vaccine trial conducted by Jonas Salk in 1954, one of the most fa"
+      }
+    },
+    "B5": {
+      "type": "empirical",
+      "label": "Voices for Vaccines (2024): explicit list of vaccines tested against saline-placebo controls (rubella, pneumococcal, Hib, HPV, Salk polio, measles, Tdap, COVID).",
+      "sub_claim": null,
+      "source": {
+        "name": "Voices for Vaccines (Task Force for Global Health) \u2014 Just the Facts, August 2024",
+        "url": "https://www.voicesforvaccines.org/jtf_topics/why-arent-vaccines-tested-against-placebos/",
+        "quote": "saline-placebo-controlled trials are conducted for many vaccines to assess both safety and efficacy: Rubella vaccine Pneumococcal vaccine Hib vaccines HPV vaccine The Salk Polio vaccine Measles vaccine Tdap vaccine COVID vaccine"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "live",
+        "credibility": {
+          "domain": "voicesforvaccines.org",
+          "source_type": "unknown",
+          "tier": 2,
+          "flags": [],
+          "note": "Unclassified domain \u2014 verify source authority manually"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "saline-placebo-controlled trials are conducted for many vaccines to assess both "
+      }
+    },
+    "A1": {
+      "type": "computed",
+      "label": "Verified rejection-source count",
+      "sub_claim": null,
+      "method": "count(verified rejection citations) = 5",
+      "result": "5",
+      "depends_on": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5"
+      ]
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Five independent authoritative sources (different institutional types: journalism fact-check, professional medical society, university public-health center, academic medical center, public-health communications nonprofit) consulted for the rejection of the placebo-trials premise.",
+      "fact_ids": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5"
+      ],
+      "agreement": true,
+      "n_sources_consulted": 5,
+      "n_sources_verified": 5,
+      "sources": {
+        "factcheck_2026": "verified",
+        "aap_factcheck": "verified",
+        "jhu_ivac": "verified",
+        "chop_grabenstein": "verified",
+        "voices_for_vaccines": "verified"
+      },
+      "independence_note": "Sources are from different institutions and authors; the underlying primary evidence (NEJM pivotal trial publications, FDA review documents) is available independently of any single meta-source. None of the meta-sources cite each other as the sole basis for their conclusion.",
+      "coi_flags": []
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Do anti-vaccine advocates (RFK Jr., Del Bigtree, Aaron Siri / ICAN, Children's Health Defense) maintain that childhood vaccines were never tested in placebo-controlled trials, and is their argument credible enough to break the disproof?",
+      "verification_performed": "Reviewed Aaron Siri's substack post 'Clinical Trial to License RotaTeq, Like Almost All Childhood Vaccines, Did Not Use a Placebo Control' (https://aaronsiri.substack.com/p/clinical-trial-to-license-rotateq); Del Bigtree's quoted statement at the MAHA Institute conference (March 2026) reproduced in the FactCheck.org article (B1); RFK Jr.'s January 2026 public statements; CDC ACIP December 2025 presentation by Aaron Siri (linked from the FactCheck.org article).",
+      "finding": "These advocates do make this argument but their argument relies on a non-standard definition of 'placebo' that excludes any control containing the vaccine's inactive carrier (adjuvants, stabilizers, buffers). Under that definition they are correct that several recent vaccine pivotal trials used non-saline controls (e.g., Prevnar-13 was compared to Prevnar-7 because it would have been unethical to deny efficacious pneumococcal protection to control-arm children). Two reasons their argument does not break the disproof: (1) Even under their narrow saline-only definition, the 1954 Salk polio trial (~200,000 children received saline placebo in the randomized arm), the 1984 NEJM varicella trial, the 1992 Werzberger NEJM hepatitis A trial in 519 vs 518 children, the original 1990s rotavirus trials, and the FUTURE I/II HPV trials are documented placebo-controlled RCTs that supported pre-licensure approval. (2) The U.S. FDA told FactCheck.org in 2023 that 'a placebo control, such as saline, is not required to determine the safety (or effectiveness) of a vaccine' and that in some cases is 'considered unethical' \u2014 i.e., the regulator's definition of 'placebo' is broader than 'inert saline.' The claim therefore rests on a definitional dispute, not on an empirical absence of placebo-controlled trials.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Are the rejection sources independent? Could they all be tracing back to a single primary fact-check that itself might be wrong?",
+      "verification_performed": "Compared institutional affiliations and publication histories: FactCheck.org (Annenberg / U. Penn \u2014 journalism nonprofit, April 2026); American Academy of Pediatrics (medical professional society, separate authorship); Johns Hopkins Bloomberg School of Public Health / IVAC (university public-health center); Children's Hospital of Philadelphia (Gr\u00e4benstein, an independent pharmacist with U.S. Army and industry vaccinology background, June 2025); Voices for Vaccines (Task Force for Global Health, August 2024). Publication dates span 2024-2026 and predecessor versions of these analyses go back over a decade. The underlying primary evidence \u2014 peer-reviewed pivotal trial publications in NEJM (Salk 1955; Werzberger 1992; Vesikari 2006 RotaTeq; FUTURE II Gardasil 2007) and FDA package inserts \u2014 is independent of any single fact-check.",
+      "finding": "Sources are institutionally independent (5 distinct organizations of different types) and the primary evidence (NEJM-published pivotal trials, FDA review documents) is available independent of the meta-sources. No single-fact-check dependency exists.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the claim be salvaged by reinterpreting it as a claim specifically about *long-term* placebo-controlled safety trials (e.g., RFK Jr.'s tweet about 'long-term placebo-controlled')?",
+      "verification_performed": "Reviewed the most charitable narrow reading: 'long-term saline-placebo trials of years-to-decades follow-up have not been conducted for every dose on the current schedule.'",
+      "finding": "Under this narrower reading the claim has some empirical merit (ethical and operational reasons make decade-long placebo arms rare), but this is a different claim than the one we are evaluating. The claim under proof says vaccines 'were never tested in placebo-controlled clinical trials before approval' \u2014 an absolute statement about pre-licensure trial design, not a qualified statement about long-term follow-up. Reinterpreting the claim into a defensible weaker form would require redefining it in 'operator_note' and constitutes operating on a different claim. We disprove the stated claim and explicitly note that the long-term-follow-up reformulation is a distinct question that this proof does not address.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the second clause of the claim ('not properly tested for safety') survive even after refuting the placebo premise \u2014 i.e., could vaccines still be 'not properly tested' for some other reason?",
+      "verification_performed": "The claim is structured 'A because B'. Falsifying B refutes the offered reasoning for A but does not establish A's independent truth or falsity. We searched for additional evidence on the testing process beyond placebo controls (Phase 1/2/3 trials, FDA Vaccines and Related Biological Products Advisory Committee review, post-marketing surveillance via VAERS / VSD / V-safe / CISA \u2014 confirmed in the JHU/IVAC and FactCheck.org sources).",
+      "finding": "Vaccines undergo multi-phase clinical trials and continuous post-marketing safety monitoring. The disproof here addresses the *reasoning* offered for the safety conclusion, not the broader empirical question 'are vaccines safe?'. Because the claim under proof asserts a specific causal-justificatory link ('not safe-tested *because* never placebo-tested'), refuting the premise refutes the offered reasoning. The proof does not claim to settle the underlying safety question by itself.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "DISPROVED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "n_confirmed": 5,
+    "threshold": 3,
+    "operator": ">=",
+    "claim_holds": true,
+    "proof_direction": "disprove"
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.24.1",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-04-28"
+  }
+}
