@@ -23,7 +23,7 @@ Each item is **PASS / FAIL / N/A** with **specific evidence** (file path, line n
 4. proof_audit.md contains `## Implementation Regression Checks` (required by v2_theorem schema profile).
 5. proof.md does NOT contain sentences with sampling counts (`"sampled N games"`, `"verified on N games"`, `"X violations"`). Sampling content lives in proof_audit.md only.
 6. Every `add_computed_fact()` call in proof.py whose `method=` string contains a sampling token (`"sampled"`, `"random"`, `"Monte Carlo"`) also contains regression-role wording (`"regression"`, `"sanity check"`, `"spot-check"`) within ~80 characters of the sampling token.
-7. Author/year references (`"Author (Year)"`) in proof.md are wrapped in `<!-- not-a-citation-start -->`/`<!-- not-a-citation-end -->` comments OR rendered via `{{cite:...}}` markers. Bare unwrapped author/year references will be rejected by the citation linter at publish.
+7. Author/year references (`"Author (Year)"`) in proof.md are wrapped in `<!-- not-a-citation-start -->`/`<!-- not-a-citation-end -->` comments. The `{{cite:...}}` marker form is accepted by existing published proofs but is deprecated for new proofs pending a toolchain fix (see Rule 9). Bare unwrapped author/year references will be rejected by the citation linter at publish. The wrapper must NOT contain `doi:` — the linter pattern-matches that prefix even inside the comment.
 
 ### Section B — citation-target quality (FAIL blocks publish for `claim_type: "theorem"`)
 

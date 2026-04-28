@@ -54,7 +54,7 @@ Section-by-section guidance:
 
 - **`## Scope`** — explicit bullet list of what is **NOT** proved. Typical exclusions for theorem proofs in this engine: mixed equilibria, infinite domains, convergence rates, broader learning dynamics, computational complexity bounds. The list should be short and specific — generic "this is just a theorem, not the universe" hedging is not useful.
 
-- **`## Relation to prior work`** — when the theorem is a special case, forward direction, or instance of a known result, name it explicitly with citation. For example: *"This proves the forward direction of Monderer & Shapley (1996); the converse — FIP ⟺ existence of a generalized ordinal potential — is in the same paper and is not addressed here."* Use `{{cite:...}}` markers (Rule 9) for any author/title strings.
+- **`## Relation to prior work`** — when the theorem is a special case, forward direction, or instance of a known result, name it explicitly with citation. For prose attributions to prior work, wrap the entire bibliographic mention in `<!-- not-a-citation-start -->Author (Year), "Title," *Journal* vol(issue), pages<!-- not-a-citation-end -->`. Do NOT include the DOI in the prose — the `verify-prose` linter pattern-matches `doi:` even inside HTML-comment wrappers and will reject the line. If you need the DOI for machine consumption, put it in `proof.json` metadata or `meta.yaml`, not in proof.md prose. Example: *"This proves the forward direction of <!-- not-a-citation-start -->Monderer & Shapley (1996), \"Potential Games,\" *Games and Economic Behavior* 14(1), 124–143<!-- not-a-citation-end -->; the converse — FIP ⟺ existence of a generalized ordinal potential — is in the same paper and is not addressed here."* The `{{cite:...}}` marker form is deprecated for new proofs pending a toolchain fix (see Rule 9).
 
 - **`## What could challenge this verdict?`** — existing convention; stays. Adversarial checks documented as prose; if a reader could imagine a hole in the argument or in the formalization, address it here.
 
@@ -276,6 +276,12 @@ if __name__ == "__main__":
 
     builder.set_verdict(verdict)
     builder.emit()
+```
+
+**Note on `proof.json`.** `proof.py` does NOT write `proof.json` directly. `builder.emit()` prints the JSON summary to stdout, preceded by the marker line `=== PROOF SUMMARY (JSON) ===`. The publish toolchain (`tools/proof-site.py publish`) and the site-build loader capture from stdout. To inspect `proof.json` locally without publishing, run:
+
+```bash
+python proof.py | awk '/=== PROOF SUMMARY \(JSON\) ===/{flag=1; next} flag' > proof.json
 ```
 
 ## Key differences from other templates

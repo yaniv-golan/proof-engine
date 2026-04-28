@@ -479,32 +479,35 @@ rendering would leave unresolved tokens in the archived file.
 
 **Enforced by:** `tools/lib/reference_resolver.py` + `tools/lib/prose_reference_scan.py` + `cite-expand` pre-publish gate.
 
-**Bad (hand-typed, unverified):**
+**Two mechanisms exist; one works in practice.** The skill ships:
+
+1. **`<!-- not-a-citation-start -->...<!-- not-a-citation-end -->`** — HTML-comment escape hatch. **This is the working idiom for new proofs.** Wrap the entire bibliographic mention; do NOT include `doi:` inside the wrapper (the linter pattern-matches it even inside the comment).
+2. **`{{cite:<type>:<value>}}`** — structured marker resolved at publish time by `cite-expand`. **Deprecated for new proofs pending toolchain fix.** As of the 2026-04-28 end-to-end test, `cite-expand` could not resolve DOI metadata even after `resolve-deps --refresh`, and `verify-prose` still flagged `doi:` inside the resolved output. Existing published proofs that use `{{cite:...}}` are not being rewritten — this is a forward-going recommendation only.
+
+**Bad (hand-typed, unwrapped):**
 ```markdown
 R. Cheng, "The elementary function arithmetic" (arXiv:2603.21852)
 ```
 
-**Good (verified via `{{cite:...}}` + `cite-expand`):**
+**Good (HTML-comment wrapper, no DOI in prose):**
+```markdown
+<!-- not-a-citation-start -->A. Odrzywołek (2026), "All elementary functions from a single binary operator," arXiv preprint<!-- not-a-citation-end -->
+```
+
+If you need the DOI/arXiv ID for machine consumption, put it in `proof.json` metadata or `meta.yaml`, not in proof.md prose.
+
+**Deprecated (do not use for new proofs):**
 ```markdown
 {{cite:arxiv:2603.21852}}
 ```
 
-After running `proof-site.py cite-expand`, the committed markdown becomes:
-
-```markdown
-[A. Odrzywołek, "All elementary functions from a single binary operator"](https://arxiv.org/abs/2603.21852) (2026, arXiv preprint) <!-- cite-source: arxiv:2603.21852 -->
+**Authoring workflow (HTML-comment form):**
 ```
-
-This is what `mint-doi` uploads to Zenodo, so the archived artifact carries
-the resolved attribution, not a template placeholder or a hand-typed claim.
-
-**Authoring workflow:**
-```
-proof-site.py resolve-deps --artifacts-dir <dir> --refresh
-proof-site.py cite-expand  --artifacts-dir <dir>
 proof-site.py verify-prose --artifacts-dir <dir>
 proof-site.py publish <dir>
 ```
+
+The `resolve-deps` and `cite-expand` steps are only needed for proofs that still rely on `{{cite:...}}` markers.
 
 **Escape hatch** (rare — use only for historical prose, never for actual citations):
 ```markdown
@@ -512,6 +515,27 @@ proof-site.py publish <dir>
 ```
 
 The escape hatch suppresses only `DANGLING_SHORT_PATTERN` (bare author-year). Author + quoted title must always carry an identifier — there is no escape hatch for that form.
+
+**What the linter actually flags vs. what is allowed:**
+
+The `verify-prose` linter pattern-matches a narrow shape: capitalized name(s), optional `&`, then a parenthesized 4-digit year. The regex is roughly `\b[A-Z][a-z]+\s*(?:&\s*[A-Z][a-z]+)?\s*\((?:19|20)\d{2}\)`. Things outside that shape pass through silently.
+
+| Form | Status | Example |
+|------|--------|---------|
+| Parenthetical author-year | **Flagged** | `Monderer & Shapley (1996) showed ...` |
+| Author et al. + year | **Flagged** | `Smith et al. (2010) proved ...` |
+| Cross-reference to sibling artifact | Allowed | `See proof_audit.md, Implementation regression checks, for ...` |
+| Section / heading name in prose | Allowed | `... discussed in the Scope section.` |
+| Code identifier or file path | Allowed | `tools/lib/proof_loader.py` |
+| Prose with no parenthetical year | Allowed | `Rosenthal's potential function ...` |
+
+**Working idiom for new proofs.** Wrap the entire bibliographic mention in the HTML-comment escape hatch and keep DOIs out of the prose:
+
+```markdown
+<!-- not-a-citation-start -->Monderer & Shapley (1996), "Potential Games," *Games and Economic Behavior* 14(1), 124–143<!-- not-a-citation-end -->
+```
+
+The DOI (if needed for machine consumption) belongs in `proof.json` metadata or `meta.yaml`, not in proof.md. The `verify-prose` linter pattern-matches the literal `doi:` prefix even inside `<!-- not-a-citation-* -->` blocks and will reject the line.
 
 ---
 

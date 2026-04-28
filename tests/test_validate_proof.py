@@ -197,6 +197,78 @@ def test_subclaim_holds_hardcoded_fails():
     assert len(v.issues) > 0
 
 
+# Phase 2.4.a: scope `*_holds` heuristic to verdict block.
+# Helper functions can legitimately use `*_holds` as a local variable name
+# (e.g. a loop accumulator probing a property). Such locals must NOT trigger
+# the verdict-hardcoded warning.
+
+HELPER_LOCAL_HOLDS_NOT_FLAGGED = '''
+def probe_property(refs):
+    ref_holds = True  # local accumulator, not a verdict
+    for r in refs:
+        if not r.ok:
+            ref_holds = False
+    return ref_holds
+
+if __name__ == "__main__":
+    claim_holds = compare(probe_property([]), "==", True)
+'''
+
+HELPER_LOCAL_HOLDS_HARDCODED_FALSE_NOT_FLAGGED = '''
+def helper():
+    helper_holds = False  # local, not the verdict
+    return helper_holds
+
+if __name__ == "__main__":
+    claim_holds = compare(helper(), "==", False)
+'''
+
+VERDICT_BLOCK_HARDCODED_STILL_FLAGGED = '''
+def helper():
+    local_holds = True
+    return local_holds
+
+if __name__ == "__main__":
+    claim_holds = True
+'''
+
+CLASS_BODY_HOLDS_NOT_FLAGGED = '''
+class Probe:
+    default_holds = True  # class attribute, not a verdict
+
+if __name__ == "__main__":
+    claim_holds = compare(1, "==", 1)
+'''
+
+
+def test_helper_function_local_holds_not_flagged():
+    """A `*_holds` local variable in a helper function must not trigger the rule."""
+    v = _validate_claim_holds(HELPER_LOCAL_HOLDS_NOT_FLAGGED)
+    assert len(v.issues) == 0, f"Unexpected issues: {v.issues}"
+    assert len(v.warnings) == 0, f"Unexpected warnings: {v.warnings}"
+
+
+def test_helper_hardcoded_false_local_not_flagged():
+    """Hardcoded `helper_holds = False` inside a helper function must not trigger the rule."""
+    v = _validate_claim_holds(HELPER_LOCAL_HOLDS_HARDCODED_FALSE_NOT_FLAGGED)
+    assert len(v.issues) == 0, f"Unexpected issues: {v.issues}"
+
+
+def test_verdict_block_hardcoded_still_flagged_with_helper_present():
+    """Hardcoded verdict-block assignment must still trigger even when helpers contain `*_holds` locals."""
+    v = _validate_claim_holds(VERDICT_BLOCK_HARDCODED_STILL_FLAGGED)
+    assert len(v.issues) > 0, "Verdict-block `claim_holds = True` must still be flagged"
+    # And the helper's `local_holds = True` must NOT have been flagged.
+    helper_flagged = any("local_holds" in msg for msg, _ in v.issues)
+    assert not helper_flagged, "Helper-function `local_holds` must not be flagged"
+
+
+def test_class_body_holds_not_flagged():
+    """A `*_holds` class attribute must not trigger the rule."""
+    v = _validate_claim_holds(CLASS_BODY_HOLDS_NOT_FLAGGED)
+    assert len(v.issues) == 0, f"Unexpected issues: {v.issues}"
+
+
 def _validate_hardcoded_compare(source_code: str) -> ProofValidator:
     """Write source to temp file, run hardcoded_compare_input check, return validator."""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:

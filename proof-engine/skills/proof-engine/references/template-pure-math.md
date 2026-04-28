@@ -121,6 +121,12 @@ if __name__ == "__main__":
     builder.emit()
 ```
 
+**Note on `proof.json`.** `proof.py` does NOT write `proof.json` directly. `builder.emit()` prints the JSON summary to stdout, preceded by the marker line `=== PROOF SUMMARY (JSON) ===`. The publish toolchain (`tools/proof-site.py publish`) and the site-build loader capture from stdout. To inspect `proof.json` locally without publishing, run:
+
+```bash
+python proof.py | awk '/=== PROOF SUMMARY \(JSON\) ===/{flag=1; next} flag' > proof.json
+```
+
 Key differences from the empirical template:
 - No `empirical_facts`, `verify_all_citations`, `extract_values`, or `smart_extract` imports
 - No `citations` or `extractions` keys in the JSON summary (omitted, not empty)

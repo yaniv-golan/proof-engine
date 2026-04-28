@@ -10,6 +10,7 @@ Usage:
 Exit code 0 = pass (warnings OK), 1 = fail (issues found).
 """
 
+import ast
 import re
 import sys
 import os
@@ -912,23 +913,107 @@ class ProofValidator:
         else:
             self.passed.append("General: Self-contained proof with __main__ and verdict")
 
+    def _verdict_scope_lines(self):
+        """Return the set of source line numbers considered "verdict scope".
+
+        Verdict scope = module-level statements PLUS the body of any
+        `if __name__ == "__main__":` block. Statements nested inside function
+        or class definitions are NOT verdict scope, even if they happen to
+        assign a variable whose name ends in `_holds`.
+
+        This scoping exists to suppress false positives from helper functions
+        that legitimately use `*_holds` as a local-variable name — for example
+        a loop accumulator named `ref_holds` inside a helper that probes a
+        property over many candidates. Such locals are not the proof's
+        verdict-bearing variable and must not be flagged as "hardcoded
+        verdict".
+
+        If the AST cannot be parsed, returns None — callers should treat that
+        as "no scoping info available" and fall back to permissive behavior
+        (skip the check rather than risk regressions on malformed sources).
+        """
+        try:
+            tree = ast.parse(self.source)
+        except SyntaxError:
+            return None
+
+        scope_lines: set[int] = set()
+
+        def _is_main_guard(node):
+            # Match `if __name__ == "__main__":` (either operand order).
+            if not isinstance(node, ast.If):
+                return False
+            test = node.test
+            if not isinstance(test, ast.Compare) or len(test.ops) != 1:
+                return False
+            if not isinstance(test.ops[0], ast.Eq):
+                return False
+            left, right = test.left, test.comparators[0]
+            def _is_name(n, name):
+                return isinstance(n, ast.Name) and n.id == name
+            def _is_str(n, s):
+                return isinstance(n, ast.Constant) and n.value == s
+            return (
+                (_is_name(left, "__name__") and _is_str(right, "__main__")) or
+                (_is_name(right, "__name__") and _is_str(left, "__main__"))
+            )
+
+        def _collect_lines(node):
+            # Walk a subtree but do NOT descend into nested function/class
+            # definitions — their interiors are helper-local, not verdict scope.
+            for child in ast.iter_child_nodes(node):
+                if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                    continue
+                lineno = getattr(child, "lineno", None)
+                end_lineno = getattr(child, "end_lineno", lineno)
+                if lineno is not None:
+                    for ln in range(lineno, (end_lineno or lineno) + 1):
+                        scope_lines.add(ln)
+                _collect_lines(child)
+
+        # Module-level statements (excluding function/class bodies).
+        _collect_lines(tree)
+
+        # Plus everything inside any `if __name__ == "__main__":` block,
+        # even though such blocks live at module scope (already covered above)
+        # — handled implicitly by _collect_lines on the module body, since the
+        # `if` is a module-level statement and we descend into its body.
+        # Nested __name__ guards (rare) are handled the same way recursively.
+        return scope_lines
+
     def check_claim_holds_computed(self):
         """Check that verdict-controlling variables are computed, not hardcoded.
 
         Scans for any variable named *claim_holds* (including variants like
         overall_claim_holds, sc1_claim_holds) and checks that they are assigned
         from compare() or a compound expression, not from bare True/False literals.
+
+        Scoping: only assignments at module scope or inside an
+        `if __name__ == "__main__":` block are considered. Assignments inside
+        helper functions or class bodies are skipped — those are local
+        variables that happen to share the `*_holds` naming convention and
+        are not the proof's verdict-bearing variable. (Without this scoping,
+        a helper-function loop accumulator like `ref_holds` would falsely
+        trigger the "hardcoded verdict" warning.)
         """
         # Match claim_holds and variants: overall_claim_holds, sc1_claim_holds,
         # subclaim_a_holds, subclaim_b_holds, etc.
         pattern = re.compile(r'\s*(\w*(?:claim_holds|_holds)\w*)\s+=\s+(.+)')
         found_any = False
 
+        verdict_lines = self._verdict_scope_lines()
+
         for i, line in enumerate(self.lines, 1):
             if line.strip().startswith("#"):
                 continue
             m = pattern.match(line)
             if m:
+                # Skip assignments outside verdict scope (i.e. inside helper
+                # function or class bodies). If AST parse failed
+                # (verdict_lines is None), preserve legacy behavior and check
+                # every line — better to over-warn than silently regress.
+                if verdict_lines is not None and i not in verdict_lines:
+                    continue
                 found_any = True
                 var_name = m.group(1)
                 rhs = m.group(2).strip()
