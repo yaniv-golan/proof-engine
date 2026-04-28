@@ -52,7 +52,7 @@ def generate_claim_review(
         }
 
     if proof_json_url:
-        claim_review["mainEntity"] = {
+        dataset = {
             "@type": "Dataset",
             "url": proof_json_url,
             "name": "proof.json",
@@ -69,6 +69,13 @@ def generate_claim_review(
             },
             "license": "https://opensource.org/licenses/MIT",
         }
+        if doi:
+            dataset["identifier"] = f"https://doi.org/{doi}"
+            dataset_same_as = [f"https://doi.org/{doi}"]
+            if concept_doi and concept_doi != doi:
+                dataset_same_as.append(f"https://doi.org/{concept_doi}")
+            dataset["sameAs"] = dataset_same_as
+        claim_review["mainEntity"] = dataset
 
     if provenance_url:
         claim_review["about"] = {

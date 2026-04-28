@@ -159,3 +159,45 @@ def test_json_ld_includes_main_entity():
     assert result["mainEntity"]["description"]
     assert result["mainEntity"]["creator"]["name"] == "Proof Engine"
     assert "opensource.org" in result["mainEntity"]["license"]
+    assert "identifier" not in result["mainEntity"]
+    assert "sameAs" not in result["mainEntity"]
+
+
+def test_json_ld_main_entity_carries_doi_when_minted():
+    from tools.lib.json_ld import generate_claim_review
+    import json
+    proof_data = {
+        "format_version": 3, "claim_natural": "Test",
+        "verdict": {"value": "PROVED", "qualified": False, "qualifier": None, "reason": None},
+        "generator": {"generated_at": "2026-04-13"},
+    }
+    result = json.loads(generate_claim_review(
+        proof_data, "https://example.com/proofs/test/",
+        proof_json_url="https://example.com/proofs/test/proof.json",
+        doi="10.5281/zenodo.1234567",
+        concept_doi="10.5281/zenodo.1234560",
+    ))
+    dataset = result["mainEntity"]
+    assert dataset["identifier"] == "https://doi.org/10.5281/zenodo.1234567"
+    assert dataset["sameAs"] == [
+        "https://doi.org/10.5281/zenodo.1234567",
+        "https://doi.org/10.5281/zenodo.1234560",
+    ]
+
+
+def test_json_ld_main_entity_doi_without_concept():
+    from tools.lib.json_ld import generate_claim_review
+    import json
+    proof_data = {
+        "format_version": 3, "claim_natural": "Test",
+        "verdict": {"value": "PROVED", "qualified": False, "qualifier": None, "reason": None},
+        "generator": {"generated_at": "2026-04-13"},
+    }
+    result = json.loads(generate_claim_review(
+        proof_data, "https://example.com/proofs/test/",
+        proof_json_url="https://example.com/proofs/test/proof.json",
+        doi="10.5281/zenodo.1234567",
+    ))
+    dataset = result["mainEntity"]
+    assert dataset["identifier"] == "https://doi.org/10.5281/zenodo.1234567"
+    assert dataset["sameAs"] == ["https://doi.org/10.5281/zenodo.1234567"]

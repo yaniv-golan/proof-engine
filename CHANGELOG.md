@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- **DOI on embedded `Dataset` in JSON-LD.** Per-proof `ClaimReview.mainEntity` (a `Dataset` describing `proof.json`) now carries `identifier` (the DOI URL) and `sameAs` (DOI + concept-DOI URLs) when the proof has a minted Zenodo DOI. The DOI was already on the parent `ClaimReview`; surfacing it on the embedded `Dataset` deepens the dataset record for Google's Dataset rich-result crawler and any DataCite-aware consumer reading the embedded entity directly. Unminted proofs are unchanged.
+
 ## [1.33.2] - 2026-04-25
 
 ### Added
