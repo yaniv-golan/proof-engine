@@ -10,7 +10,7 @@ description: >
 license: MIT
 metadata:
   author: Yaniv Golan
-  version: "1.33.4"
+  version: "1.34.0"
 compatibility: >
   Requires Python 3, `requests`, and the `proof-citations` PyPI package
   (`pip install proof-citations` — the scripts/ entries are thin shims
