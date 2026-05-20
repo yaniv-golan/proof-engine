@@ -1,0 +1,9 @@
+{
+  "doi": "10.5281/zenodo.20315066",
+  "zenodo_id": "20315066",
+  "concept_doi": "10.5281/zenodo.20315065",
+  "concept_zenodo_id": "20315065",
+  "claim_natural": "Daily low-dose aspirin reduces the risk of recurrent non-fatal myocardial infarction in patients with prior cardiovascular disease, per the Antithrombotic Trialists' Collaboration meta-analysis.",
+  "minted_at": "2026-05-20",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.34.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.20315066"
+}

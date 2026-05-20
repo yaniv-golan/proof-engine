@@ -1,0 +1,32 @@
+{
+  "url:https://pmc.ncbi.nlm.nih.gov/articles/PMC64503/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pmc.ncbi.nlm.nih.gov/articles/PMC64503/",
+    "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC64503/",
+    "title": "Collaborative meta-analysis of randomised trials of antiplatelet therapy for prevention of death, myocardial infarction, and stroke in high risk patients - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T18:48:11Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 262816
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/19482214/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/19482214/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/19482214/",
+    "title": "Aspirin in the primary and secondary prevention of vascular disease: collaborative meta-analysis of individual participant data from randomised trials - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T18:48:11Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 252610
+    }
+  }
+}
