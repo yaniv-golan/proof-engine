@@ -1444,11 +1444,25 @@ def main():
     )
     write_file(output_dir / "sitemap.xml", sitemap_xml)
 
-    # robots.txt
+    # sitemap_index.xml — sitemap-index wrapper pointing at sitemap.xml. Exists
+    # so GSC can be given a fresh sitemap URL that bypasses any URL-level
+    # failure cache from a prior bad fetch on /sitemap.xml.
+    index_lastmod_line = f"<lastmod>{site_lastmod}</lastmod>" if site_lastmod else ""
+    sitemap_index_xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"  <sitemap><loc>{xml_escape(f'{site_url}{base_url}sitemap.xml')}</loc>{index_lastmod_line}</sitemap>\n"
+        "</sitemapindex>\n"
+    )
+    write_file(output_dir / "sitemap_index.xml", sitemap_index_xml)
+
+    # robots.txt — advertise both. Crawlers that hit robots.txt first will see
+    # both URLs; GSC reads only what we explicitly submit there.
     robots_txt = (
         "User-agent: *\n"
         "Allow: /\n"
         "\n"
+        f"Sitemap: {site_url}{base_url}sitemap_index.xml\n"
         f"Sitemap: {site_url}{base_url}sitemap.xml\n"
     )
     write_file(output_dir / "robots.txt", robots_txt)

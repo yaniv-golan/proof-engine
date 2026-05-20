@@ -4,9 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.33.4] - 2026-05-20
+
 ### Added
 
 - **DOI on embedded `Dataset` in JSON-LD.** Per-proof `ClaimReview.mainEntity` (a `Dataset` describing `proof.json`) now carries `identifier` (the DOI URL) and `sameAs` (DOI + concept-DOI URLs) when the proof has a minted Zenodo DOI. The DOI was already on the parent `ClaimReview`; surfacing it on the embedded `Dataset` deepens the dataset record for Google's Dataset rich-result crawler and any DataCite-aware consumer reading the embedded entity directly. Unminted proofs are unchanged.
+- **`/sitemap_index.xml` sitemap-index file.** A standard `<sitemapindex>` document referencing the existing `/sitemap.xml`. `robots.txt` now declares both. Exists to give Google Search Console a fresh sitemap URL that bypasses the URL-level failure cache from a one-off bad fetch on `/sitemap.xml` (the fetcher recorded "Sitemap could not be read" on 2026-04-26 during the Cloudflare proxy transition and entered long backoff; resubmitting the same URL doesn't reset that). The new index URL is what GSC should be pointed at going forward.
 
 ## [1.33.2] - 2026-04-25
 

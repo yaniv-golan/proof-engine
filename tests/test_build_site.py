@@ -163,6 +163,17 @@ def test_robots_txt_at_root(site_fixture):
     robots = (site_fixture / "_site" / "robots.txt").read_text()
     assert "User-agent: *" in robots
     assert "Sitemap: https://example.com/proof-engine/sitemap.xml" in robots
+    assert "Sitemap: https://example.com/proof-engine/sitemap_index.xml" in robots
+
+
+def test_sitemap_index_xml_at_root(site_fixture):
+    result = _run_build(site_fixture)
+    assert result.returncode == 0, f"Build failed:\n{result.stderr}"
+    sitemap_index = (site_fixture / "_site" / "sitemap_index.xml").read_text()
+    assert '<?xml version="1.0" encoding="UTF-8"?>' in sitemap_index
+    assert 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' in sitemap_index
+    assert "<sitemapindex" in sitemap_index
+    assert "<loc>https://example.com/proof-engine/sitemap.xml</loc>" in sitemap_index
 
 
 def test_sitemap_xml_at_root(site_fixture):
