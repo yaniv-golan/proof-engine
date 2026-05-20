@@ -1,0 +1,62 @@
+{
+  "url:https://pubmed.ncbi.nlm.nih.gov/23627332/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/23627332/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/23627332/",
+    "title": "Periodontitis and atherosclerotic cardiovascular disease: consensus report of the Joint EFP/AAP Workshop on Periodontitis and Systemic Diseases - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T14:11:22Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 139425
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/32011025/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/32011025/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/32011025/",
+    "title": "Periodontitis and cardiovascular diseases: Consensus report - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T14:11:23Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 175694
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/23574472/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/23574472/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/23574472/",
+    "title": "Periodontal disease and systemic illness: will the evidence ever be enough? - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T14:11:23Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 136349
+    }
+  },
+  "url:http://web.archive.org/web/20260128105120/https://pubmed.ncbi.nlm.nih.gov/22514251/": {
+    "identifier_type": "url",
+    "identifier_value": "http://web.archive.org/web/20260128105120/https://pubmed.ncbi.nlm.nih.gov/22514251/",
+    "canonical_url": "http://web.archive.org/web/20260128105120/https://pubmed.ncbi.nlm.nih.gov/22514251/",
+    "title": "Periodontal disease and atherosclerotic vascular disease: does the evidence support an independent association?: a scientific statement from the American Heart Association - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T14:11:24Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 26754
+    }
+  }
+}

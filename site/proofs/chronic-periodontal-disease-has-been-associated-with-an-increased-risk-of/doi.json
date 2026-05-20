@@ -1,0 +1,9 @@
+{
+  "doi": "10.5281/zenodo.20311397",
+  "zenodo_id": "20311397",
+  "concept_doi": "10.5281/zenodo.20311396",
+  "concept_zenodo_id": "20311396",
+  "claim_natural": "Chronic periodontal disease has been associated with an increased risk of atherosclerotic cardiovascular disease in adults, with consensus reviews pointing to systemic inflammation as a biologically plausible mediating mechanism (Tonetti & Van Dyke, 2013; Sanz et al., 2020; Cullinan & Ford, 2013).",
+  "minted_at": "2026-05-20",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.34.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.20311397"
+}
