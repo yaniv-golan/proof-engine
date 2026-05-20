@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 import pytest
 
-from proof_citations.registry.base import Author, ResolvedRecord, ResolutionError, now_iso
+from proof_citations.resolvers.base import Author, ResolvedRecord, ResolutionError, now_iso
 from proof_citations import cli as cli_module
 
 

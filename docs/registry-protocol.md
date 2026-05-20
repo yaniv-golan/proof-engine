@@ -3,6 +3,8 @@
 JSON-over-HTTPS protocol for querying and (optionally) publishing verified proofs.
 Public and private self-hosted registries implement this same protocol.
 
+> **Naming note.** This spec describes a *catalog of proofs* — claim → verdict + DOI, queryable over HTTPS. It is implemented by the [`proof-engine-registry`](https://pypi.org/project/proof-engine-registry/) Python package and the `proof-registry serve` CLI. It is **unrelated to** `proof_citations.resolvers` (the Python identifier→bibliographic-metadata module shipped in the [`proof-citations`](https://pypi.org/project/proof-citations/) package), even though both concepts could plausibly be called "a registry." Different layers, different problems, no shared code. The naming asymmetry is intentional after the v1.39.0 rename of the citation-resolver submodule.
+
 ## Discovery
 
     GET /.well-known/proof-registry.json

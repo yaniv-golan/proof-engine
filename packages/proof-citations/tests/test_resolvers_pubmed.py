@@ -1,4 +1,4 @@
-"""Tests for proof_citations.registry.pubmed.
+"""Tests for proof_citations.resolvers.pubmed.
 
 Three layers:
 1. Pure-function parsing tests (no network) — verify the response mapping
@@ -16,8 +16,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from proof_citations.registry.base import ResolutionError, Author, ResolvedRecord
-from proof_citations.registry.pubmed import (
+from proof_citations.resolvers.base import ResolutionError, Author, ResolvedRecord
+from proof_citations.resolvers.pubmed import (
     resolve_pmid,
     _parse_year,
     _parse_published_date,
@@ -264,7 +264,7 @@ class TestResolvePMIDMocked:
 def test_resolve_pmid_live_smoke():
     """Hit the real E-utilities for the Sung et al. 2021 cancer-statistics paper
     (PMID 33538338) — known stable, frequently cited reference."""
-    from proof_citations.registry.base import HTTPSession
+    from proof_citations.resolvers.base import HTTPSession
     record = resolve_pmid("33538338", session=HTTPSession())
     assert record.identifier_value == "33538338"
     assert record.title and "cancer statistics" in record.title.lower()

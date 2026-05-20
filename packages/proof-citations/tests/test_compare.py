@@ -2,7 +2,7 @@
 
 import pytest
 
-from proof_citations.registry.base import Author, ResolvedRecord, now_iso
+from proof_citations.resolvers.base import Author, ResolvedRecord, now_iso
 from proof_citations.compare import (
     compare_metadata,
     _normalize_doi,

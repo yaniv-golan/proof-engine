@@ -16,7 +16,7 @@ from proof_citations import (
     verify_all_citations,
     verify_citation_record,
 )
-from proof_citations.registry.base import ResolvedRecord
+from proof_citations.resolvers.base import ResolvedRecord
 
 
 def _cmd_verify(args) -> int:

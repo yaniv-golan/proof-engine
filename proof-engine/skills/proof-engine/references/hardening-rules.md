@@ -477,7 +477,7 @@ Document the subject-match and language classification in the `adversarial_check
 Cheng-vs-Odrzywołek class), and the artifact-gap where build-time template
 rendering would leave unresolved tokens in the archived file.
 
-**Enforced by:** `tools/lib/reference_resolver.py` + `tools/lib/prose_reference_scan.py` + `cite-expand` pre-publish gate.
+**Enforced by:** `tools/lib/proof_cache.py` (per-proof identifier cache, consumes `proof_citations.resolvers` for registry backends) + `tools/lib/prose_reference_scan.py` + `cite-expand` pre-publish gate.
 
 **Two mechanisms exist; one works in practice.** The skill ships:
 

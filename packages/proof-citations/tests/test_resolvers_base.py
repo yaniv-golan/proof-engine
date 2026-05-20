@@ -1,11 +1,11 @@
-"""Tests for proof_citations.registry.base — Author, ResolvedRecord, caches."""
+"""Tests for proof_citations.resolvers.base — Author, ResolvedRecord, caches."""
 
 import json
 from pathlib import Path
 
 import pytest
 
-from proof_citations.registry.base import (
+from proof_citations.resolvers.base import (
     Author,
     ResolvedRecord,
     InMemoryCache,

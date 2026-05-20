@@ -1,18 +1,27 @@
-"""proof_citations.registry — identifier-to-metadata resolution.
+"""proof_citations.resolvers — identifier-to-bibliographic-metadata resolution.
 
 Each submodule implements one backend (PubMed, Crossref, arXiv, …) behind a
 common interface: take an identifier value, return a `ResolvedRecord` with
-canonical metadata. Backends are stateless; dispatch lives here.
+canonical bibliographic metadata. Backends are stateless; dispatch lives here.
 
 Public API:
     resolve(identifier, *, cache=None, session=None) -> ResolvedRecord
     register_backend(type_name, resolver_fn)
     Backend signatures match: (value: str, *, session: HTTPSession) -> ResolvedRecord
+
+Scope guardrail (renamed from `proof_citations.registry` in v1.39.0 to resolve a
+naming collision with the unrelated `proof_engine_registry` package — the
+JSON-over-HTTPS *catalog of proofs* specified in `docs/registry-protocol.md`):
+this module is for identifier→bibliographic-metadata resolution specifically.
+If a future need arises for a *non*-identifier-resolution backend system
+(source-credibility resolvers, archive resolvers, etc.), put it in its own
+subpackage rather than overloading `resolvers/` — that would re-create the
+naming-collision problem we just fixed.
 """
 
 from typing import Callable, Optional, Union
 
-from proof_citations.registry.base import (
+from proof_citations.resolvers.base import (
     Author,
     ResolvedRecord,
     Cache,
@@ -94,7 +103,7 @@ def resolve(
 
 # Auto-register built-in backends at import time
 def _autoregister() -> None:
-    from proof_citations.registry import pubmed, doi, arxiv, isbn, swhid, handle, url
+    from proof_citations.resolvers import pubmed, doi, arxiv, isbn, swhid, handle, url
 
     register_backend("pmid", pubmed.resolve_pmid)
     register_backend("doi", doi.resolve_doi)

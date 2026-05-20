@@ -31,7 +31,7 @@ from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Optional
 
-from proof_citations.registry.base import Author, ResolvedRecord
+from proof_citations.resolvers.base import Author, ResolvedRecord
 
 
 # ---------------------------------------------------------------------------

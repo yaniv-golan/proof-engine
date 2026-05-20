@@ -14,7 +14,7 @@ from __future__ import annotations
 import time
 from typing import Optional
 
-from proof_citations.registry.base import (
+from proof_citations.resolvers.base import (
     Author,
     HTTPSession,
     ResolutionError,

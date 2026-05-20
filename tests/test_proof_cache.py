@@ -1,6 +1,6 @@
 """Tests for tools.lib.proof_cache.
 
-As of v1.37.0, the backends moved into `proof_citations.registry.*` and
+As of v1.37.0, the backends moved into `proof_citations.resolvers.*` and
 this module's `_resolve_X` functions translate the new `ResolvedRecord`
 back to the legacy `ResolvedReference` shape. Tests mock at the HTTPSession
 layer so the translation logic is exercised end-to-end.

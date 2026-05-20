@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from proof_citations.registry.base import Author, ResolvedRecord, ResolutionError, now_iso
+from proof_citations.resolvers.base import Author, ResolvedRecord, ResolutionError, now_iso
 from proof_citations.verify_record import verify_citation_record
 
 

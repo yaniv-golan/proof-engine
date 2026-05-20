@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.39.0] - 2026-05-21
+
+### Changed
+
+- **`proof_citations.registry` submodule renamed to `proof_citations.resolvers`.** The previous name collided with the established "Registry Protocol" concept (JSON-over-HTTPS catalog of proofs, shipped in the unrelated [`proof-engine-registry`](https://pypi.org/project/proof-engine-registry/) package since v1.28.0). "Registry" properly refers to a catalog/index; the Python submodule's job is identifier→bibliographic-metadata *resolution* via authoritative APIs (Crossref, DataCite, NCBI E-utilities, arXiv, Open Library, Software Heritage, Handle). `resolvers` matches the established term-of-art (DNS resolvers, the DOI resolver at `doi.org/`) and is plural to convey "collection of backends." **The top-level public API (`from proof_citations import resolve, ResolvedRecord, Cache, FileCache, InMemoryCache, HTTPSession, Author, ResolutionError, identify, register_backend, compare_metadata, verify_citation_record, verify_citation, verify_all_citations`) is unchanged** — these all keep their exact import paths. Only consumers who reached past the top level (`from proof_citations.registry.pubmed import resolve_pmid`, etc.) need to update to `from proof_citations.resolvers.pubmed import resolve_pmid`; same exports, same behavior. No back-compat shim is provided: the path was 24 hours old when renamed (introduced in v1.35.0, the first release of the resolver layer) and has no confirmed external consumers. Alternative names considered and rejected: `backends/` (matches the internal `_BACKENDS` dict but emphasizes implementation structure over external role); `lookup` (too generic); `sources` (collides with citation "source" field); `agencies` (jargon).
+
+### Added
+
+- **Disambiguation note in `docs/registry-protocol.md`** explaining that the JSON-over-HTTPS catalog spec is unrelated to the `proof_citations.resolvers` Python module, in case anyone arrives at one looking for the other.
+- **Future-collision guardrail in `proof_citations.resolvers.__init__` docstring** explicitly scoping the module to *identifier→bibliographic-metadata* resolution. If a future need arises for a non-identifier-resolution backend system (source-credibility resolvers, archive resolvers, etc.), it should land in its own subpackage rather than overload `resolvers/`.
+
+### Docs
+
+- **`packages/proof-citations/README.md` rewritten** (32 lines → ~180 lines) to cover the v1.35.0–v1.39.0 public surface end-to-end: identifier extraction (`identify`), registry resolution (`resolve`, supported identifier types and which backend handles each), structured `ResolvedRecord`, `Author`, `Cache` protocol with `FileCache` / `InMemoryCache`, `HTTPSession` and the polite-pool conventions, metadata comparison (`compare_metadata`), the high-level orchestrator (`verify_citation_record`), the batch-audit CLI (`proof-citations verify-records --input audit.json`), error model (`ResolutionError.kind`), adding a custom backend (`register_backend`). Includes a worked example of catching metadata-chimera fraud against the Ren-audit-style claim. External `pip install proof-citations` users now discover the full v1.35+ capability from the package README — previously they only saw the v1.34.x quote-on-page surface.
+- **`docs/DESIGN.md` "Prose Reference Verification" paragraph** modernized to mention `proof_citations.resolvers` as the implementation, list PubMed/E-utilities (added in v1.35.0) among the registries, and note the v1.38.0 rename of `tools/lib/reference_resolver.py` → `tools/lib/proof_cache.py`.
+- **`proof-engine/skills/proof-engine/SKILL.md`** and **`proof-engine/skills/proof-engine/references/hardening-rules.md`** — path-stale fixes leftover from v1.38.0 (`tools/lib/reference_resolver.py` → `tools/lib/proof_cache.py`).
+
+### Tests
+
+- **3 test files renamed** to match the new module name (`test_registry_base.py` → `test_resolvers_base.py`, etc.) via `git mv` so history is preserved.
+- **3 more test files** (`test_cli_verify_records.py`, `test_verify_record.py`, `test_compare.py`) had their internal imports updated from `proof_citations.registry.base` → `proof_citations.resolvers.base`.
+- 1394 total tests still pass (1135 main repo + 156 proof-citations + 84 proof-engine-registry + 19 proof-engine-wiki).
+
 ## [1.38.0] - 2026-05-20
 
 ### Changed

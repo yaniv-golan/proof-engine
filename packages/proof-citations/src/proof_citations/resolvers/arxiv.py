@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from xml.etree import ElementTree as ET
 
-from proof_citations.registry.base import (
+from proof_citations.resolvers.base import (
     Author,
     HTTPSession,
     ResolutionError,

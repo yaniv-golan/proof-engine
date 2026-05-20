@@ -1,16 +1,16 @@
-"""Tests for proof_citations.registry dispatch layer."""
+"""Tests for proof_citations.resolvers dispatch layer."""
 
 from unittest.mock import MagicMock
 
 import pytest
 
-from proof_citations.registry import (
+from proof_citations.resolvers import (
     resolve,
     register_backend,
     get_backend,
     InMemoryCache,
 )
-from proof_citations.registry.base import ResolvedRecord, now_iso
+from proof_citations.resolvers.base import ResolvedRecord, now_iso
 
 
 def _fake_backend(value, *, session):
@@ -53,7 +53,7 @@ class TestResolveDispatch:
         first = resolve(("fake", "x"), cache=cache)
         # Now poison the cache to verify second call uses it
         from unittest.mock import patch
-        with patch("proof_citations.registry._BACKENDS") as backends:
+        with patch("proof_citations.resolvers._BACKENDS") as backends:
             backends.__getitem__.side_effect = AssertionError("should not be called")
             backends.get.return_value = None
             # Wait — we need cache hit to short-circuit before backend lookup
@@ -75,5 +75,5 @@ class TestPubMedAutoRegistered:
         backend = get_backend("pmid")
         assert backend is not None
         # Should be the pubmed.resolve_pmid function
-        from proof_citations.registry.pubmed import resolve_pmid
+        from proof_citations.resolvers.pubmed import resolve_pmid
         assert backend is resolve_pmid

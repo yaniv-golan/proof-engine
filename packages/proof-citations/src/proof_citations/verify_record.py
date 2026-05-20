@@ -18,8 +18,8 @@ from typing import Optional, Union
 
 from proof_citations.compare import compare_metadata
 from proof_citations.identify import identify
-from proof_citations.registry import resolve
-from proof_citations.registry.base import (
+from proof_citations.resolvers import resolve
+from proof_citations.resolvers.base import (
     Cache,
     HTTPSession,
     ResolutionError,

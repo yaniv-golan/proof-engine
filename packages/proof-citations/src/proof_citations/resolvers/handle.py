@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from proof_citations.registry.base import (
+from proof_citations.resolvers.base import (
     HTTPSession,
     ResolutionError,
     ResolvedRecord,

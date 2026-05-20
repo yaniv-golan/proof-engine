@@ -1,4 +1,4 @@
-"""Shared types and infrastructure for `proof_citations.registry` backends.
+"""Shared types and infrastructure for `proof_citations.resolvers` backends.
 
 This module defines:
 
@@ -342,7 +342,7 @@ class HTTPSession:
     ):
         if not _HAS_REQUESTS:
             raise RuntimeError(
-                "proof_citations.registry requires the `requests` package. "
+                "proof_citations.resolvers requires the `requests` package. "
                 "Install with: pip install proof-citations[registry] (or `pip install requests`)."
             )
         from proof_citations import __version__

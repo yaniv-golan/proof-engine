@@ -18,7 +18,7 @@ import os
 import re
 from typing import Optional
 
-from proof_citations.registry.base import (
+from proof_citations.resolvers.base import (
     Author,
     ResolutionError,
     ResolvedRecord,

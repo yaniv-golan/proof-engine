@@ -58,7 +58,7 @@ A static analyzer (`validate_proof.py`) runs before execution to catch common st
 
 ## Prose Reference Verification
 
-Every external scholarly reference in a proof — whether in `meta.yaml` `depends_on`, in v3 `evidence[*].source.url`, or in free prose inside any `.md` file — is resolved to canonical metadata from an authoritative registry (arXiv, DataCite, Crossref, Software Heritage, Handle.Net, OpenLibrary) and cached per-proof in `depends_on_resolved.json`.
+Every external scholarly reference in a proof — whether in `meta.yaml` `depends_on`, in v3 `evidence[*].source.url`, or in free prose inside any `.md` file — is resolved to canonical metadata from an authoritative registry (PubMed E-utilities, Crossref, DataCite, arXiv, Software Heritage, Handle.Net, OpenLibrary) and cached per-proof in `depends_on_resolved.json`. As of v1.37.0 the resolution backends live in the pip-installable `proof_citations.resolvers` package; `tools/lib/proof_cache.py` (renamed from `tools/lib/reference_resolver.py` in v1.38.0) consumes the package and persists the legacy cache shape.
 
 Prose attributions are cross-checked against the resolved metadata by four passes:
 

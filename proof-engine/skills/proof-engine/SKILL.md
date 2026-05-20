@@ -10,7 +10,7 @@ description: >
 license: MIT
 metadata:
   author: Yaniv Golan
-  version: "1.38.0"
+  version: "1.39.0"
 compatibility: >
   Requires Python 3, `requests`, and the `proof-citations` PyPI package
   (`pip install proof-citations` — the scripts/ entries are thin shims
@@ -156,7 +156,7 @@ The `agents/openai.yaml` file in this skill directory is a small UX adapter for 
 | 6. Independent cross-checks | Shared-variable bugs | Multiple sources parsed separately |
 | 7. Never hard-code constants/formulas | LLM misremembers values | `scripts/computations.py` |
 | 8. Evidence relevance for rejection | Weak/off-subject rejection sources | `adversarial_checks` documentation |
-| 9. Prose references mechanically resolvable | Hand-typed attribution hallucinations; raw tokens archived | `tools/lib/reference_resolver.py` + `prose_reference_scan.py` + `cite-expand` |
+| 9. Prose references mechanically resolvable | Hand-typed attribution hallucinations; raw tokens archived | `tools/lib/proof_cache.py` + `prose_reference_scan.py` + `cite-expand` |
 | 10. Quantifier–domain match | Sampling treated as load-bearing evidence for "for all" claims | `claim_type: "theorem"` + `template-deductive-theorem.md` + `validate_proof.py` regression-role check |
 
 See [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for detailed examples of each.

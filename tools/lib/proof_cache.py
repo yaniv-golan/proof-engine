@@ -13,7 +13,7 @@ package deliberately does NOT impose:
    walks `meta.yaml depends_on` plus `proof.json evidence`, both of which are
    conventions of THIS repo, not generic capabilities).
 
-This module is the glue: it consumes `proof_citations.registry` for the actual
+This module is the glue: it consumes `proof_citations.resolvers` for the actual
 identifier resolution, translates the new `ResolvedRecord` back to the legacy
 `ResolvedReference` shape via `_record_to_reference()`, and persists the
 result.
@@ -33,7 +33,7 @@ from urllib.parse import unquote
 # The pip package owns identifier extraction and registry backends now.
 from proof_citations import identify as _pc_identify
 from proof_citations import resolve as _pc_resolve
-from proof_citations.registry.base import (
+from proof_citations.resolvers.base import (
     Author,
     ResolutionError,
     ResolvedRecord,
@@ -135,7 +135,7 @@ def _record_to_reference(record: ResolvedRecord) -> ResolvedReference:
 
 
 def _resolve_one(ident_type: str, value: str, *, http=None) -> ResolvedReference:
-    """Call the appropriate `proof_citations.registry` backend, translate."""
+    """Call the appropriate `proof_citations.resolvers` backend, translate."""
     session: Optional[HTTPSession]
     if http is None:
         session = get_default_session()
