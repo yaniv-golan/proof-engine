@@ -18,7 +18,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
-from tools.lib.reference_resolver import (
+from tools.lib.proof_cache import (
     collect_identifiers, load_cache, save_cache, resolve,
 )
 from tools.lib.prose_reference_scan import verify_prose

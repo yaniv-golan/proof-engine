@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.38.0] - 2026-05-20
+
+### Changed
+
+- **`tools/lib/reference_resolver.py` renamed to `tools/lib/proof_cache.py`.** The file's job after v1.37.0 — when the heavy-lifting registry backends moved into `proof_citations.registry` — was never really *resolution*. It's the site's per-proof on-disk cache (`depends_on_resolved.json`), the legacy `ResolvedReference` dataclass that 132 committed cache files use, and the site-specific publish-pipeline glue (`collect_identifiers` walks `meta.yaml depends_on` + `proof.json evidence`, both of which are conventions of this repo). The new name makes the layering clear: identifier resolution is `proof_citations.registry`; cache is `tools.lib.proof_cache`. All 22 internal import references in 9 caller files (`tools/proof-site.py`, `tools/migrate-prose-refs.py`, `tools/lib/prose_reference_scan.py`, plus 6 test files) updated in lockstep. Public surface (`ResolvedReference`, `resolve`, `load_cache`, `save_cache`, `collect_identifiers`, `identifier_from_url`) preserved unchanged so the rename is internally-mechanical only.
+- **`tests/test_reference_resolver.py` → `tests/test_proof_cache.py`** in the same move.
+
+### Notes
+
+This release is purely the layering cleanup deferred from v1.37.0's "do this as a follow-up" note. No behavior change, no schema change, no API change to external consumers. Closes the original v1.35 → v1.37 design's step 5 ("migrate site-tooling callers; drop the shim"). The result is a clean separation:
+
+```
+proof_citations.registry              ← identifier resolution (pip package)
+proof_citations.compare               ← metadata comparison (pip package)
+proof_citations.verify_citation       ← quote-on-page (pip package)
+proof_citations.verify_citation_record ← high-level orchestrator (pip package)
+
+tools/lib/proof_cache.py              ← per-proof on-disk cache (site)
+tools/lib/prose_reference_scan.py     ← {{cite:}} marker scan (site)
+tools/lib/cite_expander.py            ← {{cite:}} → prose expansion (site)
+tools/proof-site.py                   ← publish pipeline (site)
+```
+
+The pip package is portable; the `tools/` directory is site-specific. The current 1394-test suite passes against the renamed layout.
+
 ## [1.37.0] - 2026-05-20
 
 ### Changed

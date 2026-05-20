@@ -26,7 +26,7 @@ def test_fold_surname_normalizes_diacritics_and_case():
 
 def test_extract_resolved_author_parts_prefers_structured_family_name():
     """Rev-9 resolved-side priority 1: DataCite structured familyName wins."""
-    from tools.lib.reference_resolver import ResolvedReference
+    from tools.lib.proof_cache import ResolvedReference
     ref = ResolvedReference(
         identifier_type="doi", identifier_value="10/x",
         canonical_url="https://doi.org/10/x",
@@ -71,7 +71,7 @@ def test_boundary_accepts_sentence_boundary_before_match():
 def test_extract_resolved_author_parts_falls_back_to_unstructured_parser():
     """Rev-9 resolved-side priority 2: arXiv unstructured name gets same parser
     used on prose side — compound surname, not last token."""
-    from tools.lib.reference_resolver import ResolvedReference
+    from tools.lib.proof_cache import ResolvedReference
     ref = ResolvedReference(
         identifier_type="arxiv", identifier_value="1609.03499",
         canonical_url="https://arxiv.org/abs/1609.03499",

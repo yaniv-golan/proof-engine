@@ -42,7 +42,7 @@ def test_pass1_tracks_span_for_windowing():
 
 
 from tools.lib.prose_reference_scan import check_authors
-from tools.lib.reference_resolver import ResolvedReference
+from tools.lib.proof_cache import ResolvedReference
 
 
 def _odrzywolek_ref():

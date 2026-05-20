@@ -1,22 +1,25 @@
-"""Resolver — identifier → canonical metadata, per-proof JSON cache.
+"""Per-proof cache of resolved-identifier metadata.
 
-As of v1.37.0, the heavy-lifting backends (Crossref, DataCite, arXiv, Open
-Library, Software Heritage, Handle, URL/OG-extraction) live in
-`proof_citations.registry`. This module now provides:
+Site-specific module owning two concerns the pip-installable `proof_citations`
+package deliberately does NOT impose:
 
-- The site-specific `ResolvedReference` dataclass with the legacy
-  `authors: list[str]` shape (committed `depends_on_resolved.json` files
-  use this shape; 132 such files exist).
-- `identifier_from_url` — backwards-compat alias for
-  `proof_citations.identify`.
-- Thin per-backend wrappers that call `proof_citations.registry.resolve()`
-  and translate the `ResolvedRecord` back into a `ResolvedReference`.
-- Site-specific cache I/O (`collect_identifiers`, `load_cache`, `save_cache`)
-  that read / write `depends_on_resolved.json`.
+1. The shape of the on-disk cache (`depends_on_resolved.json` next to each
+   proof) and its legacy `ResolvedReference` dataclass with `authors: list[str]`.
+   132 committed cache files use this shape; 9 site callers
+   (`cite_expander`, `prose_reference_scan`, `proof-site.py`, etc.) operate on
+   `authors[0]` as a string. Preserving the shape keeps both populations
+   working without migration.
+2. Read/write semantics tailored to publish-pipeline gates (`collect_identifiers`
+   walks `meta.yaml depends_on` plus `proof.json evidence`, both of which are
+   conventions of THIS repo, not generic capabilities).
 
-This file used to be 408 lines of backend implementations + cache I/O. After
-v1.37.0 it is ~180 lines of translation + cache I/O, with the backend logic
-shared with the pip-installable `proof_citations` package.
+This module is the glue: it consumes `proof_citations.registry` for the actual
+identifier resolution, translates the new `ResolvedRecord` back to the legacy
+`ResolvedReference` shape via `_record_to_reference()`, and persists the
+result.
+
+Renamed from `tools/lib/reference_resolver.py` in v1.38.0 (the registry
+layer is in `proof_citations`; what stays here is *cache*, not *resolver*).
 """
 
 from __future__ import annotations

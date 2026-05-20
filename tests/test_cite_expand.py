@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 from tools.lib.cite_expander import expand, check, expand_style
-from tools.lib.reference_resolver import ResolvedReference
+from tools.lib.proof_cache import ResolvedReference
 
 
 def _odrzywolek():

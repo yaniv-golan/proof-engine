@@ -1,6 +1,6 @@
 import pytest
 from tools.lib.prose_reference_scan import pass1_identifiers, pass2_attribution_check
-from tools.lib.reference_resolver import ResolvedReference
+from tools.lib.proof_cache import ResolvedReference
 
 
 def _odrzywolek_ref(authors=None):

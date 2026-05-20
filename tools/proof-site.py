@@ -133,7 +133,7 @@ def cmd_publish(args) -> int:
 
     # 6b. Pre-stage gate — strictly offline: resolve-deps (cache-only),
     # cite-expand --check, verify-prose.
-    from tools.lib.reference_resolver import collect_identifiers, load_cache
+    from tools.lib.proof_cache import collect_identifiers, load_cache
     from tools.lib.cite_expander import check as cite_check
     from tools.lib.prose_reference_scan import verify_prose
 
@@ -473,7 +473,7 @@ def cmd_mint_doi(args) -> int:
         return 1
 
     # Pre-flight: identical two-step gate used by publish (offline only).
-    from tools.lib.reference_resolver import load_cache
+    from tools.lib.proof_cache import load_cache
     from tools.lib.cite_expander import check as cite_check
     from tools.lib.prose_reference_scan import verify_prose as _vp
 
@@ -810,7 +810,7 @@ def _asdict_or_none(ref):
 
 
 def cmd_resolve_deps(args) -> int:
-    from tools.lib.reference_resolver import (
+    from tools.lib.proof_cache import (
         collect_identifiers, load_cache, save_cache, resolve,
     )
     targets = _select_targets(args)
@@ -853,7 +853,7 @@ def cmd_resolve_deps(args) -> int:
 
 def cmd_cite_expand(args) -> int:
     from tools.lib.cite_expander import expand, check
-    from tools.lib.reference_resolver import load_cache
+    from tools.lib.proof_cache import load_cache
     targets = _select_targets(args)
     any_err = 0
     for proof_dir in targets:

@@ -577,7 +577,7 @@ def verify_prose(proof_dir, *, strict: bool = False) -> VerifyResult:
 
     `strict=True` promotes Pass-3 advisories to errors.
     """
-    from tools.lib.reference_resolver import load_cache, collect_identifiers
+    from tools.lib.proof_cache import load_cache, collect_identifiers
     proof_dir = Path(proof_dir)
     resolved = {k: v for k, v in load_cache(proof_dir).items()}
     declared = collect_identifiers(proof_dir)

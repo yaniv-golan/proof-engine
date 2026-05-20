@@ -1,4 +1,4 @@
-"""Tests for tools.lib.reference_resolver.
+"""Tests for tools.lib.proof_cache.
 
 As of v1.37.0, the backends moved into `proof_citations.registry.*` and
 this module's `_resolve_X` functions translate the new `ResolvedRecord`
@@ -11,7 +11,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 import requests
 
-from tools.lib.reference_resolver import (
+from tools.lib.proof_cache import (
     identifier_from_url,
     ResolvedReference,
     resolve,
@@ -78,7 +78,7 @@ def test_resolve_arxiv_populates_fields():
     """Translation: arxiv ResolvedRecord → legacy ResolvedReference."""
     mock_resp = _mock_response(text=_ARXIV_RESPONSE_TEXT)
     session = _mock_session(mock_resp)
-    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
+    with patch("tools.lib.proof_cache.get_default_session", return_value=session):
         ref = resolve("arxiv", "2603.21852", refresh=True)
     assert isinstance(ref, ResolvedReference)
     assert ref.identifier_type == "arxiv"
@@ -94,7 +94,7 @@ def test_resolve_arxiv_populates_fields():
 
 
 def test_resolve_without_refresh_reads_cache(tmp_path):
-    from tools.lib.reference_resolver import save_cache, load_cache
+    from tools.lib.proof_cache import save_cache, load_cache
     ref = ResolvedReference(
         identifier_type="arxiv", identifier_value="2603.21852",
         canonical_url="https://arxiv.org/abs/2603.21852",
@@ -138,7 +138,7 @@ _CROSSREF_RESPONSE = {
 def test_resolve_doi_datacite_primary():
     datacite_resp = _mock_response(status_code=200, json_data=_DATACITE_RESPONSE)
     session = _mock_session(datacite_resp)
-    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
+    with patch("tools.lib.proof_cache.get_default_session", return_value=session):
         ref = resolve("doi", "10.1000/foo", refresh=True)
     assert ref.identifier_type == "doi"
     assert ref.title == "Planck 2018 results VI"
@@ -152,7 +152,7 @@ def test_resolve_doi_crossref_fallback_on_404():
     datacite_404 = _mock_response(status_code=404)
     crossref_ok = _mock_response(status_code=200, json_data=_CROSSREF_RESPONSE)
     session = _mock_session(datacite_404, crossref_ok)
-    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
+    with patch("tools.lib.proof_cache.get_default_session", return_value=session):
         ref = resolve("doi", "10.1000/fallback", refresh=True)
     assert ref.title == "Crossref-only paper"
     assert ref.year == 2019
@@ -171,7 +171,7 @@ _SWH_RESPONSE = {
 def test_resolve_swhid():
     resp = _mock_response(status_code=200, json_data=_SWH_RESPONSE)
     session = _mock_session(resp)
-    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
+    with patch("tools.lib.proof_cache.get_default_session", return_value=session):
         ref = resolve("swhid", "swh:1:dir:" + "0" * 40, refresh=True)
     assert ref.identifier_type == "swhid"
     assert ref.title
@@ -191,7 +191,7 @@ _ISBN_RESPONSE = {
 def test_resolve_isbn():
     resp = _mock_response(status_code=200, json_data=_ISBN_RESPONSE)
     session = _mock_session(resp)
-    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
+    with patch("tools.lib.proof_cache.get_default_session", return_value=session):
         ref = resolve("isbn", "9780262033848", refresh=True)
     assert ref.title == "Introduction to Algorithms"
     # `Author.from_full_name` parses 'Thomas H. Cormen' → family='Cormen', given='Thomas H.'
@@ -211,7 +211,7 @@ def test_resolve_url_reads_og_meta():
     )
     resp = _mock_response(status_code=200, text=html)
     session = _mock_session(resp)
-    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
+    with patch("tools.lib.proof_cache.get_default_session", return_value=session):
         ref = resolve("url", "https://example.com/post", refresh=True)
     assert ref.title == "My Blog Post"
     assert ref.authors == ["Jane Smith"]
@@ -220,7 +220,7 @@ def test_resolve_url_reads_og_meta():
 
 def test_collect_identifiers_from_meta_and_evidence(tmp_path):
     import json as _json
-    from tools.lib.reference_resolver import collect_identifiers
+    from tools.lib.proof_cache import collect_identifiers
     (tmp_path / "meta.yaml").write_text(
         "tags: [math]\n"
         "depends_on:\n"

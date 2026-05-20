@@ -1,6 +1,6 @@
 import pytest
 from tools.lib.prose_reference_scan import check_authors
-from tools.lib.reference_resolver import ResolvedReference
+from tools.lib.proof_cache import ResolvedReference
 
 
 def _mk(authors, year=2024):
