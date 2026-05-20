@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.36.0] - 2026-05-20
+
+### Added
+
+- **`proof_citations.compare_metadata(resolved, expected)` — metadata-chimera detector.** Pure-function primitive that compares a `ResolvedRecord` against a dict of claimed bibliographic fields (`title`, `journal`, `year`, `doi`, `issn`, `authors`, `volume`, `issue`, `pages`). Returns a structured verdict — `genuine`, `metadata_chimera`, `title_chimera`, `partial_match`, or `no_expected` — plus per-field `field_matches`, a list of `mismatches`, and the title-similarity score. Title comparison uses `SequenceMatcher` after NFKC + lowercase + punctuation-strip + whitespace-collapse normalization, with a 0.85 match threshold and a 0.50 chimera threshold tuned against the Ren-audit / CITADEL corpus. Journal comparison checks ISSN-equality first, then exact-after-normalize, then a small bundled NLM-ISO abbreviation table (~40 entries seeded from common biomedical journals), then a 0.80 fuzzy fallback. DOI comparison strips URL prefixes and lowercases (DOIs are case-insensitive). Author comparison does first-author family-name match by default, supports full surname lists in order if the claim provides them. Absent fields in `expected` are "not asserted" — they neither pass nor fail.
+- **`proof_citations.verify_citation_record(identifier, expected)` — high-level orchestrator.** Combines identifier resolution and metadata comparison into one call. Accepts `(type, value)` tuples, `"type:value"` strings, or full URLs (passed through `identify()`). Returns a uniform dict with `status` (`verified`, `metadata_chimera`, `title_chimera`, `partial_match`, `resolved`, `unresolvable`, `fetch_failed`), the resolved record, field-level match details, and human-readable message. Backwards-compat with existing `verify_citation` callers: this is a new entry point, no existing behavior changes.
+- **`proof-citations verify-records --input audit.json [--output report.json]` CLI.** Batch-verify a list of citations against authoritative registries. Input is a JSON file with a `references` list of `{ref_id, identifier, expected: {title, journal, year, doi, authors}}` entries. Emits a structured report with per-reference verdicts plus a summary block (`total`, `by_status`, `verified`, `chimeras`, `unresolvable`). Exit code is 1 if any reference is anything other than `verified` or `resolved`. Productionizes the ad-hoc Ren-audit / CITADEL workflow as a first-class capability.
+- **Bundled `proof_citations/data/journal_abbreviations.json`.** Small lookup table mapping common biomedical-journal NLM-ISO abbreviations to canonical full titles. Used by `compare_metadata` to bridge `J Urol` ↔ `The Journal of Urology` style mismatches. Extensible — drop in additional entries as new failure modes surface; backwards-compatible with future tables (keys prefixed with `_` are treated as metadata).
+
+### Notes
+
+This release closes the gap surfaced by the Ren-audit / Topaz CITADEL exercise: metadata-chimera fraud (real PMID, fabricated journal/year/volume) is now detectable end-to-end via `verify_citation_record`. The `expected_metadata` proof-side schema field (so the skill's empirical-facts pipeline can populate claimed metadata declaratively) is the next step — landing in a future release once the regression corpus has confirmed the comparator's thresholds are well-calibrated.
+
 ## [1.35.0] - 2026-05-20
 
 ### Added

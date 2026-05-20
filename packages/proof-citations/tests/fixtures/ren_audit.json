@@ -1,0 +1,501 @@
+{
+  "source_paper": {
+    "citation": "Ren C, Xiao M, Zhu J, Tong W, Yi F. Comparative analysis of ureteroileal anastomotic stricture rates: Bricker versus Wallace techniques in ileal conduit urinary diversion—a single-surgeon study with BMI-matched design and long-term follow-up excluding cancer recurrence bias. Front Oncol. 2025;15:1613772.",
+    "pmcid": "PMC12591951",
+    "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12591951/",
+    "flagged_by": "Topaz et al., The Lancet 2026 (CITADEL audit) — 18 of 30 references identified as fabricated."
+  },
+  "audit_method": "Independent re-verification: for each reference, fetch the claimed PMID via PubMed eutils esummary, compare the resolved record's journal, year, and title against the claimed citation. Chimera = PMID exists but resolves to a different paper.",
+  "audit_date": "2026-05-20",
+  "references": [
+    {
+      "ref_id": "B1",
+      "identifier": "pmid:33538338",
+      "pmid": "33538338",
+      "claimed_citation": "Sung H, Ferlay J, Siegel RL, Laversanne M, Soerjomataram I, Jemal A, et al. Global cancer statistics 2020: GLOBOCAN estimates of incidence and mortality worldwide for 36 cancers in 185 countries. CA Cancer J Clin. (2021) 71:209–49. doi:  10.3322/caac.21660, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Global Cancer Statistics 2020: GLOBOCAN Estimates of Incidence and Mortality Worldwide for 36 Cancers in 185 Countries.",
+        "journal": "CA: a cancer journal for clinicians",
+        "year": "2021"
+      },
+      "expected": {
+        "doi": "10.3322/caac.21660"
+      },
+      "audit_verdict": "LIKELY_REAL"
+    },
+    {
+      "ref_id": "B2",
+      "identifier": "pmid:25440985",
+      "pmid": "25440985",
+      "claimed_citation": "Hautmann RE, de Petriconi RC, Volkmer BG. Radical cystectomy for bladder cancer: morbidity, mortality, and oncological outcomes in 1,000+ patients. Eur Urol. (2023) 84:e45–50. doi:  10.1016/j.urology.2014.06.075, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Urinary diversion: how experts divert.",
+        "journal": "Urology",
+        "year": "2015"
+      },
+      "expected": {
+        "doi": "10.1016/j.urology.2014.06.075"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B3",
+      "identifier": "pmid:23260561",
+      "pmid": "23260561",
+      "claimed_citation": "Anderson CB, Morgan TM, Kappa SF, Manny TB, Clark PE, Smith JA, et al. Ureteroenteric anastomotic strictures after radical cystectomy: does operative approach matter? J Urol. (2023) 209:789–97. doi:  10.1016/j.juro.2012.11.001, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Ureteroenteric anastomotic strictures after radical cystectomy-does operative approach matter?",
+        "journal": "The Journal of urology",
+        "year": "2013"
+      },
+      "expected": {
+        "doi": "10.1016/j.juro.2012.11.001"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B4",
+      "identifier": "pmid:38198985",
+      "pmid": "38198985",
+      "claimed_citation": "Can O, Danış E, Kutlutürk EG, Polat EC, Ötünçtemur A. Urinary diversion after radical cystectomy: contemporary outcomes and challenges. Eur Urol Oncol. (2024) 7:12–20. doi:  10.1016/j.suronc.2024.102036, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Hybrid technique has lower stricture rates than Wallace and Bricker.",
+        "journal": "Surgical oncology",
+        "year": "2024"
+      },
+      "expected": {
+        "doi": "10.1016/j.suronc.2024.102036"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B5",
+      "identifier": "pmid:34940890",
+      "pmid": "34940890",
+      "claimed_citation": "Kouba E, Sands M, Wallen E, Pruthi RS. Bricker versus Wallace anastomosis in ileal conduit diversion: a meta-analysis of 10-year outcomes. Urol Oncol. (2024) 42:15–24. doi:  10.1007/s00423-021-02413-4, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Comparative analysis of Bricker versus Wallace ureteroenteric anastomosis and identification of predictors for postoperative ureteroenteric stricture.",
+        "journal": "Langenbeck's archives of surgery",
+        "year": "2022"
+      },
+      "expected": {
+        "doi": "10.1007/s00423-021-02413-4"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B6",
+      "identifier": "pmid:31651306",
+      "pmid": "31651306",
+      "claimed_citation": "Tyson MD, Chang SS, Barocas DA. Comparative outcomes of Bricker versus Wallace ureteroenteric anastomosis: a systematic review. Eur Urol Focus. (2024) 10:230–8. doi:  10.1186/s12894-019-0529-6, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Ureteroenteric strictures: a single center experience comparing Bricker versus Wallace ureteroileal anastomosis in patients after urinary diversion for bladder cancer.",
+        "journal": "BMC urology",
+        "year": "2019"
+      },
+      "expected": {
+        "doi": "10.1186/s12894-019-0529-6"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B7",
+      "identifier": "pmid:25825873",
+      "pmid": "25825873",
+      "claimed_citation": "Goh AC, Gill IS, Desai MM. Robotic versus open radical cystectomy: an updated systematic review and meta-analysis. J Urol. (2024) 211:45–55. doi:  10.1111/bju.12121, PMID: 25825873",
+      "pubmed_resolves_to": {
+        "title": "Robotic versus open radical cystectomy: an updated systematic review and meta-analysis.",
+        "journal": "PloS one",
+        "year": "2015"
+      },
+      "expected": {
+        "doi": "10.1111/bju.12121"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B8",
+      "identifier": "pmid:26029296",
+      "pmid": "26029296",
+      "claimed_citation": "Tyson MD, Barocas DA. Bricker versus Wallace anastomosis: a meta-analysis of stricture rates. Urol Oncol. (2023) 41:295–304. doi:  10.5489/cuaj.2692, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Bricker versus Wallace anastomosis: A meta-analysis of ureteroenteric stricture rates after ileal conduit urinary diversion.",
+        "journal": "Canadian Urological Association journal = Journal de l'Association des urologues du Canada",
+        "year": "2015"
+      },
+      "expected": {
+        "doi": "10.5489/cuaj.2692"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B9",
+      "identifier": "pmid:39138815",
+      "pmid": "39138815",
+      "claimed_citation": "Abdalla A, Cohn JA, Simhan J. Defining early morbidity of radical cystectomy for patients with bladder cancer. Eur Urol. (2022) 81:e20–5. doi:  10.1007/s11934-024-01222-8, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Unraveling the Complexities of Uretero-Enteric Strictures: A Modern Review.",
+        "journal": "Current urology reports",
+        "year": "2024"
+      },
+      "expected": {
+        "doi": "10.1007/s11934-024-01222-8"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B10",
+      "identifier": "pmid:19220244",
+      "pmid": "19220244",
+      "claimed_citation": "Hautmann RE, Stein JP. Neobladder or ileal conduit: who decides? Eur Urol. (2024) 85:78–85. doi:  10.1111/j.1464-410X.2009.08358.x, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Impact of body mass index on clinical and cost outcomes after radical cystectomy.",
+        "journal": "BJU international",
+        "year": "2009"
+      },
+      "expected": {
+        "doi": "10.1111/j.1464-410X.2009.08358.x"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B11",
+      "identifier": "pmid:28650867",
+      "pmid": "28650867",
+      "claimed_citation": "Abufaraj M, Mari A, Mansy K, Sievert KD. Impact of surgeon experience on stricture rates after urinary diversion. J Urol. (2023) 210:450–8. doi:  10.1097/MOU.0000000000000429, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Obesity and its implications on oncological urological surgery.",
+        "journal": "Current opinion in urology",
+        "year": "2017"
+      },
+      "expected": {
+        "doi": "10.1097/MOU.0000000000000429"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B12",
+      "identifier": "pmid:35007620",
+      "pmid": "35007620",
+      "claimed_citation": "Lee DJ, Tyson MD, Chang SS. Obesity and complications after radical cystectomy: a 2024 multi-institutional analysis. J Urol. (2024) 212:123–30. doi:  10.1016/j.urology.2021.11.020, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Robotic Repair of Ureteroenteric Stricture Following Radical Cystectomy: A Multi-Institutional Experience.",
+        "journal": "Urology",
+        "year": "2022"
+      },
+      "expected": {
+        "doi": "10.1016/j.urology.2021.11.020"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B13",
+      "identifier": "pmid:32684511",
+      "pmid": "32684511",
+      "claimed_citation": "Smith AB, Nielsen ME, Wallen EM, Pruthi RS. Obesity and ureteroenteric anastomotic complications: a multi-institutional analysis. J Urol. (2024) 212:89–96. doi:  10.1016/j.urolonc.2020.06.020, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Obesity is associated with adverse short-term perioperative outcomes in patients treated with open and robot-assisted radical cystectomy for bladder cancer.",
+        "journal": "Urologic oncology",
+        "year": "2021"
+      },
+      "expected": {
+        "doi": "10.1016/j.urolonc.2020.06.020"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B14",
+      "identifier": "pmid:36250946",
+      "pmid": "36250946",
+      "claimed_citation": "McLoughlin LC, Kassouf W, Breau RH, Fairey A, Agnihotram VR, Salimi A, et al. Association of body mass index with outcomes after radical cystectomy. J Urol. (2023) 209:789–97. doi:  10.1097/JU.0000000000002988, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Obesity and Complication Risk From Radical Cystectomy: Identifying a Body Mass Index Threshold.",
+        "journal": "The Journal of urology",
+        "year": "2023"
+      },
+      "expected": {
+        "doi": "10.1097/JU.0000000000002988"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B15",
+      "identifier": "pmid:32701445",
+      "pmid": "32701445",
+      "claimed_citation": "Browne E, Lawrentschuk N, Jack GS, Davis NF. Tumor recurrence and hydronephrosis after urinary diversion. Eur Urol Oncol. (2024) 8:150–8. doi:  10.5489/cuaj.6466, PMID:",
+      "pubmed_resolves_to": {
+        "title": "A systematic review and meta-analysis of the long-term outcomes of ileal conduit and orthotopic neobladder urinary diversion.",
+        "journal": "Canadian Urological Association journal = Journal de l'Association des urologues du Canada",
+        "year": "2021"
+      },
+      "expected": {
+        "doi": "10.5489/cuaj.6466"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B16",
+      "identifier": "pmid:26372035",
+      "pmid": "26372035",
+      "claimed_citation": "Picozzi S, Ricci C, Gaeta M, Ratti D, Macchi A, Casellato S, et al. Long-term complications of urinary diversion. Eur Urol. (2024) 85:200–10. doi:  10.1016/j.juro.2012.08.017, PMID: 26372035",
+      "pubmed_resolves_to": {
+        "title": "Long-term complications of urinary diversion.",
+        "journal": "Current opinion in urology",
+        "year": "2015"
+      },
+      "expected": {
+        "doi": "10.1016/j.juro.2012.08.017"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B17",
+      "identifier": "pmid:38644653",
+      "pmid": "38644653",
+      "claimed_citation": "Al-Nader M, Krafft U, Hess J, Kesch C, AbdelRazek M, Abolyosr A, et al. Defining early morbidity of radical cystectomy. Eur Urol. (2023) 83:e45–6. doi:  10.1111/iju.15471, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Bricker versus Wallace ureteroileal anastomosis: A multi-institutional propensity score-matched analysis.",
+        "journal": "International journal of urology : official journal of the Japanese Urological Association",
+        "year": "2024"
+      },
+      "expected": {
+        "doi": "10.1111/iju.15471"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B18",
+      "identifier": "pmid:40622432",
+      "pmid": "40622432",
+      "claimed_citation": "Lee JY, Albers JA, Klaassen Z, Terris MK. Robotic Bricker anastomosis: outcomes and stricture rates in 500 patients. Eur Urol Open Sci. (2024) 61:30–8. doi:  10.1007/s00345-025-05781-4, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Comparison of perioperative outcomes between Bricker and Wallace anastomosis techniques in robotic-assisted radical cystectomy with intracorporeal diversion.",
+        "journal": "World journal of urology",
+        "year": "2025"
+      },
+      "expected": {
+        "doi": "10.1007/s00345-025-05781-4"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B19",
+      "identifier": "pmid:27377994",
+      "pmid": "27377994",
+      "claimed_citation": "Onen A. Grading hydronephrosis: a revised classification system. Front Pediatr. (2023) 11:1234. doi:  10.3389/fped.2016.00064, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Commentary: Enhanced Monitoring of the Preterm Infant during Stabilization in the Delivery Room.",
+        "journal": "Frontiers in pediatrics",
+        "year": "2016"
+      },
+      "expected": {
+        "doi": "10.3389/fped.2016.00064"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B20",
+      "identifier": "pmid:15862615",
+      "pmid": "15862615",
+      "claimed_citation": "Goh AC, Gill IS. The impact of surgical expertise on urinary diversion outcomes. Eur Urol Focus. (2024) 10:50–8. doi:  10.1016/j.ucl.2005.02.001, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Neobladder with prostatic capsule and seminal-sparing cystectomy for bladder cancer: a step in the wrong direction.",
+        "journal": "The Urologic clinics of North America",
+        "year": "2005"
+      },
+      "expected": {
+        "doi": "10.1016/j.ucl.2005.02.001"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B21",
+      "identifier": "pmid:22419010",
+      "pmid": "22419010",
+      "claimed_citation": "Hautmann RE, Stein JP. Learning curve in radical cystectomy: a 2024 consensus statement. Eur Urol. (2024) 86:100–8. doi:  10.1007/s00120-012-2812-y, PMID:",
+      "pubmed_resolves_to": {
+        "title": "[Symptomatic reflux and stenosis of ureteroenteric anastomosis. Diagnostics and therapy].",
+        "journal": "Der Urologe. Ausg. A",
+        "year": "2012"
+      },
+      "expected": {
+        "doi": "10.1007/s00120-012-2812-y"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B22",
+      "identifier": "pmid:30091420",
+      "pmid": "30091420",
+      "claimed_citation": "Ficarra V, Giannarini G, Crestani A, Palumbo V, Rossanese M, Valotto C, et al. Suture tension and ischemia in ureteroenteric anastomosis. J Urol. (2024) 213:45–52. doi:  10.1016/j.eururo.2018.06.023, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Retrosigmoid Versus Traditional Ileal Conduit for Urinary Diversion After Radical Cystectomy.",
+        "journal": "European urology",
+        "year": "2019"
+      },
+      "expected": {
+        "doi": "10.1016/j.eururo.2018.06.023"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B23",
+      "identifier": "pmid:38205387",
+      "pmid": "38205387",
+      "claimed_citation": "Tyson MD, Chang SS. Technical challenges of ureteral mobilization in obese patients. J Urol. (2024) 212:200–8. doi:  10.1080/2090598X.2023.2239107, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Risk factors for ureteroenteric stricture after radical cystectomy and urinary diversion: A systematic review.",
+        "journal": "Arab journal of urology",
+        "year": "2024"
+      },
+      "expected": {
+        "doi": "10.1080/2090598X.2023.2239107"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B24",
+      "identifier": "pmid:35382195",
+      "pmid": "35382195",
+      "claimed_citation": "Adnan S, Abu Bakar M, Khalil MAI, Fiaz S, Ahmad Cheema Z, Ali A, et al. Meta-analysis of Bricker versus Wallace anastomosis outcomes. Urol Oncol. (2024) 42:95–103. doi:  10.7759/cureus.22782, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Outcomes of Uretero-ileal Anastomosis in Bladder Cancer Cystectomies: Bricker vs. Wallace 1.",
+        "journal": "Cureus",
+        "year": "2022"
+      },
+      "expected": {
+        "doi": "10.7759/cureus.22782"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B25",
+      "identifier": "pmid:27423823",
+      "pmid": "27423823",
+      "claimed_citation": "Westerman ME, Parker WP, Viers BR, Rivera ME, Karnes RJ, Frank I, et al. Late hydronephrosis after urinary diversion: distinguishing stricture from recurrence. J Urol. (2024) 213:789–97. doi:  10.1016/j.urolonc.2016.06.008, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Malignant ureteroenteric anastomotic stricture following radical cystectomy with urinary diversion: Patterns, risk factors, and outcomes.",
+        "journal": "Urologic oncology",
+        "year": "2016"
+      },
+      "expected": {
+        "doi": "10.1016/j.urolonc.2016.06.008"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B26",
+      "identifier": "pmid:37694596",
+      "pmid": "37694596",
+      "claimed_citation": "Rich JM, Tillu N, Grauer R, Busby D, Auer R, Breda A, et al. Long-term outcomes of Wallace anastomosis. Eur Urol. (2024) 85:321–30. doi:  10.1089/end.2023.0204, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Robot-Assisted Repair of Ureteroenteric Strictures After Cystectomy with Urinary Diversion: Technique Description and Outcomes from the European Robotic Urology Section Scientific Working Group.",
+        "journal": "Journal of endourology",
+        "year": "2023"
+      },
+      "expected": {
+        "doi": "10.1089/end.2023.0204"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B27",
+      "identifier": "pmid:40619483",
+      "pmid": "40619483",
+      "claimed_citation": "Ramadan R, Tharwat M, Hashem A, Taha DE. Improved mucosal apposition techniques in ureteroenteric anastomosis. J Urol. (2024) 214:60–8. doi:  10.1007/s11701-025-02502-2, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Robotic-assisted ureteroenteric reimplantation for ureteroenteric stricture after radical cystectomy: a systematic review and dual meta-analysis.",
+        "journal": "Journal of robotic surgery",
+        "year": "2025"
+      },
+      "expected": {
+        "doi": "10.1007/s11701-025-02502-2"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B28",
+      "identifier": "pmid:38260944",
+      "pmid": "38260944",
+      "claimed_citation": "Tyson MD, Barocas DA. Operative efficiency of Bricker versus Wallace anastomosis. Urol Pract. (2024) 11:100–7. doi:  10.1097/JS9.0000000000001065, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Robot-assisted radical cystectomy with intracorporeal urinary diversion: an updated systematic review and meta-analysis of its differential effect on effectiveness and safety.",
+        "journal": "International journal of surgery (London, England)",
+        "year": "2024"
+      },
+      "expected": {
+        "doi": "10.1097/JS9.0000000000001065"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B29",
+      "identifier": null,
+      "pmid": "",
+      "claimed_citation": "Goh AC, Gill IS. Wallace anastomosis in complex dissections. Eur Urol Focus. (2024) 11:80–8.",
+      "pubmed_resolves_to": null,
+      "expected": {},
+      "audit_verdict": "NO_IDENTIFIER (likely fabrication; cannot fetch to verify)"
+    },
+    {
+      "ref_id": "B30",
+      "identifier": "pmid:30815976",
+      "pmid": "30815976",
+      "claimed_citation": "Ahmadi N, Ashrafi AN, Hartman N, Shakir A, Cacciamani GE, Freitas D, et al. ICG fluorescence reduces ureteroenteric stricture rates. Eur Urol. (2024) 85:e50–1. doi:  10.1111/bju.14733, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Use of indocyanine green to minimise uretero-enteric strictures after robotic radical cystectomy.",
+        "journal": "BJU international",
+        "year": "2019"
+      },
+      "expected": {
+        "doi": "10.1111/bju.14733"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B31",
+      "identifier": "pmid:32235281",
+      "pmid": "32235281",
+      "claimed_citation": "Lee JY, Albers JA, Klaassen Z, Terris MK. Robotic platforms and urinary diversion outcomes. Eur Urol Open Sci. (2024) 62:40–8. doi:  10.1097/MOU.0000000000000755, PMID:",
+      "pubmed_resolves_to": {
+        "title": "Comparing open-radical cystectomy and robot-assisted radical cystectomy: current status and analysis of the evidence.",
+        "journal": "Current opinion in urology",
+        "year": "2020"
+      },
+      "expected": {
+        "doi": "10.1097/MOU.0000000000000755"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B32",
+      "identifier": "pmid:35678987",
+      "pmid": "35678987",
+      "claimed_citation": "Brewin A, Sriprasad S, Somani B. Urinary TGF-β1 as a biomarker for stricture detection. J Urol. (2024) 214:200–10. doi:  10.1007/s11934-022-01098-6, PMID:",
+      "pubmed_resolves_to": {
+        "title": "The Use of Neutrophil Gelatinase-Associated Lipocalin (NGAL) as a Diagnostic and Prognostic Biomarker in Urinary Tract Obstruction: a Systematic Review.",
+        "journal": "Current urology reports",
+        "year": "2022"
+      },
+      "expected": {
+        "doi": "10.1007/s11934-022-01098-6"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    },
+    {
+      "ref_id": "B33",
+      "identifier": "pmid:17085147",
+      "pmid": "17085147",
+      "claimed_citation": "Samuel JD, Bhatt RI, Montague RJ, Clarke NW, Ramani VA. Renal function trajectories post-diversion. Eur Urol. (2023) 84:78–85. doi:  10.1016/j.juro.2006.07.146, PMID:",
+      "pubmed_resolves_to": {
+        "title": "The natural history of postoperative renal function in patients undergoing ileal conduit diversion for cancer measured using serial isotopic glomerular filtration rate and 99m technetium-mercaptoacetyltriglycine renography.",
+        "journal": "The Journal of urology",
+        "year": "2006"
+      },
+      "expected": {
+        "doi": "10.1016/j.juro.2006.07.146"
+      },
+      "audit_verdict": "CHIMERA (PMID resolves to different paper)"
+    }
+  ]
+}
