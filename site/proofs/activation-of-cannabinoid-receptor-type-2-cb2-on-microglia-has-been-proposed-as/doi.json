@@ -1,0 +1,9 @@
+{
+  "doi": "10.5281/zenodo.20314489",
+  "zenodo_id": "20314489",
+  "concept_doi": "10.5281/zenodo.20314488",
+  "concept_zenodo_id": "20314488",
+  "claim_natural": "Activation of cannabinoid receptor type 2 (CB2) on microglia has been proposed as a mechanism for modulating neuroinflammatory pain states, including chronic widespread pain syndromes such as fibromyalgia where central sensitization and microglial activation have been implicated (Cabral & Griffin-Thomas, 2009; Stella, 2010; Chen et al., 2023).",
+  "minted_at": "2026-05-20",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.34.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.20314489"
+}

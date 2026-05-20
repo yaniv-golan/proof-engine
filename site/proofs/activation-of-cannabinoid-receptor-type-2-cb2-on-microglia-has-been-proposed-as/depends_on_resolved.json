@@ -1,0 +1,92 @@
+{
+  "url:https://pubmed.ncbi.nlm.nih.gov/19152719/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/19152719/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/19152719/",
+    "title": "Emerging role of the cannabinoid receptor CB2 in immune regulation: therapeutic prospects for neuroinflammation - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T17:48:44Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 158252
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/20468046/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/20468046/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/20468046/",
+    "title": "Cannabinoid and cannabinoid-like receptors in microglia, astrocytes, and astrocytomas - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T17:48:44Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 162454
+    }
+  },
+  "url:https://www.frontiersin.org/journals/molecular-neuroscience/articles/10.3389/fnmol.2023.1061220/full": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.frontiersin.org/journals/molecular-neuroscience/articles/10.3389/fnmol.2023.1061220/full",
+    "canonical_url": "https://www.frontiersin.org/journals/molecular-neuroscience/articles/10.3389/fnmol.2023.1061220/full",
+    "title": "Frontiers | Spinal cannabinoid receptor 2 activation alleviates neuropathic pain by regulating microglia and suppressing P2X7 receptor",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T17:48:45Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 923637
+    }
+  },
+  "url:https://www.mdpi.com/1422-0067/24/3/2348": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.mdpi.com/1422-0067/24/3/2348",
+    "canonical_url": "https://www.mdpi.com/1422-0067/24/3/2348",
+    "title": "Microglial Cannabinoid CB2 Receptors in Pain Modulation",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T17:48:54Z",
+    "source_api": "og_extraction_wayback",
+    "raw": {
+      "html_len": 727597
+    }
+  },
+  "url:https://pubmed.ncbi.nlm.nih.gov/30223011/": {
+    "identifier_type": "url",
+    "identifier_value": "https://pubmed.ncbi.nlm.nih.gov/30223011/",
+    "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/30223011/",
+    "title": "Brain glial activation in fibromyalgia - A multi-site positron emission tomography investigation - PubMed",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T17:48:55Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 253937
+    }
+  },
+  "url:https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11852494/": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11852494/",
+    "canonical_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11852494/",
+    "title": "Neuroinflammatory and Immunological Aspects of Fibromyalgia - PMC",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T17:48:56Z",
+    "source_api": "og_extraction",
+    "raw": {
+      "html_len": 306207
+    }
+  }
+}
