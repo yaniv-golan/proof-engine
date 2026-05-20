@@ -80,7 +80,15 @@ def generate_narrative(proof_dir: Path, model: str, dry_run: bool = False) -> tu
         return False, [f"ERROR: {proof_dir}: proof.json not found"]
 
     proof_data = json.loads(proof_json_path.read_text())
-    verdict = proof_data.get("verdict", "")
+    verdict_raw = proof_data.get("verdict", "")
+    # v3 structured verdict — extract the string the validator expects.
+    # Mirrors validate-site-proof.py:332-337.
+    if isinstance(verdict_raw, dict):
+        verdict = verdict_raw.get("value", "")
+        if verdict_raw.get("qualified") and verdict_raw.get("qualifier") == "unverified_citations":
+            verdict = f"{verdict} (with unverified citations)"
+    else:
+        verdict = verdict_raw
     claim_natural = proof_data.get("claim_natural", "")
 
     proof_md = proof_md_path.read_text() if proof_md_path.exists() else ""
