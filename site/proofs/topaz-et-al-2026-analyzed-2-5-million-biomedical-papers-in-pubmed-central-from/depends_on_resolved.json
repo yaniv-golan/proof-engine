@@ -1,0 +1,23 @@
+{
+  "url:https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00603-3/fulltext": {
+    "identifier_type": "url",
+    "identifier_value": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00603-3/fulltext",
+    "canonical_url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00603-3/fulltext",
+    "title": "Fabricated citations: an audit across 2.5 million biomedical papers",
+    "authors": [
+      "Maxim Topaz",
+      "Nadav Roguin",
+      "Pratik Gupta",
+      "Zhihong Zhang",
+      "Laura-Maria Peltonen"
+    ],
+    "year": 2026,
+    "venue": "The Lancet",
+    "version": null,
+    "resolved_at": "2026-05-20T08:51:27Z",
+    "source_api": "manual",
+    "raw": {
+      "note": "Publisher domain (thelancet.com) is gated behind Cloudflare bot-challenge; programmatic fetches return 403. Metadata transcribed from the article's title page in the local PDF snapshot used by the proof's citation verifier (Topaz M, Roguin N, Gupta P, Zhang Z, Peltonen L-M. Lancet 2026; 407: 1779-81)."
+    }
+  }
+}
