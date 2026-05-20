@@ -94,8 +94,15 @@ def resolve(
 
 # Auto-register built-in backends at import time
 def _autoregister() -> None:
-    from proof_citations.registry import pubmed
+    from proof_citations.registry import pubmed, doi, arxiv, isbn, swhid, handle, url
+
     register_backend("pmid", pubmed.resolve_pmid)
+    register_backend("doi", doi.resolve_doi)
+    register_backend("arxiv", arxiv.resolve_arxiv)
+    register_backend("isbn", isbn.resolve_isbn)
+    register_backend("swhid", swhid.resolve_swhid)
+    register_backend("handle", handle.resolve_handle)
+    register_backend("url", url.resolve_url)
 
 
 _autoregister()

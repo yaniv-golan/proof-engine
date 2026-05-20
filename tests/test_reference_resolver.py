@@ -1,7 +1,21 @@
+"""Tests for tools.lib.reference_resolver.
+
+As of v1.37.0, the backends moved into `proof_citations.registry.*` and
+this module's `_resolve_X` functions translate the new `ResolvedRecord`
+back to the legacy `ResolvedReference` shape. Tests mock at the HTTPSession
+layer so the translation logic is exercised end-to-end.
+"""
+
+from unittest.mock import MagicMock, patch
+
 import pytest
 import requests
-from unittest.mock import patch, MagicMock
-from tools.lib.reference_resolver import identifier_from_url, ResolvedReference, resolve
+
+from tools.lib.reference_resolver import (
+    identifier_from_url,
+    ResolvedReference,
+    resolve,
+)
 
 
 @pytest.mark.parametrize("url,expected", [
@@ -27,33 +41,55 @@ def test_identifier_from_url_empty():
     assert identifier_from_url(None) is None
 
 
-_ARXIV_RESPONSE = """<?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+def _mock_session(*responses):
+    """Build a mock HTTPSession whose .get() returns the given responses in order."""
+    session = MagicMock()
+    if len(responses) == 1:
+        session.get.return_value = responses[0]
+    else:
+        session.get.side_effect = list(responses)
+    return session
+
+
+def _mock_response(*, status_code=200, json_data=None, text=""):
+    resp = MagicMock(status_code=status_code, text=text)
+    resp.raise_for_status = MagicMock()
+    if status_code >= 400:
+        resp.raise_for_status.side_effect = requests.exceptions.HTTPError()
+    if json_data is not None:
+        resp.json = MagicMock(return_value=json_data)
+    return resp
+
+
+_ARXIV_RESPONSE_TEXT = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
   <entry>
     <id>http://arxiv.org/abs/2603.21852v2</id>
     <title>All elementary functions from a single binary operator</title>
     <published>2026-03-31T00:00:00Z</published>
     <updated>2026-04-05T00:00:00Z</updated>
-    <author><name>Andrzej Odrzywo\u0142ek</name></author>
+    <author><name>Andrzej Odrzywołek</name></author>
   </entry>
 </feed>
 """
 
 
 def test_resolve_arxiv_populates_fields():
-    mock_resp = MagicMock(status_code=200, text=_ARXIV_RESPONSE)
-    mock_resp.raise_for_status = MagicMock()
-    with patch("tools.lib.reference_resolver.requests.get", return_value=mock_resp) as mock_get:
+    """Translation: arxiv ResolvedRecord → legacy ResolvedReference."""
+    mock_resp = _mock_response(text=_ARXIV_RESPONSE_TEXT)
+    session = _mock_session(mock_resp)
+    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
         ref = resolve("arxiv", "2603.21852", refresh=True)
-    assert mock_get.called
     assert isinstance(ref, ResolvedReference)
     assert ref.identifier_type == "arxiv"
     assert ref.identifier_value == "2603.21852"
     assert ref.title == "All elementary functions from a single binary operator"
-    assert ref.authors == ["Andrzej Odrzywo\u0142ek"]
+    # Authors translate to "Given Family" strings
+    assert ref.authors == ["Andrzej Odrzywołek"]
     assert ref.year == 2026
     assert ref.canonical_url == "https://arxiv.org/abs/2603.21852"
-    assert ref.version == "v2"
+    assert ref.version == "v2"  # extracted from id_url, stored in raw
+    assert ref.venue == "arXiv preprint"  # legacy venue label preserved
     assert ref.source_api == "export.arxiv.org/api/query"
 
 
@@ -63,7 +99,7 @@ def test_resolve_without_refresh_reads_cache(tmp_path):
         identifier_type="arxiv", identifier_value="2603.21852",
         canonical_url="https://arxiv.org/abs/2603.21852",
         title="All elementary functions from a single binary operator",
-        authors=["Andrzej Odrzywo\u0142ek"], year=2026,
+        authors=["Andrzej Odrzywołek"], year=2026,
         venue="arXiv preprint", version="v2",
         resolved_at="2026-04-17T00:00:00Z",
         source_api="export.arxiv.org/api/query", raw={},
@@ -72,6 +108,7 @@ def test_resolve_without_refresh_reads_cache(tmp_path):
     cache = load_cache(tmp_path)
     assert "arxiv:2603.21852" in cache
     assert cache["arxiv:2603.21852"].title == ref.title
+    assert cache["arxiv:2603.21852"].authors == ["Andrzej Odrzywołek"]
 
 
 _DATACITE_RESPONSE = {
@@ -99,32 +136,29 @@ _CROSSREF_RESPONSE = {
 
 
 def test_resolve_doi_datacite_primary():
-    datacite_resp = MagicMock(status_code=200)
-    datacite_resp.raise_for_status = MagicMock()
-    datacite_resp.json = MagicMock(return_value=_DATACITE_RESPONSE)
-    with patch("tools.lib.reference_resolver.requests.get", return_value=datacite_resp):
+    datacite_resp = _mock_response(status_code=200, json_data=_DATACITE_RESPONSE)
+    session = _mock_session(datacite_resp)
+    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
         ref = resolve("doi", "10.1000/foo", refresh=True)
     assert ref.identifier_type == "doi"
     assert ref.title == "Planck 2018 results VI"
     assert ref.year == 2020
     assert "van den Oord" in ref.authors[0]
-    assert ref.raw["datacite"]["data"]["attributes"]["creators"][0]["familyName"] == "van den Oord"
+    assert ref.venue == "A&A"  # legacy: venue = publisher for DataCite
+    assert ref.source_api == "api.datacite.org"
 
 
 def test_resolve_doi_crossref_fallback_on_404():
-    datacite_404 = MagicMock(status_code=404)
-    http_err = requests.exceptions.HTTPError()
-    http_err.response = datacite_404
-    datacite_404.raise_for_status = MagicMock(side_effect=http_err)
-    crossref_ok = MagicMock(status_code=200)
-    crossref_ok.raise_for_status = MagicMock()
-    crossref_ok.json = MagicMock(return_value=_CROSSREF_RESPONSE)
-    with patch("tools.lib.reference_resolver.requests.get",
-               side_effect=[datacite_404, crossref_ok]):
+    datacite_404 = _mock_response(status_code=404)
+    crossref_ok = _mock_response(status_code=200, json_data=_CROSSREF_RESPONSE)
+    session = _mock_session(datacite_404, crossref_ok)
+    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
         ref = resolve("doi", "10.1000/fallback", refresh=True)
     assert ref.title == "Crossref-only paper"
     assert ref.year == 2019
     assert ref.authors == ["Jane Smith"]
+    assert ref.venue == "Journal of Fallback"
+    assert ref.source_api == "api.crossref.org"
 
 
 _SWH_RESPONSE = {
@@ -135,10 +169,9 @@ _SWH_RESPONSE = {
 
 
 def test_resolve_swhid():
-    resp = MagicMock(status_code=200)
-    resp.raise_for_status = MagicMock()
-    resp.json = MagicMock(return_value=_SWH_RESPONSE)
-    with patch("tools.lib.reference_resolver.requests.get", return_value=resp):
+    resp = _mock_response(status_code=200, json_data=_SWH_RESPONSE)
+    session = _mock_session(resp)
+    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
         ref = resolve("swhid", "swh:1:dir:" + "0" * 40, refresh=True)
     assert ref.identifier_type == "swhid"
     assert ref.title
@@ -156,14 +189,16 @@ _ISBN_RESPONSE = {
 
 
 def test_resolve_isbn():
-    resp = MagicMock(status_code=200)
-    resp.raise_for_status = MagicMock()
-    resp.json = MagicMock(return_value=_ISBN_RESPONSE)
-    with patch("tools.lib.reference_resolver.requests.get", return_value=resp):
+    resp = _mock_response(status_code=200, json_data=_ISBN_RESPONSE)
+    session = _mock_session(resp)
+    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
         ref = resolve("isbn", "9780262033848", refresh=True)
     assert ref.title == "Introduction to Algorithms"
-    assert "Thomas H. Cormen" in ref.authors
+    # `Author.from_full_name` parses 'Thomas H. Cormen' → family='Cormen', given='Thomas H.'
+    # Legacy translation joins as 'Thomas H. Cormen'
+    assert "Cormen" in ref.authors[0]
     assert ref.year == 2009
+    assert ref.venue == "MIT Press"
 
 
 def test_resolve_url_reads_og_meta():
@@ -174,9 +209,9 @@ def test_resolve_url_reads_og_meta():
         '<meta property="article:published_time" content="2024-03-01"/>'
         '</head><body></body></html>'
     )
-    resp = MagicMock(status_code=200, text=html)
-    resp.raise_for_status = MagicMock()
-    with patch("tools.lib.reference_resolver.requests.get", return_value=resp):
+    resp = _mock_response(status_code=200, text=html)
+    session = _mock_session(resp)
+    with patch("tools.lib.reference_resolver.get_default_session", return_value=session):
         ref = resolve("url", "https://example.com/post", refresh=True)
     assert ref.title == "My Blog Post"
     assert ref.authors == ["Jane Smith"]

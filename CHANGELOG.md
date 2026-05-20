@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.37.0] - 2026-05-20
+
+### Changed
+
+- **Registry backends consolidated into `proof_citations.registry`.** Crossref, DataCite, arXiv, Open Library, Software Heritage, Handle, and OG-extraction URL backends — which had lived in `tools/lib/reference_resolver.py` since the registry layer was first written — moved into per-source modules under the pip-installable `proof_citations.registry` package. Each backend returns the canonical `ResolvedRecord` introduced in v1.35.0. Auto-registered in `proof_citations.registry._BACKENDS` at import time, so `proof_citations.resolve(("doi", "10.x/y"))` now works end-to-end for external `pip install proof-citations` users, not just for the proof-engine site. Closes the layering issue called out in the v1.35.0 design doc: citation hygiene is now one cohesive library.
+- **`tools/lib/reference_resolver.py` is now a translation shim.** Down from 408 lines to ~270. The site-facing `ResolvedReference` dataclass (with the legacy `authors: list[str]` shape) and `_BACKENDS` dispatch are preserved unchanged for backwards compatibility — all 9 existing callers (`prose_reference_scan`, `cite_expander`, `proof-site.py`, etc.) and all 132 committed `depends_on_resolved.json` files continue to work without modification. Each `_resolve_X` wrapper calls into `proof_citations.registry.resolve()` and translates the returned `ResolvedRecord` back to the legacy `ResolvedReference` shape via the new `_record_to_reference()` translator. `identifier_from_url` is now a thin alias for `proof_citations.identify`. The cache loader (`load_cache`) silently drops unknown payload keys so newer caches written by future code don't break older readers — forward-compat policy applied retroactively to the 1.x cache format.
+
+### Added
+
+- **`proof_citations.registry.doi`** — Crossref + DataCite backend with publication-type, ISSN, page/volume/issue, and retraction signals from Crossref's `update-to` block (sets `update_status` to `retracted` / `expression_of_concern` / `corrigendum` with linked DOIs in `update_refs`).
+- **`proof_citations.registry.arxiv`** — Atom-feed parser with primary-category, version capture, DOI cross-reference, and `published_date` extraction.
+- **`proof_citations.registry.isbn`** — Open Library `bibkeys` lookup with author parsing, publish-date year extraction, publisher → venue mapping, `publication_type: "book"`.
+- **`proof_citations.registry.swhid`** — Software Heritage `api/1/resolve` lookup with origin-URL → title mapping.
+- **`proof_citations.registry.handle`** — CNRI Handle lookup (used for some institutional repositories).
+- **`proof_citations.registry.url`** — OG-meta / `<title>` extraction with Wayback fallback for publisher-blocked / Cloudflare-gated landing pages.
+
+### Notes
+
+This release is a pure internal refactor — no behavior change for site callers, no breaking change for `pip install proof-citations` users (all v1.36.0 API surface remains). The architectural payoff: the citation-hygiene library now owns identification + resolution + comparison + verification end-to-end. Anyone who `pip install proof-citations` gets the whole capability; the proof-engine site is a consumer of the library, not the source of registry backends. Closes the layering issue introduced when v1.28.0 extracted only the HTML-quote-verification slice.
+
+The committed test suite (1135 site tests + 156 proof-citations + 84 proof-engine-registry + 19 proof-engine-wiki = 1394 total) all passes against the refactored layout.
+
 ## [1.36.0] - 2026-05-20
 
 ### Added

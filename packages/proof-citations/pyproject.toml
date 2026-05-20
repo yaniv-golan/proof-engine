@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "proof-citations"
-version = "1.36.0"
+version = "1.37.0"
 description = "Fetch URLs and verify that quoted text appears on the page. Extracted from proof-engine."
 readme = "README.md"
 license = { file = "LICENSE" }
