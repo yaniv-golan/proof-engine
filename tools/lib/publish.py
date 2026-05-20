@@ -60,6 +60,10 @@ def stage_proof(source_dir: Path, proofs_dir: Path | None = None) -> str:
         if src.exists():
             shutil.copy2(src, staging_path / name)
 
+    snapshots_src = source_dir / "snapshots"
+    if snapshots_src.is_dir():
+        shutil.copytree(snapshots_src, staging_path / "snapshots")
+
     return staging
 
 
