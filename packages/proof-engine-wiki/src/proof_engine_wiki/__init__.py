@@ -1,3 +1,3 @@
 """proof-engine-wiki: attach Proof Engine proofs to LLM-wiki claims."""
 
-__version__ = "1.34.1"
+__version__ = "1.35.0"
