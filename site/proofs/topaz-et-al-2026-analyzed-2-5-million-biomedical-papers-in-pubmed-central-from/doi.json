@@ -1,0 +1,9 @@
+{
+  "doi": "10.5281/zenodo.20306620",
+  "zenodo_id": "20306620",
+  "concept_doi": "10.5281/zenodo.20306619",
+  "concept_zenodo_id": "20306619",
+  "claim_natural": "Topaz et al. (2026) analyzed 2.5 million biomedical papers in PubMed Central from January 2023 through February 2026 and identified 4,046 references pointing to studies that do not exist, distributed across 2,810 papers.",
+  "minted_at": "2026-05-20",
+  "binder_url": "https://mybinder.org/v2/gh/yaniv-golan/proof-engine-binder/v1.34.0?urlpath=lab%2Ftree%2Flauncher.ipynb%3Fdoi%3D10.5281%2Fzenodo.20306620"
+}
