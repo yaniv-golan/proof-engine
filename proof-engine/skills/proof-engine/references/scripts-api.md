@@ -81,3 +81,37 @@ verify_data_values(url, data_values, fact_id, timeout=15, snapshot=None) -> dict
 #   Fetches page and confirms each value string appears.
 #   Returns {key: {found, value, fetch_mode}}.
 ```
+
+## v1.35+ APIs in the `proof_citations` package
+
+The bundled `scripts/` above are skill-internal shims preserved for backwards
+compatibility. The
+[`proof-citations` package](https://pypi.org/project/proof-citations/) exposes
+a richer set of APIs directly — reach for these when writing new proofs that
+cite identifier-bearing sources (PMID, DOI, arXiv, …):
+
+```python
+from proof_citations import (
+    identify,                    # URL/string → ("pmid", "12345") / ("doi", "10.x/y") / …
+    resolve,                     # identifier → ResolvedRecord (canonical bibliographic record)
+    compare_metadata,            # ResolvedRecord vs claimed dict → per-field verdict
+    verify_citation_record,      # high-level: resolve + compare in one call
+    verify_citation,             # quote-on-page; v1.40+ accepts expected_metadata= for joint check
+    ResolvedRecord, Author,      # types
+    InMemoryCache, FileCache,    # default caches; resolve(..., cache=cache)
+    ResolutionError,             # with `.kind` ∈ {not_found, fetch_failed, rate_limited, malformed_response}
+)
+```
+
+When to use which:
+
+| Goal | API |
+|---|---|
+| Verify a quoted passage on a cited page | `verify_citation(url, quote, fact_id)` (existing) |
+| Verify quote AND that the cited identifier resolves to the claimed paper | `verify_citation(url, quote, fact_id, expected_metadata={...})` (v1.40+) |
+| Verify only that an identifier resolves to the claimed paper (no quote) | `verify_citation_record(("pmid", "12345"), expected={...})` |
+| Get the canonical bibliographic record for an identifier | `resolve(("pmid", "12345"))` |
+| Batch-audit a list of references for citation fabrication | `proof-citations verify-records --input refs.json` (CLI) |
+
+See [`packages/proof-citations/README.md`](../../../../packages/proof-citations/README.md)
+for full signatures, return shapes, error model, and worked examples.

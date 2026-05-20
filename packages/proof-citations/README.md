@@ -102,20 +102,41 @@ Input shape:
 }
 ```
 
-Emits per-reference verdicts plus a summary block (`total`, `by_status`, `verified`, `chimeras`, `unresolvable`). Exit code is 1 if any reference is anything other than `verified` or `resolved`. This is what the *CITADEL* audit workflow looks like once productionized.
+Emits per-reference verdicts plus a summary block (`total`, `by_status`, `verified`, `chimeras`, `unresolvable`). Exit code is 1 if any reference is anything other than `verified` or `resolved`. The CLI is the canonical entry point for batch audits — manuscript review, automated reference-list checks, post-publication audits.
 
-### Verify a quote with metadata together
+### Verify a quote AND its bibliographic claim in one call (v1.40.0+)
 
-`verify_citation` accepts an optional `expected_metadata=` kwarg that runs the metadata check in addition to the quote-on-page check; status is `verified` only if both pass:
+For single facts where you have both a URL with structured identifier (PMID / DOI / arXiv) AND a quote, pass `expected_metadata` to `verify_citation` to run both checks:
 
 ```python
-verify_citation(
+r = verify_citation(
     "https://pubmed.ncbi.nlm.nih.gov/33538338/",
     "Global Cancer Statistics 2020",
     fact_id="B1",
-    expected_metadata={"title": "Global Cancer Statistics 2020...", "year": 2021},
+    expected_metadata={
+        "title": "Global Cancer Statistics 2020",
+        "journal": "CA: a cancer journal for clinicians",
+        "year": 2021,
+        "doi": "10.3322/caac.21660",
+    },
 )
+
+# `status` continues to reflect the quote-on-page outcome only — meaning preserved from v1.34.x.
+assert r["status"] == "verified"
+
+# `metadata_result` (new in v1.40.0) carries the metadata-chimera check.
+# Key is ALWAYS present in the return dict — value is None when expected_metadata isn't passed.
+assert r["metadata_result"]["verdict"] == "genuine"
+
+# Joint pass: compose explicitly when you want it.
+joint_pass = r["status"] == "verified" and r["metadata_result"]["verdict"] == "genuine"
 ```
+
+When the URL has no structured identifier (e.g., a plain blog URL), `metadata_result["status"]` is `"skipped_no_structured_identifier"` — OG-extraction from arbitrary pages is too noisy to compare against claimed bibliographic fields. Similarly, identifier types without a registered resolver backend yield `"skipped_no_resolver"`.
+
+`verify_all_citations(empirical_facts, ...)` accepts `expected_metadata` as an optional per-fact dict field, with the same semantics.
+
+**CLI policy:** the `proof-citations verify` subcommand stays quote-only; for batch metadata audits use `proof-citations verify-records --input audit.json` (the canonical batch path).
 
 ## Caching
 
@@ -143,13 +164,29 @@ export PROOF_CITATIONS_CONTACT=you@example.org
 proof-citations verify-records --input audit.json
 ```
 
+## Compatibility — what landed when
+
+For min-version pinning. Each capability landed in a specific release:
+
+| Capability | Since |
+|---|---|
+| `verify_citation(url, quote)` quote-on-page check | v1.28.0 (initial extraction) |
+| `verify_all_citations(facts)` batch quote-on-page | v1.28.0 |
+| `proof_citations.resolvers.*` identifier resolution (PMID, DOI, arXiv, ISBN, SWHID, Handle, URL) | v1.35.0 (called `.registry` until v1.39.0) |
+| `ResolvedRecord`, `Author`, `Cache`/`FileCache`/`InMemoryCache`, `HTTPSession`, `ResolutionError`, `identify()` | v1.35.0 |
+| `compare_metadata(resolved, expected)`, `verify_citation_record(identifier, expected)` | v1.36.0 |
+| `proof-citations verify-records --input audit.json` CLI | v1.36.0 |
+| `verify_citation(..., expected_metadata=...)` integrated path; `metadata_result` key in return dict | v1.40.0 |
+
+If you're writing new code: pin `proof-citations>=1.40.0` to get all of the above.
+
 ## Public API surface
 
 Top-level imports (the stable contract):
 
 ```python
 from proof_citations import (
-    # Quote-on-page verification
+    # Quote-on-page verification (v1.28.0+ semantics preserved; v1.40.0 added optional expected_metadata=)
     verify_citation, verify_all_citations,
     # Identifier → ResolvedRecord
     resolve, identify,
@@ -163,12 +200,18 @@ from proof_citations import (
 )
 ```
 
+**`verify_all_citations` vs `verify-records`** — both do "batch verification," but at different layers and via different inputs:
+
+- `verify_all_citations(empirical_facts)` is the **library function** for batch quote-on-page verification (optionally with `expected_metadata` per fact). Inputs are a Python dict of `{fact_id: {url, quote, expected_metadata?, …}}`. Used inside proof scripts (`proof.py`) and as a programmatic API.
+- `proof-citations verify-records --input audit.json` is the **CLI subcommand** for batch *bibliographic-claim* audits. Inputs are a JSON file with `{references: [{ref_id, identifier, expected: {…}}]}`. No quote-on-page check — pure metadata-comparison. Used for manuscript review / post-publication audits where the goal is "are these citations real?"
+
 Backend submodules (`proof_citations.resolvers.pubmed`, `.doi`, `.arxiv`, `.isbn`, `.swhid`, `.handle`, `.url`) are accessible for direct use but the dispatch via `resolve()` is the supported entry point.
 
 ## Adding a custom backend
 
 ```python
-from proof_citations import register_backend, ResolvedRecord, now_iso
+from proof_citations import register_backend, ResolvedRecord
+from proof_citations.resolvers.base import now_iso
 
 def resolve_my_thing(value, *, session):
     resp = session.get(f"https://my.registry.invalid/api/{value}")
@@ -215,7 +258,7 @@ except ResolutionError as e:
 
 ## Status
 
-Used by the Proof Engine to verify ~140 published proofs at `proofengine.info`, and as a standalone audit tool against external reference lists (Topaz et al.'s CITADEL audit of LLM-generated medical literature). See the [Proof Engine repo](https://github.com/yaniv-golan/proof-engine) for the parent project.
+Used by the Proof Engine to verify the proof corpus at `proofengine.info`, and as a standalone audit tool for external reference-list audits (manuscripts, post-publication reviews of LLM-generated bibliographies). See the [Proof Engine repo](https://github.com/yaniv-golan/proof-engine) for the parent project.
 
 ## License
 

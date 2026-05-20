@@ -10,7 +10,7 @@ description: >
 license: MIT
 metadata:
   author: Yaniv Golan
-  version: "1.39.0"
+  version: "1.40.0"
 compatibility: >
   Requires Python 3, `requests`, and the `proof-citations` PyPI package
   (`pip install proof-citations` — the scripts/ entries are thin shims
@@ -28,6 +28,18 @@ Produces four outputs: a re-runnable `proof.py` script, a reader-facing `proof.m
 ## Setup
 
 The bundled `scripts/` are thin shims over the `proof-citations` PyPI package, which carries the real verify/fetch/normalize implementations. Install it before running any Type B proof: `pip install proof-citations`. A `requirements.txt` next to this file lists the same dependency for hosts that auto-install. If you see `ModuleNotFoundError: No module named 'proof_citations'`, the scripts will now raise an actionable error pointing at this install command — run it and retry.
+
+### Beyond the bundled scripts: structured citation verification
+
+For empirical proofs that cite identifier-bearing sources (PMID, DOI, arXiv, …), the `proof-citations` package (v1.35+) ships higher-level APIs the bundled `scripts/` shims don't expose. Reach for these when the citation has a structured identifier AND the claim makes specific bibliographic assertions (journal, year, volume, DOI). They catch the "real paper, forged journal/year" fraud class — sometimes called metadata-chimera fraud — that pure quote-on-page verification can't see:
+
+- **`verify_citation(url, quote, fact_id, expected_metadata={...})`** (v1.40.0+) — combined quote-on-page + metadata-chimera check in one call. The same flow `scripts/verify_citations.py` already does, plus a per-field metadata comparison against the authoritative registry (NCBI E-utilities for PMIDs, Crossref for DOIs, etc.). Result dict gains a `metadata_result` key with the per-field verdict; top-level `status` continues to reflect the quote-on-page outcome only.
+- **`verify_citation_record((type, value), expected)`** (v1.36+) — pure metadata-check, no page fetch. Useful when you have the identifier but no specific quote to verify, or when you want to audit a bibliography without re-checking every quoted passage.
+- **`proof-citations verify-records --input refs.json` CLI** (v1.36+) — batch metadata audit over a list of references. The canonical entry point for manuscript / reference-list audits.
+
+When the URL has no structured identifier (e.g., a generic blog page), `metadata_result["status"]` is `"skipped_no_structured_identifier"` — OG-extraction from arbitrary pages is too noisy to compare against claimed bibliographic fields.
+
+See [`packages/proof-citations/README.md`](../../../packages/proof-citations/README.md) for the full API, the registered identifier types, and worked examples. See [`references/scripts-api.md`](references/scripts-api.md) for signatures.
 
 ## Gotchas
 

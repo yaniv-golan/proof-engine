@@ -4,7 +4,27 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.40.0] - 2026-05-21
+
+### Added
+
+- **`verify_citation(..., expected_metadata=...)` — integrated quote-on-page + metadata-chimera check.** New optional kwarg on the single-fact verifier. When provided AND the URL has a structured identifier (PMID, DOI, arXiv, …), the function ALSO runs `verify_citation_record` against the claimed bibliographic fields, and the return dict gains a `metadata_result` key carrying the full per-field verdict. Catches the "real paper, forged journal/year/DOI" fraud class (B3/B7/B16 in the Ren CITADEL audit) the quote-on-page check alone cannot see. Top-level `status` continues to reflect the quote-on-page outcome only (zero breaking change for existing callers reading `status`); callers compose joint-pass explicitly via `r["status"] == "verified" and r["metadata_result"]["verdict"] == "genuine"`. Skip paths are explicit: `metadata_result["status"] = "skipped_no_structured_identifier"` when the URL is unstructured (OG-extraction is too noisy to compare against), `"skipped_no_resolver"` when the identifier type has no registered backend.
+- **`verify_all_citations` batch parity.** The batch wrapper now accepts an optional `expected_metadata` per fact (single-source) or per source (multi-source format) — pass-through to the underlying `verify_citation` calls. Existing facts without `expected_metadata` see no behavior change.
+- **`metadata_result` key always present in `verify_citation` return dict.** Deterministic shape: value is `None` when `expected_metadata` is not provided, a `verify_citation_record`-shaped dict when it is. Avoids the conditional-key-present footgun for callers that walk the result.
+
+### Changed
+
+- **`packages/proof-citations/README.md`**: rewrote the previously-fictional "Verify a quote with metadata together" section with the now-real `expected_metadata=` kwarg. Added a new "Compatibility" table listing which capabilities landed in which release for min-version pinners. Added an explicit `verify_all_citations` (library batch quote-on-page) vs `verify-records` (CLI batch metadata audit) section so callers know which to reach for. Custom-backend example fixed: `from proof_citations.resolvers.base import now_iso` instead of the previously-broken top-level import. Dropped the undefined "CITADEL" term in favor of plain English; replaced "~140 published proofs" with "the proof corpus" to dodge future drift.
+- **`docs/DESIGN.md` "Prose Reference Verification" paragraph**: simplified the v1.37.0/v1.38.0 layering footnote to plain English.
+
+### Notes
+
+- The `proof-citations verify` CLI subcommand stays quote-only — for batch metadata audits use `proof-citations verify-records --input audit.json`. The new library kwarg is single-fact convenience inside `verify_citation()` for callers already on the quote-on-page path who want the metadata check in the same call.
+- Skill documentation gets a minimal "Beyond the bundled scripts" subsection in `SKILL.md` pointing at the v1.40.0 `expected_metadata=` path; a fuller skill-doc structural rewrite (re-organizing the bundled-scripts framing around the v1.35+ library APIs as primary) is deferred to a later release once we have usage signal on which APIs proof authors actually reach for most.
+
 ## [1.39.0] - 2026-05-21
+
+> **Naming note for readers of earlier entries:** mentions of `proof_citations.registry` in v1.35.0–v1.38.0 entries below refer to the pre-v1.39.0 submodule name. The current API is `proof_citations.resolvers` — same exports, same behavior; only the import path changed.
 
 ### Changed
 

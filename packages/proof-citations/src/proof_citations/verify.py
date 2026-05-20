@@ -33,6 +33,7 @@ import math
 import re
 import sys
 import json
+from typing import Optional
 
 try:
     import requests
@@ -638,6 +639,68 @@ def _try_oa_fallback(url: str, doi: str = None, timeout: int = 15) -> tuple:
 # Main verification function
 # ---------------------------------------------------------------------------
 
+def _compute_metadata_result(url: str, expected_metadata: Optional[dict]) -> Optional[dict]:
+    """Run identifier extraction + metadata comparison for `verify_citation`.
+
+    Returns:
+        - `None` when `expected_metadata` is falsy (caller didn't ask).
+        - A dict matching `verify_citation_record`'s return shape when a
+          structured identifier was extracted from `url` and a registered
+          backend exists.
+        - A skip dict (`status="skipped_no_structured_identifier"`) when
+          `identify(url)` returned no structured type — OG-extraction from
+          arbitrary pages is too noisy to compare claimed metadata against.
+        - A skip dict (`status="skipped_no_resolver"`) when a structured
+          identifier was extracted but no resolver backend is registered for
+          its type (e.g., a PMC ID before a PMC backend is added).
+
+    Lazy-imported because the registry path is only used when the new
+    `expected_metadata` kwarg is exercised — keeps cold-start cost on the
+    quote-only legacy path identical to v1.39.x.
+    """
+    if not expected_metadata:
+        return None
+
+    from proof_citations.identify import identify
+    from proof_citations.resolvers import get_backend
+    from proof_citations.verify_record import verify_citation_record
+
+    identifier = identify(url)
+    if identifier is None or identifier[0] == "url":
+        return {
+            "status": "skipped_no_structured_identifier",
+            "verdict": "skipped",
+            "resolved": None,
+            "field_matches": {},
+            "mismatches": [],
+            "title_similarity": None,
+            "message": (
+                "URL has no structured identifier (PMID/DOI/arXiv/...); "
+                "metadata check skipped — OG-extraction from arbitrary pages "
+                "is too noisy to compare against claimed bibliographic fields."
+            ),
+            "error": None,
+        }
+
+    if get_backend(identifier[0]) is None:
+        return {
+            "status": "skipped_no_resolver",
+            "verdict": "skipped",
+            "resolved": None,
+            "field_matches": {},
+            "mismatches": [],
+            "title_similarity": None,
+            "message": (
+                f"Identifier type {identifier[0]!r} has no registered resolver "
+                f"backend; metadata check skipped. Either install a backend or "
+                f"call `register_backend('{identifier[0]}', ...)` first."
+            ),
+            "error": None,
+        }
+
+    return verify_citation_record(identifier, expected_metadata)
+
+
 def verify_citation(
     url: str,
     expected_quote: str,
@@ -649,6 +712,7 @@ def verify_citation(
     wayback_fallback: bool = False,
     oa_lookup: bool = True,
     doi: str = None,
+    expected_metadata: Optional[dict] = None,
 ) -> dict:
     """Fetch a URL and check whether the expected quote appears on the page.
 
@@ -656,6 +720,14 @@ def verify_citation(
 
     Also performs source credibility assessment and includes it in the result
     under the "credibility" key.
+
+    When `expected_metadata` is provided AND the URL has a structured identifier
+    (PMID, DOI, arXiv, …), the result also carries a `metadata_result` key with
+    a full `verify_citation_record` response — catches the metadata-chimera
+    fraud class (real identifier, forged journal/year/DOI) the quote-on-page
+    check alone cannot see. The top-level `status` field continues to reflect
+    the quote-on-page outcome only; combine `status == "verified"` with
+    `metadata_result["verdict"] == "genuine"` if you want a joint pass.
 
     Args:
         url: The URL to fetch.
@@ -665,11 +737,16 @@ def verify_citation(
         snapshot: Pre-fetched page text for offline verification.
         snapshot_fetched_at: ISO 8601 timestamp of when snapshot was captured.
         wayback_fallback: If True, try Wayback Machine when live+snapshot fail.
+        expected_metadata: Optional dict with claimed bibliographic fields
+            (title, journal, year, doi, authors, …). If provided, runs the
+            metadata-chimera check in addition to the quote-on-page check.
+            New in v1.40.0.
 
     Returns:
         dict with keys: status, method, coverage_pct, fetch_error, fetch_mode,
-                        message, credibility
+                        message, credibility, metadata_result
         - status: "verified" | "partial" | "not_found" | "fetch_failed"
+          (quote-on-page outcome only — meaning unchanged from prior versions)
         - method: "full_quote" | "unicode_normalized" | "fragment" |
                   "aggressive_normalization" | None
         - coverage_pct: float for fragment matches, None otherwise
@@ -677,13 +754,23 @@ def verify_citation(
         - fetch_mode: "live" | "snapshot" | "wayback"
         - message: human-readable description
         - credibility: {domain, source_type, tier, flags, note}
+        - metadata_result: `None` when `expected_metadata` is not provided;
+          otherwise a `verify_citation_record`-shaped dict, OR a skip-shaped
+          dict (`status` ∈ {"skipped_no_structured_identifier",
+          "skipped_no_resolver"}) when the URL or backend doesn't support it.
+          New in v1.40.0; key is ALWAYS present in the return dict.
     """
     # Assess source credibility (offline, no network call)
     credibility = assess_credibility(url)
 
+    # Run the metadata check eagerly when requested; its outcome does not
+    # depend on the quote-check, so this is independent and cacheable upstream.
+    metadata_result = _compute_metadata_result(url, expected_metadata)
+
     def _with_credibility(result):
-        """Attach credibility assessment to any verification result."""
+        """Attach credibility + metadata_result to any verification result."""
         result["credibility"] = credibility
+        result["metadata_result"] = metadata_result
         return result
 
     # Fetch page text using fallback chain
@@ -739,9 +826,16 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
 
     Supports two formats per fact:
       - Single-source: {"url": "...", "quote": "...", "source_name": "...",
-                        "snapshot": "...", "snapshot_fetched_at": "..."}
+                        "snapshot": "...", "snapshot_fetched_at": "...",
+                        "expected_metadata": {...}}        # v1.40.0+
       - Multi-source:  {"sources": [{"url": "...", "quote": "...",
-                        "snapshot": "...", "snapshot_fetched_at": "..."}, ...]}
+                        "snapshot": "...", "snapshot_fetched_at": "...",
+                        "expected_metadata": {...}}, ...]}  # v1.40.0+
+
+    The optional per-fact `expected_metadata` dict is passed through to the
+    underlying `verify_citation` call; when present, the result for that fact
+    gains a `metadata_result` key carrying the metadata-chimera-check outcome.
+    See `verify_citation` for the field semantics. New in v1.40.0.
 
     Args:
         empirical_facts: Dict of fact_id → fact data.
@@ -749,7 +843,8 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
 
     Returns:
         dict of {check_id: result_dict} where result_dict has keys:
-        status, method, coverage_pct, fetch_error, fetch_mode, message
+        status, method, coverage_pct, fetch_error, fetch_mode, message,
+        credibility, metadata_result.
     """
     results = {}
 
@@ -776,6 +871,7 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
                     wayback_fallback=wayback_fallback,
                     oa_lookup=oa_lookup,
                     doi=source.get("doi"),
+                    expected_metadata=source.get("expected_metadata"),
                 )
                 results[check_id] = result
                 _print_status(check_id, result)
@@ -799,6 +895,7 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
                 wayback_fallback=wayback_fallback,
                 oa_lookup=oa_lookup,
                 doi=fact.get("doi"),
+                expected_metadata=fact.get("expected_metadata"),
             )
             results[fact_id] = result
             _print_status(fact_id, result)
