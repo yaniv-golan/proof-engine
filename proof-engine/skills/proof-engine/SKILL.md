@@ -10,11 +10,13 @@ description: >
 license: MIT
 metadata:
   author: Yaniv Golan
-  version: "1.33.2"
+  version: "1.33.4"
 compatibility: >
-  Requires Python 3 and requests library. Optional: pdfplumber (PDF citations),
-  sympy (symbolic math). Outbound HTTP needed for Type B (empirical) proofs.
-  Works on Claude Code, ChatGPT, Cursor, and other AI coding environments.
+  Requires Python 3, `requests`, and the `proof-citations` PyPI package
+  (`pip install proof-citations` — the scripts/ entries are thin shims
+  over it). Optional: `pdfplumber` (PDF citations), `sympy` (symbolic math).
+  Outbound HTTP needed for Type B (empirical) proofs. Works on Claude Code,
+  ChatGPT, Cursor, and other AI coding environments.
 ---
 
 # Proof Engine
@@ -22,6 +24,10 @@ compatibility: >
 LLMs hallucinate facts and make reasoning errors. This skill overcomes both by offloading all verification to **code** and **citations**. Every fact is either computed by Python code anyone can re-run (Type A) or backed by a specific source, URL, and exact quote (Type B).
 
 Produces four outputs: a re-runnable `proof.py` script, a reader-facing `proof.md`, a `proof_audit.md` with full verification details, and a `proof_narrative.md` plain-language narrative.
+
+## Setup
+
+The bundled `scripts/` are thin shims over the `proof-citations` PyPI package, which carries the real verify/fetch/normalize implementations. Install it before running any Type B proof: `pip install proof-citations`. A `requirements.txt` next to this file lists the same dependency for hosts that auto-install. If you see `ModuleNotFoundError: No module named 'proof_citations'`, the scripts will now raise an actionable error pointing at this install command — run it and retry.
 
 ## Gotchas
 

@@ -55,11 +55,17 @@ import sys
 from dataclasses import dataclass, field
 from typing import Optional, List, Any
 
-from proof_citations.normalize import (
-    UNICODE_NORMALIZATIONS,
-    normalize_unicode,
-    diagnose_mismatch,
-)
+try:
+    from proof_citations.normalize import (
+        UNICODE_NORMALIZATIONS,
+        normalize_unicode,
+        diagnose_mismatch,
+    )
+except ImportError as exc:
+    raise ImportError(
+        "proof-engine scripts require the 'proof-citations' PyPI package. "
+        "Install with: pip install proof-citations"
+    ) from exc
 
 
 # ---------------------------------------------------------------------------

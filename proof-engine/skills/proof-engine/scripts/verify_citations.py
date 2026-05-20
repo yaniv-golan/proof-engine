@@ -10,11 +10,23 @@ delegating to the package CLI.
 
 import sys as _sys
 
-from proof_citations import verify as _verify
+try:
+    from proof_citations import verify as _verify
+except ImportError as exc:
+    raise ImportError(
+        "proof-engine scripts require the 'proof-citations' PyPI package. "
+        "Install with: pip install proof-citations"
+    ) from exc
 
 
 if __name__ == "__main__":
-    from proof_citations.cli import main
+    try:
+        from proof_citations.cli import main
+    except ImportError as exc:
+        raise ImportError(
+            "proof-engine scripts require the 'proof-citations' PyPI package. "
+            "Install with: pip install proof-citations"
+        ) from exc
     raise SystemExit(main())
 
 # Imported as a module: alias to the real implementation so attribute access
