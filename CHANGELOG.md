@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.34.1] - 2026-05-20
+
+### Added
+
+- **Python 3.10 support for the three pip-installable subpackages.** `proof-citations`, `proof-engine-registry`, and `proof-engine-wiki` now declare `requires-python = ">=3.10"` (was `>=3.11`) and add a `Programming Language :: Python :: 3.10` classifier. The only 3.11-only import in the package sources — `tomllib` in `proof_engine_registry.config` — is now shimmed (`import tomllib` on 3.11+, `import tomli as tomllib` on 3.10), and the `tomli>=2.0; python_version<'3.11'` conditional dependency that was already declared on `proof-engine-registry` now actually does work. Repo-level dev environment and CI workflows continue to pin 3.11.
+
+### Fixed
+
+- **`stage_proof` preserves the `snapshots/` directory.** The publish staging step copied only the fixed `REQUIRED + OPTIONAL` artifact list, dropping any sibling `snapshots/` directory the proof used as a citation-verification surface. Without those files the staged `proof.py` would fall through to a live URL fetch, hit a 403 on Cloudflare-gated publishers (e.g. The Lancet), and crash schema validation (`verification.method` becomes `None`, which the schema rejects with `None is not of type 'string'`). `stage_proof` now copies `source_dir/snapshots/` into the staging dir when present. The directory is still gitignored repo-wide (`**/snapshots/`), and CI deploy-site continues to use `--structural-only` and never re-executes `proof.py`, so this only affects the local publish flow.
+
 ## [1.34.0] - 2026-05-20
 
 ### Added
