@@ -128,6 +128,8 @@ Section "Generator": Same footer as proof.md.
 
 The machine-readable summary produced by proof.py. All four markdown documents derive their data from this file.
 
+`ProofSummaryBuilder.emit(write_json_path=...)` writes `proof.json` as a file artifact AND prints the JSON to stdout (preceded by the marker line `=== PROOF SUMMARY (JSON) ===` — the marker INTRODUCES the JSON block, it does not close it). Templates pass an inline path computed from `__file__` so the file lands next to `proof.py` regardless of the caller's CWD. Both consumers — direct file read and stdout capture — receive identical content.
+
 ### v2 format (format_version: 2)
 
 Required top-level fields:

@@ -192,7 +192,12 @@ if empirical_facts:
     # For all-snapshot proofs against blocked domains (PMC, Nature, etc.), see
     # scripts-api.md "Snapshot-only fast path" — pass skip_live_fetch=True,
     # oa_lookup=False to skip the slow live-fetch + OA-lookup attempts.
-    citation_results = verify_all_citations(empirical_facts, wayback_fallback=True)
+    # snapshot_base_dir anchors relative snapshot_file paths to proof.py's
+    # directory so the published proof runs from any CWD without breaking.
+    citation_results = verify_all_citations(
+        empirical_facts, wayback_fallback=True,
+        snapshot_base_dir=os.path.dirname(os.path.abspath(__file__)),
+    )
     n_corroborating = sum(
         1 for key in empirical_facts
         if citation_results.get(key, {}).get("status") in COUNTABLE_STATUSES
@@ -367,7 +372,9 @@ if __name__ == "__main__":
         corroboration_met=corroboration_met,
         claim_holds=claim_holds,
     )
-    builder.emit()
+    # write_json_path lands proof.json next to proof.py regardless of CWD
+    builder.emit(write_json_path=os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "proof.json"))
 ```
 
 ### Adaptation notes

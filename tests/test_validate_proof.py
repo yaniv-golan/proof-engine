@@ -241,6 +241,39 @@ overall_claim_holds = subclaim_a_holds and subclaim_b_holds
 '''
 
 
+CLAIM_HOLDS_MULTILINE_COMPREHENSION = '''
+if __name__ == "__main__":
+    sc_holds = {
+        sc["id"]: compare(n_sc[sc["id"]], ">=", sc["threshold"])
+        for sc in CLAIM_FORMAL["sub_claims"]
+    }
+'''
+
+CLAIM_HOLDS_ONELINE_COMPREHENSION = '''
+if __name__ == "__main__":
+    sc_holds = {sc["id"]: compare(n_sc[sc["id"]], ">=", sc["threshold"]) for sc in CLAIM_FORMAL["sub_claims"]}
+'''
+
+
+def test_claim_holds_multiline_dict_comprehension_with_compare_passes():
+    """v1.44.0: multi-line dict comprehension whose body calls compare()
+    must not trip 'prefer using compare()' warning — the validator now
+    extends RHS bracket-balanced to catch compare() on continuation lines."""
+    v = _validate_claim_holds(CLAIM_HOLDS_MULTILINE_COMPREHENSION)
+    holds_warnings = [msg for msg, _ in v.warnings if "sc_holds" in msg]
+    assert len(holds_warnings) == 0, f"Unexpected warnings: {holds_warnings}"
+    assert any("sc_holds assigned from compare()" in msg for msg in v.passed), \
+        f"Expected sc_holds-compare pass; passed: {v.passed}"
+
+
+def test_claim_holds_oneline_dict_comprehension_with_compare_passes():
+    """Sanity: single-line comprehension was already supported — keep it
+    passing alongside the multi-line case."""
+    v = _validate_claim_holds(CLAIM_HOLDS_ONELINE_COMPREHENSION)
+    holds_warnings = [msg for msg, _ in v.warnings if "sc_holds" in msg]
+    assert len(holds_warnings) == 0
+
+
 def test_claim_holds_via_compare_passes():
     v = _validate_claim_holds(CLAIM_HOLDS_VIA_COMPARE)
     assert len(v.issues) == 0

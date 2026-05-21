@@ -10,7 +10,7 @@ description: >
 license: MIT
 metadata:
   author: Yaniv Golan
-  version: "1.43.0"
+  version: "1.44.0"
 compatibility: >
   Requires Python 3, `requests`, and the `proof-citations` PyPI package
   (`pip install proof-citations` — the scripts/ entries are thin shims
@@ -31,11 +31,11 @@ The bundled `scripts/` are thin shims over the `proof-citations` PyPI package, w
 
 ### Beyond the bundled scripts: structured citation verification
 
-For empirical proofs that cite identifier-bearing sources (PMID, DOI, arXiv, …), the `proof-citations` package (v1.35+) ships higher-level APIs the bundled `scripts/` shims don't expose. Reach for these when the citation has a structured identifier AND the claim makes specific bibliographic assertions (journal, year, volume, DOI). They catch the "real paper, forged journal/year" fraud class — sometimes called metadata-chimera fraud — that pure quote-on-page verification can't see:
+For empirical proofs that cite identifier-bearing sources (PMID, DOI, arXiv, …), the `proof-citations` package ships higher-level APIs the bundled `scripts/` shims don't expose. Reach for these when the citation has a structured identifier AND the claim makes specific bibliographic assertions (journal, year, volume, DOI). They catch the "real paper, forged journal/year" fraud class — sometimes called metadata-chimera fraud — that pure quote-on-page verification can't see:
 
-- **`verify_citation(url, quote, fact_id, expected_metadata={...})`** (v1.40.0+) — combined quote-on-page + metadata-chimera check in one call. The same flow `scripts/verify_citations.py` already does, plus a per-field metadata comparison against the authoritative registry (NCBI E-utilities for PMIDs, Crossref for DOIs, etc.). Result dict gains a `metadata_result` key with the per-field verdict; top-level `status` continues to reflect the quote-on-page outcome only.
-- **`verify_citation_record((type, value), expected)`** (v1.36+) — pure metadata-check, no page fetch. Useful when you have the identifier but no specific quote to verify, or when you want to audit a bibliography without re-checking every quoted passage.
-- **`proof-citations verify-records --input refs.json` CLI** (v1.36+) — batch metadata audit over a list of references. The canonical entry point for manuscript / reference-list audits.
+- **`verify_citation(url, quote, fact_id, expected_metadata={...})`** — combined quote-on-page + metadata-chimera check in one call. The same flow `scripts/verify_citations.py` already does, plus a per-field metadata comparison against the authoritative registry (NCBI E-utilities for PMIDs, Crossref for DOIs, etc.). Result dict gains a `metadata_result` key with the per-field verdict; top-level `status` continues to reflect the quote-on-page outcome only.
+- **`verify_citation_record((type, value), expected)`** — pure metadata-check, no page fetch. Useful when you have the identifier but no specific quote to verify, or when you want to audit a bibliography without re-checking every quoted passage.
+- **`proof-citations verify-records --input refs.json` CLI** — batch metadata audit over a list of references. The canonical entry point for manuscript / reference-list audits.
 
 When the URL has no structured identifier (e.g., a generic blog page), `metadata_result["status"]` is `"skipped_no_structured_identifier"` — OG-extraction from arbitrary pages is too noisy to compare against claimed bibliographic fields.
 
@@ -69,7 +69,7 @@ The highest-value lessons from field testing, grouped by area. Read before writi
 - **Academic HTML degrades citation matches**: PMC and journal pages embed inline reference markers (`[1]`, superscripts) that inject noise after HTML stripping. If a real verbatim quote gets `partial` status, check whether the source is academic HTML before suspecting the quote itself. Use `snapshot` to capture clean text if needed.
 - **Domains that commonly block automated fetches**: The following domains frequently return blocked, captcha, or degraded content for automated HTTP requests. Plan to use `snapshot` or `snapshot_file` for sources from these domains: `pmc.ncbi.nlm.nih.gov` (PubMed Central), `nature.com`, `link.springer.com`, `sciencedirect.com` (Elsevier), `wiley.com`, also `pubmed.ncbi.nlm.nih.gov` (use `eutils.ncbi.nlm.nih.gov` E-utilities for programmatic access). See the snapshot fallback pattern in the proof templates. The live→snapshot→Wayback fallback chain in `verify_citations.py` handles this automatically when a snapshot is provided.
 
-  **Skip slow defaults for all-snapshot proofs** (v1.42.0+): when every citation in your proof has a snapshot and the live domain is known to block, pass `skip_live_fetch=True, oa_lookup=False` to `verify_all_citations()` — this bypasses the doomed live-fetch + OA-lookup attempts that otherwise add 30-45s per blocked fact. See [scripts-api.md "Snapshot-only fast path"](references/scripts-api.md#snapshot-only-fast-path-v1420) for the full kwarg menu (`skip_live_fetch`, `prefer_snapshot`, `oa_lookup`, `oa_lookup_budget_seconds`).
+  **Skip slow defaults for all-snapshot proofs**: when every citation in your proof has a snapshot and the live domain is known to block, pass `skip_live_fetch=True, oa_lookup=False` to `verify_all_citations()` — this bypasses the doomed live-fetch + OA-lookup attempts that otherwise add 30-45s per blocked fact. See [scripts-api.md "Snapshot-only fast path"](references/scripts-api.md#snapshot-only-fast-path) for the full kwarg menu (`skip_live_fetch`, `prefer_snapshot`, `oa_lookup`, `oa_lookup_budget_seconds`).
 
 ### JSON summary & FACT_REGISTRY
 
@@ -228,7 +228,7 @@ Required elements:
 - Adversarial checks with `verification_performed` field (Rule 5)
 - Cross-checks from independent sources/methods (Rule 6)
 - `FACT_REGISTRY` mapping report IDs to proof-script keys
-- JSON summary block in `__main__` ending with `=== PROOF SUMMARY (JSON) ===`
+- JSON summary block in `__main__` preceded by the marker line `=== PROOF SUMMARY (JSON) ===` (the marker introduces the JSON, it does not close it)
 
 **Pre-flight citation check (before Step 4):** Run `verify_all_citations(empirical_facts, wayback_fallback=True)` interactively and inspect the results. Fix any `not_found`, `partial`, or `fetch_failed` entries. Use `closest_passage` as a diagnostic hint to locate the right region, then copy the visible rendered text from the page. Do not proceed to Step 4 with known citation failures that are fixable.
 

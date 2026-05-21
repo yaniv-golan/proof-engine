@@ -80,7 +80,7 @@ sys.path.insert(0, PROOF_ENGINE_ROOT)
 **Resolution order:**
 1. **Env var:** `PROOF_ENGINE_ROOT` if set — Binder and site-publishing tools set it explicitly.
 2. **Walk-up:** at each ancestor of `proof.py`, check `<ancestor>/proof-engine/skills/proof-engine/` (dev-repo layout) and `<ancestor>/skills/proof-engine/` (plugin install layout).
-3. **Sibling search (v1.43.0+):** at each ancestor, also descend each non-excluded sibling directory to depth 1; dotted siblings (e.g., `.remote-plugins`, `.devcontainer`) are descended to depth 2. This handles Cowork/plugin layouts where `proof.py` (in `outputs/`) and the skill (in `.remote-plugins/<plugin_id>/skills/proof-engine`) sit in sibling trees, never above each other.
+3. **Sibling search:** at each walk-up step, also descend each non-excluded sibling directory to depth 1; dotted siblings (e.g., `.remote-plugins`, `.devcontainer`) are descended to depth 2. This handles plugin/host layouts where `proof.py` (in `outputs/`) and the skill (in `.remote-plugins/<plugin_id>/skills/proof-engine`) sit in sibling trees, never above each other.
 4. **Sentinel files:** a candidate is accepted only if it contains BOTH `scripts/verify_citations.py` AND `SKILL.md`. This keeps broad descent safe against false positives (vendored pip packages, git worktrees).
 5. **Excluded dirs:** `.git`, `.venv`, `venv`, `.tox`, `.worktrees`, `.cache`, `.idea`, `.vscode`, `node_modules`, `__pycache__`, `site-packages`, `dist`, `build` are always skipped.
 6. **Failure:** raise a `RuntimeError` with explicit `export PROOF_ENGINE_ROOT=...` instructions.
@@ -154,7 +154,7 @@ verify_data_values(url, data_values, fact_id, timeout=15, snapshot=None) -> dict
 #   Returns {key: {found, value, fetch_mode}}.
 ```
 
-### Snapshot-only fast path (v1.42.0+)
+### Snapshot-only fast path
 
 The kwargs above shape how `verify_all_citations()` handles citations whose
 source pages either block automated fetches or are paywalled. By default each
@@ -190,7 +190,7 @@ citation_results = verify_all_citations(
 )
 ```
 
-The same four kwargs are accepted by the per-call `verify_citation()` (v1.42.0+). The canonical signatures live in the function docstrings at `packages/proof-citations/src/proof_citations/verify.py` — keep that as source of truth; this section summarizes the practical recipes.
+The same four kwargs are accepted by the per-call `verify_citation()`. The canonical signatures live in the function docstrings at `packages/proof-citations/src/proof_citations/verify.py` — keep that as source of truth; this section summarizes the practical recipes.
 
 ## v1.35+ APIs in the `proof_citations` package
 
@@ -218,7 +218,7 @@ When to use which:
 | Goal | API |
 |---|---|
 | Verify a quoted passage on a cited page | `verify_citation(url, quote, fact_id)` (existing) |
-| Verify quote AND that the cited identifier resolves to the claimed paper | `verify_citation(url, quote, fact_id, expected_metadata={...})` (v1.40+) |
+| Verify quote AND that the cited identifier resolves to the claimed paper | `verify_citation(url, quote, fact_id, expected_metadata={...})` |
 | Verify only that an identifier resolves to the claimed paper (no quote) | `verify_citation_record(("pmid", "12345"), expected={...})` |
 | Get the canonical bibliographic record for an identifier | `resolve(("pmid", "12345"))` |
 | Batch-audit a list of references for citation fabrication | `proof-citations verify-records --input refs.json` (CLI) |

@@ -758,6 +758,7 @@ def verify_citation(
     expected_metadata: Optional[dict] = None,
     skip_live_fetch: bool = False,
     prefer_snapshot: bool = False,
+    snapshot_base_dir: str = None,
 ) -> dict:
     """Fetch a URL and check whether the expected quote appears on the page.
 
@@ -831,6 +832,7 @@ def verify_citation(
         wayback_fallback=wayback_fallback,
         skip_live_fetch=skip_live_fetch or (requests is None),
         prefer_snapshot=prefer_snapshot,
+        snapshot_base_dir=snapshot_base_dir,
     )
 
     if page_text is not None:
@@ -879,7 +881,8 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
                          oa_lookup: bool = True,
                          oa_lookup_budget_seconds: Optional[float] = None,
                          skip_live_fetch: bool = False,
-                         prefer_snapshot: bool = False) -> dict:
+                         prefer_snapshot: bool = False,
+                         snapshot_base_dir: str = None) -> dict:
     """Verify all empirical facts by fetching their citation URLs.
 
     Supports two formats per fact:
@@ -953,6 +956,7 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
                     expected_metadata=source.get("expected_metadata"),
                     skip_live_fetch=skip_live_fetch,
                     prefer_snapshot=prefer_snapshot,
+                    snapshot_base_dir=snapshot_base_dir,
                 )
                 results[check_id] = result
                 _print_status(check_id, result)
@@ -979,6 +983,7 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
                 expected_metadata=fact.get("expected_metadata"),
                 skip_live_fetch=skip_live_fetch,
                 prefer_snapshot=prefer_snapshot,
+                snapshot_base_dir=snapshot_base_dir,
             )
             results[fact_id] = result
             _print_status(fact_id, result)

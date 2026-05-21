@@ -123,12 +123,31 @@ class ProofValidator:
         return True
 
     def _has_search_registry(self) -> bool:
-        """Check if the source defines search_registry with entries."""
+        """Check if the source defines a non-empty search_registry.
+
+        Only counts real top-level assignments (`search_registry = {...}`)
+        and ignores commented-out template examples. Templates frequently
+        include commented `# search_registry = {...}` blocks documenting
+        the optional shape — those must not trigger the
+        "has search_registry but no verify_search_registry call" issue.
+        """
         if "search_registry" not in self.source:
             return False
-        if re.search(r'search_registry\s*=\s*\{\s*\}', self.source):
+        # Strip Python line comments before pattern-matching so commented-out
+        # examples don't count as real assignments.
+        code_lines = [
+            (line.split("#", 1)[0] if "#" in line else line)
+            for line in self.source.splitlines()
+        ]
+        code_no_comments = "\n".join(code_lines)
+        if "search_registry" not in code_no_comments:
             return False
-        return True
+        if re.search(r'search_registry\s*=\s*\{\s*\}', code_no_comments):
+            return False
+        # Require an actual assignment, not just a reference (e.g., a function
+        # signature parameter or a dict-key reference).
+        return bool(re.search(r'^\s*search_registry\s*=\s*\{',
+                               code_no_comments, flags=re.MULTILINE))
 
     def _extract_search_registry_domains(self) -> set:
         """Extract unique URL domains from search_registry entries."""
@@ -1122,14 +1141,33 @@ class ProofValidator:
                 found_any = True
                 var_name = m.group(1)
                 rhs = m.group(2).strip()
+                # For multi-line RHS (dict comprehension, parenthesized expr),
+                # extend the search to the matching closing bracket so we don't
+                # miss compare()/prove_holds() that appears on a continuation
+                # line. Bracket-balance is approximate (no string/comment
+                # awareness) but sufficient for the template shapes we emit.
+                if rhs and rhs[0] in "{([":
+                    opener = rhs[0]
+                    closer = {"{": "}", "(": ")", "[": "]"}[opener]
+                    depth = 0
+                    extended = []
+                    for j in range(i - 1, len(self.lines)):
+                        seg = self.lines[j]
+                        extended.append(seg)
+                        depth += seg.count(opener) - seg.count(closer)
+                        if depth <= 0 and (closer in seg):
+                            break
+                    rhs_extended = "\n".join(extended)
+                else:
+                    rhs_extended = rhs
                 if rhs in ("True", "False"):
                     self.issues.append((
                         f"Verdict: {var_name} is hardcoded to {rhs} (line {i}) — "
                         "must use compare() so the verdict is computed from evidence",
                         [],
                     ))
-                elif "compare(" in rhs or "prove_holds(" in rhs:
-                    src = "compare()" if "compare(" in rhs else "prove_holds()"
+                elif "compare(" in rhs_extended or "prove_holds(" in rhs_extended:
+                    src = "compare()" if "compare(" in rhs_extended else "prove_holds()"
                     self.passed.append(f"Verdict: {var_name} assigned from {src}")
                 else:
                     # Could be a variable alias (overall_claim_holds = sc1 and sc2)

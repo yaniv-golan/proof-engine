@@ -165,7 +165,11 @@ def _load_snapshot(fname):
 # For all-snapshot proofs against blocked domains (PMC, Nature, etc.), see
 # scripts-api.md "Snapshot-only fast path" — pass skip_live_fetch=True,
 # oa_lookup=False to skip the slow live-fetch + OA-lookup attempts.
-citation_results = verify_all_citations(empirical_facts, wayback_fallback=True)
+# snapshot_base_dir anchors relative snapshot_file paths to proof.py's
+# directory so the published proof runs from any CWD without breaking.
+citation_results = verify_all_citations(
+    empirical_facts, wayback_fallback=True, snapshot_base_dir=_PROOF_DIR
+)
 
 # 5. COUNT SOURCES WITH VERIFIED CITATIONS
 # A source counts toward the threshold if its quote was found on the page
@@ -302,7 +306,7 @@ if __name__ == "__main__":
         operator=CLAIM_FORMAL["operator"],
         claim_holds=claim_holds,
     )
-    builder.emit()
+    builder.emit(write_json_path=os.path.join(_PROOF_DIR, "proof.json"))
 ```
 
 ### Disproof variant

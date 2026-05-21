@@ -175,7 +175,8 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
                wayback_fallback: bool = False,
                skip_live_fetch: bool = False,
                snapshot_file: str = None,
-               prefer_snapshot: bool = False) -> tuple[str | None, str, str | None]:
+               prefer_snapshot: bool = False,
+               snapshot_base_dir: str = None) -> tuple[str | None, str, str | None]:
     """Fetch page text using the standard fallback chain.
 
     Args:
@@ -188,11 +189,18 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
             serve anti-bot challenges to scripted requests.
         snapshot_file: Path to a local file containing pre-fetched page text.
             Used for paywalled content that cannot be embedded inline. Inline
-            snapshot takes precedence over snapshot_file.
+            snapshot takes precedence over snapshot_file. If relative AND
+            snapshot_base_dir is provided, the path is resolved against
+            snapshot_base_dir; otherwise it resolves against the CWD.
         prefer_snapshot: If True AND a snapshot (inline or file) is provided,
             use it before attempting a live fetch. Live fetch is still tried
             as a fallback if the snapshot is unusable. Use this for known-
             blocked sources without giving up the live-fetch fallback entirely.
+        snapshot_base_dir: Directory to resolve relative snapshot_file paths
+            against. Proof templates pass the proof.py directory so the
+            published proof.py can be re-run from any CWD without breaking
+            paywalled-content lookups. If None or absolute, snapshot_file
+            is used as-is (back-compat with callers that pre-resolve paths).
 
     Returns:
         (page_text, fetch_mode, error_message)
@@ -201,6 +209,9 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
         - error_message: Error description if failed, else None
     """
     fetch_error_msg = None
+
+    if snapshot_file and snapshot_base_dir and not os.path.isabs(snapshot_file):
+        snapshot_file = os.path.join(snapshot_base_dir, snapshot_file)
 
     # --- 0. Snapshot-first short-circuit ---
     # When the caller has reason to believe the live URL is blocked, taking

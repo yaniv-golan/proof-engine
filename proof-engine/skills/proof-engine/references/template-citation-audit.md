@@ -269,7 +269,9 @@ if __name__ == "__main__":
         n_needs_review=n_needs_review,
         n_total=n_total,
     )
-    builder.emit()
+    # write_json_path lands proof.json next to proof.py regardless of CWD
+    builder.emit(write_json_path=os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "proof.json"))
 ```
 
 **Key design points:**

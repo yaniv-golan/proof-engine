@@ -4,6 +4,74 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.44.0] - 2026-05-22
+
+Follow-up release fixing v1.43.0 compound-template regressions plus a
+real `proof.json` artifact and a CWD-independent `snapshot_file` resolver.
+
+### Added
+
+- **`ProofSummaryBuilder.emit(write_json_path=...)`.** Writes the JSON
+  summary to a file path in addition to printing it to stdout. Templates
+  pass an inline path computed from `__file__` so `proof.json` lands next
+  to `proof.py` regardless of the caller's CWD. Closes the gap between
+  output-specs.md (which describes `proof.json` as an artifact) and the
+  prior behavior (stdout-only).
+- **`fetch_page`/`verify_citation`/`verify_all_citations` accept
+  `snapshot_base_dir=`.** Relative `snapshot_file` paths are resolved
+  against this directory, so a published `proof.py` can run from any CWD
+  without breaking paywalled-content lookups. Templates pass the
+  proof.py directory. Absolute paths are honored as-is.
+- **Compound template `CLAIM_FORMAL` carries `"proof_direction": "affirm"`
+  by default.** Closes the v1.43.0 regression where a faithful copy of
+  the template failed validation: the verdict block reads
+  `CLAIM_FORMAL.get("proof_direction")` but the template's example
+  omitted the key.
+- **`derived: true` sub-claim wiring** (the v1.43.0 introduction)
+  already worked; this release adds an additional behavior: the
+  validator's "0 sources" check is now suppressed AND it requires at
+  least one `add_computed_fact(..., depends_on=[...])` with a non-empty
+  list. Documented in `hardening-rules.md` (Rule 6 section).
+- **Validator multi-line RHS handling.** `check_claim_holds_computed`
+  now extends the right-hand side of `*_holds` assignments across
+  bracket-balanced lines, so a multi-line dict comprehension whose body
+  calls `compare()` is correctly recognized instead of warning.
+
+### Changed
+
+- **Compound template `sc_holds` uses a single-line dict comprehension.**
+  The v1.43.0 `sc_holds = {}` followed by a `for ...` loop pattern
+  tripped the validator's "prefer using compare()" warning on every
+  compound proof. The comprehension is on one line so the validator
+  sees `compare(` in the RHS; the helper `_sc_coi_override` was
+  factored out so the COI override dict can be built as a comprehension
+  too. Behavior is unchanged.
+- **`build_citation_detail` removed from compound-template imports.** It
+  was never referenced in the template body; verbatim copies tripped
+  the validator's "unused script imports" warning.
+- **JSON-marker wording: "preceded by" not "ending with".** SKILL.md and
+  proof-templates.md previously described the marker line
+  `=== PROOF SUMMARY (JSON) ===` as closing the JSON block; it
+  introduces it. Fixed to match observable behavior.
+- **`_has_search_registry` ignores commented-out template examples.**
+  The validator's search-registry detection stripped Python line comments
+  before pattern-matching, so a commented `# search_registry = {` no
+  longer trips "Rule 2: Has search_registry but no
+  verify_search_registry call" on the compound template (which
+  documents the optional shape in comments).
+- **Version annotations stripped from skill references.** The skill at
+  HEAD describes current behavior; release-history annotations like
+  "(v1.35+)" were removed from SKILL.md, scripts-api.md, hardening-rules.md,
+  and templates. Past-version context belongs in CHANGELOG, not in
+  reference docs loaded into every conversation.
+
+### Compatibility
+
+- All new kwargs (`write_json_path`, `snapshot_base_dir`) are additive
+  with backwards-compatible defaults (`None` = previous behavior).
+- Existing 2-SC compound proofs in `site/proofs/` are frozen and
+  unaffected; only the regen pipeline picks up the new template.
+
 ## [1.43.0] - 2026-05-21
 
 Follow-up hardening release addressing nine issues from a second Claude Cowork sandbox proof run. No breaking changes.

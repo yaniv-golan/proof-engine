@@ -119,7 +119,12 @@ empirical_facts = {
 # For all-snapshot proofs against blocked domains (PMC, Nature, etc.), see
 # scripts-api.md "Snapshot-only fast path" — pass skip_live_fetch=True,
 # oa_lookup=False to skip the slow live-fetch + OA-lookup attempts.
-citation_results = verify_all_citations(empirical_facts, wayback_fallback=True)
+# snapshot_base_dir anchors relative snapshot_file paths to proof.py's
+# directory so the published proof runs from any CWD without breaking.
+citation_results = verify_all_citations(
+    empirical_facts, wayback_fallback=True,
+    snapshot_base_dir=os.path.dirname(os.path.abspath(__file__)),
+)
 
 # 5. VALUE EXTRACTION (Rule 1) — parse + verify_extraction
 val_a = parse_date_from_quote(empirical_facts["source_a"]["quote"], "source_a")
@@ -250,5 +255,7 @@ if __name__ == "__main__":
         operator=CLAIM_FORMAL["operator"],
         claim_holds=claim_holds,
     )
-    builder.emit()
+    # write_json_path lands proof.json next to proof.py regardless of CWD
+    builder.emit(write_json_path=os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "proof.json"))
 ```

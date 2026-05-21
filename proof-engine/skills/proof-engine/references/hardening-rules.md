@@ -390,7 +390,7 @@ A COI does not disqualify a source — it reduces the independence credit. Docum
 
 For compound proofs, the COI check runs per sub-claim, not globally.
 
-**Derived sub-claims (v1.43.0+):** Some compound proofs have a sub-claim computed from other sub-claims rather than from independent sources — e.g., SC3 = f(SC1, SC2). These have no own sources by design; the 2-source rule doesn't apply. Mark them with `"derived": True` in the sub-claim entry:
+**Derived sub-claims:** Some compound proofs have a sub-claim computed from other sub-claims rather than from independent sources — e.g., SC3 = f(SC1, SC2). These have no own sources by design; the 2-source rule doesn't apply. Mark them with `"derived": True` in the sub-claim entry:
 
 ```python
 CLAIM_FORMAL = {

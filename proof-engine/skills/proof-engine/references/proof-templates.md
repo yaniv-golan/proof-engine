@@ -37,4 +37,4 @@ Every template includes:
 - `FACT_REGISTRY` mapping report IDs to proof-script keys
 - `compare()` for claim evaluation (Rule 7)
 - `adversarial_checks` with `verification_performed` (Rule 5)
-- JSON summary in `__main__` ending with `=== PROOF SUMMARY (JSON) ===`
+- JSON summary in `__main__` preceded by the marker line `=== PROOF SUMMARY (JSON) ===` (the marker introduces the JSON, it does not close it)

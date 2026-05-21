@@ -124,3 +124,50 @@ def test_fetch_page_prefer_snapshot_falls_back_to_live_when_no_snapshot():
         )
     assert fetch_mode == "live"
     assert "hello world" in page_text.lower()
+
+
+def test_fetch_page_resolves_snapshot_file_against_snapshot_base_dir(tmp_path):
+    """Relative snapshot_file paths must be anchored to snapshot_base_dir,
+    not the caller's CWD — so a published proof.py re-runs from any CWD.
+    """
+    import os
+    snap_dir = tmp_path / "snapshots"
+    snap_dir.mkdir()
+    (snap_dir / "B1_snapshot.txt").write_text(
+        "The verbatim quote that should be found.", encoding="utf-8"
+    )
+
+    # Change CWD away from tmp_path to prove the relative path doesn't
+    # depend on CWD when snapshot_base_dir is supplied.
+    original = os.getcwd()
+    os.chdir("/tmp")
+    try:
+        page_text, fetch_mode, err = fetch_page(
+            "https://example-blocked.test/article",
+            skip_live_fetch=True,
+            snapshot_file="snapshots/B1_snapshot.txt",
+            snapshot_base_dir=str(tmp_path),
+        )
+    finally:
+        os.chdir(original)
+
+    assert page_text is not None
+    assert fetch_mode == "snapshot"
+    assert "verbatim quote" in page_text
+
+
+def test_fetch_page_absolute_snapshot_file_ignores_snapshot_base_dir(tmp_path):
+    """Absolute snapshot_file paths are taken verbatim — back-compat with
+    callers that pre-resolve paths."""
+    snap = tmp_path / "absolute.txt"
+    snap.write_text("absolute path content", encoding="utf-8")
+
+    page_text, fetch_mode, err = fetch_page(
+        "https://example-blocked.test/article",
+        skip_live_fetch=True,
+        snapshot_file=str(snap),  # absolute
+        snapshot_base_dir="/nonexistent",  # ignored because path is absolute
+    )
+    assert page_text is not None
+    assert fetch_mode == "snapshot"
+    assert "absolute path content" in page_text

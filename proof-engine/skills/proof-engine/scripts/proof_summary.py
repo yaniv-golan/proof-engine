@@ -273,8 +273,19 @@ class ProofSummaryBuilder:
         summary.update(self._extra)
         return _to_native(summary)
 
-    def emit(self, validate_schema: bool = True):
-        """Build, optionally validate against JSON Schema, and print the proof summary."""
+    def emit(self, validate_schema: bool = True, write_json_path: str | None = None):
+        """Build, optionally validate against JSON Schema, and print the proof summary.
+
+        Args:
+            validate_schema: when True, validate the built summary against
+                `references/proof-schema.json` if `jsonschema` is installed.
+            write_json_path: when set, also write the JSON summary to this
+                path as a real file artifact. Templates pass
+                `os.path.join(_PROOF_DIR, "proof.json")` so the file lands
+                next to proof.py regardless of the caller's CWD. The marker
+                line and stdout JSON block are still emitted — downstream
+                consumers can use either source.
+        """
         summary = self.build()
 
         if validate_schema:
@@ -293,5 +304,17 @@ class ProofSummaryBuilder:
                         f"ProofSummaryBuilder output failed schema validation: {e.message}"
                     ) from e
 
+        rendered = json.dumps(summary, indent=2, default=str)
+
+        if write_json_path:
+            try:
+                os.makedirs(os.path.dirname(os.path.abspath(write_json_path)),
+                            exist_ok=True)
+                with open(write_json_path, "w") as f:
+                    f.write(rendered)
+                    f.write("\n")
+            except OSError as e:
+                print(f"Warning: failed to write proof.json to {write_json_path}: {e}")
+
         print("\n=== PROOF SUMMARY (JSON) ===")
-        print(json.dumps(summary, indent=2, default=str))
+        print(rendered)

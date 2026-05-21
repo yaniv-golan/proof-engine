@@ -62,6 +62,8 @@ Many scientific papers and reports are behind paywalls. When a key source return
 - The `snapshots/` directory is `.gitignore`d — paywalled content stays local
 - Public-source snapshots (government sites, JS-rendered pages) may remain inline
 
+**Relative `snapshot_file` paths are anchored to the proof.py directory.** All proof templates pass `snapshot_base_dir=<proof.py dir>` to `verify_all_citations()`, so a relative path like `"snapshots/B2_snapshot.txt"` resolves against the directory containing `proof.py`, not the caller's CWD. This means the published `proof.py` runs from any directory without breaking paywalled-content lookups. Absolute paths in `snapshot_file` are honored as-is. If you call `verify_citation()` directly, pass `snapshot_base_dir=os.path.dirname(os.path.abspath(__file__))` to get the same anchoring.
+
 **Fallback strategy for paywalled sources:**
 
 1. **Check for open-access versions** — many papers have preprints on arXiv, bioRxiv, medRxiv, or the author's institutional page. Use ar5iv for arXiv papers (see above).

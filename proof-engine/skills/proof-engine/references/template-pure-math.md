@@ -170,14 +170,12 @@ if __name__ == "__main__":
         operator=CLAIM_FORMAL["operator"],
         claim_holds=claim_holds,
     )
-    builder.emit()
+    # write_json_path lands proof.json next to proof.py regardless of CWD
+    builder.emit(write_json_path=os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "proof.json"))
 ```
 
-**Note on `proof.json`.** `proof.py` does NOT write `proof.json` directly. `builder.emit()` prints the JSON summary to stdout, preceded by the marker line `=== PROOF SUMMARY (JSON) ===`. The publish toolchain (`tools/proof-site.py publish`) and the site-build loader capture from stdout. To inspect `proof.json` locally without publishing, run:
-
-```bash
-python proof.py | awk '/=== PROOF SUMMARY \(JSON\) ===/{flag=1; next} flag' > proof.json
-```
+**Note on `proof.json`.** `builder.emit(write_json_path=...)` writes `proof.json` as a real file alongside `proof.py` AND prints the JSON to stdout (preceded by the marker line `=== PROOF SUMMARY (JSON) ===`). The publish toolchain (`tools/proof-site.py publish`) and the site-build loader capture from stdout; downstream consumers can use either source. Inline path computation in the template anchors the output next to `proof.py` regardless of the caller's CWD. To suppress the file write (e.g., for a one-off inspection that shouldn't leave an artifact), call `builder.emit()` without `write_json_path`.
 
 Key differences from the empirical template:
 - No `empirical_facts`, `verify_all_citations`, `extract_values`, or `smart_extract` imports

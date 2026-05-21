@@ -139,7 +139,12 @@ empirical_facts = {
 # For all-snapshot proofs against blocked domains (PMC, Nature, etc.), see
 # scripts-api.md "Snapshot-only fast path" — pass skip_live_fetch=True,
 # oa_lookup=False to skip the slow live-fetch + OA-lookup attempts.
-citation_results = verify_all_citations(empirical_facts, wayback_fallback=True)
+# snapshot_base_dir anchors relative snapshot_file paths to proof.py's
+# directory so the published proof runs from any CWD without breaking.
+citation_results = verify_all_citations(
+    empirical_facts, wayback_fallback=True,
+    snapshot_base_dir=os.path.dirname(os.path.abspath(__file__)),
+)
 
 # 5. DATA VALUE VERIFICATION — confirms numbers appear on page
 dv_results_a = verify_data_values(
@@ -298,5 +303,7 @@ if __name__ == "__main__":
         operator=CLAIM_FORMAL["operator"],
         claim_holds=claim_holds,
     )
-    builder.emit()
+    # write_json_path lands proof.json next to proof.py regardless of CWD
+    builder.emit(write_json_path=os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "proof.json"))
 ```
