@@ -30,6 +30,14 @@ Generated: [date]
 import os
 import sys
 
+_SKILL_EXCLUDED_DIRS = {".git", ".venv", "venv", ".tox", ".worktrees",
+                        ".cache", ".idea", ".vscode", "node_modules",
+                        "__pycache__", "site-packages", "dist", "build"}
+
+def _is_valid_skill_root(p):
+    return (os.path.isfile(os.path.join(p, "scripts", "verify_citations.py"))
+            and os.path.isfile(os.path.join(p, "SKILL.md")))
+
 PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
 if not PROOF_ENGINE_ROOT:
     _d = os.path.dirname(os.path.abspath(__file__))
@@ -38,14 +46,52 @@ if not PROOF_ENGINE_ROOT:
             os.path.join(_d, "proof-engine", "skills", "proof-engine"),
             os.path.join(_d, "skills", "proof-engine"),
         ):
-            if os.path.isdir(os.path.join(_cand, "scripts")):
+            if _is_valid_skill_root(_cand):
                 PROOF_ENGINE_ROOT = _cand
                 break
         if PROOF_ENGINE_ROOT:
             break
+        try:
+            for _sib in os.listdir(_d):
+                if _sib in _SKILL_EXCLUDED_DIRS:
+                    continue
+                _sib_path = os.path.join(_d, _sib)
+                if not os.path.isdir(_sib_path):
+                    continue
+                for _cand in (
+                    os.path.join(_sib_path, "skills", "proof-engine"),
+                    os.path.join(_sib_path, "proof-engine", "skills", "proof-engine"),
+                ):
+                    if _is_valid_skill_root(_cand):
+                        PROOF_ENGINE_ROOT = _cand
+                        break
+                if PROOF_ENGINE_ROOT:
+                    break
+                if _sib.startswith("."):
+                    try:
+                        for _sub in os.listdir(_sib_path):
+                            if _sub in _SKILL_EXCLUDED_DIRS:
+                                continue
+                            _cand = os.path.join(_sib_path, _sub, "skills", "proof-engine")
+                            if _is_valid_skill_root(_cand):
+                                PROOF_ENGINE_ROOT = _cand
+                                break
+                    except OSError:
+                        pass
+                    if PROOF_ENGINE_ROOT:
+                        break
+        except OSError:
+            pass
+        if PROOF_ENGINE_ROOT:
+            break
         _d = os.path.dirname(_d)
     if not PROOF_ENGINE_ROOT:
-        raise RuntimeError("PROOF_ENGINE_ROOT not set and skill dir not found via walk-up from proof.py")
+        raise RuntimeError(
+            "PROOF_ENGINE_ROOT not set and skill dir not found via walk-up "
+            f"or sibling search from {os.path.dirname(os.path.abspath(__file__))}. "
+            "Set the env var explicitly: "
+            "export PROOF_ENGINE_ROOT=/path/to/skills/proof-engine"
+        )
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 from datetime import date
 
@@ -90,6 +136,9 @@ empirical_facts = {
 }
 
 # 4. CITATION VERIFICATION (Rule 2) — verifies quotes
+# For all-snapshot proofs against blocked domains (PMC, Nature, etc.), see
+# scripts-api.md "Snapshot-only fast path" — pass skip_live_fetch=True,
+# oa_lookup=False to skip the slow live-fetch + OA-lookup attempts.
 citation_results = verify_all_citations(empirical_facts, wayback_fallback=True)
 
 # 5. DATA VALUE VERIFICATION — confirms numbers appear on page

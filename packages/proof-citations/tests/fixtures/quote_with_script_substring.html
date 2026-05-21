@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test page</title>
+<script>
+// This entire block must be stripped before the quote-match runs.
+// It contains many `$` and `<sup>` tokens that would otherwise
+// trigger the LaTeX-detection passes in normalize_text.
+var foo = "$x$_$y$_$z$";
+var bar = "<sup>1</sup>";
+</script>
+<style>
+.x { content: "$dollar$"; }
+</style>
+</head>
+<body>
+<p>
+The HTML specification originally allowed the &lt;script&gt; tag to
+embed executable code in pages. Today the literal &lt;script&gt; tag
+is still parsed identically by all major browsers.
+</p>
+</body>
+</html>

@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.43.0] - 2026-05-21
+
+Follow-up hardening release addressing nine issues from a second Claude Cowork sandbox proof run. No breaking changes.
+
+### Added
+
+- **`_strip_non_content_blocks(html)` helper in `proof_citations.verify`.** Drops `<script>/<style>/<noscript>/<head>` blocks (content + tags) before normalize_text runs on fetched page HTML. Megabytes of JS/CSS no longer pass through 14 downstream regex passes — a 2.1 MB Frontiers snapshot that previously took >30s in a single `verify_citation()` call now completes in <1s (~75× speedup). Quote normalization is unaffected — the strip runs only on page-fetch results, never on `expected_quote`.
+- **Bounded sibling search in `PROOF_ENGINE_ROOT` resolver.** All 7 templates now walk siblings of each ancestor (not just ancestors themselves) with a depth-2 descent into dotted directories. Handles Cowork (`.remote-plugins/<plugin_id>/skills/proof-engine`), Codespaces (`.devcontainer/`), and VS Code Remote (`.vscode-server/`) layouts where `proof.py` lives in a sibling tree of the skill. Sentinel-file check (`scripts/verify_citations.py` + `SKILL.md`) keeps broad descent safe against false positives from vendored pip packages or git worktrees. Failure message now includes an explicit `export PROOF_ENGINE_ROOT=...` instruction.
+- **`derived: true` field on sub-claims in compound proofs.** Marks a sub-claim that is computed from other sub-claims (e.g., SC3 = f(SC1, SC2)) and has no independent sources by design. `validate_proof.py` skips the Rule 6 "0/1 sources" warning for derived sub-claims and instead checks that at least one `builder.add_computed_fact(..., depends_on=[...])` has a non-empty `depends_on` list (proves derivation is wired).
+- **N-sub-claim support in compound template.** `template-compound.md` Python sections now loop over `CLAIM_FORMAL["sub_claims"]` instead of hardcoding SC1/SC2. Adding SC3/SC4 only requires extending the `sub_claims` list — no other code changes. The previous `"SC1" if … else "SC2"` ternary that silently mislabeled SC3+ facts is replaced with an explicit prefix-match loop with assertion. Contested-qualifier carve-out remains 2-SC-only with an explicit `len(sub_claims) == 2` guard.
+- **`search_registry` support in compound template.** Compound sub-claims can now use Type S (absence-search) evidence as machine-checkable structures instead of prose in `adversarial_checks`. Commented examples + the new `builder.add_search_fact` loop are wired in alongside the existing empirical/computed fact paths. An S-fact alone is a 1-source sub-claim and should be paired with a corroborating B-fact for Rule 6 compliance — documented in the template.
+- **New `template-citation-audit.md` (Type R — Reference Audit).** First-class template for proofs that audit whether claimed citations exist with the asserted bibliographic metadata. Wraps `verify_citation_record` + `compare_metadata` verdict taxonomy (`genuine` / `metadata_chimera` / `title_chimera` / `partial_match`) in a structured proof shape — catches LLM-fabricated citations that quote-on-page verification can't see. Added to `proof-templates.md` index and decision flowchart.
+- **`verify_all_citations()` snapshot-fast-path docs.** New "Snapshot-only fast path" section in `scripts-api.md` documenting `skip_live_fetch`, `prefer_snapshot`, `oa_lookup`, and `oa_lookup_budget_seconds` (all v1.42.0+) with two practical recipes. All 7 templates carry a one-line comment at their `verify_all_citations` call site pointing at the section.
+- **NCBI / PubMed / PMC section in `environment-and-sources.md`.** Documents that `pubmed.ncbi.nlm.nih.gov` and `pmc.ncbi.nlm.nih.gov` return 403/CAPTCHA to automated requests, while `eutils.ncbi.nlm.nih.gov` (E-utilities) is the unrestricted programmatic alternative. Practical guidance per use-case: quote-on-page verification (snapshot), metadata-only audit (`verify_citation_record`), systematic search (esearch URL in `search_registry`).
+
+### Changed
+
+- **`output-specs.md` and `self-critique-checklist.md` updated v2 → v3 schema.** Eight `citations[fact_id].X` references in `output-specs.md` and one in `self-critique-checklist.md` rewritten to point at the v3 `evidence[fact_id].verification.X` shape that the v3 builder actually emits. Doc lag was confusing authors reading the spec to understand JSON-summary output.
+- **SKILL.md `PROOF_ENGINE_ROOT` resolution-order paragraph** updated to describe step 3 (sibling search) and sentinel-file check.
+- **`hardening-rules.md` Rule 6 section** documents `derived: true` semantics and the validator's lightweight depends_on wiring check.
+
+### Compatibility
+
+- All template changes are additive (new fields, new loops); existing 2-SC compound proofs continue to validate against the new template.
+- `_strip_non_content_blocks` is a no-op on inputs without `<script>/<style>/<noscript>/<head>` block boundaries — quotes containing the literal substring `<script>` (without a closing tag) are unaffected.
+- `derived: true` is optional; sub-claims without it follow existing 2-source semantics.
+
 ## [1.42.0] - 2026-05-21
 
 Hardening release addressing six issues from a Claude Cowork sandbox proof run. No breaking changes.

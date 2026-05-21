@@ -24,7 +24,7 @@ Read this at **Step 7** before presenting results.
 - [ ] PDF citations include `snapshot` with extracted text for re-run reproducibility
 - [ ] All 9 hardening rules checked in proof_audit.md hardening checklist
 - [ ] proof.md has executive summary with key numbers directly under verdict
-- [ ] proof.md verification statuses derivable from JSON summary `citations[].status` (not from message strings)
+- [ ] proof.md verification statuses derivable from JSON summary `evidence[fact_id].verification.status` (not from message strings)
 - [ ] proof.md conclusion addresses unverified/partially verified citations with impact analysis (if any)
 - [ ] proof.md conclusion notes low-credibility sources if any cited source has tier ≤ 2
 - [ ] proof_audit.md sections labeled with provenance (proof.py JSON summary / proof.py inline output / author analysis)

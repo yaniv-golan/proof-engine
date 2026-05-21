@@ -143,6 +143,33 @@ def _result(status, method=None, coverage_pct=None, fetch_error=None,
 # Inline tag pattern for _light_clean — compiled once at module level.
 _LIGHT_CLEAN_INLINE_RE = r'(?:span|abbr|cite|code|dfn|em|kbd|mark|small|strong|var|wbr|a|b|i|s|u|sub|sup)(?=[\s>/])'
 
+_NON_CONTENT_BLOCK_RE = re.compile(
+    r'<(script|style|noscript|head)\b[^>]*>.*?</\1>',
+    re.DOTALL | re.IGNORECASE,
+)
+
+
+def _strip_non_content_blocks(html_text: str) -> str:
+    """Drop <script>/<style>/<noscript>/<head> blocks (content + tags).
+
+    Page HTML often carries megabytes of JS/CSS/metadata that never contain
+    citation text but whose dense `$`, `<sup>`, and inline tag tokens make
+    every downstream regex pass much more expensive. On a 2.1 MB Frontiers
+    snapshot this single strip is a ~75x speedup for verify_citation().
+
+    Linear in input length (single non-greedy pattern, no nested quantifiers).
+
+    Never call this on `expected_quote` — a quote may legitimately contain
+    literal substrings like '<script>' or '<style>' that must round-trip
+    through normalize_text intact. Call it only on fetched page HTML.
+
+    Regex is byte-tag-only: HTML-entity-encoded forms like &lt;script&gt;
+    are not stripped. Real pages don't entity-encode their own block tags,
+    so this is an acceptable limitation.
+    """
+    return _NON_CONTENT_BLOCK_RE.sub(' ', html_text)
+
+
 def _light_clean(html_text: str) -> str:
     """Strip HTML tags and decode entities, but preserve original case and punctuation.
 
@@ -807,6 +834,7 @@ def verify_citation(
     )
 
     if page_text is not None:
+        page_text = _strip_non_content_blocks(page_text)
         result = _match_quote(page_text, expected_quote, fact_id, fetch_mode=fetch_mode)
         if result is not None:
             if result["status"] == "partial":
@@ -830,6 +858,7 @@ def verify_citation(
         oa_text, oa_url = _try_oa_fallback(url, doi=doi, timeout=timeout,
                                            fact_id=fact_id)
         if oa_text is not None:
+            oa_text = _strip_non_content_blocks(oa_text)
             oa_result = _match_quote(oa_text, expected_quote, fact_id,
                                      fetch_mode="oa_variant")
             if oa_result is not None:

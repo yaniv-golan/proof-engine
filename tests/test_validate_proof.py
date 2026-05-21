@@ -90,6 +90,101 @@ def test_rule6_no_empirical_pure_math():
     assert len(v.issues) == 0
 
 
+# --- v1.43.0: derived sub-claim support ---
+
+def _validate_per_subclaim(source_code: str) -> ProofValidator:
+    """Write source to temp file, run per-subclaim Rule 6 check, return validator."""
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(source_code)
+        f.flush()
+        v = ProofValidator(f.name)
+        v.check_rule6_per_subclaim()
+    os.unlink(f.name)
+    return v
+
+
+DERIVED_SC_WITH_DEPENDS_ON = '''
+CLAIM_FORMAL = {
+    "sub_claims": [
+        {"id": "SC1", "property": "x", "operator": ">=", "threshold": 2},
+        {"id": "SC2", "property": "y", "operator": ">=", "threshold": 2},
+        {"id": "SC3", "property": "z", "derived": True,
+         "operator_note": "Computed from SC1 ∧ SC2"},
+    ],
+    "subclaim_to_sources": {
+        "SC1": ["a", "b"],
+        "SC2": ["c", "d"],
+        "SC3": [],  # derived: no own sources
+    },
+}
+builder.add_computed_fact("A3", label="SC3 derivation", method="...",
+                          result=1, depends_on=["B1", "B2", "B3", "B4"],
+                          sub_claim="SC3")
+'''
+
+DERIVED_SC_WITHOUT_DEPENDS_ON = '''
+CLAIM_FORMAL = {
+    "sub_claims": [
+        {"id": "SC1", "property": "x", "operator": ">=", "threshold": 2},
+        {"id": "SC2", "property": "y", "operator": ">=", "threshold": 2},
+        {"id": "SC3", "property": "z", "derived": True,
+         "operator_note": "Computed but unwired"},
+    ],
+    "subclaim_to_sources": {
+        "SC1": ["a", "b"],
+        "SC2": ["c", "d"],
+        "SC3": [],
+    },
+}
+# No add_computed_fact call → derivation unwired
+'''
+
+
+def test_rule6_derived_sub_claim_with_depends_on_passes():
+    """Derived sub-claim with proper depends_on wiring should not warn about
+    missing sources OR derivation."""
+    v = _validate_per_subclaim(DERIVED_SC_WITH_DEPENDS_ON)
+    rule6_warnings = [msg for msg, _ in v.warnings if "Rule 6" in msg]
+    # No warnings: SC3 is derived (exempt from 2-source check), and the
+    # add_computed_fact has non-empty depends_on (derivation wired).
+    assert len(rule6_warnings) == 0, f"Unexpected warnings: {rule6_warnings}"
+
+
+def test_rule6_derived_sub_claim_without_depends_on_warns():
+    """Derived sub-claim missing depends_on wiring should warn that derivation
+    appears unwired (without false-positive 2-source warning)."""
+    v = _validate_per_subclaim(DERIVED_SC_WITHOUT_DEPENDS_ON)
+    rule6_warnings = [msg for msg, _ in v.warnings if "Rule 6" in msg]
+    # Should warn about unwired derivation
+    assert any("derivation appears unwired" in msg for msg in rule6_warnings), \
+        f"Expected unwired-derivation warning, got: {rule6_warnings}"
+    # Should NOT warn about SC3 having 0 sources (it's derived)
+    assert not any("SC3" in msg and "only 0" in msg for msg in rule6_warnings)
+
+
+def test_rule6_non_derived_single_source_still_warns():
+    """Non-derived sub-claim with <2 sources should still trigger Rule 6 warning
+    even when other sub-claims are derived."""
+    source = '''
+CLAIM_FORMAL = {
+    "sub_claims": [
+        {"id": "SC1", "property": "x", "operator": ">=", "threshold": 2},
+        {"id": "SC2", "property": "z", "derived": True},
+    ],
+    "subclaim_to_sources": {
+        "SC1": ["a"],  # only 1 source
+        "SC2": [],
+    },
+}
+builder.add_computed_fact("A2", label="...", method="...",
+                          result=1, depends_on=["B1"], sub_claim="SC2")
+'''
+    v = _validate_per_subclaim(source)
+    rule6_warnings = [msg for msg, _ in v.warnings if "Rule 6" in msg]
+    assert any("SC1" in msg and "only 1 source" in msg for msg in rule6_warnings), \
+        f"Expected SC1 single-source warning, got: {rule6_warnings}"
+
+
 def _validate_claim_holds(source_code: str) -> ProofValidator:
     """Write source to temp file, run claim_holds check, return validator."""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:

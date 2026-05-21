@@ -536,6 +536,87 @@ class ProofValidator:
             break  # CLAIM_FORMAL found, no subclaim_to_sources key
         return None
 
+    def _extract_derived_sub_claims(self):
+        """Return set of sub-claim IDs marked `derived: True` in CLAIM_FORMAL.
+
+        Derived sub-claims are computed from other sub-claims (e.g., SC3 = f(SC1, SC2))
+        and have no independent sources of their own by design. They are exempt
+        from the 2-source Rule 6 check.
+
+        Recognized shapes:
+            "sub_claims": [
+                {"id": "SC1", "property": "..."},
+                {"id": "SC3", "property": "...", "derived": True},  # ← detected
+            ]
+        """
+        import ast
+        try:
+            tree = ast.parse(self.source)
+        except SyntaxError:
+            return set()
+
+        derived = set()
+        for node in tree.body:
+            if not isinstance(node, ast.Assign):
+                continue
+            if len(node.targets) != 1:
+                continue
+            target = node.targets[0]
+            if not (isinstance(target, ast.Name) and target.id == "CLAIM_FORMAL"):
+                continue
+            if not isinstance(node.value, ast.Dict):
+                break
+
+            for cf_key, cf_val in zip(node.value.keys, node.value.values):
+                if not (isinstance(cf_key, ast.Constant) and
+                        cf_key.value == "sub_claims"):
+                    continue
+                if not isinstance(cf_val, ast.List):
+                    break
+                for sc_entry in cf_val.elts:
+                    if not isinstance(sc_entry, ast.Dict):
+                        continue
+                    sc_id = None
+                    is_derived = False
+                    for k, v in zip(sc_entry.keys, sc_entry.values):
+                        if not isinstance(k, ast.Constant):
+                            continue
+                        if k.value == "id" and isinstance(v, ast.Constant):
+                            sc_id = v.value
+                        elif k.value == "derived" and isinstance(v, ast.Constant):
+                            is_derived = bool(v.value)
+                    if sc_id and is_derived:
+                        derived.add(sc_id)
+                break
+            break
+        return derived
+
+    def _has_computed_fact_with_depends_on(self):
+        """Detect whether any `builder.add_computed_fact(..., depends_on=[...])`
+        call has a non-empty `depends_on` list.
+
+        Used to validate that derived sub-claims wire their derivation through
+        a Type A fact (lightweight presence check; does not validate that
+        depends_on references facts from *other* sub-claims).
+        """
+        import ast
+        try:
+            tree = ast.parse(self.source)
+        except SyntaxError:
+            return False
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            func = node.func
+            attr = getattr(func, "attr", None)
+            if attr != "add_computed_fact":
+                continue
+            for kw in node.keywords:
+                if kw.arg == "depends_on" and isinstance(kw.value, ast.List):
+                    if len(kw.value.elts) > 0:
+                        return True
+        return False
+
     def check_rule6_per_subclaim(self):
         """Check that each sub-claim in a compound proof has >=2 sources.
 
@@ -545,14 +626,33 @@ class ProofValidator:
         2. Inference: fall back to lowercase SC prefix matching (sc1_, sc2_, etc.).
            Only warns when ALL sub-claims have prefix-matched keys; skips silently
            when keys are descriptive (no prefix match).
+
+        Sub-claims marked `derived: True` in CLAIM_FORMAL are exempt — they're
+        computed from other sub-claims and have no independent sources by design.
+        For derived sub-claims, we instead verify at least one Type A computed
+        fact has non-empty depends_on (sanity check that derivation is wired).
         """
         if "sub_claims" not in self.source:
             return
+
+        derived_scs = self._extract_derived_sub_claims()
+
+        # If there's at least one derived sub-claim, validate derivation wiring.
+        if derived_scs and not self._has_computed_fact_with_depends_on():
+            self.warnings.append((
+                f"Rule 6: Sub-claim(s) {sorted(derived_scs)} marked derived "
+                "but no add_computed_fact(...) call has a non-empty depends_on "
+                "list — derivation appears unwired. Add a Type A fact that "
+                "references the source sub-claims' facts in depends_on.",
+                [],
+            ))
 
         # --- Path 1: Explicit subclaim_to_sources map ---
         explicit_map = self._extract_subclaim_to_sources()
         if explicit_map:
             for sc_id, keys in explicit_map.items():
+                if sc_id in derived_scs:
+                    continue  # derived: no own sources expected
                 if len(keys) < 2:
                     self.warnings.append((
                         f"Rule 6: Sub-claim {sc_id} has only {len(keys)} "
@@ -580,18 +680,23 @@ class ProofValidator:
         if not ef_keys:
             return
 
-        # Check if ALL sub-claims have at least one prefixed key.
-        # If any sub-claim has zero prefixed keys, the proof likely uses
-        # descriptive keys for that sub-claim — skip the whole check to
-        # avoid false positives on mixed-shape proofs.
+        # Check if ALL non-derived sub-claims have at least one prefixed key.
+        # If any non-derived sub-claim has zero prefixed keys, the proof likely
+        # uses descriptive keys for that sub-claim — skip the whole check to
+        # avoid false positives on mixed-shape proofs. Derived sub-claims are
+        # expected to have zero prefixed keys and don't disqualify the check.
         for sc_id in sc_ids:
+            if sc_id in derived_scs:
+                continue
             prefix = sc_id.lower() + "_"
             if not any(k.startswith(prefix) for k in ef_keys):
-                # At least one sub-claim has no prefixed keys — can't
+                # A non-derived sub-claim has no prefixed keys — can't
                 # reliably assess balance, skip entirely
                 return
 
         for sc_id in sc_ids:
+            if sc_id in derived_scs:
+                continue  # derived: no own sources expected
             prefix = sc_id.lower() + "_"
             sc_keys = [k for k in ef_keys if k.startswith(prefix)]
             if len(sc_keys) < 2:

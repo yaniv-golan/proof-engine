@@ -12,6 +12,14 @@ Every proof script begins with:
 import os
 import sys
 
+_SKILL_EXCLUDED_DIRS = {".git", ".venv", "venv", ".tox", ".worktrees",
+                        ".cache", ".idea", ".vscode", "node_modules",
+                        "__pycache__", "site-packages", "dist", "build"}
+
+def _is_valid_skill_root(p):
+    return (os.path.isfile(os.path.join(p, "scripts", "verify_citations.py"))
+            and os.path.isfile(os.path.join(p, "SKILL.md")))
+
 PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
 if not PROOF_ENGINE_ROOT:
     _d = os.path.dirname(os.path.abspath(__file__))
@@ -20,18 +28,64 @@ if not PROOF_ENGINE_ROOT:
             os.path.join(_d, "proof-engine", "skills", "proof-engine"),
             os.path.join(_d, "skills", "proof-engine"),
         ):
-            if os.path.isdir(os.path.join(_cand, "scripts")):
+            if _is_valid_skill_root(_cand):
                 PROOF_ENGINE_ROOT = _cand
                 break
         if PROOF_ENGINE_ROOT:
             break
+        try:
+            for _sib in os.listdir(_d):
+                if _sib in _SKILL_EXCLUDED_DIRS:
+                    continue
+                _sib_path = os.path.join(_d, _sib)
+                if not os.path.isdir(_sib_path):
+                    continue
+                for _cand in (
+                    os.path.join(_sib_path, "skills", "proof-engine"),
+                    os.path.join(_sib_path, "proof-engine", "skills", "proof-engine"),
+                ):
+                    if _is_valid_skill_root(_cand):
+                        PROOF_ENGINE_ROOT = _cand
+                        break
+                if PROOF_ENGINE_ROOT:
+                    break
+                if _sib.startswith("."):
+                    try:
+                        for _sub in os.listdir(_sib_path):
+                            if _sub in _SKILL_EXCLUDED_DIRS:
+                                continue
+                            _cand = os.path.join(_sib_path, _sub, "skills", "proof-engine")
+                            if _is_valid_skill_root(_cand):
+                                PROOF_ENGINE_ROOT = _cand
+                                break
+                    except OSError:
+                        pass
+                    if PROOF_ENGINE_ROOT:
+                        break
+        except OSError:
+            pass
+        if PROOF_ENGINE_ROOT:
+            break
         _d = os.path.dirname(_d)
     if not PROOF_ENGINE_ROOT:
-        raise RuntimeError("PROOF_ENGINE_ROOT not set and skill dir not found via walk-up from proof.py")
+        raise RuntimeError(
+            "PROOF_ENGINE_ROOT not set and skill dir not found via walk-up "
+            f"or sibling search from {os.path.dirname(os.path.abspath(__file__))}. "
+            "Set the env var explicitly: "
+            "export PROOF_ENGINE_ROOT=/path/to/skills/proof-engine"
+        )
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 ```
 
-**Resolution order:** (1) `PROOF_ENGINE_ROOT` env var if set — Binder and site-publishing tools set it explicitly; (2) walk up from proof.py's directory until either `proof-engine/skills/proof-engine/scripts/` (dev-repo layout) or `skills/proof-engine/scripts/` (plugin install layout) is found — makes the published proof portable to any clone of the repo or any plugin install; (3) raise a clear `RuntimeError`. Do NOT replace the block with a hardcoded absolute path — it leaks the generating agent's filesystem and doesn't work anywhere else.
+**Resolution order:**
+1. **Env var:** `PROOF_ENGINE_ROOT` if set — Binder and site-publishing tools set it explicitly.
+2. **Walk-up:** at each ancestor of `proof.py`, check `<ancestor>/proof-engine/skills/proof-engine/` (dev-repo layout) and `<ancestor>/skills/proof-engine/` (plugin install layout).
+3. **Sibling search (v1.43.0+):** at each ancestor, also descend each non-excluded sibling directory to depth 1; dotted siblings (e.g., `.remote-plugins`, `.devcontainer`) are descended to depth 2. This handles Cowork/plugin layouts where `proof.py` (in `outputs/`) and the skill (in `.remote-plugins/<plugin_id>/skills/proof-engine`) sit in sibling trees, never above each other.
+4. **Sentinel files:** a candidate is accepted only if it contains BOTH `scripts/verify_citations.py` AND `SKILL.md`. This keeps broad descent safe against false positives (vendored pip packages, git worktrees).
+5. **Excluded dirs:** `.git`, `.venv`, `venv`, `.tox`, `.worktrees`, `.cache`, `.idea`, `.vscode`, `node_modules`, `__pycache__`, `site-packages`, `dist`, `build` are always skipped.
+6. **Failure:** raise a `RuntimeError` with explicit `export PROOF_ENGINE_ROOT=...` instructions.
+
+Do NOT replace the block with a hardcoded absolute path — it leaks the generating agent's filesystem and doesn't work anywhere else.
 
 ## computations.py
 
@@ -79,14 +133,64 @@ The older `emit_proof_summary()` in `computations.py` is a legacy fallback that 
 ## verify_citations.py
 
 ```python
+verify_all_citations(empirical_facts, *,
+                     wayback_fallback=False,
+                     oa_lookup=True,
+                     oa_lookup_budget_seconds=None,
+                     skip_live_fetch=False,
+                     prefer_snapshot=False) -> dict
+#   Batch-verify every fact in empirical_facts. Returns
+#   {fact_key: result_dict}. See verify_citation() docstring in
+#   packages/proof-citations/src/proof_citations/verify.py for the
+#   full per-fact result shape (status/method/coverage_pct/fetch_mode/
+#   credibility/metadata_result).
+
 build_citation_detail(fact_registry, citation_results, empirical_facts) -> dict
 #   Stitches FACT_REGISTRY + verification results + empirical_facts entries
-#   into the citations[] block expected by ProofSummaryBuilder.
+#   into the evidence block expected by ProofSummaryBuilder.
 
 verify_data_values(url, data_values, fact_id, timeout=15, snapshot=None) -> dict
 #   Fetches page and confirms each value string appears.
 #   Returns {key: {found, value, fetch_mode}}.
 ```
+
+### Snapshot-only fast path (v1.42.0+)
+
+The kwargs above shape how `verify_all_citations()` handles citations whose
+source pages either block automated fetches or are paywalled. By default each
+citation tries live fetch → snapshot → snapshot_file → Wayback Machine → OA
+fallback (Unpaywall DOI lookup + variant fetch). For all-snapshot proofs
+backed by blocked or paywalled domains, the default path wastes minutes per
+fact on doomed live-fetch + OA-lookup attempts. Tune as follows:
+
+| Kwarg | Effect | When to use |
+|-------|--------|-------------|
+| `skip_live_fetch=True` | Skip live fetch entirely; go straight to snapshot → snapshot_file → wayback. | Every citation in the proof has a snapshot; live domain is known to block bots. |
+| `prefer_snapshot=True` | Try snapshot before live fetch; live remains the fallback if snapshot is empty. | Mixed — some citations might have snapshots, live works as a backup. |
+| `oa_lookup=False` | Skip the Unpaywall OA-variant lookup entirely. | All snapshots are intact; no need to chase OA mirrors. |
+| `oa_lookup_budget_seconds=N` | Cap total time across all OA fallback attempts. After N seconds, subsequent facts skip OA. | Mixed proofs where OA is occasionally useful but you don't want one slow lookup to dominate runtime. |
+
+**Recipes:**
+
+```python
+# All-snapshot proof against blocked/paywalled domains (PMC, Nature, Frontiers):
+citation_results = verify_all_citations(
+    empirical_facts,
+    skip_live_fetch=True,
+    oa_lookup=False,
+)
+```
+
+```python
+# Snapshot-preferred with live fetch as fallback; bound total OA budget:
+citation_results = verify_all_citations(
+    empirical_facts,
+    prefer_snapshot=True,
+    oa_lookup_budget_seconds=30,
+)
+```
+
+The same four kwargs are accepted by the per-call `verify_citation()` (v1.42.0+). The canonical signatures live in the function docstrings at `packages/proof-citations/src/proof_citations/verify.py` — keep that as source of truth; this section summarizes the practical recipes.
 
 ## v1.35+ APIs in the `proof_citations` package
 

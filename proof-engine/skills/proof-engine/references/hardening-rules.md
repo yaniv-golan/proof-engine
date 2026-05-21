@@ -390,6 +390,22 @@ A COI does not disqualify a source — it reduces the independence credit. Docum
 
 For compound proofs, the COI check runs per sub-claim, not globally.
 
+**Derived sub-claims (v1.43.0+):** Some compound proofs have a sub-claim computed from other sub-claims rather than from independent sources — e.g., SC3 = f(SC1, SC2). These have no own sources by design; the 2-source rule doesn't apply. Mark them with `"derived": True` in the sub-claim entry:
+
+```python
+CLAIM_FORMAL = {
+    "sub_claims": [
+        {"id": "SC1", "property": "...", "operator": ">=", "threshold": 3},
+        {"id": "SC2", "property": "...", "operator": ">=", "threshold": 3},
+        {"id": "SC3", "property": "...", "derived": True,
+         "operator_note": "Computed from SC1 ∧ SC2; no independent sources"},
+    ],
+    "compound_operator": "AND",
+}
+```
+
+The validator (a) skips the Rule 6 "0/1 sources" warning for derived sub-claims and (b) verifies at least one `builder.add_computed_fact(..., depends_on=[...])` call has a non-empty `depends_on` list — proving the derivation is wired through a Type A fact. If no such fact exists, the validator warns that the derivation appears unwired.
+
 **How validate_proof.py catches it**: Counts distinct source references (`source_a`, `source_b`, etc.). Warns if only one source is found for an empirical proof.
 
 ---

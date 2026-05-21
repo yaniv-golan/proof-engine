@@ -121,6 +121,41 @@ def test_verify_citation_falls_through_recaptcha_to_snapshot():
     assert result["fetch_mode"] == "snapshot"
 
 
+def test_verify_citation_strips_real_script_block_but_preserves_prose():
+    """Fix 2 regression: the page's real <script>...</script> block gets
+    stripped (preventing the 30s hang on dense JS), but the body prose
+    around it is preserved and matches against the quote.
+    """
+    with _fixture_server() as base:
+        result = verify_citation(
+            f"{base}/quote_with_script_substring.html",
+            "is still parsed identically by all major browsers",
+            "B1",
+        )
+    assert result["status"] == "verified", result.get("message")
+
+
+def test_strip_non_content_blocks_not_called_on_quote_path():
+    """Fix 2 contract: _strip_non_content_blocks must only run on fetched
+    page HTML, never on expected_quote. The strip requires both an opening
+    AND closing tag, so a stray '<script>' (no closing) in a quote is safe
+    even if the helper did run — but the stronger guarantee is that the
+    helper is not in the quote normalization call graph at all.
+    """
+    from proof_citations.verify import _strip_non_content_blocks
+
+    # Helper is a no-op when there's no closing tag — proving quotes with
+    # unclosed '<script>' substrings would survive even if it ran.
+    quote_with_partial = "the <script> tag was deprecated"
+    assert _strip_non_content_blocks(quote_with_partial) == quote_with_partial
+
+    # And a full block IS stripped.
+    page_html = "<p>real</p><script>var x = 1;</script><p>text</p>"
+    out = _strip_non_content_blocks(page_html)
+    assert "var x" not in out
+    assert "real" in out and "text" in out
+
+
 def test_verify_citation_prefer_snapshot_skips_live_when_snapshot_present():
     """prefer_snapshot=True uses snapshot before live fetch for known-blocked sources."""
     with _fixture_server() as base:

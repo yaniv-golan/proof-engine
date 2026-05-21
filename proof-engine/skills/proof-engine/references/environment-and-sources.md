@@ -80,6 +80,27 @@ Many scientific papers and reports are behind paywalls. When a key source return
 
 The `paywalled:` prefix signals that the content must use `snapshot_file`, not inline `snapshot`.
 
+## NCBI / PubMed / PMC
+
+`pubmed.ncbi.nlm.nih.gov` and `pmc.ncbi.nlm.nih.gov` both return 403 / CAPTCHA for automated requests — this is by design, intended to deter scraping. Avoid using these URLs as citation targets for automated `verify_all_citations()` runs without a snapshot.
+
+**Use E-utilities for programmatic access:** `eutils.ncbi.nlm.nih.gov` is the canonical NCBI programmatic API and is **not** rate-limited or CAPTCHA-protected for unauthenticated requests (≤3 requests/sec without an API key, ≤10 with). It exposes:
+
+- `esearch.fcgi` — keyword search returning a list of UIDs
+- `esummary.fcgi` — fetch metadata for a list of UIDs (title, authors, journal, year, DOI)
+- `efetch.fcgi` — fetch full record (abstract, MeSH terms, references)
+
+`proof_citations.resolvers.pubmed` already uses E-utilities under the hood for identifier resolution — when a citation has a `("pmid", "12345")` identifier, the resolver hits `efetch.fcgi`, not the public PubMed page. This is why `verify_citation_record` works without a snapshot for PubMed-identified citations while `verify_citation` against a `pubmed.ncbi.nlm.nih.gov` URL needs one.
+
+**Practical guidance:**
+- For **quote-on-page verification** of a PubMed article: capture a snapshot from the PMC full-text page in Step 2 (browser or PMC FTP), use `snapshot_file`, and call `verify_citation` against the article URL.
+- For **bibliographic metadata verification only** (no quote): use `verify_citation_record(("pmid", "..."), expected={...})` — no snapshot needed.
+- For **literature search** (absence proofs, citation discovery): construct an `esearch.fcgi` URL with `term=...` parameter and include the URL in `search_registry` — the URL is reproducible and machine-checkable.
+
+Direct PubMed/PMC URLs are still the right thing to put in `empirical_facts[*].url` (they're the canonical citation), but pair them with a snapshot for quote verification. Cite the E-utilities URL in `search_registry` for systematic searches.
+
+NCBI E-utilities documentation: <https://www.ncbi.nlm.nih.gov/books/NBK25500/>.
+
 ## Government Statistics Sites (.gov)
 
 BLS, FRED, Federal Reserve, Census, and similar .gov sites systematically return 403 to automated fetching. This is the norm, not the exception. For government statistics:
