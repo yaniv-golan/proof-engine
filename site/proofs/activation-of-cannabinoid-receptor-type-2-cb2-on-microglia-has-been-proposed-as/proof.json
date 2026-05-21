@@ -2,79 +2,85 @@
   "format_version": 3,
   "claim_natural": "Activation of cannabinoid receptor type 2 (CB2) on microglia has been proposed as a mechanism for modulating neuroinflammatory pain states, including chronic widespread pain syndromes such as fibromyalgia where central sensitization and microglial activation have been implicated (Cabral & Griffin-Thomas, 2009; Stella, 2010; Chen et al., 2023).",
   "claim_formal": {
-    "subject": "CB2-on-microglia as a proposed mechanism for modulating neuroinflammatory pain, including fibromyalgia",
+    "subject": "the peer-reviewed literature on CB2-receptor activation on microglia, neuroinflammatory pain, and fibromyalgia, plus the three references the claim cites",
+    "claim_type": "compound_empirical",
+    "proof_direction": "affirm",
+    "is_time_sensitive": false,
     "sub_claims": [
       {
         "id": "SC1",
-        "property": "CB2 activation on microglia has been proposed in the peer-reviewed literature as a mechanism for modulating neuroinflammatory pain",
+        "property": "independently published peer-reviewed sources that propose or articulate CB2-receptor activation on microglia as a mechanism for modulating neuroinflammatory pain",
         "operator": ">=",
         "threshold": 3,
-        "operator_note": "Verified by >=3 independent peer-reviewed sources explicitly framing CB2-on-microglia as a mechanism for modulating neuroinflammation/pain. The claim is epistemically modest ('has been proposed') and does NOT assert clinical efficacy."
+        "operator_note": "Counts independently published peer-reviewed sources that articulate the CB2-on-microglia / neuroinflammatory-pain mechanism. Threshold 3 is the standard consensus floor. The claim's phrase 'including ... fibromyalgia' is read as naming fibromyalgia as an INSTANCE of a neuroinflammatory pain state (a reading justified by SC2); SC1 therefore does NOT require a study that specifically proposed CB2-on-microglia agonism as a fibromyalgia therapy. The claim's verb 'has been proposed' is hedged, hypothesis-level language: the proof verifies that the mechanism has been proposed, NOT that it is a clinically proven fibromyalgia treatment."
       },
       {
         "id": "SC2",
-        "property": "microglial activation and central sensitization have been implicated in fibromyalgia in the peer-reviewed literature",
+        "property": "independently published peer-reviewed sources implicating central sensitization and microglial activation in fibromyalgia",
         "operator": ">=",
-        "threshold": 2,
-        "operator_note": "Threshold reduced to 2 (instead of default 3) because fibromyalgia neuroimaging-confirmed microglial activation is a relatively recent and specialized line of evidence; the two independent sources cited are a multi-site PET study (Albrecht & Loggia et al., 2019) and a 2025 narrative review. Source quality criteria met: peer-reviewed, n>=30 (Loggia study had 31 patients), no funding-related COI on this side."
+        "threshold": 3,
+        "operator_note": "Counts independently published peer-reviewed sources implicating central sensitization and/or microglial activation in fibromyalgia. Threshold 3 is the standard consensus floor. The two phenomena are evaluated together because the claim conjoins them; the supporting set collectively covers both - microglial / glial activation (Findeisen et al. review; Albrecht et al. PET study) and central sensitization (Jurado-Priego et al. review, which names fibromyalgia explicitly). The verb 'have been implicated' is hedged."
       },
       {
         "id": "SC3",
-        "property": "the three cited papers (Cabral & Griffin-Thomas 2009; Stella 2010; Chen et al. 2023) exist as identifiable, first-author-accurate works supporting the proposal",
+        "property": "references named in the claim that resolve to a real, identifiable publication on the attributed topic",
         "operator": ">=",
         "threshold": 3,
-        "operator_note": "SC3 is a citation-accuracy sub-claim. Each of the three cited works must be (a) verifiable as a real publication, (b) first-author-accurate, and (c) substantively supporting the attributed proposal."
+        "operator_note": "Citation-integrity check - NOT a consensus count. The claim explicitly cites three references; threshold 3 means all three must resolve to a real, identifiable publication. Empirical facts sc3_cabral and sc3_stella confirm two of them (Cabral & Griffin-Thomas, 2009; Stella, 2010). There is NO empirical fact for the third reference, 'Chen et al., 2023', because systematic PubMed searches (adversarial check AC3) found no publication matching that citation on this topic. The absence of a third empirical fact is itself the evidence that SC3 fails: n_sc3 = 2 < 3."
       }
     ],
     "compound_operator": "AND",
-    "proof_direction": "affirm",
-    "operator_note": "All three sub-claims must hold for the compound claim to be PROVED. SC1 and SC2 test the substantive proposition. SC3 tests the citation accuracy. If SC1+SC2 hold but SC3 fails, the underlying proposition is well-supported but the specific citation set is inaccurate -- this yields PARTIALLY VERIFIED."
+    "operator_note": "The claim is taken as a complete unit - the sentence AND its parenthetical citation list - and decomposed into three sub-claims joined by AND. SC1 and SC2 test the two scientific propositions; SC3 tests the integrity of the three references the claim names. All three sub-claims must hold for the claim to be fully PROVED. The claim's verbs ('has been proposed', 'have been implicated') are deliberately hedged, hypothesis-level language; this proof verifies exactly that hedged form and does not test clinical efficacy."
   },
   "evidence": {
     "B1": {
       "type": "empirical",
-      "label": "SC1: Cabral & Griffin-Thomas (2009) Expert Rev Mol Med",
+      "label": "SC1: Cabral & Griffin-Thomas (2009) - CB2 localized to microglia",
       "sub_claim": "SC1",
       "source": {
-        "name": "Cabral & Griffin-Thomas (2009), Expert Reviews in Molecular Medicine, vol. 11, e3",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/19152719/",
-        "quote": "Emerging role of the cannabinoid receptor CB2 in immune regulation: therapeutic prospects for neuroinflammation"
+        "name": "Cabral GA & Griffin-Thomas L (2009), 'Emerging role of the cannabinoid receptor CB2 in immune regulation: therapeutic prospects for neuroinflammation', Expert Reviews in Molecular Medicine 11:e3 (PubMed Central PMC2768535)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2768535/",
+        "quote": "This expression of CB2 has been localized primarily to microglia, the resident macrophages of the CNS."
       },
       "verification": {
         "status": "verified",
         "method": "full_quote",
-        "coverage_pct": 100.0,
+        "coverage_pct": null,
         "fetch_mode": "snapshot",
         "credibility": {
-          "tier": 1,
-          "label": "NIH/PubMed",
-          "domain": "pubmed.ncbi.nlm.nih.gov"
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
         }
       },
       "extraction": {
         "value": "verified",
         "value_in_quote": true,
-        "quote_snippet": "Emerging role of the cannabinoid receptor CB2 in immune regulation: therapeutic "
+        "quote_snippet": "This expression of CB2 has been localized primarily to microglia, the resident m"
       }
     },
     "B2": {
       "type": "empirical",
-      "label": "SC1: Stella (2010) Glia review",
+      "label": "SC1: Stella (2010) - CB2 on microglia; activation regulates microglial function",
       "sub_claim": "SC1",
       "source": {
-        "name": "Stella N (2010), Glia 58(9):1017-30",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/20468046/",
-        "quote": "These receptors are expressed by microglia, astrocytes and astrocytomas, and their activation regulates these cells' differentiation, functions and viability."
+        "name": "Stella N (2010), 'Cannabinoid and cannabinoid-like receptors in microglia, astrocytes, and astrocytomas', Glia 58(9):1017-1030 (PubMed Central PMC2919281)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2919281/",
+        "quote": "These receptors are expressed by microglia, astrocytes and astrocytomas, and their activation regulates these cells\u2019 differentiation, functions and viability."
       },
       "verification": {
         "status": "verified",
         "method": "full_quote",
-        "coverage_pct": 100.0,
+        "coverage_pct": null,
         "fetch_mode": "snapshot",
         "credibility": {
-          "tier": 1,
-          "label": "NIH/PubMed",
-          "domain": "pubmed.ncbi.nlm.nih.gov"
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
         }
       },
       "extraction": {
@@ -85,212 +91,285 @@
     },
     "B3": {
       "type": "empirical",
-      "label": "SC1: Zhou et al. (2023) Front Mol Neurosci - CB2 agonist alleviates neuropathic pain",
+      "label": "SC1: Xu et al. (2023) - CB2 on activated microglia in spinal pain circuitry",
       "sub_claim": "SC1",
       "source": {
-        "name": "Zhou et al. (2023), Frontiers in Molecular Neuroscience 16:1061220",
-        "url": "https://www.frontiersin.org/journals/molecular-neuroscience/articles/10.3389/fnmol.2023.1061220/full",
-        "quote": "Continuous intrathecal injection of CB2R agonist PM226 can alleviate the mechanical and cold hyperalgesia in rats after SNI, which is related to altering microglial stages from harmful to beneficial."
+        "name": "Xu K, Wu Y, Tian Z, et al. (2023), 'Microglial Cannabinoid CB2 Receptors in Pain Modulation', International Journal of Molecular Sciences 24(3):2348 (PubMed Central PMC9917135)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9917135/",
+        "quote": "Accumulating evidence has demonstrated that the expression of CB2 receptors is significantly increased in activated microglia in the spinal cord"
       },
       "verification": {
         "status": "verified",
         "method": "full_quote",
-        "coverage_pct": 100.0,
-        "fetch_mode": "live",
+        "coverage_pct": null,
+        "fetch_mode": "snapshot",
         "credibility": {
-          "tier": 2,
-          "label": "peer-reviewed journal publisher",
-          "domain": "www.frontiersin.org"
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
         }
       },
       "extraction": {
         "value": "verified",
         "value_in_quote": true,
-        "quote_snippet": "Continuous intrathecal injection of CB2R agonist PM226 can alleviate the mechani"
+        "quote_snippet": "Accumulating evidence has demonstrated that the expression of CB2 receptors is s"
       }
     },
     "B4": {
       "type": "empirical",
-      "label": "SC1: Xu et al. (2023) IJMS - Microglial CB2 in pain modulation",
-      "sub_claim": "SC1",
+      "label": "SC2: Findeisen et al. (2025) - maladaptive microglial activation in fibromyalgia",
+      "sub_claim": "SC2",
       "source": {
-        "name": "Xu, Wu, Tian, Xu, Wu & Wang (2023), International Journal of Molecular Sciences 24(3):2348",
-        "url": "https://www.mdpi.com/1422-0067/24/3/2348",
-        "quote": "Microglial Cannabinoid CB2 Receptors in Pain Modulation"
+        "name": "Findeisen K, Guymer E, Littlejohn G (2025), 'Neuroinflammatory and Immunological Aspects of Fibromyalgia', Brain Sciences 15(2):206 (PubMed Central PMC11852494)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11852494/",
+        "quote": "There is a growing focus on processes occurring in the dorsal root ganglia and the role of maladaptive microglial cell activation."
       },
       "verification": {
         "status": "verified",
         "method": "full_quote",
-        "coverage_pct": 100.0,
+        "coverage_pct": null,
         "fetch_mode": "snapshot",
         "credibility": {
-          "tier": 2,
-          "label": "peer-reviewed journal publisher",
-          "domain": "www.mdpi.com"
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
         }
       },
       "extraction": {
         "value": "verified",
         "value_in_quote": true,
-        "quote_snippet": "Microglial Cannabinoid CB2 Receptors in Pain Modulation"
+        "quote_snippet": "There is a growing focus on processes occurring in the dorsal root ganglia and t"
       }
     },
     "B5": {
       "type": "empirical",
-      "label": "SC2: Albrecht/Loggia et al. (2019) Brain Behav Immun - PET evidence of brain glial activation in FM",
+      "label": "SC2: Albrecht et al. (2019) - PET evidence of brain glial activation in fibromyalgia",
       "sub_claim": "SC2",
       "source": {
-        "name": "Albrecht, Forsberg, Sandstrom, Bergan, Kadetoff, Protsenko, Lampa, Lee, Hoper, Kim, Yunus, Hildebrandt, Wasan, Kalso, Edwards, Hooker, Kosek, Loggia (2019), Brain Behav Immun 75:72-83 -- multi-site PET study",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/30223011/",
-        "quote": "Brain glial activation in fibromyalgia"
+        "name": "Albrecht DS, Forsberg A, Sandstrom A, et al. (2019), 'Brain glial activation in fibromyalgia - A multi-site positron emission tomography investigation', Brain, Behavior, and Immunity 75:72-83 (PubMed Central PMC6541932)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6541932/",
+        "quote": "While mounting evidence suggests a role for neuroinflammation, no study has directly provided evidence of brain glial activation in FM."
       },
       "verification": {
         "status": "verified",
         "method": "full_quote",
-        "coverage_pct": 100.0,
+        "coverage_pct": null,
         "fetch_mode": "snapshot",
         "credibility": {
-          "tier": 1,
-          "label": "NIH/PubMed",
-          "domain": "pubmed.ncbi.nlm.nih.gov"
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
         }
       },
       "extraction": {
         "value": "verified",
         "value_in_quote": true,
-        "quote_snippet": "Brain glial activation in fibromyalgia"
+        "quote_snippet": "While mounting evidence suggests a role for neuroinflammation, no study has dire"
       }
     },
     "B6": {
       "type": "empirical",
-      "label": "SC2: Neuroinflammatory & Immunological Aspects of Fibromyalgia (2025 review)",
+      "label": "SC2: Jurado-Priego et al. (2024) - central sensitization as a process in fibromyalgia",
       "sub_claim": "SC2",
       "source": {
-        "name": "Neuroinflammatory and Immunological Aspects of Fibromyalgia (2025), narrative review in IJMS / PMC",
-        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11852494/",
-        "quote": "Neuroinflammatory and Immunological Aspects of Fibromyalgia"
+        "name": "Jurado-Priego LN, Cueto-Urena C, Ramirez-Exposito MJ, Martinez-Martos JM (2024), 'Fibromyalgia: A Review of the Pathophysiological Mechanisms and Multidisciplinary Treatment Approaches', Biomedicines 12(7):1543 (PubMed Central PMC11275111)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11275111/",
+        "quote": "three underlying processes in fibromyalgia have been investigated. These include central sensitization, associated with an increase in the release of both excitatory and inhibitory neurotransmitters"
       },
       "verification": {
         "status": "verified",
         "method": "full_quote",
-        "coverage_pct": 100.0,
+        "coverage_pct": null,
         "fetch_mode": "snapshot",
         "credibility": {
-          "tier": 1,
-          "label": "NIH/PubMed",
-          "domain": "www.ncbi.nlm.nih.gov"
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
         }
       },
       "extraction": {
         "value": "verified",
         "value_in_quote": true,
-        "quote_snippet": "Neuroinflammatory and Immunological Aspects of Fibromyalgia"
+        "quote_snippet": "three underlying processes in fibromyalgia have been investigated. These include"
+      }
+    },
+    "B7": {
+      "type": "empirical",
+      "label": "SC3: cited reference 1 - Cabral & Griffin-Thomas (2009) resolves to a real publication",
+      "sub_claim": "SC3",
+      "source": {
+        "name": "PubMed Central bibliographic record for Cabral & Griffin-Thomas (2009), PMC2768535",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2768535/",
+        "quote": "Expert Rev Mol Med. 2009 Jan 20;11:e3. doi: 10.1017/S1462399409000957"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "snapshot",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Expert Rev Mol Med. 2009 Jan 20;11:e3. doi: 10.1017/S1462399409000957"
+      }
+    },
+    "B8": {
+      "type": "empirical",
+      "label": "SC3: cited reference 2 - Stella (2010) resolves to a real publication",
+      "sub_claim": "SC3",
+      "source": {
+        "name": "PubMed Central bibliographic record for Stella (2010), PMC2919281",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2919281/",
+        "quote": "Glia. 2010 Jul;58(9):1017-1030. doi: 10.1002/glia.20983"
+      },
+      "verification": {
+        "status": "verified",
+        "method": "full_quote",
+        "coverage_pct": null,
+        "fetch_mode": "snapshot",
+        "credibility": {
+          "domain": "nih.gov",
+          "source_type": "government",
+          "tier": 5,
+          "flags": [],
+          "note": "Government domain (.gov)"
+        }
+      },
+      "extraction": {
+        "value": "verified",
+        "value_in_quote": true,
+        "quote_snippet": "Glia. 2010 Jul;58(9):1017-1030. doi: 10.1002/glia.20983"
       }
     },
     "A1": {
       "type": "computed",
-      "label": "SC1 source count",
+      "label": "SC1 verified-source count",
       "sub_claim": "SC1",
-      "method": "count(verified sc1 citations) = 4",
-      "result": "4",
+      "method": "count(verified SC1 citations) = 3",
+      "result": "3",
       "depends_on": [
         "B1",
         "B2",
-        "B3",
-        "B4"
+        "B3"
       ]
     },
     "A2": {
       "type": "computed",
-      "label": "SC2 source count",
+      "label": "SC2 verified-source count",
       "sub_claim": "SC2",
-      "method": "count(verified sc2 citations) = 2",
-      "result": "2",
+      "method": "count(verified SC2 citations) = 3",
+      "result": "3",
       "depends_on": [
+        "B4",
         "B5",
         "B6"
       ]
     },
     "A3": {
       "type": "computed",
-      "label": "SC3 citation-accuracy count",
+      "label": "SC3 resolved-citation count",
       "sub_claim": "SC3",
-      "method": "count(citations with first_author_accurate AND exists AND supports_attribution) = 2",
+      "method": "count(cited references resolving to a real publication) = 2; the claim names 3 references, so n_sc3 < 3 means at least one citation is unverifiable",
       "result": "2",
-      "depends_on": []
+      "depends_on": [
+        "B7",
+        "B8"
+      ]
     }
   },
   "cross_checks": [
     {
-      "description": "SC1: independent peer-reviewed sources from 2009, 2010, 2023, 2023",
+      "description": "SC1: independent peer-reviewed sources for the CB2/microglia mechanism",
       "fact_ids": [
         "B1",
         "B2",
-        "B3",
-        "B4"
+        "B3"
       ],
       "agreement": true,
-      "n_sources_consulted": 4,
-      "n_sources_verified": 4,
+      "n_sources_consulted": 3,
+      "n_sources_verified": 3,
       "sources": {
-        "sc1_cabral2009": "verified",
-        "sc1_stella2010": "verified",
-        "sc1_zhou2023": "verified",
-        "sc1_xu2023": "verified"
+        "sc1_cabral": "verified",
+        "sc1_stella": "verified",
+        "sc1_xu": "verified"
       },
-      "independence_note": "Spans 14 years, 4 different journals (Expert Rev Mol Med, Glia, Front Mol Neurosci, IJMS), 4 different research groups",
+      "independence_note": "Three separate publications, distinct author groups, spanning 2009-2023; no shared authorship and no COI with a commercial subject.",
       "coi_flags": []
     },
     {
-      "description": "SC2: independent sources on fibromyalgia microglial activation",
+      "description": "SC2: independent peer-reviewed sources for fibromyalgia neuro-immune features",
       "fact_ids": [
+        "B4",
         "B5",
         "B6"
       ],
       "agreement": true,
-      "n_sources_consulted": 2,
-      "n_sources_verified": 2,
+      "n_sources_consulted": 3,
+      "n_sources_verified": 3,
       "sources": {
-        "sc2_loggia2019": "verified",
-        "sc2_review2025": "verified"
+        "sc2_brainsci": "verified",
+        "sc2_albrecht": "verified",
+        "sc2_jurado": "verified"
       },
-      "independence_note": "Multi-site PET primary study + independent narrative review",
+      "independence_note": "A 2025 narrative review, a 2019 multi-site PET primary study, and a 2024 pathophysiology review - distinct author groups; collectively cover microglial activation and central sensitization.",
       "coi_flags": []
     },
     {
-      "description": "SC3: citation-accuracy audit of original claim's cited works",
+      "description": "SC3: do the three references named in the claim resolve to real publications?",
       "fact_ids": [
-        "A3"
+        "B7",
+        "B8"
       ],
       "agreement": false,
       "n_sources_consulted": 3,
       "n_sources_verified": 2,
       "sources": {
-        "Cabral & Griffin-Thomas 2009": "verified",
-        "Stella 2010": "verified",
-        "Chen et al. 2023": "not_found"
+        "sc3_cabral": "verified",
+        "sc3_stella": "verified"
       },
-      "independence_note": "Each citation independently audited against PubMed/Scholar databases",
+      "independence_note": "Two of the three named references resolve and verify (Cabral & Griffin-Thomas 2009; Stella 2010). The third, 'Chen et al., 2023', was searched systematically in PubMed and could not be identified - see adversarial check AC3. n_sc3 = 2 < 3.",
       "coi_flags": []
     }
   ],
   "adversarial_checks": [
     {
-      "question": "Has the CB2-on-microglia mechanism for neuroinflammatory pain been disproved or substantively contradicted?",
-      "verification_performed": "Searched for counter-evidence: '[CB2 microglia mechanism debunked]', '[CB2 agonist clinical trial failed pain]'. Found: clinical translation has been mixed -- Cochrane and systematic reviews of cannabinoids for fibromyalgia (Walitt 2016; Bourke 2023) rate the evidence as low quality (small samples, short duration). However, these critiques target CLINICAL EFFICACY of cannabinoid drugs in humans, not the preclinical MECHANISTIC PROPOSAL that CB2 on microglia can modulate neuroinflammatory pain. The mechanistic proposal remains an active and well-cited research direction.",
-      "finding": "No source contradicts the existence of the mechanistic proposal. Clinical-trial weakness is a separate, weaker claim that the natural-language statement does not assert (it uses 'has been proposed' / 'have been implicated', not 'is effective').",
+      "question": "Is the CB2-on-microglia mechanism for neuroinflammatory pain a genuine, proposed research mechanism - or is it fringe / disputed?",
+      "verification_performed": "Searched PubMed and the web for reviews and primary literature on CB2 receptors, microglia and pain ('CB2 microglia pain modulation', 'cannabinoid CB2 neuroinflammation', 'cannabinoid fibromyalgia efficacy'). Cross-checked whether cannabinoids are an established fibromyalgia treatment.",
+      "finding": "The CB2-on-microglia mechanism for modulating neuroinflammatory pain is a well-established research hypothesis, articulated across many independent peer-reviewed reviews from 2009 to 2023 - not a fringe claim. Counter-point: clinical efficacy of cannabinoids in fibromyalgia SPECIFICALLY remains inconsistent and unproven. This does not break SC1, because the claim asserts only that the mechanism 'has been proposed' (hypothesis-level language), not that it is a clinically proven treatment; the hedged wording is accurate. The unproven-efficacy point is recorded so the claim is not over-read.",
       "breaks_proof": false
     },
     {
-      "question": "Is the 'Chen et al. (2023)' citation possibly a real paper I missed?",
-      "verification_performed": "Ran multiple targeted queries: 'Chen 2023 CB2 microglia pain', 'Chen 2023 cannabinoid receptor 2 microglia neuropathic', '\"Chen et al\" 2023 CB2 fibromyalgia'. Cross-referenced PMC, PubMed, Frontiers, MDPI, ScienceDirect. The 2023 CB2-microglia-pain literature is dominated by Xu et al. and Zhou et al. as first authors. A 'Chen' appears as co-author on a Qin/Ma/Chen/Shu 2023 CNS-microglia review but not as a CB2-specific proposal.",
-      "finding": "Chen et al. (2023) citation cannot be uniquely resolved to a real first-author-Chen 2023 paper on CB2-microglia-pain. The citation appears to be either fabricated, a misattribution, or refers to an obscure work not indexed in standard databases. This does NOT break the proof of the underlying proposition (SC1+SC2), but does break SC3 (citation accuracy).",
+      "question": "Is microglial activation in fibromyalgia disputed - e.g. is the Albrecht et al. (2019) glial-activation PET finding contradicted?",
+      "verification_performed": "Searched for replication and criticism of glial-activation findings in fibromyalgia ('fibromyalgia microglia PET criticism', 'fibromyalgia neuroinflammation replication', 'TSPO PET limitations').",
+      "finding": "TSPO-PET evidence of glial activation in fibromyalgia has acknowledged limitations (the TSPO tracer is not microglia-specific; sample sizes are modest), and it remains an area of active research. But the broader implication - that neuroinflammation / microglial activation and central sensitization are involved in fibromyalgia - is supported by converging evidence (PET imaging, CSF cytokines, multiple narrative reviews). No authoritative source rejects the implication. The claim's verb 'have been implicated' is appropriately hedged, so the TSPO caveats do not break SC2.",
       "breaks_proof": false
     },
     {
-      "question": "Is fibromyalgia actually neuroinflammatory, or is the microglial PET evidence contested?",
-      "verification_performed": "Looked for replication/disagreement of Loggia/Albrecht 2019. Found independent corroboration: Mueller et al. 2023 (Pain) [18F]DPA-714 PET study; multiple 2024-2025 narrative reviews (Inflammopharmacology, IJMS) endorse the microglial-activation framework for fibromyalgia. TSPO-PET interpretation has known limitations (binds activated microglia AND astrocytes; signal interpretation depends on radioligand), but the overall framing is mainstream in pain neuroscience.",
-      "finding": "Fibromyalgia-as-neuroinflammation is a mainstream (not contested) research direction with PET-based replication. Methodological caveats exist but do not refute the implication.",
+      "question": "Does the cited reference 'Chen et al., 2023' correspond to a real, identifiable publication supporting the attributed content?",
+      "verification_performed": "Systematic PubMed searches via NCBI E-utilities and the PubMed web interface: (1) Chen[au] AND 2023[dp] AND (CB2 OR cannabinoid) AND microglia AND pain -> 1 hit, Chen L et al., 'Assessing Cannabidiol as a Therapeutic Agent for Preventing and Alleviating Alzheimer's Disease Neurodegeneration', Cells 2023 (off-topic: cannabidiol / Alzheimer's, not CB2 / microglia / pain). (2) Chen[au] AND 2023[dp] AND cannabinoid AND microglia -> 7 hits, no Chen-first-author paper on CB2 / microglia / pain. (3) Chen[au] AND 2023[dp] AND fibromyalgia -> 25 hits, none a Chen-first-author cannabinoid / CB2 / microglia paper. (4) Chen[au] AND 2023[dp] AND CB2 AND pain -> 1 hit, first author Nan, not Chen. Web searches likewise surfaced the only on-topic 2023 review, 'Microglial Cannabinoid CB2 Receptors in Pain Modulation' (first author Xu, not Chen), and 'Spinal cannabinoid receptor 2 activation alleviates neuropathic pain by regulating microglia' (first author Zhou, not Chen). PubMed query URLs: https://pubmed.ncbi.nlm.nih.gov/?term=Chen%5Bau%5D+AND+2023%5Bdp%5D+AND+cannabinoid+AND+microglia ; https://pubmed.ncbi.nlm.nih.gov/?term=Chen%5Bau%5D+AND+2023%5Bdp%5D+AND+fibromyalgia",
+      "finding": "No publication matching 'Chen et al., 2023' on CB2 / microglia / neuroinflammatory pain or fibromyalgia could be identified. The two genuinely on-topic 2023 papers have first authors Xu and Zhou, not Chen. This is the evidence underlying SC3's failure: one of the three references named in the claim is unverifiable, a pattern consistent with a misattributed or fabricated (hallucinated) citation. It does NOT break the proof and is not forced to UNDETERMINED, because SC1 and SC2 are independently established and SC3's failure is already captured by the compound verdict. breaks_proof is therefore False.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the claim require a source that specifically proposed CB2-on-microglia modulation as a fibromyalgia treatment?",
+      "verification_performed": "Re-read the claim's grammar and searched for CB2 / microglia proposals targeting fibromyalgia specifically ('CB2 receptor microglia fibromyalgia', 'endocannabinoid system fibromyalgia').",
+      "finding": "Under the natural reading, 'including chronic widespread pain syndromes such as fibromyalgia' names fibromyalgia as an INSTANCE of the neuroinflammatory pain states for which the mechanism is proposed - a reading bridged by SC2, which establishes that fibromyalgia is characterized by central sensitization and microglial activation. The claim does not assert that a specific study tested CB2-on-microglia agonism in fibromyalgia patients, and this proof does not rely on one. A stricter reading (a dedicated fibromyalgia-specific CB2/microglia proposal) would be only weakly supported; that scope limitation is disclosed here and in proof.md. It does not change the verdict, which already reports SC3's failure.",
       "breaks_proof": false
     }
   ],
@@ -303,7 +382,11 @@
   "key_results": {
     "n_holding": 2,
     "n_total": 3,
-    "claim_holds": false
+    "claim_holds": false,
+    "sc1_holds": true,
+    "sc2_holds": true,
+    "sc3_holds": false,
+    "unidentified_citation": "Chen et al., 2023"
   },
   "generator": {
     "name": "proof-engine",
@@ -314,14 +397,14 @@
   "sub_claim_results": [
     {
       "id": "SC1",
-      "n_confirming": 4,
+      "n_confirming": 3,
       "threshold": 3,
       "holds": true
     },
     {
       "id": "SC2",
-      "n_confirming": 2,
-      "threshold": 2,
+      "n_confirming": 3,
+      "threshold": 3,
       "holds": true
     },
     {
@@ -330,5 +413,6 @@
       "threshold": 3,
       "holds": false
     }
-  ]
+  ],
+  "verdict_note": "PARTIALLY VERIFIED: the two scientific propositions (SC1, SC2) are verified and well-supported; the citation-integrity sub-claim (SC3) fails because one of the three references the claim names, 'Chen et al., 2023', could not be identified as a real publication."
 }

@@ -1,136 +1,190 @@
-# Proof Audit
+# Audit: "Activation of cannabinoid receptor type 2 (CB2) on microglia has been proposed as a mechanism for modulating neuroinflammatory pain states, including chronic widespread pain syndromes such as fibromyalgia where central sensitization and microglial activation have been implicated (Cabral & Griffin-Thomas, 2009; Stella, 2010; Chen et al., 2023)."
 
-**Claim audited.** Activation of cannabinoid receptor type 2 (CB2) on microglia has been proposed as a mechanism for modulating neuroinflammatory pain states, including chronic widespread pain syndromes such as fibromyalgia where central sensitization and microglial activation have been implicated (Cabral & Griffin-Thomas, 2009; Stella, 2010; Chen et al., 2023).
+**Generated:** 2026-05-20
 
-**Verdict.** PARTIALLY VERIFIED. SC1 and SC2 hold; SC3 (citation accuracy) fails because "<!-- not-a-citation-start -->Chen et al. (2023)<!-- not-a-citation-end -->" is not identifiable as written.
+**Reader summary:** [proof.md](proof.md)
 
-**Generated.** 2026-05-20.
+**Proof script:** [proof.py](proof.py)
 
-## Environment Notes
+## Claim Interpretation
 
-The proof was executed in a Python 3.10 sandbox where the upstream `proof-citations` PyPI package (which has a `>=3.11` floor) could not be installed. A minimal local shim (`proof_citations_shim.py`) registers a `proof_citations.verify` module that does plain substring matching after HTML stripping. The shim:
+The natural-language claim asserts, about the scientific literature, that (a) activation of cannabinoid receptor type 2 (CB2) on microglia has been *proposed* as a mechanism for modulating neuroinflammatory pain states, that this class of states includes chronic widespread pain syndromes such as fibromyalgia, and that central sensitization and microglial activation have been *implicated* in fibromyalgia; and (b) three named references support this — <!-- not-a-citation-start -->Cabral & Griffin-Thomas (2009)<!-- not-a-citation-end -->, <!-- not-a-citation-start -->Stella (2010)<!-- not-a-citation-end -->, and <!-- not-a-citation-start -->Chen et al. (2023)<!-- not-a-citation-end -->.
 
-- Honors the standard `snapshot` / `snapshot_file` fields on `empirical_facts` entries.
-- Handles HTML stripping, basic Unicode normalization, and simple partial-match scoring.
-- Does NOT support Wayback fallback or open-access lookups.
+The formal interpretation treats the claim as a compound of three sub-claims joined by AND. SC1 tests the first scientific proposition (the CB2/microglia mechanism has been proposed for neuroinflammatory pain). SC2 tests the second scientific proposition (central sensitization and microglial activation are implicated in fibromyalgia). SC3 tests the integrity of the claim's citation apparatus (each of the three named references resolves to a real, identifiable publication). The compound operator is AND: all three sub-claims must hold for the claim, taken as a complete unit, to be fully PROVED.
 
-PubMed, PMC, and MDPI returned HTTP 403 to the shim's automated fetcher (a documented limitation in the proof-engine guidance for these domains). Snapshots were therefore added for every PubMed-, PMC-, and MDPI-hosted source, using verbatim text from the listing/abstract sections of those pages that I confirmed via `workspace.web_fetch`. The Frontiers paper (Zhou et al. 2023) was fetched live without difficulty.
+SC1 and SC2 are operationalized as source-counting sub-claims with a threshold of three independently published peer-reviewed sources — the standard consensus floor. SC3 is operationalized as a citation-integrity count: the claim names exactly three references, so the threshold is three and the sub-claim holds only if all three resolve.
 
-This shim is sandbox-only and would be replaced by the upstream `proof-citations` package in a Python 3.11+ environment.
+**Formalization scope.** Two aspects of the natural-language claim are operationalized in ways that should be made explicit. First, the verbs "has been proposed" and "have been implicated" are treated at face value as hedged, hypothesis-level assertions; the proof tests whether the mechanism has been *proposed* and the phenomena *implicated*, and does not test clinical efficacy of cannabinoid therapy in fibromyalgia (which is separately noted in the adversarial checks as inconsistent/unproven). Second, the clause "including chronic widespread pain syndromes such as fibromyalgia" is read as naming fibromyalgia as an *instance* of the neuroinflammatory pain states for which the mechanism is proposed — a reading bridged by SC2. Under this reading SC1 does not require a study specifically proposing CB2-on-microglia agonism as a fibromyalgia therapy. A stricter reading (a dedicated fibromyalgia-specific CB2/microglia proposal) is addressed in adversarial check 4 and would be only weakly supported; this divergence is disclosed and does not affect the verdict, which already reports SC3's failure.
+
+*Source: proof.py JSON summary `claim_formal` and `claim_natural`*
+
+## Claim Specification
+
+| Field | Value |
+|-------|-------|
+| Subject | The peer-reviewed literature on CB2-receptor activation on microglia, neuroinflammatory pain, and fibromyalgia, plus the three references the claim cites |
+| Claim type | compound_empirical |
+| Proof direction | affirm |
+| Time-sensitive | No |
+| Compound operator | AND |
+| SC1 | CB2-on-microglia mechanism proposed for neuroinflammatory pain — operator `>=`, threshold 3 |
+| SC2 | Central sensitization and microglial activation implicated in fibromyalgia — operator `>=`, threshold 3 |
+| SC3 | All three cited references resolve to real publications — operator `>=`, threshold 3 |
+
+*Source: proof.py JSON summary `claim_formal`*
+
+## Fact Registry
+
+| ID | Key | Label |
+|----|-----|-------|
+| B1 | sc1_cabral | SC1: <!-- not-a-citation-start -->Cabral & Griffin-Thomas (2009)<!-- not-a-citation-end --> — CB2 localized to microglia |
+| B2 | sc1_stella | SC1: <!-- not-a-citation-start -->Stella (2010)<!-- not-a-citation-end --> — CB2 on microglia; activation regulates microglial function |
+| B3 | sc1_xu | SC1: <!-- not-a-citation-start -->Xu et al. (2023)<!-- not-a-citation-end --> — CB2 on activated microglia in spinal pain circuitry |
+| B4 | sc2_brainsci | SC2: <!-- not-a-citation-start -->Findeisen et al. (2025)<!-- not-a-citation-end --> — maladaptive microglial activation in fibromyalgia |
+| B5 | sc2_albrecht | SC2: <!-- not-a-citation-start -->Albrecht et al. (2019)<!-- not-a-citation-end --> — PET evidence of brain glial activation in fibromyalgia |
+| B6 | sc2_jurado | SC2: <!-- not-a-citation-start -->Jurado-Priego et al. (2024)<!-- not-a-citation-end --> — central sensitization as a process in fibromyalgia |
+| B7 | sc3_cabral | SC3: cited reference 1 — <!-- not-a-citation-start -->Cabral & Griffin-Thomas (2009)<!-- not-a-citation-end --> resolves to a real publication |
+| B8 | sc3_stella | SC3: cited reference 2 — <!-- not-a-citation-start -->Stella (2010)<!-- not-a-citation-end --> resolves to a real publication |
+| A1 | — | SC1 verified-source count |
+| A2 | — | SC2 verified-source count |
+| A3 | — | SC3 resolved-citation count |
+
+*Source: proof.py JSON summary `evidence`*
+
+## Full Evidence Table
+
+### Type A (Computed) Facts
+
+| ID | Fact | Method | Result |
+|----|------|--------|--------|
+| A1 | SC1 verified-source count | count(verified SC1 citations) | 3 |
+| A2 | SC2 verified-source count | count(verified SC2 citations) | 3 |
+| A3 | SC3 resolved-citation count | count(cited references resolving to a real publication); the claim names 3 references, so a count below 3 means at least one citation is unverifiable | 2 |
+
+### Type B (Empirical) Facts
+
+| ID | Fact | Source | URL | Quote | Status | Method | Credibility |
+|----|------|--------|-----|-------|--------|--------|-------------|
+| B1 | CB2 expression localized to microglia | <!-- not-a-citation-start -->Cabral & Griffin-Thomas (2009)<!-- not-a-citation-end -->, *Expert Rev. Mol. Med.* 11:e3 | https://pmc.ncbi.nlm.nih.gov/articles/PMC2768535/ | &ldquo;This expression of CB2 has been localized primarily to microglia, the resident macrophages of the CNS.&rdquo; | verified | full_quote | Government |
+| B2 | CB1/CB2 on microglia; activation regulates microglial function | <!-- not-a-citation-start -->Stella (2010)<!-- not-a-citation-end -->, *Glia* 58(9):1017–1030 | https://pmc.ncbi.nlm.nih.gov/articles/PMC2919281/ | &ldquo;These receptors are expressed by microglia, astrocytes and astrocytomas, and their activation regulates these cells&rsquo; differentiation, functions and viability.&rdquo; | verified | full_quote | Government |
+| B3 | CB2 increased in activated microglia in spinal cord | <!-- not-a-citation-start -->Xu et al. (2023)<!-- not-a-citation-end -->, *Int. J. Mol. Sci.* 24(3):2348 | https://pmc.ncbi.nlm.nih.gov/articles/PMC9917135/ | &ldquo;Accumulating evidence has demonstrated that the expression of CB2 receptors is significantly increased in activated microglia in the spinal cord&rdquo; | verified | full_quote | Government |
+| B4 | Maladaptive microglial cell activation in fibromyalgia | <!-- not-a-citation-start -->Findeisen, Guymer & Littlejohn (2025)<!-- not-a-citation-end -->, *Brain Sciences* 15(2):206 | https://pmc.ncbi.nlm.nih.gov/articles/PMC11852494/ | &ldquo;There is a growing focus on processes occurring in the dorsal root ganglia and the role of maladaptive microglial cell activation.&rdquo; | verified | full_quote | Government |
+| B5 | PET evidence of brain glial activation in fibromyalgia | <!-- not-a-citation-start -->Albrecht et al. (2019)<!-- not-a-citation-end -->, *Brain Behav. Immun.* 75:72–83 | https://pmc.ncbi.nlm.nih.gov/articles/PMC6541932/ | &ldquo;While mounting evidence suggests a role for neuroinflammation, no study has directly provided evidence of brain glial activation in FM.&rdquo; | verified | full_quote | Government |
+| B6 | Central sensitization an investigated process in fibromyalgia | <!-- not-a-citation-start -->Jurado-Priego et al. (2024)<!-- not-a-citation-end -->, *Biomedicines* 12(7):1543 | https://pmc.ncbi.nlm.nih.gov/articles/PMC11275111/ | &ldquo;three underlying processes in fibromyalgia have been investigated. These include central sensitization, associated with an increase in the release of both excitatory and inhibitory neurotransmitters&rdquo; | verified | full_quote | Government |
+| B7 | <!-- not-a-citation-start -->Cabral & Griffin-Thomas (2009)<!-- not-a-citation-end --> is a real publication | PubMed Central bibliographic record PMC2768535 | https://pmc.ncbi.nlm.nih.gov/articles/PMC2768535/ | &ldquo;Expert Rev Mol Med. 2009 Jan 20;11:e3. doi: 10.1017/S1462399409000957&rdquo; | verified | full_quote | Government |
+| B8 | <!-- not-a-citation-start -->Stella (2010)<!-- not-a-citation-end --> is a real publication | PubMed Central bibliographic record PMC2919281 | https://pmc.ncbi.nlm.nih.gov/articles/PMC2919281/ | &ldquo;Glia. 2010 Jul;58(9):1017-1030. doi: 10.1002/glia.20983&rdquo; | verified | full_quote | Government |
+
+*Source: proof.py JSON summary `evidence`*
 
 ## Citation Verification Details
 
-| Fact ID | Source | URL | Verification status | Method | Notes |
-|---|---|---|---|---|---|
-| B1 | Cabral & <!-- not-a-citation-start -->Griffin-Thomas (2009)<!-- not-a-citation-end -->, Expert Rev Mol Med 11:e3 | https://pubmed.ncbi.nlm.nih.gov/19152719/ | verified (via snapshot) | full_quote | PubMed live fetch returned 403; snapshot from listing page metadata. PubMed ID, DOI, and authors are independently confirmed by Cambridge Core and SciRP indexing. |
-| B2 | Stella N (2010), Glia 58(9):1017–30 | https://pubmed.ncbi.nlm.nih.gov/20468046/ | verified (via snapshot) | full_quote | Workspace web_fetch returned the full PubMed page including meta-description and abstract; snapshot is verbatim. |
-| B3 | <!-- not-a-citation-start -->Zhou et al. (2023)<!-- not-a-citation-end -->, Front Mol Neurosci 16:1061220 | https://www.frontiersin.org/journals/molecular-neuroscience/articles/10.3389/fnmol.2023.1061220/full | verified (live) | full_quote | Live fetch succeeded; exact verbatim quote located in the Conclusion section. |
-| B4 | <!-- not-a-citation-start -->Xu et al. (2023)<!-- not-a-citation-end -->, Int J Mol Sci 24(3):2348 | https://www.mdpi.com/1422-0067/24/3/2348 | verified (via snapshot) | full_quote | MDPI returned 403; snapshot from search-engine summary cross-checked against ResearchGate listing of authors. |
-| B5 | Albrecht/<!-- not-a-citation-start -->Loggia et al. (2019)<!-- not-a-citation-end -->, Brain Behav Immun 75:72–83 | https://pubmed.ncbi.nlm.nih.gov/30223011/ | verified (via snapshot) | full_quote | PubMed live fetch 403; snapshot from listing metadata + abstract section. PMID and authors independently confirmed by PMC and ScienceDirect indexing. |
-| B6 | "Neuroinflammatory and Immunological Aspects of Fibromyalgia" (2025) | https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11852494/ | verified (via snapshot) | full_quote | PMC live fetch 403; snapshot from search-result summary cross-checked against the article's open-access listing. |
+All eight empirical citations resolved to the same outcome, so the per-citation fields are reported once and then noted individually.
 
-All six confirming sources verify against snapshot or live-fetch content. The verdict therefore does NOT carry the "(with unverified citations)" qualifier — but the **fetch_mode** for five of six is `snapshot`, which is a weaker trust boundary than `live`. Readers in Python 3.11+ environments can replace the shim with `pip install proof-citations` and re-run to obtain live verification.
+**B1 — <!-- not-a-citation-start -->Cabral & Griffin-Thomas (2009)<!-- not-a-citation-end -->.** Status: verified. Method: full_quote (the quote was an exact match; `coverage_pct` is null, as expected for a full-quote match). Fetch mode: snapshot. Verbatim: yes. Impact: not applicable (verified).
 
-## Sub-claim Computation
+**B2 — <!-- not-a-citation-start -->Stella (2010)<!-- not-a-citation-end -->.** Status: verified. Method: full_quote. Fetch mode: snapshot. Verbatim: yes. The quote contains a typographic apostrophe (U+2019) in "cells'"; it was matched after Unicode normalization within the full-quote pass.
+
+**B3 — <!-- not-a-citation-start -->Xu et al. (2023)<!-- not-a-citation-end -->.** Status: verified. Method: full_quote. Fetch mode: snapshot. Verbatim: yes.
+
+**B4 — <!-- not-a-citation-start -->Findeisen et al. (2025)<!-- not-a-citation-end -->.** Status: verified. Method: full_quote. Fetch mode: snapshot. Verbatim: yes.
+
+**B5 — <!-- not-a-citation-start -->Albrecht et al. (2019)<!-- not-a-citation-end -->.** Status: verified. Method: full_quote. Fetch mode: snapshot. Verbatim: yes.
+
+**B6 — <!-- not-a-citation-start -->Jurado-Priego et al. (2024)<!-- not-a-citation-end -->.** Status: verified. Method: full_quote. Fetch mode: snapshot. Verbatim: yes.
+
+**B7 — bibliographic record for <!-- not-a-citation-start -->Cabral & Griffin-Thomas (2009)<!-- not-a-citation-end -->.** Status: verified. Method: full_quote. Fetch mode: snapshot. Verbatim: yes.
+
+**B8 — bibliographic record for <!-- not-a-citation-start -->Stella (2010)<!-- not-a-citation-end -->.** Status: verified. Method: full_quote. Fetch mode: snapshot. Verbatim: yes.
+
+**Note on fetch mode.** All eight citations were verified with fetch mode `snapshot`. PubMed Central (`pmc.ncbi.nlm.nih.gov`) blocks or truncates automated HTTP requests non-deterministically — an identical request returns the full article on one run and a roughly 21 KB stub on the next. To make this proof deterministic and offline-reproducible, `proof.py` disables live fetching (by setting the verifier module's `requests` reference to `None`, a documented monkeypatch pattern) and verifies every quote against committed full-page snapshots in the `snapshots/` directory, captured 2026-05-20 with a browser user-agent. A re-runner therefore obtains the same result regardless of PMC's current behavior. The snapshot files are part of the proof bundle.
+
+*Source: proof.py JSON summary `evidence[*].verification`*
+
+## Computation Traces
 
 ```
-n_sc1 = count(verified or partial in [B1,B2,B3,B4]) = 4
-sc1_threshold = 3
-sc1_holds = (4 >= 3) = True
-
-n_sc2 = count(verified or partial in [B5,B6]) = 2
-sc2_threshold = 2
-sc2_holds = (2 >= 2) = True
-
-n_sc3 = count(citation_audit entries with first_author_accurate AND exists AND supports_attribution)
-       = 2  (Cabral & Griffin-Thomas 2009; Stella 2010)
-sc3_threshold = 3
-sc3_holds = (2 >= 3) = False
-
-n_holding = sc1_holds + sc2_holds + sc3_holds = 2
-n_total = 3
-claim_holds = (n_holding == n_total) = (2 == 3) = False
+SC1 (CB2/microglia mechanism proposed): 3 >= 3 = True
+SC2 (central sensitization & microglial activation in fibromyalgia): 3 >= 3 = True
+SC3 (all three cited references resolve): 2 >= 3 = False
+compound (all sub-claims hold): 2 == 3 = False
 ```
 
-Because at least one but not all sub-claims hold, the verdict is `PARTIALLY VERIFIED`.
+n_holding = 2 of n_total = 3 sub-claims. Because some but not all sub-claims hold, the verdict is PARTIALLY VERIFIED.
 
-## SC3 Citation-Accuracy Audit (Detail)
+*Source: proof.py inline output (execution trace)*
 
-### Cabral & <!-- not-a-citation-start -->Griffin-Thomas (2009)<!-- not-a-citation-end --> — VERIFIED
+## Independent Source Agreement (Rule 6)
 
-- Title: "Emerging role of the cannabinoid receptor CB2 in immune regulation: therapeutic prospects for neuroinflammation"
-- Journal: Expert Reviews in Molecular Medicine
-- Volume/article: 11:e3
-- DOI: 10.1017/S1462399409000957
-- Identifiers: PubMed 19152719; PMC 2768535
-- First-author accurate: yes (Cabral GA; Griffin-Thomas L is second author)
-- Year accurate: yes (2009)
-- Substantively supports the claim: yes — explicitly proposes CB2 as a therapeutic target in neuroinflammation, with CB2 expression on microglia central to the framework.
+**SC1 cross-check.** Three sources consulted, three verified. <!-- not-a-citation-start -->Cabral & Griffin-Thomas (2009)<!-- not-a-citation-end -->, <!-- not-a-citation-start -->Stella (2010)<!-- not-a-citation-end -->, and <!-- not-a-citation-start -->Xu et al. (2023)<!-- not-a-citation-end --> are three separate publications by distinct author groups, spanning 2009 to 2023, with no shared authorship. They independently articulate the CB2-on-microglia mechanism; agreement holds.
 
-### <!-- not-a-citation-start -->Stella (2010)<!-- not-a-citation-end --> — VERIFIED
+**SC2 cross-check.** Three sources consulted, three verified. A 2025 narrative review (Findeisen et al.), a 2019 multi-site PET primary study (Albrecht et al.), and a 2024 pathophysiology review (Jurado-Priego et al.) — distinct author groups, distinct study types. The set collectively covers both conjuncts of the sub-claim: microglial/glial activation (Findeisen, Albrecht) and central sensitization (Jurado-Priego). Agreement holds.
 
-- Title: "Cannabinoid and cannabinoid-like receptors in microglia, astrocytes, and astrocytomas"
-- Journal: *Glia* 58(9):1017–30
-- DOI: 10.1002/glia.20983
-- Identifiers: PubMed 20468046; PMC 2919281
-- First-author accurate: yes (Stella N, sole author)
-- Year accurate: yes (2010)
-- Substantively supports the claim: yes — reviews CB1/CB2 expression on microglia, proposes therapeutic targeting for neuroinflammation, including "selective compounds targeting cannabinoid-like receptors constitute promising therapeutics to manage neuroinflammation."
+**SC3 cross-check.** Three references named in the claim; two resolve and verify (Cabral & Griffin-Thomas 2009; Stella 2010), one does not ("Chen et al., 2023"). Agreement does not hold (2 of 3).
 
-### <!-- not-a-citation-start -->Chen et al. (2023)<!-- not-a-citation-end --> — FAILED
+**Conflict of interest.** The claim concerns the scientific literature itself, not a commercial product or organization, so the standard COI taxonomy (organizational, funding dependency, institutional co-benefit, competitive antagonism, revolving door, advocacy) has no party to attach to. `coi_flags` is an explicit empty list for each sub-claim. No source has a conflict of interest with the claim's subject; no majority-COI condition applies.
 
-Search log:
-- Query: `Chen 2023 cannabinoid receptor 2 microglia neuropathic pain neuroinflammation`. Results: Zhou et al. 2023 (Front Mol Neurosci), Xu et al. 2023 (IJMS), Komorowska-Müller & Schmöle 2021 (predates citation). No first-author Chen match.
-- Query: `"Chen et al" 2023 CB2 agonist microglial fibromyalgia OR "widespread pain"`. Results: no first-author Chen match on the topic.
-- Query: `Chen 2023 "CB2" microglia review article PMC PubMed`. Top result: "Microglia activation in central nervous system disorders" (Qin, Ma, Chen & Shu 2023) — Chen is third author, not first; paper is not a CB2-microglia-pain proposal.
-- Query: `"Chen" first author 2023 endocannabinoid CB2 microglia pain`. Best matches still have first authors other than Chen.
+*Source: proof.py JSON summary `cross_checks`*
 
-Conclusion: the citation as written ("Chen et al., 2023") cannot be uniquely resolved to a real first-author-Chen 2023 paper on CB2-microglia-pain. The cited proposal *is* well-supported in 2023 literature (Xu et al. 2023, Zhou et al. 2023), so the most likely explanations are misattribution or hallucination. SC3 therefore fails.
+## Adversarial Checks (Rule 5)
 
-Impact: SC1 and SC2 do not depend on <!-- not-a-citation-start -->Chen et al. (2023)<!-- not-a-citation-end --> — they hold on independent verified sources. The failure is confined to citation accuracy.
+**Check 1 — Is the CB2-on-microglia mechanism a genuine proposal or fringe?** Searched PubMed and the web for reviews and primary literature on CB2 receptors, microglia and pain, and cross-checked whether cannabinoids are an established fibromyalgia treatment. Finding: the mechanism is a well-established research hypothesis articulated across many independent peer-reviewed reviews from 2009 to 2023 — not fringe. A separate caution: clinical efficacy of cannabinoids in fibromyalgia specifically remains inconsistent and unproven; this does not break SC1 because the claim asserts only that the mechanism "has been proposed," but it is recorded so the claim is not over-read as evidence of a working therapy. Breaks proof: No.
 
-## Adversarial Checks
+**Check 2 — Is microglial activation in fibromyalgia disputed?** Searched for replication and criticism of glial-activation findings in fibromyalgia, including TSPO-PET limitations. Finding: TSPO-PET evidence has acknowledged limitations (the tracer is not microglia-specific; modest sample sizes) and the field remains active, but the broader implication is supported by converging evidence (PET, CSF cytokines, multiple reviews) and no authoritative source rejects it. The claim's verb "implicated" is appropriately hedged. Breaks proof: No.
 
-### 1. Has the CB2-on-microglia proposal been substantively contradicted?
+**Check 3 — Does "Chen et al., 2023" correspond to a real publication?** This is the decisive check. Systematic PubMed searches via NCBI E-utilities and the PubMed web interface: (1) Chen[au] AND 2023[dp] AND (CB2 OR cannabinoid) AND microglia AND pain — 1 hit, Chen L et al., "Assessing Cannabidiol as a Therapeutic Agent for Preventing and Alleviating Alzheimer's Disease Neurodegeneration," *Cells* 2023 (off-topic: cannabidiol/Alzheimer's, not CB2/microglia/pain); (2) Chen[au] AND 2023[dp] AND cannabinoid AND microglia — 7 hits, no Chen-first-author paper on CB2/microglia/pain; (3) Chen[au] AND 2023[dp] AND fibromyalgia — 25 hits, none a Chen-first-author cannabinoid/CB2/microglia paper; (4) Chen[au] AND 2023[dp] AND CB2 AND pain — 1 hit, first author Nan, not Chen. Web searches surfaced the only on-topic 2023 review, "Microglial Cannabinoid CB2 Receptors in Pain Modulation" (first author Xu), and "Spinal cannabinoid receptor 2 activation alleviates neuropathic pain by regulating microglia" (first author Zhou). PubMed query URLs: `https://pubmed.ncbi.nlm.nih.gov/?term=Chen%5Bau%5D+AND+2023%5Bdp%5D+AND+cannabinoid+AND+microglia` and `https://pubmed.ncbi.nlm.nih.gov/?term=Chen%5Bau%5D+AND+2023%5Bdp%5D+AND+fibromyalgia`. Finding: no publication matching "Chen et al., 2023" on this topic could be identified; the on-topic 2023 papers are authored by Xu et al. and Zhou et al. This is the evidence underlying SC3's failure — a pattern consistent with a misattributed or hallucinated citation. It does not force UNDETERMINED, because SC1 and SC2 are independently established and SC3's failure is captured by the compound verdict. Breaks proof: No.
 
-Verification performed: searched for "CB2 microglia mechanism debunked," "CB2 agonist clinical trial failed pain," "cannabinoid fibromyalgia cochrane criticism."
+**Check 4 — Does the claim require a fibromyalgia-specific CB2/microglia proposal?** Re-read the claim's grammar and searched for CB2/microglia proposals targeting fibromyalgia specifically. Finding: under the natural reading, "including … fibromyalgia" names fibromyalgia as an instance of the relevant pain states (bridged by SC2); the claim does not assert a fibromyalgia-specific CB2/microglia study, and the proof does not rely on one. A stricter reading would be only weakly supported; this scope limitation is disclosed and does not change the verdict. Breaks proof: No.
 
-Findings: Cochrane and systematic reviews (Walitt et al. 2016; Bourke et al. 2023) rate the clinical-trial evidence for cannabinoids in fibromyalgia as *low quality* (small samples, short duration, inconsistent outcomes). However, these critiques target **clinical efficacy of cannabinoid drugs in humans**, not the **preclinical mechanistic proposal** that CB2 activation on microglia can modulate neuroinflammatory pain. The mechanistic literature has expanded steadily through 2023–2025.
+*Source: proof.py JSON summary `adversarial_checks`*
 
-Does not break the proof. The natural-language claim's epistemic register is "has been proposed" / "have been implicated," not "is effective."
+## Source Credibility Assessment
 
-### 2. Is the "<!-- not-a-citation-start -->Chen et al. (2023)<!-- not-a-citation-end -->" citation a real paper I missed?
+| Fact ID | Domain | Type | Note |
+|---------|--------|------|------|
+| B1 | nih.gov | Government | Peer-reviewed journal article hosted on NIH/PubMed Central; credibility tier 5 |
+| B2 | nih.gov | Government | Peer-reviewed journal article hosted on NIH/PubMed Central; credibility tier 5 |
+| B3 | nih.gov | Government | Peer-reviewed journal article hosted on NIH/PubMed Central; credibility tier 5 |
+| B4 | nih.gov | Government | Peer-reviewed journal article hosted on NIH/PubMed Central; credibility tier 5 |
+| B5 | nih.gov | Government | Peer-reviewed journal article hosted on NIH/PubMed Central; credibility tier 5 |
+| B6 | nih.gov | Government | Peer-reviewed journal article hosted on NIH/PubMed Central; credibility tier 5 |
+| B7 | nih.gov | Government | Peer-reviewed journal article hosted on NIH/PubMed Central; credibility tier 5 |
+| B8 | nih.gov | Government | Peer-reviewed journal article hosted on NIH/PubMed Central; credibility tier 5 |
 
-Verification performed: see SC3 search log above.
+All sources are peer-reviewed academic publications accessed via PubMed Central, which the credibility module classifies by its `nih.gov` government domain (tier 5). No source is flagged unreliable or satire. The verdict does not depend on any low-credibility source.
 
-Finding: no unambiguous match. Documented as the basis for SC3 failure.
+*Source: proof.py JSON summary `evidence[*].verification.credibility`*
 
-Does not break the proof (SC1+SC2 do not depend on this source); it produces the partial-verification verdict.
+## Source Data
 
-### 3. Is fibromyalgia-as-neuroinflammation contested?
+This is a qualitative/consensus proof: no numeric values were extracted from quote text. The `extractions` records therefore carry citation-verification status per source rather than parsed values.
 
-Verification performed: searched for replication/disagreement of Loggia/Albrecht 2019.
+| Fact ID | Value | Found in quote | Quote snippet (first 80 chars) |
+|---------|-------|----------------|--------------------------------|
+| B1 | verified | Yes | This expression of CB2 has been localized primarily to microglia, the resident m |
+| B2 | verified | Yes | These receptors are expressed by microglia, astrocytes and astrocytomas, and the |
+| B3 | verified | Yes | Accumulating evidence has demonstrated that the expression of CB2 receptors is s |
+| B4 | verified | Yes | There is a growing focus on processes occurring in the dorsal root ganglia and t |
+| B5 | verified | Yes | While mounting evidence suggests a role for neuroinflammation, no study has dire |
+| B6 | verified | Yes | three underlying processes in fibromyalgia have been investigated. These include |
+| B7 | verified | Yes | Expert Rev Mol Med. 2009 Jan 20;11:e3. doi: 10.1017/S1462399409000957 |
+| B8 | verified | Yes | Glia. 2010 Jul;58(9):1017-1030. doi: 10.1002/glia.20983 |
 
-Findings: independent corroboration in Mueller et al. (2023, *Pain*, [18F]DPA-714 PET) and multiple 2024–2025 narrative reviews (Inflammopharmacology, IJMS). TSPO-PET ligand interpretation has known limitations (binds activated microglia *and* astrocytes; signal depends on radioligand) but the broader framing is mainstream in pain neuroscience.
+Extraction method: each quote was confirmed as a verbatim substring of the normalized source page (HTML stripped, Unicode normalized, whitespace collapsed, lowercased) by the bundled `verify_citations` matcher. No regex value extraction was performed because the claim is qualitative.
 
-Does not break the proof.
+*Source: proof.py JSON summary `evidence[*].extraction`; extraction-method narrative is author analysis*
 
-## Sources Consulted
+## Quality Checks
 
-External sources cited or relied on:
+- **Rule 1 (no hand-typed values):** N/A — qualitative proof, no numeric extraction from quotes.
+- **Rule 2 (citations fetched and verified):** Pass — all eight citations verified via `verify_all_citations` against committed snapshots.
+- **Rule 3 (system time):** N/A — `CLAIM_FORMAL.is_time_sensitive` is False; the claim is not date-dependent and no `date()` logic is used.
+- **Rule 4 (explicit claim interpretation):** Pass — `CLAIM_FORMAL` carries a compound `operator_note` and a per-sub-claim `operator_note`, including the formalization-scope disclosure for SC1.
+- **Rule 5 (adversarial checks):** Pass — four independent counter-evidence investigations recorded.
+- **Rule 6 (independent cross-checks):** Pass — three per-sub-claim cross-checks over distinct author groups; explicit empty `coi_flags`.
+- **Rule 7 (no hard-coded constants/formulas):** Pass — all evaluations via `compare()`; verdict via `apply_verdict_qualifier()`.
+- **validate_proof.py result:** PASS — 22/22 checks passed, 0 issues, 0 warnings.
 
-- [Cabral & <!-- not-a-citation-start -->Griffin-Thomas (2009)<!-- not-a-citation-end --> — PubMed 19152719](https://pubmed.ncbi.nlm.nih.gov/19152719/)
-- [Cabral & <!-- not-a-citation-start -->Griffin-Thomas (2009)<!-- not-a-citation-end --> — PMC 2768535](https://pmc.ncbi.nlm.nih.gov/articles/PMC2768535/)
-- [Stella N (2010) — PubMed 20468046](https://pubmed.ncbi.nlm.nih.gov/20468046/)
-- [<!-- not-a-citation-start -->Zhou et al. (2023)<!-- not-a-citation-end --> — Front Mol Neurosci](https://www.frontiersin.org/journals/molecular-neuroscience/articles/10.3389/fnmol.2023.1061220/full)
-- [<!-- not-a-citation-start -->Xu et al. (2023)<!-- not-a-citation-end --> — IJMS 24(3):2348](https://www.mdpi.com/1422-0067/24/3/2348)
-- [Albrecht/<!-- not-a-citation-start -->Loggia et al. (2019)<!-- not-a-citation-end --> — PubMed 30223011](https://pubmed.ncbi.nlm.nih.gov/30223011/)
-- [Albrecht/<!-- not-a-citation-start -->Loggia et al. (2019)<!-- not-a-citation-end --> — PMC 6541932](https://pmc.ncbi.nlm.nih.gov/articles/PMC6541932/)
-- [<!-- not-a-citation-start -->Neuroinflammatory and Immunological Aspects of Fibromyalgia (2025)<!-- not-a-citation-end --> — PMC 11852494](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11852494/)
-- [Walitt et al. — Cannabinoids for fibromyalgia (Cochrane summary, PMC 6457965)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6457965/)
+*Source: proof.py and validate_proof.py output*
 
-## Limitations
-
-1. **Snapshot-based verification.** Five of six confirming citations were verified via snapshot rather than live fetch because PubMed, PMC, and MDPI returned 403 to the sandbox shim. Snapshot content is taken from page text I had directly read via `workspace.web_fetch`, but a stricter Python 3.11+ run with the upstream `proof-citations` package would be slightly stronger.
-2. **SC3 cannot prove negative existence.** I cannot prove that no "<!-- not-a-citation-start -->Chen et al. (2023)<!-- not-a-citation-end -->" CB2-microglia-pain paper exists anywhere — only that none could be found via standard databases under multiple targeted queries. The failure is a "no unambiguous match," not a definitive refutation.
-3. **The claim's mechanistic register is preclinical.** This proof verifies that the mechanism has been *proposed*, not that CB2 agonists are clinically effective for fibromyalgia. A claim with "treats" or "is effective" instead of "has been proposed" would carry a much higher evidentiary bar that the current literature does not meet.
+---
+Generated by [proof-engine](https://github.com/yaniv-golan/proof-engine) v1.34.1 on 2026-05-20.
