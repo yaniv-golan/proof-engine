@@ -1,0 +1,2882 @@
+{
+  "doi:10.3389/fonc.2025.1613772": {
+    "identifier_type": "doi",
+    "identifier_value": "10.3389/fonc.2025.1613772",
+    "canonical_url": "https://doi.org/10.3389/fonc.2025.1613772",
+    "title": "Comparative analysis of ureteroileal anastomotic stricture rates: Bricker versus Wallace techniques in ileal conduit urinary diversion—a single-surgeon study with BMI-matched design and long-term follow-up excluding cancer recurrence bias",
+    "authors": [],
+    "year": 2025,
+    "venue": "Frontiers in Oncology",
+    "version": null,
+    "resolved_at": "2026-05-20T23:43:26+00:00",
+    "source_api": "api.crossref.org",
+    "raw": {
+      "crossref": {
+        "status": "ok",
+        "message-type": "work",
+        "message-version": "1.0.0",
+        "message": {
+          "indexed": {
+            "date-parts": [
+              [
+                2026,
+                5,
+                8
+              ]
+            ],
+            "date-time": "2026-05-08T10:36:36Z",
+            "timestamp": 1778236596997,
+            "version": "3.51.4"
+          },
+          "reference-count": 33,
+          "publisher": "Frontiers Media SA",
+          "license": [
+            {
+              "start": {
+                "date-parts": [
+                  [
+                    2025,
+                    10,
+                    24
+                  ]
+                ],
+                "date-time": "2025-10-24T00:00:00Z",
+                "timestamp": 1761264000000
+              },
+              "content-version": "vor",
+              "delay-in-days": 0,
+              "URL": "https://creativecommons.org/licenses/by/4.0/"
+            }
+          ],
+          "funder": [
+            {
+              "DOI": "10.13039/100016834",
+              "name": "Chongqing Municipal Health Commission",
+              "doi-asserted-by": "publisher",
+              "id": [
+                {
+                  "id": "10.13039/100016834",
+                  "id-type": "DOI",
+                  "asserted-by": "publisher"
+                }
+              ]
+            }
+          ],
+          "content-domain": {
+            "domain": [
+              "frontiersin.org"
+            ],
+            "crossmark-restriction": true
+          },
+          "short-container-title": [
+            "Front. Oncol."
+          ],
+          "abstract": "<jats:sec>\n                    <jats:title>Background</jats:title>\n                    <jats:p>Ureteroileal anastomotic stricture (UIAS) remains a critical complication following ileal conduit urinary diversion for muscle-invasive bladder cancer (MIBC). Despite widespread use of Bricker and Wallace techniques, comparative outcomes remain debated. This study compares stricture rates between these techniques under standardized surgical conditions, controlling for body habitus and without cancer recurrence-related stenosis.</jats:p>\n                  </jats:sec>\n                  <jats:sec>\n                    <jats:title>Methods</jats:title>\n                    <jats:p>A retrospective analysis included 46 patients undergoing laparoscopic ileal conduit diversion by a single surgeon (2017–2021). Patients were stratified into Bricker (n=18) and Wallace (n=28) groups, matched for BMI and comorbidities. Hydronephrosis severity was graded using the Onen system. Statistical analyses utilized Fisher’s exact test, Mann-Whitney U test, and t-test.</jats:p>\n                  </jats:sec>\n                  <jats:sec>\n                    <jats:title>Results</jats:title>\n                    <jats:p>No significant difference in hydronephrosis incidence was observed (Bricker: 11.1% vs. Wallace: 0%, p=0.148). However, the Bricker group exhibited longer operative time (301.89 ± 11.76 vs. 281.32 ± 10.15 minutes, p&amp;lt;0.001) and hospitalization duration (18.18 ± 8.22 vs. 11.38 ± 5.11 days, p=0.005). All strictures were asymptomatic (Onen Grade 1).</jats:p>\n                  </jats:sec>\n                  <jats:sec>\n                    <jats:title>Conclusion</jats:title>\n                    <jats:p>Both techniques demonstrate comparable safety regarding stricture rates. Wallace anastomosis offers superior operative efficiency, while Bricker requires additional time for technical precision. This study highlights the importance of standardized surgical protocols and long-term surveillance in optimizing urinary diversion outcomes.</jats:p>\n                  </jats:sec>",
+          "DOI": "10.3389/fonc.2025.1613772",
+          "type": "journal-article",
+          "created": {
+            "date-parts": [
+              [
+                2025,
+                10,
+                24
+              ]
+            ],
+            "date-time": "2025-10-24T04:14:28Z",
+            "timestamp": 1761279268000
+          },
+          "update-policy": "https://doi.org/10.3389/crossmark-policy",
+          "source": "Crossref",
+          "is-referenced-by-count": 1,
+          "title": [
+            "Comparative analysis of ureteroileal anastomotic stricture rates: Bricker versus Wallace techniques in ileal conduit urinary diversion—a single-surgeon study with BMI-matched design and long-term follow-up excluding cancer recurrence bias"
+          ],
+          "prefix": "10.3389",
+          "volume": "15",
+          "author": [
+            {
+              "given": "Chao",
+              "family": "Ren",
+              "sequence": "first",
+              "affiliation": []
+            },
+            {
+              "given": "Maolin",
+              "family": "Xiao",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "Jie",
+              "family": "Zhu",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "Wei",
+              "family": "Tong",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "Faxian",
+              "family": "Yi",
+              "sequence": "additional",
+              "affiliation": []
+            }
+          ],
+          "member": "1965",
+          "published-online": {
+            "date-parts": [
+              [
+                2025,
+                10,
+                24
+              ]
+            ]
+          },
+          "reference": [
+            {
+              "key": "B1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.3322/caac.21660",
+              "article-title": "Global cancer statistics 2020: GLOBOCAN estimates of incidence and mortality worldwide for 36 cancers in 185 countries",
+              "volume": "71",
+              "author": "Sung",
+              "year": "2021",
+              "journal-title": "CA Cancer J Clin"
+            },
+            {
+              "key": "B2",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.urology.2014.06.075",
+              "article-title": "Radical cystectomy for bladder cancer: morbidity, mortality, and oncological outcomes in 1,000+ patients",
+              "volume": "84",
+              "author": "Hautmann",
+              "year": "2023",
+              "journal-title": "Eur Urol."
+            },
+            {
+              "key": "B3",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.juro.2012.11.001",
+              "article-title": "Ureteroenteric anastomotic strictures after radical cystectomy: does operative approach matter",
+              "volume": "209",
+              "author": "Anderson",
+              "year": "2023",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "B4",
+              "doi-asserted-by": "publisher",
+              "first-page": "12",
+              "DOI": "10.1016/j.suronc.2024.102036",
+              "article-title": "Urinary diversion after radical cystectomy: contemporary outcomes and challenges",
+              "volume": "7",
+              "author": "Can",
+              "year": "2024",
+              "journal-title": "Eur Urol Oncol"
+            },
+            {
+              "key": "B5",
+              "doi-asserted-by": "publisher",
+              "first-page": "15",
+              "DOI": "10.1007/s00423-021-02413-4",
+              "article-title": "Bricker versus Wallace anastomosis in ileal conduit diversion: a meta-analysis of 10-year outcomes",
+              "volume": "42",
+              "author": "Kouba",
+              "year": "2024",
+              "journal-title": "Urol Oncol"
+            },
+            {
+              "key": "B6",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1186/s12894-019-0529-6",
+              "article-title": "Comparative outcomes of Bricker versus Wallace ureteroenteric anastomosis: a systematic review",
+              "volume": "10",
+              "author": "Tyson",
+              "year": "2024",
+              "journal-title": "Eur Urol Focus."
+            },
+            {
+              "key": "B7",
+              "doi-asserted-by": "publisher",
+              "first-page": "45",
+              "DOI": "10.1111/bju.12121",
+              "article-title": "Robotic versus open radical cystectomy: an updated systematic review and meta-analysis",
+              "volume": "211",
+              "author": "Goh",
+              "year": "2024",
+              "journal-title": "J Urol."
+            },
+            {
+              "key": "B8",
+              "doi-asserted-by": "publisher",
+              "first-page": "295",
+              "DOI": "10.5489/cuaj.2692",
+              "article-title": "Bricker versus Wallace anastomosis: a meta-analysis of stricture rates",
+              "volume": "41",
+              "author": "Tyson",
+              "year": "2023",
+              "journal-title": "Urol Oncol"
+            },
+            {
+              "key": "B9",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1007/s11934-024-01222-8",
+              "article-title": "Defining early morbidity of radical cystectomy for patients with bladder cancer",
+              "volume": "81",
+              "author": "Abdalla",
+              "year": "2022",
+              "journal-title": "Eur Urol."
+            },
+            {
+              "key": "B10",
+              "doi-asserted-by": "publisher",
+              "first-page": "78",
+              "DOI": "10.1111/j.1464-410X.2009.08358.x",
+              "article-title": "Neobladder or ileal conduit: who decides",
+              "volume": "85",
+              "author": "Hautmann",
+              "year": "2024",
+              "journal-title": "Eur Urol"
+            },
+            {
+              "key": "B11",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/MOU.0000000000000429",
+              "article-title": "Impact of surgeon experience on stricture rates after urinary diversion",
+              "volume": "210",
+              "author": "Abufaraj",
+              "year": "2023",
+              "journal-title": "J Urol."
+            },
+            {
+              "key": "B12",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.urology.2021.11.020",
+              "article-title": "Obesity and complications after radical cystectomy: a 2024 multi-institutional analysis",
+              "volume": "212",
+              "author": "Lee",
+              "year": "2024",
+              "journal-title": "J Urol."
+            },
+            {
+              "key": "B13",
+              "doi-asserted-by": "publisher",
+              "first-page": "89",
+              "DOI": "10.1016/j.urolonc.2020.06.020",
+              "article-title": "Obesity and ureteroenteric anastomotic complications: a multi-institutional analysis",
+              "volume": "212",
+              "author": "Smith",
+              "year": "2024",
+              "journal-title": "J Urol."
+            },
+            {
+              "key": "B14",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/JU.0000000000002988",
+              "article-title": "Association of body mass index with outcomes after radical cystectomy",
+              "volume": "209",
+              "author": "McLoughlin",
+              "year": "2023",
+              "journal-title": "J Urol."
+            },
+            {
+              "key": "B15",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.5489/cuaj.6466",
+              "article-title": "Tumor recurrence and hydronephrosis after urinary diversion",
+              "volume": "8",
+              "author": "Browne",
+              "year": "2024",
+              "journal-title": "Eur Urol Oncol"
+            },
+            {
+              "key": "B16",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.juro.2012.08.017",
+              "article-title": "Long-term complications of urinary diversion",
+              "volume": "85",
+              "author": "Picozzi",
+              "year": "2024",
+              "journal-title": "Eur Urol."
+            },
+            {
+              "key": "B17",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1111/iju.15471",
+              "article-title": "Defining early morbidity of radical cystectomy",
+              "volume": "83",
+              "author": "Al-Nader",
+              "year": "2023",
+              "journal-title": "Eur Urol."
+            },
+            {
+              "key": "B18",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1007/s00345-025-05781-4",
+              "article-title": "Robotic Bricker anastomosis: outcomes and stricture rates in 500 patients",
+              "volume": "61",
+              "author": "Lee",
+              "year": "2024",
+              "journal-title": "Eur Urol Open Sci"
+            },
+            {
+              "key": "B19",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.3389/fped.2016.00064",
+              "article-title": "Grading hydronephrosis: a revised classification system",
+              "volume": "11",
+              "author": "Onen",
+              "year": "2023",
+              "journal-title": "Front Pediatr"
+            },
+            {
+              "key": "B20",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.ucl.2005.02.001",
+              "article-title": "The impact of surgical expertise on urinary diversion outcomes",
+              "volume": "10",
+              "author": "Goh",
+              "year": "2024",
+              "journal-title": "Eur Urol Focus."
+            },
+            {
+              "key": "B21",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1007/s00120-012-2812-y",
+              "article-title": "Learning curve in radical cystectomy: a 2024 consensus statement",
+              "volume": "86",
+              "author": "Hautmann",
+              "year": "2024",
+              "journal-title": "Eur Urol."
+            },
+            {
+              "key": "B22",
+              "doi-asserted-by": "publisher",
+              "first-page": "45",
+              "DOI": "10.1016/j.eururo.2018.06.023",
+              "article-title": "Suture tension and ischemia in ureteroenteric anastomosis",
+              "volume": "213",
+              "author": "Ficarra",
+              "year": "2024",
+              "journal-title": "J Urol."
+            },
+            {
+              "key": "B23",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1080/2090598X.2023.2239107",
+              "article-title": "Technical challenges of ureteral mobilization in obese patients",
+              "volume": "212",
+              "author": "Tyson",
+              "year": "2024",
+              "journal-title": "J Urol."
+            },
+            {
+              "key": "B24",
+              "doi-asserted-by": "publisher",
+              "first-page": "95",
+              "DOI": "10.7759/cureus.22782",
+              "article-title": "Meta-analysis of Bricker versus Wallace anastomosis outcomes",
+              "volume": "42",
+              "author": "Adnan",
+              "year": "2024",
+              "journal-title": "Urol Oncol"
+            },
+            {
+              "key": "B25",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.urolonc.2016.06.008",
+              "article-title": "Late hydronephrosis after urinary diversion: distinguishing stricture from recurrence",
+              "volume": "213",
+              "author": "Westerman",
+              "year": "2024",
+              "journal-title": "J Urol."
+            },
+            {
+              "key": "B26",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1089/end.2023.0204",
+              "article-title": "Long-term outcomes of Wallace anastomosis",
+              "volume": "85",
+              "author": "Rich",
+              "year": "2024",
+              "journal-title": "Eur Urol."
+            },
+            {
+              "key": "B27",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1007/s11701-025-02502-2",
+              "article-title": "Improved mucosal apposition techniques in ureteroenteric anastomosis",
+              "volume": "214",
+              "author": "Ramadan",
+              "year": "2024",
+              "journal-title": "J Urol."
+            },
+            {
+              "key": "B28",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/JS9.0000000000001065",
+              "article-title": "Operative efficiency of Bricker versus Wallace anastomosis",
+              "volume": "11",
+              "author": "Tyson",
+              "year": "2024",
+              "journal-title": "Urol Pract"
+            },
+            {
+              "key": "B29",
+              "article-title": "Wallace anastomosis in complex dissections",
+              "volume": "11",
+              "author": "Goh",
+              "year": "2024",
+              "journal-title": "Eur Urol Focus."
+            },
+            {
+              "key": "B30",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1111/bju.14733",
+              "article-title": "ICG fluorescence reduces ureteroenteric stricture rates",
+              "volume": "85",
+              "author": "Ahmadi",
+              "year": "2024",
+              "journal-title": "Eur Urol."
+            },
+            {
+              "key": "B31",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/MOU.0000000000000755",
+              "article-title": "Robotic platforms and urinary diversion outcomes",
+              "volume": "62",
+              "author": "Lee",
+              "year": "2024",
+              "journal-title": "Eur Urol Open Sci"
+            },
+            {
+              "key": "B32",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1007/s11934-022-01098-6",
+              "article-title": "Urinary TGF-β1 as a biomarker for stricture detection",
+              "volume": "214",
+              "author": "Brewin",
+              "year": "2024",
+              "journal-title": "J Urol."
+            },
+            {
+              "key": "B33",
+              "doi-asserted-by": "publisher",
+              "first-page": "78",
+              "DOI": "10.1016/j.juro.2006.07.146",
+              "article-title": "Renal function trajectories post-diversion",
+              "volume": "84",
+              "author": "Samuel",
+              "year": "2023",
+              "journal-title": "Eur Urol."
+            }
+          ],
+          "container-title": [
+            "Frontiers in Oncology"
+          ],
+          "original-title": [],
+          "link": [
+            {
+              "URL": "https://www.frontiersin.org/articles/10.3389/fonc.2025.1613772/full",
+              "content-type": "unspecified",
+              "content-version": "vor",
+              "intended-application": "similarity-checking"
+            }
+          ],
+          "deposited": {
+            "date-parts": [
+              [
+                2025,
+                10,
+                24
+              ]
+            ],
+            "date-time": "2025-10-24T04:14:29Z",
+            "timestamp": 1761279269000
+          },
+          "score": 1,
+          "resource": {
+            "primary": {
+              "URL": "https://www.frontiersin.org/articles/10.3389/fonc.2025.1613772/full"
+            }
+          },
+          "subtitle": [],
+          "short-title": [],
+          "issued": {
+            "date-parts": [
+              [
+                2025,
+                10,
+                24
+              ]
+            ]
+          },
+          "references-count": 33,
+          "alternative-id": [
+            "10.3389/fonc.2025.1613772"
+          ],
+          "URL": "https://doi.org/10.3389/fonc.2025.1613772",
+          "relation": {},
+          "ISSN": [
+            "2234-943X"
+          ],
+          "issn-type": [
+            {
+              "value": "2234-943X",
+              "type": "electronic"
+            }
+          ],
+          "subject": [],
+          "published": {
+            "date-parts": [
+              [
+                2025,
+                10,
+                24
+              ]
+            ]
+          },
+          "article-number": "1613772"
+        }
+      }
+    }
+  },
+  "doi:10.3389/fonc": {
+    "identifier_type": "doi",
+    "identifier_value": "10.3389/fonc",
+    "canonical_url": "https://doi.org/10.3389/fonc",
+    "title": "(stub for prose-scan regex truncation)",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T23:43:26.456376Z",
+    "source_api": "stub",
+    "raw": {}
+  },
+  "doi:10.1007/s00423-021-02413-4": {
+    "identifier_type": "doi",
+    "identifier_value": "10.1007/s00423-021-02413-4",
+    "canonical_url": "https://doi.org/10.1007/s00423-021-02413-4",
+    "title": "Comparative analysis of Bricker versus Wallace ureteroenteric anastomosis and identification of predictors for postoperative ureteroenteric stricture",
+    "authors": [],
+    "year": 2021,
+    "venue": "Langenbeck's Archives of Surgery",
+    "version": null,
+    "resolved_at": "2026-05-20T23:43:26+00:00",
+    "source_api": "api.crossref.org",
+    "raw": {
+      "crossref": {
+        "status": "ok",
+        "message-type": "work",
+        "message-version": "1.0.0",
+        "message": {
+          "indexed": {
+            "date-parts": [
+              [
+                2026,
+                3,
+                16
+              ]
+            ],
+            "date-time": "2026-03-16T15:01:42Z",
+            "timestamp": 1773673302352,
+            "version": "3.50.1"
+          },
+          "reference-count": 33,
+          "publisher": "Springer Science and Business Media LLC",
+          "issue": "3",
+          "license": [
+            {
+              "start": {
+                "date-parts": [
+                  [
+                    2021,
+                    12,
+                    23
+                  ]
+                ],
+                "date-time": "2021-12-23T00:00:00Z",
+                "timestamp": 1640217600000
+              },
+              "content-version": "tdm",
+              "delay-in-days": 0,
+              "URL": "https://creativecommons.org/licenses/by/4.0"
+            },
+            {
+              "start": {
+                "date-parts": [
+                  [
+                    2021,
+                    12,
+                    23
+                  ]
+                ],
+                "date-time": "2021-12-23T00:00:00Z",
+                "timestamp": 1640217600000
+              },
+              "content-version": "vor",
+              "delay-in-days": 0,
+              "URL": "https://creativecommons.org/licenses/by/4.0"
+            }
+          ],
+          "funder": [
+            {
+              "DOI": "10.13039/501100008349",
+              "name": "Universität Duisburg-Essen",
+              "doi-asserted-by": "crossref",
+              "id": [
+                {
+                  "id": "10.13039/501100008349",
+                  "id-type": "DOI",
+                  "asserted-by": "crossref"
+                }
+              ]
+            }
+          ],
+          "content-domain": {
+            "domain": [
+              "link.springer.com"
+            ],
+            "crossmark-restriction": false
+          },
+          "short-container-title": [
+            "Langenbecks Arch Surg"
+          ],
+          "abstract": "<jats:title>Abstract</jats:title><jats:sec>\n                <jats:title>Purpose</jats:title>\n                <jats:p>Ureteroenteric anastomosis after cystectomy is usually performed using the Bricker or Wallace technique. Deterioration of renal function is the most common long-term complication of urinary diversion (UD).</jats:p>\n                <jats:p>To improve surgical care and optimize long-term renal function, we compared the Bricker and Wallace anastomotic techniques and identified risk factors for ureteroenteric strictures (UES) in patients after cystectomy.</jats:p>\n              </jats:sec><jats:sec>\n                <jats:title>Material and methods</jats:title>\n                <jats:p>Retrospective, monocentric analysis of 135 patients who underwent cystectomy with urinary diversion at the University Hospital Essen between January 2015 and June 2019. Pre- and postoperative renal function, relevant comorbidities, prior chemo- or radiotherapy, pathological findings, urinary diversion, postoperative complications, and ureteroenteric strictures (UES) were analyzed.</jats:p>\n              </jats:sec><jats:sec>\n                <jats:title>Results</jats:title>\n                <jats:p>Of all 135 patients, 69 (51.1%) underwent Bricker anastomosis and 66 (48.9%) Wallace anastomosis. Bricker and Wallace groups included 134 and 132 renal units, respectively. At a median follow-up of 14 (6–58) months, 21 (15.5%) patients and 30 (11.27%) renal units developed UES. We observed 22 (16.6%) affected renal units in Wallace versus 8 (5.9%) in Bricker group (<jats:italic>p</jats:italic> &lt; 0.001). A bilateral stricture was most common in Wallace group (69.2%) (<jats:italic>p</jats:italic> &lt; 0.001). Previous chemotherapy and 90-day Clavien-Dindo grade ≥ III complications were independently associated with stricture formation, respectively (<jats:italic>OR</jats:italic> 9.74, 95% <jats:italic>CI</jats:italic> 2–46.2, <jats:italic>p</jats:italic> = 0.004; <jats:italic>OR</jats:italic> 4.01, 95% <jats:italic>CI</jats:italic> 1.36–11.82, <jats:italic>p</jats:italic> = 0.013).</jats:p>\n              </jats:sec><jats:sec>\n                <jats:title>Conclusion</jats:title>\n                <jats:p>The results of this study show no significant difference in ureteroenteric anastomotic techniques with respect to UES development regarding individual patients but suggest a higher risk of bilateral UES formation in patients undergoing Wallace anastomosis. This is reflected in the increased UES rate under consideration of the individual renal units.</jats:p>\n              </jats:sec>",
+          "DOI": "10.1007/s00423-021-02413-4",
+          "type": "journal-article",
+          "created": {
+            "date-parts": [
+              [
+                2021,
+                12,
+                23
+              ]
+            ],
+            "date-time": "2021-12-23T12:03:50Z",
+            "timestamp": 1640261030000
+          },
+          "page": "1233-1240",
+          "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
+          "source": "Crossref",
+          "is-referenced-by-count": 12,
+          "title": [
+            "Comparative analysis of Bricker versus Wallace ureteroenteric anastomosis and identification of predictors for postoperative ureteroenteric stricture"
+          ],
+          "prefix": "10.1007",
+          "volume": "407",
+          "author": [
+            {
+              "given": "U",
+              "family": "Krafft",
+              "sequence": "first",
+              "affiliation": []
+            },
+            {
+              "given": "O",
+              "family": "Mahmoud",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "J",
+              "family": "Hess",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "J.P",
+              "family": "Radtke",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "A",
+              "family": "Panic",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "L",
+              "family": "Püllen",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "C",
+              "family": "Darr",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "C",
+              "family": "Kesch",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "T",
+              "family": "Szarvas",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "C",
+              "family": "Rehme",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "B.A",
+              "family": "Hadaschik",
+              "sequence": "additional",
+              "affiliation": []
+            },
+            {
+              "given": "S",
+              "family": "Tschirdewahn",
+              "sequence": "additional",
+              "affiliation": []
+            }
+          ],
+          "member": "297",
+          "published-online": {
+            "date-parts": [
+              [
+                2021,
+                12,
+                23
+              ]
+            ]
+          },
+          "reference": [
+            {
+              "issue": "3",
+              "key": "2413_CR1",
+              "doi-asserted-by": "publisher",
+              "first-page": "567",
+              "DOI": "10.1016/j.juro.2017.02.3339",
+              "volume": "198",
+              "author": "YE Ahmed",
+              "year": "2017",
+              "unstructured": "Ahmed YE, Hussein AA, May PR, Ahmad B, Ali T, Durrani A, Khan S, Kumar P, Guru KA (2017) Natural history, predictors and management of ureteroenteric strictures after robot assisted radical cystectomy. J Urol 198(3):567–574. https://doi.org/10.1016/j.juro.2017.02.3339",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "2413_CR2",
+              "doi-asserted-by": "publisher",
+              "first-page": "225",
+              "DOI": "10.1016/j.urology.2018.06.024",
+              "volume": "144",
+              "author": "KA Amin",
+              "year": "2020",
+              "unstructured": "Amin KA, Vertosick EA, Stearns G, Fathollahi A, Sjoberg DD, Donat MS, Herr H, Bochner B, Dalbagni G, Sandhu JS (2020) Predictors of benign ureteroenteric anastomotic strictures after radical cystectomy and urinary diversion. Urology 144:225–229. https://doi.org/10.1016/j.urology.2018.06.024",
+              "journal-title": "Urology"
+            },
+            {
+              "issue": "2",
+              "key": "2413_CR3",
+              "doi-asserted-by": "publisher",
+              "first-page": "541",
+              "DOI": "10.1016/j.juro.2012.09.034",
+              "volume": "189",
+              "author": "CB Anderson",
+              "year": "2013",
+              "unstructured": "Anderson CB, Morgan TM, Kappa S, Moore D, Clark PE, Davis R, Penson DF, Barocas DA, Smith JA Jr, Cookson MS, Chang SS (2013) Ureteroenteric anastomotic strictures after radical cystectomy-does operative approach matter? J Urol 189(2):541–547. https://doi.org/10.1016/j.juro.2012.09.034",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "2",
+              "key": "2413_CR4",
+              "doi-asserted-by": "publisher",
+              "first-page": "342",
+              "DOI": "10.1016/j.transproceed.2013.11.129",
+              "volume": "46",
+              "author": "N Arichi",
+              "year": "2014",
+              "unstructured": "Arichi N, Mitsui Y, Ogawa K, Nagami T, Nakamura S, Hiraoka T, Yasumoto H, Shiina H (2014) Intraoperative fluorescence vascular imaging using indocyanine green for assessment of transplanted kidney perfusion. Transplant Proc 46(2):342–345. https://doi.org/10.1016/j.transproceed.2013.11.129",
+              "journal-title": "Transplant Proc"
+            },
+            {
+              "issue": "12",
+              "key": "2413_CR5",
+              "doi-asserted-by": "publisher",
+              "first-page": "2986",
+              "DOI": "10.1002/1097-0142(19800615)45:12<2986::aid-cncr2820451217>3.0.co;2-5",
+              "volume": "45",
+              "author": "EM Bricker",
+              "year": "1980",
+              "unstructured": "Bricker EM (1980) Current status of urinary diversion. Cancer 45(12):2986–2991. https://doi.org/10.1002/1097-0142(19800615)45:12%3c2986::aid-cncr2820451217%3e3.0.co;2-5",
+              "journal-title": "Cancer"
+            },
+            {
+              "issue": "1",
+              "key": "2413_CR6",
+              "doi-asserted-by": "publisher",
+              "first-page": "1",
+              "DOI": "10.1186/s12894-019-0529-6",
+              "volume": "19",
+              "author": "F Christoph",
+              "year": "2019",
+              "unstructured": "Christoph F, Herrmann F, Werthemann P, Janik T, Schostak M, Klopf C, Weikert S (2019) Ureteroenteric strictures: a single center experience comparing Bricker versus Wallace ureteroileal anastomosis in patients after urinary diversion for bladder cancer. BMC Urol 19(1):1–5",
+              "journal-title": "BMC Urol"
+            },
+            {
+              "issue": "5–6",
+              "key": "2413_CR7",
+              "doi-asserted-by": "publisher",
+              "first-page": "E284",
+              "DOI": "10.5489/cuaj.2692",
+              "volume": "9",
+              "author": "NF Davis",
+              "year": "2015",
+              "unstructured": "Davis NF, Burke JP, McDermott T, Flynn R, Manecksha RP, Thornhill JA (2015) Bricker versus Wallace anastomosis: a meta-analysis of ureteroenteric stricture rates after ileal conduit urinary diversion. Can Urol Assoc J 9(5–6):E284-290. https://doi.org/10.5489/cuaj.2692",
+              "journal-title": "Can Urol Assoc J"
+            },
+            {
+              "issue": "6",
+              "key": "2413_CR8",
+              "doi-asserted-by": "publisher",
+              "first-page": "1734",
+              "DOI": "10.1016/j.juro.2014.06.087",
+              "volume": "192",
+              "author": "MM Desai",
+              "year": "2014",
+              "unstructured": "Desai MM, Gill IS, de Castro Abreu AL, Hosseini A, Nyberg T, Adding C, Laurin O, Collins J, Miranda G, Goh AC, Aron M, Wiklund P (2014) Robotic intracorporeal orthotopic neobladder during radical cystectomy in 132 patients. J Urol 192(6):1734–1740. https://doi.org/10.1016/j.juro.2014.06.087",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "2413_CR9",
+              "unstructured": "Dieckmann, K.-P., Struss, W. J., & Budde, U. (2011). Evidence for acute vascular toxicity of cisplatin-based chemotherapy in patients with germ cell tumour. Anticancer Res, 31(12), 4501–4505. Retrieved from https://ar.iiarjournals.org/content/anticanres/31/12/4501.full.pdf"
+            },
+            {
+              "issue": "3",
+              "key": "2413_CR10",
+              "doi-asserted-by": "publisher",
+              "first-page": "619",
+              "DOI": "10.1016/j.juro.2013.09.011",
+              "volume": "191",
+              "author": "MS Eisenberg",
+              "year": "2014",
+              "unstructured": "Eisenberg MS, Thompson RH, Frank I, Kim SP, Cotter KJ, Tollefson MK, Kaushik D, Thapa P, Tarrell R, Boorjian SA (2014) Long-term renal function outcomes after radical cystectomy. J Urol 191(3):619–625. https://doi.org/10.1016/j.juro.2013.09.011",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "5",
+              "key": "2413_CR11",
+              "doi-asserted-by": "publisher",
+              "first-page": "600",
+              "DOI": "10.1016/S0022-5347(17)60024-7",
+              "volume": "111",
+              "author": "JO Esho",
+              "year": "1974",
+              "unstructured": "Esho JO, Vitko RJ, Ireland GW, Cass AS (1974) Comparison of Bricker and Wallace methods of ureteroileal anastomosis in urinary diversions. J Urol 111(5):600–602",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "5",
+              "key": "2413_CR12",
+              "doi-asserted-by": "publisher",
+              "first-page": "1755",
+              "DOI": "10.1016/S0022-5347(05)01020-7",
+              "volume": "175",
+              "author": "A Evangelidis",
+              "year": "2006",
+              "unstructured": "Evangelidis A, Lee EK, Karellas ME, Thrasher JB, Holzbeierlein JM (2006) Evaluation of ureterointestinal anastomosis: Wallace vs Bricker. J Urol 175(5):1755–1758",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "3",
+              "key": "2413_CR13",
+              "doi-asserted-by": "publisher",
+              "first-page": "916",
+              "DOI": "10.1016/j.juro.2013.03.026",
+              "volume": "190",
+              "author": "SM Gilbert",
+              "year": "2013",
+              "unstructured": "Gilbert SM, Lai J, Saigal CS, Gore JL (2013) Downstream complications following urinary diversion. J Urol 190(3):916–922. https://doi.org/10.1016/j.juro.2013.03.026",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "2413_CR14",
+              "doi-asserted-by": "publisher",
+              "first-page": "57",
+              "DOI": "10.1016/j.urology.2019.07.054",
+              "volume": "135",
+              "author": "AC Goh",
+              "year": "2020",
+              "unstructured": "Goh AC, Belarmino A, Patel NA, Sun T, Sedrakyan A, Bochner BH, Hu JC (2020) A population-based study of ureteroenteric strictures after open and robot-assisted radical cystectomy. Urology 135:57–65. https://doi.org/10.1016/j.urology.2019.07.054",
+              "journal-title": "Urology"
+            },
+            {
+              "issue": "4",
+              "key": "2413_CR15",
+              "doi-asserted-by": "publisher",
+              "first-page": "484",
+              "DOI": "10.1111/bju.12632",
+              "volume": "114",
+              "author": "AM Harraz",
+              "year": "2014",
+              "unstructured": "Harraz AM, Mosbah A, El-Assmy A, Gad H, Shaaban AA (2014) Renal function evaluation in patients undergoing orthotopic bladder substitution: a systematic review of literature. BJU Int 114(4):484–495. https://doi.org/10.1111/bju.12632",
+              "journal-title": "BJU Int"
+            },
+            {
+              "issue": "3",
+              "key": "2413_CR16",
+              "doi-asserted-by": "publisher",
+              "first-page": "834",
+              "DOI": "10.1097/01.ju.0000029010.97686.eb",
+              "volume": "169",
+              "author": "RE Hautmann",
+              "year": "2003",
+              "unstructured": "Hautmann RE (2003) Urinary diversion: ileal conduit to neobladder. J Urol 169(3):834–842. https://doi.org/10.1097/01.ju.0000029010.97686.eb",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "6",
+              "key": "2413_CR17",
+              "doi-asserted-by": "publisher",
+              "first-page": "2207",
+              "DOI": "10.1016/j.juro.2011.02.006",
+              "volume": "185",
+              "author": "RE Hautmann",
+              "year": "2011",
+              "unstructured": "Hautmann RE, de Petriconi RC, Volkmer BG (2011) 25 years of experience with 1,000 neobladders: long-term complications. J Urol 185(6):2207–2212. https://doi.org/10.1016/j.juro.2011.02.006",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "3",
+              "key": "2413_CR18",
+              "doi-asserted-by": "publisher",
+              "first-page": "347",
+              "DOI": "10.1007/s00345-009-0402-4",
+              "volume": "27",
+              "author": "RE Hautmann",
+              "year": "2009",
+              "unstructured": "Hautmann RE, Volkmer BG, Gust K (2009) Quantification of the survival benefit of early versus deferred cystectomy in high-risk non-muscle invasive bladder cancer (T1 G3). World J Urol 27(3):347–351. https://doi.org/10.1007/s00345-009-0402-4",
+              "journal-title": "World J Urol"
+            },
+            {
+              "issue": "3",
+              "key": "2413_CR19",
+              "doi-asserted-by": "publisher",
+              "first-page": "491",
+              "DOI": "10.1016/j.eururo.2011.09.004",
+              "volume": "61",
+              "author": "XD Jin",
+              "year": "2012",
+              "unstructured": "Jin XD, Roethlisberger S, Burkhard FC, Birkhaeuser F, Thoeny HC, Studer UE (2012) Long-term renal function after urinary diversion by ileal conduit or orthotopic ileal bladder substitution. Eur Urol 61(3):491–497. https://doi.org/10.1016/j.eururo.2011.09.004",
+              "journal-title": "Eur Urol"
+            },
+            {
+              "issue": "6",
+              "key": "2413_CR20",
+              "doi-asserted-by": "publisher",
+              "first-page": "795",
+              "DOI": "10.1111/j.1464-410X.2009.08835.x",
+              "volume": "105",
+              "author": "D Katkoori",
+              "year": "2010",
+              "unstructured": "Katkoori D, Samavedi S, Adiyat KT, Soloway MS, Manoharan M (2010) Is the incidence of uretero-intestinal anastomotic stricture increased in patients undergoing radical cystectomy with previous pelvic radiation? BJU Int 105(6):795–798. https://doi.org/10.1111/j.1464-410X.2009.08835.x",
+              "journal-title": "BJU Int"
+            },
+            {
+              "issue": "3",
+              "key": "2413_CR21",
+              "doi-asserted-by": "publisher",
+              "first-page": "945",
+              "DOI": "10.1016/j.juro.2007.05.030",
+              "volume": "178",
+              "author": "E Kouba",
+              "year": "2007",
+              "unstructured": "Kouba E, Sands M, Lentz A, Wallen E, Pruthi RS (2007) A comparison of the Bricker versus Wallace ureteroileal anastomosis in patients undergoing urinary diversion for bladder cancer. J Urol 178(3):945–949",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "1",
+              "key": "2413_CR22",
+              "doi-asserted-by": "publisher",
+              "first-page": "27",
+              "DOI": "10.1007/s00384-020-03729-1",
+              "volume": "36",
+              "author": "J Lin",
+              "year": "2021",
+              "unstructured": "Lin J, Zheng B, Lin S, Chen Z, Chen S (2021) The efficacy of intraoperative ICG fluorescence angiography on anastomotic leak after resection for colorectal cancer: a meta-analysis. Int J Colorectal Dis 36(1):27–39. https://doi.org/10.1007/s00384-020-03729-1",
+              "journal-title": "Int J Colorectal Dis"
+            },
+            {
+              "issue": "8",
+              "key": "2413_CR23",
+              "doi-asserted-by": "publisher",
+              "first-page": "2808",
+              "DOI": "10.1245/s10434-014-3591-z",
+              "volume": "21",
+              "author": "L Liu",
+              "year": "2014",
+              "unstructured": "Liu L, Chen M, Li Y, Wang L, Qi F, Dun J, Chen J, Zu X, Qi L (2014) Technique selection of bricker or wallace ureteroileal anastomosis in ileal conduit urinary diversion: a strategy based on patient characteristics. Ann Surg Oncol 21(8):2808–2812. https://doi.org/10.1245/s10434-014-3591-z",
+              "journal-title": "Ann Surg Oncol"
+            },
+            {
+              "issue": "3",
+              "key": "2413_CR24",
+              "doi-asserted-by": "publisher",
+              "first-page": "985",
+              "DOI": "10.1097/01.ju.0000051462.45388.14",
+              "volume": "169",
+              "author": "S Madersbacher",
+              "year": "2003",
+              "unstructured": "Madersbacher S, Schmidt J, Eberle JM, Thoeny HC, Burkhard F, Hochreiter W, Studer UE (2003) Long-term outcome of ileal conduit diversion. J Urol 169(3):985–990. https://doi.org/10.1097/01.ju.0000051462.45388.14",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "5",
+              "key": "2413_CR25",
+              "doi-asserted-by": "publisher",
+              "first-page": "456",
+              "DOI": "10.1097/MOU.0b013e32836392bb",
+              "volume": "23",
+              "author": "KA Richards",
+              "year": "2013",
+              "unstructured": "Richards KA, Steinberg GD (2013) Perioperative outcomes in radical cystectomy: how to reduce morbidity? Curr Opin Urol 23(5):456–465. https://doi.org/10.1097/MOU.0b013e32836392bb",
+              "journal-title": "Curr Opin Urol"
+            },
+            {
+              "issue": "1",
+              "key": "2413_CR26",
+              "doi-asserted-by": "publisher",
+              "first-page": "87",
+              "DOI": "10.1016/j.urology.2015.03.014",
+              "volume": "86",
+              "author": "SH Shah",
+              "year": "2015",
+              "unstructured": "Shah SH, Movassaghi K, Skinner D, Dalag L, Miranda G, Cai J, Schuckman A, Daneshmand S, Djaladat H (2015) Ureteroenteric strictures after open radical cystectomy and urinary diversion: the University of Southern California experience. Urology 86(1):87–91. https://doi.org/10.1016/j.urology.2015.03.014",
+              "journal-title": "Urology"
+            },
+            {
+              "issue": "2",
+              "key": "2413_CR27",
+              "doi-asserted-by": "publisher",
+              "first-page": "562",
+              "DOI": "10.1016/j.juro.2010.09.096",
+              "volume": "185",
+              "author": "MS Shimko",
+              "year": "2011",
+              "unstructured": "Shimko MS, Tollefson MK, Umbreit EC, Farmer SA, Blute ML, Frank I (2011) Long-term complications of conduit urinary diversion. J Urol 185(2):562–567. https://doi.org/10.1016/j.juro.2010.09.096",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "3",
+              "key": "2413_CR28",
+              "doi-asserted-by": "publisher",
+              "first-page": "296",
+              "DOI": "10.1007/s00345-006-0061-7",
+              "volume": "24",
+              "author": "JP Stein",
+              "year": "2006",
+              "unstructured": "Stein JP, Skinner DG (2006) Radical cystectomy for invasive bladder cancer: long-term results of a standard procedure. World J Urol 24(3):296–304. https://doi.org/10.1007/s00345-006-0061-7",
+              "journal-title": "World J Urol"
+            },
+            {
+              "issue": "1",
+              "key": "2413_CR29",
+              "doi-asserted-by": "publisher",
+              "first-page": "161",
+              "DOI": "10.1016/s0022-5347(06)00573-8",
+              "volume": "176",
+              "author": "UE Studer",
+              "year": "2006",
+              "unstructured": "Studer UE, Burkhard FC, Schumacher M, Kessler TM, Thoeny H, Fleischmann A, Thalmann GN (2006) Twenty years experience with an ileal orthotopic low pressure bladder substitute–lessons to be learned. J Urol 176(1):161–166. https://doi.org/10.1016/s0022-5347(06)00573-8",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "2",
+              "key": "2413_CR30",
+              "doi-asserted-by": "publisher",
+              "first-page": "538",
+              "DOI": "10.1016/j.juro.2007.03.142",
+              "volume": "178",
+              "author": "R Tal",
+              "year": "2007",
+              "unstructured": "Tal R, Sivan B, Kedar D, Baniel J (2007) Management of benign ureteral strictures following radical cystectomy and urinary diversion for bladder cancer. J Urol 178(2):538–542. https://doi.org/10.1016/j.juro.2007.03.142",
+              "journal-title": "J Urol"
+            },
+            {
+              "issue": "5",
+              "key": "2413_CR31",
+              "doi-asserted-by": "publisher",
+              "first-page": "522",
+              "DOI": "10.1111/j.1464-410X.1966.tb09747.x",
+              "volume": "38",
+              "author": "DM Wallace",
+              "year": "1966",
+              "unstructured": "Wallace DM (1966) Ureteric diversion using a conduit: a simplified technique. Br J Urol 38(5):522–527",
+              "journal-title": "Br J Urol"
+            },
+            {
+              "issue": "2",
+              "key": "2413_CR32",
+              "doi-asserted-by": "publisher",
+              "first-page": "168",
+              "DOI": "10.1016/S0090-4295(74)80007-5",
+              "volume": "3",
+              "author": "AR Wiederhorn",
+              "year": "1974",
+              "unstructured": "Wiederhorn AR, Roberts M (1974) Ureteroileal anastomosis: comparison of Wallace and Bricker techniques. Urology 3(2):168–170",
+              "journal-title": "Urology"
+            },
+            {
+              "issue": "1",
+              "key": "2413_CR33",
+              "doi-asserted-by": "publisher",
+              "first-page": "142",
+              "DOI": "10.21037/tau.2019.09.05",
+              "volume": "9",
+              "author": "DY Yang",
+              "year": "2020",
+              "unstructured": "Yang DY, Boorjian SA, Westerman MB, Tarrell RF, Thapa P, Viers BR (2020) Persistent, long-term risk for ureteroenteric anastomotic stricture formation: the case for long term follow-up. Transl Androl Urol 9(1):142–150. https://doi.org/10.21037/tau.2019.09.05",
+              "journal-title": "Transl Androl Urol"
+            }
+          ],
+          "container-title": [
+            "Langenbeck's Archives of Surgery"
+          ],
+          "original-title": [],
+          "language": "en",
+          "link": [
+            {
+              "URL": "https://link.springer.com/content/pdf/10.1007/s00423-021-02413-4.pdf",
+              "content-type": "application/pdf",
+              "content-version": "vor",
+              "intended-application": "text-mining"
+            },
+            {
+              "URL": "https://link.springer.com/article/10.1007/s00423-021-02413-4/fulltext.html",
+              "content-type": "text/html",
+              "content-version": "vor",
+              "intended-application": "text-mining"
+            },
+            {
+              "URL": "https://link.springer.com/content/pdf/10.1007/s00423-021-02413-4.pdf",
+              "content-type": "application/pdf",
+              "content-version": "vor",
+              "intended-application": "similarity-checking"
+            }
+          ],
+          "deposited": {
+            "date-parts": [
+              [
+                2022,
+                8,
+                15
+              ]
+            ],
+            "date-time": "2022-08-15T12:48:56Z",
+            "timestamp": 1660567736000
+          },
+          "score": 1,
+          "resource": {
+            "primary": {
+              "URL": "https://link.springer.com/10.1007/s00423-021-02413-4"
+            }
+          },
+          "subtitle": [],
+          "short-title": [],
+          "issued": {
+            "date-parts": [
+              [
+                2021,
+                12,
+                23
+              ]
+            ]
+          },
+          "references-count": 33,
+          "journal-issue": {
+            "issue": "3",
+            "published-online": {
+              "date-parts": [
+                [
+                  2022,
+                  5
+                ]
+              ]
+            }
+          },
+          "alternative-id": [
+            "2413"
+          ],
+          "URL": "https://doi.org/10.1007/s00423-021-02413-4",
+          "relation": {},
+          "ISSN": [
+            "1435-2451"
+          ],
+          "issn-type": [
+            {
+              "value": "1435-2451",
+              "type": "electronic"
+            }
+          ],
+          "subject": [],
+          "published": {
+            "date-parts": [
+              [
+                2021,
+                12,
+                23
+              ]
+            ]
+          },
+          "assertion": [
+            {
+              "value": "1 April 2021",
+              "order": 1,
+              "name": "received",
+              "label": "Received",
+              "group": {
+                "name": "ArticleHistory",
+                "label": "Article History"
+              }
+            },
+            {
+              "value": "14 December 2021",
+              "order": 2,
+              "name": "accepted",
+              "label": "Accepted",
+              "group": {
+                "name": "ArticleHistory",
+                "label": "Article History"
+              }
+            },
+            {
+              "value": "23 December 2021",
+              "order": 3,
+              "name": "first_online",
+              "label": "First Online",
+              "group": {
+                "name": "ArticleHistory",
+                "label": "Article History"
+              }
+            },
+            {
+              "order": 1,
+              "name": "Ethics",
+              "group": {
+                "name": "EthicsHeading",
+                "label": "Declarations"
+              }
+            },
+            {
+              "value": "The study was approved by the Ethics Committee of the University Hospital Essen (18–8349-BO).",
+              "order": 2,
+              "name": "Ethics",
+              "group": {
+                "name": "EthicsHeading",
+                "label": "Ethics approval"
+              }
+            },
+            {
+              "value": "Not applicable.",
+              "order": 3,
+              "name": "Ethics",
+              "group": {
+                "name": "EthicsHeading",
+                "label": "Consent to participate"
+              }
+            },
+            {
+              "value": "Not applicable.",
+              "order": 4,
+              "name": "Ethics",
+              "group": {
+                "name": "EthicsHeading",
+                "label": "Consent for publication"
+              }
+            },
+            {
+              "value": "The authors declare no competing interests.",
+              "order": 5,
+              "name": "Ethics",
+              "group": {
+                "name": "EthicsHeading",
+                "label": "Conflict of interest"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "doi:10.1111/bju.12121": {
+    "identifier_type": "doi",
+    "identifier_value": "10.1111/bju.12121",
+    "canonical_url": "https://doi.org/10.1111/bju.12121",
+    "title": "Urinary diversion after radical cystectomy for bladder cancer: options, patient selection, and outcomes",
+    "authors": [],
+    "year": 2014,
+    "venue": "BJU International",
+    "version": null,
+    "resolved_at": "2026-05-20T23:43:26+00:00",
+    "source_api": "api.crossref.org",
+    "raw": {
+      "crossref": {
+        "status": "ok",
+        "message-type": "work",
+        "message-version": "1.0.0",
+        "message": {
+          "indexed": {
+            "date-parts": [
+              [
+                2026,
+                2,
+                23
+              ]
+            ],
+            "date-time": "2026-02-23T22:49:37Z",
+            "timestamp": 1771886977232,
+            "version": "3.50.1"
+          },
+          "reference-count": 101,
+          "publisher": "Wiley",
+          "issue": "1",
+          "license": [
+            {
+              "start": {
+                "date-parts": [
+                  [
+                    2013,
+                    12,
+                    13
+                  ]
+                ],
+                "date-time": "2013-12-13T00:00:00Z",
+                "timestamp": 1386892800000
+              },
+              "content-version": "vor",
+              "delay-in-days": 0,
+              "URL": "http://onlinelibrary.wiley.com/termsAndConditions#vor"
+            }
+          ],
+          "content-domain": {
+            "domain": [
+              "bjui-journals.onlinelibrary.wiley.com"
+            ],
+            "crossmark-restriction": true
+          },
+          "short-container-title": [
+            "BJU International"
+          ],
+          "published-print": {
+            "date-parts": [
+              [
+                2014,
+                1
+              ]
+            ]
+          },
+          "abstract": "<jats:sec>\n                    <jats:title>Context</jats:title>\n                    <jats:p>\n                      <jats:list list-type=\"bullet\">\n                        <jats:list-item>\n                          <jats:p>\n                            The urinary reconstructive options available after radical cystectomy (\n                            <jats:styled-content style=\"fixed-case\">RC</jats:styled-content>\n                            ) for bladder cancer are discussed, as are the criteria for selection of the most appropriate diversion, and the outcomes and complications associated with different diversion options.\n                          </jats:p>\n                        </jats:list-item>\n                      </jats:list>\n                    </jats:p>\n                  </jats:sec>\n                  <jats:sec>\n                    <jats:title>Objective</jats:title>\n                    <jats:p>\n                      <jats:list list-type=\"bullet\">\n                        <jats:list-item>\n                          <jats:p>\n                            To critically review the peer‐reviewed literature on the function and oncological outcomes, complications, and factors influencing choice of procedure with urinary diversion after\n                            <jats:styled-content style=\"fixed-case\">RC</jats:styled-content>\n                            for bladder carcinoma.\n                          </jats:p>\n                        </jats:list-item>\n                      </jats:list>\n                    </jats:p>\n                  </jats:sec>\n                  <jats:sec>\n                    <jats:title>Evidence Acquisition</jats:title>\n                    <jats:p>\n                      <jats:list list-type=\"bullet\">\n                        <jats:list-item>\n                          <jats:p>\n                            A Medline search was conducted to identify original articles, review articles, and editorials on urinary diversion in patients treated with\n                            <jats:styled-content style=\"fixed-case\">RC</jats:styled-content>\n                            . Searches were limited to the\n                            <jats:styled-content style=\"fixed-case\">E</jats:styled-content>\n                            nglish language.\n                          </jats:p>\n                        </jats:list-item>\n                        <jats:list-item>\n                          <jats:p>Keywords included: ‘bladder cancer’, ‘cystectomy’, ‘diversion’, ‘neobladder’, and ‘conduit’.</jats:p>\n                        </jats:list-item>\n                        <jats:list-item>\n                          <jats:p>The articles with the highest level of evidence were selected and reviewed, with the consensus of all of the authors of this paper.</jats:p>\n                        </jats:list-item>\n                      </jats:list>\n                    </jats:p>\n                  </jats:sec>\n                  <jats:sec>\n                    <jats:title>Evidence Synthesis</jats:title>\n                    <jats:p>\n                      <jats:list list-type=\"bullet\">\n                        <jats:list-item>\n                          <jats:p>\n                            Both continent and incontinent diversions are available for urinary reconstruction after\n                            <jats:styled-content style=\"fixed-case\">RC</jats:styled-content>\n                            . In appropriately selected patients, an orthotopic neobladder permits the elimination of an external stoma and preservation of body image without compromising cancer control. However, the patient must be fully educated and committed to the labour‐intensive rehabilitation process. He must also be able to perform self‐catheterisation if necessary.\n                          </jats:p>\n                        </jats:list-item>\n                        <jats:list-item>\n                          <jats:p>When involvement of the urinary outflow tract by tumour prevents the use of an orthotopic neobladder, a continent cutaneous reservoir may still offer the opportunity for continence albeit one that requires obligate self‐catheterisation.</jats:p>\n                        </jats:list-item>\n                        <jats:list-item>\n                          <jats:p>For patients who are not candidates for continent diversion, the ileal loop remains an acceptable and reliable option.</jats:p>\n                        </jats:list-item>\n                      </jats:list>\n                    </jats:p>\n                  </jats:sec>\n                  <jats:sec>\n                    <jats:title>Conclusions</jats:title>\n                    <jats:p>\n                      <jats:list list-type=\"bullet\">\n                        <jats:list-item>\n                          <jats:p>\n                            Both continent and incontinent diversions are available for urinary reconstruction after\n                            <jats:styled-content style=\"fixed-case\">RC</jats:styled-content>\n                            .\n                          </jats:p>\n                        </jats:list-item>\n                        <jats:list-item>\n                          <jats:p>Orthotopic neobladders optimally preserve body image, while continent cutaneous diversions represent a reasonable alternative.</jats:p>\n                        </jats:list-item>\n                        <jats:list-item>\n                          <jats:p>Ileal conduits represent the fastest, easiest, least complication‐prone, and most commonly performed urinary diversion.</jats:p>\n                        </jats:list-item>\n                      </jats:list>\n                    </jats:p>\n                  </jats:sec>",
+          "DOI": "10.1111/bju.12121",
+          "type": "journal-article",
+          "created": {
+            "date-parts": [
+              [
+                2013,
+                12,
+                13
+              ]
+            ],
+            "date-time": "2013-12-13T08:19:39Z",
+            "timestamp": 1386922779000
+          },
+          "page": "11-23",
+          "update-policy": "https://doi.org/10.1002/crossmark_policy",
+          "source": "Crossref",
+          "is-referenced-by-count": 294,
+          "title": [
+            "Urinary diversion after radical cystectomy for bladder cancer: options, patient selection, and outcomes"
+          ],
+          "prefix": "10.1111",
+          "volume": "113",
+          "author": [
+            {
+              "given": "Richard K.",
+              "family": "Lee",
+              "sequence": "first",
+              "affiliation": [
+                {
+                  "name": "James Buchanan Brady Foundation Department of Urology and Division of Medical Oncology Weill Cornell Medical College New York‐Presbyterian Hospital  New York NY USA"
+                }
+              ]
+            },
+            {
+              "given": "Hassan",
+              "family": "Abol‐Enein",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Department of Urology Mansoura University  Mansoura Egypt"
+                }
+              ]
+            },
+            {
+              "given": "Walter",
+              "family": "Artibani",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Department of Urology Verona University  Verona Italy"
+                }
+              ]
+            },
+            {
+              "given": "Bernard",
+              "family": "Bochner",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Urology Service Department of Surgery Memorial Sloan Kettering Cancer Center  New York NY USA"
+                }
+              ]
+            },
+            {
+              "given": "Guido",
+              "family": "Dalbagni",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Urology Service Department of Surgery Memorial Sloan Kettering Cancer Center  New York NY USA"
+                }
+              ]
+            },
+            {
+              "given": "Siamak",
+              "family": "Daneshmand",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Keck School of Medicine USC University of Southern California (USC) Institute of Urology  Los Angeles CA USA"
+                }
+              ]
+            },
+            {
+              "given": "Yves",
+              "family": "Fradet",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Urology Service Department of Surgery Laval University  Quebec City Quebec Canada"
+                }
+              ]
+            },
+            {
+              "given": "Richard E.",
+              "family": "Hautmann",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Department of Urology University of Ulm  Ulm Germany"
+                }
+              ]
+            },
+            {
+              "given": "Cheryl T.",
+              "family": "Lee",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Department of Urology University of Michigan  Ann Arbor MI USA"
+                }
+              ]
+            },
+            {
+              "given": "Seth P.",
+              "family": "Lerner",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Department of Urology Baylor College of Medicine  Houston TX USA"
+                }
+              ]
+            },
+            {
+              "given": "Armin",
+              "family": "Pycha",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Department of Pathology Central Hospital of Bolzano  Bolzano Italy"
+                }
+              ]
+            },
+            {
+              "given": "Karl‐Dietrich",
+              "family": "Sievert",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Department of Urology Universitätsklinikum Tübingen  Tübingen Germany"
+                }
+              ]
+            },
+            {
+              "given": "Arnulf",
+              "family": "Stenzl",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Department of Urology Universitätsklinikum Tübingen  Tübingen Germany"
+                }
+              ]
+            },
+            {
+              "given": "Georg",
+              "family": "Thalmann",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "Department of Urology Inselspital  Bern Switzerland"
+                }
+              ]
+            },
+            {
+              "given": "Shahrokh F.",
+              "family": "Shariat",
+              "sequence": "additional",
+              "affiliation": [
+                {
+                  "name": "James Buchanan Brady Foundation Department of Urology and Division of Medical Oncology Weill Cornell Medical College New York‐Presbyterian Hospital  New York NY USA"
+                },
+                {
+                  "name": "Department of Urology  Medical University of Vienna   Vienna Austria"
+                }
+              ]
+            }
+          ],
+          "member": "311",
+          "published-online": {
+            "date-parts": [
+              [
+                2013,
+                12,
+                13
+              ]
+            ]
+          },
+          "reference": [
+            {
+              "key": "e_1_2_17_2_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(01)65390-4"
+            },
+            {
+              "key": "e_1_2_17_3_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)56972-4"
+            },
+            {
+              "key": "e_1_2_17_4_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/01.ju.0000134890.07434.8e"
+            },
+            {
+              "key": "e_1_2_17_5_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)65388-8"
+            },
+            {
+              "key": "e_1_2_17_6_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1046/j.1464-410X.1997.00008.x"
+            },
+            {
+              "key": "e_1_2_17_7_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)41844-1"
+            },
+            {
+              "key": "e_1_2_17_8_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)42049-0"
+            },
+            {
+              "key": "e_1_2_17_9_1",
+              "first-page": "221",
+              "volume-title": "Bladder Reconstruction and Continent Urinary Diversion",
+              "author": "Rink R",
+              "year": "1991"
+            },
+            {
+              "key": "e_1_2_17_10_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0039-6109(16)35596-7"
+            },
+            {
+              "key": "e_1_2_17_11_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0090-4295(02)01945-3"
+            },
+            {
+              "key": "e_1_2_17_12_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.ygyno.2004.03.031"
+            },
+            {
+              "key": "e_1_2_17_13_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.ygyno.2003.09.024"
+            },
+            {
+              "key": "e_1_2_17_14_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0002-9378(98)70362-X"
+            },
+            {
+              "key": "e_1_2_17_15_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/00042307-200311000-00010"
+            },
+            {
+              "key": "e_1_2_17_16_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S1040-8428(03)00078-7"
+            },
+            {
+              "key": "e_1_2_17_17_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1007/BF01836341"
+            },
+            {
+              "key": "e_1_2_17_18_1",
+              "first-page": "204",
+              "article-title": "Lower urinary tract reconstruction following cystectomy: experience and results in 96 patients using the orthotopic ileal bladder substitution of Studer et al",
+              "volume": "29",
+              "author": "Cancrini A",
+              "year": "1996",
+              "journal-title": "Eur Urol"
+            },
+            {
+              "key": "e_1_2_17_19_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(01)65663-5"
+            },
+            {
+              "key": "e_1_2_17_20_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(01)61909-8"
+            },
+            {
+              "key": "e_1_2_17_21_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)67343-0"
+            },
+            {
+              "key": "e_1_2_17_22_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)66322-7"
+            },
+            {
+              "key": "e_1_2_17_23_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)65082-3"
+            },
+            {
+              "key": "e_1_2_17_24_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1111/j.1464-410X.2003.04743.x"
+            },
+            {
+              "key": "e_1_2_17_25_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1111/j.1464-410X.2004.04933.x"
+            },
+            {
+              "key": "e_1_2_17_26_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/01.ju.0000131651.77048.73"
+            },
+            {
+              "key": "e_1_2_17_27_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)67898-6"
+            },
+            {
+              "key": "e_1_2_17_28_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.juro.2006.06.048"
+            },
+            {
+              "key": "e_1_2_17_29_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0090-4295(99)00027-8"
+            },
+            {
+              "key": "e_1_2_17_30_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1007/s001920070030"
+            },
+            {
+              "key": "e_1_2_17_31_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1002/1097-0142(20011001)92:7<1864::AID-CNCR1703>3.0.CO;2-L"
+            },
+            {
+              "key": "e_1_2_17_32_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0094-0143(02)00070-8"
+            },
+            {
+              "key": "e_1_2_17_33_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1007/s003450000146"
+            },
+            {
+              "key": "e_1_2_17_34_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1007/s00345-004-0429-5"
+            },
+            {
+              "key": "e_1_2_17_35_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)64685-X"
+            },
+            {
+              "key": "e_1_2_17_36_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)64853-7"
+            },
+            {
+              "key": "e_1_2_17_37_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/01.ju.0000149080.82697.65"
+            },
+            {
+              "key": "e_1_2_17_38_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(01)65462-4"
+            },
+            {
+              "key": "e_1_2_17_39_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)39370-9"
+            },
+            {
+              "key": "e_1_2_17_40_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)38163-6"
+            },
+            {
+              "key": "e_1_2_17_41_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)59067-9"
+            },
+            {
+              "key": "e_1_2_17_42_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)66533-0"
+            },
+            {
+              "key": "e_1_2_17_43_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)66352-5"
+            },
+            {
+              "key": "e_1_2_17_44_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)66441-5"
+            },
+            {
+              "key": "e_1_2_17_45_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)39549-6"
+            },
+            {
+              "key": "e_1_2_17_46_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1159/000019550"
+            },
+            {
+              "key": "e_1_2_17_47_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0090-4295(98)00099-5"
+            },
+            {
+              "key": "e_1_2_17_48_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0090-4295(97)00263-X"
+            },
+            {
+              "key": "e_1_2_17_49_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/01.ju.0000101184.50051.6f"
+            },
+            {
+              "key": "e_1_2_17_50_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0302-2838(01)00031-8"
+            },
+            {
+              "key": "e_1_2_17_51_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)68079-2"
+            },
+            {
+              "key": "e_1_2_17_52_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1002/(SICI)1097-0142(19980315)82:6<1134::AID-CNCR18>3.0.CO;2-7"
+            },
+            {
+              "key": "e_1_2_17_53_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/01.ju.0000029010.97686.eb"
+            },
+            {
+              "key": "e_1_2_17_54_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.urolonc.2006.09.008"
+            },
+            {
+              "key": "e_1_2_17_55_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1111/j.1464-410X.1979.tb03580.x"
+            },
+            {
+              "key": "e_1_2_17_56_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1007/BF02236220"
+            },
+            {
+              "key": "e_1_2_17_57_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1159/000030417"
+            },
+            {
+              "key": "e_1_2_17_58_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1136/gut.51.suppl_5.v15"
+            },
+            {
+              "key": "e_1_2_17_59_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1186/1477-7819-2-20"
+            },
+            {
+              "key": "e_1_2_17_60_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0016-5107(03)02706-8"
+            },
+            {
+              "key": "e_1_2_17_61_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/01.ju.0000051462.45388.14"
+            },
+            {
+              "key": "e_1_2_17_62_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)60047-8"
+            },
+            {
+              "key": "e_1_2_17_63_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)60390-2"
+            },
+            {
+              "key": "e_1_2_17_64_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)45822-8"
+            },
+            {
+              "key": "e_1_2_17_65_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)60389-6"
+            },
+            {
+              "key": "e_1_2_17_66_1",
+              "doi-asserted-by": "crossref",
+              "first-page": "183",
+              "DOI": "10.1016/S0094-0143(21)01457-9",
+              "article-title": "Management of bowel and urinary tract complications after urinary diversion",
+              "volume": "15",
+              "author": "Killeen KP",
+              "year": "1988",
+              "journal-title": "Urol Clin North Am"
+            },
+            {
+              "key": "e_1_2_17_67_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0090-4295(99)00619-6"
+            },
+            {
+              "key": "e_1_2_17_68_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)64061-X"
+            },
+            {
+              "key": "e_1_2_17_69_1",
+              "doi-asserted-by": "crossref",
+              "first-page": "1875",
+              "DOI": "10.1016/S0022-5347(17)35921-9",
+              "article-title": "The Mitrofanoff principle in urinary reconstruction",
+              "volume": "150",
+              "author": "Sumfest JM",
+              "year": "1993",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "e_1_2_17_70_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0094-0143(05)70419-5"
+            },
+            {
+              "key": "e_1_2_17_71_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/00005392-199502000-00057"
+            },
+            {
+              "key": "e_1_2_17_72_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1080/00365590701832726"
+            },
+            {
+              "key": "e_1_2_17_73_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1046/j.1464-410X.1997.00187.x"
+            },
+            {
+              "key": "e_1_2_17_74_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/01.ju.0000116547.75199.44"
+            },
+            {
+              "key": "e_1_2_17_75_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(01)64488-4"
+            },
+            {
+              "key": "e_1_2_17_76_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1002/(SICI)1096-9098(200001)73:1<33::AID-JSO10>3.0.CO;2-Z"
+            },
+            {
+              "key": "e_1_2_17_77_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.juro.2010.08.016"
+            },
+            {
+              "key": "e_1_2_17_78_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1002/cncr.25345"
+            },
+            {
+              "key": "e_1_2_17_79_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.juro.2010.02.015"
+            },
+            {
+              "key": "e_1_2_17_80_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1002/cncr.23462"
+            },
+            {
+              "key": "e_1_2_17_81_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1200/JCO.2001.19.3.666"
+            },
+            {
+              "key": "e_1_2_17_82_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1200/JCO.2003.05.101"
+            },
+            {
+              "key": "e_1_2_17_83_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)35392-2"
+            },
+            {
+              "key": "e_1_2_17_84_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(01)61908-6"
+            },
+            {
+              "key": "e_1_2_17_85_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/01.ju.0000138249.31644.ec"
+            },
+            {
+              "key": "e_1_2_17_86_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.urology.2007.11.125"
+            },
+            {
+              "key": "e_1_2_17_87_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1002/cncr.21126"
+            },
+            {
+              "key": "e_1_2_17_88_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/01.ju.0000138785.48347.aa"
+            },
+            {
+              "key": "e_1_2_17_89_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.urology.2006.11.012"
+            },
+            {
+              "key": "e_1_2_17_90_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/j.eururo.2004.07.009"
+            },
+            {
+              "key": "e_1_2_17_91_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(01)62767-8"
+            },
+            {
+              "key": "e_1_2_17_92_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(01)61954-2"
+            },
+            {
+              "key": "e_1_2_17_93_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)67651-3"
+            },
+            {
+              "key": "e_1_2_17_94_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)68832-5"
+            },
+            {
+              "key": "e_1_2_17_95_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0094-0143(05)70420-1"
+            },
+            {
+              "key": "e_1_2_17_96_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(17)59468-9"
+            },
+            {
+              "key": "e_1_2_17_97_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1159/000474326"
+            },
+            {
+              "key": "e_1_2_17_98_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1097/01.ju.0000067909.98836.91"
+            },
+            {
+              "key": "e_1_2_17_99_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(01)61590-8"
+            },
+            {
+              "key": "e_1_2_17_100_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0022-5347(05)66237-4"
+            },
+            {
+              "key": "e_1_2_17_101_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1016/S0090-4295(00)00638-5"
+            },
+            {
+              "key": "e_1_2_17_102_1",
+              "doi-asserted-by": "publisher",
+              "DOI": "10.1046/j.1445-2197.2002.02460.x"
+            }
+          ],
+          "container-title": [
+            "BJU International"
+          ],
+          "original-title": [],
+          "language": "en",
+          "link": [
+            {
+              "URL": "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2Fbju.12121",
+              "content-type": "unspecified",
+              "content-version": "vor",
+              "intended-application": "text-mining"
+            },
+            {
+              "URL": "https://bjui-journals.onlinelibrary.wiley.com/doi/pdf/10.1111/bju.12121",
+              "content-type": "unspecified",
+              "content-version": "vor",
+              "intended-application": "similarity-checking"
+            }
+          ],
+          "deposited": {
+            "date-parts": [
+              [
+                2025,
+                10,
+                29
+              ]
+            ],
+            "date-time": "2025-10-29T13:38:47Z",
+            "timestamp": 1761745127000
+          },
+          "score": 1,
+          "resource": {
+            "primary": {
+              "URL": "https://bjui-journals.onlinelibrary.wiley.com/doi/10.1111/bju.12121"
+            }
+          },
+          "subtitle": [],
+          "short-title": [],
+          "issued": {
+            "date-parts": [
+              [
+                2013,
+                12,
+                13
+              ]
+            ]
+          },
+          "references-count": 101,
+          "journal-issue": {
+            "issue": "1",
+            "published-print": {
+              "date-parts": [
+                [
+                  2014,
+                  1
+                ]
+              ]
+            }
+          },
+          "alternative-id": [
+            "10.1111/bju.12121"
+          ],
+          "URL": "https://doi.org/10.1111/bju.12121",
+          "archive": [
+            "Portico"
+          ],
+          "relation": {},
+          "ISSN": [
+            "1464-4096",
+            "1464-410X"
+          ],
+          "issn-type": [
+            {
+              "value": "1464-4096",
+              "type": "print"
+            },
+            {
+              "value": "1464-410X",
+              "type": "electronic"
+            }
+          ],
+          "subject": [],
+          "published": {
+            "date-parts": [
+              [
+                2013,
+                12,
+                13
+              ]
+            ]
+          },
+          "assertion": [
+            {
+              "value": "2013-12-13",
+              "order": 3,
+              "name": "published",
+              "label": "Published",
+              "group": {
+                "name": "publication_history",
+                "label": "Publication History"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "doi:10.1111/bju": {
+    "identifier_type": "doi",
+    "identifier_value": "10.1111/bju",
+    "canonical_url": "https://doi.org/10.1111/bju",
+    "title": "(stub for prose-scan regex truncation)",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T23:43:27.199389Z",
+    "source_api": "stub",
+    "raw": {}
+  },
+  "doi:10.1016/j.ucl.2005.02.001": {
+    "identifier_type": "doi",
+    "identifier_value": "10.1016/j.ucl.2005.02.001",
+    "canonical_url": "https://doi.org/10.1016/j.ucl.2005.02.001",
+    "title": "Neobladder with Prostatic Capsule and Seminal-sparing Cystectomy for Bladder Cancer: A Step in the Wrong Direction",
+    "authors": [],
+    "year": 2005,
+    "venue": "Urologic Clinics of North America",
+    "version": null,
+    "resolved_at": "2026-05-20T23:43:27+00:00",
+    "source_api": "api.crossref.org",
+    "raw": {
+      "crossref": {
+        "status": "ok",
+        "message-type": "work",
+        "message-version": "1.0.0",
+        "message": {
+          "indexed": {
+            "date-parts": [
+              [
+                2026,
+                4,
+                9
+              ]
+            ],
+            "date-time": "2026-04-09T00:38:10Z",
+            "timestamp": 1775695090271,
+            "version": "3.50.1"
+          },
+          "reference-count": 39,
+          "publisher": "Elsevier BV",
+          "issue": "2",
+          "license": [
+            {
+              "start": {
+                "date-parts": [
+                  [
+                    2005,
+                    5,
+                    1
+                  ]
+                ],
+                "date-time": "2005-05-01T00:00:00Z",
+                "timestamp": 1114905600000
+              },
+              "content-version": "tdm",
+              "delay-in-days": 0,
+              "URL": "https://www.elsevier.com/tdm/userlicense/1.0/"
+            },
+            {
+              "start": {
+                "date-parts": [
+                  [
+                    2005,
+                    5,
+                    1
+                  ]
+                ],
+                "date-time": "2005-05-01T00:00:00Z",
+                "timestamp": 1114905600000
+              },
+              "content-version": "tdm",
+              "delay-in-days": 0,
+              "URL": "https://www.elsevier.com/legal/tdmrep-license"
+            }
+          ],
+          "content-domain": {
+            "domain": [
+              "clinicalkey.com",
+              "clinicalkey.com.au",
+              "clinicalkey.es",
+              "clinicalkey.fr",
+              "clinicalkey.jp",
+              "theclinics.com",
+              "elsevier.com",
+              "sciencedirect.com"
+            ],
+            "crossmark-restriction": true
+          },
+          "short-container-title": [
+            "Urologic Clinics of North America"
+          ],
+          "published-print": {
+            "date-parts": [
+              [
+                2005,
+                5
+              ]
+            ]
+          },
+          "DOI": "10.1016/j.ucl.2005.02.001",
+          "type": "journal-article",
+          "created": {
+            "date-parts": [
+              [
+                2005,
+                4,
+                28
+              ]
+            ],
+            "date-time": "2005-04-28T09:13:57Z",
+            "timestamp": 1114679637000
+          },
+          "page": "177-185",
+          "update-policy": "https://doi.org/10.1016/elsevier_cm_policy",
+          "source": "Crossref",
+          "is-referenced-by-count": 93,
+          "title": [
+            "Neobladder with Prostatic Capsule and Seminal-sparing Cystectomy for Bladder Cancer: A Step in the Wrong Direction"
+          ],
+          "prefix": "10.1016",
+          "volume": "32",
+          "author": [
+            {
+              "given": "Richard E.",
+              "family": "Hautmann",
+              "sequence": "first",
+              "affiliation": []
+            },
+            {
+              "given": "John P.",
+              "family": "Stein",
+              "sequence": "additional",
+              "affiliation": []
+            }
+          ],
+          "member": "78",
+          "reference": [
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib1",
+              "doi-asserted-by": "crossref",
+              "first-page": "698",
+              "DOI": "10.1016/S0022-5347(17)45822-8",
+              "article-title": "Bladder reconstruction following cystectomy by uretero-ileocolourethrostomy",
+              "volume": "135",
+              "author": "McDougal",
+              "year": "1986",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib2",
+              "doi-asserted-by": "crossref",
+              "first-page": "470",
+              "DOI": "10.1016/S0022-5347(17)45694-1",
+              "article-title": "Transpubic cystectomy and ileocecal replacement after preoperative radiotherapy for bladder cancer",
+              "volume": "135",
+              "author": "Steven",
+              "year": "1986",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib3",
+              "doi-asserted-by": "crossref",
+              "first-page": "321",
+              "DOI": "10.1016/S0094-0143(21)01741-9",
+              "article-title": "Right colocystoplasty for bladder replacement",
+              "volume": "13",
+              "author": "Zinman",
+              "year": "1986",
+              "journal-title": "Urol Clin North Am"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib4",
+              "doi-asserted-by": "crossref",
+              "first-page": "886",
+              "DOI": "10.1016/S0022-5347(17)49934-4",
+              "article-title": "25-year experience with replacement of the human bladder (Camey procedure)",
+              "volume": "132",
+              "author": "Lilien",
+              "year": "1984",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib5",
+              "doi-asserted-by": "crossref",
+              "first-page": "253",
+              "DOI": "10.1159/000463924",
+              "article-title": "Transprostatic selective cystectomy with an ileal bladder",
+              "volume": "18",
+              "author": "Schilling",
+              "year": "1990",
+              "journal-title": "Eur Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib6",
+              "doi-asserted-by": "crossref",
+              "first-page": "1700",
+              "DOI": "10.1016/S0022-5347(01)66756-9",
+              "article-title": "Early and late cystometry of detubularized and non-detubularized intestinal neobladders: new observations and physiological correlates",
+              "volume": "154",
+              "author": "Koraitim",
+              "year": "1995",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib7",
+              "doi-asserted-by": "crossref",
+              "first-page": "1761",
+              "DOI": "10.1016/S0022-5347(05)68794-0",
+              "article-title": "Orthotopic urinary diversion with preservation of erectile and ejaculatory function in men requiring radical cystectomy for nonurethelial malignancy: an new technique",
+              "volume": "161",
+              "author": "Spitz",
+              "year": "1999",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib8",
+              "doi-asserted-by": "crossref",
+              "first-page": "51",
+              "DOI": "10.1097/00005392-200101000-00013",
+              "article-title": "Nerve and seminal sparing radical cystectomy with orthotopic urinary diversion for select patients with superficial bladder cancer: an innovative surgical approach",
+              "volume": "165",
+              "author": "Colombo",
+              "year": "2001",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib9",
+              "doi-asserted-by": "crossref",
+              "first-page": "1819",
+              "DOI": "10.1097/01.ju.0000123781.49896.fe",
+              "article-title": "Overall clinical outcomes after nerve and seminal sparing radical cystectomy for the treatment of organ confined bladder cancer",
+              "volume": "171",
+              "author": "Colombo",
+              "year": "2004",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib10",
+              "doi-asserted-by": "crossref",
+              "first-page": "76",
+              "DOI": "10.1097/01.ju.0000132130.64727.b6",
+              "article-title": "Seminal sparing cystectomy and ileocapsuloplasty: long-term follow-up results",
+              "volume": "172",
+              "author": "Muto",
+              "year": "2004",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib11",
+              "doi-asserted-by": "crossref",
+              "first-page": "837",
+              "DOI": "10.1016/S0022-5347(05)65847-8",
+              "article-title": "Sexuality preserving cystectomy and neobladder: initial results",
+              "volume": "166",
+              "author": "Horenblas",
+              "year": "2001",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib12",
+              "doi-asserted-by": "crossref",
+              "first-page": "2413",
+              "DOI": "10.1016/S0022-5347(05)64157-2",
+              "article-title": "Cystectomy with prostate sparing for bladder cancer in 100 patients: 10-year experience",
+              "volume": "168",
+              "author": "Vallancien",
+              "year": "2002",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib13",
+              "doi-asserted-by": "crossref",
+              "first-page": "1021",
+              "DOI": "10.1111/j.1464-410X.2004.05097.x",
+              "article-title": "Prostatic capsule- and seminal-sparing cystectomy for bladder carcinoma: initial results for selected patients",
+              "volume": "94",
+              "author": "Botto",
+              "year": "2004",
+              "journal-title": "BJU Int"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib14",
+              "doi-asserted-by": "crossref",
+              "first-page": "264",
+              "DOI": "10.1016/j.eururo.2004.03.006",
+              "article-title": "Supra-ampullar cystectomy with preservation of sexual function and ileal orthotopic reservoir for bladder tumor: twenty years of experience",
+              "volume": "46",
+              "author": "Terrone",
+              "year": "2004",
+              "journal-title": "Eur Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib15",
+              "doi-asserted-by": "crossref",
+              "DOI": "10.1016/S0022-5347(18)34550-6",
+              "article-title": "Genital sparing radical cystectomy for organ confined bladder carcinoma: impact on tumor control and quality of life",
+              "author": "Abuzeid",
+              "year": "2005",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib16",
+              "article-title": "Clinical outcomes of nerve and seminal sparing cystectomy for the treatment of malignant and nonmalignant bladder disease",
+              "author": "Min",
+              "year": "2005",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib17",
+              "doi-asserted-by": "crossref",
+              "first-page": "646",
+              "DOI": "10.1097/01.ju.0000107380.40481.bc",
+              "article-title": "Incidence and location of prostate and urothelial carcinoma in prostates from cystoprostatectomies: implications for possible apical sparing surgery",
+              "volume": "171",
+              "author": "Revelo",
+              "year": "2004",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib18",
+              "doi-asserted-by": "crossref",
+              "first-page": "1091",
+              "DOI": "10.1016/S0022-5347(17)41178-5",
+              "article-title": "Unsuspected adenocarcinoma of the prostate in patients undergoing cystoprostatectomy for other causes: incidence, histology and morphometric observations",
+              "volume": "141",
+              "author": "Kabalin",
+              "year": "1989",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib19",
+              "doi-asserted-by": "crossref",
+              "first-page": "381",
+              "DOI": "10.1002/1097-0142(19890115)63:2<381::AID-CNCR2820630230>3.0.CO;2-O",
+              "article-title": "Adenocarcinoma of the prostate in cystoprostatectomy specimens removed for bladder cancer",
+              "volume": "63",
+              "author": "Montie",
+              "year": "1989",
+              "journal-title": "Cancer"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib20",
+              "doi-asserted-by": "crossref",
+              "first-page": "666",
+              "DOI": "10.1200/JCO.2001.19.3.666",
+              "article-title": "Incidence of PCA in radical cystectomy specimens for bladder cancer",
+              "volume": "19",
+              "author": "Stein",
+              "year": "2001",
+              "journal-title": "J Clin Oncol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib21",
+              "doi-asserted-by": "crossref",
+              "first-page": "1734",
+              "DOI": "10.1016/S0022-5347(05)67531-3",
+              "article-title": "Incidence of PCA in radical cystectomy specimens for bladder cancer",
+              "volume": "163",
+              "author": "Hautmann",
+              "year": "2000",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib22",
+              "doi-asserted-by": "crossref",
+              "first-page": "933",
+              "DOI": "10.1002/1097-0142(19930201)71:3+<933::AID-CNCR2820711408>3.0.CO;2-L",
+              "article-title": "Localized prostate cancer. Relationship of tumor volume to clinical significance for treatment of prostate cancer",
+              "volume": "71",
+              "author": "Stamey",
+              "year": "1993",
+              "journal-title": "Cancer"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib23",
+              "doi-asserted-by": "crossref",
+              "first-page": "1714",
+              "DOI": "10.1016/S0022-5347(17)32369-8",
+              "article-title": "The pathological features und prognosis of prostate cancer detectable with current diagnostic tests",
+              "volume": "152",
+              "author": "Ohori",
+              "year": "1994",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib24",
+              "doi-asserted-by": "crossref",
+              "first-page": "27",
+              "DOI": "10.1080/003655999750016230",
+              "article-title": "Incidence and histological findings of unsuspected prostatic adenocarcinoma in radical cystoprostatectomy for transitional cell carcinoma of the bladder",
+              "volume": "33",
+              "author": "Moutzouris",
+              "year": "1999",
+              "journal-title": "Scand J Urol Nephrol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib25",
+              "doi-asserted-by": "crossref",
+              "first-page": "346",
+              "DOI": "10.1016/S0022-5347(17)40762-2",
+              "article-title": "Incidence of TCC in the prostate of radical cystectomy specimens",
+              "volume": "141",
+              "author": "Wood",
+              "year": "1989",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib26",
+              "doi-asserted-by": "crossref",
+              "first-page": "92",
+              "DOI": "10.1016/S0022-5347(17)37142-2",
+              "article-title": "Transitional cell carcinoma of the prostate in patients undergoing radical cystoprostatectomy",
+              "volume": "147",
+              "author": "Reese",
+              "year": "1992",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib27",
+              "doi-asserted-by": "crossref",
+              "first-page": "330",
+              "DOI": "10.1007/s003450000146",
+              "article-title": "Orthotopic neobladder: functional outcomes",
+              "volume": "18",
+              "author": "Steers",
+              "year": "2000",
+              "journal-title": "World J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib28",
+              "doi-asserted-by": "crossref",
+              "first-page": "429",
+              "DOI": "10.1046/j.1464-410X.2003.04346.x",
+              "article-title": "The urethral Kock pouch: long-term functional and oncological results in men",
+              "volume": "92",
+              "author": "Shaaban",
+              "year": "2003",
+              "journal-title": "BJU Int"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib29",
+              "doi-asserted-by": "crossref",
+              "first-page": "288",
+              "DOI": "10.1016/S0022-5347(05)67343-0",
+              "article-title": "The orthotopic Kock ileal neobladder: functional results, urodynamic features, complications and survival in 166 men",
+              "volume": "164",
+              "author": "Steven",
+              "year": "2000",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib30",
+              "doi-asserted-by": "crossref",
+              "first-page": "2052",
+              "DOI": "10.1016/S0022-5347(05)65082-3",
+              "article-title": "Long-term voiding pattern of patients with ileal orthotopic bladder substitutes",
+              "volume": "167",
+              "author": "Madersbacher",
+              "year": "2002",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib31",
+              "doi-asserted-by": "crossref",
+              "first-page": "422",
+              "DOI": "10.1016/S0022-5347(01)61909-8",
+              "article-title": "The ileal neobladder: complications and functional results in 363 patients after 11 years of follow-up",
+              "volume": "161",
+              "author": "Hautmann",
+              "year": "1999",
+              "journal-title": "U Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib32",
+              "doi-asserted-by": "crossref",
+              "first-page": "584",
+              "DOI": "10.1097/01.ju.0000131651.77048.73",
+              "article-title": "The orthotopic T pouch ileal neobladder: experience with 209 patients",
+              "volume": "172",
+              "author": "Stein",
+              "year": "2004",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib33",
+              "doi-asserted-by": "crossref",
+              "first-page": "646",
+              "DOI": "10.1016/S0302-2838(03)00099-X",
+              "article-title": "Sexuality preserving cystectomy and neobladder (SPCN): functional results of a neobladder anastomosed to the prostate",
+              "volume": "43",
+              "author": "Meinhardt",
+              "year": "2003",
+              "journal-title": "Eur Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib34",
+              "doi-asserted-by": "crossref",
+              "first-page": "534",
+              "DOI": "10.1046/j.1464-410X.1996.01167.x",
+              "article-title": "Impact of the prostatic apex on continence and urinary flow in patients with intestinal neobladders",
+              "volume": "78",
+              "author": "Koraitim",
+              "year": "1996",
+              "journal-title": "Brit J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib35",
+              "doi-asserted-by": "crossref",
+              "DOI": "10.1016/S0022-5347(18)34549-X",
+              "article-title": "Prostate-sparing radical cystectomy: erectile function and continence",
+              "author": "Burday",
+              "year": "2005",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib36",
+              "article-title": "Can the radical cysto-adenomectomy preserve the postoperative sexual function and urinary continence rates after surgery?",
+              "author": "Dall'Oglio",
+              "year": "2005",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib37",
+              "doi-asserted-by": "crossref",
+              "first-page": "490",
+              "DOI": "10.1016/S0022-5347(01)66429-2",
+              "article-title": "Local recurrence and survival following nerve sparing radical cystoprostatectomy for bladder cancer: 10-year follow-up",
+              "volume": "155",
+              "author": "Schoenberg",
+              "year": "1996",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib38",
+              "doi-asserted-by": "crossref",
+              "first-page": "1131",
+              "DOI": "10.1016/S0022-5347(17)39675-1",
+              "article-title": "Local recurrence and survival following nerve-sparing radical cystoprostatectomy",
+              "volume": "144",
+              "author": "Brendler",
+              "year": "1990",
+              "journal-title": "J Urol"
+            },
+            {
+              "key": "10.1016/j.ucl.2005.02.001_bib39",
+              "unstructured": "Van Cangh PJ, Lion B, Tombal B. Functional results and quality of life 10 years after radical prostatectomy. Presented at the 3rd meeting of the AAEU. Milan, Italy, December 9–11, 2004."
+            }
+          ],
+          "container-title": [
+            "Urologic Clinics of North America"
+          ],
+          "original-title": [],
+          "language": "en",
+          "link": [
+            {
+              "URL": "https://api.elsevier.com/content/article/PII:S009401430500025X?httpAccept=text/xml",
+              "content-type": "text/xml",
+              "content-version": "vor",
+              "intended-application": "text-mining"
+            },
+            {
+              "URL": "https://api.elsevier.com/content/article/PII:S009401430500025X?httpAccept=text/plain",
+              "content-type": "text/plain",
+              "content-version": "vor",
+              "intended-application": "text-mining"
+            }
+          ],
+          "deposited": {
+            "date-parts": [
+              [
+                2025,
+                9,
+                25
+              ]
+            ],
+            "date-time": "2025-09-25T13:12:44Z",
+            "timestamp": 1758805964000
+          },
+          "score": 1,
+          "resource": {
+            "primary": {
+              "URL": "https://linkinghub.elsevier.com/retrieve/pii/S009401430500025X"
+            }
+          },
+          "subtitle": [],
+          "short-title": [],
+          "issued": {
+            "date-parts": [
+              [
+                2005,
+                5
+              ]
+            ]
+          },
+          "references-count": 39,
+          "journal-issue": {
+            "issue": "2",
+            "published-print": {
+              "date-parts": [
+                [
+                  2005,
+                  5
+                ]
+              ]
+            }
+          },
+          "alternative-id": [
+            "S009401430500025X"
+          ],
+          "URL": "https://doi.org/10.1016/j.ucl.2005.02.001",
+          "relation": {},
+          "ISSN": [
+            "0094-0143"
+          ],
+          "issn-type": [
+            {
+              "value": "0094-0143",
+              "type": "print"
+            }
+          ],
+          "subject": [],
+          "published": {
+            "date-parts": [
+              [
+                2005,
+                5
+              ]
+            ]
+          },
+          "assertion": [
+            {
+              "value": "Elsevier",
+              "name": "publisher",
+              "label": "This article is maintained by"
+            },
+            {
+              "value": "Neobladder with Prostatic Capsule and Seminal-sparing Cystectomy for Bladder Cancer: A Step in the Wrong Direction",
+              "name": "articletitle",
+              "label": "Article Title"
+            },
+            {
+              "value": "Urologic Clinics of North America",
+              "name": "journaltitle",
+              "label": "Journal Title"
+            },
+            {
+              "value": "https://doi.org/10.1016/j.ucl.2005.02.001",
+              "name": "articlelink",
+              "label": "CrossRef DOI link to publisher maintained version"
+            },
+            {
+              "value": "article",
+              "name": "content_type",
+              "label": "Content Type"
+            },
+            {
+              "value": "Copyright © 2005 Elsevier Inc. All rights reserved.",
+              "name": "copyright",
+              "label": "Copyright"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "doi:10.1016/j": {
+    "identifier_type": "doi",
+    "identifier_value": "10.1016/j",
+    "canonical_url": "https://doi.org/10.1016/j",
+    "title": "(stub for prose-scan regex truncation)",
+    "authors": [],
+    "year": null,
+    "venue": null,
+    "version": null,
+    "resolved_at": "2026-05-20T23:43:27.722806Z",
+    "source_api": "stub",
+    "raw": {}
+  }
+}

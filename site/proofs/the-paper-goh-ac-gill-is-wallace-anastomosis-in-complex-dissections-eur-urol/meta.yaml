@@ -1,0 +1,39 @@
+tags:
+- methodology
+- ai
+depends_on:
+- relation: IsDescribedBy
+  identifiers:
+  - type: doi
+    value: 10.3389/fonc.2025.1613772
+  note: Frontiers in Oncology (2025) — source where the disputed citation appears as a reference-list entry
+- relation: IsDescribedBy
+  identifiers:
+  - type: doi
+    value: 10.3389/fonc
+  note: Truncated DOI form captured by prose-scan regex (10.3389/fonc.2025.1613772)
+- relation: References
+  identifiers:
+  - type: doi
+    value: 10.1007/s00423-021-02413-4
+  note: Langenbeck's Archives of Surgery 2021 paper — sibling reference cited under wrong journal/year
+- relation: References
+  identifiers:
+  - type: doi
+    value: 10.1111/bju.12121
+  note: BJU International 2013 paper — sibling reference cited under wrong journal/year
+- relation: References
+  identifiers:
+  - type: doi
+    value: 10.1111/bju
+  note: Truncated DOI form for prose-scan regex
+- relation: References
+  identifiers:
+  - type: doi
+    value: 10.1016/j.ucl.2005.02.001
+  note: Urologic Clinics of North America 2005 paper — sibling reference cited under wrong journal/year
+- relation: References
+  identifiers:
+  - type: doi
+    value: 10.1016/j
+  note: Truncated DOI form for prose-scan regex

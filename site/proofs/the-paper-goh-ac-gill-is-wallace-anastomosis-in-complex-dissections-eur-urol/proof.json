@@ -1,0 +1,273 @@
+{
+  "format_version": 3,
+  "claim_natural": "The paper 'Goh AC, Gill IS. Wallace anastomosis in complex dissections. Eur Urol Focus. (2024) 11:80\u20138' does not exist.",
+  "claim_formal": {
+    "subject": "the journal article cited as 'Goh AC, Gill IS. Wallace anastomosis in complex dissections. Eur Urol Focus. (2024) 11:80\u20138'",
+    "property": "absence of any indexed record of a published article matching this citation",
+    "operator": ">=",
+    "operator_note": "Absence-of-evidence proof. 'Does not exist' is operationalised as: no published journal article matching the disputed citation -- this exact title, attributed to A.C. Goh and I.S. Gill, in the journal European Urology Focus -- can be located in any major scholarly index or in the journal's own catalogue. The verdict ceiling for an absence proof is SUPPORTED, never PROVED: comprehensive searching strongly supports non-existence but cannot logically exclude an unindexed record. result_count is the number of indexed records that MATCH the cited article; for relevance-ranked databases, unrelated ranked candidates returned by a fuzzy query are not matches and do not count toward it. result_count values are author-reported and reproducible via the search_url links but are not machine-verified. The exact citation string does occur once -- in the reference list of a single article (Frontiers in Oncology, 2025; DOI 10.3389/fonc.2025.1613772) -- but a reference-list entry is a claim that a paper exists, not the paper itself, and is the very artefact this claim concerns. Two independent lines of corroboration are documented in the adversarial checks: (1) the citation is internally inconsistent -- European Urology Focus volume 11 corresponds to 2025, not 2024; and (2) sibling references in that same reference list carry DOIs that resolve to unrelated papers, indicating a pattern of fabricated citations.",
+    "search_threshold": 3,
+    "corroboration_threshold": 0,
+    "proof_direction": "absence"
+  },
+  "evidence": {
+    "S1": {
+      "type": "search",
+      "label": "PubMed: exact-title phrase search",
+      "sub_claim": null,
+      "search": {
+        "database": "PubMed",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/",
+        "search_url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22Wallace+anastomosis+in+complex+dissections%22",
+        "query_terms": "\"Wallace anastomosis in complex dissections\" (exact title phrase)",
+        "date_range": "all years indexed by PubMed; searched 2026-05-21",
+        "result_count": 0,
+        "source_name": "NIH National Library of Medicine -- PubMed"
+      },
+      "extraction": {
+        "value": "accessible",
+        "value_in_quote": true,
+        "quote_snippet": "result_count=0"
+      }
+    },
+    "S2": {
+      "type": "search",
+      "label": "PubMed: Goh AC as author in European Urology Focus",
+      "sub_claim": null,
+      "search": {
+        "database": "PubMed",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/",
+        "search_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Goh+AC%5BAuthor%5D+AND+%22European+Urology+Focus%22%5BJournal%5D",
+        "query_terms": "Goh AC[Author] AND \"European Urology Focus\"[Journal]",
+        "date_range": "all years indexed by PubMed; searched 2026-05-21",
+        "result_count": 0,
+        "source_name": "NIH National Library of Medicine -- PubMed"
+      },
+      "extraction": {
+        "value": "accessible",
+        "value_in_quote": true,
+        "quote_snippet": "result_count=0"
+      }
+    },
+    "S3": {
+      "type": "search",
+      "label": "Europe PMC: exact-title field search",
+      "sub_claim": null,
+      "search": {
+        "database": "Europe PMC",
+        "url": "https://europepmc.org/",
+        "search_url": "https://europepmc.org/search?query=TITLE%3A%22Wallace%20anastomosis%20in%20complex%20dissections%22",
+        "query_terms": "TITLE:\"Wallace anastomosis in complex dissections\"",
+        "date_range": "all years indexed by Europe PMC; searched 2026-05-21",
+        "result_count": 0,
+        "source_name": "EMBL-EBI -- Europe PMC"
+      },
+      "extraction": {
+        "value": "accessible",
+        "value_in_quote": true,
+        "quote_snippet": "result_count=0"
+      }
+    },
+    "S4": {
+      "type": "search",
+      "label": "Europe PMC: Goh AC as author in European Urology Focus",
+      "sub_claim": null,
+      "search": {
+        "database": "Europe PMC",
+        "url": "https://europepmc.org/",
+        "search_url": "https://europepmc.org/search?query=AUTH%3A%22Goh%20AC%22%20AND%20JOURNAL%3A%22European%20Urology%20Focus%22",
+        "query_terms": "AUTH:\"Goh AC\" AND JOURNAL:\"European Urology Focus\"",
+        "date_range": "all years indexed by Europe PMC; searched 2026-05-21",
+        "result_count": 0,
+        "source_name": "EMBL-EBI -- Europe PMC"
+      },
+      "extraction": {
+        "value": "accessible",
+        "value_in_quote": true,
+        "quote_snippet": "result_count=0"
+      }
+    },
+    "S5": {
+      "type": "search",
+      "label": "OpenAlex: title search",
+      "sub_claim": null,
+      "search": {
+        "database": "OpenAlex",
+        "url": "https://openalex.org/",
+        "search_url": "https://api.openalex.org/works?filter=title.search:Wallace%20anastomosis%20in%20complex%20dissections",
+        "query_terms": "title.search:Wallace anastomosis in complex dissections",
+        "date_range": "all years indexed by OpenAlex (~250M works); searched 2026-05-21",
+        "result_count": 0,
+        "source_name": "OurResearch -- OpenAlex"
+      },
+      "extraction": {
+        "value": "accessible",
+        "value_in_quote": true,
+        "quote_snippet": "result_count=0"
+      }
+    },
+    "S6": {
+      "type": "search",
+      "label": "Crossref: exact-title match among indexed works",
+      "sub_claim": null,
+      "search": {
+        "database": "Crossref",
+        "url": "https://www.crossref.org/",
+        "search_url": "https://api.crossref.org/works?query.title=Wallace+anastomosis+in+complex+dissections&rows=20",
+        "query_terms": "query.title=Wallace anastomosis in complex dissections (exact-title matches among Crossref-registered works)",
+        "date_range": "all years of Crossref DOI registrations; searched 2026-05-21",
+        "result_count": 0,
+        "source_name": "Crossref -- DOI registration agency"
+      },
+      "extraction": {
+        "value": "accessible",
+        "value_in_quote": true,
+        "quote_snippet": "result_count=0"
+      }
+    },
+    "A1": {
+      "type": "computed",
+      "label": "Unique accessible databases with null results",
+      "sub_claim": null,
+      "method": "count of unique accessible databases with result_count == 0 = 4",
+      "result": "4",
+      "depends_on": [
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6"
+      ]
+    }
+  },
+  "cross_checks": [
+    {
+      "description": "Systematic searches of four independent scholarly indexes for any record of the disputed article",
+      "fact_ids": [
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6"
+      ],
+      "agreement": true,
+      "n_databases_searched": 6,
+      "n_null_verified": 4,
+      "n_reviewed": 0,
+      "databases": {
+        "pubmed_title": {
+          "database": "PubMed",
+          "result_count": 0,
+          "status": "accessible"
+        },
+        "pubmed_author": {
+          "database": "PubMed",
+          "result_count": 0,
+          "status": "accessible"
+        },
+        "europepmc_title": {
+          "database": "Europe PMC",
+          "result_count": 0,
+          "status": "accessible"
+        },
+        "europepmc_author": {
+          "database": "Europe PMC",
+          "result_count": 0,
+          "status": "accessible"
+        },
+        "openalex": {
+          "database": "OpenAlex",
+          "result_count": 0,
+          "status": "accessible"
+        },
+        "crossref": {
+          "database": "Crossref",
+          "result_count": 0,
+          "status": "accessible"
+        }
+      },
+      "independence_note": "PubMed (NLM), Europe PMC (EMBL-EBI), OpenAlex (OurResearch) and Crossref (DOI registration agency) maintain separate indexes with independent ingestion pipelines; all four would index a genuine 2024 or 2025 European Urology Focus article."
+    }
+  ],
+  "adversarial_checks": [
+    {
+      "question": "Can the PubMed searches be reproduced and do they confirm 0 results?",
+      "verification_performed": "Queried the PubMed E-utilities API and the public PubMed search page on 2026-05-21. esearch term='\"Wallace anastomosis in complex dissections\"' returned count=0. esearch term='Goh AC[Author] AND \"European Urology Focus\"[Journal]' returned count=0 with the message 'No items found'.",
+      "finding": "PubMed accessible; both queries return 0 records. No article with this title is indexed, and A.C. Goh has no article indexed in European Urology Focus.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Can the Europe PMC searches be reproduced and do they confirm 0 results?",
+      "verification_performed": "Queried the Europe PMC REST API on 2026-05-21. query='TITLE:\"Wallace anastomosis in complex dissections\"' returned hitCount=0. query='AUTH:\"Goh AC\" AND JOURNAL:\"European Urology Focus\"' returned hitCount=0.",
+      "finding": "Europe PMC accessible; both queries return 0 records. Europe PMC aggregates PubMed, PubMed Central, preprint servers, Agricola and patents, so a 0 hitCount spans an exceptionally broad corpus.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Can the OpenAlex search be reproduced and does it confirm 0 results?",
+      "verification_performed": "Queried the OpenAlex API on 2026-05-21. filter=title.search:Wallace anastomosis in complex dissections returned meta.count=0 across the ~250-million-work OpenAlex index.",
+      "finding": "OpenAlex accessible; 0 works match the title. OpenAlex ingests Crossref, PubMed, and many other sources, so this is a wide independent index.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Can the Crossref search be reproduced and does it confirm 0 results?",
+      "verification_performed": "Queried the Crossref REST API on 2026-05-21. A query.title search and a journal-scoped scan of European Urology Focus (ISSN 2405-4569) were both examined; 0 indexed works carry the exact title 'Wallace anastomosis in complex dissections', and no European Urology Focus work has that title or lists A.C. Goh as an author of an article so titled. The disputed citation also has no DOI.",
+      "finding": "Crossref accessible; 0 records match the cited article. Crossref is the DOI registration agency for Elsevier (the publisher of European Urology Focus), so a real article would carry a registered DOI here.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could the relevance-ranked candidates returned by fuzzy title queries actually be the disputed paper under a different wording?",
+      "verification_performed": "Reviewed the ranked candidate lists returned by the Crossref and OpenAlex fuzzy title queries and by Google Scholar / web search for the title.",
+      "finding": "Every ranked candidate is a different, real publication on ureteroileal anastomosis (e.g. 'Wallace method of ureteroileal anastomosis', Urology 1975; 'Evaluation of Ureterointestinal Anastomosis: Wallace vs Bricker'). None is titled 'Wallace anastomosis in complex dissections' and none is authored by Goh and Gill. Fuzzy databases return ranked near-matches even for non-existent titles, so these candidates are not counter-evidence.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is there ANY published evidence that the cited paper exists?",
+      "verification_performed": "Searched for every occurrence of the exact title string across web search, Google Scholar, and the four scholarly indexes.",
+      "finding": "The exact citation string occurs in exactly one place: the reference list of the article 'Comparative analysis of ureteroileal anastomotic stricture rates: Bricker versus Wallace techniques...' (Frontiers in Oncology, 2025, DOI 10.3389/fonc.2025.1613772), as reference entry 'Goh AC, Gill IS. Wallace anastomosis in complex dissections. Eur Urol Focus. (2024) 11:80-8' with NO DOI. A reference-list entry is a claim that a paper exists; it is not the paper, and is precisely the artefact this proof's claim concerns. No indexed article, registered DOI, or journal-catalogue entry corresponds to it. This does not break the proof -- it confirms the disputed citation has no referent.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Does the citation's sole point of origin show signs that the reference is fabricated rather than a real-but-poorly-indexed paper?",
+      "verification_performed": "Examined the sibling references in the same Frontiers in Oncology reference list and resolved their DOIs via the Crossref API on 2026-05-21.",
+      "finding": "The reference list shows a clear pattern of fabricated citations. Three sibling references carry DOIs that resolve to entirely unrelated papers: 10.1007/s00423-021-02413-4 (cited as 'Kouba ES et al. Urol Oncol (2024) 42:15-24') actually resolves to a 2021 paper in Langenbeck's Archives of Surgery; 10.1111/bju.12121 (cited as 'Goh AC, Gill IS, Desai MM. J Urol (2024) 211:45-55') actually resolves to a 2013 paper in BJU International; 10.1016/j.ucl.2005.02.001 (cited as 'Goh AC, Gill IS. Eur Urol Focus (2024) 10:50-8') actually resolves to a 2005 paper in Urologic Clinics of North America. The disputed reference itself has no DOI at all. This pattern is consistent with AI-hallucinated citations and corroborates that the disputed paper does not exist.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Is the disputed citation internally consistent on volume and year?",
+      "verification_performed": "Cross-referenced European Urology Focus volume numbering via the Crossref API on 2026-05-21: the journal began at volume 1 in 2015; articles published in 2024 carry volume 10; articles published in 2025 carry volume 11.",
+      "finding": "The disputed citation pairs '(2024)' with 'volume 11'. European Urology Focus volume 11 corresponds to publication year 2025, and 2024 corresponds to volume 10. No real article in this journal can satisfy both coordinates simultaneously -- the citation is internally inconsistent. This is independent corroboration that the citation does not describe a real paper; it does not break the proof.",
+      "breaks_proof": false
+    },
+    {
+      "question": "Could a real paper by these authors on this topic exist under different citation coordinates, making the claim too strong?",
+      "verification_performed": "A.C. Goh and I.S. Gill are real urologic surgeons who have co-published. Searched their joint publication record on PubMed on 2026-05-21 ('Goh AC[Author] AND Gill IS[Author] AND Wallace').",
+      "finding": "The only Goh-AC + Gill-IS record involving 'Wallace' in PubMed is PMID 25016136, 'Robotic intracorporeal orthotopic neobladder during radical cystectomy in 132 patients', J Urol 2014;192:1734-40 -- a different paper with a different title in a different journal and year. No paper titled 'Wallace anastomosis in complex dissections' by these authors exists in any index. The disputed citation recombines real authors, a real journal, and a real surgical technique into a reference whose target does not exist.",
+      "breaks_proof": false
+    }
+  ],
+  "verdict": {
+    "value": "SUPPORTED",
+    "qualified": false,
+    "qualifier": null,
+    "reason": null
+  },
+  "key_results": {
+    "n_databases_searched": 6,
+    "n_null_verified": 4,
+    "n_reviewed": 0,
+    "n_corroborating": 0,
+    "search_threshold": 3,
+    "corroboration_threshold": 0,
+    "searches_met": true,
+    "corroboration_met": true,
+    "claim_holds": true
+  },
+  "generator": {
+    "name": "proof-engine",
+    "version": "1.34.1",
+    "repo": "https://github.com/yaniv-golan/proof-engine",
+    "generated_at": "2026-05-20"
+  }
+}
