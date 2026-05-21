@@ -37,6 +37,21 @@ _DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 _cache = {}
 
 
+# ---------------------------------------------------------------------------
+# Academic-database overrides for .gov hostnames
+# ---------------------------------------------------------------------------
+# Some .gov domains run peer-reviewed-literature databases that are functionally
+# academic sources, not government policy/data primaries. Classifying PubMed
+# and PMC as `government / tier 5` mis-frames their content for citation
+# reviewers ("primary government source" reads as policy, not biomedical
+# literature). Match these BEFORE the general .gov rule fires.
+_ACADEMIC_DATABASE_HOSTS = {
+    "ncbi.nlm.nih.gov",      # NCBI parent (PubMed, PMC, Bookshelf, ...)
+    "nlm.nih.gov",           # National Library of Medicine
+    "clinicaltrials.gov",    # NIH-run trial registry — academic by use
+}
+
+
 def _load_json(filename: str) -> dict:
     """Load a bundled JSON data file, with caching."""
     if filename not in _cache:
@@ -121,8 +136,8 @@ def assess_credibility(url: str) -> dict:
     Returns:
         {
             "domain": "bls.gov",
-            "source_type": "government" | "academic" | "major_news" |
-                           "reference" | "commercial" | "unknown",
+            "source_type": "government" | "academic" | "academic_database" |
+                           "major_news" | "reference" | "commercial" | "unknown",
             "tier": 5,  # 1-5
             "flags": [...],  # list of warning strings, empty if clean
             "note": "Official .gov domain"
@@ -164,6 +179,21 @@ def assess_credibility(url: str) -> dict:
             "flags": ["satire_site"] if is_satire else ["flagged_unreliable"],
             "note": "Known satire site" if is_satire else "Flagged as unreliable source",
         }
+
+    # --- Academic-database overrides for .gov hostnames ---
+    # Run BEFORE the general government check so e.g. pubmed.ncbi.nlm.nih.gov
+    # and pmc.ncbi.nlm.nih.gov are typed as academic literature databases,
+    # not "government primary sources" (which mis-frames biomedical lit
+    # for the citation reviewer).
+    for academic_host in _ACADEMIC_DATABASE_HOSTS:
+        if domain == academic_host or domain.endswith("." + academic_host):
+            return {
+                "domain": registered,
+                "source_type": "academic_database",
+                "tier": 4,
+                "flags": flags,
+                "note": f"Peer-reviewed literature database ({academic_host})",
+            }
 
     # --- Government / intergovernmental ---
     gov_data = _load_json("government_tlds.json")

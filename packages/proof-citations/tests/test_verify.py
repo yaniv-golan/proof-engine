@@ -85,3 +85,54 @@ def test_verify_result_carries_credibility():
         )
     assert "credibility" in result
     assert "tier" in result["credibility"]
+
+
+def test_verify_citation_skip_live_fetch_uses_snapshot():
+    """skip_live_fetch=True forces the snapshot path even when the URL is reachable."""
+    with _fixture_server() as base:
+        # Live URL would NOT contain the quote; snapshot does.
+        result = verify_citation(
+            f"{base}/sample.html",
+            "The consumer price index increased by 3.4 percent",
+            "B1",
+            snapshot=(
+                "<html><body>The consumer price index increased by "
+                "3.4 percent in 2023.</body></html>"
+            ),
+            skip_live_fetch=True,
+        )
+    assert result["status"] == "verified"
+    assert result["fetch_mode"] == "snapshot"
+
+
+def test_verify_citation_falls_through_recaptcha_to_snapshot():
+    """End-to-end: verify_citation against a 200-CAPTCHA URL with snapshot uses snapshot."""
+    with _fixture_server() as base:
+        result = verify_citation(
+            f"{base}/recaptcha_page.html",
+            "The consumer price index increased by 3.4 percent",
+            "B1",
+            snapshot=(
+                "<html><body>The consumer price index increased by "
+                "3.4 percent in 2023.</body></html>"
+            ),
+        )
+    assert result["status"] == "verified"
+    assert result["fetch_mode"] == "snapshot"
+
+
+def test_verify_citation_prefer_snapshot_skips_live_when_snapshot_present():
+    """prefer_snapshot=True uses snapshot before live fetch for known-blocked sources."""
+    with _fixture_server() as base:
+        result = verify_citation(
+            f"{base}/sample.html",
+            "The consumer price index increased by 3.4 percent",
+            "B1",
+            snapshot=(
+                "<html><body>The consumer price index increased by "
+                "3.4 percent in 2023.</body></html>"
+            ),
+            prefer_snapshot=True,
+        )
+    assert result["status"] == "verified"
+    assert result["fetch_mode"] == "snapshot"

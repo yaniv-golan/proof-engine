@@ -10,7 +10,7 @@ description: >
 license: MIT
 metadata:
   author: Yaniv Golan
-  version: "1.41.0"
+  version: "1.42.0"
 compatibility: >
   Requires Python 3, `requests`, and the `proof-citations` PyPI package
   (`pip install proof-citations` — the scripts/ entries are thin shims
@@ -39,7 +39,7 @@ For empirical proofs that cite identifier-bearing sources (PMID, DOI, arXiv, …
 
 When the URL has no structured identifier (e.g., a generic blog page), `metadata_result["status"]` is `"skipped_no_structured_identifier"` — OG-extraction from arbitrary pages is too noisy to compare against claimed bibliographic fields.
 
-See [`packages/proof-citations/README.md`](../../../packages/proof-citations/README.md) for the full API, the registered identifier types, and worked examples. See [`references/scripts-api.md`](references/scripts-api.md) for signatures.
+See the [`proof-citations` README on GitHub](https://github.com/yaniv-golan/proof-engine/blob/main/packages/proof-citations/README.md) (or the PyPI page at <https://pypi.org/project/proof-citations/>) for the full API, the registered identifier types, and worked examples. See [`references/scripts-api.md`](references/scripts-api.md) for signatures.
 
 ## Gotchas
 
@@ -104,7 +104,7 @@ The highest-value lessons from field testing, grouped by area. Read before writi
 
 - **Don't inline verification logic**: Import the bundled scripts. Rewriting `normalize_text()` inline risks garbling the HTML-stripping logic.
 - **Index base mismatches**: Economic data from different aggregators may use different base periods. If `cross_check()` flags a large disagreement, check whether sources use different scaling. Document the base period in source_name.
-- **`PROOF_ENGINE_ROOT` uses env-var override with a walk-up fallback** (see [scripts-api.md](references/scripts-api.md#import-pattern) for the exact snippet). Resolution order: (1) env var if set — Binder and site-publishing tools set it explicitly; (2) walk up from proof.py's directory until `proof-engine/skills/proof-engine/scripts/` is found — makes the published proof portable across any repo clone; (3) raise `RuntimeError` with a clear message. Do NOT hardcode an absolute path as the fallback — it leaks the generating agent's filesystem and breaks for every other re-runner. Copy the block from the relevant template verbatim; do not collapse, shorten, or replace with `__file__` dirname traversal.
+- **`PROOF_ENGINE_ROOT` uses env-var override with a walk-up fallback** (see [scripts-api.md](references/scripts-api.md#import-pattern) for the exact snippet). Resolution order: (1) env var if set — Binder and site-publishing tools set it explicitly; (2) walk up from proof.py's directory until either `proof-engine/skills/proof-engine/scripts/` (dev-repo layout) or `skills/proof-engine/scripts/` (plugin install layout) is found — makes the published proof portable across any repo clone or plugin install; (3) raise `RuntimeError` with a clear message. Do NOT hardcode an absolute path as the fallback — it leaks the generating agent's filesystem and breaks for every other re-runner. Copy the block from the relevant template verbatim; do not collapse, shorten, or replace with `__file__` dirname traversal.
 
 ## Reference Files
 
@@ -168,7 +168,7 @@ The `agents/openai.yaml` file in this skill directory is a small UX adapter for 
 | 6. Independent cross-checks | Shared-variable bugs | Multiple sources parsed separately |
 | 7. Never hard-code constants/formulas | LLM misremembers values | `scripts/computations.py` |
 | 8. Evidence relevance for rejection | Weak/off-subject rejection sources | `adversarial_checks` documentation |
-| 9. Prose references mechanically resolvable | Hand-typed attribution hallucinations; raw tokens archived | `tools/lib/proof_cache.py` + `prose_reference_scan.py` + `cite-expand` |
+| 9. Prose references mechanically resolvable | Hand-typed attribution hallucinations; raw tokens archived | `{{cite:...}}` markers expanded by repo tooling (dev-repo: `tools/lib/proof_cache.py` + `prose_reference_scan.py` + `cite-expand`) |
 | 10. Quantifier–domain match | Sampling treated as load-bearing evidence for "for all" claims | `claim_type: "theorem"` + `template-deductive-theorem.md` + `validate_proof.py` regression-role check |
 
 See [hardening-rules.md](${CLAUDE_SKILL_DIR}/references/hardening-rules.md) for detailed examples of each.
@@ -303,12 +303,14 @@ This is a strict IF/ELSE on `claim_type`, not a judgment call: theorem → alway
 
 After a proof passes validation, it can be published to the site and archived as a citable research object.
 
-**Publish to the site:**
+> **Plugin install note.** The publishing commands below ship with the [proof-engine repo](https://github.com/yaniv-golan/proof-engine) — they are not part of the plugin/skill distribution because they're tied to the proofengine.info site infrastructure. If you generated a proof from a plugin install and want it published on proofengine.info, open a PR to the repo with the four proof artifacts; if you're hosting your own catalog, see `proof-engine-registry serve` in the [proof-engine-registry package](https://pypi.org/project/proof-engine-registry/).
+
+**Publish to the site** (dev-repo):
 ```bash
 python tools/proof-site.py publish <proof-dir> --site-dir site
 ```
 
-**Mint a Zenodo DOI** (archives the proof as a citable research object; requires `ZENODO_TOKEN`):
+**Mint a Zenodo DOI** (dev-repo; archives the proof as a citable research object; requires `ZENODO_TOKEN`):
 ```bash
 # Build the site first so machine-readable artifacts are generated
 python tools/build-site.py --site-dir site --output-dir _site --base-url / --site-url https://proofengine.info --design-md docs/DESIGN.md --hardening-rules-md proof-engine/skills/proof-engine/references/hardening-rules.md
@@ -351,7 +353,7 @@ Only omit `attribution` when the result is genuinely novel and you are confident
 
 For theorem proofs (`claim_type: "theorem"`), `purpose` should almost always be `methodology_demonstration` — the engine cannot independently establish a "for all" mathematical claim, and the prior reviewer feedback established that artifacts overstating this are correctly rejected. The site renders the purpose label next to the verdict chip so readers see at a glance whether they are looking at a verified empirical claim, a closed-form computation, or a methodology demonstration.
 
-If `purpose` is omitted, it defaults from `claim_type` via [tools/lib/proof_loader.py:default_purpose_for_claim_type](../../tools/lib/proof_loader.py): theorem and open_problem default to `methodology_demonstration`; everything else defaults to `fact_verification`. Set explicitly to override.
+If `purpose` is omitted, it defaults from `claim_type` via [`default_purpose_for_claim_type` in `tools/lib/proof_loader.py`](https://github.com/yaniv-golan/proof-engine/blob/main/tools/lib/proof_loader.py): theorem and open_problem default to `methodology_demonstration`; everything else defaults to `fact_verification`. Set explicitly to override.
 
 See [template-deductive-theorem.md](${CLAUDE_SKILL_DIR}/references/template-deductive-theorem.md) §"What this template produces — and what it does NOT produce" and [Hardening Rule 10](${CLAUDE_SKILL_DIR}/references/hardening-rules.md#rule-10-quantifier-domain-match).
 

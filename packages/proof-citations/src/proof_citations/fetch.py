@@ -17,6 +17,69 @@ except ImportError:
 
 
 # ---------------------------------------------------------------------------
+# Anti-bot / block-page detection
+# ---------------------------------------------------------------------------
+
+# Many anti-bot middlewares respond HTTP 200 with a JS challenge / CAPTCHA
+# page instead of the requested article. Without explicit detection, the
+# fallback chain treats these as a successful fetch — quote verification
+# then fails with "not_found" instead of falling through to snapshot/Wayback.
+# Each pattern matches a marker that's distinctive to a particular middleware
+# and very unlikely to appear in legitimate content. Conservative on purpose:
+# a false positive here would skip a real page in favor of a snapshot, which
+# is a survivable failure mode; a false negative is the bug we're fixing.
+_BLOCK_PAGE_PATTERNS = [
+    # Google reCAPTCHA
+    (re.compile(r'\bg-recaptcha\b', re.IGNORECASE), "g-recaptcha"),
+    (re.compile(
+        r'<script\b[^>]*\bsrc\s*=\s*["\'][^"\']*recaptcha/api\.js',
+        re.IGNORECASE), "recaptcha-api.js"),
+    # Cloudflare browser challenge
+    (re.compile(r'\bcf-browser-verification\b', re.IGNORECASE), "cf-browser-verification"),
+    (re.compile(r'\b__cf_chl_tk\b', re.IGNORECASE), "cf-challenge-token"),
+    (re.compile(r'\bcf_chl_opt\b', re.IGNORECASE), "cf-challenge-options"),
+    (re.compile(
+        r'<title[^>]*>\s*Just a moment\.\.\.\s*</title>',
+        re.IGNORECASE), "cloudflare-just-a-moment"),
+    (re.compile(
+        r'<title[^>]*>\s*Attention Required!\s*\|\s*Cloudflare\s*</title>',
+        re.IGNORECASE), "cloudflare-attention-required"),
+    # Imperva / Incapsula
+    (re.compile(r'\b_Incapsula_Resource\b', re.IGNORECASE), "incapsula"),
+    (re.compile(r'\bincap_ses_\b', re.IGNORECASE), "incapsula-session"),
+    # DataDome
+    (re.compile(
+        r'<title[^>]*>\s*Pardon Our Interruption\s*</title>',
+        re.IGNORECASE), "datadome"),
+    # Akamai Bot Manager
+    (re.compile(r'\b_abck\b', re.IGNORECASE), "akamai-abck"),
+    # Generic
+    (re.compile(
+        r'<title[^>]*>\s*Access Denied\s*</title>',
+        re.IGNORECASE), "access-denied-title"),
+]
+
+
+def looks_like_block_page(text: str) -> str | None:
+    """Return the matched marker name if text looks like an anti-bot / CAPTCHA
+    challenge page, else None.
+
+    Detection is intentionally conservative: only fires on markers distinctive
+    to specific anti-bot middlewares (Google reCAPTCHA, Cloudflare, Imperva,
+    DataDome, Akamai). Scans only the first 64KB — challenge pages are tiny
+    and the markers always appear in <head> or top of <body>, so this keeps
+    the check ~O(1) even on multi-megabyte snapshots.
+    """
+    if not text:
+        return None
+    sample = text[:65536]
+    for pattern, name in _BLOCK_PAGE_PATTERNS:
+        if pattern.search(sample):
+            return name
+    return None
+
+
+# ---------------------------------------------------------------------------
 # PDF text extraction
 # ---------------------------------------------------------------------------
 
@@ -111,7 +174,8 @@ def try_github_raw(url: str, timeout: int = 15) -> str | None:
 def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
                wayback_fallback: bool = False,
                skip_live_fetch: bool = False,
-               snapshot_file: str = None) -> tuple[str | None, str, str | None]:
+               snapshot_file: str = None,
+               prefer_snapshot: bool = False) -> tuple[str | None, str, str | None]:
     """Fetch page text using the standard fallback chain.
 
     Args:
@@ -119,11 +183,16 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
         timeout: Fetch timeout in seconds.
         snapshot: Pre-fetched page text for offline verification (inline).
         wayback_fallback: If True, try Wayback Machine as last resort.
-        skip_live_fetch: If True, skip live HTTP fetch (e.g., when requests
-            is unavailable in the calling module).
+        skip_live_fetch: If True, skip live HTTP fetch entirely (snapshot →
+            snapshot_file → wayback only). Set this for domains known to
+            serve anti-bot challenges to scripted requests.
         snapshot_file: Path to a local file containing pre-fetched page text.
             Used for paywalled content that cannot be embedded inline. Inline
             snapshot takes precedence over snapshot_file.
+        prefer_snapshot: If True AND a snapshot (inline or file) is provided,
+            use it before attempting a live fetch. Live fetch is still tried
+            as a fallback if the snapshot is unusable. Use this for known-
+            blocked sources without giving up the live-fetch fallback entirely.
 
     Returns:
         (page_text, fetch_mode, error_message)
@@ -131,8 +200,26 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
         - fetch_mode: "live", "snapshot", "wayback", "github_raw", or "fetch_failed"
         - error_message: Error description if failed, else None
     """
-    # --- 1. Try live fetch ---
     fetch_error_msg = None
+
+    # --- 0. Snapshot-first short-circuit ---
+    # When the caller has reason to believe the live URL is blocked, taking
+    # the snapshot first avoids burning the live-fetch timeout. Falls through
+    # to live fetch if the snapshot is empty/missing.
+    if prefer_snapshot:
+        if snapshot:
+            return snapshot, "snapshot", None
+        if snapshot_file and os.path.isfile(snapshot_file):
+            try:
+                with open(snapshot_file, "r", encoding="utf-8") as f:
+                    return f.read(), "snapshot", None
+            except (OSError, UnicodeDecodeError) as exc:
+                fetch_error_msg = (
+                    f"prefer_snapshot=True but snapshot_file "
+                    f"'{snapshot_file}' could not be read: {exc}"
+                )
+
+    # --- 1. Try live fetch ---
     if requests is not None and not skip_live_fetch:
         try:
             resp = requests.get(
@@ -154,17 +241,29 @@ def fetch_page(url: str, timeout: int = 15, snapshot: str = None,
                     return pdf_text, "live", None
             else:
                 page_text = resp.text
-                # --- 1.5. GitHub raw README fallback ---
-                # Only try if live fetch returned an empty/JS-shell page (< 500 chars of
-                # visible text after tag stripping) for a bare GitHub repo URL.
-                # This preserves quotes about repo metadata that appears on the rendered
-                # github.com page, falling back to raw README only when the live page
-                # didn't contain useful content.
-                if len(re.sub(r'<[^>]+>', '', page_text).strip()) < 500:
-                    github_text = try_github_raw(url, timeout)
-                    if github_text is not None:
-                        return github_text, "github_raw", None
-                return page_text, "live", None
+                # --- 1.4. Anti-bot / CAPTCHA block-page detection ---
+                # PMC, Frontiers, Springer, and other publishers serve HTTP 200
+                # with a Google reCAPTCHA / Cloudflare challenge page when the
+                # request fingerprint looks bot-like. Treat these as fetch
+                # failures so the snapshot/Wayback fallback chain still triggers.
+                block_marker = looks_like_block_page(page_text)
+                if block_marker is not None:
+                    fetch_error_msg = (
+                        f"live fetch returned an anti-bot challenge page "
+                        f"({block_marker}); falling back to snapshot/Wayback"
+                    )
+                else:
+                    # --- 1.5. GitHub raw README fallback ---
+                    # Only try if live fetch returned an empty/JS-shell page (< 500 chars of
+                    # visible text after tag stripping) for a bare GitHub repo URL.
+                    # This preserves quotes about repo metadata that appears on the rendered
+                    # github.com page, falling back to raw README only when the live page
+                    # didn't contain useful content.
+                    if len(re.sub(r'<[^>]+>', '', page_text).strip()) < 500:
+                        github_text = try_github_raw(url, timeout)
+                        if github_text is not None:
+                            return github_text, "github_raw", None
+                    return page_text, "live", None
 
         except requests.exceptions.Timeout:
             fetch_error_msg = f"Timeout after {timeout}s on {url}"

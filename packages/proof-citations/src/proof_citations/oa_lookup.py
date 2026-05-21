@@ -46,7 +46,7 @@ def extract_doi(url: str, doi: str = None) -> str | None:
 # Unpaywall OA lookup
 # ---------------------------------------------------------------------------
 
-def lookup_oa_url(doi: str, email: str = None) -> str | None:
+def lookup_oa_url(doi: str, email: str = None, timeout: int = 5) -> str | None:
     """Query Unpaywall for an open-access URL for the given DOI.
 
     Args:
@@ -54,6 +54,8 @@ def lookup_oa_url(doi: str, email: str = None) -> str | None:
         email: Contact email required by Unpaywall API terms.
             If None, reads from PROOF_ENGINE_UNPAYWALL_EMAIL env var.
             If still None, returns None (API requires email).
+        timeout: HTTP request timeout in seconds (default 5). Unpaywall is
+            typically very fast; the lower default keeps sandbox runs bounded.
 
     Returns:
         OA URL string, or None if no OA version found or API error.
@@ -68,7 +70,7 @@ def lookup_oa_url(doi: str, email: str = None) -> str | None:
 
     api_url = f"https://api.unpaywall.org/v2/{_url_quote(doi, safe='')}?email={_url_quote(email, safe='@')}"
     try:
-        resp = requests.get(api_url, timeout=10,
+        resp = requests.get(api_url, timeout=timeout,
                             headers={"User-Agent": "proof-engine/1.0"})
         resp.raise_for_status()
         data = resp.json()

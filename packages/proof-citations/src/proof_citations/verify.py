@@ -339,8 +339,13 @@ def normalize_text(text: str, *, preserve_ambiguous_sups: bool = False) -> str:
     # Catches PMC variants: <sup><span class="ref"><a>1</a></span></sup>
     # Also handles comma-separated refs: <sup><a>5</a>,<a>6</a></sup>
     # Requires <a> inside (nested spans without links are formula exponents)
+    #
+    # All inner unbounded `*` quantifiers were bounded in v1.42.0 to prevent
+    # catastrophic backtracking on large academic HTML (cowork sandbox hung
+    # >25s on a 924KB Frontiers article). Real-world refs use \u22643 nested spans
+    # and \u226430 comma-separated targets, so the caps are conservative.
     text, n0 = re.subn(
-        r'<sup[^>]*>\s*(?:<span[^>]*>\s*)*<a[^>]*>\s*(?:<span[^>]*>\s*)?\[?\d+(?:[,\-\u2013]\d+)*\]?\s*(?:</span>\s*)?</a>\s*(?:</span>\s*)*(?:,\s*(?:<span[^>]*>\s*)*<a[^>]*>\s*(?:<span[^>]*>\s*)?\[?\d+(?:[,\-\u2013]\d+)*\]?\s*(?:</span>\s*)?</a>\s*(?:</span>\s*)*)*</sup>',
+        r'<sup[^>]*>\s*(?:<span[^>]*>\s*){0,5}<a[^>]*>\s*(?:<span[^>]*>\s*)?\[?\d+(?:[,\-\u2013]\d+){0,10}\]?\s*(?:</span>\s*)?</a>\s*(?:</span>\s*){0,5}(?:,\s*(?:<span[^>]*>\s*){0,5}<a[^>]*>\s*(?:<span[^>]*>\s*)?\[?\d+(?:[,\-\u2013]\d+){0,10}\]?\s*(?:</span>\s*)?</a>\s*(?:</span>\s*){0,5}){0,40}</sup>',
         '', text, flags=re.IGNORECASE)
 
     # Pattern 1: simple linked refs -- requires <a> tag inside <sup>
@@ -606,25 +611,35 @@ def _match_quote(page_text_raw: str, expected_quote: str, fact_id: str,
 # OA fallback helper
 # ---------------------------------------------------------------------------
 
-def _try_oa_fallback(url: str, doi: str = None, timeout: int = 15) -> tuple:
+def _try_oa_fallback(url: str, doi: str = None, timeout: int = 15,
+                     fact_id: str = "") -> tuple:
     """Try to find and fetch an OA version of a paywalled source.
 
     Args:
         url: Original citation URL (used for DOI extraction if doi not provided).
         doi: Explicit DOI from empirical_facts.
         timeout: Fetch timeout for the OA URL.
+        fact_id: Identifier for log messages; cosmetic.
 
     Returns:
         (page_text, oa_url) — both None if no OA version found or fetch failed.
+
+    Visibility: each step prints a one-line status. Without this, multi-minute
+    OA latency looks like a silent hang (the cowork sandbox lost ~45s here
+    with no output, see v1.42.0 release notes).
     """
     extracted_doi = extract_doi(url, doi=doi)
     if not extracted_doi:
         return None, None
 
-    oa_url = lookup_oa_url(extracted_doi)
+    label = f" {fact_id}" if fact_id else ""
+    print(f"  [?]{label}: live+snapshot+wayback failed — trying Unpaywall OA lookup for {extracted_doi}")
+    oa_url = lookup_oa_url(extracted_doi, timeout=5)
     if not oa_url:
+        print(f"  [?]{label}: no OA version found via Unpaywall")
         return None, None
 
+    print(f"  [?]{label}: OA URL found ({oa_url}) — fetching")
     # Fetch the OA URL
     page_text, fetch_mode, _ = _fetch_page(
         oa_url, timeout=timeout,
@@ -632,6 +647,7 @@ def _try_oa_fallback(url: str, doi: str = None, timeout: int = 15) -> tuple:
     )
     if page_text is not None:
         return page_text, oa_url
+    print(f"  [?]{label}: OA fetch failed")
     return None, None
 
 
@@ -713,6 +729,8 @@ def verify_citation(
     oa_lookup: bool = True,
     doi: str = None,
     expected_metadata: Optional[dict] = None,
+    skip_live_fetch: bool = False,
+    prefer_snapshot: bool = False,
 ) -> dict:
     """Fetch a URL and check whether the expected quote appears on the page.
 
@@ -741,6 +759,12 @@ def verify_citation(
             (title, journal, year, doi, authors, …). If provided, runs the
             metadata-chimera check in addition to the quote-on-page check.
             New in v1.40.0.
+        skip_live_fetch: If True, skip the live HTTP fetch entirely and go
+            straight to snapshot → snapshot_file → wayback. Use for sources
+            known to serve anti-bot challenges. New in v1.42.0.
+        prefer_snapshot: If True AND a snapshot is provided, use it before
+            attempting a live fetch. Live fetch remains the fallback if the
+            snapshot is unusable. New in v1.42.0.
 
     Returns:
         dict with keys: status, method, coverage_pct, fetch_error, fetch_mode,
@@ -778,7 +802,8 @@ def verify_citation(
         url, timeout=timeout, snapshot=snapshot,
         snapshot_file=snapshot_file,
         wayback_fallback=wayback_fallback,
-        skip_live_fetch=(requests is None),
+        skip_live_fetch=skip_live_fetch or (requests is None),
+        prefer_snapshot=prefer_snapshot,
     )
 
     if page_text is not None:
@@ -802,7 +827,8 @@ def verify_citation(
 
     # All fetch methods exhausted — try OA fallback before giving up
     if oa_lookup:
-        oa_text, oa_url = _try_oa_fallback(url, doi=doi, timeout=timeout)
+        oa_text, oa_url = _try_oa_fallback(url, doi=doi, timeout=timeout,
+                                           fact_id=fact_id)
         if oa_text is not None:
             oa_result = _match_quote(oa_text, expected_quote, fact_id,
                                      fetch_mode="oa_variant")
@@ -821,7 +847,10 @@ def verify_citation(
 # ---------------------------------------------------------------------------
 
 def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
-                         oa_lookup: bool = True) -> dict:
+                         oa_lookup: bool = True,
+                         oa_lookup_budget_seconds: Optional[float] = None,
+                         skip_live_fetch: bool = False,
+                         prefer_snapshot: bool = False) -> dict:
     """Verify all empirical facts by fetching their citation URLs.
 
     Supports two formats per fact:
@@ -840,13 +869,34 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
     Args:
         empirical_facts: Dict of fact_id → fact data.
         wayback_fallback: If True, try Wayback Machine when live+snapshot fail.
+        oa_lookup: If True (default), try Unpaywall OA fallback after a fetch
+            failure when the URL carries a DOI. Set to False in sandboxed
+            environments with strict overall time budgets — OA lookup can add
+            ~10–15s per failed fact and is silent (cowork sandbox hit this).
+        oa_lookup_budget_seconds: Total wall-clock budget (in seconds) for OA
+            lookups across all facts in this call. Once exhausted, subsequent
+            facts skip OA. None (default) means no budget. New in v1.42.0.
+        skip_live_fetch: Forwarded to each verify_citation call. New in v1.42.0.
+        prefer_snapshot: Forwarded to each verify_citation call. New in v1.42.0.
 
     Returns:
         dict of {check_id: result_dict} where result_dict has keys:
         status, method, coverage_pct, fetch_error, fetch_mode, message,
         credibility, metadata_result.
     """
+    import time as _time
     results = {}
+    oa_deadline = (
+        _time.monotonic() + oa_lookup_budget_seconds
+        if (oa_lookup and oa_lookup_budget_seconds is not None) else None
+    )
+
+    def _oa_allowed() -> bool:
+        if not oa_lookup:
+            return False
+        if oa_deadline is None:
+            return True
+        return _time.monotonic() < oa_deadline
 
     for fact_id, fact in empirical_facts.items():
         if "sources" in fact:
@@ -869,9 +919,11 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
                     snapshot_file=source.get("snapshot_file"),
                     snapshot_fetched_at=source.get("snapshot_fetched_at"),
                     wayback_fallback=wayback_fallback,
-                    oa_lookup=oa_lookup,
+                    oa_lookup=_oa_allowed(),
                     doi=source.get("doi"),
                     expected_metadata=source.get("expected_metadata"),
+                    skip_live_fetch=skip_live_fetch,
+                    prefer_snapshot=prefer_snapshot,
                 )
                 results[check_id] = result
                 _print_status(check_id, result)
@@ -893,9 +945,11 @@ def verify_all_citations(empirical_facts: dict, wayback_fallback: bool = False,
                 snapshot_file=fact.get("snapshot_file"),
                 snapshot_fetched_at=fact.get("snapshot_fetched_at"),
                 wayback_fallback=wayback_fallback,
-                oa_lookup=oa_lookup,
+                oa_lookup=_oa_allowed(),
                 doi=fact.get("doi"),
                 expected_metadata=fact.get("expected_metadata"),
+                skip_live_fetch=skip_live_fetch,
+                prefer_snapshot=prefer_snapshot,
             )
             results[fact_id] = result
             _print_status(fact_id, result)

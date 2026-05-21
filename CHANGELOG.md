@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.42.0] - 2026-05-21
+
+Hardening release addressing six issues from a Claude Cowork sandbox proof run. No breaking changes.
+
+### Added
+
+- **`fetch_page(..., prefer_snapshot=)`** and **`verify_citation(..., skip_live_fetch=, prefer_snapshot=)`.** First-class kwargs to control the fallback chain. `skip_live_fetch=True` bypasses live HTTP entirely (snapshot → snapshot_file → wayback only); `prefer_snapshot=True` uses the snapshot before attempting live fetch, falling back to live if the snapshot is unusable. Both flags also pass through `verify_all_citations`. Replaces the prior monkeypatch dance (`scripts.verify_citations.requests = None`) that the cowork sandbox had to use to bypass live fetch on PMC/Frontiers.
+- **`verify_all_citations(..., oa_lookup_budget_seconds=)`.** Total wall-clock budget for Unpaywall OA lookups across a batch — once exhausted, subsequent facts skip OA. Closes the case where 7 sequential OA lookups silently consumed ~70s without log output.
+- **`looks_like_block_page(text)` in `proof_citations.fetch`.** Detector for anti-bot / CAPTCHA challenge pages served with HTTP 200 (Google reCAPTCHA, Cloudflare browser-check, Imperva/Incapsula, DataDome, Akamai). Used internally by `fetch_page` to trigger snapshot fallback on a 200-status challenge; exported for callers that want the same detection.
+- **Visible OA-fallback logging.** `verify_citation` now prints a one-line status for each OA-lookup step (Unpaywall query → OA URL found → fetch result). Eliminates the silent multi-minute hang the cowork sandbox hit.
+
+### Changed
+
+- **`fetch_page` falls through to snapshot when the live fetch returns an anti-bot challenge page.** Previously, an HTTP 200 reCAPTCHA / Cloudflare challenge was treated as a successful fetch and the quote-on-page check failed with `not_found`. SKILL.md's gotcha note about "the live→snapshot→Wayback fallback chain handles this automatically when a snapshot is provided" was aspirational pre-1.42.0; it is now true.
+- **`normalize_text` regex hardened against catastrophic backtracking.** Pattern 0 (PMC-style nested `<sup><span><a>` reference markers) had three nested unbounded `*` quantifiers that exhibited exponential blowup on a ~924KB Frontiers article (cowork sandbox observed >25s). Quantifiers are now bounded — real-world refs need ≤3 nested spans and ≤30 comma-separated targets, so caps are conservative. Synthetic 1MB academic HTML now normalizes in ~0.1s (vs >25s pre-fix).
+- **`lookup_oa_url(..., timeout=)`** parameterized (default lowered to 5s from 10s). Unpaywall is fast; the lower default keeps sandbox runs bounded without hurting real-world success rate.
+- **Source-credibility classifier**: PubMed (`pubmed.ncbi.nlm.nih.gov`), PMC (`pmc.ncbi.nlm.nih.gov`), and other NCBI/NLM hostnames now type as `source_type: "academic_database"`, `tier: 4` instead of `"government"`, `tier: 5`. The .gov-suffix-only check mis-framed peer-reviewed biomedical literature as government policy/data primaries; the override list runs before the general .gov check so other .gov domains (bls.gov, nasa.gov, cdc.gov, …) remain government tier 5.
+- **`PROOF_ENGINE_ROOT` walk-up accepts the plugin-install layout.** Templates and `scripts-api.md` previously walked up looking only for `proof-engine/skills/proof-engine/scripts/` (dev-repo layout). The walk-up now also accepts `skills/proof-engine/scripts/` (plugin install layout), so a delivered `proof.py` can re-run from inside a plugin install without needing `PROOF_ENGINE_ROOT` set manually.
+- **SKILL.md dead-link cleanup.** The link to `packages/proof-citations/README.md` now points at the GitHub copy (and PyPI), the `tools/lib/proof_loader.py` link points at GitHub, and the Publishing section carries a prominent dev-repo-only note pointing plugin-install users at the upstream repo or the `proof-engine-registry` PyPI package for self-hosting.
+
+### Compatibility
+
+- All new kwargs are additive with safe defaults; existing callers see no behavior change.
+- The new `source_type: "academic_database"` value is a new tier-4 type — code that switches exhaustively on `source_type` and didn't have a default arm should add the new case (the previous fallthrough to `"government"` will no longer fire for NCBI/NLM hostnames).
+- The new visible OA-fallback logging adds three `print()` lines per fact that triggers OA fallback. Callers running in quiet contexts can either set `oa_lookup=False` or `oa_lookup_budget_seconds=0`.
+
 ## [1.40.0] - 2026-05-21
 
 ### Added

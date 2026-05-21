@@ -16,8 +16,14 @@ PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
 if not PROOF_ENGINE_ROOT:
     _d = os.path.dirname(os.path.abspath(__file__))
     while _d != os.path.dirname(_d):
-        if os.path.isdir(os.path.join(_d, "proof-engine", "skills", "proof-engine", "scripts")):
-            PROOF_ENGINE_ROOT = os.path.join(_d, "proof-engine", "skills", "proof-engine")
+        for _cand in (
+            os.path.join(_d, "proof-engine", "skills", "proof-engine"),
+            os.path.join(_d, "skills", "proof-engine"),
+        ):
+            if os.path.isdir(os.path.join(_cand, "scripts")):
+                PROOF_ENGINE_ROOT = _cand
+                break
+        if PROOF_ENGINE_ROOT:
             break
         _d = os.path.dirname(_d)
     if not PROOF_ENGINE_ROOT:

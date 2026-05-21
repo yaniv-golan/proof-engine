@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "proof-engine-wiki"
-version = "1.41.0"
+version = "1.42.0"
 description = "Attach verified Proof Engine proofs to LLM-wiki claims."
 readme = "README.md"
 license = { file = "LICENSE" }

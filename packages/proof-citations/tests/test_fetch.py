@@ -66,3 +66,61 @@ def test_fetch_page_accepts_snapshot_fallback():
     assert page_text == "<html>snapshot body</html>"
     assert fetch_mode == "snapshot"
     assert error is None
+
+
+def test_fetch_page_treats_recaptcha_as_failure_and_uses_snapshot():
+    """HTTP 200 reCAPTCHA pages must fall through to snapshot fallback.
+
+    Regression for cowork sandbox issue (v1.42.0): PMC and Frontiers serve a
+    200-status reCAPTCHA when fingerprint looks bot-like. The previous
+    fallback chain treated this as a successful fetch and quote verification
+    failed with "not_found" instead of using the provided snapshot.
+    """
+    with _fixture_server() as base:
+        page_text, fetch_mode, error = fetch_page(
+            f"{base}/recaptcha_page.html",
+            snapshot="<html><body>real article body</body></html>",
+        )
+    # The crucial regression check: live fetch returned 200, the OLD code
+    # would have returned fetch_mode="live" with the CAPTCHA page as the body.
+    # The fix recognizes the block-page and falls through to snapshot.
+    assert fetch_mode == "snapshot"
+    assert "real article body" in page_text
+    # On a successful snapshot, error is None per the existing contract.
+    assert error is None
+
+
+def test_fetch_page_treats_cloudflare_challenge_as_failure():
+    """Cloudflare browser-check pages (HTTP 200) must fall through to snapshot."""
+    with _fixture_server() as base:
+        page_text, fetch_mode, error = fetch_page(
+            f"{base}/cloudflare_challenge.html",
+            snapshot="<html><body>real article body</body></html>",
+        )
+    assert fetch_mode == "snapshot"
+    assert "real article body" in page_text
+
+
+def test_fetch_page_prefer_snapshot_skips_live_fetch_when_snapshot_present():
+    """prefer_snapshot=True uses snapshot before trying live fetch."""
+    with _fixture_server() as base:
+        page_text, fetch_mode, error = fetch_page(
+            f"{base}/sample.html",  # would succeed live
+            snapshot="<html>preferred snapshot</html>",
+            prefer_snapshot=True,
+        )
+    assert fetch_mode == "snapshot"
+    assert page_text == "<html>preferred snapshot</html>"
+    assert error is None
+
+
+def test_fetch_page_prefer_snapshot_falls_back_to_live_when_no_snapshot():
+    """prefer_snapshot=True still falls back to live fetch if snapshot is empty."""
+    with _fixture_server() as base:
+        page_text, fetch_mode, error = fetch_page(
+            f"{base}/sample.html",
+            snapshot=None,
+            prefer_snapshot=True,
+        )
+    assert fetch_mode == "live"
+    assert "hello world" in page_text.lower()

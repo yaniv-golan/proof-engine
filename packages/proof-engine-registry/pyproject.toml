@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "proof-engine-registry"
-version = "1.41.0"
+version = "1.42.0"
 description = "Proof Registry protocol: client, reference server, and static-JSON emitter."
 readme = "README.md"
 license = { file = "LICENSE" }

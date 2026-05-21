@@ -16,8 +16,14 @@ PROOF_ENGINE_ROOT = os.environ.get("PROOF_ENGINE_ROOT")
 if not PROOF_ENGINE_ROOT:
     _d = os.path.dirname(os.path.abspath(__file__))
     while _d != os.path.dirname(_d):
-        if os.path.isdir(os.path.join(_d, "proof-engine", "skills", "proof-engine", "scripts")):
-            PROOF_ENGINE_ROOT = os.path.join(_d, "proof-engine", "skills", "proof-engine")
+        for _cand in (
+            os.path.join(_d, "proof-engine", "skills", "proof-engine"),
+            os.path.join(_d, "skills", "proof-engine"),
+        ):
+            if os.path.isdir(os.path.join(_cand, "scripts")):
+                PROOF_ENGINE_ROOT = _cand
+                break
+        if PROOF_ENGINE_ROOT:
             break
         _d = os.path.dirname(_d)
     if not PROOF_ENGINE_ROOT:
@@ -25,7 +31,7 @@ if not PROOF_ENGINE_ROOT:
 sys.path.insert(0, PROOF_ENGINE_ROOT)
 ```
 
-**Resolution order:** (1) `PROOF_ENGINE_ROOT` env var if set — Binder and site-publishing tools set it explicitly; (2) walk up from proof.py's directory until `proof-engine/skills/proof-engine/scripts/` is found — makes the published proof portable to any clone of the repo; (3) raise a clear `RuntimeError`. Do NOT replace the block with a hardcoded absolute path — it leaks the generating agent's filesystem and doesn't work anywhere else.
+**Resolution order:** (1) `PROOF_ENGINE_ROOT` env var if set — Binder and site-publishing tools set it explicitly; (2) walk up from proof.py's directory until either `proof-engine/skills/proof-engine/scripts/` (dev-repo layout) or `skills/proof-engine/scripts/` (plugin install layout) is found — makes the published proof portable to any clone of the repo or any plugin install; (3) raise a clear `RuntimeError`. Do NOT replace the block with a hardcoded absolute path — it leaks the generating agent's filesystem and doesn't work anywhere else.
 
 ## computations.py
 
