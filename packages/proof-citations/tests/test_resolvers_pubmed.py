@@ -19,10 +19,13 @@ import pytest
 from proof_citations.resolvers.base import ResolutionError, Author, ResolvedRecord
 from proof_citations.resolvers.pubmed import (
     resolve_pmid,
+    resolve_pmc,
     _parse_year,
     _parse_published_date,
     _parse_authors,
     _extract_doi,
+    _extract_pmid,
+    _normalize_pmc_input,
 )
 
 
@@ -271,3 +274,227 @@ def test_resolve_pmid_live_smoke():
     assert record.year == 2021
     assert record.venue and "cancer" in record.venue.lower()
     assert record.doi == "10.3322/caac.21660"
+
+
+# ---------------------------------------------------------------------------
+# PMC normalization + extraction helpers
+# ---------------------------------------------------------------------------
+
+class TestNormalizePmcInput:
+    def test_with_pmc_prefix(self):
+        assert _normalize_pmc_input("PMC2768535") == "2768535"
+
+    def test_bare_numeric(self):
+        assert _normalize_pmc_input("2768535") == "2768535"
+
+    def test_pmcid_colon_prefix(self):
+        assert _normalize_pmc_input("PMCID:PMC2768535") == "2768535"
+
+    def test_pmc_colon_prefix(self):
+        assert _normalize_pmc_input("pmc:PMC2768535") == "2768535"
+
+    def test_lowercase_pmc(self):
+        assert _normalize_pmc_input("pmc2768535") == "2768535"
+
+    def test_whitespace(self):
+        assert _normalize_pmc_input("  PMC2768535  ") == "2768535"
+
+
+class TestExtractPmid:
+    def test_pmid_idtype(self):
+        ids = [{"idtype": "pmid", "value": "19152719"}]
+        assert _extract_pmid(ids) == "19152719"
+
+    def test_pubmed_idtype_synonym(self):
+        ids = [{"idtype": "pubmed", "value": "19152719"}]
+        assert _extract_pmid(ids) == "19152719"
+
+    def test_skips_non_pmid(self):
+        ids = [
+            {"idtype": "doi", "value": "10.1017/S1462399409000957"},
+            {"idtype": "pmcid", "value": "PMC2768535"},
+        ]
+        assert _extract_pmid(ids) is None
+
+    def test_rejects_non_numeric(self):
+        ids = [{"idtype": "pmid", "value": "PMC123"}]
+        assert _extract_pmid(ids) is None
+
+    def test_empty(self):
+        assert _extract_pmid([]) is None
+        assert _extract_pmid(None) is None
+
+
+# ---------------------------------------------------------------------------
+# PMC resolver — mocked tests
+# ---------------------------------------------------------------------------
+
+def _canned_pmc_response(pmc_num: str, *, pmid_xref: str = "19152719",
+                         doi_xref: str = "10.1017/S1462399409000957") -> dict:
+    """Representative esummary db=pmc payload (modeled on PMC2768535).
+
+    `db=pmc` does NOT return `pubtype`, `issn`/`essn`, or `lang` (verified
+    live against eutils on 2026-05-21). It DOES return `articleids` carrying
+    both the `pmid` and `doi` cross-references."""
+    return {
+        "header": {"type": "esummary", "version": "0.3"},
+        "result": {
+            "uids": [pmc_num],
+            pmc_num: {
+                "uid": pmc_num,
+                "pubdate": "2009 Jan 20",
+                "epubdate": "2009 Jan 20",
+                "source": "Expert Rev Mol Med",
+                "fulljournalname": "Expert reviews in molecular medicine",
+                "title": "Emerging role of the cannabinoid receptor CB2 in immune regulation.",
+                "volume": "11",
+                "issue": "",
+                "pages": "e3",
+                "authors": [
+                    {"name": "Cabral GA", "authtype": "Author"},
+                    {"name": "Griffin-Thomas L", "authtype": "Author"},
+                ],
+                "articleids": [
+                    {"idtype": "pmcid", "value": f"PMC{pmc_num}"},
+                    {"idtype": "pmid", "value": pmid_xref},
+                    {"idtype": "doi", "value": doi_xref},
+                ],
+            },
+        },
+    }
+
+
+def _mock_session_sequence(*payloads):
+    """Build a mock HTTPSession that returns each payload in turn on
+    successive `.get()` calls — needed when resolve_pmc enriches via
+    resolve_pmid (two calls in one logical resolve)."""
+    session = MagicMock()
+    responses = []
+    for p in payloads:
+        r = MagicMock()
+        r.status_code = 200
+        r.json.return_value = p
+        r.text = json.dumps(p)
+        responses.append(r)
+    session.get.side_effect = responses
+    return session
+
+
+class TestResolvePmcMocked:
+    def test_happy_path_with_enrichment(self):
+        pmc_payload = _canned_pmc_response("2768535")
+        pmid_payload = _canned_eutils_response("19152719")
+        session = _mock_session_sequence(pmc_payload, pmid_payload)
+
+        record = resolve_pmc("PMC2768535", session=session)
+
+        assert isinstance(record, ResolvedRecord)
+        assert record.identifier_type == "pmc"
+        assert record.identifier_value == "PMC2768535"
+        assert record.canonical_url == "https://pmc.ncbi.nlm.nih.gov/articles/PMC2768535/"
+        assert record.year == 2009
+        assert record.doi == "10.1017/S1462399409000957"
+        assert record.pmid == "19152719"
+        # Enriched from the PMID round-trip:
+        assert record.issn == "0022-5347"  # canned pmid response carries this
+        assert record.publication_type == "journal-article"
+        assert record.source_api == "eutils.ncbi.nlm.nih.gov"
+
+    def test_outbound_id_is_numeric_not_prefixed(self):
+        """E-utilities rejects `id=PMC2768535`. Verify we strip the prefix."""
+        pmc_payload = _canned_pmc_response("2768535")
+        pmid_payload = _canned_eutils_response("19152719")
+        session = _mock_session_sequence(pmc_payload, pmid_payload)
+
+        resolve_pmc("PMC2768535", session=session)
+
+        # First call is the db=pmc fetch
+        first_call = session.get.call_args_list[0]
+        assert first_call.kwargs["params"]["id"] == "2768535"
+        assert first_call.kwargs["params"]["db"] == "pmc"
+
+    def test_accepts_bare_numeric_input(self):
+        pmc_payload = _canned_pmc_response("2768535")
+        pmid_payload = _canned_eutils_response("19152719")
+        session = _mock_session_sequence(pmc_payload, pmid_payload)
+        record = resolve_pmc("2768535", session=session)
+        assert record.identifier_value == "PMC2768535"
+
+    def test_non_numeric_raises(self):
+        session = _mock_session({})
+        with pytest.raises(ValueError, match="PMCID must be numeric"):
+            resolve_pmc("PMCfoo", session=session)
+
+    def test_http_429_raises_rate_limited(self):
+        session = _mock_session({}, status_code=429)
+        with pytest.raises(ResolutionError) as exc_info:
+            resolve_pmc("PMC2768535", session=session)
+        assert exc_info.value.kind == "rate_limited"
+
+    def test_pmc_not_found_raises_not_found(self):
+        payload = {"result": {"uids": ["999999999"],
+                              "999999999": {"error": "cannot get document summary"}}}
+        session = _mock_session(payload)
+        with pytest.raises(ResolutionError) as exc_info:
+            resolve_pmc("PMC999999999", session=session)
+        assert exc_info.value.kind == "not_found"
+
+    def test_enrichment_failure_is_swallowed(self):
+        """If the cross-ref PMID resolve fails, return the pmc-only record."""
+        pmc_payload = _canned_pmc_response("2768535")
+        # Second response (the enrichment) returns 500 — resolve_pmid raises.
+        bad_pmid_response = MagicMock()
+        bad_pmid_response.status_code = 500
+        bad_pmid_response.json.return_value = {}
+        bad_pmid_response.text = ""
+
+        pmc_response = MagicMock()
+        pmc_response.status_code = 200
+        pmc_response.json.return_value = pmc_payload
+        pmc_response.text = json.dumps(pmc_payload)
+
+        session = MagicMock()
+        session.get.side_effect = [pmc_response, bad_pmid_response]
+
+        record = resolve_pmc("PMC2768535", session=session)
+        # PMC-side fields populated:
+        assert record.identifier_value == "PMC2768535"
+        assert record.year == 2009
+        assert record.doi == "10.1017/S1462399409000957"
+        assert record.pmid == "19152719"
+        # Enrichment-side fields stayed None:
+        assert record.issn is None
+        assert record.publication_type is None
+        assert record.update_status is None
+
+    def test_no_pmid_xref_no_enrichment_call(self):
+        """If db=pmc returns no pmid articleid, only one HTTP call is made."""
+        payload = _canned_pmc_response("2768535", pmid_xref="")
+        payload["result"]["2768535"]["articleids"] = [
+            {"idtype": "pmcid", "value": "PMC2768535"},
+            {"idtype": "doi", "value": "10.1017/S1462399409000957"},
+        ]
+        session = _mock_session(payload)
+        record = resolve_pmc("PMC2768535", session=session)
+        assert session.get.call_count == 1
+        assert record.pmid is None
+        assert record.doi == "10.1017/S1462399409000957"
+
+
+# ---------------------------------------------------------------------------
+# Live network smoke test — PMC
+# ---------------------------------------------------------------------------
+
+@needs_network
+@pytest.mark.network
+def test_resolve_pmc_live_smoke():
+    """Hit the real E-utilities for PMC2768535 (Cabral & Griffin-Thomas 2009 —
+    used in proof-engine's CB2/microglia proof)."""
+    from proof_citations.resolvers.base import HTTPSession
+    record = resolve_pmc("PMC2768535", session=HTTPSession())
+    assert record.identifier_type == "pmc"
+    assert record.identifier_value == "PMC2768535"
+    assert record.canonical_url == "https://pmc.ncbi.nlm.nih.gov/articles/PMC2768535/"
+    assert record.year == 2009
+    assert record.doi  # Crossref cross-ref populated
+    assert record.pmid  # PubMed cross-ref populated

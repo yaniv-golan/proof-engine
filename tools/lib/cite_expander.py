@@ -47,6 +47,7 @@ def _identifier_prefix(ref) -> str:
         "swhid": ref.identifier_value,
         "handle": f"hdl:{ref.identifier_value}",
         "isbn":  f"ISBN:{ref.identifier_value}",
+        "pmc":   f"PMCID:{ref.identifier_value}",
     }.get(ref.identifier_type, ref.identifier_value)
 
 

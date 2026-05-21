@@ -193,6 +193,8 @@ def _identifier_href(ident, base_url: str):
         return f"https://archive.softwareheritage.org/{ident.value}"
     if ident.type == "handle":
         return f"https://hdl.handle.net/{ident.value}"
+    if ident.type == "pmc":
+        return f"https://pmc.ncbi.nlm.nih.gov/articles/{ident.value}/"
     if ident.type == "url":
         return ident.value
     return None
@@ -212,6 +214,8 @@ def _identifier_label(ident, proofs_by_slug: dict) -> str:
         return ident.value
     if ident.type == "handle":
         return f"hdl:{ident.value}"
+    if ident.type == "pmc":
+        return f"PMCID:{ident.value}"
     if ident.type == "url":
         return ident.value
     if ident.type == "isbn":
@@ -227,6 +231,7 @@ _TYPE_LABEL = {
     "handle": "handle",
     "url": "link",
     "isbn": "ISBN",
+    "pmc": "PMC",
 }
 
 

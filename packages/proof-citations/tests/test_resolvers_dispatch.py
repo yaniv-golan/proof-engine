@@ -77,3 +77,9 @@ class TestPubMedAutoRegistered:
         # Should be the pubmed.resolve_pmid function
         from proof_citations.resolvers.pubmed import resolve_pmid
         assert backend is resolve_pmid
+
+    def test_pmc_backend_registered(self):
+        backend = get_backend("pmc")
+        assert backend is not None
+        from proof_citations.resolvers.pubmed import resolve_pmc
+        assert backend is resolve_pmc

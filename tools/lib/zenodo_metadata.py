@@ -21,10 +21,15 @@ from tools.lib.depends_on import DependsOnEntry, Identifier
 # paper is by arXiv ID, not by the SWH archival hash) and URL must beat
 # slug (slug is not externally resolvable; URL is).
 _ZENODO_PREFERENCE: tuple[str, ...] = (
-    "doi", "arxiv", "swhid", "handle", "isbn", "url", "slug",
+    "doi", "arxiv", "swhid", "handle", "isbn", "pmc", "url", "slug",
 )
 
 
+# Zenodo's relatedIdentifier `scheme` vocabulary has no `pmc` entry, so we
+# emit pmc edges with `scheme="url"` plus the canonical PMC URL as the
+# identifier. The mapping below intentionally omits `pmc` — the special case
+# inside `build_related_identifiers` must run before the `_SCHEME_BY_TYPE`
+# lookup or a KeyError fires.
 _SCHEME_BY_TYPE: dict[str, str] = {
     "doi": "doi",
     "arxiv": "arxiv",
@@ -39,6 +44,7 @@ _RESOURCE_TYPE_BY_TYPE: dict[str, str] = {
     "arxiv": "publication-preprint",
     "swhid": "software",
     "isbn":  "publication-book",
+    "pmc":   "publication-article",
     # doi: omitted — could be article, dataset, software, etc. Our own DOIs
     #   are datasets. Omit and let Zenodo/DataCite resolve from the target.
     # handle, url: omitted — too ambiguous to guess.
@@ -97,14 +103,21 @@ def build_related_identifiers(
             )
             continue
         relation = _camel(entry.relation)
-        scheme = _SCHEME_BY_TYPE[ident.type]
-        key = (ident.value, relation, scheme)
+        # PMC has no Zenodo scheme; emit the canonical PMC URL with scheme=url.
+        # MUST run before the _SCHEME_BY_TYPE lookup below (no pmc key there).
+        if ident.type == "pmc":
+            ident_str = f"https://pmc.ncbi.nlm.nih.gov/articles/{ident.value}/"
+            scheme = "url"
+        else:
+            ident_str = ident.value
+            scheme = _SCHEME_BY_TYPE[ident.type]
+        key = (ident_str, relation, scheme)
         if key in seen:
             continue
         seen.add(key)
 
         entry_out = {
-            "identifier": ident.value,
+            "identifier": ident_str,
             "relation":   relation,
             "scheme":     scheme,
         }

@@ -1,4 +1,4 @@
-"""PubMed backend via NCBI E-utilities `esummary`.
+"""PubMed and PubMed-Central backends via NCBI E-utilities `esummary`.
 
 The `esummary` JSON response carries every field we need: title, source/journal,
 publication date, volume, issue, pages, authors, DOI (via `articleids`).
@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import os
 import re
+import sys
 from typing import Optional
 
 from proof_citations.resolvers.base import (
@@ -29,12 +30,14 @@ from proof_citations.resolvers.base import (
 
 ESUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
 PUBMED_VIEW_URL = "https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+PMC_VIEW_URL = "https://pmc.ncbi.nlm.nih.gov/articles/PMC{pmc_num}/"
 
 _PMID_RE = re.compile(r"^\d+$")
+_PMC_NUM_RE = re.compile(r"^\d+$")
 
 
-def _build_params(pmid: str) -> dict:
-    params = {"db": "pubmed", "id": pmid, "retmode": "json", "tool": "proof-citations"}
+def _build_params(db: str, uid: str) -> dict:
+    params = {"db": db, "id": uid, "retmode": "json", "tool": "proof-citations"}
     api_key = os.environ.get("NCBI_API_KEY")
     if api_key:
         params["api_key"] = api_key
@@ -106,6 +109,17 @@ def _extract_doi(articleids: list) -> Optional[str]:
     return None
 
 
+def _extract_pmid(articleids: list) -> Optional[str]:
+    """`db=pmc` articleids carry both `pmid` and `pubmed` idtypes in the wild;
+    accept either spelling. Returns the bare numeric PMID."""
+    for aid in articleids or []:
+        if isinstance(aid, dict) and aid.get("idtype") in ("pmid", "pubmed"):
+            v = (aid.get("value") or "").strip()
+            if v and _PMID_RE.match(v):
+                return v
+    return None
+
+
 def resolve_pmid(pmid: str, *, session: HTTPSession) -> ResolvedRecord:
     """Resolve a PubMed identifier (PMID) to a `ResolvedRecord`.
 
@@ -124,7 +138,7 @@ def resolve_pmid(pmid: str, *, session: HTTPSession) -> ResolvedRecord:
         raise ValueError(f"PMID must be numeric, got {pmid!r}")
 
     try:
-        resp = session.get(ESUMMARY_URL, params=_build_params(pmid))
+        resp = session.get(ESUMMARY_URL, params=_build_params("pubmed", pmid))
     except Exception as exc:
         raise ResolutionError(
             f"PubMed fetch failed for PMID {pmid}: {exc}",
@@ -224,4 +238,157 @@ def resolve_pmid(pmid: str, *, session: HTTPSession) -> ResolvedRecord:
     )
 
 
-__all__ = ["resolve_pmid", "ESUMMARY_URL", "PUBMED_VIEW_URL"]
+def _normalize_pmc_input(value: str) -> str:
+    """Accept `PMC2768535`, `2768535`, `PMCID:PMC2768535`, or `pmc:PMC2768535`
+    forms. Returns the bare numeric portion E-utilities expects (PMC prefix
+    is rejected as an invalid uid when passed via `id=`)."""
+    s = (value or "").strip()
+    # Strip recognized prefixes case-insensitively.
+    for prefix in ("PMCID:", "pmc:", "pmcid:"):
+        if s.lower().startswith(prefix.lower()):
+            s = s[len(prefix):].strip()
+            break
+    if s.upper().startswith("PMC"):
+        s = s[3:].strip()
+    return s
+
+
+def resolve_pmc(pmcid: str, *, session: HTTPSession) -> ResolvedRecord:
+    """Resolve a PubMed-Central identifier (PMCID) to a `ResolvedRecord`.
+
+    Hits `esummary.fcgi?db=pmc&id={numeric}`. E-utilities rejects `id=PMC...`
+    as an invalid uid, so the `PMC` prefix is stripped before the request;
+    the returned record's `identifier_value` is the canonical `PMC{n}` form.
+
+    `db=pmc` esummary does not return `pubtype`, `issn`, or `lang`. When the
+    response carries a `pmid` cross-reference in `articleids`, this resolver
+    makes a best-effort follow-up `resolve_pmid` call to enrich
+    `update_status` / `publication_type` / `issn` / `language`. Failures of
+    that enrichment are swallowed (logged to stderr) so a transient pmid-side
+    error does not break a successful pmc resolve.
+
+    Args:
+        pmcid: `PMC2768535`, `2768535`, `PMCID:PMC2768535`, or `pmc:PMC2768535`.
+        session: the polite HTTP session.
+
+    Raises:
+        ValueError: numeric portion is missing or non-numeric.
+        ResolutionError: E-utilities returned an error, the PMC ID doesn't
+            exist, or the response shape is unexpected.
+    """
+    numeric = _normalize_pmc_input(pmcid)
+    if not _PMC_NUM_RE.match(numeric):
+        raise ValueError(f"PMCID must be numeric after PMC prefix, got {pmcid!r}")
+
+    try:
+        resp = session.get(ESUMMARY_URL, params=_build_params("pmc", numeric))
+    except Exception as exc:
+        raise ResolutionError(
+            f"PMC fetch failed for PMC{numeric}: {exc}",
+            kind="fetch_failed",
+            details={"pmcid": numeric, "underlying": str(exc)},
+        ) from exc
+
+    if resp.status_code == 429:
+        raise ResolutionError(
+            f"PMC rate-limited for PMC{numeric} (HTTP 429). "
+            "Set NCBI_API_KEY for higher quota.",
+            kind="rate_limited",
+            details={"pmcid": numeric, "status": 429},
+        )
+    if resp.status_code != 200:
+        raise ResolutionError(
+            f"PMC returned HTTP {resp.status_code} for PMC{numeric}",
+            kind="fetch_failed",
+            details={"pmcid": numeric, "status": resp.status_code, "body": resp.text[:200]},
+        )
+
+    try:
+        payload = resp.json()
+    except ValueError as exc:
+        raise ResolutionError(
+            f"PMC response for PMC{numeric} was not JSON: {exc}",
+            kind="malformed_response",
+            details={"pmcid": numeric, "body": resp.text[:200]},
+        ) from exc
+
+    if "error" in payload:
+        raise ResolutionError(
+            f"PMC reported error for PMC{numeric}: {payload['error']}",
+            kind="not_found",
+            details={"pmcid": numeric, "error": payload["error"]},
+        )
+
+    result = payload.get("result", {})
+    record_data = result.get(numeric)
+    if record_data is None:
+        raise ResolutionError(
+            f"PMC response for PMC{numeric} missing the expected record",
+            kind="malformed_response",
+            details={"pmcid": numeric, "keys": list(result.keys())},
+        )
+    if "error" in record_data:
+        raise ResolutionError(
+            f"PMC reports PMC{numeric} as not found: {record_data['error']}",
+            kind="not_found",
+            details={"pmcid": numeric, "error": record_data["error"]},
+        )
+
+    pmc_value = f"PMC{numeric}"
+    title = (record_data.get("title") or "").rstrip(".") or None
+    pubdate = record_data.get("pubdate") or record_data.get("epubdate") or ""
+    venue = record_data.get("fulljournalname") or record_data.get("source") or None
+    doi = _extract_doi(record_data.get("articleids", []))
+    pmid_xref = _extract_pmid(record_data.get("articleids", []))
+
+    # Best-effort enrichment from db=pubmed, which carries pubtype/issn/lang
+    # that db=pmc omits. Narrow except: only ResolutionError + ValueError.
+    publication_type: Optional[str] = None
+    update_status: Optional[str] = None
+    issn: Optional[str] = None
+    language: Optional[str] = None
+    if pmid_xref:
+        try:
+            enriched = resolve_pmid(pmid_xref, session=session)
+            publication_type = enriched.publication_type
+            update_status = enriched.update_status
+            issn = enriched.issn
+            language = enriched.language
+        except (ResolutionError, ValueError) as exc:
+            print(
+                f"proof_citations.resolvers.pubmed.resolve_pmc: "
+                f"enrichment via PMID {pmid_xref} failed for {pmc_value}: {exc}",
+                file=sys.stderr,
+            )
+
+    return ResolvedRecord(
+        identifier_type="pmc",
+        identifier_value=pmc_value,
+        canonical_url=PMC_VIEW_URL.format(pmc_num=numeric),
+        title=title,
+        authors=_parse_authors(record_data.get("authors", [])),
+        year=_parse_year(pubdate),
+        venue=venue,
+        publication_type=publication_type,
+        published_date=_parse_published_date(pubdate),
+        issn=issn,
+        doi=doi,
+        pmid=pmid_xref,
+        volume=record_data.get("volume") or None,
+        issue=record_data.get("issue") or None,
+        pages=record_data.get("pages") or None,
+        language=language,
+        update_status=update_status,
+        resolved_at=now_iso(),
+        source_api="eutils.ncbi.nlm.nih.gov",
+        raw={"eutils": record_data},
+    )
+
+
+__all__ = [
+    "resolve_pmid",
+    "resolve_pmc",
+    "ESUMMARY_URL",
+    "PUBMED_VIEW_URL",
+    "PMC_VIEW_URL",
+]

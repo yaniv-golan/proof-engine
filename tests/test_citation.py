@@ -318,3 +318,43 @@ def test_codemeta_omits_isbasedon_when_only_non_prereq_deps():
         base_url="/", site_url="https://proofengine.info",
     ))
     assert "isBasedOn" not in payload
+
+
+# --- PMC support ---
+
+def test_cff_pmc_only_emits_full_url():
+    deps = [DependsOnEntry("References", [Identifier("pmc", "PMC2768535")])]
+    cff_str = build_cff(_ctx(), depends_on=deps, base_url="/",
+                        site_url="https://proofengine.info")
+    parsed = _yaml.safe_load(cff_str)
+    ref = parsed["references"][0]
+    assert ref["type"] == "article"
+    assert ref["url"] == "https://pmc.ncbi.nlm.nih.gov/articles/PMC2768535/"
+
+
+def test_cff_doi_plus_pmc_doi_wins_canonical():
+    deps = [DependsOnEntry("References", [
+        Identifier("doi", "10.1017/S1462399409000957"),
+        Identifier("pmc", "PMC2768535"),
+    ])]
+    cff_str = build_cff(_ctx(), depends_on=deps, base_url="/",
+                        site_url="https://proofengine.info")
+    parsed = _yaml.safe_load(cff_str)
+    ref = parsed["references"][0]
+    assert ref["doi"] == "10.1017/S1462399409000957"
+    # PMC drops to the extras list as a URL identifier.
+    extras = ref.get("identifiers", [])
+    assert any(i["type"] == "url"
+               and "PMC2768535" in i["value"]
+               for i in extras)
+
+
+def test_codemeta_canonical_id_pmc_uses_full_url():
+    deps = [DependsOnEntry("IsDerivedFrom", [Identifier("pmc", "PMC2768535")])]
+    payload = json.loads(build_codemeta(
+        _ctx(), depends_on=deps,
+        base_url="/", site_url="https://proofengine.info",
+    ))
+    based = payload["isBasedOn"]
+    assert len(based) == 1
+    assert based[0]["@id"] == "https://pmc.ncbi.nlm.nih.gov/articles/PMC2768535/"

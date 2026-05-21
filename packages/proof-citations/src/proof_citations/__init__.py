@@ -1,6 +1,6 @@
 """proof-citations — fetch URLs, resolve identifiers, verify quoted text and bibliographic claims."""
 
-__version__ = "1.40.0"
+__version__ = "1.41.0"
 
 from proof_citations.verify import (
     verify_citation,

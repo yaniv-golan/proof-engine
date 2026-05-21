@@ -205,3 +205,40 @@ def test_author_supplied_isSupplementedBy_does_not_jump_webpage_edge():
     tail_relations = [r["relation"] for r in result[1:]]
     assert tail_relations == ["isDerivedFrom", "references", "isSupplementedBy"]
     assert result[-1]["identifier"] == "10.5281/zenodo.AUX"
+
+
+# --- PMC support ---
+
+def test_pmc_only_entry_emits_full_url_with_url_scheme():
+    """Zenodo's relatedIdentifier vocab has no `pmc` scheme; we emit the
+    canonical PMC URL with scheme=url instead. resource_type still flags it
+    as a publication-article."""
+    entries = [
+        DependsOnEntry(
+            relation="References",
+            identifiers=[Identifier(type="pmc", value="PMC2768535")],
+        ),
+    ]
+    result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+    # result[0] is the webpage edge; the pmc edge follows.
+    pmc_edge = result[1]
+    assert pmc_edge["scheme"] == "url"
+    assert pmc_edge["identifier"] == "https://pmc.ncbi.nlm.nih.gov/articles/PMC2768535/"
+    assert pmc_edge["relation"] == "references"
+    assert pmc_edge["resource_type"] == "publication-article"
+
+
+def test_doi_plus_pmc_doi_wins_canonical():
+    entries = [
+        DependsOnEntry(
+            relation="References",
+            identifiers=[
+                Identifier(type="doi", value="10.1017/S1462399409000957"),
+                Identifier(type="pmc", value="PMC2768535"),
+            ],
+        ),
+    ]
+    result = build_related_identifiers(entries, "https://ex.test/proofs/foo/")
+    edge = result[1]
+    assert edge["scheme"] == "doi"
+    assert edge["identifier"] == "10.1017/S1462399409000957"

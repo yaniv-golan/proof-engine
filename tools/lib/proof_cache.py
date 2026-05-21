@@ -185,6 +185,10 @@ def _resolve_url(value: str, http=None) -> ResolvedReference:
     return _resolve_one("url", value, http=http)
 
 
+def _resolve_pmc(value: str, http=None) -> ResolvedReference:
+    return _resolve_one("pmc", value, http=http)
+
+
 _BACKENDS = {
     "arxiv": _resolve_arxiv,
     "doi": _resolve_doi,
@@ -192,6 +196,7 @@ _BACKENDS = {
     "handle": _resolve_handle,
     "isbn": _resolve_isbn,
     "url": _resolve_url,
+    "pmc": _resolve_pmc,
 }
 
 

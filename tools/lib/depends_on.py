@@ -16,7 +16,7 @@ from urllib.parse import urlparse
 # Closed type vocabulary. Hard-fail on anything else.
 # orcid is intentionally excluded (people are not artifacts).
 ALLOWED_TYPES: frozenset[str] = frozenset({
-    "slug", "doi", "arxiv", "url", "swhid", "handle", "isbn",
+    "slug", "doi", "arxiv", "url", "swhid", "handle", "isbn", "pmc",
 })
 
 # Full DataCite RelationType vocabulary, version 4.5.
@@ -80,6 +80,7 @@ _SWHID_RE = re.compile(
     r"^swh:1:(snp|rel|rev|dir|cnt):[0-9a-f]{40}(;\S+)*$"
 )
 _HANDLE_RE = re.compile(r"^\d+(\.\d+)*/\S+$")
+_PMC_RE = re.compile(r"^PMC\d+$")
 
 
 def _isbn_checksum_ok(value: str) -> bool:
@@ -141,6 +142,10 @@ def validate_identifier_syntax(type_: str, value: str) -> str | None:
             return "isbn must be 10 or 13 digits (hyphens optional)"
         if not _isbn_checksum_ok(value):
             return "isbn checksum failed"
+        return None
+    if type_ == "pmc":
+        if not _PMC_RE.match(value):
+            return "pmc must match ^PMC\\d+$"
         return None
     return f"unknown identifier type: {type_}"
 
@@ -411,16 +416,20 @@ def check_cross(
 # Canonical-identifier preference for single-valued slots in CFF / codemeta /
 # BibTeX / RIS. DOI wins because it's the most durable scholarly identifier;
 # slug beats url because the canonical site URL is derivable from the slug.
+# pmc sits ahead of swhid/handle/arxiv because for biomedical proofs a PMCID
+# resolves more reliably for human readers (PubMed Central is the de-facto
+# entry point) than a software-heritage hash or DOI-handle. It still loses
+# to doi when both are declared.
 _CANONICAL_PREFERENCE: tuple[str, ...] = (
-    "doi", "swhid", "handle", "arxiv", "isbn", "slug", "url",
+    "doi", "pmc", "swhid", "handle", "arxiv", "isbn", "slug", "url",
 )
 
 
 def canonical_identifier(entry: DependsOnEntry) -> Identifier:
     """Pick the canonical identifier for a grouped entry.
 
-    Order: doi > swhid > handle > arxiv > isbn > slug > url. Falls back to
-    the first identifier if (impossibly, given vocab validation) none match.
+    Order: doi > pmc > swhid > handle > arxiv > isbn > slug > url. Falls back
+    to the first identifier if (impossibly, given vocab validation) none match.
     """
     by_type: dict[str, Identifier] = {}
     for ident in entry.identifiers:

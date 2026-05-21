@@ -52,7 +52,7 @@ print(record.doi)           # "10.3322/caac.21660"
 print(record.update_status) # None | "retracted" | "expression_of_concern" | "corrigendum"
 ```
 
-Supported identifier types out of the box: `pmid`, `doi`, `arxiv`, `isbn`, `swhid`, `handle`, `url`. PubMed uses the NCBI E-utilities JSON API (set `NCBI_API_KEY` for ~10 req/sec; default ~3). DOIs route through DataCite first, Crossref on 404. arXiv and Open Library handled natively.
+Supported identifier types out of the box: `pmid`, `pmc`, `doi`, `arxiv`, `isbn`, `swhid`, `handle`, `url`. PubMed and PubMed Central both use the NCBI E-utilities JSON API (set `NCBI_API_KEY` for ~10 req/sec; default ~3). `pmc` resolves via `db=pmc` esummary; because that endpoint omits `pubtype` / `issn` / `lang`, the backend makes a best-effort follow-up `db=pubmed` call when an `articleids` PMID cross-reference is present, to enrich retraction status, ISSN, and language. DOIs route through DataCite first, Crossref on 404. arXiv and Open Library handled natively.
 
 ### Catch metadata-chimera fraud
 
@@ -205,7 +205,7 @@ from proof_citations import (
 - `verify_all_citations(empirical_facts)` is the **library function** for batch quote-on-page verification (optionally with `expected_metadata` per fact). Inputs are a Python dict of `{fact_id: {url, quote, expected_metadata?, …}}`. Used inside proof scripts (`proof.py`) and as a programmatic API.
 - `proof-citations verify-records --input audit.json` is the **CLI subcommand** for batch *bibliographic-claim* audits. Inputs are a JSON file with `{references: [{ref_id, identifier, expected: {…}}]}`. No quote-on-page check — pure metadata-comparison. Used for manuscript review / post-publication audits where the goal is "are these citations real?"
 
-Backend submodules (`proof_citations.resolvers.pubmed`, `.doi`, `.arxiv`, `.isbn`, `.swhid`, `.handle`, `.url`) are accessible for direct use but the dispatch via `resolve()` is the supported entry point.
+Backend submodules (`proof_citations.resolvers.pubmed` — covers both `pmid` and `pmc` — `.doi`, `.arxiv`, `.isbn`, `.swhid`, `.handle`, `.url`) are accessible for direct use but the dispatch via `resolve()` is the supported entry point.
 
 ## Adding a custom backend
 

@@ -106,6 +106,7 @@ def _autoregister() -> None:
     from proof_citations.resolvers import pubmed, doi, arxiv, isbn, swhid, handle, url
 
     register_backend("pmid", pubmed.resolve_pmid)
+    register_backend("pmc", pubmed.resolve_pmc)
     register_backend("doi", doi.resolve_doi)
     register_backend("arxiv", arxiv.resolve_arxiv)
     register_backend("isbn", isbn.resolve_isbn)

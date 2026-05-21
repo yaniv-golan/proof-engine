@@ -182,9 +182,13 @@ class TestUnstructuredURLSkip:
 # ---------------------------------------------------------------------------
 
 class TestNoResolverSkip:
-    def test_pmc_id_no_backend(self):
-        # PMC URLs identify to ("pmc", ...) but no backend is registered.
-        with patch("proof_citations.verify._fetch_page", side_effect=_mock_quote_found):
+    def test_skipped_when_backend_missing(self):
+        # As of v1.41.0, pmc has a registered backend, so we simulate the
+        # no-resolver path by patching get_backend to return None. This pins
+        # down the skip behavior for any future identifier type that lands in
+        # ALLOWED_TYPES without a corresponding resolver.
+        with patch("proof_citations.verify._fetch_page", side_effect=_mock_quote_found), \
+             patch("proof_citations.resolvers.get_backend", return_value=None):
             r = verify_citation(
                 "https://pmc.ncbi.nlm.nih.gov/articles/PMC12345/",
                 "the quoted text",

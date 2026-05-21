@@ -149,12 +149,15 @@ def _identifier_uri(ident: Identifier, base_url: str, site_url: str) -> str:
         return f"urn:isbn:{ident.value}"
     if ident.type == "slug":
         return f"{site_url}{base_url}proofs/{ident.value}/"
+    if ident.type == "pmc":
+        return f"https://pmc.ncbi.nlm.nih.gov/articles/{ident.value}/"
     return ident.value
 
 
 _CFF_TYPE_BY_CANONICAL: dict[str, str] = {
     "doi": "article",
     "arxiv": "article",
+    "pmc": "article",
     "swhid": "software",
     "slug": "software",
     "isbn": "book",
@@ -185,6 +188,8 @@ def _cff_reference(
         ref["url"] = canon.value
     elif canon.type == "handle":
         ref["url"] = f"https://hdl.handle.net/{canon.value}"
+    elif canon.type == "pmc":
+        ref["url"] = f"https://pmc.ncbi.nlm.nih.gov/articles/{canon.value}/"
 
     if entry.note:
         ref["title"] = entry.note

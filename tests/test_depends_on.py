@@ -27,7 +27,7 @@ from tools.lib.depends_on import (
 
 def test_allowed_types():
     assert ALLOWED_TYPES == frozenset({
-        "slug", "doi", "arxiv", "url", "swhid", "handle", "isbn",
+        "slug", "doi", "arxiv", "url", "swhid", "handle", "isbn", "pmc",
     })
 
 
@@ -75,6 +75,9 @@ def test_allowed_relations_contains_full_datacite_vocab():
     ("isbn", "9780201896831"),
     ("isbn", "978-0-201-89683-1"),
     ("isbn", "0306406152"),
+    ("pmc", "PMC2768535"),
+    ("pmc", "PMC1"),
+    ("pmc", "PMC9999999999"),
 ])
 def test_identifier_syntax_accepts_valid(type_, value):
     assert validate_identifier_syntax(type_, value) is None
@@ -96,6 +99,10 @@ def test_identifier_syntax_accepts_valid(type_, value):
     ("isbn", "1234567890123", "bad checksum 13"),
     ("isbn", "0306406159", "bad checksum 10"),
     ("isbn", "12345", "wrong length"),
+    ("pmc", "2768535", "missing PMC prefix"),
+    ("pmc", "PMC", "no digits"),
+    ("pmc", "PMCabc", "non-numeric body"),
+    ("pmc", "pmc2768535", "lowercase prefix"),
 ])
 def test_identifier_syntax_rejects_invalid(type_, value, reason):
     err = validate_identifier_syntax(type_, value)
@@ -416,6 +423,28 @@ def test_canonical_identifier_slug_only():
 def test_canonical_identifier_url_only():
     entry = DependsOnEntry("References", [Identifier("url", "https://x.org/p")])
     assert canonical_identifier(entry) == Identifier("url", "https://x.org/p")
+
+
+def test_canonical_identifier_doi_beats_pmc():
+    entry = DependsOnEntry("References", [
+        Identifier("pmc", "PMC2768535"),
+        Identifier("doi", "10.1017/S1462399409000957"),
+    ])
+    assert canonical_identifier(entry) == Identifier("doi", "10.1017/S1462399409000957")
+
+
+def test_canonical_identifier_pmc_beats_arxiv_and_handle():
+    entry = DependsOnEntry("References", [
+        Identifier("handle", "10.1000/abc"),
+        Identifier("arxiv", "2603.21852"),
+        Identifier("pmc", "PMC2768535"),
+    ])
+    assert canonical_identifier(entry) == Identifier("pmc", "PMC2768535")
+
+
+def test_canonical_identifier_pmc_only():
+    entry = DependsOnEntry("References", [Identifier("pmc", "PMC2768535")])
+    assert canonical_identifier(entry) == Identifier("pmc", "PMC2768535")
 
 
 def test_validate_repo_passes_clean(tmp_path):
