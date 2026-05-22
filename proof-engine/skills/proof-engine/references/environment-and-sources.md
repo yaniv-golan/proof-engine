@@ -8,6 +8,23 @@ Read this when facing fetch failures, paywalled sources, or sandboxed environmen
 - **ChatGPT:** Python sandbox has no outbound HTTP. Use the browsing capability during Step 2 to fetch each source page and include raw page text as the `snapshot` field in `empirical_facts`.
 - **Other sandboxed environments:** If Python cannot fetch URLs, use the snapshot workflow — pre-fetch page text by any available means and embed it in `empirical_facts`.
 
+### `proof-citations` install on space-constrained or managed sandboxes
+
+The default install — `pip install proof-citations` — assumes a writable Python site-packages directory with sufficient free space. Some sandboxes (Cowork, ChatGPT code interpreter, certain CI runners) have a small read-write filesystem that can be 100% full, or pin site-packages read-only. When `pip install` fails with `No space left on device` or `Permission denied`, fall back to a `--target` install on a writable mount:
+
+```bash
+mkdir -p /tmp/py-deps
+pip install --target=/tmp/py-deps proof-citations
+export PYTHONPATH="/tmp/py-deps:${PYTHONPATH:-}"
+python proof.py
+```
+
+`/tmp` is typically backed by a separate filesystem in sandboxes, has more space, and is wiped between runs — fine for a one-shot proof. Setting `PYTHONPATH` makes `proof_citations` importable for that Python invocation only; no system state is modified.
+
+If the sandbox also restricts `/tmp`, try `$HOME/.local/lib/proof-citations` instead — most sandboxes have a writable home directory even when site-packages is read-only.
+
+If neither mount is writable, the sandbox is incompatible with `proof-citations` and the proof cannot be run there. Surface this explicitly rather than failing silently — the proof author needs to know.
+
 ## Verification Fallback Chain
 
 1. **Live fetch** — try to fetch the URL directly. If successful, verify against live page.

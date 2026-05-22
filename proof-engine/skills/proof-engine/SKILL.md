@@ -10,7 +10,7 @@ description: >
 license: MIT
 metadata:
   author: Yaniv Golan
-  version: "1.44.0"
+  version: "1.45.0"
 compatibility: >
   Requires Python 3, `requests`, and the `proof-citations` PyPI package
   (`pip install proof-citations` — the scripts/ entries are thin shims
@@ -396,7 +396,13 @@ Disproof is often easier (single counterexample suffices). The engine struggles 
 
 ## Edge Cases
 
-**Fictitious source attributions:** If a claim attributes data to a specific source that doesn't contain that data (e.g., "according to the 1947 British census" when no such census exists), treat it as a compound claim: (SC1) the numeric value is correct, (SC2) the stated source contains it. Prove SC1 from the actual source, and note the attribution error in `operator_note` and adversarial checks. The verdict reflects both sub-claims.
+**Fictitious source attributions — distinguish load-bearing from appended.** Two shapes share the surface form "the claim mentions a source that turns out not to exist" but warrant different proof structures:
+
+- **Load-bearing attribution** — the source identity *is* part of the claim's meaning. Form: "per [Source], value is X" / "[Source] reported Y in 2023" / "according to [Author]'s [Year] study." If [Source] doesn't exist, the claim's authority chain breaks; PROVED would be misleading. Treat as a compound: (SC1) the numeric value or factual proposition is correct, (SC2) the stated source contains/asserts it. The compound verdict reflects both — typically PARTIALLY VERIFIED if SC1 holds and SC2 fails, or DISPROVED with `proof_direction: "disprove"` if the claim *is* the attribution.
+
+- **Appended reference list** — the proposition stands on its own literature; the citations are apparatus, not authority. Form: "Adult neurogenesis occurs in the dentate gyrus (Eriksson 1998; Spalding 2013; Chen 2023)." The proposition is supported by the cited literature taken collectively; one fabricated reference doesn't undo the proposition if the surviving citations independently establish it. Prove the proposition itself in the normal Type B way, and document each broken citation in `adversarial_checks` (with the citation-audit verdict — `unresolvable`, `metadata_chimera`, etc.). The verdict reflects whether the proposition holds; the citation-defect disclosure goes in adversarial checks AND a note in `proof.md`'s Conclusion section AND the audit doc's Citation Verification Details.
+
+**Which shape is it?** Apply the substitution test: if you remove the named source from the claim text, does the claim still make a checkable assertion? "per Smith 2023, the value is 5" → without Smith, no claim remains → load-bearing. "Adult neurogenesis occurs (Smith 2023)" → without Smith, "adult neurogenesis occurs" is still a checkable proposition → appended. When ambiguous, prefer the load-bearing reading — it is the more conservative call.
 
 **Partial-period data:** If a claim covers a time range but the best sources only cover part of it (e.g., claim says 1994-2023, sources cover 1994-2020), document the gap in `operator_note`. For **cumulative nonnegative totals** (e.g., total aid disbursed, cumulative emissions), if the partial-period sum already exceeds the claim's threshold, prove it with a logical extension: "If S₂₀ > T and the quantity is monotonically nondecreasing (cumulative total cannot shrink), then S₂₃ ≥ S₂₀ > T." State the monotonicity assumption explicitly using `explain_calc()`. This shortcut does NOT apply to averages, rates, percentages, or rolling metrics — for those, the missing-period values could decrease the aggregate, and you must either find full-period sources or return `UNDETERMINED` with an explanation of what data is missing.
 

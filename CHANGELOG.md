@@ -4,6 +4,67 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.45.0] - 2026-05-22
+
+Follow-up release for five issues from another Cowork run: a real
+behavior bug (substring-based contested-qualifier detection), two
+template/doc cleanups, one new SKILL.md guidance section for a
+recurring claim shape, and a sandbox-install fallback.
+
+### Changed (BREAKING for compound proofs that relied on substring detection)
+
+- **`contested_qualifier` is now an explicit field on `CLAIM_FORMAL`,
+  not a prose-substring inference.** The previous template detected
+  contested-qualifier mode via
+  `"qualifier" in CLAIM_FORMAL["operator_note"].lower()`, which silently
+  flipped verdict logic if an author's `operator_note` text happened to
+  contain the word "qualifier" (e.g., "the qualifier 'often'"). The new
+  template reads `CLAIM_FORMAL.get("contested_qualifier")` — set it
+  `True` to enable the carve-out, leave it absent or `False` otherwise.
+  The 132 existing site proofs ship their own old code and are
+  unaffected; future regenerations pick up the new template and must
+  set the field explicitly if they want the contested-qualifier branch.
+
+### Changed
+
+- **`from datetime import date` removed from the compound template's
+  default import block.** It was dead code in non-time-sensitive
+  compound proofs, and authors who saw it imported sometimes added a
+  hardcoded `date(YYYY, M, D)` literal — which trips the Rule 3
+  "hardcoded date literal" validator check. A comment now explains
+  when to re-add the import (time-sensitive claims only).
+- **`scripts-api.md` `verify_all_citations` signature** documents
+  `snapshot_base_dir=None` (previously the kwarg shipped in code and
+  templates but was missing from the documented signature, so a reader
+  trusting the doc would think the template was buggy).
+
+### Added
+
+- **SKILL.md edge-case section distinguishes "load-bearing
+  attribution" from "appended reference list".** The previous
+  "Fictitious source attributions" entry only described the
+  load-bearing case ("per [Source], value is X"). For the increasingly
+  common appended-reference-list case ("X happens (Smith 2023;
+  Chen 2024)") where one citation is fabricated but the proposition
+  stands on its own literature, the new guidance says to prove the
+  proposition normally and document each broken citation in
+  `adversarial_checks` with the citation-audit verdict. Includes a
+  substitution test for disambiguating the two shapes.
+- **`environment-and-sources.md` recipe for disk-full / managed
+  sandboxes.** When `pip install proof-citations` fails with
+  `No space left on device` or `Permission denied`, the doc now
+  documents the `pip install --target=/tmp/py-deps proof-citations` +
+  `PYTHONPATH` fallback (Cowork hit this on a 100% full primary
+  filesystem). Falls through to `$HOME/.local` if `/tmp` is also
+  restricted, with a clear failure mode if neither works.
+
+### Compatibility
+
+- Compound proofs that previously relied on the substring detection
+  must explicitly set `"contested_qualifier": True` on `CLAIM_FORMAL`
+  if they want the carve-out. Pre-existing site proofs ship their own
+  old code and are unaffected.
+
 ## [1.44.0] - 2026-05-22
 
 Follow-up release fixing v1.43.0 compound-template regressions plus a

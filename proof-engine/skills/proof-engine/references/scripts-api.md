@@ -138,7 +138,12 @@ verify_all_citations(empirical_facts, *,
                      oa_lookup=True,
                      oa_lookup_budget_seconds=None,
                      skip_live_fetch=False,
-                     prefer_snapshot=False) -> dict
+                     prefer_snapshot=False,
+                     snapshot_base_dir=None) -> dict
+#   snapshot_base_dir: directory to resolve relative snapshot_file paths
+#     against. Proof templates pass the proof.py directory so the published
+#     proof.py can be re-run from any CWD without breaking paywalled-
+#     content lookups. Absolute snapshot_file paths are honored as-is.
 #   Batch-verify every fact in empirical_facts. Returns
 #   {fact_key: result_dict}. See verify_citation() docstring in
 #   packages/proof-citations/src/proof_citations/verify.py for the

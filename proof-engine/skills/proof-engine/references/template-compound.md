@@ -79,8 +79,12 @@ if not PROOF_ENGINE_ROOT:
             "export PROOF_ENGINE_ROOT=/path/to/skills/proof-engine"
         )
 sys.path.insert(0, PROOF_ENGINE_ROOT)
-from datetime import date
-
+# Add `from datetime import date` ONLY for time-sensitive claims (Rule 3) —
+# e.g., when CLAIM_FORMAL has `"is_time_sensitive": True` and the proof
+# compares against `date.today()`. Non-time-sensitive compound claims omit
+# the import; including it unused triggers the validator's unused-import
+# warning, and adding a hardcoded date(YYYY,M,D) literal would trip the
+# Rule 3 "hardcoded date literal" check.
 from scripts.verify_citations import verify_all_citations
 # If any sub-claim uses absence-search evidence (Type S facts), also import:
 # from scripts.verify_citations import verify_search_registry
@@ -294,12 +298,17 @@ if __name__ == "__main__":
 
     # Contested qualifier override: SC1 holds + SC2 fails → DISPROVED
     # (assertion exists but the epistemic qualifier is not warranted).
-    # INTRINSICALLY 2-SUB-CLAIM: this branch is gated by len(sub_claims) == 2
-    # because the carve-out relies on "SC1 = factual assertion, SC2 = qualifier"
+    # INTRINSICALLY 2-SUB-CLAIM: gated by len(sub_claims) == 2 because the
+    # carve-out relies on "SC1 = factual assertion, SC2 = qualifier"
     # semantics that don't generalize. For 3+ sub-claims, restructure as
     # separate simple-AND sub-claims or use the absence template for
-    # epistemic checks. Set is_contested_qualifier = False to skip the branch.
-    is_contested_qualifier = "qualifier" in CLAIM_FORMAL.get("operator_note", "").lower()
+    # epistemic checks.
+    #
+    # Set `"contested_qualifier": True` on CLAIM_FORMAL to enable. The
+    # explicit field is required — prior substring-on-operator_note matching
+    # was fragile (author prose mentioning "qualifier" silently flipped
+    # the verdict mode).
+    is_contested_qualifier = bool(CLAIM_FORMAL.get("contested_qualifier"))
     is_2sc_contested_qualifier = (
         is_contested_qualifier
         and len(CLAIM_FORMAL["sub_claims"]) == 2
@@ -448,7 +457,7 @@ if __name__ == "__main__":
 
 **Key design points:**
 - `PARTIALLY VERIFIED` is checked BEFORE the `claim_holds` branches — mixed results short-circuit the verdict.
-- For **contested qualifier** claims: `is_contested_qualifier` auto-detects from `operator_note` and inserts a `sc1_holds and not sc2_holds → DISPROVED` branch before `PARTIALLY VERIFIED`. This ensures "assertion exists but qualifier is unwarranted" produces DISPROVED, not PARTIALLY VERIFIED. Standard compound claims are unaffected.
+- For **contested qualifier** claims: set `"contested_qualifier": True` on `CLAIM_FORMAL` to enable the carve-out — the `sc1_holds and not sc2_holds → DISPROVED` branch fires before `PARTIALLY VERIFIED`. This ensures "assertion exists but qualifier is unwarranted" produces DISPROVED, not PARTIALLY VERIFIED. Standard compound claims leave the field absent (or set it `False`); the branch is skipped. The field must be explicit — prose-substring auto-detection was removed because author phrases like "the qualifier 'often'" silently flipped verdict logic.
 - `UNDETERMINED` when no sub-claims meet threshold — for source-counting proofs, insufficient evidence is not disproof.
 - Per-sub-claim `compare()` calls use labels, so the computation trace is self-documenting.
 - `any_unverified` modifies PROVED → PROVED (with unverified citations). For PARTIALLY VERIFIED and UNDETERMINED, citation status is documented in proof.md's Conclusion section rather than changing the verdict label — those verdicts already signal incompleteness.
@@ -505,6 +514,8 @@ CLAIM_FORMAL = {
          "operator_note": "SC2 checks the epistemic qualifier — was it independently verified?"},
     ],
     "compound_operator": "AND",
+    "contested_qualifier": True,  # REQUIRED for this carve-out (no prose-substring auto-detect)
+    "proof_direction": "affirm",
     "operator_note": (
         "The claim uses the qualifier '[qualifier]'. SC1 checks provenance "
         "(the assertion exists), SC2 checks the qualifier (independently verified). "
